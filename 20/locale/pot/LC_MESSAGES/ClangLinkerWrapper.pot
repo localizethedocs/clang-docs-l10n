@@ -1,0 +1,129 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 20\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ClangLinkerWrapper.rst:3
+msgid "Clang Linker Wrapper"
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:11
+msgid "Introduction"
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:13
+msgid ""
+"This tool works as a wrapper of the normal host linking job. This tool is "
+"used to create linked device images for offloading and the necessary runtime "
+"calls to register them. It works by first scanning the linker's input for "
+"embedded device offloading data stored at the ``.llvm.offloading`` section. "
+"This section contains binary data created by the :doc:"
+"`ClangOffloadPackager`. The extracted device files will then be linked. The "
+"linked modules will then be wrapped into a new object file containing the "
+"code necessary to register it with the offloading runtime."
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:23
+msgid "Usage"
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:25
+msgid ""
+"This tool can be used with the following options. Any arguments not intended "
+"only for the linker wrapper will be forwarded to the wrapped linker job."
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:64
+msgid "Relocatable Linking"
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:66
+msgid ""
+"The ``clang-linker-wrapper`` handles linking embedded device code and then "
+"registering it with the appropriate runtime. Normally, this is only done "
+"when the executable is created so other files containing device code can be "
+"linked together. This can be somewhat problematic for users who wish to ship "
+"static libraries that contain offloading code to users without a compatible "
+"offloading toolchain."
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:73
+msgid ""
+"When using a relocatable link with ``-r``, the ``clang-linker-wrapper`` will "
+"perform the device linking and registration eagerly. This will remove the "
+"embedded device code and register it correctly with the runtime. "
+"Semantically, this is similar to creating a shared library object. If "
+"standard relocatable linking is desired, simply do not run the binaries "
+"through the ``clang-linker-wrapper``. This will simply append the embedded "
+"device code so that it can be linked later."
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:82
+msgid "Matching"
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:84
+msgid ""
+"The linker wrapper will link extracted device code that is compatible with "
+"each other. Generally, this requires that the target triple and architecture "
+"match. An exception is made when the architecture is listed as ``generic``, "
+"which will cause it be linked with any other device code with the same "
+"target triple."
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:90
+msgid "Debugging"
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:92
+msgid ""
+"The linker wrapper performs a lot of steps internally, such as input "
+"matching, symbol resolution, and image registration. This makes it difficult "
+"to debug in some scenarios. The behavior of the linker-wrapper is controlled "
+"mostly through metadata, described in `clang documentation <https://clang."
+"llvm.org/docs/OffloadingDesign.html>`_. Intermediate output can be obtained "
+"from the linker-wrapper using the ``--save-temps`` flag. These files can "
+"then be modified."
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:107
+msgid ""
+"Doing this will allow you to override one of the input files by replacing "
+"its embedded offloading metadata with a user-modified version. However, this "
+"will be more difficult when there are multiple input files. For a very large "
+"hammer, the ``--override-image=<kind>=<file>`` flag can be used."
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:112
+msgid ""
+"In the following example, we use the ``--save-temps`` to obtain the LLVM-IR "
+"just before running the backend. We then modify it to test altered behavior, "
+"and then compile it to a binary. This can then be passed to the linker-"
+"wrapper which will then ignore all embedded metadata and use the provided "
+"image as if it were the result of the device linking phase."
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:126
+msgid "Example"
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:128
+msgid ""
+"This tool links object files with offloading images embedded within it using "
+"the ``-fembed-offload-object`` flag in Clang. Given an input file containing "
+"the magic section we can pass it to this tool to extract the data contained "
+"at that section and run a device linking job on it."
+msgstr ""

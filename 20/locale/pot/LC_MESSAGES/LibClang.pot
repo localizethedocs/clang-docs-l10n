@@ -1,0 +1,268 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 20\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../LibClang.rst:5
+msgid "Libclang tutorial"
+msgstr ""
+
+#: ../../../LibClang.rst:6
+msgid ""
+"The C Interface to Clang provides a relatively small API that exposes "
+"facilities for parsing source code into an abstract syntax tree (AST), "
+"loading already-parsed ASTs, traversing the AST, associating physical source "
+"locations with elements within the AST, and other facilities that support "
+"Clang-based development tools. This C interface to Clang will never provide "
+"all of the information representation stored in Clang's C++ AST, nor should "
+"it: the intent is to maintain an API that is relatively stable from one "
+"release to the next, providing only the basic functionality needed to "
+"support development tools. The entire C interface of libclang is available "
+"in the file `Index.h`_"
+msgstr ""
+
+#: ../../../LibClang.rst:11
+msgid "Essential types overview"
+msgstr ""
+
+#: ../../../LibClang.rst:13
+msgid "All types of libclang are prefixed with ``CX``"
+msgstr ""
+
+#: ../../../LibClang.rst:16
+msgid "CXIndex"
+msgstr ""
+
+#: ../../../LibClang.rst:17
+msgid ""
+"An Index that consists of a set of translation units that would typically be "
+"linked together into an executable or library."
+msgstr ""
+
+#: ../../../LibClang.rst:20
+msgid "CXTranslationUnit"
+msgstr ""
+
+#: ../../../LibClang.rst:21
+msgid "A single translation unit, which resides in an index."
+msgstr ""
+
+#: ../../../LibClang.rst:24
+msgid "CXCursor"
+msgstr ""
+
+#: ../../../LibClang.rst:25
+msgid ""
+"A cursor representing a pointer to some element in the abstract syntax tree "
+"of a translation unit."
+msgstr ""
+
+#: ../../../LibClang.rst:29 ../../../LibClang.rst:148 ../../../LibClang.rst:239
+msgid "Code example"
+msgstr ""
+
+#: ../../../LibClang.rst:61
+msgid "Visiting elements of an AST"
+msgstr ""
+
+#: ../../../LibClang.rst:62
+msgid ""
+"The elements of an AST can be recursively visited with pre-order traversal "
+"with ``clang_visitChildren``."
+msgstr ""
+
+#: ../../../LibClang.rst:87
+msgid ""
+"The return value of ``CXCursorVisitor``, the callable argument of "
+"``clang_visitChildren``, can return one of the three:"
+msgstr ""
+
+#: ../../../LibClang.rst:89
+msgid "``CXChildVisit_Break``: Terminates the cursor traversal"
+msgstr ""
+
+#: ../../../LibClang.rst:91
+msgid ""
+"``CXChildVisit_Continue``: Continues the cursor traversal with the next "
+"sibling of the cursor just visited, without visiting its children."
+msgstr ""
+
+#: ../../../LibClang.rst:93
+msgid ""
+"``CXChildVisit_Recurse``: Recursively traverse the children of this cursor, "
+"using the same visitor and client data"
+msgstr ""
+
+#: ../../../LibClang.rst:95
+msgid "The expected output of that program is"
+msgstr ""
+
+#: ../../../LibClang.rst:105
+msgid "Extracting information from a Cursor"
+msgstr ""
+
+#: ../../../LibClang.rst:111
+msgid "Extracting the Cursor kind"
+msgstr ""
+
+#: ../../../LibClang.rst:113
+msgid ""
+"``CXCursorKind clang_getCursorKind(CXCursor)`` Describes the kind of entity "
+"that a cursor refers to. Example values:"
+msgstr ""
+
+#: ../../../LibClang.rst:115
+msgid "``CXCursor_StructDecl``: A C or C++ struct."
+msgstr ""
+
+#: ../../../LibClang.rst:116
+msgid "``CXCursor_FieldDecl``: A field in a struct, union, or C++ class."
+msgstr ""
+
+#: ../../../LibClang.rst:117
+msgid "``CXCursor_CallExpr``: An expression that calls a function."
+msgstr ""
+
+#: ../../../LibClang.rst:121
+msgid "Extracting the Cursor type"
+msgstr ""
+
+#: ../../../LibClang.rst:122
+msgid ""
+"``CXType clang_getCursorType(CXCursor)``: Retrieve the type of a CXCursor "
+"(if any)."
+msgstr ""
+
+#: ../../../LibClang.rst:124
+msgid ""
+"A ``CXType`` represents a complete C++ type, including qualifiers and "
+"pointers. It has a member field ``CXTypeKind kind`` and additional opaque "
+"data."
+msgstr ""
+
+#: ../../../LibClang.rst:126
+msgid "Example values for ``CXTypeKind kind``"
+msgstr ""
+
+#: ../../../LibClang.rst:128
+msgid ""
+"``CXType_Invalid``: Represents an invalid type (e.g., where no type is "
+"available)"
+msgstr ""
+
+#: ../../../LibClang.rst:129
+msgid "``CXType_Pointer``: A pointer to another type"
+msgstr ""
+
+#: ../../../LibClang.rst:130
+msgid "``CXType_Int``: Regular ``int``"
+msgstr ""
+
+#: ../../../LibClang.rst:131
+msgid ""
+"``CXType_Elaborated``: Represents a type that was referred to using an "
+"elaborated type keyword e.g. struct S, or via a qualified name, e.g., N::M::"
+"type, or both."
+msgstr ""
+
+#: ../../../LibClang.rst:133
+msgid ""
+"Any ``CXTypeKind`` can be converted to a ``CXString`` using "
+"``clang_getTypeKindSpelling(CXTypeKind)``."
+msgstr ""
+
+#: ../../../LibClang.rst:135
+msgid "A ``CXType`` holds additional necessary opaque type info, such as:"
+msgstr ""
+
+#: ../../../LibClang.rst:137
+msgid "Which struct was referred to?"
+msgstr ""
+
+#: ../../../LibClang.rst:138
+msgid "What type is the pointer pointing to?"
+msgstr ""
+
+#: ../../../LibClang.rst:139
+msgid "Qualifiers (e.g. ``const``, ``volatile``)?"
+msgstr ""
+
+#: ../../../LibClang.rst:141
+msgid "Qualifiers of a ``CXType`` can be queried with:"
+msgstr ""
+
+#: ../../../LibClang.rst:143
+msgid "``clang_isConstQualifiedType(CXType)`` to check for ``const``"
+msgstr ""
+
+#: ../../../LibClang.rst:144
+msgid "``clang_isRestrictQualifiedType(CXType)`` to check for ``restrict``"
+msgstr ""
+
+#: ../../../LibClang.rst:145
+msgid "``clang_isVolatileQualifiedType(CXType)`` to check for ``volatile``"
+msgstr ""
+
+#: ../../../LibClang.rst:208
+msgid "The expected output of program is:"
+msgstr ""
+
+#: ../../../LibClang.rst:220
+msgid ""
+"Reiterating the difference between ``CXType`` and ``CXTypeKind``: For an "
+"example"
+msgstr ""
+
+#: ../../../LibClang.rst:226
+msgid "Type Kind will be: ``CXType_Pointer`` spelled ``\"Pointer\"``"
+msgstr ""
+
+#: ../../../LibClang.rst:227
+msgid ""
+"Type will be a complex ``CXType`` structure, spelled ``\"const char* "
+"__restrict__``"
+msgstr ""
+
+#: ../../../LibClang.rst:230
+msgid "Retrieving source locations"
+msgstr ""
+
+#: ../../../LibClang.rst:232
+msgid ""
+"``CXSourceRange clang_getCursorExtent(CXCursor)`` returns a "
+"``CXSourceRange``, representing a half-open range in the source code."
+msgstr ""
+
+#: ../../../LibClang.rst:234
+msgid ""
+"Use ``clang_getRangeStart(CXSourceRange)`` and "
+"``clang_getRangeEnd(CXSourceRange)`` to retrieve the starting and end "
+"``CXSourceLocation`` from a source range, respectively."
+msgstr ""
+
+#: ../../../LibClang.rst:236
+msgid ""
+"Given a ``CXSourceLocation``, use ``clang_getExpansionLocation`` to retrieve "
+"file, line and column of a source location."
+msgstr ""
+
+#: ../../../LibClang.rst:273
+msgid "The expected output of this program is:"
+msgstr ""
+
+#: ../../../LibClang.rst:282
+msgid "Complete example code"
+msgstr ""

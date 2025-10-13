@@ -1,0 +1,113 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 20\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../WarningSuppressionMappings.rst:3
+msgid "Warning suppression mappings"
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:11
+msgid ""
+"Warning suppression mappings enable users to suppress Clang's diagnostics at "
+"a per-file granularity. This allows enforcing diagnostics in specific parts "
+"of the project even if there are violations in some headers."
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:16
+msgid "Goal and usage"
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:18
+msgid ""
+"Clang allows diagnostics to be configured at a translation-unit granularity. "
+"If a ``foo.cpp`` is compiled with ``-Wfoo``, all transitively included "
+"headers also need to be clean. Hence, turning on new warnings in large "
+"codebases requires cleaning up all the existing warnings. This might not be "
+"possible when some dependencies aren't in the project owner's control or "
+"because new violations are creeping up quicker than the clean up."
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:25
+msgid ""
+"Warning suppression mappings aim to alleviate some of these concerns by "
+"making diagnostic configuration granularity finer, at a source file level."
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:28
+msgid ""
+"To achieve this, user can create a file that lists which :doc:`diagnostic "
+"groups <DiagnosticsReference>` to suppress in which files or paths, and pass "
+"it as a command line argument to Clang with the ``--warning-suppression-"
+"mappings`` flag."
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:33
+msgid ""
+"Note that this mechanism won't enable any diagnostics on its own. Users "
+"should still turn on warnings in their compilations with explicit ``-Wfoo`` "
+"flags. `Controlling diagnostics pragmas <https://clang.llvm.org/docs/"
+"UsersManual.html#controlling-diagnostics-via-pragmas>`_ take precedence over "
+"suppression mappings. Ensuring code author's explicit intent is always "
+"preserved."
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:41
+msgid "Example"
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:61
+msgid "Format"
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:63
+msgid ""
+"Warning suppression mappings uses the same format as :doc:"
+"`SanitizerSpecialCaseList`."
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:66
+msgid ""
+"Sections describe which diagnostic group's behaviour to change, e.g. "
+"``[unused]``. When a diagnostic is matched by multiple sections, the latest "
+"section takes precedence."
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:70
+msgid ""
+"Afterwards in each section, users can have multiple entities that match "
+"source files based on the globs. These entities look like ``src:*/my/dir/"
+"*``. Users can also use the ``emit`` category to exclude a subdirectory from "
+"suppression. Source files are matched against these globs either:"
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:76
+msgid "as paths relative to the current working directory"
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:77
+msgid "as absolute paths."
+msgstr ""
+
+#: ../../../WarningSuppressionMappings.rst:79
+msgid ""
+"When a source file matches multiple globs in a section, the longest one "
+"takes precedence."
+msgstr ""
