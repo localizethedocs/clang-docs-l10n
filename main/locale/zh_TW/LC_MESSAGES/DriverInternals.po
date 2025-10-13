@@ -1,0 +1,539 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../DriverInternals.rst:3
+msgid "Driver Design & Internals"
+msgstr ""
+
+#: ../../../DriverInternals.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../DriverInternals.rst:11
+msgid ""
+"This document describes the Clang driver. The purpose of this document is to "
+"describe both the motivation and design goals for the driver, as well as "
+"details of the internal implementation."
+msgstr ""
+
+#: ../../../DriverInternals.rst:16
+msgid "Features and Goals"
+msgstr ""
+
+#: ../../../DriverInternals.rst:18
+msgid ""
+"The Clang driver is intended to be a production quality compiler driver "
+"providing access to the Clang compiler and tools, with a command line "
+"interface which is compatible with the gcc driver."
+msgstr ""
+
+#: ../../../DriverInternals.rst:22
+msgid ""
+"Although the driver is part of and driven by the Clang project, it is "
+"logically a separate tool which shares many of the same goals as Clang:"
+msgstr ""
+
+#: ../../../DriverInternals.rst:26
+msgid "Features"
+msgstr ""
+
+#: ../../../DriverInternals.rst:29
+msgid "GCC Compatibility"
+msgstr ""
+
+#: ../../../DriverInternals.rst:31
+msgid ""
+"The number one goal of the driver is to ease the adoption of Clang by "
+"allowing users to drop Clang into a build system which was designed to call "
+"GCC. Although this makes the driver much more complicated than might "
+"otherwise be necessary, we decided that being very compatible with the gcc "
+"command line interface was worth it in order to allow users to quickly test "
+"clang on their projects."
+msgstr ""
+
+#: ../../../DriverInternals.rst:39
+msgid "Flexible"
+msgstr ""
+
+#: ../../../DriverInternals.rst:41
+msgid ""
+"The driver was designed to be flexible and easily accommodate new uses as we "
+"grow the clang and LLVM infrastructure. As one example, the driver can "
+"easily support the introduction of tools which have an integrated assembler; "
+"something we hope to add to LLVM in the future."
+msgstr ""
+
+#: ../../../DriverInternals.rst:46
+msgid ""
+"Similarly, most of the driver functionality is kept in a library which can "
+"be used to build other tools which want to implement or accept a gcc like "
+"interface."
+msgstr ""
+
+#: ../../../DriverInternals.rst:51
+msgid "Low Overhead"
+msgstr ""
+
+#: ../../../DriverInternals.rst:53
+msgid ""
+"The driver should have as little overhead as possible. In practice, we found "
+"that the gcc driver by itself incurred a small but meaningful overhead when "
+"compiling many small files. The driver doesn't do much work compared to a "
+"compilation, but we have tried to keep it as efficient as possible by "
+"following a few simple principles:"
+msgstr ""
+
+#: ../../../DriverInternals.rst:59
+msgid "Avoid memory allocation and string copying when possible."
+msgstr ""
+
+#: ../../../DriverInternals.rst:60
+msgid "Don't parse arguments more than once."
+msgstr ""
+
+#: ../../../DriverInternals.rst:61
+msgid "Provide a few simple interfaces for efficiently searching arguments."
+msgstr ""
+
+#: ../../../DriverInternals.rst:64
+msgid "Simple"
+msgstr ""
+
+#: ../../../DriverInternals.rst:66
+msgid ""
+"Finally, the driver was designed to be \"as simple as possible\", given the "
+"other goals. Notably, trying to be completely compatible with the gcc driver "
+"adds a significant amount of complexity. However, the design of the driver "
+"attempts to mitigate this complexity by dividing the process into a number "
+"of independent stages instead of a single monolithic task."
+msgstr ""
+
+#: ../../../DriverInternals.rst:74
+msgid "Internal Design and Implementation"
+msgstr ""
+
+#: ../../../DriverInternals.rst:81
+msgid "Internals Introduction"
+msgstr ""
+
+#: ../../../DriverInternals.rst:83
+msgid ""
+"In order to satisfy the stated goals, the driver was designed to completely "
+"subsume the functionality of the gcc executable; that is, the driver should "
+"not need to delegate to gcc to perform subtasks. On Darwin, this implies "
+"that the Clang driver also subsumes the gcc driver-driver, which is used to "
+"implement support for building universal images (binaries and object files). "
+"This also implies that the driver should be able to call the language "
+"specific compilers (e.g. cc1) directly, which means that it must have enough "
+"information to forward command line arguments to child processes correctly."
+msgstr ""
+
+#: ../../../DriverInternals.rst:94
+msgid "Design Overview"
+msgstr ""
+
+#: ../../../DriverInternals.rst:96
+msgid ""
+"The diagram below shows the significant components of the driver "
+"architecture and how they relate to one another. The orange components "
+"represent concrete data structures built by the driver, the green components "
+"indicate conceptually distinct stages which manipulate these data "
+"structures, and the blue components are important helper classes."
+msgstr ""
+
+#: ../../../DriverInternals.rst:-1
+msgid "Driver Architecture Diagram"
+msgstr ""
+
+#: ../../../DriverInternals.rst:107
+msgid "Driver Stages"
+msgstr ""
+
+#: ../../../DriverInternals.rst:109
+msgid "The driver functionality is conceptually divided into five stages:"
+msgstr ""
+
+#: ../../../DriverInternals.rst:111
+msgid "**Parse: Option Parsing**"
+msgstr ""
+
+#: ../../../DriverInternals.rst:113
+msgid ""
+"The command line argument strings are decomposed into arguments (``Arg`` "
+"instances). The driver expects to understand all available options, although "
+"there is some facility for just passing certain classes of options through "
+"(like ``-Wl,``)."
+msgstr ""
+
+#: ../../../DriverInternals.rst:118
+msgid ""
+"Each argument corresponds to exactly one abstract ``Option`` definition, "
+"which describes how the option is parsed along with some additional "
+"metadata. The Arg instances themselves are lightweight and merely contain "
+"enough information for clients to determine which option they correspond to "
+"and their values (if they have additional parameters)."
+msgstr ""
+
+#: ../../../DriverInternals.rst:125
+msgid ""
+"For example, a command line like \"-Ifoo -I foo\" would parse to two Arg "
+"instances (a JoinedArg and a SeparateArg instance), but each would refer to "
+"the same Option."
+msgstr ""
+
+#: ../../../DriverInternals.rst:129
+msgid ""
+"Options are lazily created in order to avoid populating all Option classes "
+"when the driver is loaded. Most of the driver code only needs to deal with "
+"options by their unique ID (e.g., ``options::OPT_I``),"
+msgstr ""
+
+#: ../../../DriverInternals.rst:133
+msgid ""
+"Arg instances themselves do not generally store the values of parameters. In "
+"many cases, this would simply result in creating unnecessary string copies. "
+"Instead, Arg instances are always embedded inside an ArgList structure, "
+"which contains the original vector of argument strings. Each Arg itself only "
+"needs to contain an index into this vector instead of storing its values "
+"directly."
+msgstr ""
+
+#: ../../../DriverInternals.rst:140
+msgid ""
+"The clang driver can dump the results of this stage using the ``-###`` flag "
+"(which must precede any actual command line arguments). For example:"
+msgstr ""
+
+#: ../../../DriverInternals.rst:153
+msgid ""
+"After this stage is complete the command line should be broken down into "
+"well defined option objects with their appropriate parameters. Subsequent "
+"stages should rarely, if ever, need to do any string processing."
+msgstr ""
+
+#: ../../../DriverInternals.rst:158
+msgid "**Pipeline: Compilation Action Construction**"
+msgstr ""
+
+#: ../../../DriverInternals.rst:160
+msgid ""
+"Once the arguments are parsed, the tree of subprocess jobs needed for the "
+"desired compilation sequence are constructed. This involves determining the "
+"input files and their types, what work is to be done on them (preprocess, "
+"compile, assemble, link, etc.), and constructing a list of Action instances "
+"for each task. The result is a list of one or more top-level actions, each "
+"of which generally corresponds to a single output (for example, an object or "
+"linked executable)."
+msgstr ""
+
+#: ../../../DriverInternals.rst:168
+msgid ""
+"The majority of Actions correspond to actual tasks, however there are two "
+"special Actions. The first is InputAction, which simply serves to adapt an "
+"input argument for use as an input to other Actions. The second is "
+"BindArchAction, which conceptually alters the architecture to be used for "
+"all of its input Actions."
+msgstr ""
+
+#: ../../../DriverInternals.rst:174
+msgid ""
+"The clang driver can dump the results of this stage using the ``-ccc-print-"
+"phases`` flag. For example:"
+msgstr ""
+
+#: ../../../DriverInternals.rst:188
+msgid ""
+"Here the driver is constructing seven distinct actions, four to compile the "
+"\"t.c\" input into an object file, two to assemble the \"t.s\" input, and "
+"one to link them together."
+msgstr ""
+
+#: ../../../DriverInternals.rst:192
+msgid ""
+"A rather different compilation pipeline is shown here; in this example there "
+"are two top level actions to compile the input files into two separate "
+"object files, where each object file is built using ``lipo`` to merge "
+"results built for two separate architectures."
+msgstr ""
+
+#: ../../../DriverInternals.rst:215
+msgid ""
+"After this stage is complete the compilation process is divided into a "
+"simple set of actions which need to be performed to produce intermediate or "
+"final outputs (in some cases, like ``-fsyntax-only``, there is no \"real\" "
+"final output). Phases are well known compilation steps, such as "
+"\"preprocess\", \"compile\", \"assemble\", \"link\", etc."
+msgstr ""
+
+#: ../../../DriverInternals.rst:221
+msgid "**Bind: Tool & Filename Selection**"
+msgstr ""
+
+#: ../../../DriverInternals.rst:223
+msgid ""
+"This stage (in conjunction with the Translate stage) turns the tree of "
+"Actions into a list of actual subprocess to run. Conceptually, the driver "
+"performs a top down matching to assign Action(s) to Tools. The ToolChain is "
+"responsible for selecting the tool to perform a particular action; once "
+"selected the driver interacts with the tool to see if it can match "
+"additional actions (for example, by having an integrated preprocessor)."
+msgstr ""
+
+#: ../../../DriverInternals.rst:231
+msgid ""
+"Once Tools have been selected for all actions, the driver determines how the "
+"tools should be connected (for example, using an inprocess module, pipes, "
+"temporary files, or user provided filenames). If an output file is required, "
+"the driver also computes the appropriate file name (the suffix and file "
+"location depend on the input types and options such as ``-save-temps``)."
+msgstr ""
+
+#: ../../../DriverInternals.rst:238
+msgid ""
+"The driver interacts with a ToolChain to perform the Tool bindings. Each "
+"ToolChain contains information about all the tools needed for compilation "
+"for a particular architecture, platform, and operating system. A single "
+"driver invocation may query multiple ToolChains during one compilation in "
+"order to interact with tools for separate architectures."
+msgstr ""
+
+#: ../../../DriverInternals.rst:245
+msgid ""
+"The results of this stage are not computed directly, but the driver can "
+"print the results via the ``-ccc-print-bindings`` option. For example:"
+msgstr ""
+
+#: ../../../DriverInternals.rst:260
+msgid ""
+"This shows the tool chain, tool, inputs and outputs which have been bound "
+"for this compilation sequence. Here clang is being used to compile t0.c on "
+"the i386 architecture and darwin specific versions of the tools are being "
+"used to assemble and link the result, but generic gcc versions of the tools "
+"are being used on PowerPC."
+msgstr ""
+
+#: ../../../DriverInternals.rst:266
+msgid "**Translate: Tool Specific Argument Translation**"
+msgstr ""
+
+#: ../../../DriverInternals.rst:268
+msgid ""
+"Once a Tool has been selected to perform a particular Action, the Tool must "
+"construct concrete Commands which will be executed during compilation. The "
+"main work is in translating from the gcc style command line options to "
+"whatever options the subprocess expects."
+msgstr ""
+
+#: ../../../DriverInternals.rst:273
+msgid ""
+"Some tools, such as the assembler, only interact with a handful of arguments "
+"and just determine the path of the executable to call and pass on their "
+"input and output arguments. Others, like the compiler or the linker, may "
+"translate a large number of arguments in addition."
+msgstr ""
+
+#: ../../../DriverInternals.rst:278
+msgid ""
+"The ArgList class provides a number of simple helper methods to assist with "
+"translating arguments; for example, to pass on only the last of arguments "
+"corresponding to some option, or all arguments for an option."
+msgstr ""
+
+#: ../../../DriverInternals.rst:283
+msgid ""
+"The result of this stage is a list of Commands (executable paths and "
+"argument strings) to execute."
+msgstr ""
+
+#: ../../../DriverInternals.rst:286
+msgid "**Execute**"
+msgstr ""
+
+#: ../../../DriverInternals.rst:288
+msgid ""
+"Finally, the compilation pipeline is executed. This is mostly "
+"straightforward, although there is some interaction with options like ``-"
+"pipe``, ``-pass-exit-codes`` and ``-time``."
+msgstr ""
+
+#: ../../../DriverInternals.rst:293
+msgid "Additional Notes"
+msgstr ""
+
+#: ../../../DriverInternals.rst:296
+msgid "The Compilation Object"
+msgstr ""
+
+#: ../../../DriverInternals.rst:298
+msgid ""
+"The driver constructs a Compilation object for each set of command line "
+"arguments. The Driver itself is intended to be invariant during construction "
+"of a Compilation; an IDE should be able to construct a single long lived "
+"driver instance to use for an entire build, for example."
+msgstr ""
+
+#: ../../../DriverInternals.rst:304
+msgid ""
+"The Compilation object holds information that is particular to each "
+"compilation sequence. For example, the list of used temporary files (which "
+"must be removed once compilation is finished) and result files (which should "
+"be removed if compilation fails)."
+msgstr ""
+
+#: ../../../DriverInternals.rst:310
+msgid "Unified Parsing & Pipelining"
+msgstr ""
+
+#: ../../../DriverInternals.rst:312
+msgid ""
+"Parsing and pipelining both occur without reference to a Compilation "
+"instance. This is by design; the driver expects that both of these phases "
+"are platform neutral, with a few very well defined exceptions such as "
+"whether the platform uses a driver driver."
+msgstr ""
+
+#: ../../../DriverInternals.rst:318
+msgid "ToolChain Argument Translation"
+msgstr ""
+
+#: ../../../DriverInternals.rst:320
+msgid ""
+"In order to match gcc very closely, the clang driver currently allows tool "
+"chains to perform their own translation of the argument list (into a new "
+"ArgList data structure). Although this allows the clang driver to match gcc "
+"easily, it also makes the driver operation much harder to understand (since "
+"the Tools stop seeing some arguments the user provided, and see new ones "
+"instead)."
+msgstr ""
+
+#: ../../../DriverInternals.rst:327
+msgid ""
+"For example, on Darwin ``-gfull`` gets translated into two separate "
+"arguments, ``-g`` and ``-fno-eliminate-unused-debug-symbols``. Trying to "
+"write Tool logic to do something with ``-gfull`` will not work, because Tool "
+"argument translation is done after the arguments have been translated."
+msgstr ""
+
+#: ../../../DriverInternals.rst:333
+msgid ""
+"A long term goal is to remove this tool chain specific translation, and "
+"instead force each tool to change its own logic to do the right thing on the "
+"untranslated original arguments."
+msgstr ""
+
+#: ../../../DriverInternals.rst:338
+msgid "Unused Argument Warnings"
+msgstr ""
+
+#: ../../../DriverInternals.rst:340
+msgid ""
+"The driver operates by parsing all arguments but giving Tools the "
+"opportunity to choose which arguments to pass on. One downside of this "
+"infrastructure is that if the user misspells some option, or is confused "
+"about which options to use, some command line arguments the user really "
+"cared about may go unused. This problem is particularly important when using "
+"clang as a compiler, since the clang compiler does not support anywhere near "
+"all the options that gcc does, and we want to make sure users know which "
+"ones are being used."
+msgstr ""
+
+#: ../../../DriverInternals.rst:349
+msgid ""
+"To support this, the driver maintains a bit associated with each argument of "
+"whether it has been used (at all) during the compilation. This bit usually "
+"doesn't need to be set by hand, as the key ArgList accessors will set it "
+"automatically."
+msgstr ""
+
+#: ../../../DriverInternals.rst:354
+msgid ""
+"When a compilation is successful (there are no errors), the driver checks "
+"the bit and emits an \"unused argument\" warning for any arguments which "
+"were never accessed. This is conservative (the argument may not have been "
+"used to do what the user wanted) but still catches the most obvious cases."
+msgstr ""
+
+#: ../../../DriverInternals.rst:361
+msgid "Relation to GCC Driver Concepts"
+msgstr ""
+
+#: ../../../DriverInternals.rst:363
+msgid ""
+"For those familiar with the gcc driver, this section provides a brief "
+"overview of how things from the gcc driver map to the clang driver."
+msgstr ""
+
+#: ../../../DriverInternals.rst:366
+msgid "**Driver Driver**"
+msgstr ""
+
+#: ../../../DriverInternals.rst:368
+msgid ""
+"The driver driver is fully integrated into the clang driver. The driver "
+"simply constructs additional Actions to bind the architecture during the "
+"*Pipeline* phase. The tool chain specific argument translation is "
+"responsible for handling ``-Xarch_``."
+msgstr ""
+
+#: ../../../DriverInternals.rst:373
+msgid ""
+"The one caveat is that this approach requires ``-Xarch_`` not be used to "
+"alter the compilation itself (for example, one cannot provide ``-S`` as an "
+"``-Xarch_`` argument). The driver attempts to reject such invocations, and "
+"overall there isn't a good reason to abuse ``-Xarch_`` to that end in "
+"practice."
+msgstr ""
+
+#: ../../../DriverInternals.rst:379
+msgid ""
+"The upside is that the clang driver is more efficient and does little extra "
+"work to support universal builds. It also provides better error reporting "
+"and UI consistency."
+msgstr ""
+
+#: ../../../DriverInternals.rst:383
+msgid "**Specs**"
+msgstr ""
+
+#: ../../../DriverInternals.rst:385
+msgid ""
+"The clang driver has no direct correspondent for \"specs\". The majority of "
+"the functionality that is embedded in specs is in the Tool specific argument "
+"translation routines. The parts of specs which control the compilation "
+"pipeline are generally part of the *Pipeline* stage."
+msgstr ""
+
+#: ../../../DriverInternals.rst:391
+msgid "**Toolchains**"
+msgstr ""
+
+#: ../../../DriverInternals.rst:393
+msgid ""
+"The gcc driver has no direct understanding of tool chains. Each gcc binary "
+"roughly corresponds to the information which is embedded inside a single "
+"ToolChain."
+msgstr ""
+
+#: ../../../DriverInternals.rst:397
+msgid ""
+"The clang driver is intended to be portable and support complex compilation "
+"environments. All platform and tool chain specific code should be protected "
+"behind either abstract or well defined interfaces (such as whether the "
+"platform supports use as a driver driver)."
+msgstr ""
