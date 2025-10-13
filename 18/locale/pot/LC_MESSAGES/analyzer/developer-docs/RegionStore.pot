@@ -1,0 +1,230 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 18\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:3
+msgid "Region Store"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:4
+msgid ""
+"The analyzer \"Store\" represents the contents of memory regions. It is an "
+"opaque functional data structure stored in each ``ProgramState``; the only "
+"class that can modify the store is its associated StoreManager."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:8
+msgid ""
+"Currently (Feb. 2013), the only StoreManager implementation being used is "
+"``RegionStoreManager``. This store records bindings to memory regions using "
+"a \"base region + offset\" key. (This allows ``*p`` and ``p[0]`` to map to "
+"the same location, among other benefits.)"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:13
+msgid ""
+"Regions are grouped into \"clusters\", which roughly correspond to \"regions "
+"with the same base region\". This allows certain operations to be more "
+"efficient, such as invalidation."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:17
+msgid ""
+"Regions that do not have a known offset use a special \"symbolic\" offset. "
+"These keys store both the original region, and the \"concrete offset "
+"region\" -- the last region whose offset is entirely concrete. (For example, "
+"in the expression ``foo.bar[1][i].baz``, the concrete offset region is the "
+"array ``foo.bar[1]``, since that has a known offset from the start of the "
+"top-level ``foo`` struct.)"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:25
+msgid "Binding Invalidation"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:27
+msgid ""
+"Supporting both concrete and symbolic offsets makes things a bit tricky. "
+"Here's an example:"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:36
+msgid ""
+"After the third assignment, nothing can be said about the value of "
+"``foo[0]``, because ``foo[i]`` may have overwritten it! Thus, *binding to a "
+"region with a symbolic offset invalidates the entire concrete offset region."
+"* We know ``foo[i]`` is somewhere within ``foo``, so we don't have to "
+"invalidate anything else, but we do have to be conservative about all other "
+"bindings within ``foo``."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:43
+msgid "Continuing the example:"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:50
+msgid ""
+"After this latest assignment, nothing can be said about the value of "
+"``foo[i]``, because ``foo[0]`` may have overwritten it! *Binding to a region "
+"R with a concrete offset invalidates any symbolic offset bindings whose "
+"concrete offset region is a super-region **or** sub-region of R.* All we "
+"know about ``foo[i]`` is that it is somewhere within ``foo``, so changing "
+"*anything* within ``foo`` might change ``foo[i]``, and changing *all* of "
+"``foo`` (or its base region) will *definitely* change ``foo[i]``."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:58
+msgid ""
+"This logic could be improved by using the current constraints on ``i``, at "
+"the cost of speed. The latter case could also be improved by matching region "
+"kinds, i.e. changing ``foo[0].a`` is unlikely to affect ``foo[i].b``, no "
+"matter what ``i`` is."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:63
+msgid ""
+"For more detail, read through ``RegionStoreManager::"
+"removeSubRegionBindings`` in RegionStore.cpp."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:68
+msgid "ObjCIvarRegions"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:70
+msgid ""
+"Objective-C instance variables require a bit of special handling. Like "
+"struct fields, they are not base regions, and when their parent object "
+"region is invalidated, all the instance variables must be invalidated as "
+"well. However, they have no concrete compile-time offsets (in the modern, "
+"\"non-fragile\" runtime), and so cannot easily be represented as an offset "
+"from the start of the object in the analyzer. Moreover, this means that "
+"invalidating a single instance variable should *not* invalidate the rest of "
+"the object, since unlike struct fields or array elements there is no way to "
+"perform pointer arithmetic to access another instance variable."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:80
+msgid ""
+"Consequently, although the base region of an ObjCIvarRegion is the entire "
+"object, RegionStore offsets are computed from the start of the instance "
+"variable. Thus it is not valid to assume that all bindings with non-symbolic "
+"offsets start from the base region!"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:87
+msgid "Region Invalidation"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:89
+msgid ""
+"Unlike binding invalidation, region invalidation occurs when the entire "
+"contents of a region may have changed---say, because it has been passed to a "
+"function the analyzer can model, like memcpy, or because its address has "
+"escaped, usually as an argument to an opaque function call. In these cases "
+"we need to throw away not just all bindings within the region itself, but "
+"within its entire cluster, since neighboring regions may be accessed via "
+"pointer arithmetic."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:97
+msgid ""
+"Region invalidation typically does even more than this, however. Because it "
+"usually represents the complete escape of a region from the analyzer's "
+"model, its *contents* must also be transitively invalidated. (For example, "
+"if a region ``p`` of type ``int **`` is invalidated, the contents of ``*p`` "
+"and ``**p`` may have changed as well.) The algorithm that traverses this "
+"transitive closure of accessible regions is known as ClusterAnalysis, and is "
+"also used for finding all live bindings in the store (in order to throw away "
+"the dead ones). The name \"ClusterAnalysis\" predates the cluster-based "
+"organization of bindings, but refers to the same concept: during "
+"invalidation and liveness analysis, all bindings within a cluster must be "
+"treated in the same way for a conservative model of program behavior."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:111
+msgid "Default Bindings"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:113
+msgid ""
+"Most bindings in RegionStore are simple scalar values -- integers and "
+"pointers. These are known as \"Direct\" bindings. However, RegionStore "
+"supports a second type of binding called a \"Default\" binding. These are "
+"used to provide values to all the elements of an aggregate type (struct or "
+"array) without having to explicitly specify a binding for each individual "
+"element."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:119
+msgid ""
+"When there is no Direct binding for a particular region, the store manager "
+"looks at each super-region in turn to see if there is a Default binding. If "
+"so, this value is used as the value of the original region. The search ends "
+"when the base region is reached, at which point the RegionStore will pick an "
+"appropriate default value for the region (usually a symbolic value, but "
+"sometimes zero, for static data, or \"uninitialized\", for stack variables)."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:137
+msgid ""
+"NOTE: The fact that bindings are stored as a base region plus an offset "
+"limits the Default Binding strategy, because in C aggregates can contain "
+"other aggregates. In the current implementation of RegionStore, there is no "
+"way to distinguish a Default binding for an entire aggregate from a Default "
+"binding for the sub-aggregate at offset 0."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:145
+msgid "Lazy Bindings (LazyCompoundVal)"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:147
+msgid ""
+"RegionStore implements an optimization for copying aggregates (structs and "
+"arrays) called \"lazy bindings\", implemented using a special SVal called "
+"LazyCompoundVal. When the store is asked for the \"binding\" for an entire "
+"aggregate (i.e. for an lvalue-to-rvalue conversion), it returns a "
+"LazyCompoundVal instead. When this value is then stored into a variable, it "
+"is bound as a Default value. This makes copying arrays and structs much "
+"cheaper than if they had required memberwise access."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:155
+msgid ""
+"Under the hood, a LazyCompoundVal is implemented as a uniqued pair of "
+"(region, store), representing \"the value of the region during this "
+"'snapshot' of the store\". This has important implications for any sort of "
+"liveness or reachability analysis, which must take the bindings in the old "
+"store into account."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:161
+msgid ""
+"Retrieving a value from a lazy binding happens in the same way as any other "
+"Default binding: since there is no direct binding, the store manager falls "
+"back to super-regions to look for an appropriate default binding. "
+"LazyCompoundVal differs from a normal default binding, however, in that it "
+"contains several different values, instead of one value that will appear "
+"several times. Because of this, the store manager has to reconstruct the "
+"subregion chain on top of the LazyCompoundVal region, and look up *that* "
+"region in the previous store."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/RegionStore.rst:169
+msgid "Here's a concrete example:"
+msgstr ""
