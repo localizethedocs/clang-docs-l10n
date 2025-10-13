@@ -1,0 +1,172 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 11\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:44+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../JSONCompilationDatabase.rst:3
+msgid "JSON Compilation Database Format Specification"
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:5
+msgid ""
+"This document describes a format for specifying how to replay single "
+"compilations independently of the build system."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:9
+msgid "Background"
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:11
+msgid ""
+"Tools based on the C++ Abstract Syntax Tree need full information how to "
+"parse a translation unit. Usually this information is implicitly available "
+"in the build system, but running tools as part of the build system is not "
+"necessarily the best solution:"
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:16
+msgid ""
+"Build systems are inherently change driven, so running multiple tools over "
+"the same code base without changing the code does not fit into the "
+"architecture of many build systems."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:19
+msgid ""
+"Figuring out whether things have changed is often an IO bound process; this "
+"makes it hard to build low latency end user tools based on the build system."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:22
+msgid ""
+"Build systems are inherently sequential in the build graph, for example due "
+"to generated source code. While tools that run independently of the build "
+"still need the generated source code to exist, running tools multiple times "
+"over unchanging source does not require serialization of the runs according "
+"to the build dependency graph."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:30
+msgid "Supported Systems"
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:32
+msgid ""
+"Currently `CMake <https://cmake.org>`_ (since 2.8.5) supports generation of "
+"compilation databases for Unix Makefile builds (Ninja builds in the works) "
+"with the option ``CMAKE_EXPORT_COMPILE_COMMANDS``."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:36
+msgid ""
+"For projects on Linux, there is an alternative to intercept compiler calls "
+"with a tool called `Bear <https://github.com/rizsotto/Bear>`_."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:39
+msgid ""
+"Clang's tooling interface supports reading compilation databases; see the :"
+"doc:`LibTooling documentation <LibTooling>`. libclang and its python "
+"bindings also support this (since clang 3.2); see `CXCompilationDatabase.h </"
+"doxygen/group__COMPILATIONDB.html>`_."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:45
+msgid "Format"
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:47
+msgid ""
+"A compilation database is a JSON file, which consist of an array of "
+"\"command objects\", where each command object specifies one way a "
+"translation unit is compiled in the project."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:51
+msgid ""
+"Each command object contains the translation unit's main file, the working "
+"directory of the compile run and the actual compile command."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:54
+msgid "Example:"
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:65
+msgid "The contracts for each field in the command object are:"
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:67
+msgid ""
+"**directory:** The working directory of the compilation. All paths specified "
+"in the **command** or **file** fields must be either absolute or relative to "
+"this directory."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:70
+msgid ""
+"**file:** The main translation unit source processed by this compilation "
+"step. This is used by tools as the key into the compilation database. There "
+"can be multiple command objects for the same file, for example if the same "
+"source file is compiled with different configurations."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:75
+msgid ""
+"**command:** The compile command executed. After JSON unescaping, this must "
+"be a valid command to rerun the exact compilation step for the translation "
+"unit in the environment the build system uses. Parameters use shell quoting "
+"and shell escaping of quotes, with '``\"``' and '``\\``' being the only "
+"special characters. Shell expansion is not supported."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:81
+msgid ""
+"**arguments:** The compile command executed as list of strings. Either "
+"**arguments** or **command** is required."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:83
+msgid ""
+"**output:** The name of the output created by this compilation step. This "
+"field is optional. It can be used to distinguish different processing modes "
+"of the same input file."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:88
+msgid "Build System Integration"
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:90
+msgid ""
+"The convention is to name the file compile\\_commands.json and put it at the "
+"top of the build directory. Clang tools are pointed to the top of the build "
+"directory to detect the file and use the compilation database to parse C++ "
+"code in the source tree."
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:96
+msgid "Alternatives"
+msgstr ""
+
+#: ../../../JSONCompilationDatabase.rst:97
+msgid ""
+"For simple projects, Clang tools also recognize a compile_flags.txt file. "
+"This should contain one flag per line. The same flags will be used to "
+"compile any file."
+msgstr ""

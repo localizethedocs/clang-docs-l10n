@@ -1,0 +1,85 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 11\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:44+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../SanitizerStats.rst:3
+msgid "SanitizerStats"
+msgstr ""
+
+#: ../../../SanitizerStats.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../SanitizerStats.rst:11
+msgid ""
+"The sanitizers support a simple mechanism for gathering profiling statistics "
+"to help understand the overhead associated with sanitizers."
+msgstr ""
+
+#: ../../../SanitizerStats.rst:15
+msgid "How to build and run"
+msgstr ""
+
+#: ../../../SanitizerStats.rst:17
+msgid ""
+"SanitizerStats can currently only be used with :doc:`ControlFlowIntegrity`. "
+"In addition to ``-fsanitize=cfi*``, pass the ``-fsanitize-stats`` flag. This "
+"will cause the program to count the number of times that each control flow "
+"integrity check in the program fires."
+msgstr ""
+
+#: ../../../SanitizerStats.rst:22
+msgid ""
+"At run time, set the ``SANITIZER_STATS_PATH`` environment variable to direct "
+"statistics output to a file. The file will be written on process exit. The "
+"following substitutions will be applied to the environment variable:"
+msgstr ""
+
+#: ../../../SanitizerStats.rst:26
+msgid "``%b`` -- The executable basename."
+msgstr ""
+
+#: ../../../SanitizerStats.rst:27
+msgid "``%p`` -- The process ID."
+msgstr ""
+
+#: ../../../SanitizerStats.rst:29
+msgid ""
+"You can also send the ``SIGUSR2`` signal to a process to make it write "
+"sanitizer statistics immediately."
+msgstr ""
+
+#: ../../../SanitizerStats.rst:32
+msgid ""
+"The ``sanstats`` program can be used to dump statistics. It takes as a "
+"command line argument the path to a statistics file produced by a program "
+"compiled with ``-fsanitize-stats``."
+msgstr ""
+
+#: ../../../SanitizerStats.rst:36
+msgid ""
+"The output of ``sanstats`` is in four columns, separated by spaces. The "
+"first column is the file and line number of the call site. The second column "
+"is the function name. The third column is the type of statistic gathered (in "
+"this case, the type of control flow integrity check). The fourth column is "
+"the call count."
+msgstr ""
+
+#: ../../../SanitizerStats.rst:42
+msgid "Example:"
+msgstr ""
