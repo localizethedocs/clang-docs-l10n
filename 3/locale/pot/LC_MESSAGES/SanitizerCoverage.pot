@@ -1,0 +1,863 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../SanitizerCoverage.rst:3
+msgid "SanitizerCoverage"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:11
+msgid ""
+"Sanitizer tools have a very simple code coverage tool built in. It allows to "
+"get function-level, basic-block-level, and edge-level coverage at a very low "
+"cost."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:16
+msgid "How to build and run"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:18
+msgid ""
+"SanitizerCoverage can be used with :doc:`AddressSanitizer`, :doc:"
+"`LeakSanitizer`, :doc:`MemorySanitizer`, UndefinedBehaviorSanitizer, or "
+"without any sanitizer.  Pass one of the following compile-time flags:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:23
+msgid "``-fsanitize-coverage=func`` for function-level coverage (very fast)."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:24
+msgid ""
+"``-fsanitize-coverage=bb`` for basic-block-level coverage (may add up to 30% "
+"**extra** slowdown)."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:26
+msgid ""
+"``-fsanitize-coverage=edge`` for edge-level coverage (up to 40% slowdown)."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:28
+msgid ""
+"You may also specify ``-fsanitize-coverage=indirect-calls`` for additional "
+"`caller-callee coverage`_."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:31
+msgid ""
+"At run time, pass ``coverage=1`` in ``ASAN_OPTIONS``, ``LSAN_OPTIONS``, "
+"``MSAN_OPTIONS`` or ``UBSAN_OPTIONS``, as appropriate. For the standalone "
+"coverage mode, use ``UBSAN_OPTIONS``."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:35
+msgid ""
+"To get `Coverage counters`_, add ``-fsanitize-coverage=8bit-counters`` to "
+"one of the above compile-time flags. At runtime, use "
+"``*SAN_OPTIONS=coverage=1:coverage_counters=1``."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:39
+msgid "Example:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:63
+msgid ""
+"Every time you run an executable instrumented with SanitizerCoverage one ``*."
+"sancov`` file is created during the process shutdown. If the executable is "
+"dynamically linked against instrumented DSOs, one ``*.sancov`` file will be "
+"also created for every DSO."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:69
+msgid "Postprocessing"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:71
+msgid ""
+"The format of ``*.sancov`` files is very simple: the first 8 bytes is the "
+"magic, one of ``0xC0BFFFFFFFFFFF64`` and ``0xC0BFFFFFFFFFFF32``. The last "
+"byte of the magic defines the size of the following offsets. The rest of the "
+"data is the offsets in the corresponding binary/DSO that were executed "
+"during the run."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:76
+msgid ""
+"A simple script ``$LLVM/projects/compiler-rt/lib/sanitizer_common/scripts/"
+"sancov.py`` is provided to dump these offsets."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:89
+msgid ""
+"You can then filter the output of ``sancov.py`` through ``addr2line --exe "
+"ObjectFile`` or ``llvm-symbolizer --obj ObjectFile`` to get file names and "
+"line numbers:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:100
+msgid "Sancov Tool"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:102
+msgid ""
+"A new experimental ``sancov`` tool is developed to process coverage files. "
+"The tool is part of LLVM project and is currently supported only on Linux. "
+"It can handle symbolization tasks autonomously without any extra support "
+"from the environment. You need to pass .sancov files (named ``<module_name>."
+"<pid>.sancov`` and paths to all corresponding binary elf files. Sancov "
+"matches these files using module names and binaries file names."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:126
+msgid "Automatic HTML Report Generation"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:128
+msgid ""
+"If ``*SAN_OPTIONS`` contains ``html_cov_report=1`` option set, then html "
+"coverage report would be automatically generated alongside the coverage "
+"files. The ``sancov`` binary should be present in ``PATH`` or "
+"``sancov_path=<path_to_sancov`` option can be used to specify tool location."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:135
+msgid "How good is the coverage?"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:137
+msgid ""
+"It is possible to find out which PCs are not covered, by subtracting the "
+"covered set from the set of all instrumented PCs. The latter can be obtained "
+"by listing all callsites of ``__sanitizer_cov()`` in the binary. On Linux, "
+"``sancov.py`` can do this for you. Just supply the path to binary and a list "
+"of covered PCs:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:154
+msgid "Edge coverage"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:156
+msgid "Consider this code:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:165
+msgid "It contains 3 basic blocks, let's name them A, B, C:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:177
+msgid ""
+"If blocks A, B, and C are all covered we know for certain that the edges "
+"A=>B and B=>C were executed, but we still don't know if the edge A=>C was "
+"executed. Such edges of control flow graph are called `critical <http://en."
+"wikipedia.org/wiki/Control_flow_graph#Special_edges>`_. The edge-level "
+"coverage (``-fsanitize-coverage=edge``) simply splits all critical edges by "
+"introducing new dummy blocks and then instruments those blocks:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:195
+msgid "Bitset"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:197
+msgid ""
+"When ``coverage_bitset=1`` run-time flag is given, the coverage will also be "
+"dumped as a bitset (text file with 1 for blocks that have been executed and "
+"0 for blocks that were not)."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:215
+msgid ""
+"For a given executable the length of the bitset is always the same (well, "
+"unless dlopen/dlclose come into play), so the bitset coverage can be easily "
+"used for bitset-based corpus distillation."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:220
+msgid "Caller-callee coverage"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:222
+msgid ""
+"(Experimental!) Every indirect function call is instrumented with a run-time "
+"function call that captures caller and callee.  At the shutdown time the "
+"process dumps a separate file called ``caller-callee.PID.sancov`` which "
+"contains caller/callee pairs as pairs of lines (odd lines are callers, even "
+"lines are callees)"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:235
+msgid "Current limitations:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:237
+msgid ""
+"Only the first 14 callees for every caller are recorded, the rest are "
+"silently ignored."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:239
+msgid ""
+"The output format is not very compact since caller and callee may reside in "
+"different modules and we need to spell out the module names."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:241
+msgid "The routine that dumps the output is not optimized for speed"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:242
+msgid "Only Linux x86_64 is tested so far."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:243
+msgid "Sandboxes are not supported."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:246
+msgid "Coverage counters"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:248
+msgid ""
+"This experimental feature is inspired by `AFL <http://lcamtuf.coredump.cx/"
+"afl/technical_details.txt>`__'s coverage instrumentation. With additional "
+"compile-time and run-time flags you can get more sensitive coverage "
+"information.  In addition to boolean values assigned to every basic block "
+"(edge) the instrumentation will collect imprecise counters. On exit, every "
+"counter will be mapped to a 8-bit bitset representing counter ranges: ``1, "
+"2, 3, 4-7, 8-15, 16-31, 32-127, 128+`` and those 8-bit bitsets will be "
+"dumped to disk."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:266
+msgid ""
+"These counters may also be used for in-process coverage-guided fuzzers. See "
+"``include/sanitizer/coverage_interface.h``:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:290
+msgid "Tracing basic blocks"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:291
+msgid ""
+"Experimental support for basic block (or edge) tracing. With ``-fsanitize-"
+"coverage=trace-bb`` the compiler will insert "
+"``__sanitizer_cov_trace_basic_block(s32 *id)`` before every function, basic "
+"block, or edge (depending on the value of ``-fsanitize-coverage=[func,bb,"
+"edge]``). Example:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:302
+msgid ""
+"This will produce two files after the process exit: `trace-points.PID."
+"sancov` and `trace-events.PID.sancov`. The first file will contain a textual "
+"description of all the instrumented points in the program in the form that "
+"you can feed into llvm-symbolizer (e.g. `a.out 0x4dca89`), one per line. The "
+"second file will contain the actual execution trace as a sequence of 4-byte "
+"integers -- these integers are the indices into the array of instrumented "
+"points (the first file)."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:309
+msgid ""
+"Basic block tracing is currently supported only for single-threaded "
+"applications."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:313
+msgid "Tracing PCs"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:314
+msgid ""
+"*Experimental* feature similar to tracing basic blocks, but with a different "
+"API. With ``-fsanitize-coverage=trace-pc`` the compiler will insert "
+"``__sanitizer_cov_trace_pc()`` on every edge. With an additional ``...=trace-"
+"pc,indirect-calls`` flag ``__sanitizer_cov_trace_pc_indirect(void *callee)`` "
+"will be inserted on every indirect call. These callbacks are not implemented "
+"in the Sanitizer run-time and should be defined by the user. So, these flags "
+"do not require the other sanitizer to be used. This mechanism is used for "
+"fuzzing the Linux kernel (https://github.com/google/syzkaller) and can be "
+"used with `AFL <http://lcamtuf.coredump.cx/afl>`__."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:325
+msgid "Tracing data flow"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:327
+msgid ""
+"An *experimental* feature to support data-flow-guided fuzzing. With ``-"
+"fsanitize-coverage=trace-cmp`` the compiler will insert extra "
+"instrumentation around comparison instructions and switch statements. The "
+"fuzzer will need to define the following functions, they will be called by "
+"the instrumented code."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:349
+msgid ""
+"This interface is a subject to change. The current implementation is not "
+"thread-safe and thus can be safely used only for single-threaded targets."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:353
+msgid "Output directory"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:355
+msgid ""
+"By default, .sancov files are created in the current working directory. This "
+"can be changed with ``ASAN_OPTIONS=coverage_dir=/path``:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:366
+msgid "Sudden death"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:368
+msgid ""
+"Normally, coverage data is collected in memory and saved to disk when the "
+"program exits (with an ``atexit()`` handler), when a SIGSEGV is caught, or "
+"when ``__sanitizer_cov_dump()`` is called."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:372
+msgid ""
+"If the program ends with a signal that ASan does not handle (or can not "
+"handle at all, like SIGKILL), coverage data will be lost. This is a big "
+"problem on Android, where SIGKILL is a normal way of evicting applications "
+"from memory."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:376
+msgid ""
+"With ``ASAN_OPTIONS=coverage=1:coverage_direct=1`` coverage data is written "
+"to a memory-mapped file as soon as it collected."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:394
+msgid ""
+"Note that on 64-bit platforms, this method writes 2x more data than the "
+"default, because it stores full PC values instead of 32-bit offsets."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:398
+msgid "In-process fuzzing"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:400
+msgid ""
+"Coverage data could be useful for fuzzers and sometimes it is preferable to "
+"run a fuzzer in the same process as the code being fuzzed (in-process "
+"fuzzer)."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:403
+msgid ""
+"You can use ``__sanitizer_get_total_unique_coverage()`` from ``<sanitizer/"
+"coverage_interface.h>`` which returns the number of currently covered "
+"entities in the program. This will tell the fuzzer if the coverage has "
+"increased after testing every new input."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:408
+msgid ""
+"If a fuzzer finds a bug in the ASan run, you will need to save the "
+"reproducer before exiting the process.  Use ``__asan_set_death_callback`` "
+"from ``<sanitizer/asan_interface.h>`` to do that."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:412
+msgid ""
+"An example of such fuzzer can be found in `the LLVM tree <http://llvm.org/"
+"viewvc/llvm-project/llvm/trunk/lib/Fuzzer/README.txt?view=markup>`_."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:416
+msgid "Performance"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:418
+msgid ""
+"This coverage implementation is **fast**. With function-level coverage (``-"
+"fsanitize-coverage=func``) the overhead is not measurable. With basic-block-"
+"level coverage (``-fsanitize-coverage=bb``) the overhead varies between 0 "
+"and 25%."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:424
+msgid "benchmark"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:424
+msgid "cov0"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:424
+msgid "cov1"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:424
+msgid "diff 0-1"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:424
+msgid "cov2"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:424
+msgid "diff 0-2"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:424
+msgid "diff 1-2"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:426
+msgid "400.perlbench"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:426
+msgid "1296.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:426
+msgid "1307.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:426 ../../../SanitizerCoverage.rst:428
+#: ../../../SanitizerCoverage.rst:429 ../../../SanitizerCoverage.rst:432
+#: ../../../SanitizerCoverage.rst:440 ../../../SanitizerCoverage.rst:441
+msgid "1.01"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:426
+msgid "1465.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:426
+msgid "1.13"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:426 ../../../SanitizerCoverage.rst:435
+msgid "1.12"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:427
+msgid "401.bzip2"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:427
+msgid "858.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:427
+msgid "854.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:427 ../../../SanitizerCoverage.rst:431
+#: ../../../SanitizerCoverage.rst:434 ../../../SanitizerCoverage.rst:438
+#: ../../../SanitizerCoverage.rst:439 ../../../SanitizerCoverage.rst:444
+msgid "1.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:427
+msgid "1010.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:427
+msgid "1.18"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:428
+msgid "403.gcc"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:428
+msgid "613.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:428
+msgid "617.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:428
+msgid "683.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:428
+msgid "1.11"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:429
+msgid "429.mcf"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:429
+msgid "605.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:429 ../../../SanitizerCoverage.rst:437
+msgid "582.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:429
+msgid "0.96"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:429
+msgid "610.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:429 ../../../SanitizerCoverage.rst:434
+#: ../../../SanitizerCoverage.rst:443
+msgid "1.05"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:430
+msgid "445.gobmk"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:430
+msgid "896.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:430
+msgid "880.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:430
+msgid "0.98"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:430
+msgid "1050.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:430
+msgid "1.17"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:430 ../../../SanitizerCoverage.rst:437
+msgid "1.19"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:431
+msgid "456.hmmer"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:431
+msgid "892.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:431
+msgid "918.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:431 ../../../SanitizerCoverage.rst:435
+#: ../../../SanitizerCoverage.rst:440
+msgid "1.03"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:432
+msgid "458.sjeng"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:432
+msgid "995.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:432
+msgid "1009.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:432
+msgid "1217.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:432
+msgid "1.22"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:432
+msgid "1.21"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:433
+msgid "462.libquantum"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:433
+msgid "497.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:433
+msgid "492.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:433 ../../../SanitizerCoverage.rst:436
+#: ../../../SanitizerCoverage.rst:443
+msgid "0.99"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:433
+msgid "534.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:433 ../../../SanitizerCoverage.rst:441
+msgid "1.07"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:433 ../../../SanitizerCoverage.rst:436
+#: ../../../SanitizerCoverage.rst:439
+msgid "1.09"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:434
+msgid "464.h264ref"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:434
+msgid "1461.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:434
+msgid "1467.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:434
+msgid "1543.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:434
+msgid "1.06"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:435
+msgid "471.omnetpp"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:435
+msgid "575.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:435
+msgid "590.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:435
+msgid "660.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:435
+msgid "1.15"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:436
+msgid "473.astar"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:436
+msgid "658.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:436
+msgid "652.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:436
+msgid "715.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:436
+msgid "1.10"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:437
+msgid "483.xalancbmk"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:437
+msgid "471.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:437
+msgid "491.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:437 ../../../SanitizerCoverage.rst:440
+#: ../../../SanitizerCoverage.rst:443
+msgid "1.04"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:437
+msgid "1.24"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:438
+msgid "433.milc"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:438
+msgid "616.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:438
+msgid "627.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:438 ../../../SanitizerCoverage.rst:442
+msgid "1.02"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:439
+msgid "444.namd"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:439
+msgid "602.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:439
+msgid "601.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:439
+msgid "654.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:440
+msgid "447.dealII"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:440
+msgid "630.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:440
+msgid "634.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:440
+msgid "653.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:441
+msgid "450.soplex"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:441
+msgid "365.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:441
+msgid "368.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:441
+msgid "395.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:441 ../../../SanitizerCoverage.rst:444
+msgid "1.08"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:442
+msgid "453.povray"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:442
+msgid "427.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:442
+msgid "434.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:442
+msgid "495.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:442
+msgid "1.16"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:442
+msgid "1.14"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:443
+msgid "470.lbm"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:443
+msgid "357.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:443
+msgid "375.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:443
+msgid "370.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:444
+msgid "482.sphinx3"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:444
+msgid "927.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:444
+msgid "928.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:444
+msgid "1000.00"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:448
+msgid "Why another coverage?"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:454
+msgid "Why did we implement yet another code coverage?"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:451
+msgid ""
+"We needed something that is lightning fast, plays well with "
+"AddressSanitizer, and does not significantly increase the binary size."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:453
+msgid ""
+"Traditional coverage implementations based in global counters `suffer from "
+"contention on counters <https://groups.google.com/forum/#!topic/llvm-dev/"
+"cDqYgnxNEhY>`_."
+msgstr ""
