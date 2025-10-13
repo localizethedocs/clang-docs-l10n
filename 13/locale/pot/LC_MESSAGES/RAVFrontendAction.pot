@@ -1,0 +1,136 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 13\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:43+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../RAVFrontendAction.rst:3
+msgid "How to write RecursiveASTVisitor based ASTFrontendActions."
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:6
+msgid "Introduction"
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:8
+msgid ""
+"In this tutorial you will learn how to create a FrontendAction that uses a "
+"RecursiveASTVisitor to find CXXRecordDecl AST nodes with a specified name."
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:13
+msgid "Creating a FrontendAction"
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:15
+msgid ""
+"When writing a clang based tool like a Clang Plugin or a standalone tool "
+"based on LibTooling, the common entry point is the FrontendAction. "
+"FrontendAction is an interface that allows execution of user specific "
+"actions as part of the compilation. To run tools over the AST clang provides "
+"the convenience interface ASTFrontendAction, which takes care of executing "
+"the action. The only part left is to implement the CreateASTConsumer method "
+"that returns an ASTConsumer per translation unit."
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:35
+msgid "Creating an ASTConsumer"
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:37
+msgid ""
+"ASTConsumer is an interface used to write generic actions on an AST, "
+"regardless of how the AST was produced. ASTConsumer provides many different "
+"entry points, but for our use case the only one needed is "
+"HandleTranslationUnit, which is called with the ASTContext for the "
+"translation unit."
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:58
+msgid "Using the RecursiveASTVisitor"
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:60
+msgid ""
+"Now that everything is hooked up, the next step is to implement a "
+"RecursiveASTVisitor to extract the relevant information from the AST."
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:63
+msgid ""
+"The RecursiveASTVisitor provides hooks of the form bool "
+"VisitNodeType(NodeType \\*) for most AST nodes; the exception are TypeLoc "
+"nodes, which are passed by-value. We only need to implement the methods for "
+"the relevant node types."
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:68
+msgid ""
+"Let's start by writing a RecursiveASTVisitor that visits all CXXRecordDecl's."
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:87
+msgid ""
+"In the methods of our RecursiveASTVisitor we can now use the full power of "
+"the Clang AST to drill through to the parts that are interesting for us. For "
+"example, to find all class declaration with a certain name, we can check for "
+"a specific qualified name:"
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:101
+msgid "Accessing the SourceManager and ASTContext"
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:103
+msgid ""
+"Some of the information about the AST, like source locations and global "
+"identifier information, are not stored in the AST nodes themselves, but in "
+"the ASTContext and its associated source manager. To retrieve them we need "
+"to hand the ASTContext into our RecursiveASTVisitor implementation."
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:108
+msgid ""
+"The ASTContext is available from the CompilerInstance during the call to "
+"CreateASTConsumer. We can thus extract it there and hand it into our freshly "
+"created FindNamedClassConsumer:"
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:119
+msgid ""
+"Now that the ASTContext is available in the RecursiveASTVisitor, we can do "
+"more interesting things with AST nodes, like looking up their source "
+"locations:"
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:139
+msgid "Putting it all together"
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:141
+msgid "Now we can combine all of the above into a small example program:"
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:200
+msgid ""
+"We store this into a file called FindClassDecls.cpp and create the following "
+"CMakeLists.txt to link it:"
+msgstr ""
+
+#: ../../../RAVFrontendAction.rst:220
+msgid ""
+"When running this tool over a small code snippet it will output all "
+"declarations of a class n::m::C it found:"
+msgstr ""
