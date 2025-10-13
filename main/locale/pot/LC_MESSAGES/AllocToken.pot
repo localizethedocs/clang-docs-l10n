@@ -1,0 +1,226 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../AllocToken.rst:3
+msgid "Allocation Tokens"
+msgstr ""
+
+#: ../../../AllocToken.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../AllocToken.rst:11
+msgid ""
+"Clang provides support for allocation tokens to enable allocator-level heap "
+"organization strategies. Clang assigns mode-dependent token IDs to "
+"allocation calls; the runtime behavior depends entirely on the "
+"implementation of a compatible memory allocator."
+msgstr ""
+
+#: ../../../AllocToken.rst:16
+msgid "Possible allocator strategies include:"
+msgstr ""
+
+#: ../../../AllocToken.rst:18
+msgid ""
+"**Security Hardening**: Placing allocations into separate, isolated heap "
+"partitions. For example, separating pointer-containing types from raw data "
+"can mitigate exploits that rely on overflowing a primitive buffer to corrupt "
+"object metadata."
+msgstr ""
+
+#: ../../../AllocToken.rst:23
+msgid ""
+"**Memory Layout Optimization**: Grouping related allocations to improve data "
+"locality and cache utilization."
+msgstr ""
+
+#: ../../../AllocToken.rst:26
+msgid ""
+"**Custom Allocation Policies**: Applying different management strategies to "
+"different partitions."
+msgstr ""
+
+#: ../../../AllocToken.rst:30
+msgid "Token Assignment Mode"
+msgstr ""
+
+#: ../../../AllocToken.rst:32
+msgid "The default mode to calculate tokens is:"
+msgstr ""
+
+#: ../../../AllocToken.rst:34
+msgid ""
+"``typehashpointersplit``: This mode assigns a token ID based on the hash of "
+"the allocated type's name, where the top half ID-space is reserved for types "
+"that contain pointers and the bottom half for types that do not contain "
+"pointers."
+msgstr ""
+
+#: ../../../AllocToken.rst:39
+msgid ""
+"Other token ID assignment modes are supported, but they may be subject to "
+"change or removal. These may (experimentally) be selected with ``-mllvm -"
+"alloc-token-mode=<mode>``:"
+msgstr ""
+
+#: ../../../AllocToken.rst:43
+msgid ""
+"``typehash``: This mode assigns a token ID based on the hash of the "
+"allocated type's name."
+msgstr ""
+
+#: ../../../AllocToken.rst:46
+msgid ""
+"``random``: This mode assigns a statically-determined random token ID to "
+"each allocation site."
+msgstr ""
+
+#: ../../../AllocToken.rst:49
+msgid ""
+"``increment``: This mode assigns a simple, incrementally increasing token ID "
+"to each allocation site."
+msgstr ""
+
+#: ../../../AllocToken.rst:53
+msgid "Allocation Token Instrumentation"
+msgstr ""
+
+#: ../../../AllocToken.rst:55
+msgid ""
+"To enable instrumentation of allocation functions, code can be compiled with "
+"the ``-fsanitize=alloc-token`` flag:"
+msgstr ""
+
+#: ../../../AllocToken.rst:62
+msgid ""
+"The instrumentation transforms allocation calls to include a token ID. For "
+"example:"
+msgstr ""
+
+#: ../../../AllocToken.rst:73
+msgid "The following command-line options affect generated token IDs:"
+msgstr ""
+
+#: ../../../AllocToken.rst:81
+msgid "``-falloc-token-max=<N>``"
+msgstr ""
+
+#: ../../../AllocToken.rst:76
+msgid ""
+"Configures the maximum number of tokens. No max by default (tokens bounded "
+"by ``SIZE_MAX``)."
+msgstr ""
+
+#: ../../../AllocToken.rst:84
+msgid "Runtime Interface"
+msgstr ""
+
+#: ../../../AllocToken.rst:86
+msgid ""
+"A compatible runtime must be provided that implements the token-enabled "
+"allocation functions. The instrumentation generates calls to functions that "
+"take a final ``size_t token_id`` argument."
+msgstr ""
+
+#: ../../../AllocToken.rst:106
+msgid "Fast ABI"
+msgstr ""
+
+#: ../../../AllocToken.rst:108
+msgid ""
+"An alternative ABI can be enabled with ``-fsanitize-alloc-token-fast-abi``, "
+"which encodes the token ID hint in the allocation function name."
+msgstr ""
+
+#: ../../../AllocToken.rst:122
+msgid ""
+"This ABI provides a more efficient alternative where ``-falloc-token-max`` "
+"is small."
+msgstr ""
+
+#: ../../../AllocToken.rst:126
+msgid "Instrumenting Non-Standard Allocation Functions"
+msgstr ""
+
+#: ../../../AllocToken.rst:128
+msgid ""
+"By default, AllocToken only instruments standard library allocation "
+"functions. This simplifies adoption, as a compatible allocator only needs to "
+"provide token-enabled variants for a well-defined set of standard functions."
+msgstr ""
+
+#: ../../../AllocToken.rst:132
+msgid ""
+"To extend instrumentation to custom allocation functions, enable broader "
+"coverage with ``-fsanitize-alloc-token-extended``. Such functions require "
+"being marked with the `malloc <https://clang.llvm.org/docs/"
+"AttributeReference.html#malloc>`_ or `alloc_size <https://clang.llvm.org/"
+"docs/AttributeReference.html#alloc-size>`_ attributes (or a combination)."
+msgstr ""
+
+#: ../../../AllocToken.rst:139
+msgid "For example:"
+msgstr ""
+
+#: ../../../AllocToken.rst:155
+msgid "Disabling Instrumentation"
+msgstr ""
+
+#: ../../../AllocToken.rst:157
+msgid ""
+"To exclude specific functions from instrumentation, you can use the "
+"``no_sanitize(\"alloc-token\")`` attribute:"
+msgstr ""
+
+#: ../../../AllocToken.rst:167
+msgid ""
+"Note: Independent of any given allocator support, the instrumentation aims "
+"to remain performance neutral. As such, ``no_sanitize(\"alloc-token\")`` "
+"functions may be inlined into instrumented functions and vice-versa. If "
+"correctness is affected, such functions should explicitly be marked "
+"``noinline``."
+msgstr ""
+
+#: ../../../AllocToken.rst:173
+msgid ""
+"The ``__attribute__((disable_sanitizer_instrumentation))`` is also supported "
+"to disable this and other sanitizer instrumentations."
+msgstr ""
+
+#: ../../../AllocToken.rst:177
+msgid "Suppressions File (Ignorelist)"
+msgstr ""
+
+#: ../../../AllocToken.rst:179
+msgid ""
+"AllocToken respects the ``src`` and ``fun`` entity types in the :doc:"
+"`SanitizerSpecialCaseList`, which can be used to omit specified source files "
+"or functions from instrumentation."
+msgstr ""
+
+#: ../../../AllocToken.rst:197
+msgid "Conditional Compilation with ``__SANITIZE_ALLOC_TOKEN__``"
+msgstr ""
+
+#: ../../../AllocToken.rst:199
+msgid ""
+"In some cases, one may need to execute different code depending on whether "
+"AllocToken instrumentation is enabled. The ``__SANITIZE_ALLOC_TOKEN__`` "
+"macro can be used for this purpose."
+msgstr ""
