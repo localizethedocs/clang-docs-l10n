@@ -1,0 +1,421 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 20\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:3
+msgid "Debug Checks"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:8
+msgid ""
+"The analyzer contains a number of checkers which can aid in debugging. "
+"Enable them by using the \"-analyzer-checker=\" flag, followed by the name "
+"of the checker."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:14
+msgid "General Analysis Dumpers"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:16
+msgid ""
+"These checkers are used to dump the results of various infrastructural "
+"analyses to stderr. Some checkers also have \"view\" variants, which will "
+"display a graph using a 'dot' format viewer (such as Graphviz on macOS) "
+"instead."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:20
+msgid ""
+"debug.DumpCallGraph, debug.ViewCallGraph: Show the call graph generated for "
+"the current translation unit. This is used to determine the order in which "
+"to analyze functions when inlining is enabled."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:24
+msgid ""
+"debug.DumpCFG, debug.ViewCFG: Show the CFG generated for each top-level "
+"function being analyzed."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:27
+msgid ""
+"debug.DumpDominators: Shows the dominance tree for the CFG of each top-level "
+"function."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:30
+msgid ""
+"debug.DumpLiveVars: Show the results of live variable analysis for each top-"
+"level function being analyzed."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:33
+msgid ""
+"debug.DumpLiveExprs: Show the results of live expression analysis for each "
+"top-level function being analyzed."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:36
+msgid ""
+"debug.ViewExplodedGraph: Show the Exploded Graphs generated for the analysis "
+"of different functions in the input translation unit. When there are several "
+"functions analyzed, display one graph per function. Beware that these graphs "
+"may grow very large, even for small functions."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:42
+msgid "Path Tracking"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:44
+msgid ""
+"These checkers print information about the path taken by the analyzer engine."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:46
+msgid ""
+"debug.DumpCalls: Prints out every function or method call encountered during "
+"a path traversal. This is indented to show the call stack, but does NOT do "
+"any special handling of branches, meaning different paths could end up "
+"interleaved."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:51
+msgid ""
+"debug.DumpTraversal: Prints the name of each branch statement encountered "
+"during a path traversal (\"IfStmt\", \"WhileStmt\", etc). Currently used to "
+"check whether the analysis engine is doing BFS or DFS."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:57
+msgid "State Checking"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:59
+msgid ""
+"These checkers will print out information about the analyzer state in the "
+"form of analysis warnings. They are intended for use with the -verify "
+"functionality in regression tests."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:63
+msgid ""
+"debug.TaintTest: Prints out the word \"tainted\" for every expression that "
+"carries taint. At the time of this writing, taint was only introduced by the "
+"checks under experimental.security.taint.TaintPropagation; this checker may "
+"eventually move to the security.taint package."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:68
+msgid ""
+"debug.ExprInspection: Responds to certain function calls, which are modeled "
+"after builtins. These function calls should affect the program state other "
+"than the evaluation of their arguments; to use them, you will need to "
+"declare them within your test file. The available functions are described "
+"below."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:73
+msgid ""
+"(FIXME: debug.ExprInspection should probably be renamed, since it no longer "
+"only inspects expressions.)"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:78
+msgid "ExprInspection checks"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:80
+msgid "``void clang_analyzer_eval(bool);``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:82
+msgid ""
+"Prints TRUE if the argument is known to have a non-zero value, FALSE if the "
+"argument is known to have a zero or null value, and UNKNOWN if the argument "
+"isn't sufficiently constrained on this path.  You can use this to test other "
+"values by using expressions like \"x == 5\".  Note that this functionality "
+"is currently DISABLED in inlined functions, since different calls to the "
+"same inlined function could provide different information, making it "
+"difficult to write proper -verify directives."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:90
+#: ../../../analyzer/developer-docs/DebugChecks.rst:115
+msgid "In C, the argument can be typed as 'int' or as '_Bool'."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:92
+#: ../../../analyzer/developer-docs/DebugChecks.rst:117
+#: ../../../analyzer/developer-docs/DebugChecks.rst:135
+#: ../../../analyzer/developer-docs/DebugChecks.rst:149
+#: ../../../analyzer/developer-docs/DebugChecks.rst:171
+#: ../../../analyzer/developer-docs/DebugChecks.rst:188
+#: ../../../analyzer/developer-docs/DebugChecks.rst:208
+#: ../../../analyzer/developer-docs/DebugChecks.rst:222
+#: ../../../analyzer/developer-docs/DebugChecks.rst:241
+#: ../../../analyzer/developer-docs/DebugChecks.rst:254
+#: ../../../analyzer/developer-docs/DebugChecks.rst:267
+#: ../../../analyzer/developer-docs/DebugChecks.rst:287
+#: ../../../analyzer/developer-docs/DebugChecks.rst:305
+#: ../../../analyzer/developer-docs/DebugChecks.rst:330
+msgid "Example usage::"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:99
+msgid "``void clang_analyzer_checkInlined(bool);``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:101
+msgid ""
+"If a call occurs within an inlined function, prints TRUE or FALSE according "
+"to the value of its argument. If a call occurs outside an inlined function, "
+"nothing is printed."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:105
+msgid ""
+"The intended use of this checker is to assert that a function is inlined at "
+"least once (by passing 'true' and expecting a warning), or to assert that a "
+"function is never inlined (by passing 'false' and expecting no warning). The "
+"argument is technically unnecessary but is intended to clarify intent."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:110
+msgid ""
+"You might wonder why we can't print TRUE if a function is ever inlined and "
+"FALSE if it is not. The problem is that any inlined function could "
+"conceivably also be analyzed as a top-level function (in which case both "
+"TRUE and FALSE would be printed), depending on the value of the -analyzer-"
+"inlining option."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:131
+msgid "``void clang_analyzer_warnIfReached();``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:133
+msgid "Generate a warning if this line of code gets reached by the analyzer."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:144
+msgid "``void clang_analyzer_numTimesReached();``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:146
+msgid ""
+"Same as above, but include the number of times this call expression gets "
+"reached by the analyzer during the current analysis."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:155
+msgid "``void clang_analyzer_warnOnDeadSymbol(int);``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:157
+msgid ""
+"Subscribe for a delayed warning when the symbol that represents the value of "
+"the argument is garbage-collected by the analyzer."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:160
+msgid ""
+"When calling 'clang_analyzer_warnOnDeadSymbol(x)', if value of 'x' is a "
+"symbol, then this symbol is marked by the ExprInspection checker. Then, "
+"during each garbage collection run, the checker sees if the marked symbol is "
+"being collected and issues the 'SYMBOL DEAD' warning if it does. This way "
+"you know where exactly, up to the line of code, the symbol dies."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:166
+msgid ""
+"It is unlikely that you call this function after the symbol is already dead, "
+"because the very reference to it as the function argument prevents it from "
+"dying. However, if the argument is not a symbol but a concrete value, no "
+"warning would be issued."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:179
+msgid "``void clang_analyzer_explain(a single argument of any type);``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:181
+msgid ""
+"This function explains the value of its argument in a human-readable manner "
+"in the warning message. You can make as many overrides of its prototype in "
+"the test code as necessary to explain various integral, pointer, or even "
+"record-type values. To simplify usage in C code (where overloading the "
+"function declaration is not allowed), you may append an arbitrary suffix to "
+"the function name, without affecting functionality."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:203
+msgid "``void clang_analyzer_dump( /* a single argument of any type */);``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:205
+msgid ""
+"Similar to clang_analyzer_explain, but produces a raw dump of the value, "
+"same as SVal::dump()."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:215
+msgid "``size_t clang_analyzer_getExtent(void *);``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:217
+msgid ""
+"This function returns the value that represents the extent of a memory "
+"region pointed to by the argument. This value is often difficult to obtain "
+"otherwise, because no valid code that produces this value. However, it may "
+"be useful for testing purposes, to see how well does the analyzer model "
+"region extents."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:232
+msgid "``void clang_analyzer_printState();``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:234
+msgid ""
+"Dumps the current ProgramState to the stderr. Quickly lookup the program "
+"state at any execution point without ViewExplodedGraph or re-compiling the "
+"program. This is not very useful for writing tests (apart from testing how "
+"ProgramState gets printed), but useful for debugging tests. Also, this "
+"method doesn't produce a warning, so it gets printed on the console before "
+"all other ExprInspection warnings."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:248
+msgid "``void clang_analyzer_hashDump(int);``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:250
+msgid ""
+"The analyzer can generate a hash to identify reports. To debug what "
+"information is used to calculate this hash it is possible to dump the hashed "
+"string as a warning of an arbitrary expression using the function above."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:261
+msgid "``void clang_analyzer_denote(int, const char *);``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:263
+msgid ""
+"Denotes symbols with strings. A subsequent call to clang_analyzer_express() "
+"will expresses another symbol in terms of these string. Useful for testing "
+"relationships between different symbols."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:274
+msgid "``void clang_analyzer_express(int);``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:276
+msgid "See clang_analyzer_denote()."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:278
+msgid "``void clang_analyzer_isTainted(a single argument of any type);``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:280
+msgid ""
+"Queries the analyzer whether the expression used as argument is tainted or "
+"not. This is useful in tests, where we don't want to issue warning for all "
+"tainted expressions but only check for certain expressions. This would help "
+"to reduce the *noise* that the `TaintTest` debug checker would introduce and "
+"let you focus on the `expected-warning`'s that you really care about."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:300
+msgid "``clang_analyzer_dumpExtent(a single argument of any type)``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:301
+msgid "``clang_analyzer_dumpElementCount(a single argument of any type)``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:303
+msgid "Dumps out the extent and the element count of the argument."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:313
+msgid "``clang_analyzer_value(a single argument of integer or pointer type)``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:315
+msgid ""
+"Prints an associated value for the given argument. Supported argument types "
+"are integers, enums and pointers. The value can be represented either as a "
+"range set or as a concrete integer. For the rest of the types function "
+"prints ``n/a`` (aka not available)."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:320
+msgid ""
+"**Note:** This function will print nothing for clang built with Z3 "
+"constraint manager. This may cause crashes of your tests. To manage this use "
+"one of the test constraining techniques:"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:324
+msgid ""
+"llvm-lit commands ``REQUIRES no-z3`` or ``UNSUPPORTED z3`` `See for details. "
+"<https://llvm.org/docs/TestingGuide.html#constraining-test-execution>`_"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:326
+msgid "a preprocessor directive ``#ifndef ANALYZER_CM_Z3``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:328
+msgid "a clang command argument ``-analyzer-constraints=range``"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:341
+msgid "Statistics"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:343
+msgid ""
+"The debug.Stats checker collects various information about the analysis of "
+"each function, such as how many blocks were reached and if the analyzer "
+"timed out."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:346
+msgid ""
+"There is also an additional -analyzer-stats flag, which enables various "
+"statistics within the analyzer engine. Note the Stats checker (which "
+"produces at least one bug report per function) may actually change the "
+"values reported by -analyzer-stats."
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:352
+msgid "Output testing checkers"
+msgstr ""
+
+#: ../../../analyzer/developer-docs/DebugChecks.rst:354
+msgid ""
+"debug.ReportStmts reports a warning at **every** statement, making it a very "
+"useful tool for testing thoroughly bug report construction and output "
+"emission."
+msgstr ""
