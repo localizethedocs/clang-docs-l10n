@@ -1,0 +1,1684 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:44+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../Modules.rst:3
+msgid "Modules"
+msgstr ""
+
+#: ../../../Modules.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../Modules.rst:10
+msgid ""
+"Most software is built using a number of software libraries, including "
+"libraries supplied by the platform, internal libraries built as part of the "
+"software itself to provide structure, and third-party libraries. For each "
+"library, one needs to access both its interface (API) and its "
+"implementation. In the C family of languages, the interface to a library is "
+"accessed by including the appropriate header files(s):"
+msgstr ""
+
+#: ../../../Modules.rst:16
+msgid ""
+"The implementation is handled separately by linking against the appropriate "
+"library. For example, by passing ``-lSomeLib`` to the linker."
+msgstr ""
+
+#: ../../../Modules.rst:18
+msgid ""
+"Modules provide an alternative, simpler way to use software libraries that "
+"provides better compile-time scalability and eliminates many of the problems "
+"inherent to using the C preprocessor to access the API of a library."
+msgstr ""
+
+#: ../../../Modules.rst:21
+msgid "Problems with the current model"
+msgstr ""
+
+#: ../../../Modules.rst:22
+msgid ""
+"The ``#include`` mechanism provided by the C preprocessor is a very poor way "
+"to access the API of a library, for a number of reasons:"
+msgstr ""
+
+#: ../../../Modules.rst:24
+msgid ""
+"**Compile-time scalability**: Each time a header is included, the compiler "
+"must preprocess and parse the text in that header and every header it "
+"includes, transitively. This process must be repeated for every translation "
+"unit in the application, which involves a huge amount of redundant work. In "
+"a project with *N* translation units and *M* headers included in each "
+"translation unit, the compiler is performing *M x N* work even though most "
+"of the *M* headers are shared among multiple translation units. C++ is "
+"particularly bad, because the compilation model for templates forces a huge "
+"amount of code into headers."
+msgstr ""
+
+#: ../../../Modules.rst:35
+msgid ""
+"**Fragility**: ``#include`` directives are treated as textual inclusion by "
+"the preprocessor, and are therefore subject to any active macro definitions "
+"at the time of inclusion. If any of the active macro definitions happens to "
+"collide with a name in the library, it can break the library API or cause "
+"compilation failures in the library header itself. For an extreme example, "
+"``#define std \"The C++ Standard\"`` and then include a standard library "
+"header: the result is a horrific cascade of failures in the C++ Standard "
+"Library's implementation. More subtle real-world problems occur when the "
+"headers for two different libraries interact due to macro collisions, and "
+"users are forced to reorder ``#include`` directives or introduce ``#undef`` "
+"directives to break the (unintended) dependency."
+msgstr ""
+
+#: ../../../Modules.rst:49
+msgid ""
+"**Conventional workarounds**: C programmers have adopted a number of "
+"conventions to work around the fragility of the C preprocessor model. "
+"Include guards, for example, are required for the vast majority of headers "
+"to ensure that multiple inclusion doesn't break the compile. Macro names are "
+"written with ``LONG_PREFIXED_UPPERCASE_IDENTIFIERS`` to avoid collisions, "
+"and some library/framework developers even use ``__underscored`` names in "
+"headers to avoid collisions with \"normal\" names that (by convention) "
+"shouldn't even be macros. These conventions are a barrier to entry for "
+"developers coming from non-C languages, are boilerplate for more experienced "
+"developers, and make our headers far uglier than they should be."
+msgstr ""
+
+#: ../../../Modules.rst:62
+msgid ""
+"**Tool confusion**: In a C-based language, it is hard to build tools that "
+"work well with software libraries, because the boundaries of the libraries "
+"are not clear. Which headers belong to a particular library, and in what "
+"order should those headers be included to guarantee that they compile "
+"correctly? Are the headers C, C++, Objective-C++, or one of the variants of "
+"these languages? What declarations in those headers are actually meant to be "
+"part of the API, and what declarations are present only because they had to "
+"be written as part of the header file?"
+msgstr ""
+
+#: ../../../Modules.rst:73
+msgid "Semantic import"
+msgstr ""
+
+#: ../../../Modules.rst:74
+msgid ""
+"Modules improve access to the API of software libraries by replacing the "
+"textual preprocessor inclusion model with a more robust, more efficient "
+"semantic model. From the user's perspective, the code looks only slightly "
+"different, because one uses an ``import`` declaration rather than a "
+"``#include`` preprocessor directive:"
+msgstr ""
+
+#: ../../../Modules.rst:80
+msgid ""
+"However, this module import behaves quite differently from the corresponding "
+"``#include <stdio.h>``: when the compiler sees the module import above, it "
+"loads a binary representation of the ``std.io`` module and makes its API "
+"available to the application directly. Preprocessor definitions that precede "
+"the import declaration have no impact on the API provided by ``std.io``, "
+"because the module itself was compiled as a separate, standalone module. "
+"Additionally, any linker flags required to use the ``std.io`` module will "
+"automatically be provided when the module is imported [#]_ This semantic "
+"import model addresses many of the problems of the preprocessor inclusion "
+"model:"
+msgstr ""
+
+#: ../../../Modules.rst:83
+msgid ""
+"**Compile-time scalability**: The ``std.io`` module is only compiled once, "
+"and importing the module into a translation unit is a constant-time "
+"operation (independent of module system). Thus, the API of each software "
+"library is only parsed once, reducing the *M x N* compilation problem to an "
+"*M + N* problem."
+msgstr ""
+
+#: ../../../Modules.rst:85
+msgid ""
+"**Fragility**: Each module is parsed as a standalone entity, so it has a "
+"consistent preprocessor environment. This completely eliminates the need for "
+"``__underscored`` names and similarly defensive tricks. Moreover, the "
+"current preprocessor definitions when an import declaration is encountered "
+"are ignored, so one software library can not affect how another software "
+"library is compiled, eliminating include-order dependencies."
+msgstr ""
+
+#: ../../../Modules.rst:87
+msgid ""
+"**Tool confusion**: Modules describe the API of software libraries, and "
+"tools can reason about and present a module as a representation of that API. "
+"Because modules can only be built standalone, tools can rely on the module "
+"definition to ensure that they get the complete API for the library. "
+"Moreover, modules can specify which languages they work with, so, e.g., one "
+"can not accidentally attempt to load a C++ module into a C program."
+msgstr ""
+
+#: ../../../Modules.rst:90
+msgid "Problems modules do not solve"
+msgstr ""
+
+#: ../../../Modules.rst:91
+msgid ""
+"Many programming languages have a module or package system, and because of "
+"the variety of features provided by these languages it is important to "
+"define what modules do *not* do. In particular, all of the following are "
+"considered out-of-scope for modules:"
+msgstr ""
+
+#: ../../../Modules.rst:93
+msgid ""
+"**Rewrite the world's code**: It is not realistic to require applications or "
+"software libraries to make drastic or non-backward-compatible changes, nor "
+"is it feasible to completely eliminate headers. Modules must interoperate "
+"with existing software libraries and allow a gradual transition."
+msgstr ""
+
+#: ../../../Modules.rst:95
+msgid ""
+"**Versioning**: Modules have no notion of version information. Programmers "
+"must still rely on the existing versioning mechanisms of the underlying "
+"language (if any exist) to version software libraries."
+msgstr ""
+
+#: ../../../Modules.rst:97
+msgid ""
+"**Namespaces**: Unlike in some languages, modules do not imply any notion of "
+"namespaces. Thus, a struct declared in one module will still conflict with a "
+"struct of the same name declared in a different module, just as they would "
+"if declared in two different headers. This aspect is important for backward "
+"compatibility, because (for example) the mangled names of entities in "
+"software libraries must not change when introducing modules."
+msgstr ""
+
+#: ../../../Modules.rst:99
+msgid ""
+"**Binary distribution of modules**: Headers (particularly C++ headers) "
+"expose the full complexity of the language. Maintaining a stable binary "
+"module format across architectures, compiler versions, and compiler vendors "
+"is technically infeasible."
+msgstr ""
+
+#: ../../../Modules.rst:102
+msgid "Using Modules"
+msgstr ""
+
+#: ../../../Modules.rst:103
+msgid ""
+"To enable modules, pass the command-line flag ``-fmodules``. This will make "
+"any modules-enabled software libraries available as modules as well as "
+"introducing any modules-specific syntax. Additional `command-line "
+"parameters`_ are described in a separate section later."
+msgstr ""
+
+#: ../../../Modules.rst:106
+msgid "Objective-C Import declaration"
+msgstr ""
+
+#: ../../../Modules.rst:107
+msgid ""
+"Objective-C provides syntax for importing a module via an *@import "
+"declaration*, which imports the named module:"
+msgstr ""
+
+#: ../../../Modules.rst:113
+msgid ""
+"The ``@import`` declaration above imports the entire contents of the ``std`` "
+"module (which would contain, e.g., the entire C or C++ standard library) and "
+"make its API available within the current translation unit. To import only "
+"part of a module, one may use dot syntax to specific a particular submodule, "
+"e.g.,"
+msgstr ""
+
+#: ../../../Modules.rst:119
+msgid ""
+"Redundant import declarations are ignored, and one is free to import modules "
+"at any point within the translation unit, so long as the import declaration "
+"is at global scope."
+msgstr ""
+
+#: ../../../Modules.rst:121
+msgid ""
+"At present, there is no C or C++ syntax for import declarations. Clang will "
+"track the modules proposal in the C++ committee. See the section `Includes "
+"as imports`_ to see how modules get imported today."
+msgstr ""
+
+#: ../../../Modules.rst:126
+msgid "Includes as imports"
+msgstr ""
+
+#: ../../../Modules.rst:127
+msgid ""
+"The primary user-level feature of modules is the import operation, which "
+"provides access to the API of software libraries. However, today's programs "
+"make extensive use of ``#include``, and it is unrealistic to assume that all "
+"of this code will change overnight. Instead, modules automatically translate "
+"``#include`` directives into the corresponding module import. For example, "
+"the include directive"
+msgstr ""
+
+#: ../../../Modules.rst:133
+msgid ""
+"will be automatically mapped to an import of the module ``std.io``. Even "
+"with specific ``import`` syntax in the language, this particular feature is "
+"important for both adoption and backward compatibility: automatic "
+"translation of ``#include`` to ``import`` allows an application to get the "
+"benefits of modules (for all modules-enabled libraries) without any changes "
+"to the application itself. Thus, users can easily use modules with one "
+"compiler while falling back to the preprocessor-inclusion mechanism with "
+"other compilers."
+msgstr ""
+
+#: ../../../Modules.rst:137
+msgid ""
+"The automatic mapping of ``#include`` to ``import`` also solves an "
+"implementation problem: importing a module with a definition of some entity "
+"(say, a ``struct Point``) and then parsing a header containing another "
+"definition of ``struct Point`` would cause a redefinition error, even if it "
+"is the same ``struct Point``. By mapping ``#include`` to ``import``, the "
+"compiler can guarantee that it always sees just the already-parsed "
+"definition from the module."
+msgstr ""
+
+#: ../../../Modules.rst:139
+msgid ""
+"While building a module, ``#include_next`` is also supported, with one "
+"caveat. The usual behavior of ``#include_next`` is to search for the "
+"specified filename in the list of include paths, starting from the path "
+"*after* the one in which the current file was found. Because files listed in "
+"module maps are not found through include paths, a different strategy is "
+"used for ``#include_next`` directives in such files: the list of include "
+"paths is searched for the specified header name, to find the first include "
+"path that would refer to the current file. ``#include_next`` is interpreted "
+"as if the current file had been found in that path. If this search finds a "
+"file named by a module map, the ``#include_next`` directive is translated "
+"into an import, just like for a ``#include`` directive.``"
+msgstr ""
+
+#: ../../../Modules.rst:153
+msgid "Module maps"
+msgstr ""
+
+#: ../../../Modules.rst:154
+msgid ""
+"The crucial link between modules and headers is described by a *module map*, "
+"which describes how a collection of existing headers maps on to the "
+"(logical) structure of a module. For example, one could imagine a module "
+"``std`` covering the C standard library. Each of the C standard library "
+"headers (``<stdio.h>``, ``<stdlib.h>``, ``<math.h>``, etc.) would contribute "
+"to the ``std`` module, by placing their respective APIs into the "
+"corresponding submodule (``std.io``, ``std.lib``, ``std.math``, etc.). "
+"Having a list of the headers that are part of the ``std`` module allows the "
+"compiler to build the ``std`` module as a standalone entity, and having the "
+"mapping from header names to (sub)modules allows the automatic translation "
+"of ``#include`` directives to module imports."
+msgstr ""
+
+#: ../../../Modules.rst:156
+msgid ""
+"Module maps are specified as separate files (each named ``module."
+"modulemap``) alongside the headers they describe, which allows them to be "
+"added to existing software libraries without having to change the library "
+"headers themselves (in most cases [#]_). The actual `Module map language`_ "
+"is described in a later section."
+msgstr ""
+
+#: ../../../Modules.rst:160
+msgid ""
+"To actually see any benefits from modules, one first has to introduce module "
+"maps for the underlying C standard library and the libraries and headers on "
+"which it depends. The section `Modularizing a Platform`_ describes the steps "
+"one must take to write these module maps."
+msgstr ""
+
+#: ../../../Modules.rst:162
+msgid ""
+"One can use module maps without modules to check the integrity of the use of "
+"header files. To do this, use the ``-fimplicit-module-maps`` option instead "
+"of the ``-fmodules`` option, or use ``-fmodule-map-file=`` option to "
+"explicitly specify the module map files to load."
+msgstr ""
+
+#: ../../../Modules.rst:165
+msgid "Compilation model"
+msgstr ""
+
+#: ../../../Modules.rst:166
+msgid ""
+"The binary representation of modules is automatically generated by the "
+"compiler on an as-needed basis. When a module is imported (e.g., by an "
+"``#include`` of one of the module's headers), the compiler will spawn a "
+"second instance of itself [#]_, with a fresh preprocessing context [#]_, to "
+"parse just the headers in that module. The resulting Abstract Syntax Tree "
+"(AST) is then persisted into the binary representation of the module that is "
+"then loaded into translation unit where the module import was encountered."
+msgstr ""
+
+#: ../../../Modules.rst:168
+msgid ""
+"The binary representation of modules is persisted in the *module cache*. "
+"Imports of a module will first query the module cache and, if a binary "
+"representation of the required module is already available, will load that "
+"representation directly. Thus, a module's headers will only be parsed once "
+"per language configuration, rather than once per translation unit that uses "
+"the module."
+msgstr ""
+
+#: ../../../Modules.rst:170
+msgid ""
+"Modules maintain references to each of the headers that were part of the "
+"module build. If any of those headers changes, or if any of the modules on "
+"which a module depends change, then the module will be (automatically) "
+"recompiled. The process should never require any user intervention."
+msgstr ""
+
+#: ../../../Modules.rst:173
+msgid "Command-line parameters"
+msgstr ""
+
+#: ../../../Modules.rst:175
+msgid "``-fmodules``"
+msgstr ""
+
+#: ../../../Modules.rst:175
+msgid "Enable the modules feature."
+msgstr ""
+
+#: ../../../Modules.rst:178
+msgid "``-fbuiltin-module-map``"
+msgstr ""
+
+#: ../../../Modules.rst:178
+msgid ""
+"Load the Clang builtins module map file. (Equivalent to ``-fmodule-map-"
+"file=<resource dir>/include/module.modulemap``)"
+msgstr ""
+
+#: ../../../Modules.rst:181
+msgid "``-fimplicit-module-maps``"
+msgstr ""
+
+#: ../../../Modules.rst:181
+msgid ""
+"Enable implicit search for module map files named ``module.modulemap`` and "
+"similar. This option is implied by ``-fmodules``. If this is disabled with "
+"``-fno-implicit-module-maps``, module map files will only be loaded if they "
+"are explicitly specified via ``-fmodule-map-file`` or transitively used by "
+"another module map file."
+msgstr ""
+
+#: ../../../Modules.rst:184
+msgid "``-fmodules-cache-path=<directory>``"
+msgstr ""
+
+#: ../../../Modules.rst:184
+msgid ""
+"Specify the path to the modules cache. If not provided, Clang will select a "
+"system-appropriate default."
+msgstr ""
+
+#: ../../../Modules.rst:187
+msgid "``-fno-autolink``"
+msgstr ""
+
+#: ../../../Modules.rst:187
+msgid ""
+"Disable automatic linking against the libraries associated with imported "
+"modules."
+msgstr ""
+
+#: ../../../Modules.rst:190
+msgid "``-fmodules-ignore-macro=macroname``"
+msgstr ""
+
+#: ../../../Modules.rst:190
+msgid ""
+"Instruct modules to ignore the named macro when selecting an appropriate "
+"module variant. Use this for macros defined on the command line that don't "
+"affect how modules are built, to improve sharing of compiled module files."
+msgstr ""
+
+#: ../../../Modules.rst:193
+msgid "``-fmodules-prune-interval=seconds``"
+msgstr ""
+
+#: ../../../Modules.rst:193
+msgid ""
+"Specify the minimum delay (in seconds) between attempts to prune the module "
+"cache. Module cache pruning attempts to clear out old, unused module files "
+"so that the module cache itself does not grow without bound. The default "
+"delay is large (604,800 seconds, or 7 days) because this is an expensive "
+"operation. Set this value to 0 to turn off pruning."
+msgstr ""
+
+#: ../../../Modules.rst:196
+msgid "``-fmodules-prune-after=seconds``"
+msgstr ""
+
+#: ../../../Modules.rst:196
+msgid ""
+"Specify the minimum time (in seconds) for which a file in the module cache "
+"must be unused (according to access time) before module pruning will remove "
+"it. The default delay is large (2,678,400 seconds, or 31 days) to avoid "
+"excessive module rebuilding."
+msgstr ""
+
+#: ../../../Modules.rst:199
+msgid "``-module-file-info <module file name>``"
+msgstr ""
+
+#: ../../../Modules.rst:199
+msgid ""
+"Debugging aid that prints information about a given module file (with a ``."
+"pcm`` extension), including the language and preprocessor options that "
+"particular module variant was built with."
+msgstr ""
+
+#: ../../../Modules.rst:202
+msgid "``-fmodules-decluse``"
+msgstr ""
+
+#: ../../../Modules.rst:202
+msgid "Enable checking of module ``use`` declarations."
+msgstr ""
+
+#: ../../../Modules.rst:205
+msgid "``-fmodule-name=module-id``"
+msgstr ""
+
+#: ../../../Modules.rst:205
+msgid "Consider a source file as a part of the given module."
+msgstr ""
+
+#: ../../../Modules.rst:208
+msgid "``-fmodule-map-file=<file>``"
+msgstr ""
+
+#: ../../../Modules.rst:208
+msgid ""
+"Load the given module map file if a header from its directory or one of its "
+"subdirectories is loaded."
+msgstr ""
+
+#: ../../../Modules.rst:211
+msgid "``-fmodules-search-all``"
+msgstr ""
+
+#: ../../../Modules.rst:211
+msgid ""
+"If a symbol is not found, search modules referenced in the current module "
+"maps but not imported for symbols, so the error message can reference the "
+"module by name.  Note that if the global module index has not been built "
+"before, this might take some time as it needs to build all the modules.  "
+"Note that this option doesn't apply in module builds, to avoid the recursion."
+msgstr ""
+
+#: ../../../Modules.rst:214
+msgid "``-fno-implicit-modules``"
+msgstr ""
+
+#: ../../../Modules.rst:214
+msgid "All modules used by the build must be specified with ``-fmodule-file``."
+msgstr ""
+
+#: ../../../Modules.rst:217
+msgid "``-fmodule-file=<file>``"
+msgstr ""
+
+#: ../../../Modules.rst:217
+msgid "Load the given precompiled module file."
+msgstr ""
+
+#: ../../../Modules.rst:220
+msgid "``-fprebuilt-module-path=<directory>``"
+msgstr ""
+
+#: ../../../Modules.rst:220
+msgid ""
+"Specify the path to the prebuilt modules. If specified, we will look for "
+"modules in this directory for a given top-level module name. We don't need a "
+"module map for loading prebuilt modules in this directory and the compiler "
+"will not try to rebuild these modules. This can be specified multiple times."
+msgstr ""
+
+#: ../../../Modules.rst:223
+msgid "Module Semantics"
+msgstr ""
+
+#: ../../../Modules.rst:225
+msgid ""
+"Modules are modeled as if each submodule were a separate translation unit, "
+"and a module import makes names from the other translation unit visible. "
+"Each submodule starts with a new preprocessor state and an empty translation "
+"unit."
+msgstr ""
+
+#: ../../../Modules.rst:229
+msgid ""
+"This behavior is currently only approximated when building a module with "
+"submodules. Entities within a submodule that has already been built are "
+"visible when building later submodules in that module. This can lead to "
+"fragile modules that depend on the build order used for the submodules of "
+"the module, and should not be relied upon. This behavior is subject to "
+"change."
+msgstr ""
+
+#: ../../../Modules.rst:231
+msgid ""
+"As an example, in C, this implies that if two structs are defined in "
+"different submodules with the same name, those two types are distinct types "
+"(but may be *compatible* types if their definitions match). In C++, two "
+"structs defined with the same name in different submodules are the *same* "
+"type, and must be equivalent under C++'s One Definition Rule."
+msgstr ""
+
+#: ../../../Modules.rst:235
+msgid ""
+"Clang currently only performs minimal checking for violations of the One "
+"Definition Rule."
+msgstr ""
+
+#: ../../../Modules.rst:237
+msgid ""
+"If any submodule of a module is imported into any part of a program, the "
+"entire top-level module is considered to be part of the program. As a "
+"consequence of this, Clang may diagnose conflicts between an entity declared "
+"in an unimported submodule and an entity declared in the current translation "
+"unit, and Clang may inline or devirtualize based on knowledge from "
+"unimported submodules."
+msgstr ""
+
+#: ../../../Modules.rst:240
+msgid "Macros"
+msgstr ""
+
+#: ../../../Modules.rst:242
+msgid ""
+"The C and C++ preprocessor assumes that the input text is a single linear "
+"buffer, but with modules this is not the case. It is possible to import two "
+"modules that have conflicting definitions for a macro (or where one "
+"``#define``\\s a macro and the other ``#undef``\\ines it). The rules for "
+"handling macro definitions in the presence of modules are as follows:"
+msgstr ""
+
+#: ../../../Modules.rst:244
+msgid ""
+"Each definition and undefinition of a macro is considered to be a distinct "
+"entity."
+msgstr ""
+
+#: ../../../Modules.rst:245
+msgid ""
+"Such entities are *visible* if they are from the current submodule or "
+"translation unit, or if they were exported from a submodule that has been "
+"imported."
+msgstr ""
+
+#: ../../../Modules.rst:246
+msgid ""
+"A ``#define X`` or ``#undef X`` directive *overrides* all definitions of "
+"``X`` that are visible at the point of the directive."
+msgstr ""
+
+#: ../../../Modules.rst:247
+msgid ""
+"A ``#define`` or ``#undef`` directive is *active* if it is visible and no "
+"visible directive overrides it."
+msgstr ""
+
+#: ../../../Modules.rst:248
+msgid ""
+"A set of macro directives is *consistent* if it consists of only ``#undef`` "
+"directives, or if all ``#define`` directives in the set define the macro "
+"name to the same sequence of tokens (following the usual rules for macro "
+"redefinitions)."
+msgstr ""
+
+#: ../../../Modules.rst:249
+msgid ""
+"If a macro name is used and the set of active directives is not consistent, "
+"the program is ill-formed. Otherwise, the (unique) meaning of the macro name "
+"is used."
+msgstr ""
+
+#: ../../../Modules.rst:251
+msgid "For example, suppose:"
+msgstr ""
+
+#: ../../../Modules.rst:253
+msgid "``<stdio.h>`` defines a macro ``getc`` (and exports its ``#define``)"
+msgstr ""
+
+#: ../../../Modules.rst:254
+msgid ""
+"``<cstdio>`` imports the ``<stdio.h>`` module and undefines the macro (and "
+"exports its ``#undef``)"
+msgstr ""
+
+#: ../../../Modules.rst:256
+msgid ""
+"The ``#undef`` overrides the ``#define``, and a source file that imports "
+"both modules *in any order* will not see ``getc`` defined as a macro."
+msgstr ""
+
+#: ../../../Modules.rst:259
+msgid "Module Map Language"
+msgstr ""
+
+#: ../../../Modules.rst:263
+msgid ""
+"The module map language is not currently guaranteed to be stable between "
+"major revisions of Clang."
+msgstr ""
+
+#: ../../../Modules.rst:265
+msgid ""
+"The module map language describes the mapping from header files to the "
+"logical structure of modules. To enable support for using a library as a "
+"module, one must write a ``module.modulemap`` file for that library. The "
+"``module.modulemap`` file is placed alongside the header files themselves, "
+"and is written in the module map language described below."
+msgstr ""
+
+#: ../../../Modules.rst:272
+msgid ""
+"For compatibility with previous releases, if a module map file named "
+"``module.modulemap`` is not found, Clang will also search for a file named "
+"``module.map``. This behavior is deprecated and we plan to eventually remove "
+"it."
+msgstr ""
+
+#: ../../../Modules.rst:277
+msgid ""
+"As an example, the module map file for the C standard library might look a "
+"bit like this:"
+msgstr ""
+
+#: ../../../Modules.rst:312
+msgid ""
+"Here, the top-level module ``std`` encompasses the whole C standard library. "
+"It has a number of submodules containing different parts of the standard "
+"library: ``complex`` for complex numbers, ``ctype`` for character types, "
+"etc. Each submodule lists one of more headers that provide the contents for "
+"that submodule. Finally, the ``export *`` command specifies that anything "
+"included by that submodule will be automatically re-exported."
+msgstr ""
+
+#: ../../../Modules.rst:315
+msgid "Lexical structure"
+msgstr ""
+
+#: ../../../Modules.rst:316
+msgid ""
+"Module map files use a simplified form of the C99 lexer, with the same rules "
+"for identifiers, tokens, string literals, ``/* */`` and ``//`` comments. The "
+"module map language has the following reserved words; all other C "
+"identifiers are valid identifiers."
+msgstr ""
+
+#: ../../../Modules.rst:327
+msgid "Module map file"
+msgstr ""
+
+#: ../../../Modules.rst:328
+msgid "A module map file consists of a series of module declarations:"
+msgstr ""
+
+#: ../../../Modules.rst:335
+msgid ""
+"Within a module map file, modules are referred to by a *module-id*, which "
+"uses periods to separate each part of a module's name:"
+msgstr ""
+
+#: ../../../Modules.rst:343
+msgid "Module declaration"
+msgstr ""
+
+#: ../../../Modules.rst:344
+msgid ""
+"A module declaration describes a module, including the headers that "
+"contribute to that module, its submodules, and other aspects of the module."
+msgstr ""
+
+#: ../../../Modules.rst:352
+msgid ""
+"The *module-id* should consist of only a single *identifier*, which provides "
+"the name of the module being defined. Each module shall have a single "
+"definition."
+msgstr ""
+
+#: ../../../Modules.rst:354
+msgid ""
+"The ``explicit`` qualifier can only be applied to a submodule, i.e., a "
+"module that is nested within another module. The contents of explicit "
+"submodules are only made available when the submodule itself was explicitly "
+"named in an import declaration or was re-exported from an imported module."
+msgstr ""
+
+#: ../../../Modules.rst:356
+msgid ""
+"The ``framework`` qualifier specifies that this module corresponds to a "
+"Darwin-style framework. A Darwin-style framework (used primarily on Mac OS X "
+"and iOS) is contained entirely in directory ``Name.framework``, where "
+"``Name`` is the name of the framework (and, therefore, the name of the "
+"module). That directory has the following layout:"
+msgstr ""
+
+#: ../../../Modules.rst:368
+msgid ""
+"The ``system`` attribute specifies that the module is a system module. When "
+"a system module is rebuilt, all of the module's headers will be considered "
+"system headers, which suppresses warnings. This is equivalent to placing "
+"``#pragma GCC system_header`` in each of the module's headers. The form of "
+"attributes is described in the section Attributes_, below."
+msgstr ""
+
+#: ../../../Modules.rst:370
+msgid ""
+"The ``extern_c`` attribute specifies that the module contains C code that "
+"can be used from within C++. When such a module is built for use in C++ "
+"code, all of the module's headers will be treated as if they were contained "
+"within an implicit ``extern \"C\"`` block. An import for a module with this "
+"attribute can appear within an ``extern \"C\"`` block. No other restrictions "
+"are lifted, however: the module currently cannot be imported within an "
+"``extern \"C\"`` block in a namespace."
+msgstr ""
+
+#: ../../../Modules.rst:372
+msgid ""
+"The ``no_undeclared_includes`` attribute specifies that the module can only "
+"reach non-modular headers and headers from used modules. Since some headers "
+"could be present in more than one search path and map to different modules "
+"in each path, this mechanism helps clang to find the right header, i.e., "
+"prefer the one for the current module or in a submodule instead of the first "
+"usual match in the search paths."
+msgstr ""
+
+#: ../../../Modules.rst:374
+msgid ""
+"Modules can have a number of different kinds of members, each of which is "
+"described below:"
+msgstr ""
+
+#: ../../../Modules.rst:389
+msgid ""
+"An extern module references a module defined by the *module-id* in a file "
+"given by the *string-literal*. The file can be referenced either by an "
+"absolute path or by a path relative to the current map file."
+msgstr ""
+
+#: ../../../Modules.rst:392
+msgid "Requires declaration"
+msgstr ""
+
+#: ../../../Modules.rst:393
+msgid ""
+"A *requires-declaration* specifies the requirements that an importing "
+"translation unit must satisfy to use the module."
+msgstr ""
+
+#: ../../../Modules.rst:406
+msgid ""
+"The requirements clause allows specific modules or submodules to specify "
+"that they are only accessible with certain language dialects or on certain "
+"platforms. The feature list is a set of identifiers, defined below. If any "
+"of the features is not available in a given translation unit, that "
+"translation unit shall not import the module. When building a module for use "
+"by a compilation, submodules requiring unavailable features are ignored. The "
+"optional ``!`` indicates that a feature is incompatible with the module."
+msgstr ""
+
+#: ../../../Modules.rst:408
+msgid "The following features are defined:"
+msgstr ""
+
+#: ../../../Modules.rst:411
+msgid "altivec"
+msgstr ""
+
+#: ../../../Modules.rst:411
+msgid "The target supports AltiVec."
+msgstr ""
+
+#: ../../../Modules.rst:414
+msgid "blocks"
+msgstr ""
+
+#: ../../../Modules.rst:414
+msgid "The \"blocks\" language feature is available."
+msgstr ""
+
+#: ../../../Modules.rst:417
+msgid "coroutines"
+msgstr ""
+
+#: ../../../Modules.rst:417
+msgid "Support for the coroutines TS is available."
+msgstr ""
+
+#: ../../../Modules.rst:420
+msgid "cplusplus"
+msgstr ""
+
+#: ../../../Modules.rst:420
+msgid "C++ support is available."
+msgstr ""
+
+#: ../../../Modules.rst:423
+msgid "cplusplus11"
+msgstr ""
+
+#: ../../../Modules.rst:423
+msgid "C++11 support is available."
+msgstr ""
+
+#: ../../../Modules.rst:426
+msgid "freestanding"
+msgstr ""
+
+#: ../../../Modules.rst:426
+msgid "A freestanding environment is available."
+msgstr ""
+
+#: ../../../Modules.rst:429
+msgid "gnuinlineasm"
+msgstr ""
+
+#: ../../../Modules.rst:429
+msgid "GNU inline ASM is available."
+msgstr ""
+
+#: ../../../Modules.rst:432
+msgid "objc"
+msgstr ""
+
+#: ../../../Modules.rst:432
+msgid "Objective-C support is available."
+msgstr ""
+
+#: ../../../Modules.rst:435
+msgid "objc_arc"
+msgstr ""
+
+#: ../../../Modules.rst:435
+msgid "Objective-C Automatic Reference Counting (ARC) is available"
+msgstr ""
+
+#: ../../../Modules.rst:438
+msgid "opencl"
+msgstr ""
+
+#: ../../../Modules.rst:438
+msgid "OpenCL is available"
+msgstr ""
+
+#: ../../../Modules.rst:441
+msgid "tls"
+msgstr ""
+
+#: ../../../Modules.rst:441
+msgid "Thread local storage is available."
+msgstr ""
+
+#: ../../../Modules.rst:445
+msgid "*target feature*"
+msgstr ""
+
+#: ../../../Modules.rst:444
+msgid ""
+"A specific target feature (e.g., ``sse4``, ``avx``, ``neon``) is available."
+msgstr ""
+
+#: ../../../Modules.rst:447
+msgid ""
+"**Example:** The ``std`` module can be extended to also include C++ and C+"
+"+11 headers using a *requires-declaration*:"
+msgstr ""
+
+#: ../../../Modules.rst:466
+msgid "Header declaration"
+msgstr ""
+
+#: ../../../Modules.rst:467
+msgid ""
+"A header declaration specifies that a particular header is associated with "
+"the enclosing module."
+msgstr ""
+
+#: ../../../Modules.rst:483
+msgid ""
+"A header declaration that does not contain ``exclude`` nor ``textual`` "
+"specifies a header that contributes to the enclosing module. Specifically, "
+"when the module is built, the named header will be parsed and its "
+"declarations will be (logically) placed into the enclosing submodule."
+msgstr ""
+
+#: ../../../Modules.rst:485
+msgid ""
+"A header with the ``umbrella`` specifier is called an umbrella header. An "
+"umbrella header includes all of the headers within its directory (and any "
+"subdirectories), and is typically used (in the ``#include`` world) to easily "
+"access the full API provided by a particular library. With modules, an "
+"umbrella header is a convenient shortcut that eliminates the need to write "
+"out ``header`` declarations for every library header. A given directory can "
+"only contain a single umbrella header."
+msgstr ""
+
+#: ../../../Modules.rst:488
+msgid ""
+"Any headers not included by the umbrella header should have explicit "
+"``header`` declarations. Use the ``-Wincomplete-umbrella`` warning option to "
+"ask Clang to complain about headers not covered by the umbrella header or "
+"the module map."
+msgstr ""
+
+#: ../../../Modules.rst:493
+msgid ""
+"A header with the ``private`` specifier may not be included from outside the "
+"module itself."
+msgstr ""
+
+#: ../../../Modules.rst:495
+msgid ""
+"A header with the ``textual`` specifier will not be compiled when the module "
+"is built, and will be textually included if it is named by a ``#include`` "
+"directive. However, it is considered to be part of the module for the "
+"purpose of checking *use-declaration*\\s, and must still be a lexically-"
+"valid header file. In the future, we intend to pre-tokenize such headers and "
+"include the token sequence within the prebuilt module representation."
+msgstr ""
+
+#: ../../../Modules.rst:502
+msgid ""
+"A header with the ``exclude`` specifier is excluded from the module. It will "
+"not be included when the module is built, nor will it be considered to be "
+"part of the module, even if an ``umbrella`` header or directory would "
+"otherwise make it part of the module."
+msgstr ""
+
+#: ../../../Modules.rst:504
+msgid ""
+"**Example:** The C header ``assert.h`` is an excellent candidate for a "
+"textual header, because it is meant to be included multiple times (possibly "
+"with different ``NDEBUG`` settings). However, declarations within it should "
+"typically be split into a separate modular header."
+msgstr ""
+
+#: ../../../Modules.rst:512
+msgid ""
+"A given header shall not be referenced by more than one *header-declaration*."
+msgstr ""
+
+#: ../../../Modules.rst:514
+msgid ""
+"Two *header-declaration*\\s, or a *header-declaration* and a ``#include``, "
+"are considered to refer to the same file if the paths resolve to the same "
+"file and the specified *header-attr*\\s (if any) match the attributes of "
+"that file, even if the file is named differently (for instance, by a "
+"relative path or via symlinks)."
+msgstr ""
+
+#: ../../../Modules.rst:521
+msgid ""
+"The use of *header-attr*\\s avoids the need for Clang to speculatively "
+"``stat`` every header referenced by a module map. It is recommended that "
+"*header-attr*\\s only be used in machine-generated module maps, to avoid "
+"mismatches between attribute values and the corresponding files."
+msgstr ""
+
+#: ../../../Modules.rst:527
+msgid "Umbrella directory declaration"
+msgstr ""
+
+#: ../../../Modules.rst:528
+msgid ""
+"An umbrella directory declaration specifies that all of the headers in the "
+"specified directory should be included within the module."
+msgstr ""
+
+#: ../../../Modules.rst:535
+msgid ""
+"The *string-literal* refers to a directory. When the module is built, all of "
+"the header files in that directory (and its subdirectories) are included in "
+"the module."
+msgstr ""
+
+#: ../../../Modules.rst:537
+msgid ""
+"An *umbrella-dir-declaration* shall not refer to the same directory as the "
+"location of an umbrella *header-declaration*. In other words, only a single "
+"kind of umbrella can be specified for a given directory."
+msgstr ""
+
+#: ../../../Modules.rst:541
+msgid ""
+"Umbrella directories are useful for libraries that have a large number of "
+"headers but do not have an umbrella header."
+msgstr ""
+
+#: ../../../Modules.rst:545
+msgid "Submodule declaration"
+msgstr ""
+
+#: ../../../Modules.rst:546
+msgid ""
+"Submodule declarations describe modules that are nested within their "
+"enclosing module."
+msgstr ""
+
+#: ../../../Modules.rst:554
+msgid ""
+"A *submodule-declaration* that is a *module-declaration* is a nested module. "
+"If the *module-declaration* has a ``framework`` specifier, the enclosing "
+"module shall have a ``framework`` specifier; the submodule's contents shall "
+"be contained within the subdirectory ``Frameworks/SubName.framework``, where "
+"``SubName`` is the name of the submodule."
+msgstr ""
+
+#: ../../../Modules.rst:556
+msgid ""
+"A *submodule-declaration* that is an *inferred-submodule-declaration* "
+"describes a set of submodules that correspond to any headers that are part "
+"of the module but are not explicitly described by a *header-declaration*."
+msgstr ""
+
+#: ../../../Modules.rst:566
+msgid ""
+"A module containing an *inferred-submodule-declaration* shall have either an "
+"umbrella header or an umbrella directory. The headers to which the *inferred-"
+"submodule-declaration* applies are exactly those headers included by the "
+"umbrella header (transitively) or included in the module because they reside "
+"within the umbrella directory (or its subdirectories)."
+msgstr ""
+
+#: ../../../Modules.rst:568
+msgid ""
+"For each header included by the umbrella header or in the umbrella directory "
+"that is not named by a *header-declaration*, a module declaration is "
+"implicitly generated from the *inferred-submodule-declaration*. The module "
+"will:"
+msgstr ""
+
+#: ../../../Modules.rst:570
+msgid "Have the same name as the header (without the file extension)"
+msgstr ""
+
+#: ../../../Modules.rst:571
+msgid ""
+"Have the ``explicit`` specifier, if the *inferred-submodule-declaration* has "
+"the ``explicit`` specifier"
+msgstr ""
+
+#: ../../../Modules.rst:572
+msgid ""
+"Have the ``framework`` specifier, if the *inferred-submodule-declaration* "
+"has the ``framework`` specifier"
+msgstr ""
+
+#: ../../../Modules.rst:574
+msgid ""
+"Have the attributes specified by the \\ *inferred-submodule-declaration*"
+msgstr ""
+
+#: ../../../Modules.rst:575
+msgid "Contain a single *header-declaration* naming that header"
+msgstr ""
+
+#: ../../../Modules.rst:576
+msgid ""
+"Contain a single *export-declaration* ``export *``, if the \\ *inferred-"
+"submodule-declaration* contains the \\ *inferred-submodule-member* ``export "
+"*``"
+msgstr ""
+
+#: ../../../Modules.rst:578
+msgid ""
+"**Example:** If the subdirectory \"MyLib\" contains the headers ``A.h`` and "
+"``B.h``, then the following module map:"
+msgstr ""
+
+#: ../../../Modules.rst:589
+msgid "is equivalent to the (more verbose) module map:"
+msgstr ""
+
+#: ../../../Modules.rst:606
+msgid "Export declaration"
+msgstr ""
+
+#: ../../../Modules.rst:607
+msgid ""
+"An *export-declaration* specifies which imported modules will automatically "
+"be re-exported as part of a given module's API."
+msgstr ""
+
+#: ../../../Modules.rst:619
+msgid ""
+"The *export-declaration* names a module or a set of modules that will be re-"
+"exported to any translation unit that imports the enclosing module. Each "
+"imported module that matches the *wildcard-module-id* up to, but not "
+"including, the first ``*`` will be re-exported."
+msgstr ""
+
+#: ../../../Modules.rst:621
+msgid ""
+"**Example:** In the following example, importing ``MyLib.Derived`` also "
+"provides the API for ``MyLib.Base``:"
+msgstr ""
+
+#: ../../../Modules.rst:636
+msgid ""
+"Note that, if ``Derived.h`` includes ``Base.h``, one can simply use a "
+"wildcard export to re-export everything ``Derived.h`` includes:"
+msgstr ""
+
+#: ../../../Modules.rst:653
+msgid ""
+"The wildcard export syntax ``export *`` re-exports all of the modules that "
+"were imported in the actual header file. Because ``#include`` directives are "
+"automatically mapped to module imports, ``export *`` provides the same "
+"transitive-inclusion behavior provided by the C preprocessor, e.g., "
+"importing a given module implicitly imports all of the modules on which it "
+"depends. Therefore, liberal use of ``export *`` provides excellent backward "
+"compatibility for programs that rely on transitive inclusion (i.e., all of "
+"them)."
+msgstr ""
+
+#: ../../../Modules.rst:664
+msgid "Use declaration"
+msgstr ""
+
+#: ../../../Modules.rst:665
+msgid ""
+"A *use-declaration* specifies another module that the current top-level "
+"module intends to use. When the option *-fmodules-decluse* is specified, a "
+"module can only use other modules that are explicitly specified in this way."
+msgstr ""
+
+#: ../../../Modules.rst:674
+msgid ""
+"**Example:** In the following example, use of A from C is not declared, so "
+"will trigger a warning."
+msgstr ""
+
+#: ../../../Modules.rst:691
+msgid ""
+"When compiling a source file that implements a module, use the option ``-"
+"fmodule-name=module-id`` to indicate that the source file is logically part "
+"of that module."
+msgstr ""
+
+#: ../../../Modules.rst:695
+msgid ""
+"The compiler at present only applies restrictions to the module directly "
+"being built."
+msgstr ""
+
+#: ../../../Modules.rst:698
+msgid "Link declaration"
+msgstr ""
+
+#: ../../../Modules.rst:699
+msgid ""
+"A *link-declaration* specifies a library or framework against which a "
+"program should be linked if the enclosing module is imported in any "
+"translation unit in that program."
+msgstr ""
+
+#: ../../../Modules.rst:706
+msgid ""
+"The *string-literal* specifies the name of the library or framework against "
+"which the program should be linked. For example, specifying \"clangBasic\" "
+"would instruct the linker to link with ``-lclangBasic`` for a Unix-style "
+"linker."
+msgstr ""
+
+#: ../../../Modules.rst:708
+msgid ""
+"A *link-declaration* with the ``framework`` specifies that the linker should "
+"link against the named framework, e.g., with ``-framework MyFramework``."
+msgstr ""
+
+#: ../../../Modules.rst:712
+msgid ""
+"Automatic linking with the ``link`` directive is not yet widely implemented, "
+"because it requires support from both the object file format and the linker. "
+"The notion is similar to Microsoft Visual Studio's ``#pragma "
+"comment(lib...)``."
+msgstr ""
+
+#: ../../../Modules.rst:718
+msgid "Configuration macros declaration"
+msgstr ""
+
+#: ../../../Modules.rst:719
+msgid ""
+"The *config-macros-declaration* specifies the set of configuration macros "
+"that have an effect on the API of the enclosing module."
+msgstr ""
+
+#: ../../../Modules.rst:729
+msgid ""
+"Each *identifier* in the *config-macro-list* specifies the name of a macro. "
+"The compiler is required to maintain different variants of the given module "
+"for differing definitions of any of the named macros."
+msgstr ""
+
+#: ../../../Modules.rst:731
+msgid ""
+"A *config-macros-declaration* shall only be present on a top-level module, i."
+"e., a module that is not nested within an enclosing module."
+msgstr ""
+
+#: ../../../Modules.rst:733
+msgid ""
+"The ``exhaustive`` attribute specifies that the list of macros in the "
+"*config-macros-declaration* is exhaustive, meaning that no other macro "
+"definition is intended to have an effect on the API of that module."
+msgstr ""
+
+#: ../../../Modules.rst:737
+msgid ""
+"The ``exhaustive`` attribute implies that any macro definitions for macros "
+"not listed as configuration macros should be ignored completely when "
+"building the module. As an optimization, the compiler could reduce the "
+"number of unique module variants by not considering these non-configuration "
+"macros. This optimization is not yet implemented in Clang."
+msgstr ""
+
+#: ../../../Modules.rst:744
+msgid ""
+"A translation unit shall not import the same module under different "
+"definitions of the configuration macros."
+msgstr ""
+
+#: ../../../Modules.rst:748
+msgid ""
+"Clang implements a weak form of this requirement: the definitions used for "
+"configuration macros are fixed based on the definitions provided by the "
+"command line. If an import occurs and the definition of any configuration "
+"macro has changed, the compiler will produce a warning (under the control of "
+"``-Wconfig-macros``)."
+msgstr ""
+
+#: ../../../Modules.rst:754
+msgid ""
+"**Example:** A logging library might provide different API (e.g., in the "
+"form of different definitions for a logging macro) based on the ``NDEBUG`` "
+"macro setting:"
+msgstr ""
+
+#: ../../../Modules.rst:764
+msgid "Conflict declarations"
+msgstr ""
+
+#: ../../../Modules.rst:765
+msgid ""
+"A *conflict-declaration* describes a case where the presence of two "
+"different modules in the same translation unit is likely to cause a problem. "
+"For example, two modules may provide similar-but-incompatible functionality."
+msgstr ""
+
+#: ../../../Modules.rst:772
+msgid ""
+"The *module-id* of the *conflict-declaration* specifies the module with "
+"which the enclosing module conflicts. The specified module shall not have "
+"been imported in the translation unit when the enclosing module is imported."
+msgstr ""
+
+#: ../../../Modules.rst:774
+msgid ""
+"The *string-literal* provides a message to be provided as part of the "
+"compiler diagnostic when two modules conflict."
+msgstr ""
+
+#: ../../../Modules.rst:778
+msgid ""
+"Clang emits a warning (under the control of ``-Wmodule-conflict``) when a "
+"module conflict is discovered."
+msgstr ""
+
+#: ../../../Modules.rst:781
+msgid "**Example:**"
+msgstr ""
+
+#: ../../../Modules.rst:798
+msgid "Attributes"
+msgstr ""
+
+#: ../../../Modules.rst:799
+msgid ""
+"Attributes are used in a number of places in the grammar to describe "
+"specific behavior of other declarations. The format of attributes is fairly "
+"simple."
+msgstr ""
+
+#: ../../../Modules.rst:809
+msgid ""
+"Any *identifier* can be used as an attribute, and each declaration specifies "
+"what attributes can be applied to it."
+msgstr ""
+
+#: ../../../Modules.rst:812
+msgid "Private Module Map Files"
+msgstr ""
+
+#: ../../../Modules.rst:813
+msgid ""
+"Module map files are typically named ``module.modulemap`` and live either "
+"alongside the headers they describe or in a parent directory of the headers "
+"they describe. These module maps typically describe all of the API for the "
+"library."
+msgstr ""
+
+#: ../../../Modules.rst:818
+msgid ""
+"However, in some cases, the presence or absence of particular headers is "
+"used to distinguish between the \"public\" and \"private\" APIs of a "
+"particular library. For example, a library may contain the headers ``Foo.h`` "
+"and ``Foo_Private.h``, providing public and private APIs, respectively. "
+"Additionally, ``Foo_Private.h`` may only be available on some versions of "
+"library, and absent in others. One cannot easily express this with a single "
+"module map file in the library:"
+msgstr ""
+
+#: ../../../Modules.rst:837
+msgid ""
+"because the header ``Foo_Private.h`` won't always be available. The module "
+"map file could be customized based on whether ``Foo_Private.h`` is available "
+"or not, but doing so requires custom build machinery."
+msgstr ""
+
+#: ../../../Modules.rst:842
+msgid ""
+"Private module map files, which are named ``module.private.modulemap`` (or, "
+"for backward compatibility, ``module_private.map``), allow one to augment "
+"the primary module map file with an additional submodule. For example, we "
+"would split the module map file above into two module map files:"
+msgstr ""
+
+#: ../../../Modules.rst:861
+msgid ""
+"When a ``module.private.modulemap`` file is found alongside a ``module."
+"modulemap`` file, it is loaded after the ``module.modulemap`` file. In our "
+"example library, the ``module.private.modulemap`` file would be available "
+"when ``Foo_Private.h`` is available, making it easier to split a library's "
+"public and private APIs along header boundaries."
+msgstr ""
+
+#: ../../../Modules.rst:868
+msgid ""
+"When writing a private module as part of a *framework*, it's recommended "
+"that:"
+msgstr ""
+
+#: ../../../Modules.rst:870
+msgid ""
+"Headers for this module are present in the ``PrivateHeaders`` framework "
+"subdirectory."
+msgstr ""
+
+#: ../../../Modules.rst:872
+msgid ""
+"The private module is defined as a *submodule* of the public framework (if "
+"there's one), similar to how ``Foo.Private`` is defined in the example above."
+msgstr ""
+
+#: ../../../Modules.rst:874
+msgid ""
+"The ``explicit`` keyword should be used to guarantee that its content will "
+"only be available when the submodule itself is explicitly named (through a "
+"``@import`` for example)."
+msgstr ""
+
+#: ../../../Modules.rst:879
+msgid "Modularizing a Platform"
+msgstr ""
+
+#: ../../../Modules.rst:880
+msgid ""
+"To get any benefit out of modules, one needs to introduce module maps for "
+"software libraries starting at the bottom of the stack. This typically means "
+"introducing a module map covering the operating system's headers and the C "
+"standard library headers (in ``/usr/include``, for a Unix system)."
+msgstr ""
+
+#: ../../../Modules.rst:882
+msgid ""
+"The module maps will be written using the `module map language`_, which "
+"provides the tools necessary to describe the mapping between headers and "
+"modules. Because the set of headers differs from one system to the next, the "
+"module map will likely have to be somewhat customized for, e.g., a "
+"particular distribution and version of the operating system. Moreover, the "
+"system headers themselves may require some modification, if they exhibit any "
+"anti-patterns that break modules. Such common patterns are described below."
+msgstr ""
+
+#: ../../../Modules.rst:894
+msgid "**Macro-guarded copy-and-pasted definitions**"
+msgstr ""
+
+#: ../../../Modules.rst:885
+msgid ""
+"System headers vend core types such as ``size_t`` for users. These types are "
+"often needed in a number of system headers, and are almost trivial to write. "
+"Hence, it is fairly common to see a definition such as the following copy-"
+"and-pasted throughout the headers:"
+msgstr ""
+
+#: ../../../Modules.rst:894
+msgid ""
+"Unfortunately, when modules compiles all of the C library headers together "
+"into a single module, only the first actual type definition of ``size_t`` "
+"will be visible, and then only in the submodule corresponding to the lucky "
+"first header. Any other headers that have copy-and-pasted versions of this "
+"pattern will *not* have a definition of ``size_t``. Importing the submodule "
+"corresponding to one of those headers will therefore not yield ``size_t`` as "
+"part of the API, because it wasn't there when the header was parsed. The fix "
+"for this problem is either to pull the copied declarations into a common "
+"header that gets included everywhere ``size_t`` is part of the API, or to "
+"eliminate the ``#ifndef`` and redefine the ``size_t`` type. The latter works "
+"for C++ headers and C11, but will cause an error for non-modules C90/C99, "
+"where redefinition of ``typedefs`` is not permitted."
+msgstr ""
+
+#: ../../../Modules.rst:897
+msgid "**Conflicting definitions**"
+msgstr ""
+
+#: ../../../Modules.rst:897
+msgid ""
+"Different system headers may provide conflicting definitions for various "
+"macros, functions, or types. These conflicting definitions don't tend to "
+"cause problems in a pre-modules world unless someone happens to include both "
+"headers in one translation unit. Since the fix is often simply \"don't do "
+"that\", such problems persist. Modules requires that the conflicting "
+"definitions be eliminated or that they be placed in separate modules (the "
+"former is generally the better answer)."
+msgstr ""
+
+#: ../../../Modules.rst:900
+msgid "**Missing includes**"
+msgstr ""
+
+#: ../../../Modules.rst:900
+msgid ""
+"Headers are often missing ``#include`` directives for headers that they "
+"actually depend on. As with the problem of conflicting definitions, this "
+"only affects unlucky users who don't happen to include headers in the right "
+"order. With modules, the headers of a particular module will be parsed in "
+"isolation, so the module may fail to build if there are missing includes."
+msgstr ""
+
+#: ../../../Modules.rst:903
+msgid "**Headers that vend multiple APIs at different times**"
+msgstr ""
+
+#: ../../../Modules.rst:903
+msgid ""
+"Some systems have headers that contain a number of different kinds of API "
+"definitions, only some of which are made available with a given include. For "
+"example, the header may vend ``size_t`` only when the macro "
+"``__need_size_t`` is defined before that header is included, and also vend "
+"``wchar_t`` only when the macro ``__need_wchar_t`` is defined. Such headers "
+"are often included many times in a single translation unit, and will have no "
+"include guards. There is no sane way to map this header to a submodule. One "
+"can either eliminate the header (e.g., by splitting it into separate "
+"headers, one per actual API) or simply ``exclude`` it in the module map."
+msgstr ""
+
+#: ../../../Modules.rst:905
+msgid ""
+"To detect and help address some of these problems, the ``clang-tools-extra`` "
+"repository contains a ``modularize`` tool that parses a set of given headers "
+"and attempts to detect these problems and produce a report. See the tool's "
+"in-source documentation for information on how to check your system or "
+"library headers."
+msgstr ""
+
+#: ../../../Modules.rst:908
+msgid "Future Directions"
+msgstr ""
+
+#: ../../../Modules.rst:909
+msgid ""
+"Modules support is under active development, and there are many "
+"opportunities remaining to improve it. Here are a few ideas:"
+msgstr ""
+
+#: ../../../Modules.rst:912
+msgid "**Detect unused module imports**"
+msgstr ""
+
+#: ../../../Modules.rst:912
+msgid ""
+"Unlike with ``#include`` directives, it should be fairly simple to track "
+"whether a directly-imported module has ever been used. By doing so, Clang "
+"can emit ``unused import`` or ``unused #include`` diagnostics, including Fix-"
+"Its to remove the useless imports/includes."
+msgstr ""
+
+#: ../../../Modules.rst:915
+msgid "**Fix-Its for missing imports**"
+msgstr ""
+
+#: ../../../Modules.rst:915
+msgid ""
+"It's fairly common for one to make use of some API while writing code, only "
+"to get a compiler error about \"unknown type\" or \"no function named\" "
+"because the corresponding header has not been included. Clang can detect "
+"such cases and auto-import the required module, but should provide a Fix-It "
+"to add the import."
+msgstr ""
+
+#: ../../../Modules.rst:918
+msgid "**Improve modularize**"
+msgstr ""
+
+#: ../../../Modules.rst:918
+msgid ""
+"The modularize tool is both extremely important (for deployment) and "
+"extremely crude. It needs better UI, better detection of problems "
+"(especially for C++), and perhaps an assistant mode to help write module "
+"maps for you."
+msgstr ""
+
+#: ../../../Modules.rst:921
+msgid "Where To Learn More About Modules"
+msgstr ""
+
+#: ../../../Modules.rst:922
+msgid "The Clang source code provides additional information about modules:"
+msgstr ""
+
+#: ../../../Modules.rst:925
+msgid "``clang/lib/Headers/module.modulemap``"
+msgstr ""
+
+#: ../../../Modules.rst:925
+msgid "Module map for Clang's compiler-specific header files."
+msgstr ""
+
+#: ../../../Modules.rst:928
+msgid "``clang/test/Modules/``"
+msgstr ""
+
+#: ../../../Modules.rst:928
+msgid "Tests specifically related to modules functionality."
+msgstr ""
+
+#: ../../../Modules.rst:931
+msgid "``clang/include/clang/Basic/Module.h``"
+msgstr ""
+
+#: ../../../Modules.rst:931
+msgid ""
+"The ``Module`` class in this header describes a module, and is used "
+"throughout the compiler to implement modules."
+msgstr ""
+
+#: ../../../Modules.rst:934
+msgid "``clang/include/clang/Lex/ModuleMap.h``"
+msgstr ""
+
+#: ../../../Modules.rst:934
+msgid ""
+"The ``ModuleMap`` class in this header describes the full module map, "
+"consisting of all of the module map files that have been parsed, and "
+"providing facilities for looking up module maps and mapping between modules "
+"and headers (in both directions)."
+msgstr ""
+
+#: ../../../Modules.rst:937
+msgid "PCHInternals_"
+msgstr ""
+
+#: ../../../Modules.rst:937
+msgid ""
+"Information about the serialized AST format used for precompiled headers and "
+"modules. The actual implementation is in the ``clangSerialization`` library."
+msgstr ""
+
+#: ../../../Modules.rst:939
+msgid ""
+"Automatic linking against the libraries of modules requires specific linker "
+"support, which is not widely available."
+msgstr ""
+
+#: ../../../Modules.rst:941
+msgid ""
+"There are certain anti-patterns that occur in headers, particularly system "
+"headers, that cause problems for modules. The section `Modularizing a "
+"Platform`_ describes some of them."
+msgstr ""
+
+#: ../../../Modules.rst:943
+msgid ""
+"The second instance is actually a new thread within the current process, not "
+"a separate process. However, the original compiler instance is blocked on "
+"the execution of this thread."
+msgstr ""
+
+#: ../../../Modules.rst:945
+msgid ""
+"The preprocessing context in which the modules are parsed is actually "
+"dependent on the command-line options provided to the compiler, including "
+"the language dialect and any ``-D`` options. However, the compiled modules "
+"for different command-line options are kept distinct, and any preprocessor "
+"directives that occur within the translation unit are ignored. See the "
+"section on the `Configuration macros declaration`_ for more information."
+msgstr ""
