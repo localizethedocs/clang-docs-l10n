@@ -1,0 +1,381 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ThinLTO.rst:3
+msgid "ThinLTO"
+msgstr ""
+
+#: ../../../ThinLTO.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../ThinLTO.rst:11
+msgid ""
+"*ThinLTO* compilation is a new type of LTO that is both scalable and "
+"incremental. *LTO* (Link Time Optimization) achieves better runtime "
+"performance through whole-program analysis and cross-module optimization. "
+"However, monolithic LTO implements this by merging all input into a single "
+"module, which is not scalable in time or memory, and also prevents fast "
+"incremental compiles."
+msgstr ""
+
+#: ../../../ThinLTO.rst:18
+msgid ""
+"In ThinLTO mode, as with regular LTO, clang emits LLVM bitcode after the "
+"compile phase. The ThinLTO bitcode is augmented with a compact summary of "
+"the module. During the link step, only the summaries are read and merged "
+"into a combined summary index, which includes an index of function locations "
+"for later cross-module function importing. Fast and efficient whole-program "
+"analysis is then performed on the combined summary index."
+msgstr ""
+
+#: ../../../ThinLTO.rst:25
+msgid ""
+"However, all transformations, including function importing, occur later when "
+"the modules are optimized in fully parallel backends. By default, linkers_ "
+"that support ThinLTO are set up to launch the ThinLTO backends in threads. "
+"So the usage model is not affected as the distinction between the fast "
+"serial thin link step and the backends is transparent to the user."
+msgstr ""
+
+#: ../../../ThinLTO.rst:32
+msgid ""
+"For more information on the ThinLTO design and current performance, see the "
+"LLVM blog post `ThinLTO: Scalable and Incremental LTO <http://blog.llvm."
+"org/2016/06/thinlto-scalable-and-incremental-lto.html>`_. While tuning is "
+"still in progress, results in the blog post show that ThinLTO already "
+"performs well compared to LTO, in many cases matching the performance "
+"improvement."
+msgstr ""
+
+#: ../../../ThinLTO.rst:40
+msgid "Current Status"
+msgstr ""
+
+#: ../../../ThinLTO.rst:43
+msgid "Clang/LLVM"
+msgstr ""
+
+#: ../../../ThinLTO.rst:46
+msgid ""
+"The 3.9 release of clang includes ThinLTO support. However, ThinLTO is under "
+"active development, and new features, improvements and bugfixes are being "
+"added for the next release. For the latest ThinLTO support, `build a recent "
+"version of clang and LLVM <https://llvm.org/docs/CMake.html>`_."
+msgstr ""
+
+#: ../../../ThinLTO.rst:53
+msgid "Linkers"
+msgstr ""
+
+#: ../../../ThinLTO.rst:57
+msgid "ThinLTO is currently supported for the following linkers:"
+msgstr ""
+
+#: ../../../ThinLTO.rst:59
+msgid ""
+"**gold (via the gold-plugin)**: Similar to monolithic LTO, this requires "
+"using a `gold linker configured with plugins enabled <https://llvm.org/docs/"
+"GoldPlugin.html>`_."
+msgstr ""
+
+#: ../../../ThinLTO.rst:63
+msgid ""
+"**ld64**: Starting with `Xcode 8 <https://developer.apple.com/xcode/>`_."
+msgstr ""
+
+#: ../../../ThinLTO.rst:65
+msgid "**lld**: Starting with r284050 for ELF, r298942 for COFF."
+msgstr ""
+
+#: ../../../ThinLTO.rst:69
+msgid "Usage"
+msgstr ""
+
+#: ../../../ThinLTO.rst:72
+msgid "Basic"
+msgstr ""
+
+#: ../../../ThinLTO.rst:74
+msgid ""
+"To utilize ThinLTO, simply add the -flto=thin option to compile and link. E."
+"g."
+msgstr ""
+
+#: ../../../ThinLTO.rst:81
+msgid ""
+"When using lld-link, the -flto option need only be added to the compile step:"
+msgstr ""
+
+#: ../../../ThinLTO.rst:88
+msgid ""
+"As mentioned earlier, by default the linkers will launch the ThinLTO backend "
+"threads in parallel, passing the resulting native object files back to the "
+"linker for the final native link.  As such, the usage model the same as non-"
+"LTO."
+msgstr ""
+
+#: ../../../ThinLTO.rst:93
+msgid "With gold, if you see an error during the link of the form:"
+msgstr ""
+
+#: ../../../ThinLTO.rst:99
+msgid ""
+"Then either gold was not configured with plugins enabled, or clang was not "
+"built with ``-DLLVM_BINUTILS_INCDIR`` set properly. See the instructions for "
+"the `LLVM gold plugin <https://llvm.org/docs/GoldPlugin.html#how-to-build-"
+"it>`_."
+msgstr ""
+
+#: ../../../ThinLTO.rst:105
+msgid "Controlling Backend Parallelism"
+msgstr ""
+
+#: ../../../ThinLTO.rst:108
+msgid ""
+"By default, the ThinLTO link step will launch as many threads in parallel as "
+"there are cores. If the number of cores can't be computed for the "
+"architecture, then it will launch ``std::thread::hardware_concurrency`` "
+"number of threads in parallel. For machines with hyper-threading, this is "
+"the total number of virtual cores. For some applications and machine "
+"configurations this may be too aggressive, in which case the amount of "
+"parallelism can be reduced to ``N`` via:"
+msgstr ""
+
+#: ../../../ThinLTO.rst:117
+msgid "gold: ``-Wl,-plugin-opt,jobs=N``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:119
+msgid "ld64: ``-Wl,-mllvm,-threads=N``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:121
+msgid "lld: ``-Wl,--thinlto-jobs=N``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:123
+msgid "lld-link: ``/opt:lldltojobs=N``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:127
+msgid "Incremental"
+msgstr ""
+
+#: ../../../ThinLTO.rst:130
+msgid ""
+"ThinLTO supports fast incremental builds through the use of a cache, which "
+"currently must be enabled through a linker option."
+msgstr ""
+
+#: ../../../ThinLTO.rst:133
+msgid "gold (as of LLVM 4.0): ``-Wl,-plugin-opt,cache-dir=/path/to/cache``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:135
+msgid ""
+"ld64 (support in clang 3.9 and Xcode 8): ``-Wl,-cache_path_lto,/path/to/"
+"cache``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:137
+msgid "ELF lld (as of LLVM 5.0): ``-Wl,--thinlto-cache-dir=/path/to/cache``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:139
+msgid "COFF lld-link (as of LLVM 6.0): ``/lldltocache:/path/to/cache``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:143
+msgid "Cache Pruning"
+msgstr ""
+
+#: ../../../ThinLTO.rst:145
+msgid ""
+"To help keep the size of the cache under control, ThinLTO supports cache "
+"pruning. Cache pruning is supported with gold, ld64 and ELF and COFF lld, "
+"but currently only gold, ELF and COFF lld allow you to control the policy "
+"with a policy string. The cache policy must be specified with a linker "
+"option."
+msgstr ""
+
+#: ../../../ThinLTO.rst:150
+msgid "gold (as of LLVM 6.0): ``-Wl,-plugin-opt,cache-policy=POLICY``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:152
+msgid "ELF lld (as of LLVM 5.0): ``-Wl,--thinlto-cache-policy,POLICY``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:154
+msgid "COFF lld-link (as of LLVM 6.0): ``/lldltocachepolicy:POLICY``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:157
+msgid ""
+"A policy string is a series of key-value pairs separated by ``:`` "
+"characters. Possible key-value pairs are:"
+msgstr ""
+
+#: ../../../ThinLTO.rst:160
+msgid ""
+"``cache_size=X%``: The maximum size for the cache directory is ``X`` percent "
+"of the available space on the disk. Set to 100 to indicate no limit, 50 to "
+"indicate that the cache size will not be left over half the available disk "
+"space. A value over 100 is invalid. A value of 0 disables the percentage "
+"size-based pruning. The default is 75%."
+msgstr ""
+
+#: ../../../ThinLTO.rst:166
+msgid ""
+"``cache_size_bytes=X``, ``cache_size_bytes=Xk``, ``cache_size_bytes=Xm``, "
+"``cache_size_bytes=Xg``: Sets the maximum size for the cache directory to "
+"``X`` bytes (or KB, MB, GB respectively). A value over the amount of "
+"available space on the disk will be reduced to the amount of available "
+"space. A value of 0 disables the byte size-based pruning. The default is no "
+"byte size-based pruning."
+msgstr ""
+
+#: ../../../ThinLTO.rst:173
+msgid ""
+"Note that ThinLTO will apply both size-based pruning policies "
+"simultaneously, and changing one does not affect the other. For example, a "
+"policy of ``cache_size_bytes=1g`` on its own will cause both the 1GB and "
+"default 75% policies to be applied unless the default ``cache_size`` is "
+"overridden."
+msgstr ""
+
+#: ../../../ThinLTO.rst:178
+msgid ""
+"``cache_size_files=X``: Set the maximum number of files in the cache "
+"directory. Set to 0 to indicate no limit. The default is 1000000 files."
+msgstr ""
+
+#: ../../../ThinLTO.rst:182
+msgid ""
+"``prune_after=Xs``, ``prune_after=Xm``, ``prune_after=Xh``: Sets the "
+"expiration time for cache files to ``X`` seconds (or minutes, hours "
+"respectively).  When a file hasn't been accessed for ``prune_after`` "
+"seconds, it is removed from the cache. A value of 0 disables the expiration-"
+"based pruning. The default is 1 week."
+msgstr ""
+
+#: ../../../ThinLTO.rst:188
+msgid ""
+"``prune_interval=Xs``, ``prune_interval=Xm``, ``prune_interval=Xh``: Sets "
+"the pruning interval to ``X`` seconds (or minutes, hours respectively). This "
+"is intended to be used to avoid scanning the directory too often. It does "
+"not impact the decision of which files to prune. A value of 0 forces the "
+"scan to occur. The default is every 20 minutes."
+msgstr ""
+
+#: ../../../ThinLTO.rst:195
+msgid "Clang Bootstrap"
+msgstr ""
+
+#: ../../../ThinLTO.rst:197
+msgid "To bootstrap clang/LLVM with ThinLTO, follow these steps:"
+msgstr ""
+
+#: ../../../ThinLTO.rst:199
+msgid "The host compiler_ must be a version of clang that supports ThinLTO."
+msgstr ""
+
+#: ../../../ThinLTO.rst:200
+msgid ""
+"The host linker_ must support ThinLTO (and in the case of gold, must be "
+"`configured with plugins enabled <https://llvm.org/docs/GoldPlugin.html>`_)."
+msgstr ""
+
+#: ../../../ThinLTO.rst:202
+msgid ""
+"Use the following additional `CMake variables <https://llvm.org/docs/CMake."
+"html#options-and-variables>`_ when configuring the bootstrap compiler build:"
+msgstr ""
+
+#: ../../../ThinLTO.rst:206 ../../../ThinLTO.rst:214
+msgid "``-DLLVM_ENABLE_LTO=Thin``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:207
+msgid "``-DCMAKE_C_COMPILER=/path/to/host/clang``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:208
+msgid "``-DCMAKE_CXX_COMPILER=/path/to/host/clang++``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:209
+msgid "``-DCMAKE_RANLIB=/path/to/host/llvm-ranlib``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:210
+msgid "``-DCMAKE_AR=/path/to/host/llvm-ar``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:212
+msgid "Or, on Windows:"
+msgstr ""
+
+#: ../../../ThinLTO.rst:215
+msgid "``-DCMAKE_C_COMPILER=/path/to/host/clang-cl.exe``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:216
+msgid "``-DCMAKE_CXX_COMPILER=/path/to/host/clang-cl.exe``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:217
+msgid "``-DCMAKE_LINKER=/path/to/host/lld-link.exe``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:218
+msgid "``-DCMAKE_RANLIB=/path/to/host/llvm-ranlib.exe``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:219
+msgid "``-DCMAKE_AR=/path/to/host/llvm-ar.exe``"
+msgstr ""
+
+#: ../../../ThinLTO.rst:221
+msgid ""
+"To use additional linker arguments for controlling the backend parallelism_ "
+"or enabling incremental_ builds of the bootstrap compiler, after configuring "
+"the build, modify the resulting CMakeCache.txt file in the build directory. "
+"Specify any additional linker options after ``CMAKE_EXE_LINKER_FLAGS:"
+"STRING=``. Note the configure may fail if linker plugin options are instead "
+"specified directly in the previous step."
+msgstr ""
+
+#: ../../../ThinLTO.rst:228
+msgid ""
+"The `BOOTSTRAP_LLVM_ENABLE_LTO=Thin`` will enable ThinLTO for stage 2 and "
+"stage 3 in case the compiler used for stage 1 does not support the ThinLTO "
+"option."
+msgstr ""
+
+#: ../../../ThinLTO.rst:233
+msgid "More Information"
+msgstr ""
+
+#: ../../../ThinLTO.rst:235
+msgid ""
+"From LLVM project blog: `ThinLTO: Scalable and Incremental LTO <http://blog."
+"llvm.org/2016/06/thinlto-scalable-and-incremental-lto.html>`_"
+msgstr ""
