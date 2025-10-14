@@ -1,0 +1,182 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 17\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:44+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ClangRepl.rst:3
+msgid "Clang-Repl"
+msgstr ""
+
+#: ../../../ClangRepl.rst:5 ../../../ClangRepl.rst:82
+msgid ""
+"**Clang-Repl** is an interactive C++ interpreter that allows for incremental "
+"compilation. It supports interactive programming for C++ in a read-evaluate-"
+"print-loop (REPL) style. It uses Clang as a library to compile the high "
+"level programming language into LLVM IR. Then the LLVM IR is executed by the "
+"LLVM just-in-time (JIT) infrastructure."
+msgstr ""
+
+#: ../../../ClangRepl.rst:11
+msgid ""
+"Clang-Repl is suitable for exploratory programming and in places where time "
+"to insight is important. Clang-Repl is a project inspired by the work in "
+"`Cling <https://github.com/root-project/cling>`_, a LLVM-based C/C++ "
+"interpreter developed by the field of high energy physics and used by the "
+"scientific data analysis framework `ROOT <https://root.cern/>`_. Clang-Repl "
+"allows to move parts of Cling upstream, making them useful and available to "
+"a broader audience."
+msgstr ""
+
+#: ../../../ClangRepl.rst:20
+msgid "Clang-Repl Basic Data Flow"
+msgstr ""
+
+#: ../../../ClangRepl.rst:-1
+msgid "ClangRepl design"
+msgstr ""
+
+#: ../../../ClangRepl.rst:26
+msgid "Clang-Repl data flow can be divided into roughly 8 phases:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:28
+msgid ""
+"Clang-Repl controls the input infrastructure by an interactive prompt or by "
+"an interface allowing the incremental processing of input."
+msgstr ""
+
+#: ../../../ClangRepl.rst:31
+msgid ""
+"Then it sends the input to the underlying incremental facilities in Clang "
+"infrastructure."
+msgstr ""
+
+#: ../../../ClangRepl.rst:34
+msgid "Clang compiles the input into an AST representation."
+msgstr ""
+
+#: ../../../ClangRepl.rst:36
+msgid ""
+"When required the AST can be further transformed in order to attach specific "
+"behavior."
+msgstr ""
+
+#: ../../../ClangRepl.rst:39
+msgid "The AST representation is then lowered to LLVM IR."
+msgstr ""
+
+#: ../../../ClangRepl.rst:41
+msgid ""
+"The LLVM IR is the input format for LLVM’s JIT compilation infrastructure. "
+"The tool will instruct the JIT to run specified functions, translating them "
+"into machine code targeting the underlying device architecture (eg. Intel "
+"x86 or NVPTX)."
+msgstr ""
+
+#: ../../../ClangRepl.rst:46
+msgid "The LLVM JIT lowers the LLVM IR to machine code."
+msgstr ""
+
+#: ../../../ClangRepl.rst:48
+msgid "The machine code is then executed."
+msgstr ""
+
+#: ../../../ClangRepl.rst:52
+msgid "Build Instructions:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:62
+msgid "**Note here**, above RelWithDebInfo - Debug / Release"
+msgstr ""
+
+#: ../../../ClangRepl.rst:70
+msgid ""
+"**Clang-repl** is built under llvm-project/build/bin. Proceed into the "
+"directory **llvm-project/build/bin**"
+msgstr ""
+
+#: ../../../ClangRepl.rst:80
+msgid "Clang-Repl Usage"
+msgstr ""
+
+#: ../../../ClangRepl.rst:90
+msgid "Basic:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:109
+msgid "Function Definitions and Calls:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:121
+msgid "Iterative Structures:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:137
+msgid "Classes and Structures:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:154
+msgid "Lamdas:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:165
+msgid "Using Dynamic Library:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:174
+msgid "**Generation of dynamic library**"
+msgstr ""
+
+#: ../../../ClangRepl.rst:195
+msgid "Comments:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:204
+msgid "Closure or Termination:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:211
+msgid ""
+"Just like Clang, Clang-Repl can be integrated in existing applications as a "
+"library (using the clangInterpreter library). This turns your C++ compiler "
+"into a service that can incrementally consume and execute code. The "
+"**Compiler as A Service** (**CaaS**) concept helps support advanced use "
+"cases such as template instantiations on demand and automatic language "
+"interoperability. It also helps static languages such as C/C++ become apt "
+"for data science."
+msgstr ""
+
+#: ../../../ClangRepl.rst:220
+msgid "Related Reading"
+msgstr ""
+
+#: ../../../ClangRepl.rst:221
+msgid ""
+"`Cling Transitions to LLVM's Clang-Repl <https://root.cern/blog/cling-in-"
+"llvm/>`_"
+msgstr ""
+
+#: ../../../ClangRepl.rst:223
+msgid ""
+"`Moving (parts of) the Cling REPL in Clang <https://lists.llvm.org/pipermail/"
+"llvm-dev/2020-July/143257.html>`_"
+msgstr ""
+
+#: ../../../ClangRepl.rst:225
+msgid ""
+"`GPU Accelerated Automatic Differentiation With Clad <https://arxiv.org/"
+"pdf/2203.06139.pdf>`_"
+msgstr ""

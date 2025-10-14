@@ -1,0 +1,66 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 17\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:44+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../HLSL/ResourceTypes.rst:3
+msgid "HLSL Resource Types"
+msgstr ""
+
+#: ../../../HLSL/ResourceTypes.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../HLSL/ResourceTypes.rst:11
+msgid ""
+"HLSL Resources are runtime-bound data that is provided as input, output or "
+"both to shader programs written in HLSL. Resource Types in HLSL provide key "
+"user abstractions for reading and writing resource data."
+msgstr ""
+
+#: ../../../HLSL/ResourceTypes.rst:16
+msgid "Implementation Details"
+msgstr ""
+
+#: ../../../HLSL/ResourceTypes.rst:18
+msgid ""
+"In Clang resource types are forward declared by the "
+"``HLSLExternalSemaSource`` on initialization. They are then lazily completed "
+"when ``requiresCompleteType`` is called later in Sema."
+msgstr ""
+
+#: ../../../HLSL/ResourceTypes.rst:22
+msgid ""
+"Resource types are templated class declarations. The template parameter "
+"specifies the expected return type of resource loads, and the expected "
+"parameter type for stores."
+msgstr ""
+
+#: ../../../HLSL/ResourceTypes.rst:26
+msgid ""
+"In Clang's AST and code generation, resource types are classes that store a "
+"pointer of the template parameter type. The pointer is populated from a call "
+"to ``__builtin_hlsl_create_handle``, and treated as a pointer to an array of "
+"typed data through until lowering in the backend."
+msgstr ""
+
+#: ../../../HLSL/ResourceTypes.rst:31
+msgid ""
+"Resource types are annotated with the ``HLSLResource`` attribute, which "
+"drives code generation for resource binding metadata. The ``hlsl`` metadata "
+"nodes are transformed in the backend to the binding information expected by "
+"the target runtime."
+msgstr ""
