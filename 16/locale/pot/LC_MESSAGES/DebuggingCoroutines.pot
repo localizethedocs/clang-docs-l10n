@@ -1,0 +1,412 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 16\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../DebuggingCoroutines.rst:3
+msgid "Debugging C++ Coroutines"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:11
+msgid ""
+"For performance and other architectural reasons, the C++ Coroutines feature "
+"in the Clang compiler is implemented in two parts of the compiler.  Semantic "
+"analysis is performed in Clang, and Coroutine construction and optimization "
+"takes place in the LLVM middle-end."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:16
+msgid ""
+"However, this design forces us to generate insufficient debugging "
+"information. Typically, the compiler generates debug information in the "
+"Clang frontend, as debug information is highly language specific. However, "
+"this is not possible for Coroutine frames because the frames are constructed "
+"in the LLVM middle-end."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:21
+msgid ""
+"To mitigate this problem, the LLVM middle end attempts to generate some "
+"debug information, which is unfortunately incomplete, since much of the "
+"language specific information is missing in the middle end."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:25
+msgid ""
+"This document describes how to use this debug information to better debug "
+"coroutines."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:29
+msgid "Terminology"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:31
+msgid ""
+"Due to the recent nature of C++20 Coroutines, the terminology used to "
+"describe the concepts of Coroutines is not settled.  This section defines a "
+"common, understandable terminology to be used consistently throughout this "
+"document."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:36
+msgid "coroutine type"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:38
+msgid ""
+"A `coroutine function` is any function that contains any of the Coroutine "
+"Keywords `co_await`, `co_yield`, or `co_return`.  A `coroutine type` is a "
+"possible return type of one of these `coroutine functions`.  `Task` and "
+"`Generator` are commonly referred to coroutine types."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:44
+msgid "coroutine"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:46
+msgid ""
+"By technical definition, a `coroutine` is a suspendable function. However, "
+"programmers typically use `coroutine` to refer to an individual instance. "
+"For example:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:57
+msgid ""
+"In practice, we typically say \"`Coros` contains 3 coroutines\" in the above "
+"example, though this is not strictly correct.  More technically, this should "
+"say \"`Coros` contains 3 coroutine instances\" or \"Coros contains 3 "
+"coroutine objects.\""
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:62
+msgid ""
+"In this document, we follow the common practice of using `coroutine` to "
+"refer to an individual `coroutine instance`, since the terms `coroutine "
+"instance` and `coroutine object` aren't sufficiently defined in this case."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:67
+msgid "coroutine frame"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:69
+msgid ""
+"The C++ Standard uses `coroutine state` to describe the allocated storage. "
+"In the compiler, we use `coroutine frame` to describe the generated data "
+"structure that contains the necessary information."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:74
+msgid "The structure of coroutine frames"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:76
+msgid "The structure of coroutine frames is defined as:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:87
+msgid ""
+"In the debugger, the function's name is obtainable from the address of the "
+"function. And the name of `resume` function is equal to the name of the "
+"coroutine function. So the name of the coroutine is obtainable once the "
+"address of the coroutine is known."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:93
+msgid "Print promise_type"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:95
+msgid ""
+"Every coroutine has a `promise_type`, which defines the behavior for the "
+"corresponding coroutine. In other words, if two coroutines have the same "
+"`promise_type`, they should behave in the same way. To print a "
+"`promise_type` in a debugger when stopped at a breakpoint inside a "
+"coroutine, printing the `promise_type` can be done by:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:105
+msgid ""
+"It is also possible to print the `promise_type` of a coroutine from the "
+"address of the coroutine frame. For example, if the address of a coroutine "
+"frame is 0x416eb0, and the type of the `promise_type` is `task::"
+"promise_type`, printing the `promise_type` can be done by:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:114
+msgid ""
+"This is possible because the `promise_type` is guaranteed by the ABI to be "
+"at a 16 bit offset from the coroutine frame."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:117
+msgid "Note that there is also an ABI independent method:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:123
+msgid ""
+"The functions `from_address(void*)` and `promise()` are often small enough "
+"to be removed during optimization, so this method may not be possible."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:127
+msgid "Print coroutine frames"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:129
+msgid ""
+"LLVM generates the debug information for the coroutine frame in the LLVM "
+"middle end, which permits printing of the coroutine frame in the debugger. "
+"Much like the `promise_type`, when stopped at a breakpoint inside a "
+"coroutine we can print the coroutine frame by:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:139
+msgid ""
+"Just as printing the `promise_type` is possible from the coroutine address, "
+"printing the details of the coroutine frame from an address is also possible:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:156
+msgid "The above is possible because:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:158
+msgid ""
+"(1) The name of the debug type of the coroutine frame is the `linkage_name`, "
+"plus the `.coro_frame_ty` suffix because each coroutine function shares the "
+"same coroutine type."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:162
+msgid ""
+"(2) The coroutine function name is accessible from the address of the "
+"coroutine frame."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:165
+msgid "The above commands can be simplified by placing them in debug scripts."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:168
+msgid "Examples to print coroutine frames"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:170
+msgid "The print examples below use the following definition:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:233
+msgid "In debug mode (`O0` + `g`), the printing result would be:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:240
+msgid ""
+"In the above, the values of `v` and `a` are clearly expressed, as are the "
+"temporary values for `await_counter` (`class_await_counter_1` and "
+"`class_await_counter_2`) and `std::suspend_always` "
+"( `struct_std__suspend_always_0` and `struct_std__suspend_always_3`). The "
+"index of the current suspension point of the coroutine is emitted as "
+"`__coro_index`. In the above example, the `__coro_index` value of `1` means "
+"the coroutine stopped at the second suspend point (Note that `__coro_index` "
+"is zero indexed) which is the first `co_await await_counter{};` in "
+"`coro_task`. Note that the first initial suspend point is the compiler "
+"generated `co_await promise_type::initial_suspend()`."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:251
+msgid ""
+"However, when optimizations are enabled, the printed result changes "
+"drastically:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:257
+msgid ""
+"Unused values are optimized out, as well as the name of the local variable "
+"`a`. The only information remained is the value of a 32 bit integer. In this "
+"simple case, it seems to be pretty clear that `__int_32_0` represents `a`. "
+"However, it is not true."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:262
+msgid ""
+"An important note with optimization is that the value of a variable may not "
+"properly express the intended value in the source code.  For example:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:283
+msgid ""
+"When debugging step-by-step, the value of `__int_32_0` seemingly does not "
+"change, despite being frequently incremented, and instead is always `43`. "
+"While this might be surprising, this is a result of the optimizer "
+"recognizing that it can eliminate most of the load/store operations. The "
+"above code gets optimized to the equivalent of:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:304
+msgid ""
+"It should now be obvious why the value of `__int_32_0` remains unchanged "
+"throughout the function. It is important to recognize that `__int_32_0` does "
+"not directly correspond to `a`, but is instead a variable generated to "
+"assist the compiler in code generation. The variables in an optimized "
+"coroutine frame should not be thought of as directly representing the "
+"variables in the C++ source."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:312
+msgid "Get the suspended points"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:314
+msgid ""
+"An important requirement for debugging coroutines is to understand suspended "
+"points, which are where the coroutine is currently suspended and awaiting."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:317
+msgid ""
+"For simple cases like the above, inspecting the value of the `__coro_index` "
+"variable in the coroutine frame works well."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:320
+msgid ""
+"However, it is not quite so simple in really complex situations. In these "
+"cases, it is necessary to use the coroutine libraries to insert the line-"
+"number."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:324
+msgid "For example:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:347
+msgid ""
+"In this case, we use `std::source_location` to store the line number of the "
+"await inside the `promise_type`.  Since we can locate the coroutine function "
+"from the address of the coroutine, we can identify suspended points this way "
+"as well."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:352
+msgid ""
+"The downside here is that this comes at the price of additional runtime "
+"cost. This is consistent with the C++ philosophy of \"Pay for what you use\"."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:356
+msgid "Get the asynchronous stack"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:358
+msgid ""
+"Another important requirement to debug a coroutine is to print the "
+"asynchronous stack to identify the asynchronous caller of the coroutine.  As "
+"many implementations of coroutine types store `std::coroutine_handle<> "
+"continuation` in the promise type, identifying the caller should be "
+"trivial.  The `continuation` is typically the awaiting coroutine for the "
+"current coroutine. That is, the asynchronous parent."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:365
+msgid ""
+"Since the `promise_type` is obtainable from the address of a coroutine and "
+"contains the corresponding continuation (which itself is a coroutine with a "
+"`promise_type`), it should be trivial to print the entire asynchronous stack."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:369
+msgid "This logic should be quite easily captured in a debugger script."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:372
+msgid "Examples to print asynchronous stack"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:374
+msgid ""
+"Here is an example to print the asynchronous stack for the normal task "
+"implementation."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:465
+msgid ""
+"In the example, the ``task`` coroutine holds a ``continuation`` field, which "
+"would be resumed once the ``task`` completes. In another word, the "
+"``continuation`` is the asynchronous caller for the ``task``. Just like the "
+"normal function returns to its caller when the function completes."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:470
+msgid ""
+"So we can use the ``continuation`` field to construct the asynchronous stack:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:617
+msgid "Then let's run:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:665
+msgid ""
+"Now we get the complete asynchronous stack! It is also possible to print "
+"other asynchronous stack which doesn't live in the top of the stack. We can "
+"make it by passing the address of the corresponding coroutine frame to "
+"``async-bt`` command."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:669
+msgid ""
+"By the debugging scripts, we can print any coroutine frame too as long as we "
+"know the address. For example, we can print the coroutine frame for "
+"``detail::chain_fn<18>()`` in the above example. From the log record, we "
+"know the address of the coroutine frame is ``0x4412c0`` in the run. Then we "
+"can:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:711
+msgid "Get the living coroutines"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:713
+msgid ""
+"Another useful task when debugging coroutines is to enumerate the list of "
+"living coroutines, which is often done with threads.  While technically "
+"possible, this task is not recommended in production code as it is costly at "
+"runtime. One such solution is to store the list of currently running "
+"coroutines in a collection:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:735
+msgid ""
+"In the above code snippet, we save the address of every lived coroutine in "
+"the `lived_coroutines` `unordered_set`. As before, once we know the address "
+"of the coroutine we can derive the function, `promise_type`, and other "
+"members of the frame. Thus, we could print the list of lived coroutines from "
+"that collection."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:740
+msgid ""
+"Please note that the above is expensive from a storage perspective, and "
+"requires some level of locking (not pictured) on the collection to prevent "
+"data races."
+msgstr ""
