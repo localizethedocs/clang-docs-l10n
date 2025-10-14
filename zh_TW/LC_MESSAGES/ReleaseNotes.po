@@ -1,0 +1,351 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 4\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ReleaseNotes.rst:3
+msgid "Clang 4.0.0 Release Notes"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:9
+msgid "Written by the `LLVM Team <http://llvm.org/>`_"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:12
+msgid "Introduction"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:14
+msgid ""
+"This document contains the release notes for the Clang C/C++/Objective-C/"
+"OpenCL frontend, part of the LLVM Compiler Infrastructure, release 4.0.0. "
+"Here we describe the status of Clang in some detail, including major "
+"improvements from the previous release and new feature work. For the general "
+"LLVM release notes, see `the LLVM documentation <http://llvm.org/docs/"
+"ReleaseNotes.html>`_. All LLVM releases may be downloaded from the `LLVM "
+"releases web site <http://llvm.org/releases/>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:23
+msgid ""
+"For more information about Clang or LLVM, including information about the "
+"latest release, please check out the main please see the `Clang Web Site "
+"<http://clang.llvm.org>`_ or the `LLVM Web Site <http://llvm.org>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:29
+msgid "What's New in Clang 4.0.0?"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:31
+msgid ""
+"Some of the major new features and improvements to Clang are listed here. "
+"Generic improvements to Clang as a whole or to its underlying infrastructure "
+"are described first, followed by language-specific sections with "
+"improvements to Clang's support for those languages."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:37
+msgid "Major New Features"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:39
+msgid ""
+"The `diagnose_if <AttributeReference.html#diagnose-if>`_ attribute has been "
+"added to clang. This attribute allows clang to emit a warning or error if a "
+"function call meets one or more user-specified conditions."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:44
+msgid ""
+"Enhanced devirtualization with `-fstrict-vtable-pointers <UsersManual."
+"html#cmdoption-fstrict-vtable-pointers>`_. Clang devirtualizes across "
+"different basic blocks, like loops:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:64
+msgid "Improvements to ThinLTO (-flto=thin)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:65
+msgid ""
+"Integration with profile data (PGO). When available, profile data enables "
+"more accurate function importing decisions, as well as cross-module indirect "
+"call promotion."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:68
+msgid ""
+"Significant build-time and binary-size improvements when compiling with "
+"debug info (``-g``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:72
+msgid "New Compiler Flags"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:74
+msgid ""
+"The option ``-Og`` has been added to optimize the debugging experience. For "
+"now, this option is exactly the same as ``-O1``. However, in the future, "
+"some other optimizations might be enabled or disabled."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:78
+msgid ""
+"The option ``-MJ`` has been added to simplify adding JSON compilation "
+"database output into existing build systems."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:83
+msgid "OpenCL C Language Changes in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:85
+msgid "**The following bugs in the OpenCL header have been fixed:**"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:87
+msgid "Added missing ``overloadable`` and ``convergent`` attributes."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:88
+msgid "Removed some erroneous extra ``native_*`` functions."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:90
+msgid "**The following bugs in the generation of metadata have been fixed:**"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:92
+msgid "Corrected the SPIR version depending on the OpenCL version."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:93
+msgid "Source level address spaces are taken from the SPIR specification."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:94
+msgid "Image types now contain no access qualifier."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:96
+msgid "**The following bugs in the AMD target have been fixed:**"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:98
+msgid ""
+"Corrected the bitwidth of ``size_t`` and NULL pointer value with respect to "
+"address spaces."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:100
+msgid ""
+"Added ``cl_khr_subgroups``, ``cl_amd_media_ops`` and ``cl_amd_media_ops2`` "
+"extensions."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:102
+msgid "Added ``cl-denorms-are-zero`` support."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:103
+msgid "Changed address spaces for image objects to be ``constant``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:104
+msgid "Added little-endian."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:106
+msgid "**The following bugs in OpenCL 2.0 have been fixed:**"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:108
+msgid ""
+"Fixed pipe builtin function return type, added extra argument to generated "
+"IR intrinsics to propagate size and alignment information of the pipe packed "
+"type."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:111
+msgid "Improved pipe type to accommodate access qualifiers."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:112
+msgid ""
+"Added correct address space to the ObjC block generation and "
+"``enqueue_kernel`` prototype."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:114
+msgid ""
+"Improved handling of integer parameters of ``enqueue_kernel`` prototype. We "
+"now allow ``size_t`` instead of ``int`` for specifying block parameter sizes."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:116
+msgid "Allow using NULL (aka ``CLK_NULL_QUEUE``) with ``queue_t``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:119
+msgid "**Improved the following diagnostics:**"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:121
+msgid ""
+"Disallow address spaces other than ``global`` for kernel pointer parameters."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:122
+msgid ""
+"Correct the use of half type argument and pointer assignment with "
+"dereferencing."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:124
+msgid "Disallow variadic arguments in functions and blocks."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:125
+msgid "Allow partial initializer for array and struct."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:127
+msgid "**Some changes to OpenCL extensions have been made:**"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:129
+msgid "Added ``cl_khr_mipmap_image``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:130
+msgid ""
+"Added ``-cl-ext`` flag to allow overwriting supported extensions otherwise "
+"set by the target compiled for (Example: ``-cl-ext=-all,+cl_khr_fp16``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:132
+msgid ""
+"New types and functions can now be flexibly added to extensions using the "
+"following pragmas instead of modifying the Clang source code:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:142
+msgid "**Miscellaneous changes:**"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:144
+msgid ""
+"Fix ``__builtin_astype`` to cast between different address space objects."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:145
+msgid ""
+"Allow using ``opencl_unroll_hint`` with earlier OpenCL versions than 2.0."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:146
+msgid ""
+"Improved handling of floating point literal to default to single precision "
+"if fp64 extension is not enabled."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:148
+msgid ""
+"Refactor ``sampler_t`` implementation to simplify initializer representation "
+"which is now handled as a compiler builtin function with an integer value "
+"passed into it."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:151
+msgid "Change fake address space map to use the SPIR convention."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:152
+msgid ""
+"Added `the OpenCL manual <UsersManual.html#opencl-features>`_ to Clang "
+"documentation."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:157
+msgid "Static Analyzer"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:159
+msgid ""
+"With the option ``--show-description``, scan-build's list of defects will "
+"also show the description of the defects."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:162
+msgid "The analyzer now provides better support of code that uses gtest."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:164
+msgid "Several new checks were added:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:166
+msgid ""
+"The analyzer warns when virtual calls are made from constructors or "
+"destructors. This check is off by default but can be enabled by passing the "
+"following command to scan-build: ``-enable-checker optin.cplusplus."
+"VirtualCall``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:169
+msgid ""
+"The analyzer checks for synthesized copy properties of mutable types in "
+"Objective C, such as ``NSMutableArray``. Calling the setter for these "
+"properties will store an immutable copy of the value."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:172
+msgid ""
+"The analyzer checks for calls to ``dispatch_once()`` that use an Objective-C "
+"instance variable as the predicate. Using an instance variable as a "
+"predicate may result in the passed-in block being executed multiple times or "
+"not at all. These calls should be rewritten either to use a lock or to store "
+"the predicate in a global or static variable."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:177
+msgid ""
+"The analyzer checks for unintended comparisons of ``NSNumber``, "
+"``CFNumberRef``, and other Cocoa number objects to scalar values."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:182
+msgid "Additional Information"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:184
+msgid ""
+"A wide variety of additional information is available on the `Clang web page "
+"<http://clang.llvm.org/>`_. The web page contains versions of the API "
+"documentation which are up-to-date with the Subversion version of the source "
+"code. You can access versions of these documents specific to this release by "
+"going into the \"``clang/docs/``\" directory in the Clang tree."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:191
+msgid ""
+"If you have any questions or comments about Clang, please feel free to "
+"contact us via the `mailing list <http://lists.llvm.org/mailman/listinfo/cfe-"
+"dev>`_."
+msgstr ""
