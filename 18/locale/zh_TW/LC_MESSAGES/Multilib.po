@@ -1,0 +1,398 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 18\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../Multilib.rst:3
+msgid "Multilib"
+msgstr ""
+
+#: ../../../Multilib.rst:6
+msgid "Introduction"
+msgstr ""
+
+#: ../../../Multilib.rst:8
+msgid "This document describes how multilib is implemented in Clang."
+msgstr ""
+
+#: ../../../Multilib.rst:10
+msgid ""
+"What is multilib and why might you care? If you're :doc:`cross "
+"compiling<CrossCompilation>` then you can't use native system headers and "
+"libraries. To address this, you can use a combination of ``--sysroot``, ``-"
+"isystem`` and ``-L`` options to point Clang at suitable directories for your "
+"target. However, when there are many possible directories to choose from, "
+"it's not necessarily obvious which one to pick. Multilib allows a toolchain "
+"designer to imbue the toolchain with the ability to pick a suitable "
+"directory automatically, based on the options the user provides to Clang. "
+"For example, if the user specifies ``--target=arm-none-eabi -mcpu=cortex-"
+"m4`` the toolchain can choose a directory containing headers and libraries "
+"suitable for Armv7E-M, because it knows that's a suitable architecture for "
+"Arm Cortex-M4. Multilib can also choose between libraries for the same "
+"architecture based on other options. For example if the user specifies ``-"
+"fno-exceptions`` then a toolchain could select libraries built without "
+"exception support, thereby reducing the size of the resulting binary."
+msgstr ""
+
+#: ../../../Multilib.rst:29
+msgid "Design"
+msgstr ""
+
+#: ../../../Multilib.rst:31
+msgid ""
+"Clang supports GCC's ``-print-multi-lib`` and ``-print-multi-directory`` "
+"options. These are described in `GCC Developer Options <https://gcc.gnu.org/"
+"onlinedocs/gcc-12.2.0/gcc/Developer-Options.html>`_."
+msgstr ""
+
+#: ../../../Multilib.rst:35
+msgid ""
+"There are two ways to configure multilib in Clang: hard-coded or via a "
+"configuration file."
+msgstr ""
+
+#: ../../../Multilib.rst:39
+msgid "Hard-coded Multilib"
+msgstr ""
+
+#: ../../../Multilib.rst:41
+msgid ""
+"The available libraries can be hard-coded in Clang. Typically this is done "
+"using the ``MultilibBuilder`` interface in ``clang/include/clang/Driver/"
+"MultilibBuilder.h``. There are many examples of this in ``lib/Driver/"
+"ToolChains/Gnu.cpp``. The remainder of this document will not focus on this "
+"type of multilib."
+msgstr ""
+
+#: ../../../Multilib.rst:48
+msgid "EXPERIMENTAL Multilib via configuration file"
+msgstr ""
+
+#: ../../../Multilib.rst:50
+msgid ""
+"Some Clang toolchains support loading multilib configuration from a "
+"``multilib.yaml`` configuration file."
+msgstr ""
+
+#: ../../../Multilib.rst:53
+msgid ""
+"A ``multilib.yaml`` configuration file specifies which multilib variants are "
+"available, their relative location, what compilation options were used to "
+"build them, and the criteria by which they are selected."
+msgstr ""
+
+#: ../../../Multilib.rst:58
+msgid "Multilib processing"
+msgstr ""
+
+#: ../../../Multilib.rst:60
+msgid ""
+"Clang goes through the following steps to use multilib from a configuration "
+"file:"
+msgstr ""
+
+#: ../../../Multilib.rst:63
+msgid ""
+"Normalize command line options. Clang can accept the same information via "
+"different options - for example, ``--target=arm-none-eabi -march=armv7-m`` "
+"and ``--target=armv7m-none-eabi`` are equivalent. Clang normalizes the "
+"command line before passing them to the multilib system. To see what flags "
+"are emitted for a given set of command line options, use the ``-print-multi-"
+"flags-experimental`` command line option along with the rest of the options "
+"you want to use."
+msgstr ""
+
+#: ../../../Multilib.rst:71
+msgid "Load ``multilib.yaml`` from sysroot."
+msgstr ""
+
+#: ../../../Multilib.rst:72
+msgid ""
+"Generate additional flags. ``multilib.yaml`` contains a ``Mappings`` "
+"section, which specifies how to generate additional flags based on the flags "
+"derived from command line options. Flags are matched using regular "
+"expressions. These regular expressions shall use the POSIX extended regular "
+"expression syntax."
+msgstr ""
+
+#: ../../../Multilib.rst:77
+msgid ""
+"Match flags against multilib variants. If the generated flags are a superset "
+"of the flags specified for a multilib variant then the variant is considered "
+"a match. If more than one variant matches then a toolchain may opt to either "
+"use only the *last* matching multilib variant, or may use all matching "
+"variants, thereby :ref:`layering<multilib-layering>` them."
+msgstr ""
+
+#: ../../../Multilib.rst:83
+msgid ""
+"Generate ``-isystem`` and ``-L`` options. Iterate in reverse order over the "
+"matching multilib variants, and generate ``-isystem`` and ``-L`` options "
+"based on the multilib variant's directory."
+msgstr ""
+
+#: ../../../Multilib.rst:90
+msgid "Multilib layering"
+msgstr ""
+
+#: ../../../Multilib.rst:92
+msgid ""
+"When Clang selects multilib variants, it may find that more than one variant "
+"matches."
+msgstr ""
+
+#: ../../../Multilib.rst:95
+msgid ""
+"It is up to the ToolChain subclass to decide what to do in this case. There "
+"are two options permitted:"
+msgstr ""
+
+#: ../../../Multilib.rst:98
+msgid ""
+"Use only the *last* matching multilib variant. This option exists primarily "
+"for compatibility with the previous multilib design."
+msgstr ""
+
+#: ../../../Multilib.rst:100
+msgid "Use all matching variants, thereby layering them."
+msgstr ""
+
+#: ../../../Multilib.rst:102
+msgid ""
+"This decision is hard-coded per ToolChain subclass. The latter option is "
+"preferred for ToolChain subclasses without backwards compatibility "
+"requirements."
+msgstr ""
+
+#: ../../../Multilib.rst:106
+msgid ""
+"If the latter option is chosen then ``-isystem`` and ``-L`` options will be "
+"generated for each matching multilib variant, in reverse order."
+msgstr ""
+
+#: ../../../Multilib.rst:109
+msgid ""
+"This means that the compiler or linker will find files in the last matching "
+"multilib variant that has the given file. This behaviour permits multilib "
+"variants with only a partial set of files. This means a toolchain can be "
+"distributed with one base multilib variant containing all system headers and "
+"includes, and more specialised multilib variants containing only files that "
+"are different to those in the base variant."
+msgstr ""
+
+#: ../../../Multilib.rst:116
+msgid ""
+"For example, a multilib variant could be compiled with ``-fno-exceptions``. "
+"This option doesn't affect the content of header files, nor does it affect "
+"the C libraries. Therefore if multilib layering is supported by the "
+"ToolChain subclass and a suitable base multilib variant is present then the "
+"``-fno-exceptions`` multilib variant need only contain C++ libraries."
+msgstr ""
+
+#: ../../../Multilib.rst:122
+msgid ""
+"It is the responsibility of layered multilib authors to ensure that headers "
+"and libraries in each layer are complete enough to mask any "
+"incompatibilities."
+msgstr ""
+
+#: ../../../Multilib.rst:126
+msgid "Stability"
+msgstr ""
+
+#: ../../../Multilib.rst:128
+msgid ""
+"Multilib via configuration file shall be considered an experimental feature "
+"until LLVM 18, at which point ``-print-multi-flags-experimental`` should be "
+"renamed to ``-print-multi-flags``. A toolchain can opt in to using this "
+"feature by including a ``multilib.yaml`` file in its distribution, once "
+"support for it is added in relevant ToolChain subclasses. Once stability is "
+"reached, flags emitted by ``-print-multi-flags`` should not be removed or "
+"changed, although new flags may be added."
+msgstr ""
+
+#: ../../../Multilib.rst:138
+msgid "Restrictions"
+msgstr ""
+
+#: ../../../Multilib.rst:140
+msgid ""
+"Despite the name, multilib is used to locate both ``include`` and ``lib`` "
+"directories. Therefore it is important that consistent options are passed to "
+"the Clang driver when both compiling and linking. Otherwise inconsistent "
+"``include`` and ``lib`` directories may be used, and the results will be "
+"undefined."
+msgstr ""
+
+#: ../../../Multilib.rst:147
+msgid "EXPERIMENTAL multilib.yaml"
+msgstr ""
+
+#: ../../../Multilib.rst:149
+msgid ""
+"The below example serves as a small of a possible multilib, and documents "
+"the available options."
+msgstr ""
+
+#: ../../../Multilib.rst:152
+msgid ""
+"For a more comprehensive example see ``clang/test/Driver/baremetal-multilib."
+"yaml`` in the ``llvm-project`` sources."
+msgstr ""
+
+#: ../../../Multilib.rst:220
+msgid "Design principles"
+msgstr ""
+
+#: ../../../Multilib.rst:223
+msgid "Stable interface"
+msgstr ""
+
+#: ../../../Multilib.rst:225
+msgid ""
+"``multilib.yaml`` and ``-print-multi-flags-experimental`` are new interfaces "
+"to Clang. In order for them to be usable over time and across LLVM versions "
+"their interfaces should be stable. The new multilib system will be "
+"considered experimental in LLVM 17, but in LLVM 18 it will be stable. In "
+"particular this is important to which multilib selection flags Clang "
+"generates from command line options. Once a flag is generated by a released "
+"version of Clang it may be used in ``multilib.yaml`` files that exist "
+"independently of the LLVM release cycle, and therefore ceasing to generate "
+"the flag would be a breaking change and should be avoided."
+msgstr ""
+
+#: ../../../Multilib.rst:236
+msgid ""
+"However, an exception is the normalization of ``-march``. ``-march`` for Arm "
+"architectures contains a list of enabled and disabled extensions and this "
+"list is likely to grow. Therefore ``-march`` flags are unstable."
+msgstr ""
+
+#: ../../../Multilib.rst:242
+msgid "Incomplete interface"
+msgstr ""
+
+#: ../../../Multilib.rst:244
+msgid ""
+"The new multilib system does multilib selection based on only a limited set "
+"of command line options, and limits which flags can be used for multilib "
+"selection. This is in order to avoid committing to too large an interface. "
+"Later LLVM versions can add support for multilib selection from more command "
+"line options as needed."
+msgstr ""
+
+#: ../../../Multilib.rst:251
+msgid "Extensible"
+msgstr ""
+
+#: ../../../Multilib.rst:253
+msgid ""
+"It is likely that the configuration format will need to evolve in future to "
+"adapt to new requirements. Using a format like YAML that supports key-value "
+"pairs helps here as it's trivial to add new keys alongside existing ones."
+msgstr ""
+
+#: ../../../Multilib.rst:259
+msgid "Backwards compatibility"
+msgstr ""
+
+#: ../../../Multilib.rst:261
+msgid ""
+"New versions of Clang should be able to use configuration written for "
+"earlier Clang versions. To avoid behaving in a way that may be subtly "
+"incorrect, Clang should be able to detect if the configuration is too new "
+"and emit an error."
+msgstr ""
+
+#: ../../../Multilib.rst:267
+msgid "Forwards compatibility"
+msgstr ""
+
+#: ../../../Multilib.rst:269
+msgid ""
+"As an author of a multilib configuration, it should be possible to design "
+"the configuration in such a way that it is likely to work well with future "
+"Clang versions. For example, if a future version of Clang is likely to add "
+"support for newer versions of an architecture and the architecture is known "
+"to be designed for backwards compatibility then it should be possible to "
+"express compatibility for such architecture versions in the multilib "
+"configuration."
+msgstr ""
+
+#: ../../../Multilib.rst:277
+msgid "Not GNU spec files"
+msgstr ""
+
+#: ../../../Multilib.rst:279
+msgid ""
+"The GNU spec files standard is large and complex and there's little desire "
+"to import that complexity to LLVM. It's also heavily oriented towards "
+"processing command line argument strings which is hard to do correctly, "
+"hence the large amount of logic dedicated to that task in the Clang driver. "
+"While compatibility with GNU would bring benefits, the cost in this case is "
+"deemed too high."
+msgstr ""
+
+#: ../../../Multilib.rst:286
+msgid "Avoid re-inventing feature detection in the configuration"
+msgstr ""
+
+#: ../../../Multilib.rst:288
+msgid ""
+"A large amount of logic in the Clang driver is dedicated to inferring which "
+"architectural features are available based on the given command line "
+"options. It is neither desirable nor practical to repeat such logic in each "
+"multilib configuration. Instead the configuration should be able to benefit "
+"from the heavy lifting Clang already does to detect features."
+msgstr ""
+
+#: ../../../Multilib.rst:295
+msgid "Low maintenance"
+msgstr ""
+
+#: ../../../Multilib.rst:297
+msgid ""
+"Multilib is a relatively small feature in the scheme of things so supporting "
+"it should accordingly take little time. Where possible this should be "
+"achieved by implementing it in terms of existing features in the LLVM "
+"codebase."
+msgstr ""
+
+#: ../../../Multilib.rst:302
+msgid "Minimal additional API surface"
+msgstr ""
+
+#: ../../../Multilib.rst:304
+msgid ""
+"The greater the API surface, the greater the difficulty of keeping it "
+"stable. Where possible the additional API surface should be kept small by "
+"defining it in relation to existing APIs. An example of this is keeping a "
+"simple relationship between flag names and command line options where "
+"possible. Since the command line options are part of a stable API they are "
+"unlikely to change, and therefore the flag names get the same stability."
+msgstr ""
+
+#: ../../../Multilib.rst:312
+msgid "Low compile-time overhead"
+msgstr ""
+
+#: ../../../Multilib.rst:314
+msgid ""
+"If the process of selecting multilib directories must be done on every "
+"invocation of the Clang driver then it must have a negligible impact on "
+"overall compile time."
+msgstr ""
