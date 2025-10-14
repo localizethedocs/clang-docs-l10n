@@ -1,0 +1,523 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:44+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../UndefinedBehaviorSanitizer.rst:3
+msgid "UndefinedBehaviorSanitizer"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:11
+msgid ""
+"UndefinedBehaviorSanitizer (UBSan) is a fast undefined behavior detector. "
+"UBSan modifies the program at compile-time to catch various kinds of "
+"undefined behavior during program execution, for example:"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:15
+msgid "Using misaligned or null pointer"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:16
+msgid "Signed integer overflow"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:17
+msgid ""
+"Conversion to, from, or between floating-point types which would overflow "
+"the destination"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:20
+msgid "See the full list of available :ref:`checks <ubsan-checks>` below."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:22
+msgid ""
+"UBSan has an optional run-time library which provides better error "
+"reporting. The checks have small runtime cost and no impact on address space "
+"layout or ABI."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:26
+msgid "How to build"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:28
+msgid "Build LLVM/Clang with `CMake <http://llvm.org/docs/CMake.html>`_."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:31
+msgid "Usage"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:33
+msgid ""
+"Use ``clang++`` to compile and link your program with ``-"
+"fsanitize=undefined`` flag. Make sure to use ``clang++`` (not ``ld``) as a "
+"linker, so that your executable is linked with proper UBSan runtime "
+"libraries. You can use ``clang`` instead of ``clang++`` if you're compiling/"
+"linking C code."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:50
+msgid ""
+"You can enable only a subset of :ref:`checks <ubsan-checks>` offered by "
+"UBSan, and define the desired behavior for each kind of check:"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:53
+msgid ""
+"``-fsanitize=...``: print a verbose error report and continue execution "
+"(default);"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:54
+msgid ""
+"``-fno-sanitize-recover=...``: print a verbose error report and exit the "
+"program;"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:55
+msgid ""
+"``-fsanitize-trap=...``: execute a trap instruction (doesn't require UBSan "
+"run-time support)."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:57
+msgid "For example if you compile/link your program as:"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:63
+msgid ""
+"the program will continue execution after signed integer overflows, exit "
+"after the first invalid use of a null pointer, and trap after the first use "
+"of misaligned pointer."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:70
+msgid "Available checks"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:72
+msgid "Available checks are:"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:74
+msgid ""
+"``-fsanitize=alignment``: Use of a misaligned pointer or creation of a "
+"misaligned reference."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:76
+msgid ""
+"``-fsanitize=bool``: Load of a ``bool`` value which is neither ``true`` nor "
+"``false``."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:78
+msgid ""
+"``-fsanitize=bounds``: Out of bounds array indexing, in cases where the "
+"array bound can be statically determined."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:80
+msgid ""
+"``-fsanitize=enum``: Load of a value of an enumerated type which is not in "
+"the range of representable values for that enumerated type."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:83
+msgid ""
+"``-fsanitize=float-cast-overflow``: Conversion to, from, or between floating-"
+"point types which would overflow the destination."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:86
+msgid "``-fsanitize=float-divide-by-zero``: Floating point division by zero."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:88
+msgid ""
+"``-fsanitize=function``: Indirect call of a function through a function "
+"pointer of the wrong type (Linux, C++ and x86/x86_64 only)."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:90
+msgid "``-fsanitize=integer-divide-by-zero``: Integer division by zero."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:91
+msgid ""
+"``-fsanitize=nonnull-attribute``: Passing null pointer as a function "
+"parameter which is declared to never be null."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:93
+msgid ""
+"``-fsanitize=null``: Use of a null pointer or creation of a null reference."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:95
+msgid ""
+"``-fsanitize=nullability-arg``: Passing null as a function parameter which "
+"is annotated with ``_Nonnull``."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:97
+msgid ""
+"``-fsanitize=nullability-assign``: Assigning null to an lvalue which is "
+"annotated with ``_Nonnull``."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:99
+msgid ""
+"``-fsanitize=nullability-return``: Returning null from a function with a "
+"return type annotated with ``_Nonnull``."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:101
+msgid ""
+"``-fsanitize=object-size``: An attempt to potentially use bytes which the "
+"optimizer can determine are not part of the object being accessed. This will "
+"also detect some types of undefined behavior that may not directly access "
+"memory, but are provably incorrect given the size of the objects involved, "
+"such as invalid downcasts and calling methods on invalid pointers. These "
+"checks are made in terms of ``__builtin_object_size``, and consequently may "
+"be able to detect more problems at higher optimization levels."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:109
+msgid ""
+"``-fsanitize=pointer-overflow``: Performing pointer arithmetic which "
+"overflows."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:111
+msgid ""
+"``-fsanitize=return``: In C++, reaching the end of a value-returning "
+"function without returning a value."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:113
+msgid ""
+"``-fsanitize=returns-nonnull-attribute``: Returning null pointer from a "
+"function which is declared to never return null."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:115
+msgid ""
+"``-fsanitize=shift``: Shift operators where the amount shifted is greater or "
+"equal to the promoted bit-width of the left hand side or less than zero, or "
+"where the left hand side is negative. For a signed left shift, also checks "
+"for signed overflow in C, and for unsigned overflow in C++. You can use ``-"
+"fsanitize=shift-base`` or ``-fsanitize=shift-exponent`` to check only left-"
+"hand side or right-hand side of shift operation, respectively."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:122
+msgid ""
+"``-fsanitize=signed-integer-overflow``: Signed integer overflow, including "
+"all the checks added by ``-ftrapv``, and checking for overflow in signed "
+"division (``INT_MIN / -1``)."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:125
+msgid ""
+"``-fsanitize=unreachable``: If control flow reaches "
+"``__builtin_unreachable``."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:127
+msgid ""
+"``-fsanitize=unsigned-integer-overflow``: Unsigned integer overflows. Note "
+"that unlike signed integer overflow, unsigned integer is not undefined "
+"behavior. However, while it has well-defined semantics, it is often "
+"unintentional, so UBSan offers to catch it."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:131
+msgid ""
+"``-fsanitize=vla-bound``: A variable-length array whose bound does not "
+"evaluate to a positive value."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:133
+msgid ""
+"``-fsanitize=vptr``: Use of an object whose vptr indicates that it is of the "
+"wrong dynamic type, or that its lifetime has not begun or has ended. "
+"Incompatible with ``-fno-rtti``. Link must be performed by ``clang++``, not "
+"``clang``, to make sure C++-specific parts of the runtime library and C++ "
+"standard libraries are present."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:149
+msgid "You can also use the following check groups:"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:140
+msgid ""
+"``-fsanitize=undefined``: All of the checks listed above other than "
+"``unsigned-integer-overflow`` and the ``nullability-*`` checks."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:142
+msgid ""
+"``-fsanitize=undefined-trap``: Deprecated alias of ``-fsanitize=undefined``."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:144
+msgid ""
+"``-fsanitize=integer``: Checks for undefined or suspicious integer behavior "
+"(e.g. unsigned integer overflow)."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:146
+msgid ""
+"``-fsanitize=nullability``: Enables ``nullability-arg``, ``nullability-"
+"assign``, and ``nullability-return``. While violating nullability does not "
+"have undefined behavior, it is often unintentional, so UBSan offers to catch "
+"it."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:152
+msgid "Volatile"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:154
+msgid ""
+"The ``null``, ``alignment``, ``object-size``, and ``vptr`` checks do not "
+"apply to pointers to types with the ``volatile`` qualifier."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:158
+msgid "Stack traces and report symbolization"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:159
+msgid ""
+"If you want UBSan to print symbolized stack trace for each error report, you "
+"will need to:"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:162
+msgid ""
+"Compile with ``-g`` and ``-fno-omit-frame-pointer`` to get proper debug "
+"information in your binary."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:164
+msgid ""
+"Run your program with environment variable "
+"``UBSAN_OPTIONS=print_stacktrace=1``."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:166
+msgid "Make sure ``llvm-symbolizer`` binary is in ``PATH``."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:169
+msgid "Issue Suppression"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:171
+msgid ""
+"UndefinedBehaviorSanitizer is not expected to produce false positives. If "
+"you see one, look again; most likely it is a true positive!"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:175
+msgid ""
+"Disabling Instrumentation with "
+"``__attribute__((no_sanitize(\"undefined\")))``"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:177
+msgid ""
+"You disable UBSan checks for particular functions with "
+"``__attribute__((no_sanitize(\"undefined\")))``. You can use all values of "
+"``-fsanitize=`` flag in this attribute, e.g. if your function deliberately "
+"contains possible signed integer overflow, you can use "
+"``__attribute__((no_sanitize(\"signed-integer-overflow\")))``."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:183
+msgid ""
+"This attribute may not be supported by other compilers, so consider using it "
+"together with ``#if defined(__clang__)``."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:188
+msgid "Suppressing Errors in Recompiled Code (Blacklist)"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:190
+msgid ""
+"UndefinedBehaviorSanitizer supports ``src`` and ``fun`` entity types in :doc:"
+"`SanitizerSpecialCaseList`, that can be used to suppress error reports in "
+"the specified source files or functions."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:195
+msgid "Runtime suppressions"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:197
+msgid ""
+"Sometimes you can suppress UBSan error reports for specific files, "
+"functions, or libraries without recompiling the code. You need to pass a "
+"path to suppression file in a ``UBSAN_OPTIONS`` environment variable."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:205
+msgid ""
+"You need to specify a :ref:`check <ubsan-checks>` you are suppressing and "
+"the bug location. For example:"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:214
+msgid "There are several limitations:"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:216
+msgid ""
+"Sometimes your binary must have enough debug info and/or symbol table, so "
+"that the runtime could figure out source file or function name to match "
+"against the suppression."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:219
+msgid ""
+"It is only possible to suppress recoverable checks. For the example above, "
+"you can additionally pass ``-fsanitize-recover=signed-integer-overflow,"
+"alignment,vptr``, although most of UBSan checks are recoverable by default."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:223
+msgid ""
+"Check groups (like ``undefined``) can't be used in suppressions file, only "
+"fine-grained checks are supported."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:227
+msgid "Supported Platforms"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:229
+msgid "UndefinedBehaviorSanitizer is supported on the following OS:"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:231
+msgid "Android"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:232
+msgid "Linux"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:233
+msgid "FreeBSD"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:234
+msgid "OS X 10.6 onwards"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:236
+msgid "and for the following architectures:"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:238
+msgid "i386/x86\\_64"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:239
+msgid "ARM"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:240
+msgid "AArch64"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:241
+msgid "PowerPC64"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:242
+msgid "MIPS/MIPS64"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:245
+msgid "Current Status"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:247
+msgid ""
+"UndefinedBehaviorSanitizer is available on selected platforms starting from "
+"LLVM 3.3. The test suite is integrated into the CMake build and can be run "
+"with ``check-ubsan`` command."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:252
+msgid "Additional Configuration"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:254
+msgid ""
+"UndefinedBehaviorSanitizer adds static check data for each check unless it "
+"is in trap mode. This check data includes the full file name. The option ``-"
+"fsanitize-undefined-strip-path-components=N`` can be used to trim this "
+"information. If ``N`` is positive, file information emitted by "
+"UndefinedBehaviorSanitizer will drop the first ``N`` components from the "
+"file path. If ``N`` is negative, the last ``N`` components will be kept."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:262
+msgid "Example"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:264
+msgid ""
+"For a file called ``/code/library/file.cpp``, here is what would be emitted: "
+"* Default (No flag, or ``-fsanitize-undefined-strip-path-components=0``): ``/"
+"code/library/file.cpp`` * ``-fsanitize-undefined-strip-path-components=1``: "
+"``code/library/file.cpp`` * ``-fsanitize-undefined-strip-path-"
+"components=2``: ``library/file.cpp`` * ``-fsanitize-undefined-strip-path-"
+"components=-1``: ``file.cpp`` * ``-fsanitize-undefined-strip-path-"
+"components=-2``: ``library/file.cpp``"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:272
+msgid "More Information"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:274
+msgid ""
+"From LLVM project blog: `What Every C Programmer Should Know About Undefined "
+"Behavior <http://blog.llvm.org/2011/05/what-every-c-programmer-should-know."
+"html>`_"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:277
+msgid ""
+"From John Regehr's *Embedded in Academia* blog: `A Guide to Undefined "
+"Behavior in C and C++ <http://blog.regehr.org/archives/213>`_"
+msgstr ""
