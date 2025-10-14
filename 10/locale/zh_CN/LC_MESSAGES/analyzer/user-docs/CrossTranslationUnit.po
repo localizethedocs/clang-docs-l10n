@@ -1,0 +1,118 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:3
+msgid "Cross Translation Unit (CTU) Analysis"
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:5
+msgid ""
+"Normally, static analysis works in the boundary of one translation unit "
+"(TU). However, with additional steps and configuration we can enable the "
+"analysis to inline the definition of a function from another TU."
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:12
+msgid "Manual CTU Analysis"
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:14
+msgid "Let's consider these source files in our minimal example:"
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:32
+msgid "And a compilation database:"
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:49
+msgid ""
+"We'd like to analyze `main.cpp` and discover the division by zero bug. In "
+"order to be able to inline the definition of `foo` from `foo.cpp` first we "
+"have to generate the `AST` (or `PCH`) file of `foo.cpp`:"
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:61
+msgid ""
+"The next step is to create a CTU index file which holds the `USR` name and "
+"location of external definitions in the source files:"
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:69
+msgid ""
+"We have to modify `externalDefMap.txt` to contain the name of the `.ast` "
+"files instead of the source files:"
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:75
+msgid ""
+"We still have to further modify the `externalDefMap.txt` file to contain "
+"relative paths:"
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:81
+msgid ""
+"Now everything is available for the CTU analysis. We have to feed Clang with "
+"CTU specific extra arguments:"
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:98
+msgid ""
+"This manual procedure is error-prone and not scalable, therefore to analyze "
+"real projects it is recommended to use `CodeChecker` or `scan-build-py`."
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:101
+msgid "Automated CTU Analysis with CodeChecker"
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:102
+msgid ""
+"The `CodeChecker <https://github.com/Ericsson/codechecker>`_ project fully "
+"supports automated CTU analysis with Clang. Once we have set up the `PATH` "
+"environment variable and we activated the python `venv` then it is all it "
+"takes:"
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:141
+msgid ""
+"The `plist` files contain the results of the analysis, which may be viewed "
+"with the regular analysis tools. E.g. one may use `CodeChecker parse` to "
+"view the results in command line:"
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:169
+msgid ""
+"Or we can use `CodeChecker parse -e html` to export the results into HTML "
+"format:"
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:177
+msgid "Automated CTU Analysis with scan-build-py (don't do it)"
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:178
+msgid ""
+"We actively develop CTU with CodeChecker as a \"runner\" script, `scan-build-"
+"py` is not actively developed for CTU. `scan-build-py` has various errors "
+"and issues, expect it to work with the very basic projects only."
+msgstr ""
+
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:181
+msgid "Example usage of scan-build-py:"
+msgstr ""
