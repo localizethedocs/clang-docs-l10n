@@ -1,0 +1,375 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../SourceBasedCodeCoverage.rst:3
+msgid "Source-based Code Coverage"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:11
+msgid ""
+"This document explains how to use clang's source-based code coverage "
+"feature. It's called \"source-based\" because it operates on AST and "
+"preprocessor information directly. This allows it to generate very precise "
+"coverage data."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:15
+msgid "Clang ships two other code coverage implementations:"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:17
+msgid ""
+":doc:`SanitizerCoverage` - A low-overhead tool meant for use alongside the "
+"various sanitizers. It can provide up to edge-level coverage."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:20
+msgid ""
+"gcov - A GCC-compatible coverage implementation which operates on DebugInfo. "
+"This is enabled by ``-ftest-coverage`` or ``--coverage``."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:23
+msgid ""
+"From this point onwards \"code coverage\" will refer to the source-based "
+"kind."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:26
+msgid "The code coverage workflow"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:28
+msgid "The code coverage workflow consists of three main steps:"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:30
+msgid "Compiling with coverage enabled."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:32
+msgid "Running the instrumented program."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:34
+msgid "Creating coverage reports."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:36
+msgid ""
+"The next few sections work through a complete, copy-'n-paste friendly "
+"example based on this program:"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:54
+msgid "Compiling with coverage enabled"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:56
+msgid ""
+"To compile code with coverage enabled, pass ``-fprofile-instr-generate -"
+"fcoverage-mapping`` to the compiler:"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:64
+msgid ""
+"Note that linking together code with and without coverage instrumentation is "
+"supported. Uninstrumented code simply won't be accounted for in reports."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:68
+msgid "Running the instrumented program"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:70
+msgid ""
+"The next step is to run the instrumented program. When the program exits it "
+"will write a **raw profile** to the path specified by the "
+"``LLVM_PROFILE_FILE`` environment variable. If that variable does not exist, "
+"the profile is written to ``default.profraw`` in the current directory of "
+"the program. If ``LLVM_PROFILE_FILE`` contains a path to a non-existent "
+"directory, the missing directory structure will be created.  Additionally, "
+"the following special **pattern strings** are rewritten:"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:78
+msgid "\"%p\" expands out to the process ID."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:80
+msgid "\"%h\" expands out to the hostname of the machine running the program."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:82
+msgid ""
+"\"%Nm\" expands out to the instrumented binary's signature. When this "
+"pattern is specified, the runtime creates a pool of N raw profiles which are "
+"used for on-line profile merging. The runtime takes care of selecting a raw "
+"profile from the pool, locking it, and updating it before the program "
+"exits.  If N is not specified (i.e the pattern is \"%m\"), it's assumed that "
+"``N = 1``. N must be between 1 and 9. The merge pool specifier can only "
+"occur once per filename pattern."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:96
+msgid "Creating coverage reports"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:98
+msgid ""
+"Raw profiles have to be **indexed** before they can be used to generate "
+"coverage reports. This is done using the \"merge\" tool in ``llvm-profdata`` "
+"(which can combine multiple raw profiles and index them at the same time):"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:107
+msgid ""
+"There are multiple different ways to render coverage reports. The simplest "
+"option is to generate a line-oriented report:"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:115
+msgid ""
+"This report includes a summary view as well as dedicated sub-views for "
+"templated functions and their instantiations. For our example program, we "
+"get distinct views for ``foo<int>(...)`` and ``foo<float>(...)``.  If ``-"
+"show-line-counts-or-regions`` is enabled, ``llvm-cov`` displays sub-line "
+"region counts (even in macro expansions):"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:143
+msgid ""
+"To generate a file-level summary of coverage statistics instead of a line-"
+"oriented report, try:"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:156
+msgid ""
+"The ``llvm-cov`` tool supports specifying a custom demangler, writing out "
+"reports in a directory structure, and generating html reports. For the full "
+"list of options, please refer to the `command guide <http://llvm.org/docs/"
+"CommandGuide/llvm-cov.html>`_."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:161
+msgid "A few final notes:"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:163
+msgid ""
+"The ``-sparse`` flag is optional but can result in dramatically smaller "
+"indexed profiles. This option should not be used if the indexed profile will "
+"be reused for PGO."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:167
+msgid ""
+"Raw profiles can be discarded after they are indexed. Advanced use of the "
+"profile runtime library allows an instrumented program to merge profiling "
+"information directly into an existing raw profile on disk. The details are "
+"out of scope."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:172
+msgid ""
+"The ``llvm-profdata`` tool can be used to merge together multiple raw or "
+"indexed profiles. To combine profiling data from multiple runs of a program, "
+"try e.g:"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:181
+msgid "Exporting coverage data"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:183
+msgid ""
+"Coverage data can be exported into JSON using the ``llvm-cov export`` sub-"
+"command. There is a comprehensive reference which defines the structure of "
+"the exported data at a high level in the llvm-cov source code."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:188
+msgid "Interpreting reports"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:190
+msgid "There are four statistics tracked in a coverage summary:"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:192
+msgid ""
+"Function coverage is the percentage of functions which have been executed at "
+"least once. A function is considered to be executed if any of its "
+"instantiations are executed."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:196
+msgid ""
+"Instantiation coverage is the percentage of function instantiations which "
+"have been executed at least once. Template functions and static inline "
+"functions from headers are two kinds of functions which may have multiple "
+"instantiations."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:201
+msgid ""
+"Line coverage is the percentage of code lines which have been executed at "
+"least once. Only executable lines within function bodies are considered to "
+"be code lines."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:205
+msgid ""
+"Region coverage is the percentage of code regions which have been executed "
+"at least once. A code region may span multiple lines (e.g in a large "
+"function body with no control flow). However, it's also possible for a "
+"single line to contain multiple code regions (e.g in \"return x || y && z\")."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:210
+msgid ""
+"Of these four statistics, function coverage is usually the least granular "
+"while region coverage is the most granular. The project-wide totals for each "
+"statistic are listed in the summary."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:215
+msgid "Format compatibility guarantees"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:217
+msgid ""
+"There are no backwards or forwards compatibility guarantees for the raw "
+"profile format. Raw profiles may be dependent on the specific compiler "
+"revision used to generate them. It's inadvisable to store raw profiles for "
+"long periods of time."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:222
+msgid ""
+"Tools must retain **backwards** compatibility with indexed profile formats. "
+"These formats are not forwards-compatible: i.e, a tool which uses format "
+"version X will not be able to understand format version (X+k)."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:226
+msgid ""
+"Tools must also retain **backwards** compatibility with the format of the "
+"coverage mappings emitted into instrumented binaries. These formats are not "
+"forwards-compatible."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:230
+msgid ""
+"The JSON coverage export format has a (major, minor, patch) version triple. "
+"Only a major version increment indicates a backwards-incompatible change. A "
+"minor version increment is for added functionality, and patch version "
+"increments are for bugfixes."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:236
+msgid "Using the profiling runtime without static initializers"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:238
+msgid ""
+"By default the compiler runtime uses a static initializer to determine the "
+"profile output path and to register a writer function. To collect profiles "
+"without using static initializers, do this manually:"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:242
+msgid ""
+"Export a ``int __llvm_profile_runtime`` symbol from each instrumented shared "
+"library and executable. When the linker finds a definition of this symbol, "
+"it knows to skip loading the object which contains the profiling runtime's "
+"static initializer."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:247
+msgid ""
+"Forward-declare ``void __llvm_profile_initialize_file(void)`` and call it "
+"once from each instrumented executable. This function parses "
+"``LLVM_PROFILE_FILE``, sets the output path, and truncates any existing "
+"files at that path. To get the same behavior without truncating existing "
+"files, pass a filename pattern string to ``void "
+"__llvm_profile_set_filename(char *)``.  These calls can be placed anywhere "
+"so long as they precede all calls to ``__llvm_profile_write_file``."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:255
+msgid ""
+"Forward-declare ``int __llvm_profile_write_file(void)`` and call it to write "
+"out a profile. This function returns 0 when it succeeds, and a non-zero "
+"value otherwise. Calling this function multiple times appends profile data "
+"to an existing on-disk raw profile."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:260
+msgid "In C++ files, declare these as ``extern \"C\"``."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:263
+msgid "Collecting coverage reports for the llvm project"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:265
+msgid ""
+"To prepare a coverage report for llvm (and any of its sub-projects), add ``-"
+"DLLVM_BUILD_INSTRUMENTED_COVERAGE=On`` to the cmake configuration. Raw "
+"profiles will be written to ``$BUILD_DIR/profiles/``. To prepare an html "
+"report, run ``llvm/utils/prepare-code-coverage-artifact.py``."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:270
+msgid ""
+"To specify an alternate directory for raw profiles, use ``-"
+"DLLVM_PROFILE_DATA_DIR``. To change the size of the profile merge pool, use "
+"``-DLLVM_PROFILE_MERGE_POOL_SIZE``."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:275
+msgid "Drawbacks and limitations"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:277
+msgid ""
+"Prior to version 2.26, the GNU binutils BFD linker is not able link programs "
+"compiled with ``-fcoverage-mapping`` in its ``--gc-sections`` mode.  "
+"Possible workarounds include disabling ``--gc-sections``, upgrading to a "
+"newer version of BFD, or using the Gold linker."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:282
+msgid ""
+"Code coverage does not handle unpredictable changes in control flow or stack "
+"unwinding in the presence of exceptions precisely. Consider the following "
+"function:"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.rst:293
+msgid ""
+"If the call to ``may_throw()`` propagates an exception into ``f``, the code "
+"coverage tool may mark the ``return`` statement as executed even though it "
+"is not. A call to ``longjmp()`` can have similar effects."
+msgstr ""
