@@ -1,0 +1,380 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 13\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:43+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../LibASTImporter.rst:3
+msgid "ASTImporter: Merging Clang ASTs"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:5
+msgid ""
+"The ``ASTImporter`` class is part of Clang's core library, the AST library. "
+"It imports nodes of an ``ASTContext`` into another ``ASTContext``."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:8
+msgid ""
+"In this document, we assume basic knowledge about the Clang AST.  See the :"
+"doc:`Introduction to the Clang AST <IntroductionToTheClangAST>` if you want "
+"to learn more about how the AST is structured. Knowledge about :doc:"
+"`matching the Clang AST <LibASTMatchers>` and the `reference for the "
+"matchers <https://clang.llvm.org/docs/LibASTMatchersReference.html>`_ are "
+"also useful."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:17
+msgid "Introduction"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:19
+msgid ""
+"``ASTContext`` holds long-lived AST nodes (such as types and decls) that can "
+"be referred to throughout the semantic analysis of a file. In some cases it "
+"is preferable to work with more than one ``ASTContext``. For example, we'd "
+"like to parse multiple different files inside the same Clang tool. It may be "
+"convenient if we could view the set of the resulting ASTs as if they were "
+"one AST resulting from the parsing of each file together. ``ASTImporter`` "
+"provides the way to copy types or declarations from one ``ASTContext`` to "
+"another. We refer to the context from which we import as the **\"from\" "
+"context** or *source context*; and the context into which we import as the "
+"**\"to\" context** or *destination context*."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:26
+msgid ""
+"Existing clients of the ``ASTImporter`` library are Cross Translation Unit "
+"(CTU) static analysis and the LLDB expression parser. CTU static analysis "
+"imports a definition of a function if its definition is found in another "
+"translation unit (TU). This way the analysis can breach out from the single "
+"TU limitation. LLDB's ``expr`` command parses a user-defined expression, "
+"creates an ``ASTContext`` for that and then imports the missing definitions "
+"from the AST what we got from the debug information (DWARF, etc)."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:32
+msgid "Algorithm of the import"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:34
+msgid ""
+"Importing one AST node copies that node into the destination ``ASTContext``. "
+"Why do we have to copy the node? Isn't enough to insert the pointer to that "
+"node into the destination context? One reason is that the \"from\" context "
+"may outlive the \"to\" context. Also, the Clang AST consider nodes (or "
+"certain properties of nodes) equivalent if they have the same address!"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:40
+msgid ""
+"The import algorithm has to ensure that the structurally equivalent nodes in "
+"the different translation units are not getting duplicated in the merged "
+"AST. E.g. if we include the definition of the vector template (``#include "
+"<vector>``) in two translation units, then their merged AST should have only "
+"one node which represents the template. Also, we have to discover *one "
+"definition rule* (ODR) violations. For instance, if there is a class "
+"definition with the same name in both translation units, but one of the "
+"definition contains a different number of fields. So, we look up existing "
+"definitions, and then we check the structural equivalency on those nodes. "
+"The following pseudo-code demonstrates the basics of the import mechanism:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:71
+msgid "Two AST nodes are *structurally equivalent* if they are"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:73
+msgid ""
+"builtin types and refer to the same type, e.g. ``int`` and ``int`` are "
+"structurally equivalent,"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:74
+msgid ""
+"function types and all their parameters have structurally equivalent types,"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:75
+msgid ""
+"record types and all their fields in order of their definition have the same "
+"identifier names and structurally equivalent types,"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:76
+msgid ""
+"variable or function declarations and they have the same identifier name and "
+"their types are structurally equivalent."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:78
+msgid ""
+"We could extend the definition of structural equivalency to templates "
+"similarly."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:80
+msgid ""
+"If A and B are AST nodes and *A depends on B*, then we say that A is a "
+"**dependant** of B and B is a **dependency** of A. The words \"dependant\" "
+"and \"dependency\" are nouns in British English. Unfortunately, in American "
+"English, the adjective \"dependent\" is used for both meanings. In this "
+"document, with the \"dependent\" adjective we always address the "
+"dependencies, the B node in the example."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:86
+msgid "API"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:88
+msgid ""
+"Let's create a tool which uses the ASTImporter class! First, we build two "
+"ASTs from virtual files; the content of the virtual files are synthesized "
+"from string literals:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:104
+msgid ""
+"The first AST corresponds to the destination (\"to\") context - which is "
+"empty - and the second for the source (\"from\") context. Next, we define a "
+"matcher to match ``MyClass`` in the \"from\" context:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:112
+msgid "Now we create the Importer and do the import:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:121
+msgid ""
+"The ``Import`` call returns with ``llvm::Expected``, so, we must check for "
+"any error. Please refer to the `error handling <https://llvm.org/docs/"
+"ProgrammersManual.html#recoverable-errors>`_ documentation for details."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:133
+msgid ""
+"If there's no error then we can get the underlying value. In this example we "
+"will print the AST of the \"to\" context."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:141
+msgid ""
+"Since we set **minimal import** in the constructor of the importer, the AST "
+"will not contain the declaration of the members (once we run the test tool)."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:155
+msgid ""
+"We'd like to get the members too, so, we use ``ImportDefinition`` to copy "
+"the whole definition of ``MyClass`` into the \"to\" context. Then we dump "
+"the AST again."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:168
+msgid "This time the AST is going to contain the members too."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:185
+msgid ""
+"We can spare the call for ``ImportDefinition`` if we set up the importer to "
+"do a \"normal\" (not minimal) import."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:191
+msgid ""
+"With **normal import**, all dependent declarations are imported normally. "
+"However, with minimal import, the dependent Decls are imported without "
+"definition, and we have to import their definition for each if we later need "
+"that."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:194
+msgid ""
+"Putting this all together here is how the source of the tool looks like:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:258
+msgid ""
+"We may extend the ``CMakeLists.txt`` under let's say ``clang/tools`` with "
+"the build and link instructions:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:274
+msgid "Then we can build and execute the new tool."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:281
+msgid "Errors during the import process"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:283
+msgid ""
+"Normally, either the source or the destination context contains the "
+"definition of a declaration. However, there may be cases when both of the "
+"contexts have a definition for a given symbol. If these definitions differ, "
+"then we have a name conflict, in C++ it is known as ODR (one definition "
+"rule) violation. Let's modify the previous tool we had written and try to "
+"import a ``ClassTemplateSpecializationDecl`` with a conflicting definition:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:332
+msgid "When we run the tool we have the following warning:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:346
+msgid ""
+"Note, because of these diagnostics we had to call "
+"``enableSourceFileDiagnostics`` on the ``ASTUnit`` objects."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:348
+msgid ""
+"Since we could not import the specified declaration (``From``), we get an "
+"error in the return value. The AST does not contain the conflicting "
+"definition, so we are left with the original AST."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:380
+msgid "Error propagation"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:382
+msgid ""
+"If there is a dependent node we have to import before we could import a "
+"given node then the import error associated to the dependency propagates to "
+"the dependant node. Let's modify the previous example and import a "
+"``FieldDecl`` instead of the ``ClassTemplateSpecializationDecl``."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:390
+msgid ""
+"In this case we can see that an error is associated "
+"(``getImportDeclErrorIfAny``) to the specialization also, not just to the "
+"field:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:410
+msgid "Polluted AST"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:412
+msgid ""
+"We may recognize an error during the import of a dependent node. However, by "
+"that time, we had already created the dependant. In these cases we do not "
+"remove the existing erroneous node from the \"to\" context, rather we "
+"associate an error to that node. Let's extend the previous example with "
+"another class ``Y``. This class has a forward definition in the \"to\" "
+"context, but its definition is in the \"from\" context. We'd like to import "
+"the definition, but it contains a member whose type conflicts with the type "
+"in the \"to\" context:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:451
+msgid ""
+"This time we create a shared_ptr for ``ASTImporterSharedState`` which owns "
+"the associated errors for the \"to\" context. Note, there may be several "
+"different ASTImporter objects which import into the same \"to\" context but "
+"from different \"from\" contexts; they should share the same "
+"``ASTImporterSharedState``. (Also note, we have to include the corresponding "
+"``ASTImporterSharedState.h`` header file.)"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:478
+msgid ""
+"If we take a look at the AST, then we can see that the Decl with the "
+"definition is created, but the field is missing."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:493
+msgid ""
+"We do not remove the erroneous nodes because by the time when we recognize "
+"the error it is too late to remove the node, there may be additional "
+"references to that already in the AST. This is aligned with the overall "
+"`design principle of the Clang AST <InternalsManual.html#immutability>`_: "
+"Clang AST nodes (types, declarations, statements, expressions, and so on) "
+"are generally designed to be **immutable once created**. Thus, clients of "
+"the ASTImporter library should always check if there is any associated error "
+"for the node which they inspect in the destination context. We recommend "
+"skipping the processing of those nodes which have an error associated with "
+"them."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:499
+msgid "Using the ``-ast-merge`` Clang front-end action"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:501
+msgid ""
+"The ``-ast-merge <pch-file>`` command-line switch can be used to merge from "
+"the given serialized AST file. This file represents the source context. When "
+"this switch is present then each top-level AST node of the source context is "
+"being merged into the destination context. If the merge was successful then "
+"``ASTConsumer::HandleTopLevelDecl`` is called for the Decl. This results "
+"that we can execute the original front-end action on the extended AST."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:508
+msgid "Example for C"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:510
+msgid "Let's consider the following three files:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:532
+msgid "Let's generate the AST files for the two source files:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:539
+msgid ""
+"Then, let's check how the merged AST would look like if we consider only the "
+"``bar()`` function:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:552
+msgid ""
+"We can inspect that the prototype of the function and the definition of it "
+"is merged into the same redeclaration chain. What's more there is a third "
+"prototype declaration merged to the chain. The functions are merged in a way "
+"that prototypes are added to the redecl chain if they refer to the same "
+"type, but we can have only one definition. The first two declarations are "
+"from ``bar.ast``, the third is from ``main.ast``."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:557
+msgid "Now, let's create an object file from the merged AST:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:563
+msgid "Next, we may call the linker and execute the created binary file."
+msgstr ""
+
+#: ../../../LibASTImporter.rst:574
+msgid "Example for C++"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:576
+msgid ""
+"In the case of C++, the generation of the AST files and the way how we "
+"invoke the front-end is a bit different. Assuming we have these three files:"
+msgstr ""
+
+#: ../../../LibASTImporter.rst:601
+msgid ""
+"We shall generate the AST files, merge them, create the executable and then "
+"run it:"
+msgstr ""
