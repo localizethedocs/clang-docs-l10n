@@ -1,0 +1,176 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 8\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../LibTooling.rst:3
+msgid "LibTooling"
+msgstr ""
+
+#: ../../../LibTooling.rst:5
+msgid ""
+"LibTooling is a library to support writing standalone tools based on Clang. "
+"This document will provide a basic walkthrough of how to write a tool using "
+"LibTooling."
+msgstr ""
+
+#: ../../../LibTooling.rst:9
+msgid ""
+"For the information on how to setup Clang Tooling for LLVM see :doc:"
+"`HowToSetupToolingForLLVM`"
+msgstr ""
+
+#: ../../../LibTooling.rst:13
+msgid "Introduction"
+msgstr ""
+
+#: ../../../LibTooling.rst:15
+msgid ""
+"Tools built with LibTooling, like Clang Plugins, run ``FrontendActions`` "
+"over code."
+msgstr ""
+
+#: ../../../LibTooling.rst:20
+msgid ""
+"In this tutorial, we'll demonstrate the different ways of running Clang's "
+"``SyntaxOnlyAction``, which runs a quick syntax check, over a bunch of code."
+msgstr ""
+
+#: ../../../LibTooling.rst:24
+msgid "Parsing a code snippet in memory"
+msgstr ""
+
+#: ../../../LibTooling.rst:26
+msgid ""
+"If you ever wanted to run a ``FrontendAction`` over some sample code, for "
+"example to unit test parts of the Clang AST, ``runToolOnCode`` is what you "
+"looked for.  Let me give you an example:"
+msgstr ""
+
+#: ../../../LibTooling.rst:41
+msgid "Writing a standalone tool"
+msgstr ""
+
+#: ../../../LibTooling.rst:43
+msgid ""
+"Once you unit tested your ``FrontendAction`` to the point where it cannot "
+"possibly break, it's time to create a standalone tool.  For a standalone "
+"tool to run clang, it first needs to figure out what command line arguments "
+"to use for a specified file.  To that end we create a "
+"``CompilationDatabase``.  There are different ways to create a compilation "
+"database, and we need to support all of them depending on command-line "
+"options.  There's the ``CommonOptionsParser`` class that takes the "
+"responsibility to parse command-line parameters related to compilation "
+"databases and inputs, so that all tools share the implementation."
+msgstr ""
+
+#: ../../../LibTooling.rst:53
+msgid "Parsing common tools options"
+msgstr ""
+
+#: ../../../LibTooling.rst:55
+msgid ""
+"``CompilationDatabase`` can be read from a build directory or the command "
+"line. Using ``CommonOptionsParser`` allows for explicit specification of a "
+"compile command line, specification of build path using the ``-p`` command-"
+"line option, and automatic location of the compilation database using source "
+"files paths."
+msgstr ""
+
+#: ../../../LibTooling.rst:81
+msgid "Creating and running a ClangTool"
+msgstr ""
+
+#: ../../../LibTooling.rst:83
+msgid ""
+"Once we have a ``CompilationDatabase``, we can create a ``ClangTool`` and "
+"run our ``FrontendAction`` over some code.  For example, to run the "
+"``SyntaxOnlyAction`` over the files \"a.cc\" and \"b.cc\" one would write:"
+msgstr ""
+
+#: ../../../LibTooling.rst:105
+msgid "Putting it together --- the first tool"
+msgstr ""
+
+#: ../../../LibTooling.rst:107
+msgid ""
+"Now we combine the two previous steps into our first real tool.  A more "
+"advanced version of this example tool is also checked into the clang tree at "
+"``tools/clang-check/ClangCheck.cpp``."
+msgstr ""
+
+#: ../../../LibTooling.rst:143
+msgid "Running the tool on some code"
+msgstr ""
+
+#: ../../../LibTooling.rst:145
+msgid ""
+"When you check out and build clang, clang-check is already built and "
+"available to you in bin/clang-check inside your build directory."
+msgstr ""
+
+#: ../../../LibTooling.rst:148
+msgid ""
+"You can run clang-check on a file in the llvm repository by specifying all "
+"the needed parameters after a \"``--``\" separator:"
+msgstr ""
+
+#: ../../../LibTooling.rst:160
+msgid ""
+"As an alternative, you can also configure cmake to output a compile command "
+"database into its build directory:"
+msgstr ""
+
+#: ../../../LibTooling.rst:169
+msgid ""
+"This creates a file called ``compile_commands.json`` in the build directory. "
+"Now you can run :program:`clang-check` over files in the project by "
+"specifying the build path as first argument and some source files as further "
+"positional arguments:"
+msgstr ""
+
+#: ../../../LibTooling.rst:184
+msgid "Builtin includes"
+msgstr ""
+
+#: ../../../LibTooling.rst:186
+msgid ""
+"Clang tools need their builtin headers and search for them the same way "
+"Clang does.  Thus, the default location to look for builtin headers is in a "
+"path ``$(dirname /path/to/tool)/../lib/clang/3.3/include`` relative to the "
+"tool binary.  This works out-of-the-box for tools running from llvm's "
+"toplevel binary directory after building clang-headers, or if the tool is "
+"running from the binary directory of a clang install next to the clang "
+"binary."
+msgstr ""
+
+#: ../../../LibTooling.rst:193
+msgid ""
+"Tips: if your tool fails to find ``stddef.h`` or similar headers, call the "
+"tool with ``-v`` and look at the search paths it looks through."
+msgstr ""
+
+#: ../../../LibTooling.rst:197
+msgid "Linking"
+msgstr ""
+
+#: ../../../LibTooling.rst:199
+msgid ""
+"For a list of libraries to link, look at one of the tools' Makefiles (for "
+"example `clang-check/Makefile <https://llvm.org/viewvc/llvm-project/cfe/"
+"trunk/tools/clang-check/Makefile?view=markup>`_)."
+msgstr ""
