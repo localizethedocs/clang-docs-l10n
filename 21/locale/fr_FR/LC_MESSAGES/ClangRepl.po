@@ -1,0 +1,561 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 21\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ClangRepl.rst:3
+msgid "Clang-Repl"
+msgstr ""
+
+#: ../../../ClangRepl.rst:5 ../../../ClangRepl.rst:80
+msgid ""
+"**Clang-Repl** is an interactive C++ interpreter that allows for incremental "
+"compilation. It supports interactive programming for C++ in a read-evaluate-"
+"print-loop (REPL) style. It uses Clang as a library to compile the high "
+"level programming language into LLVM IR. Then the LLVM IR is executed by the "
+"LLVM just-in-time (JIT) infrastructure."
+msgstr ""
+
+#: ../../../ClangRepl.rst:11
+msgid ""
+"Clang-Repl is suitable for exploratory programming and in places where time "
+"to insight is important. Clang-Repl is a project inspired by the work in "
+"`Cling <https://github.com/root-project/cling>`_, a LLVM-based C/C++ "
+"interpreter developed by the field of high energy physics and used by the "
+"scientific data analysis framework `ROOT <https://root.cern/>`_. Clang-Repl "
+"allows to move parts of Cling upstream, making them useful and available to "
+"a broader audience."
+msgstr ""
+
+#: ../../../ClangRepl.rst:20
+msgid "Clang-Repl Basic Data Flow"
+msgstr ""
+
+#: ../../../ClangRepl.rst:-1
+msgid "ClangRepl design"
+msgstr ""
+
+#: ../../../ClangRepl.rst:26
+msgid "Clang-Repl data flow can be divided into roughly 8 phases:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:28
+msgid ""
+"Clang-Repl controls the input infrastructure by an interactive prompt or by "
+"an interface allowing the incremental processing of input."
+msgstr ""
+
+#: ../../../ClangRepl.rst:31
+msgid ""
+"Then it sends the input to the underlying incremental facilities in Clang "
+"infrastructure."
+msgstr ""
+
+#: ../../../ClangRepl.rst:34
+msgid "Clang compiles the input into an AST representation."
+msgstr ""
+
+#: ../../../ClangRepl.rst:36
+msgid ""
+"When required the AST can be further transformed in order to attach specific "
+"behavior."
+msgstr ""
+
+#: ../../../ClangRepl.rst:39
+msgid "The AST representation is then lowered to LLVM IR."
+msgstr ""
+
+#: ../../../ClangRepl.rst:41
+msgid ""
+"The LLVM IR is the input format for LLVM’s JIT compilation infrastructure. "
+"The tool will instruct the JIT to run specified functions, translating them "
+"into machine code targeting the underlying device architecture (eg. Intel "
+"x86 or NVPTX)."
+msgstr ""
+
+#: ../../../ClangRepl.rst:46
+msgid "The LLVM JIT lowers the LLVM IR to machine code."
+msgstr ""
+
+#: ../../../ClangRepl.rst:48
+msgid "The machine code is then executed."
+msgstr ""
+
+#: ../../../ClangRepl.rst:51
+msgid "Build Instructions:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:61
+msgid "**Note here**, above RelWithDebInfo - Debug / Release"
+msgstr ""
+
+#: ../../../ClangRepl.rst:69
+msgid ""
+"**Clang-repl** is built under llvm-project/build/bin. Proceed into the "
+"directory **llvm-project/build/bin**"
+msgstr ""
+
+#: ../../../ClangRepl.rst:78
+msgid "Clang-Repl Usage"
+msgstr ""
+
+#: ../../../ClangRepl.rst:88
+msgid "Basic:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:107
+msgid "Function Definitions and Calls:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:119
+msgid "Iterative Structures:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:135
+msgid "Classes and Structures:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:152
+msgid "Lamdas:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:163
+msgid "Using Dynamic Library:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:172
+msgid "**Generation of dynamic library**"
+msgstr ""
+
+#: ../../../ClangRepl.rst:193
+msgid "Comments:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:202
+msgid "Closure or Termination:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:209
+msgid ""
+"Just like Clang, Clang-Repl can be integrated in existing applications as a "
+"library (using the clangInterpreter library). This turns your C++ compiler "
+"into a service that can incrementally consume and execute code. The "
+"**Compiler as A Service** (**CaaS**) concept helps support advanced use "
+"cases such as template instantiations on demand and automatic language "
+"interoperability. It also helps static languages such as C/C++ become apt "
+"for data science."
+msgstr ""
+
+#: ../../../ClangRepl.rst:217
+msgid "Execution Results Handling in Clang-Repl"
+msgstr ""
+
+#: ../../../ClangRepl.rst:219
+msgid ""
+"Execution Results Handling features discussed below help extend the Clang-"
+"Repl functionality by creating an interface between the execution results of "
+"a program and the compiled program."
+msgstr ""
+
+#: ../../../ClangRepl.rst:223
+msgid ""
+"1. **Capture Execution Results**: This feature helps capture the execution "
+"results of a program and bring them back to the compiled program."
+msgstr ""
+
+#: ../../../ClangRepl.rst:226
+msgid ""
+"2. **Dump Captured Execution Results**: This feature helps create a "
+"temporary dump for Value Printing/Automatic Printf, that is, to display the "
+"value and type of the captured data."
+msgstr ""
+
+#: ../../../ClangRepl.rst:232
+msgid "1. Capture Execution Results"
+msgstr ""
+
+#: ../../../ClangRepl.rst:234
+msgid ""
+"In many cases, it is useful to bring back the program execution result to "
+"the compiled program. This result can be stored in an object of type "
+"**Value**."
+msgstr ""
+
+#: ../../../ClangRepl.rst:238
+msgid "How Execution Results are captured (Value Synthesis):"
+msgstr ""
+
+#: ../../../ClangRepl.rst:240
+msgid ""
+"The synthesizer chooses which expression to synthesize, and then it replaces "
+"the original expression with the synthesized expression. Depending on the "
+"expression type, it may choose to save an object (``LastValue``) of type "
+"'value' while allocating memory to it (``SetValueWithAlloc()``), or not "
+"( ``SetValueNoAlloc()``)."
+msgstr ""
+
+#: ../../../ClangRepl.rst:246
+msgid "Value Synthesis"
+msgstr ""
+
+#: ../../../ClangRepl.rst:288
+msgid "Where is the captured result stored?"
+msgstr ""
+
+#: ../../../ClangRepl.rst:290
+msgid ""
+"``LastValue`` holds the last result of the value printing. It is a class "
+"member because it can be accessed even after subsequent inputs."
+msgstr ""
+
+#: ../../../ClangRepl.rst:293
+msgid "**Note:** If no value printing happens, then it is in an invalid state."
+msgstr ""
+
+#: ../../../ClangRepl.rst:296
+msgid "Improving Efficiency and User Experience"
+msgstr ""
+
+#: ../../../ClangRepl.rst:298
+msgid ""
+"The Value object is essentially used to create a mapping between an "
+"expression 'type' and the allocated 'memory'. Built-in types (bool, char, "
+"int, float, double, etc.) are copyable. Their memory allocation size is "
+"known and the Value object can introduce a small-buffer optimization. In "
+"case of objects, the ``Value`` class provides reference-counted memory "
+"management."
+msgstr ""
+
+#: ../../../ClangRepl.rst:305
+msgid ""
+"The implementation maps the type as written and the Clang Type to be able to "
+"use the preprocessor to synthesize the relevant cast operations. For "
+"example, ``X(char, Char_S)``, where ``char`` is the type from the language's "
+"type system and ``Char_S`` is the Clang builtin type which represents it. "
+"This mapping helps to import execution results from the interpreter in a "
+"compiled program and vice versa. The ``Value.h`` header file can be included "
+"at runtime and this is why it has a very low token count and was developed "
+"with strict constraints in mind."
+msgstr ""
+
+#: ../../../ClangRepl.rst:313
+msgid ""
+"This also enables the user to receive the computed 'type' back in their code "
+"and then transform the type into something else (e.g., re-cast a double into "
+"a float). Normally, the compiler can handle these conversions transparently, "
+"but in interpreter mode, the compiler cannot see all the 'from' and 'to' "
+"types, so it cannot implicitly do the conversions. So this logic enables "
+"providing these conversions on request."
+msgstr ""
+
+#: ../../../ClangRepl.rst:320
+msgid ""
+"On-request conversions can help improve the user experience, by allowing "
+"conversion to a desired 'to' type, when the 'from' type is unknown or "
+"unclear."
+msgstr ""
+
+#: ../../../ClangRepl.rst:324
+msgid "Significance of this Feature"
+msgstr ""
+
+#: ../../../ClangRepl.rst:326
+msgid ""
+"The 'Value' object enables wrapping a memory region that comes from the JIT, "
+"and bringing it back to the compiled code (and vice versa). This is a very "
+"useful functionality when:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:330
+msgid "connecting an interpreter to the compiled code, or"
+msgstr ""
+
+#: ../../../ClangRepl.rst:331
+msgid "connecting an interpreter in another language."
+msgstr ""
+
+#: ../../../ClangRepl.rst:333
+msgid ""
+"For example, this feature helps transport values across boundaries. A "
+"notable example is the cppyy project code makes use of this feature to "
+"enable running C++ within Python. It enables transporting values/information "
+"between C++ and Python."
+msgstr ""
+
+#: ../../../ClangRepl.rst:338
+msgid ""
+"Note: `cppyy <https://github.com/wlav/cppyy/>`_ is an automatic, run-time, "
+"Python-to-C++ bindings generator, for calling C++ from Python and Python "
+"from C++. It uses LLVM along with a C++ interpreter (e.g., Cling) to enable "
+"features like run-time instantiation of C++ templates, cross-inheritance, "
+"callbacks, auto-casting, transparent use of smart pointers, etc."
+msgstr ""
+
+#: ../../../ClangRepl.rst:344
+msgid ""
+"In a nutshell, this feature enables a new way of developing code, paving the "
+"way for language interoperability and easier interactive programming."
+msgstr ""
+
+#: ../../../ClangRepl.rst:348 ../../../ClangRepl.rst:476
+msgid "Implementation Details"
+msgstr ""
+
+#: ../../../ClangRepl.rst:351
+msgid "Interpreter as a REPL vs. as a Library"
+msgstr ""
+
+#: ../../../ClangRepl.rst:353
+msgid ""
+"1 - If we're using the interpreter in interactive (REPL) mode, it will dump "
+"the value (i.e., value printing)."
+msgstr ""
+
+#: ../../../ClangRepl.rst:367
+msgid ""
+"2 - If we're using the interpreter as a library, then it will pass the value "
+"to the user."
+msgstr ""
+
+#: ../../../ClangRepl.rst:371
+msgid "Incremental AST Consumer"
+msgstr ""
+
+#: ../../../ClangRepl.rst:373
+msgid ""
+"The ``IncrementalASTConsumer`` class wraps the original code generator "
+"``ASTConsumer`` and it performs a hook, to traverse all the top-level decls, "
+"to look for expressions to synthesize, based on the ``isSemiMissing()`` "
+"condition."
+msgstr ""
+
+#: ../../../ClangRepl.rst:377
+msgid ""
+"If this condition is found to be true, then ``Interp.SynthesizeExpr()`` will "
+"be invoked."
+msgstr ""
+
+#: ../../../ClangRepl.rst:380 ../../../ClangRepl.rst:520
+msgid ""
+"**Note:** Following is a sample code snippet. Actual code may vary over time."
+msgstr ""
+
+#: ../../../ClangRepl.rst:391
+msgid ""
+"The synthesizer will then choose the relevant expression, based on its type."
+msgstr ""
+
+#: ../../../ClangRepl.rst:394
+msgid "Communication between Compiled Code and Interpreted Code"
+msgstr ""
+
+#: ../../../ClangRepl.rst:396
+msgid ""
+"In Clang-Repl there is **interpreted code**, and this feature adds a 'value' "
+"runtime that can talk to the **compiled code**."
+msgstr ""
+
+#: ../../../ClangRepl.rst:399
+msgid ""
+"Following is an example where the compiled code interacts with the "
+"interpreter code. The execution results of an expression are stored in the "
+"object 'V' of type Value. This value is then printed, effectively helping "
+"the interpreter use a value from the compiled code."
+msgstr ""
+
+#: ../../../ClangRepl.rst:416
+msgid ""
+"**Note:** Above is an example of interoperability between the compiled code "
+"and the interpreted code. Interoperability between languages (e.g., C++ and "
+"Python) works similarly."
+msgstr ""
+
+#: ../../../ClangRepl.rst:422
+msgid "2. Dump Captured Execution Results"
+msgstr ""
+
+#: ../../../ClangRepl.rst:424
+msgid ""
+"This feature helps create a temporary dump to display the value and type "
+"(pretty print) of the desired data. This is a good way to interact with the "
+"interpreter during interactive programming."
+msgstr ""
+
+#: ../../../ClangRepl.rst:429
+msgid "How value printing is simplified (Automatic Printf)"
+msgstr ""
+
+#: ../../../ClangRepl.rst:431
+msgid ""
+"The ``Automatic Printf`` feature makes it easy to display variable values "
+"during program execution. Using the ``printf`` function repeatedly is not "
+"required. This is achieved using an extension in the ``libclangInterpreter`` "
+"library."
+msgstr ""
+
+#: ../../../ClangRepl.rst:435
+msgid ""
+"To automatically print the value of an expression, simply write the "
+"expression in the global scope **without a semicolon**."
+msgstr ""
+
+#: ../../../ClangRepl.rst:438
+msgid "Automatic PrintF"
+msgstr ""
+
+#: ../../../ClangRepl.rst:462
+msgid "Significance of this feature"
+msgstr ""
+
+#: ../../../ClangRepl.rst:464
+msgid ""
+"Inspired by a similar implementation in `Cling <https://github.com/root-"
+"project/cling>`_, this feature added to upstream Clang repo has essentially "
+"extended the syntax of C++, so that it can be more helpful for people that "
+"are writing code for data science applications."
+msgstr ""
+
+#: ../../../ClangRepl.rst:469
+msgid ""
+"This is useful, for example, when you want to experiment with a set of "
+"values against a set of functions, and you'd like to know the results right "
+"away. This is similar to how Python works (hence its popularity in data "
+"science research), but the superior performance of C++, along with this "
+"flexibility makes it a more attractive option."
+msgstr ""
+
+#: ../../../ClangRepl.rst:479
+msgid "Parsing mechanism:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:481
+msgid ""
+"The Interpreter in Clang-Repl (``Interpreter.cpp``) includes the function "
+"``ParseAndExecute()`` that can accept a 'Value' parameter to capture the "
+"result. But if the value parameter is made optional and it is omitted (i.e., "
+"that the user does not want to utilize it elsewhere), then the last value "
+"can be validated and pushed into the ``dump()`` function."
+msgstr ""
+
+#: ../../../ClangRepl.rst:487
+msgid "Parsing Mechanism"
+msgstr ""
+
+#: ../../../ClangRepl.rst:543
+msgid ""
+"The ``dump()`` function (in ``value.cpp``) calls the ``print()`` function."
+msgstr ""
+
+#: ../../../ClangRepl.rst:545
+msgid ""
+"Printing the Data and Type are handled in their respective functions: "
+"``ReplPrintDataImpl()`` and ``ReplPrintTypeImpl()``."
+msgstr ""
+
+#: ../../../ClangRepl.rst:549
+msgid "Annotation Token (annot_repl_input_end)"
+msgstr ""
+
+#: ../../../ClangRepl.rst:551
+msgid ""
+"This feature uses a new token (``annot_repl_input_end``) to consider "
+"printing the value of an expression if it doesn't end with a semicolon. When "
+"parsing an Expression Statement, if the last semicolon is missing, then the "
+"code will pretend that there one and set a marker there for later "
+"utilization, and continue parsing."
+msgstr ""
+
+#: ../../../ClangRepl.rst:557
+msgid ""
+"A semicolon is normally required in C++, but this feature expands the C++ "
+"syntax to handle cases where a missing semicolon is expected (i.e., when "
+"handling an expression statement). It also makes sure that an error is not "
+"generated for the missing semicolon in this specific case."
+msgstr ""
+
+#: ../../../ClangRepl.rst:562
+msgid ""
+"This is accomplished by identifying the end position of the user input "
+"(expression statement). This helps store and return the expression statement "
+"effectively, so that it can be printed (displayed to the user automatically)."
+msgstr ""
+
+#: ../../../ClangRepl.rst:566
+msgid ""
+"**Note:** This logic is only available for C++ for now, since part of the "
+"implementation itself requires C++ features. Future versions may support "
+"more languages."
+msgstr ""
+
+#: ../../../ClangRepl.rst:591
+msgid "AST Transformation"
+msgstr ""
+
+#: ../../../ClangRepl.rst:593
+msgid ""
+"When Sema encounters the ``annot_repl_input_end`` token, it knows to "
+"transform the AST before the real CodeGen process. It will consume the token "
+"and set a 'semi missing' bit in the respective decl."
+msgstr ""
+
+#: ../../../ClangRepl.rst:605
+msgid ""
+"In the AST Consumer, traverse all the Top Level Decls, to look for "
+"expressions to synthesize. If the current Decl is the Top Level Statement "
+"Decl(``TopLevelStmtDecl``) and has a semicolon missing, then ask the "
+"interpreter to synthesize another expression (an internal function call) to "
+"replace this original expression."
+msgstr ""
+
+#: ../../../ClangRepl.rst:613
+msgid "Detailed RFC and Discussion:"
+msgstr ""
+
+#: ../../../ClangRepl.rst:615
+msgid ""
+"For more technical details, community discussion and links to patches "
+"related to these features, Please visit: `RFC on LLVM Discourse <https://"
+"discourse.llvm.org/t/rfc-handle-execution-results-in-clang-repl/68493>`_."
+msgstr ""
+
+#: ../../../ClangRepl.rst:619
+msgid ""
+"Some logic presented in the RFC (e.g. ValueGetter()) may be outdated, "
+"compared to the final developed solution."
+msgstr ""
+
+#: ../../../ClangRepl.rst:623
+msgid "Related Reading"
+msgstr ""
+
+#: ../../../ClangRepl.rst:624
+msgid ""
+"`Cling Transitions to LLVM's Clang-Repl <https://root.cern/blog/cling-in-"
+"llvm/>`_"
+msgstr ""
+
+#: ../../../ClangRepl.rst:626
+msgid ""
+"`Moving (parts of) the Cling REPL in Clang <https://lists.llvm.org/pipermail/"
+"llvm-dev/2020-July/143257.html>`_"
+msgstr ""
+
+#: ../../../ClangRepl.rst:628
+msgid ""
+"`GPU Accelerated Automatic Differentiation With Clad <https://arxiv.org/"
+"pdf/2203.06139.pdf>`_"
+msgstr ""
