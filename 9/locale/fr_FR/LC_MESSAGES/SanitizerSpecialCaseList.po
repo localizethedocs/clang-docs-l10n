@@ -1,0 +1,100 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 9\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../SanitizerSpecialCaseList.rst:3
+msgid "Sanitizer special case list"
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:11
+msgid ""
+"This document describes the way to disable or alter the behavior of "
+"sanitizer tools for certain source-level entities by providing a special "
+"file at compile-time."
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:16
+msgid "Goal and usage"
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:18
+msgid ""
+"User of sanitizer tools, such as :doc:`AddressSanitizer`, :doc:"
+"`ThreadSanitizer` or :doc:`MemorySanitizer` may want to disable or alter "
+"some checks for certain source-level entities to:"
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:22
+msgid "speedup hot function, which is known to be correct;"
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:23
+msgid ""
+"ignore a function that does some low-level magic (e.g. walks through the "
+"thread stack, bypassing the frame boundaries);"
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:25
+msgid "ignore a known problem."
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:27
+msgid ""
+"To achieve this, user may create a file listing the entities they want to "
+"ignore, and pass it to clang at compile-time using ``-fsanitize-blacklist`` "
+"flag. See :doc:`UsersManual` for details."
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:32
+msgid "Example"
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:52
+msgid "Format"
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:54
+msgid ""
+"Blacklists consist of entries, optionally grouped into sections. Empty lines "
+"and lines starting with \"#\" are ignored."
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:57
+msgid ""
+"Section names are regular expressions written in square brackets that denote "
+"which sanitizer the following entries apply to. For example, ``[address]`` "
+"specifies AddressSanitizer while ``[cfi-vcall|cfi-icall]`` specifies Control "
+"Flow Integrity virtual and indirect call checking. Entries without a section "
+"will be placed under the ``[*]`` section applying to all enabled sanitizers."
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:63
+msgid ""
+"Entries contain an entity type, followed by a colon and a regular "
+"expression, specifying the names of the entities, optionally followed by an "
+"equals sign and a tool-specific category, e.g. ``fun:"
+"*ExampleFunc=example_category``.  The meaning of ``*`` in regular expression "
+"for entity names is different - it is treated as in shell wildcarding. Two "
+"generic entity types are ``src`` and ``fun``, which allow users to specify "
+"source files and functions, respectively. Some sanitizer tools may introduce "
+"custom entity types and categories - refer to tool-specific docs."
+msgstr ""
