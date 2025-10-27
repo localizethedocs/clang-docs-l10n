@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-13 13:41+0000\n"
+"POT-Creation-Date: 2025-10-27 08:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -54,7 +55,7 @@ msgid ""
 "objects, and embedded as data into the host code object. The host "
 "compilation includes an ``init`` function that will use the runtime "
 "corresponding to the offload kind (see :ref:`clang-offload-kind-table`) to "
-"load the offload code objects appropriate to the devices present when the "
+"load the offload code objects appropriate for the devices present when the "
 "host program is executed."
 msgstr ""
 
@@ -218,7 +219,7 @@ msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:150
 msgid ""
-"The symbol used for starting single-line comment in the file type of "
+"The symbol used for starting a single-line comment in the file type of "
 "constituting bundles. E.g. it is \";\" for ll ``File Type`` and \"#\" for "
 "\"s\" ``File Type``."
 msgstr ""
@@ -236,7 +237,7 @@ msgid "**eol**"
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:158
-msgid "The end of line character."
+msgid "The end-of-line character."
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:161
@@ -253,7 +254,7 @@ msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:164
 msgid ""
-"Magic string that marks the existence of offloading data i.e. "
+"The magic string that marks the existence of offloading data i.e. "
 "\"__CLANG_OFFLOAD_BUNDLE__\"."
 msgstr ""
 
@@ -436,7 +437,7 @@ msgstr ""
 #: ../../../ClangOffloadBundler.rst:232
 msgid ""
 "Host code object. ``clang-offload-bundler`` always includes this entry as "
-"the first bundled code object entry. For an embedded bundled code object "
+"the first bundled code object entry. For an embedded bundled code object, "
 "this entry is not used by the runtime and so is generally an empty code "
 "object."
 msgstr ""
@@ -511,7 +512,7 @@ msgstr ""
 #: ../../../ClangOffloadBundler.rst:274
 msgid ""
 "However, in order to standardize outputs for tools that consume bitcode "
-"bundles and to parse target ID containing dashes, the bundler only accepts "
+"bundles and to parse a target ID containing dashes, the bundler only accepts "
 "target triples in the 4-field format:"
 msgstr ""
 
@@ -551,7 +552,7 @@ msgid ""
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:295
-msgid "There may be additional target specific restrictions."
+msgid "There may be additional target-specific restrictions."
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:300
@@ -561,11 +562,11 @@ msgstr ""
 #: ../../../ClangOffloadBundler.rst:302
 msgid ""
 "A code object, specified using its Bundle Entry ID, can be loaded and "
-"executed on a target processor, if:"
+"executed on a target processor if:"
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:305
-msgid "Their offload kinds are the same or comptible."
+msgid "Their offload kinds are the same or compatible."
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:306
@@ -610,7 +611,7 @@ msgid "**processor**"
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:334
-msgid "Is a the target specific processor or any alternative processor name."
+msgid "Is the target-specific processor or any alternative processor name."
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:355
@@ -653,7 +654,7 @@ msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:353
 msgid ""
-"specified by ``-``, indicating the target feature is disabled. A code object "
+"Specified by ``-``, indicating the target feature is disabled. A code object "
 "compiled with a target ID specifying a target feature off can only be loaded "
 "on a processor configured with the target feature off."
 msgstr ""
@@ -664,12 +665,12 @@ msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:362
 msgid ""
-"A code object compiled for a Target ID is considered compatible for a "
-"target, if:"
+"A code object compiled for a Target ID is considered compatible for a target "
+"if:"
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:365
-msgid "Their processor is same."
+msgid "Their processor is the same."
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:366
@@ -707,11 +708,11 @@ msgid ""
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:384
-msgid "Target Specific information"
+msgid "Target-Specific information"
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:386
-msgid "Target specific information is available for the following:"
+msgid "Target-specific information is available for the following:"
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:393
@@ -737,7 +738,7 @@ msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:400
 msgid ""
-"Unbundling of a heterogeneous device archive (HDA) is done to create device "
+"Unbundling of a heterogeneous device archive (HDA) is done to create device-"
 "specific archives. HDA is in a format compatible with GNU ``ar`` utility and "
 "contains a collection of bundled device binaries where each bundle file will "
 "contain device binaries for a host and one or more targets. The output "
@@ -800,7 +801,7 @@ msgid ""
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:472
-msgid "Following cases may arise during compatibility testing:"
+msgid "The following cases may arise during compatibility testing:"
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:474
@@ -875,7 +876,7 @@ msgstr ""
 msgid ""
 "``clang-offload-bundler`` provides features to compress and decompress the "
 "full bundle, leveraging inherent redundancies within the bundle entries. Use "
-"the `-compress` command-line option to enable this compression capability."
+"the ``-compress`` command-line option to enable this compression capability."
 msgstr ""
 
 #: ../../../ClangOffloadBundler.rst:522
@@ -959,5 +960,5 @@ msgstr ""
 msgid ""
 "> **Note**: Version 3 is now the default format. For backward compatibility "
 "with older HIP runtimes that support version 2 only, set the environment "
-"variable `COMPRESSED_BUNDLE_FORMAT_VERSION=2`."
+"variable ``COMPRESSED_BUNDLE_FORMAT_VERSION=2``."
 msgstr ""
