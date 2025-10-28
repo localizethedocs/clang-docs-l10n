@@ -56,7 +56,7 @@
 
 <p></p>
 
-The goal of this project is to translate the LLVM documentation into multiple languages. Translations are contributed via the Crowdin platform, automatically synchronized with the GitHub repository, and can be previewed on GitHub Pages.
+The goal of this project is to translate the Clang Documentation into multiple languages. Translations are contributed via the Crowdin platform, automatically synchronized with the GitHub repository, and can be previewed on GitHub Pages.
 
 > [!NOTE]
 > The translation is community-driven. If you find any inaccuracies, always refer to the <a href="https://clang.llvm.org/docs">official documentation</a> or the <a href="https://github.com/llvm/llvm-project">source repository</a> of the upstream project for the most reliable information.
