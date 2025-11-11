@@ -1,0 +1,351 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 21\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-21 08:51+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../MSVCCompatibility.rst:1
+msgid ""
+"<style type=\"text/css\">\n"
+"  .none { background-color: #FFCCCC }\n"
+"  .partial { background-color: #FFFF99 }\n"
+"  .good { background-color: #CCFF99 }\n"
+"</style>"
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:15
+msgid "MSVC compatibility"
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:17
+msgid ""
+"When Clang compiles C++ code for Windows, it attempts to be compatible with "
+"MSVC.  There are multiple dimensions to compatibility."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:20
+msgid ""
+"First, Clang attempts to be ABI-compatible, meaning that Clang-compiled code "
+"should be able to link against MSVC-compiled code successfully.  However, C+"
+"+ ABIs are particularly large and complicated, and Clang's support for "
+"MSVC's C++ ABI is a work in progress.  If you don't require MSVC ABI "
+"compatibility or don't want to use Microsoft's C and C++ runtimes, the "
+"mingw32 toolchain might be a better fit for your project."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:27
+msgid ""
+"Second, Clang implements many MSVC language extensions, such as "
+"``__declspec(dllexport)`` and a handful of pragmas.  These are typically "
+"controlled by ``-fms-extensions``."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:31
+msgid ""
+"Third, MSVC accepts some C++ code that Clang will typically diagnose as "
+"invalid.  When these constructs are present in widely included system "
+"headers, Clang attempts to recover and continue compiling the user's "
+"program.  Most parsing and semantic compatibility tweaks are controlled by "
+"``-fms-compatibility`` and ``-fdelayed-template-parsing``, and they are a "
+"work in progress."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:38
+msgid ""
+"Finally, there is :ref:`clang-cl`, a driver program for clang that attempts "
+"to be compatible with MSVC's cl.exe."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:42
+msgid "ABI features"
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:44
+msgid "The status of major ABI-impacting C++ features:"
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:46
+msgid ""
+"Record layout: :good:`Complete`.  We've tested this with a fuzzer and have "
+"fixed all known bugs."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:49
+msgid ""
+"Class inheritance: :good:`Mostly complete`.  This covers all of the standard "
+"OO features you would expect: virtual method inheritance, multiple "
+"inheritance, and virtual inheritance.  Every so often we uncover a bug where "
+"our tables are incompatible, but this is pretty well in hand.  This feature "
+"has also been fuzz tested."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:55
+msgid ""
+"Name mangling: :good:`Ongoing`.  Every new C++ feature generally needs its "
+"own mangling.  For example, member pointer template arguments have an "
+"interesting and distinct mangling.  Fortunately, incorrect manglings usually "
+"do not result in runtime errors.  Non-inline functions with incorrect "
+"manglings usually result in link errors, which are relatively easy to "
+"diagnose.  Incorrect manglings for inline functions and templates result in "
+"multiple copies in the final image.  The C++ standard requires that those "
+"addresses be equal, but few programs rely on this."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:64
+msgid ""
+"Member pointers: :good:`Mostly complete`.  Standard C++ member pointers are "
+"fully implemented and should be ABI compatible.  Both `#pragma "
+"pointers_to_members`_ and the `/vm`_ flags are supported. However, MSVC "
+"supports an extension to allow creating a `pointer to a member of a virtual "
+"base class`_.  Clang does not yet support this."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:75
+msgid ""
+"Debug info: :good:`Mostly complete`.  Clang emits relatively complete "
+"CodeView debug information if ``/Z7`` or ``/Zi`` is passed. Microsoft's link."
+"exe will transform the CodeView debug information into a PDB that works in "
+"Windows debuggers and other tools that consume PDB files like ETW. Work to "
+"teach lld about CodeView and PDBs is ongoing."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:81
+msgid ""
+"RTTI: :good:`Complete`.  Generation of RTTI data structures has been "
+"finished, along with support for the ``/GR`` flag."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:84
+msgid ""
+"C++ Exceptions: :good:`Mostly complete`.  Support for C++ exceptions "
+"(``try`` / ``catch`` / ``throw``) have been implemented for x86 and x64.  "
+"Our implementation has been well tested but we still get the odd bug report "
+"now and again. C++ exception specifications are ignored, but this is "
+"`consistent with Visual C++`_."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:94
+msgid ""
+"Asynchronous Exceptions (SEH): :partial:`Partial`. Structured exceptions "
+"(``__try`` / ``__except`` / ``__finally``) mostly work on x86 and x64. LLVM "
+"does not model asynchronous exceptions, so it is currently impossible to "
+"catch an asynchronous exception generated in the same frame as the catching "
+"``__try``."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:101
+msgid ""
+"Thread-safe initialization of local statics: :good:`Complete`.  MSVC 2015 "
+"added support for thread-safe initialization of such variables by taking an "
+"ABI break. We are ABI compatible with both the MSVC 2013 and 2015 ABI for "
+"static local variables."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:107
+msgid ""
+"Lambdas: :good:`Mostly complete`.  Clang is compatible with Microsoft's "
+"implementation of lambdas except for providing overloads for conversion to "
+"function pointer for different calling conventions.  However, Microsoft's "
+"extension is non-conforming."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:113
+msgid "Template instantiation and name lookup"
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:115
+msgid ""
+"MSVC allows many invalid constructs in class templates that Clang has "
+"historically rejected.  In order to parse widely distributed headers for "
+"libraries such as the Active Template Library (ATL) and Windows Runtime "
+"Library (WRL), some template rules have been relaxed or extended in Clang on "
+"Windows."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:120
+msgid ""
+"The first major semantic difference is that MSVC appears to defer all "
+"parsing an analysis of inline method bodies in class templates until "
+"instantiation time.  By default on Windows, Clang attempts to follow suit.  "
+"This behavior is controlled by the ``-fdelayed-template-parsing`` flag.  "
+"While Clang delays parsing of method bodies, it still parses the bodies "
+"*before* template argument substitution, which is not what MSVC does.  The "
+"following compatibility tweaks are necessary to parse the template in those "
+"cases."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:128
+msgid ""
+"MSVC allows some name lookup into dependent base classes.  Even on other "
+"platforms, this has been a `frequently asked question`_ for Clang users.  A "
+"dependent base class is a base class that depends on the value of a template "
+"parameter.  Clang cannot see any of the names inside dependent bases while "
+"it is parsing your template, so the user is sometimes required to use the "
+"``typename`` keyword to assist the parser.  On Windows, Clang attempts to "
+"follow the normal lookup rules, but if lookup fails, it will assume that the "
+"user intended to find the name in a dependent base.  While parsing the "
+"following program, Clang will recover as if the user had written the "
+"commented-out code:"
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:151
+msgid ""
+"After recovery, Clang warns the user that this code is non-standard and "
+"issues a hint suggesting how to fix the problem."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:154
+msgid ""
+"As of this writing, Clang is able to compile a simple ATL hello world "
+"application.  There are still issues parsing WRL headers for modern Windows "
+"8 apps, but they should be addressed soon."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:159
+msgid "__forceinline behavior"
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:161
+msgid ""
+"``__forceinline`` behaves like ``[[clang::always_inline]]``. Inlining is "
+"always attempted regardless of optimization level."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:164
+msgid ""
+"This differs from MSVC where ``__forceinline`` is only respected once inline "
+"expansion is enabled which allows any function marked implicitly or "
+"explicitly ``inline`` or ``__forceinline`` to be expanded. Therefore "
+"functions marked ``__forceinline`` will be expanded when the optimization "
+"level is ``/Od`` unlike MSVC where ``__forceinline`` will not be expanded "
+"under ``/Od``."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:170
+msgid "SIMD and instruction set intrinsic behavior"
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:172
+msgid ""
+"Clang follows the GCC model for intrinsics and not the MSVC model. There are "
+"currently no plans to support the MSVC model."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:175
+msgid ""
+"MSVC intrinsics always emit the machine instruction the intrinsic models "
+"regardless of the compile time options specified. For example ``__popcnt`` "
+"always emits the x86 popcnt instruction even if the compiler does not have "
+"the option enabled to emit popcnt on its own volition."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:178
+msgid ""
+"There are two common cases where code that compiles with MSVC will need "
+"reworking to build on clang. Assume the examples are only built with `-"
+"msse2` so we do not have the intrinsics at compile time."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:199
+msgid ""
+"Clang expects that either you have compile time support for the target "
+"features, `-msse3` and `-mpopcnt`, you mark the function with the expected "
+"target feature or use runtime detection with an indirect call."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:210
+msgid ""
+"The SSE3 dot product can be easily fixed by either building the translation "
+"unit with SSE3 support or using `__target__` to compile that specific "
+"function with SSE3 support."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:221
+msgid ""
+"The above ``PopCnt`` example must be changed to work with clang. If we mark "
+"the function with `__target__(\"popcnt\")` then the compiler is free to emit "
+"popcnt at will which we do not want. While this isn't a concern in our small "
+"example it is a concern in larger functions with surrounding code around the "
+"intrinsics. Similar reasoning for compiling the translation unit with `-"
+"mpopcnt`. We must split each branch into its own function that can be called "
+"indirectly instead of using the intrinsic directly."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:239
+msgid ""
+"In the above example ``hwPopCnt`` will not be inlined into ``PopCnt`` since "
+"``PopCnt`` doesn't have the popcnt target feature. With a larger function "
+"that does real work the function call overhead is negligible. However in our "
+"popcnt example there is the function call overhead. There is no analog for "
+"this specific MSVC behavior in clang."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:243
+msgid ""
+"For clang we effectively have to create the dispatch function ourselves to "
+"each specific implementation."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:246
+msgid "SIMD vector types"
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:248
+msgid ""
+"Clang's simd vector types are builtin types and not user defined types as in "
+"MSVC. This does have some observable behavior changes. We will look at the "
+"x86 `__m128` type for the examples below but the statements apply to all "
+"vector types including ARM's `float32x4_t`."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:251
+msgid ""
+"There are no members that can be accessed on the vector types. Vector types "
+"are not structs in clang. You cannot use ``__m128.m128_f32[0]`` to access "
+"the first element of the `__m128`. This also means struct initialization "
+"like ``__m128{ { 0.0f, 0.0f, 0.0f, 0.0f } }`` will not compile with clang."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:255
+msgid ""
+"Since vector types are builtin types, clang implements operators on them "
+"natively."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:263
+msgid ""
+"The above code will fail to compile since overloaded 'operator+' must have "
+"at least one parameter of class or enumeration type. You will need to fix "
+"such code to have the check ``#if defined(_MSC_VER) && !defined(__clang__)``."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:266
+msgid ""
+"Since `__m128` is not a class type in clang any overloads after a template "
+"definition will not be considered."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:284
+msgid ""
+"With MSVC ``foo(__m128)`` will be selected but with clang ``foo<__m128>()`` "
+"will be selected since on clang `__m128` is a builtin type."
+msgstr ""
+
+#: ../../../MSVCCompatibility.rst:286
+msgid ""
+"In general the takeaway is `__m128` is a builtin type on clang while a class "
+"type on MSVC."
+msgstr ""
