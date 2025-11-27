@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2025-11-24 08:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,7 +100,7 @@ msgstr ""
 msgid "**Examples**"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:78 ../../../analyzer/checkers.rst:3154
+#: ../../../analyzer/checkers.rst:78 ../../../analyzer/checkers.rst:3171
 msgid "**Solution**"
 msgstr ""
 
@@ -334,9 +334,9 @@ msgid ""
 msgstr ""
 
 #: ../../../analyzer/checkers.rst:451 ../../../analyzer/checkers.rst:817
-#: ../../../analyzer/checkers.rst:1388 ../../../analyzer/checkers.rst:1970
-#: ../../../analyzer/checkers.rst:2077 ../../../analyzer/checkers.rst:2285
-#: ../../../analyzer/checkers.rst:2409
+#: ../../../analyzer/checkers.rst:1388 ../../../analyzer/checkers.rst:1987
+#: ../../../analyzer/checkers.rst:2094 ../../../analyzer/checkers.rst:2302
+#: ../../../analyzer/checkers.rst:2426
 msgid "**Limitations**"
 msgstr ""
 
@@ -433,8 +433,8 @@ msgid ""
 msgstr ""
 
 #: ../../../analyzer/checkers.rst:558 ../../../analyzer/checkers.rst:570
-#: ../../../analyzer/checkers.rst:1416 ../../../analyzer/checkers.rst:2093
-#: ../../../analyzer/checkers.rst:2105 ../../../analyzer/checkers.rst:2123
+#: ../../../analyzer/checkers.rst:1416 ../../../analyzer/checkers.rst:2110
+#: ../../../analyzer/checkers.rst:2122 ../../../analyzer/checkers.rst:2140
 msgid ""
 "Custom allocation/deallocation functions can be defined using :ref:"
 "`ownership attributes<analyzer-ownership-attrs>`."
@@ -1268,69 +1268,84 @@ msgid "Warn on uses of the 'bzero' function."
 msgstr ""
 
 #: ../../../analyzer/checkers.rst:1670
-msgid "security.insecureAPI.getpw (C)"
+msgid "security.insecureAPI.decodeValueOfObjCType (C)"
 msgstr ""
 
 #: ../../../analyzer/checkers.rst:1671
+msgid "Warn on uses of the Objective-C method ``-decodeValueOfObjCType:at:``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1680
+msgid ""
+"This diagnostic is emitted only on Apple platforms where the safer ``-"
+"decodeValueOfObjCType:at:size:`` alternative is available (iOS 11+, macOS "
+"10.13+, tvOS 11+, watchOS 4.0+)."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1687
+msgid "security.insecureAPI.getpw (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1688
 msgid "Warn on uses of the 'getpw' function."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1683
+#: ../../../analyzer/checkers.rst:1700
 msgid "security.insecureAPI.gets (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1684
+#: ../../../analyzer/checkers.rst:1701
 msgid "Warn on uses of the 'gets' function."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1696
+#: ../../../analyzer/checkers.rst:1713
 msgid "security.insecureAPI.mkstemp (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1697
+#: ../../../analyzer/checkers.rst:1714
 msgid "Warn when 'mkstemp' is passed fewer than 6 X's in the format string."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1708
+#: ../../../analyzer/checkers.rst:1725
 msgid "security.insecureAPI.mktemp (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1709
+#: ../../../analyzer/checkers.rst:1726
 msgid "Warn on uses of the ``mktemp`` function."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1720
+#: ../../../analyzer/checkers.rst:1737
 msgid "security.insecureAPI.rand (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1721
+#: ../../../analyzer/checkers.rst:1738
 msgid ""
 "Warn on uses of inferior random number generating functions (only if "
 "arc4random function is available): ``drand48, erand48, jrand48, lcong48, "
 "lrand48, mrand48, nrand48, random, rand_r``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1733
+#: ../../../analyzer/checkers.rst:1750
 msgid "security.insecureAPI.strcpy (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1734
+#: ../../../analyzer/checkers.rst:1751
 msgid "Warn on uses of the ``strcpy`` and ``strcat`` functions."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1749
+#: ../../../analyzer/checkers.rst:1766
 msgid "security.insecureAPI.vfork (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1750
+#: ../../../analyzer/checkers.rst:1767
 msgid "Warn on uses of the 'vfork' function."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1761
+#: ../../../analyzer/checkers.rst:1778
 msgid "security.insecureAPI.DeprecatedOrUnsafeBufferHandling (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1762
+#: ../../../analyzer/checkers.rst:1779
 msgid ""
 "Warn on occurrences of unsafe or deprecated buffer handling functions, which "
 "now have a secure variant: ``sprintf, fprintf, vsprintf, scanf, wscanf, "
@@ -1339,19 +1354,19 @@ msgid ""
 "memmove, strncpy, strncat, memset``"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1774
+#: ../../../analyzer/checkers.rst:1791
 msgid "security.MmapWriteExec (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1775
+#: ../../../analyzer/checkers.rst:1792
 msgid "Warn on ``mmap()`` calls with both writable and executable access."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1790
+#: ../../../analyzer/checkers.rst:1807
 msgid "security.PointerSub (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1791
+#: ../../../analyzer/checkers.rst:1808
 msgid ""
 "Check for pointer subtractions on two pointers pointing to different memory "
 "chunks. According to the C standard §6.5.6 only subtraction of pointers that "
@@ -1363,7 +1378,7 @@ msgid ""
 "by `malloc`)."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1825
+#: ../../../analyzer/checkers.rst:1842
 msgid ""
 "There may be existing applications that use code like above for calculating "
 "offsets of members in a structure, using pointer subtractions. This is still "
@@ -1371,11 +1386,11 @@ msgid ""
 "replaced with the `offsetof` macro."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1833
+#: ../../../analyzer/checkers.rst:1850
 msgid "security.PutenvStackArray (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1834
+#: ../../../analyzer/checkers.rst:1851
 msgid ""
 "Finds calls to the ``putenv`` function which pass a pointer to a stack-"
 "allocated (automatic) array as the argument. Function ``putenv`` does not "
@@ -1384,14 +1399,14 @@ msgid ""
 "likely to be overwritten after exiting from the function."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1840
+#: ../../../analyzer/checkers.rst:1857
 msgid ""
 "The problem can be solved by using a static array variable or dynamically "
 "allocated memory. Even better is to avoid using ``putenv`` (it has other "
 "problems related to memory leaks) and use ``setenv`` instead."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1844
+#: ../../../analyzer/checkers.rst:1861
 msgid ""
 "The check corresponds to CERT rule `POS34-C. Do not call putenv() with a "
 "pointer to an automatic variable as the argument <https://wiki.sei.cmu.edu/"
@@ -1399,14 +1414,14 @@ msgid ""
 "+Do+not+call+putenv%28%29+with+a+pointer+to+an+automatic+variable+as+the+argument>`_."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1855
+#: ../../../analyzer/checkers.rst:1872
 msgid ""
 "There is one case where the checker can report a false positive. This is "
 "when the stack-allocated array is used at `putenv` in a function or code "
 "branch that does not return (process is terminated on all execution paths)."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1859
+#: ../../../analyzer/checkers.rst:1876
 msgid ""
 "Another special case is if the `putenv` is called from function `main`. Here "
 "the stack is deallocated at the end of the program and it should be no "
@@ -1415,11 +1430,11 @@ msgid ""
 "space of `main` is used at the `putenv` call."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1866
+#: ../../../analyzer/checkers.rst:1883
 msgid "security.SetgidSetuidOrder (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1867
+#: ../../../analyzer/checkers.rst:1884
 msgid ""
 "When dropping user-level and group-level privileges in a program by using "
 "``setuid`` and ``setgid`` calls, it is important to reset the group-level "
@@ -1427,7 +1442,7 @@ msgid ""
 "the superuser privileges are already dropped."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1872
+#: ../../../analyzer/checkers.rst:1889
 msgid ""
 "The checker checks for sequences of ``setuid(getuid())`` and "
 "``setgid(getgid())`` calls (in this order). If such a sequence is found and "
@@ -1438,7 +1453,7 @@ msgid ""
 "is stored in a variable."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1898
+#: ../../../analyzer/checkers.rst:1915
 msgid ""
 "In the code above the problem is that ``setuid(getuid())`` removes superuser "
 "privileges before ``setgid(getgid())`` is called. To fix the problem the "
@@ -1447,46 +1462,46 @@ msgid ""
 "this) and always check the return value of these calls."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1904
+#: ../../../analyzer/checkers.rst:1921
 msgid ""
 "This check corresponds to SEI CERT Rule `POS36-C <https://wiki.sei.cmu.edu/"
 "confluence/display/c/POS36-C."
 "+Observe+correct+revocation+order+while+relinquishing+privileges>`_."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1909
+#: ../../../analyzer/checkers.rst:1926
 msgid "security.VAList (C, C++)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1910
+#: ../../../analyzer/checkers.rst:1927
 msgid ""
 "Reports use of uninitialized (or already released) ``va_list`` objects and "
 "situations where a ``va_start`` call is not followed by ``va_end``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1930
+#: ../../../analyzer/checkers.rst:1947
 msgid "unix"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1931
+#: ../../../analyzer/checkers.rst:1948
 msgid "POSIX/Unix checkers."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1936
+#: ../../../analyzer/checkers.rst:1953
 msgid "unix.API (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1937
+#: ../../../analyzer/checkers.rst:1954
 msgid ""
 "Check calls to various UNIX/Posix functions: ``open, pthread_once, calloc, "
 "malloc, realloc, alloca``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1945
+#: ../../../analyzer/checkers.rst:1962
 msgid "unix.BlockInCriticalSection (C, C++)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1946
+#: ../../../analyzer/checkers.rst:1963
 msgid ""
 "Check for calls to blocking functions inside a critical section. Blocking "
 "functions detected by this checker: ``sleep, getc, fgets, read, recv``. "
@@ -1495,17 +1510,17 @@ msgid ""
 "mtx_timedlock, mtx_trylock, mtx_unlock, lock_guard, unique_lock``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1972
+#: ../../../analyzer/checkers.rst:1989
 msgid ""
 "The ``trylock`` and ``timedlock`` versions of acquiring locks are currently "
 "assumed to always succeed. This can lead to false positives."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1989
+#: ../../../analyzer/checkers.rst:2006
 msgid "unix.Chroot (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:1990
+#: ../../../analyzer/checkers.rst:2007
 msgid ""
 "Check improper use of chroot described by SEI Cert C recommendation `POS05-"
 "C. Limit access to files by creating a jail <https://wiki.sei.cmu.edu/"
@@ -1514,11 +1529,11 @@ msgid ""
 "immediately after a call to ``chroot(path)``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2020
+#: ../../../analyzer/checkers.rst:2037
 msgid "unix.Errno (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2022
+#: ../../../analyzer/checkers.rst:2039
 msgid ""
 "Check for improper use of ``errno``. This checker implements partially CERT "
 "rule `ERR30-C. Set errno to zero before calling a library function known to "
@@ -1528,7 +1543,7 @@ msgid ""
 "after successful standard function calls."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2030
+#: ../../../analyzer/checkers.rst:2047
 msgid ""
 "The C and POSIX standards often do not define if a standard library function "
 "may change value of ``errno`` if the call does not fail. Therefore, "
@@ -1540,7 +1555,7 @@ msgid ""
 "<https://pubs.opengroup.org/onlinepubs/9699919799/>`_."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2051
+#: ../../../analyzer/checkers.rst:2068
 msgid ""
 "The checker :ref:`unix-StdCLibraryFunctions` must be turned on to get the "
 "warnings from this checker. The supported functions are the same as by :ref:"
@@ -1548,11 +1563,11 @@ msgid ""
 "affects the set of checked functions."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2056 ../../../analyzer/checkers.rst:2297
+#: ../../../analyzer/checkers.rst:2073 ../../../analyzer/checkers.rst:2314
 msgid "**Parameters**"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2058
+#: ../../../analyzer/checkers.rst:2075
 msgid ""
 "The ``AllowErrnoReadOutsideConditionExpressions`` option allows read of the "
 "errno value if the value is not used in a condition (in ``if`` statements, "
@@ -1561,20 +1576,20 @@ msgid ""
 "checker."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2074
+#: ../../../analyzer/checkers.rst:2091
 msgid ""
 "Default value of this option is ``true``. This allows save of the errno "
 "value for possible later error handling."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2079
+#: ../../../analyzer/checkers.rst:2096
 msgid ""
 "Only the very first usage of ``errno`` is checked after an affected function "
 "call. Value of ``errno`` is not followed when it is stored into a variable "
 "or returned from a function."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2082
+#: ../../../analyzer/checkers.rst:2099
 msgid ""
 "Documentation of function ``lseek`` is not clear about what happens if the "
 "function returns different value than the expected file position but not -1. "
@@ -1582,62 +1597,62 @@ msgid ""
 "case."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2090
+#: ../../../analyzer/checkers.rst:2107
 msgid "unix.Malloc (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2091
+#: ../../../analyzer/checkers.rst:2108
 msgid ""
 "Check for memory leaks, double free, and use-after-free problems. Traces "
 "memory managed by malloc()/free()."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2102
+#: ../../../analyzer/checkers.rst:2119
 msgid "unix.MallocSizeof (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2103
+#: ../../../analyzer/checkers.rst:2120
 msgid "Check for dubious ``malloc`` arguments involving ``sizeof``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2120
+#: ../../../analyzer/checkers.rst:2137
 msgid "unix.MismatchedDeallocator (C, C++)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2121
+#: ../../../analyzer/checkers.rst:2138
 msgid "Check for mismatched deallocators."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2132
+#: ../../../analyzer/checkers.rst:2149
 msgid "unix.Vfork (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2133
+#: ../../../analyzer/checkers.rst:2150
 msgid "Check for proper usage of ``vfork``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2164
+#: ../../../analyzer/checkers.rst:2181
 msgid "unix.cstring.BadSizeArg (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2165
+#: ../../../analyzer/checkers.rst:2182
 msgid ""
 "Check the size argument passed into C string functions for common erroneous "
 "patterns. Use ``-Wno-strncat-size`` compiler option to mute other "
 "``strncat``-related compiler warnings."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2178
+#: ../../../analyzer/checkers.rst:2195
 msgid "unix.cstring.NotNullTerminated (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2179
+#: ../../../analyzer/checkers.rst:2196
 msgid ""
 "Check for arguments which are not null-terminated strings; applies to the "
 "``strlen``, ``strcpy``, ``strcat``, ``strcmp`` family of functions."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2182
+#: ../../../analyzer/checkers.rst:2199
 msgid ""
 "Only very fundamental cases are detected where the passed memory block is "
 "absolutely different from a null-terminated string. This checker does not "
@@ -1645,22 +1660,22 @@ msgid ""
 "missing."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2201
+#: ../../../analyzer/checkers.rst:2218
 msgid "unix.cstring.NullArg (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2202
+#: ../../../analyzer/checkers.rst:2219
 msgid ""
 "Check for null pointers being passed as arguments to C string functions: "
 "``strlen, strnlen, strcpy, strncpy, strcat, strncat, strcmp, strncmp, "
 "strcasecmp, strncasecmp, wcslen, wcsnlen``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2214
+#: ../../../analyzer/checkers.rst:2231
 msgid "unix.StdCLibraryFunctions (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2215
+#: ../../../analyzer/checkers.rst:2232
 msgid ""
 "Check for calls of standard library functions that violate predefined "
 "argument constraints. For example, according to the C standard the behavior "
@@ -1668,7 +1683,7 @@ msgid ""
 "not representable as ``unsigned char`` and is not equal to ``EOF``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2220
+#: ../../../analyzer/checkers.rst:2237
 msgid ""
 "You can think of this checker as defining restrictions (pre- and "
 "postconditions) on standard library functions. Preconditions are checked, "
@@ -1678,7 +1693,7 @@ msgid ""
 "affected values are not known before the call."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2227
+#: ../../../analyzer/checkers.rst:2244
 msgid ""
 "For example, if an argument to a function must be in between 0 and 255, but "
 "the value of the argument is unknown, the analyzer will assume that it is in "
@@ -1687,26 +1702,26 @@ msgid ""
 "that it is non-null."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2244
+#: ../../../analyzer/checkers.rst:2261
 msgid ""
 "These are the possible checks on the values passed as function arguments:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2233
+#: ../../../analyzer/checkers.rst:2250
 msgid ""
 "The argument has an allowed range (or multiple ranges) of values. The "
 "checker can detect if a passed value is outside of the allowed range and "
 "show the actual and allowed values."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2236
+#: ../../../analyzer/checkers.rst:2253
 msgid ""
 "The argument has pointer type and is not allowed to be null pointer. Many "
 "(but not all) standard functions can produce undefined behavior if a null "
 "pointer is passed, these cases can be detected by the checker."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2239
+#: ../../../analyzer/checkers.rst:2256
 msgid ""
 "The argument is a pointer to a memory block and the minimal size of this "
 "buffer is determined by another argument to the function, or by "
@@ -1716,7 +1731,7 @@ msgid ""
 "the size of the buffer and the values of the corresponding arguments."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2278
+#: ../../../analyzer/checkers.rst:2295
 msgid ""
 "Additionally to the argument and return value conditions, this checker also "
 "adds state of the value ``errno`` if applicable to the analysis. Many system "
@@ -1726,7 +1741,7 @@ msgid ""
 "used by other checkers, for example :ref:`unix-Errno`."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2287
+#: ../../../analyzer/checkers.rst:2304
 msgid ""
 "The checker can not always provide notes about the values of the arguments. "
 "Without this information it is hard to confirm if the constraint is indeed "
@@ -1734,7 +1749,7 @@ msgid ""
 "value is determined by previous (not too complicated) assumptions."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2292
+#: ../../../analyzer/checkers.rst:2309
 msgid ""
 "The checker can produce false positives in cases such as if the program has "
 "invariants not known to the analyzer engine or the bug report path contains "
@@ -1742,13 +1757,13 @@ msgid ""
 "real range of the argument."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2299
+#: ../../../analyzer/checkers.rst:2316
 msgid ""
 "The ``ModelPOSIX`` option controls if functions from the POSIX standard are "
 "recognized by the checker."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2302
+#: ../../../analyzer/checkers.rst:2319
 msgid ""
 "With ``ModelPOSIX=true``, many POSIX functions are modeled according to the "
 "`POSIX standard`_. This includes ranges of parameters and possible return "
@@ -1757,7 +1772,7 @@ msgid ""
 "undefined after a successful function call."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2308
+#: ../../../analyzer/checkers.rst:2325
 msgid ""
 "With ``ModelPOSIX=false``, this checker follows the C99 language standard "
 "and only models the functions that are described there. It is possible that "
@@ -1767,15 +1782,15 @@ msgid ""
 "not modeled by the checker)."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2315
+#: ../../../analyzer/checkers.rst:2332
 msgid "Default value of the option is ``true``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2320
+#: ../../../analyzer/checkers.rst:2337
 msgid "unix.Stream (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2321
+#: ../../../analyzer/checkers.rst:2338
 msgid ""
 "Check C stream handling functions: ``fopen, fdopen, freopen, tmpfile, "
 "fclose, fread, fwrite, fgetc, fgets, fputc, fputs, fprintf, fscanf, ungetc, "
@@ -1783,46 +1798,46 @@ msgid ""
 "fsetpos, clearerr, feof, ferror, fileno``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2324
+#: ../../../analyzer/checkers.rst:2341
 msgid ""
 "The checker maintains information about the C stream objects (``FILE *``) "
 "and can detect error conditions related to use of streams. The following "
 "conditions are detected:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2328
+#: ../../../analyzer/checkers.rst:2345
 msgid ""
 "The ``FILE *`` pointer passed to the function is NULL (the single exception "
 "is ``fflush`` where NULL is allowed)."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2330
+#: ../../../analyzer/checkers.rst:2347
 msgid "Use of stream after close."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2331
+#: ../../../analyzer/checkers.rst:2348
 msgid "Opened stream is not closed."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2332
+#: ../../../analyzer/checkers.rst:2349
 msgid ""
 "Read from a stream after end-of-file. (This is not a fatal error but "
 "reported by the checker. Stream remains in EOF state and the read operation "
 "fails.)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2334
+#: ../../../analyzer/checkers.rst:2351
 msgid ""
 "Use of stream when the file position is indeterminate after a previous "
 "failed operation. Some functions (like ``ferror``, ``clearerr``, ``fseek``) "
 "are allowed in this state."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2337
+#: ../../../analyzer/checkers.rst:2354
 msgid "Invalid 3rd (\"``whence``\") argument to ``fseek``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2339
+#: ../../../analyzer/checkers.rst:2356
 msgid ""
 "The stream operations are by this checker usually split into two cases, a "
 "success and a failure case. On the success case it also assumes that the "
@@ -1832,7 +1847,7 @@ msgid ""
 "streams opened by ``fopen``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2346
+#: ../../../analyzer/checkers.rst:2363
 msgid ""
 "In the case of write operations (like ``fwrite``, ``fprintf`` and even "
 "``fsetpos``) this behavior could produce a large amount of unwanted reports "
@@ -1845,340 +1860,340 @@ msgid ""
 "assumed to succeed.)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2411
+#: ../../../analyzer/checkers.rst:2428
 msgid ""
 "The checker does not track the correspondence between integer file "
 "descriptors and ``FILE *`` pointers."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2417
+#: ../../../analyzer/checkers.rst:2434
 msgid "osx"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2418
+#: ../../../analyzer/checkers.rst:2435
 msgid "macOS checkers."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2423
+#: ../../../analyzer/checkers.rst:2440
 msgid "osx.API (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2424
+#: ../../../analyzer/checkers.rst:2441
 msgid "Check for proper uses of various Apple APIs."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2436
+#: ../../../analyzer/checkers.rst:2453
 msgid "osx.NumberObjectConversion (C, C++, ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2437
+#: ../../../analyzer/checkers.rst:2454
 msgid ""
 "Check for erroneous conversions of objects representing numbers into numbers."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2451
+#: ../../../analyzer/checkers.rst:2468
 msgid "osx.ObjCProperty (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2452
+#: ../../../analyzer/checkers.rst:2469
 msgid "Check for proper uses of Objective-C properties."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2467
+#: ../../../analyzer/checkers.rst:2484
 msgid "osx.SecKeychainAPI (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2468
+#: ../../../analyzer/checkers.rst:2485
 msgid "Check for proper uses of Secure Keychain APIs."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2476
+#: ../../../analyzer/checkers.rst:2493
 msgid "osx.cocoa.AtSync (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2477
+#: ../../../analyzer/checkers.rst:2494
 msgid "Check for nil pointers used as mutexes for @synchronized."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2494
+#: ../../../analyzer/checkers.rst:2511
 msgid "osx.cocoa.AutoreleaseWrite"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2495
+#: ../../../analyzer/checkers.rst:2512
 msgid ""
 "Warn about potentially crashing writes to autoreleasing objects from "
 "different autoreleasing pools in Objective-C."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2500
+#: ../../../analyzer/checkers.rst:2517
 msgid "osx.cocoa.ClassRelease (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2501
+#: ../../../analyzer/checkers.rst:2518
 msgid ""
 "Check for sending 'retain', 'release', or 'autorelease' directly to a Class."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2515
+#: ../../../analyzer/checkers.rst:2532
 msgid "osx.cocoa.Dealloc (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2516
+#: ../../../analyzer/checkers.rst:2533
 msgid ""
 "Warn about Objective-C classes that lack a correct implementation of -dealloc"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2524
+#: ../../../analyzer/checkers.rst:2541
 msgid "osx.cocoa.IncompatibleMethodTypes (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2525
+#: ../../../analyzer/checkers.rst:2542
 msgid "Warn about Objective-C method signatures with type incompatibilities."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2548
+#: ../../../analyzer/checkers.rst:2565
 msgid "osx.cocoa.Loops"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2549
+#: ../../../analyzer/checkers.rst:2566
 msgid "Improved modeling of loops using Cocoa collection types."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2554
+#: ../../../analyzer/checkers.rst:2571
 msgid "osx.cocoa.MissingSuperCall (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2555
+#: ../../../analyzer/checkers.rst:2572
 msgid "Warn about Objective-C methods that lack a necessary call to super."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2569
+#: ../../../analyzer/checkers.rst:2586
 msgid "osx.cocoa.NSAutoreleasePool (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2570
+#: ../../../analyzer/checkers.rst:2587
 msgid "Warn for suboptimal uses of NSAutoreleasePool in Objective-C GC mode."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2582
+#: ../../../analyzer/checkers.rst:2599
 msgid "osx.cocoa.NSError (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2583
+#: ../../../analyzer/checkers.rst:2600
 msgid "Check usage of NSError parameters."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2612
+#: ../../../analyzer/checkers.rst:2629
 msgid "osx.cocoa.NilArg (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2613
+#: ../../../analyzer/checkers.rst:2630
 msgid "Check for prohibited nil arguments to ObjC method calls."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2615
+#: ../../../analyzer/checkers.rst:2632
 msgid "caseInsensitiveCompare:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2616
+#: ../../../analyzer/checkers.rst:2633
 msgid "compare:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2617
+#: ../../../analyzer/checkers.rst:2634
 msgid "compare:options:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2618
+#: ../../../analyzer/checkers.rst:2635
 msgid "compare:options:range:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2619
+#: ../../../analyzer/checkers.rst:2636
 msgid "compare:options:range:locale:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2620
+#: ../../../analyzer/checkers.rst:2637
 msgid "componentsSeparatedByCharactersInSet:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2621
+#: ../../../analyzer/checkers.rst:2638
 msgid "initWithFormat:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2636
+#: ../../../analyzer/checkers.rst:2653
 msgid "osx.cocoa.NonNilReturnValue"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2637
+#: ../../../analyzer/checkers.rst:2654
 msgid "Models the APIs that are guaranteed to return a non-nil value."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2642
+#: ../../../analyzer/checkers.rst:2659
 msgid "osx.cocoa.ObjCGenerics (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2643
+#: ../../../analyzer/checkers.rst:2660
 msgid "Check for type errors when using Objective-C generics."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2657
+#: ../../../analyzer/checkers.rst:2674
 msgid "osx.cocoa.RetainCount (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2658
+#: ../../../analyzer/checkers.rst:2675
 msgid "Check for leaks and improper reference count management"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2675
+#: ../../../analyzer/checkers.rst:2692
 msgid "osx.cocoa.RunLoopAutoreleaseLeak"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2676
+#: ../../../analyzer/checkers.rst:2693
 msgid ""
 "Check for leaked memory in autorelease pools that will never be drained."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2681
+#: ../../../analyzer/checkers.rst:2698
 msgid "osx.cocoa.SelfInit (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2682
+#: ../../../analyzer/checkers.rst:2699
 msgid "Check that 'self' is properly initialized inside an initializer method."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2715
+#: ../../../analyzer/checkers.rst:2732
 msgid "osx.cocoa.SuperDealloc (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2716
+#: ../../../analyzer/checkers.rst:2733
 msgid "Warn about improper use of '[super dealloc]' in Objective-C."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2735
+#: ../../../analyzer/checkers.rst:2752
 msgid "osx.cocoa.UnusedIvars (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2736
+#: ../../../analyzer/checkers.rst:2753
 msgid "Warn about private ivars that are never used."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2752
+#: ../../../analyzer/checkers.rst:2769
 msgid "osx.cocoa.VariadicMethodTypes (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2753
+#: ../../../analyzer/checkers.rst:2770
 msgid ""
 "Check for passing non-Objective-C types to variadic collection "
 "initialization methods that expect only Objective-C types."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2766
+#: ../../../analyzer/checkers.rst:2783
 msgid "osx.coreFoundation.CFError (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2767
+#: ../../../analyzer/checkers.rst:2784
 msgid "Check usage of CFErrorRef* parameters"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2784
+#: ../../../analyzer/checkers.rst:2801
 msgid "osx.coreFoundation.CFNumber (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2785
+#: ../../../analyzer/checkers.rst:2802
 msgid "Check for proper uses of CFNumber APIs."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2797
+#: ../../../analyzer/checkers.rst:2814
 msgid "osx.coreFoundation.CFRetainRelease (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2798
+#: ../../../analyzer/checkers.rst:2815
 msgid "Check for null arguments to CFRetain/CFRelease/CFMakeCollectable."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2817
+#: ../../../analyzer/checkers.rst:2834
 msgid "osx.coreFoundation.containers.OutOfBounds (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2818
+#: ../../../analyzer/checkers.rst:2835
 msgid "Checks for index out-of-bounds when using 'CFArray' API."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2830
+#: ../../../analyzer/checkers.rst:2847
 msgid "osx.coreFoundation.containers.PointerSizedValues (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2831
+#: ../../../analyzer/checkers.rst:2848
 msgid ""
 "Warns if 'CFArray', 'CFDictionary', 'CFSet' are created with non-pointer-"
 "size values."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2842
+#: ../../../analyzer/checkers.rst:2859
 msgid "Fuchsia"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2844
+#: ../../../analyzer/checkers.rst:2861
 msgid ""
 "Fuchsia is an open source capability-based operating system currently being "
 "developed by Google. This section describes checkers that can find various "
 "misuses of Fuchsia APIs."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2851
+#: ../../../analyzer/checkers.rst:2868
 msgid "fuchsia.HandleChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2852
+#: ../../../analyzer/checkers.rst:2869
 msgid ""
 "Handles identify resources. Similar to pointers they can be leaked, double "
 "freed, or use after freed. This check attempts to find such problems."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2867
+#: ../../../analyzer/checkers.rst:2884
 msgid "WebKit"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2869
+#: ../../../analyzer/checkers.rst:2886
 msgid ""
 "WebKit is an open-source web browser engine available for macOS, iOS and "
 "Linux. This section describes checkers that can find issues in WebKit "
 "codebase."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2872
+#: ../../../analyzer/checkers.rst:2889
 msgid ""
 "Most of the checkers focus on memory management for which WebKit uses custom "
 "implementation of reference counted smartpointers."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2877
+#: ../../../analyzer/checkers.rst:2894
 msgid "Checkers are formulated in terms related to ref-counting:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2875
+#: ../../../analyzer/checkers.rst:2892
 msgid "*Ref-counted type* is either ``Ref<T>`` or ``RefPtr<T>``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2876
+#: ../../../analyzer/checkers.rst:2893
 msgid ""
 "*Ref-countable type* is any type that implements ``ref()`` and ``deref()`` "
 "methods as ``RefPtr<>`` is a template (i. e. relies on duck typing)."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2877
+#: ../../../analyzer/checkers.rst:2894
 msgid "*Uncounted type* is ref-countable but not ref-counted type."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2882
+#: ../../../analyzer/checkers.rst:2899
 msgid "webkit.RefCntblBaseVirtualDtor"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2883
+#: ../../../analyzer/checkers.rst:2900
 msgid ""
 "All uncounted types used as base classes must have a virtual destructor."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2885
+#: ../../../analyzer/checkers.rst:2902
 msgid ""
 "Ref-counted types hold their ref-countable data by a raw pointer and allow "
 "implicit upcasting from ref-counted pointer to derived type to ref-counted "
@@ -2188,118 +2203,118 @@ msgid ""
 "delete]``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2899
+#: ../../../analyzer/checkers.rst:2916
 msgid "webkit.NoUncountedMemberChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2900
+#: ../../../analyzer/checkers.rst:2917
 msgid ""
 "Raw pointers and references to uncounted types can't be used as class "
 "members. Only ref-counted types are allowed."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2918
+#: ../../../analyzer/checkers.rst:2935
 msgid "webkit.UncountedLambdaCapturesChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2919
+#: ../../../analyzer/checkers.rst:2936
 msgid ""
 "Raw pointers and references to uncounted types can't be captured in lambdas. "
 "Only ref-counted types are allowed."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2937
+#: ../../../analyzer/checkers.rst:2954
 msgid "Experimental Checkers"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2939
+#: ../../../analyzer/checkers.rst:2956
 msgid ""
 "*These are checkers with known issues or limitations that keep them from "
 "being on by default. They are likely to have false positives. Bug reports "
 "and especially patches are welcome.*"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2942
+#: ../../../analyzer/checkers.rst:2959
 msgid "alpha.clone"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2947
+#: ../../../analyzer/checkers.rst:2964
 msgid "alpha.clone.CloneChecker (C, C++, ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2948
+#: ../../../analyzer/checkers.rst:2965
 msgid "Reports similar pieces of code."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2969
+#: ../../../analyzer/checkers.rst:2986
 msgid "alpha.core"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2974
+#: ../../../analyzer/checkers.rst:2991
 msgid "alpha.core.BoolAssignment (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2975
+#: ../../../analyzer/checkers.rst:2992
 msgid "Warn about assigning non-{0,1} values to boolean variables."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2986
+#: ../../../analyzer/checkers.rst:3003
 msgid "alpha.core.C11Lock"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:2987
+#: ../../../analyzer/checkers.rst:3004
 msgid ""
 "Similarly to :ref:`alpha.unix.PthreadLock <alpha-unix-PthreadLock>`, checks "
 "for the locking/unlocking of ``mtx_t`` mutexes."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3003
+#: ../../../analyzer/checkers.rst:3020
 msgid "alpha.core.CastToStruct (C, C++)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3004
+#: ../../../analyzer/checkers.rst:3021
 msgid "Check for cast from non-struct pointer to struct pointer."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3025
+#: ../../../analyzer/checkers.rst:3042
 msgid "alpha.core.Conversion (C, C++, ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3026
+#: ../../../analyzer/checkers.rst:3043
 msgid "Loss of sign/precision in implicit conversions."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3049
+#: ../../../analyzer/checkers.rst:3066
 msgid "alpha.core.DynamicTypeChecker (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3050
+#: ../../../analyzer/checkers.rst:3067
 msgid ""
 "Check for cases where the dynamic and the static type of an object are "
 "unrelated."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3065
+#: ../../../analyzer/checkers.rst:3082
 msgid "alpha.core.FixedAddr (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3066
+#: ../../../analyzer/checkers.rst:3083
 msgid "Check for assignment of a fixed address to a pointer."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3078
+#: ../../../analyzer/checkers.rst:3095
 msgid "alpha.core.PointerArithm (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3079
+#: ../../../analyzer/checkers.rst:3096
 msgid "Check for pointer arithmetic on locations other than array elements."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3092
+#: ../../../analyzer/checkers.rst:3109
 msgid "alpha.core.StackAddressAsyncEscape (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3093
+#: ../../../analyzer/checkers.rst:3110
 msgid ""
 "Check that addresses to stack memory do not escape the function that "
 "involves dispatch_after or dispatch_async. This checker is a part of ``core."
@@ -2307,11 +2322,11 @@ msgid ""
 "are fixed."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3116
+#: ../../../analyzer/checkers.rst:3133
 msgid "alpha.core.StdVariant (C++)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3117
+#: ../../../analyzer/checkers.rst:3134
 msgid ""
 "Check if a value of active type is retrieved from an ``std::variant`` "
 "instance with ``std::get``. In case of bad variant type access (the accessed "
@@ -2319,209 +2334,209 @@ msgid ""
 "checker does not take exception handling into account."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3131
+#: ../../../analyzer/checkers.rst:3148
 msgid "alpha.core.TestAfterDivZero (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3132
+#: ../../../analyzer/checkers.rst:3149
 msgid ""
 "Check for division by variable that is later compared against 0. Either the "
 "comparison is useless or there is division by zero."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3145
+#: ../../../analyzer/checkers.rst:3162
 msgid "alpha.core.StoreToImmutable (C, C++)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3146
+#: ../../../analyzer/checkers.rst:3163
 msgid ""
 "Check for writes to immutable memory regions. This implements part of SEI "
 "CERT Rule ENV30-C."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3148
+#: ../../../analyzer/checkers.rst:3165
 msgid ""
 "This checker detects attempts to write to memory regions that are marked as "
 "immutable, including const variables, string literals, and other const-"
 "qualified memory."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3156
+#: ../../../analyzer/checkers.rst:3173
 msgid ""
 "Avoid writing to const-qualified memory regions. If you need to modify the "
 "data, remove the const qualifier from the original declaration or use a "
 "mutable copy."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3160
+#: ../../../analyzer/checkers.rst:3177
 msgid "alpha.cplusplus"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3165
+#: ../../../analyzer/checkers.rst:3182
 msgid "alpha.cplusplus.DeleteWithNonVirtualDtor (C++)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3166
+#: ../../../analyzer/checkers.rst:3183
 msgid ""
 "Reports destructions of polymorphic objects with a non-virtual destructor in "
 "their base class."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3188
+#: ../../../analyzer/checkers.rst:3205
 msgid "alpha.cplusplus.InvalidatedIterator (C++)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3189
+#: ../../../analyzer/checkers.rst:3206
 msgid "Check for use of invalidated iterators."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3204
+#: ../../../analyzer/checkers.rst:3221
 msgid "alpha.cplusplus.IteratorRange (C++)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3205
+#: ../../../analyzer/checkers.rst:3222
 msgid "Check for iterators used outside their valid ranges."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3217
+#: ../../../analyzer/checkers.rst:3234
 msgid "alpha.cplusplus.MismatchedIterator (C++)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3218
+#: ../../../analyzer/checkers.rst:3235
 msgid ""
 "Check for use of iterators of different containers where iterators of the "
 "same container are expected."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3241
+#: ../../../analyzer/checkers.rst:3258
 msgid "alpha.cplusplus.SmartPtr (C++)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3242
+#: ../../../analyzer/checkers.rst:3259
 msgid "Check for dereference of null smart pointers."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3253
+#: ../../../analyzer/checkers.rst:3270
 msgid "alpha.deadcode"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3257
+#: ../../../analyzer/checkers.rst:3274
 msgid "alpha.deadcode.UnreachableCode (C, C++)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3258
+#: ../../../analyzer/checkers.rst:3275
 msgid "Check unreachable code."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3287
+#: ../../../analyzer/checkers.rst:3304
 msgid "alpha.fuchsia"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3292
+#: ../../../analyzer/checkers.rst:3309
 msgid "alpha.fuchsia.Lock"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3293
+#: ../../../analyzer/checkers.rst:3310
 msgid ""
 "Similarly to :ref:`alpha.unix.PthreadLock <alpha-unix-PthreadLock>`, checks "
 "for the locking/unlocking of fuchsia mutexes."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3307
+#: ../../../analyzer/checkers.rst:3324
 msgid "alpha.llvm"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3312
+#: ../../../analyzer/checkers.rst:3329
 msgid "alpha.llvm.Conventions"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3314
+#: ../../../analyzer/checkers.rst:3331
 msgid "Check code for LLVM codebase conventions:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3316
+#: ../../../analyzer/checkers.rst:3333
 msgid ""
 "A StringRef should not be bound to a temporary std::string whose lifetime is "
 "shorter than the StringRef's."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3317
+#: ../../../analyzer/checkers.rst:3334
 msgid "Clang AST nodes should not have fields that can allocate memory."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3321
+#: ../../../analyzer/checkers.rst:3338
 msgid "alpha.osx"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3326
+#: ../../../analyzer/checkers.rst:3343
 msgid "alpha.osx.cocoa.DirectIvarAssignment (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3327
+#: ../../../analyzer/checkers.rst:3344
 msgid "Check for direct assignments to instance variables."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3346
+#: ../../../analyzer/checkers.rst:3363
 msgid "alpha.osx.cocoa.DirectIvarAssignmentForAnnotatedFunctions (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3347
+#: ../../../analyzer/checkers.rst:3364
 msgid ""
 "Check for direct assignments to instance variables in the methods annotated "
 "with ``objc_no_direct_instance_variable_assignment``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3372
+#: ../../../analyzer/checkers.rst:3389
 msgid "alpha.osx.cocoa.InstanceVariableInvalidation (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3373
+#: ../../../analyzer/checkers.rst:3390
 msgid ""
 "Check that the invalidatable instance variables are invalidated in the "
 "methods annotated with objc_instance_variable_invalidator."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3400
+#: ../../../analyzer/checkers.rst:3417
 msgid "alpha.osx.cocoa.MissingInvalidationMethod (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3401
+#: ../../../analyzer/checkers.rst:3418
 msgid ""
 "Check that the invalidation methods are present in classes that contain "
 "invalidatable instance variables."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3424
+#: ../../../analyzer/checkers.rst:3441
 msgid "alpha.osx.cocoa.localizability.PluralMisuseChecker (ObjC)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3425
+#: ../../../analyzer/checkers.rst:3442
 msgid ""
 "Warns against using one vs. many plural pattern in code when generating "
 "localized strings."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3446
+#: ../../../analyzer/checkers.rst:3463
 msgid "alpha.security"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3451
+#: ../../../analyzer/checkers.rst:3468
 msgid "alpha.security.ReturnPtrRange (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3452
+#: ../../../analyzer/checkers.rst:3469
 msgid "Check for an out-of-bound pointer being returned to callers."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3469
+#: ../../../analyzer/checkers.rst:3486
 msgid "alpha.unix"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3474
+#: ../../../analyzer/checkers.rst:3491
 msgid "alpha.unix.PthreadLock (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3475
+#: ../../../analyzer/checkers.rst:3492
 msgid ""
 "Simple lock -> unlock checker. Applies to: ``pthread_mutex_lock, "
 "pthread_rwlock_rdlock, pthread_rwlock_wrlock, lck_mtx_lock, "
@@ -2531,11 +2546,11 @@ msgid ""
 "pthread_rwlock_unlock, lck_mtx_unlock, lck_rw_done``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3514
+#: ../../../analyzer/checkers.rst:3531
 msgid "alpha.unix.SimpleStream (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3515
+#: ../../../analyzer/checkers.rst:3532
 msgid ""
 "Check for misuses of stream APIs. Check for misuses of stream APIs: ``fopen, "
 "fclose`` (demo checker, the subject of the demo (`Slides <https://llvm.org/"
@@ -2544,94 +2559,94 @@ msgid ""
 "Developers' Meeting <https://llvm.org/devmtg/2012-11/>`_)."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3538
+#: ../../../analyzer/checkers.rst:3555
 msgid "alpha.unix.cstring.BufferOverlap (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3539
+#: ../../../analyzer/checkers.rst:3556
 msgid ""
 "Checks for overlap in two buffer arguments. Applies to:  ``memcpy, mempcpy, "
 "wmemcpy, wmempcpy``."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3551
+#: ../../../analyzer/checkers.rst:3568
 msgid "alpha.unix.cstring.OutOfBounds (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3552
+#: ../../../analyzer/checkers.rst:3569
 msgid ""
 "Check for out-of-bounds access in string functions, such as: ``memcpy, "
 "bcopy, strcpy, strncpy, strcat, strncat, memmove, memcmp, memset`` and more."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3555
+#: ../../../analyzer/checkers.rst:3572
 msgid ""
 "This check also works with string literals, except there is a known bug in "
 "that the analyzer cannot detect embedded NULL characters when determining "
 "the string length."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3575
+#: ../../../analyzer/checkers.rst:3592
 msgid "alpha.unix.cstring.UninitializedRead (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3577
+#: ../../../analyzer/checkers.rst:3594
 msgid ""
 "Check for uninitialized reads from common memory copy/manipulation functions "
 "such as:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3577
+#: ../../../analyzer/checkers.rst:3594
 msgid ""
 "``memcpy, mempcpy, memmove, memcmp, strcmp, strncmp, strcpy, strlen, "
 "strsep`` and many more."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3587
+#: ../../../analyzer/checkers.rst:3604
 msgid "Limitations:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3589
+#: ../../../analyzer/checkers.rst:3606
 msgid ""
 "Due to limitations of the memory modeling in the analyzer, one can likely "
 "observe a lot of false-positive reports like this:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3603
+#: ../../../analyzer/checkers.rst:3620
 msgid ""
 "More details at the corresponding `GitHub issue <https://github.com/llvm/"
 "llvm-project/issues/43459>`_."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3606
+#: ../../../analyzer/checkers.rst:3623
 msgid "alpha.WebKit"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3609
+#: ../../../analyzer/checkers.rst:3626
 msgid "alpha.webkit.ForwardDeclChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3610
+#: ../../../analyzer/checkers.rst:3627
 msgid ""
 "Check for local variables, member variables, and function arguments that are "
 "forward declared."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3629
+#: ../../../analyzer/checkers.rst:3646
 msgid "alpha.webkit.MemoryUnsafeCastChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3630
+#: ../../../analyzer/checkers.rst:3647
 msgid ""
 "Check for all casts from a base type to its derived type as these might be "
 "memory-unsafe."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3632
+#: ../../../analyzer/checkers.rst:3649
 msgid "Example:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3643
+#: ../../../analyzer/checkers.rst:3660
 msgid ""
 "For all cast operations (C-style casts, static_cast, reinterpret_cast, "
 "dynamic_cast), if the source type a `Base*` and the destination type is "
@@ -2639,54 +2654,54 @@ msgid ""
 "signal an error."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3645
+#: ../../../analyzer/checkers.rst:3662
 msgid "This applies to:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3647
+#: ../../../analyzer/checkers.rst:3664
 msgid ""
 "C structs, C++ structs and classes, and Objective-C classes and protocols."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3648
+#: ../../../analyzer/checkers.rst:3665
 msgid "Pointers and references."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3649
+#: ../../../analyzer/checkers.rst:3666
 msgid ""
 "Inside template instantiations and macro expansions that are visible to the "
 "compiler."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3651
+#: ../../../analyzer/checkers.rst:3668
 msgid ""
 "For types like this, instead of using built in casts, the programmer will "
 "use helper functions that internally perform the appropriate type check and "
 "disable static analysis."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3654
+#: ../../../analyzer/checkers.rst:3671
 msgid "alpha.webkit.NoUncheckedPtrMemberChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3655
+#: ../../../analyzer/checkers.rst:3672
 msgid ""
 "Raw pointers and references to an object which supports CheckedPtr or "
 "CheckedRef can't be used as class members. Only CheckedPtr, CheckedRef, "
 "RefPtr, or Ref are allowed."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3670 ../../../analyzer/checkers.rst:3684
+#: ../../../analyzer/checkers.rst:3687 ../../../analyzer/checkers.rst:3701
 msgid ""
 "See `WebKit Guidelines for Safer C++ Programming <https://github.com/WebKit/"
 "WebKit/wiki/Safer-CPP-Guidelines>`_ for details."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3673
+#: ../../../analyzer/checkers.rst:3690
 msgid "alpha.webkit.NoUnretainedMemberChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3674
+#: ../../../analyzer/checkers.rst:3691
 msgid ""
 "Raw pointers and references to a NS or CF object can't be used as class "
 "members or ivars. Only RetainPtr is allowed for CF types regardless of "
@@ -2694,11 +2709,11 @@ msgid ""
 "for NS types when ARC is disabled."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3687
+#: ../../../analyzer/checkers.rst:3704
 msgid "alpha.webkit.UnretainedLambdaCapturesChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3688
+#: ../../../analyzer/checkers.rst:3705
 msgid ""
 "Raw pointers and references to NS or CF types can't be captured in lambdas. "
 "Only RetainPtr is allowed for CF types regardless of whether ARC is enabled "
@@ -2706,11 +2721,11 @@ msgid ""
 "ARC is disabled."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3702
+#: ../../../analyzer/checkers.rst:3719
 msgid "alpha.webkit.UncountedCallArgsChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3703
+#: ../../../analyzer/checkers.rst:3720
 msgid ""
 "The goal of this rule is to make sure that lifetime of any dynamically "
 "allocated ref-countable object passed as a call argument spans past the end "
@@ -2720,14 +2735,14 @@ msgid ""
 "uncounted types."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3705
+#: ../../../analyzer/checkers.rst:3722
 msgid ""
 "Here are some examples of situations that we warn about as they *might* be "
 "potentially unsafe. The logic is that either we're able to guarantee that an "
 "argument is safe or it's considered if not a bug then bug-prone."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3723
+#: ../../../analyzer/checkers.rst:3740
 msgid ""
 "Although we are enforcing member variables to be ref-counted by `webkit."
 "NoUncountedMemberChecker` any method of the same class still has "
@@ -2736,7 +2751,7 @@ msgid ""
 "indirectly) we don't consider values obtained from members safe."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3725
+#: ../../../analyzer/checkers.rst:3742
 msgid ""
 "Note: It's likely this heuristic could be made more precise with fewer false "
 "positives - for example calls to free functions that don't have any "
@@ -2744,77 +2759,77 @@ msgid ""
 "to tamper with the member unless it's a global variable."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3737
+#: ../../../analyzer/checkers.rst:3754
 msgid ""
 "The implementation of this rule is a heuristic - we define a whitelist of "
 "kinds of values that are considered safe to be passed as arguments. If we "
 "can't prove an argument is safe it's considered an error."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3739
+#: ../../../analyzer/checkers.rst:3756
 msgid "Allowed kinds of arguments:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3741
+#: ../../../analyzer/checkers.rst:3758
 msgid ""
 "values obtained from ref-counted objects (including temporaries as those "
 "survive the call too)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3754
+#: ../../../analyzer/checkers.rst:3771
 msgid "forwarding uncounted arguments from caller to callee"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3762
+#: ../../../analyzer/checkers.rst:3779
 msgid "Caller of ``foo()`` is responsible for  ``a``'s lifetime."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3764
+#: ../../../analyzer/checkers.rst:3781
 msgid "``this`` pointer"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3772
+#: ../../../analyzer/checkers.rst:3789
 msgid ""
 "Caller of ``foo()`` is responsible for keeping the memory pointed to by "
 "``this`` pointer safe."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3774
+#: ../../../analyzer/checkers.rst:3791
 msgid "constants"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3780
+#: ../../../analyzer/checkers.rst:3797
 msgid ""
 "We also define a set of safe transformations which if passed a safe value as "
 "an input provide (usually it's the return value) a safe value (or an object "
 "that provides safe values). This is also a heuristic."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3782
+#: ../../../analyzer/checkers.rst:3799
 msgid "constructors of ref-counted types (including factory methods)"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3783
+#: ../../../analyzer/checkers.rst:3800
 msgid "getters of ref-counted types"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3784
+#: ../../../analyzer/checkers.rst:3801
 msgid "member overloaded operators"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3785
+#: ../../../analyzer/checkers.rst:3802
 msgid "casts"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3786
+#: ../../../analyzer/checkers.rst:3803
 msgid "unary operators like ``&`` or ``*``"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3789
+#: ../../../analyzer/checkers.rst:3806
 msgid "alpha.webkit.UncheckedCallArgsChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3790
+#: ../../../analyzer/checkers.rst:3807
 msgid ""
 "The goal of this rule is to make sure that lifetime of any dynamically "
 "allocated CheckedPtr capable object passed as a call argument keeps its "
@@ -2824,17 +2839,17 @@ msgid ""
 "parameters of raw pointers and references to unchecked types."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3792
+#: ../../../analyzer/checkers.rst:3809
 msgid ""
 "The rules of when to use and not to use CheckedPtr / CheckedRef are same as "
 "alpha.webkit.UncountedCallArgsChecker for ref-counted objects."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3795
+#: ../../../analyzer/checkers.rst:3812
 msgid "alpha.webkit.UnretainedCallArgsChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3796
+#: ../../../analyzer/checkers.rst:3813
 msgid ""
 "The goal of this rule is to make sure that lifetime of any dynamically "
 "allocated NS or CF objects passed as a call argument keeps its memory region "
@@ -2844,17 +2859,17 @@ msgid ""
 "references to unretained types."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3798 ../../../analyzer/checkers.rst:3890
+#: ../../../analyzer/checkers.rst:3815 ../../../analyzer/checkers.rst:3907
 msgid ""
 "The rules of when to use and not to use RetainPtr or OSObjectPtr are same as "
 "alpha.webkit.UncountedCallArgsChecker for ref-counted objects."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3801
+#: ../../../analyzer/checkers.rst:3818
 msgid "alpha.webkit.UncountedLocalVarsChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3802
+#: ../../../analyzer/checkers.rst:3819
 msgid ""
 "The goal of this rule is to make sure that any uncounted local variable is "
 "backed by a ref-counted object with lifetime that is strictly larger than "
@@ -2863,24 +2878,24 @@ msgid ""
 "counted object that backs it."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3804 ../../../analyzer/checkers.rst:3847
-#: ../../../analyzer/checkers.rst:3892
+#: ../../../analyzer/checkers.rst:3821 ../../../analyzer/checkers.rst:3864
+#: ../../../analyzer/checkers.rst:3909
 msgid "These are examples of cases that we consider safe:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3824 ../../../analyzer/checkers.rst:3867
-#: ../../../analyzer/checkers.rst:3912
+#: ../../../analyzer/checkers.rst:3841 ../../../analyzer/checkers.rst:3884
+#: ../../../analyzer/checkers.rst:3929
 msgid ""
 "Here are some examples of situations that we warn about as they *might* be "
 "potentially unsafe. The logic is that either we're able to guarantee that a "
 "local variable is safe or it's considered unsafe."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3844
+#: ../../../analyzer/checkers.rst:3861
 msgid "alpha.webkit.UncheckedLocalVarsChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3845
+#: ../../../analyzer/checkers.rst:3862
 msgid ""
 "The goal of this rule is to make sure that any unchecked local variable is "
 "backed by a CheckedPtr or CheckedRef with lifetime that is strictly larger "
@@ -2889,11 +2904,11 @@ msgid ""
 "CheckedPtr/CheckRef object that backs it."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3887
+#: ../../../analyzer/checkers.rst:3904
 msgid "alpha.webkit.UnretainedLocalVarsChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3888
+#: ../../../analyzer/checkers.rst:3905
 msgid ""
 "The goal of this rule is to make sure that any NS or CF local variable is "
 "backed by a RetainPtr or OSObjectPtr with lifetime that is strictly larger "
@@ -2902,11 +2917,11 @@ msgid ""
 "RetainPtr or OSObjectPtr object that backs it."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3932
+#: ../../../analyzer/checkers.rst:3949
 msgid "webkit.RetainPtrCtorAdoptChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3933
+#: ../../../analyzer/checkers.rst:3950
 msgid ""
 "The goal of this rule is to make sure the constructors of RetainPtr and "
 "OSObjectPtr as well as adoptNS, adoptCF, and adoptOSObject are used "
@@ -2915,138 +2930,138 @@ msgid ""
 "RetainPtr or OSObjectPtr constructor should be used. Warn otherwise."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3937
+#: ../../../analyzer/checkers.rst:3954
 msgid "These are examples of cases that we consider correct:"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3945
+#: ../../../analyzer/checkers.rst:3962
 msgid ""
 "Here are some examples of cases that we consider incorrect use of RetainPtr "
 "constructor and adoptCF"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3954
+#: ../../../analyzer/checkers.rst:3971
 msgid "Debug Checkers"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3960
+#: ../../../analyzer/checkers.rst:3977
 msgid "debug"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3962
+#: ../../../analyzer/checkers.rst:3979
 msgid ""
 "Checkers used for debugging the analyzer. :doc:`developer-docs/DebugChecks` "
 "page contains a detailed description."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3968
+#: ../../../analyzer/checkers.rst:3985
 msgid "debug.AnalysisOrder"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3969
+#: ../../../analyzer/checkers.rst:3986
 msgid "Print callbacks that are called during analysis in order."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3974
+#: ../../../analyzer/checkers.rst:3991
 msgid "debug.ConfigDumper"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3975
+#: ../../../analyzer/checkers.rst:3992
 msgid "Dump config table."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3980
+#: ../../../analyzer/checkers.rst:3997
 msgid "debug.DumpCFG Display"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3981
+#: ../../../analyzer/checkers.rst:3998
 msgid "Control-Flow Graphs."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3986
+#: ../../../analyzer/checkers.rst:4003
 msgid "debug.DumpCallGraph"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3987
+#: ../../../analyzer/checkers.rst:4004
 msgid "Display Call Graph."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3992
+#: ../../../analyzer/checkers.rst:4009
 msgid "debug.DumpCalls"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3993
+#: ../../../analyzer/checkers.rst:4010
 msgid "Print calls as they are traversed by the engine."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3998
+#: ../../../analyzer/checkers.rst:4015
 msgid "debug.DumpDominators"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:3999
+#: ../../../analyzer/checkers.rst:4016
 msgid "Print the dominance tree for a given CFG."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4004
+#: ../../../analyzer/checkers.rst:4021
 msgid "debug.DumpLiveVars"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4005
+#: ../../../analyzer/checkers.rst:4022
 msgid "Print results of live variable analysis."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4010
+#: ../../../analyzer/checkers.rst:4027
 msgid "debug.DumpTraversal"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4011
+#: ../../../analyzer/checkers.rst:4028
 msgid "Print branch conditions as they are traversed by the engine."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4016
+#: ../../../analyzer/checkers.rst:4033
 msgid "debug.ExprInspection"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4017
+#: ../../../analyzer/checkers.rst:4034
 msgid "Check the analyzer's understanding of expressions."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4022
+#: ../../../analyzer/checkers.rst:4039
 msgid "debug.Stats"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4023
+#: ../../../analyzer/checkers.rst:4040
 msgid "Emit warnings with analyzer statistics."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4028
+#: ../../../analyzer/checkers.rst:4045
 msgid "debug.TaintTest"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4029
+#: ../../../analyzer/checkers.rst:4046
 msgid "Mark tainted symbols as such."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4034
+#: ../../../analyzer/checkers.rst:4051
 msgid "debug.ViewCFG"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4035
+#: ../../../analyzer/checkers.rst:4052
 msgid "View Control-Flow Graphs using GraphViz."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4040
+#: ../../../analyzer/checkers.rst:4057
 msgid "debug.ViewCallGraph"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4041
+#: ../../../analyzer/checkers.rst:4058
 msgid "View Call Graph using GraphViz."
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4046
+#: ../../../analyzer/checkers.rst:4063
 msgid "debug.ViewExplodedGraph"
 msgstr ""
 
-#: ../../../analyzer/checkers.rst:4047
+#: ../../../analyzer/checkers.rst:4064
 msgid "View Exploded Graphs using GraphViz."
 msgstr ""

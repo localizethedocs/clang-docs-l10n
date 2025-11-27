@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2025-11-24 08:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,9 +51,9 @@ msgstr ""
 
 #: ../../../TypeSanitizer.rst:23
 msgid ""
-"As TypeSanitizer is still experimental, it can currently have a large impact "
-"on runtime speed, memory use, and code size. It also has a large compile-"
-"time overhead. Work is being done to reduce these impacts."
+"Typical memory overhead introduced by TypeSanitizer is about **8x**. Runtime "
+"slowdown varies greatly depending on how often the instrumented code relies "
+"on type aliasing. In the best case slowdown is **2x-3x**."
 msgstr ""
 
 #: ../../../TypeSanitizer.rst:28
@@ -193,21 +193,35 @@ msgid "Sanitizer features"
 msgstr ""
 
 #: ../../../TypeSanitizer.rst:132
-msgid "``__has_feature(type_sanitizer)``"
+msgid "Instrumentation code inlining"
 msgstr ""
 
 #: ../../../TypeSanitizer.rst:134
+msgid ""
+"By default TypeSanitizer inserts instrumentation through function calls. "
+"This may lead to a reduction in runtime performance. ``-fno-sanitize-type-"
+"outline-instrumentation`` (default: ``false``) forces all code "
+"instrumentation to be inlined. This will increase the size of the generated "
+"code and compiler overhead, but may improve the runtime performance of the "
+"resulting code."
+msgstr ""
+
+#: ../../../TypeSanitizer.rst:140
+msgid "``__has_feature(type_sanitizer)``"
+msgstr ""
+
+#: ../../../TypeSanitizer.rst:142
 msgid ""
 "In some cases one may need to execute different code depending on whether "
 "TypeSanitizer is enabled. :ref:`\\_\\_has\\_feature <langext-__has_feature-"
 "__has_extension>` can be used for this purpose."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:148
+#: ../../../TypeSanitizer.rst:156
 msgid "``__attribute__((no_sanitize(\"type\")))``"
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:150
+#: ../../../TypeSanitizer.rst:158
 msgid ""
 "Some code you may not want to be instrumented by TypeSanitizer.  One may use "
 "the function attribute ``no_sanitize(\"type\")`` to disable instrumenting "
@@ -217,11 +231,11 @@ msgid ""
 "together with ``__has_feature(type_sanitizer)``."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:157
+#: ../../../TypeSanitizer.rst:165
 msgid "``__attribute__((disable_sanitizer_instrumentation))``"
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:159
+#: ../../../TypeSanitizer.rst:167
 msgid ""
 "The ``disable_sanitizer_instrumentation`` attribute can be applied to "
 "functions to prevent all kinds of instrumentation. As a result, it may "
@@ -231,11 +245,11 @@ msgid ""
 "This attribute overrides ``no_sanitize(\"type\")``."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:167
+#: ../../../TypeSanitizer.rst:175
 msgid "Ignorelist"
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:169
+#: ../../../TypeSanitizer.rst:177
 msgid ""
 "TypeSanitizer supports ``src`` and ``fun`` entity types in :doc:"
 "`SanitizerSpecialCaseList`, that can be used to suppress aliasing violation "
@@ -244,37 +258,29 @@ msgid ""
 "negatives."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:176
+#: ../../../TypeSanitizer.rst:184
 msgid "Limitations"
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:178
+#: ../../../TypeSanitizer.rst:186
 msgid ""
 "TypeSanitizer uses more real memory than a native run. It uses 8 bytes of "
 "shadow memory for each byte of user memory."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:180
+#: ../../../TypeSanitizer.rst:188
 msgid ""
 "There are transformation passes which run before TypeSanitizer. If these "
 "passes optimize out an aliasing violation, TypeSanitizer cannot catch it."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:182
-msgid ""
-"Currently, all instrumentation is inlined. This can result in a **15x** (on "
-"average) increase in generated file size, and **3x** to **7x** increase in "
-"compile time. In some documented cases this can cause the compiler to hang. "
-"There are plans to improve this in the future."
-msgstr ""
-
-#: ../../../TypeSanitizer.rst:186
+#: ../../../TypeSanitizer.rst:190
 msgid ""
 "Codebases that use unions and struct-initialized variables can see incorrect "
 "results, as TypeSanitizer doesn't yet instrument these reliably."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:188
+#: ../../../TypeSanitizer.rst:192
 msgid ""
 "Since Clang & LLVM's TBAA system is used to generate the checks used by the "
 "instrumentation, TypeSanitizer follows Clang & LLVM's rules for type "
@@ -283,24 +289,24 @@ msgid ""
 "violations that would cause bugs when compiling with Clang & LLVM."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:193
+#: ../../../TypeSanitizer.rst:197
 msgid ""
 "TypeSanitizer cannot currently be run alongside other sanitizers such as "
 "AddressSanitizer, ThreadSanitizer or UndefinedBehaviourSanitizer."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:197
+#: ../../../TypeSanitizer.rst:201
 msgid "Current Status"
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:199
+#: ../../../TypeSanitizer.rst:203
 msgid ""
 "TypeSanitizer is brand new, and still in development. There are some known "
 "issues, especially in areas where Clang's emitted TBAA data isn't extensive "
 "enough for TypeSanitizer's runtime."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:203
+#: ../../../TypeSanitizer.rst:207
 msgid ""
 "We are actively working on enhancing the tool --- stay tuned.  Any help, "
 "issues, pull requests, ideas, is more than welcome. You can find the `issue "
