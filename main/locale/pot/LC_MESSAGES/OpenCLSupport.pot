@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2025-11-24 08:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,7 +53,7 @@ msgid ""
 "Details about usage of clang for OpenCL can be found in :doc:`UsersManual`."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:31 ../../../OpenCLSupport.rst:327
+#: ../../../OpenCLSupport.rst:31 ../../../OpenCLSupport.rst:321
 msgid "Missing features or with limited support"
 msgstr ""
 
@@ -187,7 +187,7 @@ msgid ""
 "if full functionality is required."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:134 ../../../OpenCLSupport.rst:435
+#: ../../../OpenCLSupport.rst:134 ../../../OpenCLSupport.rst:429
 msgid "**Example of Use**:"
 msgstr ""
 
@@ -309,9 +309,9 @@ msgstr ""
 
 #: ../../../OpenCLSupport.rst:220
 msgid ""
-"If an extension modifies the standard parsing it needs to be added to the "
-"clang frontend source code. This also means that the associated macro "
-"indicating the presence of the extension should be added to clang."
+"If a new extension is added it needs to be added to the clang frontend "
+"source code. This also means that the associated macro indicating the "
+"presence of the extension should be added to clang."
 msgstr ""
 
 #: ../../../OpenCLSupport.rst:224
@@ -349,7 +349,7 @@ msgstr ""
 #: ../../../OpenCLSupport.rst:244
 msgid ""
 "If an extension adds functionality that does not modify standard language "
-"parsing it should not require modifying anything other than header files and "
+"parsing it may not require modifying anything other than header files and "
 "``OpenCLBuiltins.td`` detailed in :ref:`OpenCL builtins <opencl_builtins>`. "
 "Most commonly such extensions add functionality via libraries (by adding non-"
 "native types or functions) parsed regularly. Similar to other languages this "
@@ -360,22 +360,14 @@ msgstr ""
 msgid ""
 "Clang has standard headers where new types and functions are being added, "
 "for more details refer to :ref:`the section on the OpenCL Header "
-"<opencl_header>`. The macros indicating the presence of such extensions can "
-"be added in the standard header files conditioned on target specific "
-"predefined macros or/and language version predefined macros (see `feature/"
-"extension preprocessor macros defined in opencl-c-base.h <https://github.com/"
-"llvm/llvm-project/blob/main/clang/lib/Headers/opencl-c-base.h>`__)."
+"<opencl_header>`. **Pragmas**"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:260
-msgid "**Pragmas**"
-msgstr ""
-
-#: ../../../OpenCLSupport.rst:262
+#: ../../../OpenCLSupport.rst:256
 msgid "Some extensions alter standard parsing dynamically via pragmas."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:264
+#: ../../../OpenCLSupport.rst:258
 msgid ""
 "Clang provides a mechanism to add the standard extension pragma ``OPENCL "
 "EXTENSION`` by setting a dedicated flag in the extension list entry of "
@@ -385,7 +377,7 @@ msgid ""
 "there is no default functionality provided by clang."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:271
+#: ../../../OpenCLSupport.rst:265
 msgid ""
 "Pragmas without detailed information of their behavior (e.g. an explanation "
 "of changes it triggers in the parsing) should not be added to clang. "
@@ -394,7 +386,7 @@ msgid ""
 "redundant i.e. cannot be achieved using existing features."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:277
+#: ../../../OpenCLSupport.rst:271
 msgid ""
 "Note that some legacy extensions (published prior to OpenCL 3.0) still "
 "provide some non-conformant functionality for pragmas e.g. add diagnostics "
@@ -403,11 +395,11 @@ msgid ""
 "backward compatibility."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:286
+#: ../../../OpenCLSupport.rst:280
 msgid "Address spaces attribute"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:288
+#: ../../../OpenCLSupport.rst:282
 msgid ""
 "Clang has arbitrary address space support using the ``address_space(N)`` "
 "attribute, where ``N`` is an integer number in the range specified in the "
@@ -416,7 +408,7 @@ msgid ""
 "address spaces the behavior is not governed by OpenCL specification."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:294
+#: ../../../OpenCLSupport.rst:288
 msgid ""
 "An OpenCL implementation provides a list of standard address spaces using "
 "keywords: ``private``, ``local``, ``global``, and ``generic``. In the AST "
@@ -433,44 +425,44 @@ msgid ""
 "logical and target address spaces is specified in the Clang's source code."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:312
+#: ../../../OpenCLSupport.rst:306
 msgid "C++ for OpenCL Implementation Status"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:314
+#: ../../../OpenCLSupport.rst:308
 msgid ""
 "Clang implements language versions 1.0 and 2021 published in `the official "
 "release of C++ for OpenCL Documentation <https://github.com/KhronosGroup/"
 "OpenCL-Docs/releases/tag/cxxforopencl-docrev2021.12>`_."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:318
+#: ../../../OpenCLSupport.rst:312
 msgid ""
 "Limited support of experimental C++ libraries is described in the :ref:"
 "`experimental features <opencl_experimenal>`."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:320
+#: ../../../OpenCLSupport.rst:314
 msgid ""
 "GitHub issues for this functionality are typically prefixed with '[C+"
 "+4OpenCL]' - click `here <https://github.com/llvm/llvm-project/issues?"
 "q=is%3Aissue+is%3Aopen+%5BC%2B%2B4OpenCL%5D>`__ to view the full bug list."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:329
+#: ../../../OpenCLSupport.rst:323
 msgid ""
 "Support of C++ for OpenCL 2021 is currently in experimental phase. Refer to :"
 "ref:`OpenCL 3.0 status <opencl_300>` for details of common missing "
 "functionality from OpenCL 3.0."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:333
+#: ../../../OpenCLSupport.rst:327
 msgid ""
 "IR generation for non-trivial global destructors is incomplete (See: "
 "`PR48047 <https://llvm.org/PR48047>`_)."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:336
+#: ../../../OpenCLSupport.rst:330
 msgid ""
 "Support of `destructors with non-default address spaces <https://www.khronos."
 "org/opencl/assets/CXX_for_OpenCL."
@@ -478,11 +470,11 @@ msgid ""
 "`D109609 <https://reviews.llvm.org/D109609>`_)."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:343
+#: ../../../OpenCLSupport.rst:337
 msgid "OpenCL C 3.0 Usage"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:345
+#: ../../../OpenCLSupport.rst:339
 msgid ""
 "OpenCL C 3.0 language standard makes most OpenCL C 2.0 features optional. "
 "Optional functionality in OpenCL C 3.0 is indicated with the presence of "
@@ -492,45 +484,77 @@ msgid ""
 "override features supported by a target."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:350
+#: ../../../OpenCLSupport.rst:344
 msgid ""
 "For cases when there is an associated extension for a specific feature (fp64 "
 "and 3d image writes) user should specify both (extension and feature) in "
 "command-line flag:"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:361
+#: ../../../OpenCLSupport.rst:355
 msgid "OpenCL C 3.0 Implementation Status"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:363
+#: ../../../OpenCLSupport.rst:357
 msgid ""
 "The following table provides an overview of features in OpenCL C 3.0 and "
 "their implementation status."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:367
+#: ../../../OpenCLSupport.rst:361
 msgid "Category"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:367
+#: ../../../OpenCLSupport.rst:361
 msgid "Feature"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:367
+#: ../../../OpenCLSupport.rst:361
 msgid "Status"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:367
+#: ../../../OpenCLSupport.rst:361
 msgid "Reviews"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:369
+#: ../../../OpenCLSupport.rst:363
 msgid "Command line interface"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:369
+#: ../../../OpenCLSupport.rst:363
 msgid "New value for ``-cl-std`` flag"
+msgstr ""
+
+#: ../../../OpenCLSupport.rst:363 ../../../OpenCLSupport.rst:365
+#: ../../../OpenCLSupport.rst:367 ../../../OpenCLSupport.rst:369
+#: ../../../OpenCLSupport.rst:371 ../../../OpenCLSupport.rst:373
+#: ../../../OpenCLSupport.rst:375 ../../../OpenCLSupport.rst:377
+#: ../../../OpenCLSupport.rst:379 ../../../OpenCLSupport.rst:381
+#: ../../../OpenCLSupport.rst:383 ../../../OpenCLSupport.rst:385
+#: ../../../OpenCLSupport.rst:387 ../../../OpenCLSupport.rst:389
+#: ../../../OpenCLSupport.rst:391 ../../../OpenCLSupport.rst:393
+#: ../../../OpenCLSupport.rst:395
+msgid ":good:`done`"
+msgstr ""
+
+#: ../../../OpenCLSupport.rst:363 ../../../OpenCLSupport.rst:365
+msgid "https://reviews.llvm.org/D88300"
+msgstr ""
+
+#: ../../../OpenCLSupport.rst:365 ../../../OpenCLSupport.rst:367
+msgid "Predefined macros"
+msgstr ""
+
+#: ../../../OpenCLSupport.rst:365
+msgid "New version macro"
+msgstr ""
+
+#: ../../../OpenCLSupport.rst:367
+msgid "Feature macros"
+msgstr ""
+
+#: ../../../OpenCLSupport.rst:367
+msgid "https://reviews.llvm.org/D95776"
 msgstr ""
 
 #: ../../../OpenCLSupport.rst:369 ../../../OpenCLSupport.rst:371
@@ -538,170 +562,138 @@ msgstr ""
 #: ../../../OpenCLSupport.rst:377 ../../../OpenCLSupport.rst:379
 #: ../../../OpenCLSupport.rst:381 ../../../OpenCLSupport.rst:383
 #: ../../../OpenCLSupport.rst:385 ../../../OpenCLSupport.rst:387
-#: ../../../OpenCLSupport.rst:389 ../../../OpenCLSupport.rst:391
-#: ../../../OpenCLSupport.rst:393 ../../../OpenCLSupport.rst:395
-#: ../../../OpenCLSupport.rst:397 ../../../OpenCLSupport.rst:399
-#: ../../../OpenCLSupport.rst:401
-msgid ":good:`done`"
-msgstr ""
-
-#: ../../../OpenCLSupport.rst:369 ../../../OpenCLSupport.rst:371
-msgid "https://reviews.llvm.org/D88300"
-msgstr ""
-
-#: ../../../OpenCLSupport.rst:371 ../../../OpenCLSupport.rst:373
-msgid "Predefined macros"
-msgstr ""
-
-#: ../../../OpenCLSupport.rst:371
-msgid "New version macro"
-msgstr ""
-
-#: ../../../OpenCLSupport.rst:373
-msgid "Feature macros"
-msgstr ""
-
-#: ../../../OpenCLSupport.rst:373
-msgid "https://reviews.llvm.org/D95776"
-msgstr ""
-
-#: ../../../OpenCLSupport.rst:375 ../../../OpenCLSupport.rst:377
-#: ../../../OpenCLSupport.rst:379 ../../../OpenCLSupport.rst:381
-#: ../../../OpenCLSupport.rst:383 ../../../OpenCLSupport.rst:385
-#: ../../../OpenCLSupport.rst:387 ../../../OpenCLSupport.rst:389
-#: ../../../OpenCLSupport.rst:391 ../../../OpenCLSupport.rst:393
-#: ../../../OpenCLSupport.rst:395
+#: ../../../OpenCLSupport.rst:389
 msgid "Feature optionality"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:375
+#: ../../../OpenCLSupport.rst:369
 msgid "Generic address space"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:375
+#: ../../../OpenCLSupport.rst:369
 msgid "https://reviews.llvm.org/D95778 and https://reviews.llvm.org/D103401"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:377
+#: ../../../OpenCLSupport.rst:371
 msgid "Builtin function overloads with generic address space"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:377
+#: ../../../OpenCLSupport.rst:371
 msgid "https://reviews.llvm.org/D105526, https://reviews.llvm.org/D107769"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:379
+#: ../../../OpenCLSupport.rst:373
 msgid "Program scope variables in global memory"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:379
+#: ../../../OpenCLSupport.rst:373
 msgid "https://reviews.llvm.org/D103191"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:381
+#: ../../../OpenCLSupport.rst:375
 msgid "3D image writes including builtin functions"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:381
+#: ../../../OpenCLSupport.rst:375
 msgid "https://reviews.llvm.org/D106260 (frontend)"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:383
+#: ../../../OpenCLSupport.rst:377
 msgid "read_write images including builtin functions"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:383
+#: ../../../OpenCLSupport.rst:377
 msgid ""
 "https://reviews.llvm.org/D104915 (frontend) and https://reviews.llvm.org/"
 "D107539, https://reviews.llvm.org/D117899 (functions)"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:385
+#: ../../../OpenCLSupport.rst:379
 msgid "C11 atomics memory scopes, ordering and builtin function"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:385
+#: ../../../OpenCLSupport.rst:379
 msgid "https://reviews.llvm.org/D106111, https://reviews.llvm.org/D119420"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:387
+#: ../../../OpenCLSupport.rst:381
 msgid "Blocks and Device-side kernel enqueue including builtin functions"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:387
+#: ../../../OpenCLSupport.rst:381
 msgid "https://reviews.llvm.org/D115640, https://reviews.llvm.org/D118605"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:389
+#: ../../../OpenCLSupport.rst:383
 msgid "Pipes including builtin functions"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:389
+#: ../../../OpenCLSupport.rst:383
 msgid ""
 "https://reviews.llvm.org/D107154 (frontend) and https://reviews.llvm.org/"
 "D105858 (functions)"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:391
+#: ../../../OpenCLSupport.rst:385
 msgid "Work group collective builtin functions"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:391
+#: ../../../OpenCLSupport.rst:385
 msgid "https://reviews.llvm.org/D105858"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:393
+#: ../../../OpenCLSupport.rst:387
 msgid "Image types and builtin functions"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:393
+#: ../../../OpenCLSupport.rst:387
 msgid ""
 "https://reviews.llvm.org/D103911 (frontend) and https://reviews.llvm.org/"
 "D107539 (functions)"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:395
+#: ../../../OpenCLSupport.rst:389
 msgid "Double precision floating point type"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:395
+#: ../../../OpenCLSupport.rst:389
 msgid "https://reviews.llvm.org/D96524"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:397 ../../../OpenCLSupport.rst:399
-#: ../../../OpenCLSupport.rst:401
+#: ../../../OpenCLSupport.rst:391 ../../../OpenCLSupport.rst:393
+#: ../../../OpenCLSupport.rst:395
 msgid "New functionality"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:397
+#: ../../../OpenCLSupport.rst:391
 msgid "RGBA vector components"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:397
+#: ../../../OpenCLSupport.rst:391
 msgid "https://reviews.llvm.org/D99969"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:399
+#: ../../../OpenCLSupport.rst:393
 msgid "Subgroup functions"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:399
+#: ../../../OpenCLSupport.rst:393
 msgid "https://reviews.llvm.org/D105858, https://reviews.llvm.org/D118999"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:401
+#: ../../../OpenCLSupport.rst:395
 msgid "Atomic mem scopes: subgroup, all devices including functions"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:401
+#: ../../../OpenCLSupport.rst:395
 msgid "https://reviews.llvm.org/D103241"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:407
+#: ../../../OpenCLSupport.rst:401
 msgid "Experimental features"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:409
+#: ../../../OpenCLSupport.rst:403
 msgid ""
 "Clang provides the following new WIP features for the developers to "
 "experiment and provide early feedback or contribute with further "
@@ -710,17 +702,17 @@ msgid ""
 "GitHub issue <https://github.com/llvm/llvm-project/issues/new>`_."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:418
+#: ../../../OpenCLSupport.rst:412
 msgid "C++ libraries for OpenCL"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:420
+#: ../../../OpenCLSupport.rst:414
 msgid ""
 "There is ongoing work to support C++ standard libraries from `LLVM's libcxx "
 "<https://libcxx.llvm.org/>`_ in OpenCL kernel code using C++ for OpenCL mode."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:423
+#: ../../../OpenCLSupport.rst:417
 msgid ""
 "It is currently possible to include `type_traits` from C++17 in the kernel "
 "sources when the following clang extensions are enabled "
@@ -735,22 +727,22 @@ msgid ""
 "include."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:437
+#: ../../../OpenCLSupport.rst:431
 msgid "The example of kernel code with `type_traits` is illustrated here."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:453
+#: ../../../OpenCLSupport.rst:447
 msgid "The possible clang invocation to compile the example is as follows:"
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:459
+#: ../../../OpenCLSupport.rst:453
 msgid ""
 "Note that `type_traits` is a header only library and therefore no extra "
 "linking step against the standard libraries is required. See full example in "
 "`Compiler Explorer <https://godbolt.org/z/5WbnTfb65>`_."
 msgstr ""
 
-#: ../../../OpenCLSupport.rst:463
+#: ../../../OpenCLSupport.rst:457
 msgid ""
 "More OpenCL specific C++ library implementations built on top of libcxx are "
 "available in `libclcxx <https://github.com/KhronosGroup/libclcxx>`_ project."
