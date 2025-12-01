@@ -1,8 +1,8 @@
 <div align="center">
-<h1 id="localization-of-clang-documentation">Localization of Clang Documentation</h1>
+<h1 id="localization-of-clang-documentation">Clang 文档的本地化</h1>
 </div>
 
-<details><summary><strong>Switch Languages</strong></summary>
+<details><summary><strong>切换语言</strong></summary>
 <p></p>
 <ul>
   <li><a href="./README.md"><code>en_US</code> : English</a></li>
@@ -219,7 +219,7 @@ The goal of this project is to translate the Clang Documentation into multiple l
 </table>
 </div>
 
-<h2 id="progress-of-translations"><a href="#table-of-contents">Progress of Translations</a></h2>
+<h2 id="progress-of-translations"><a href="#table-of-contents">翻译进度</a></h2>
 
 <div align="center">
 <table>
@@ -431,7 +431,7 @@ Alternatively, you can sponsor the maintainers directly through the following pl
     <!-- Row 1 -->
     <tr>
       <th rowspan="1" colspan="1" align="center" style="text-align: center; width: 50%;"><div>Patreon</div></th>
-      <th rowspan="1" colspan="1" align="center" style="text-align: center; width: 50%;"><div>Afdian</div></th>
+      <th rowspan="1" colspan="1" align="center" style="text-align: center; width: 50%;"><div>爱发电</div></th>
     </tr>
     <!-- Row 2 -->
     <tr>
