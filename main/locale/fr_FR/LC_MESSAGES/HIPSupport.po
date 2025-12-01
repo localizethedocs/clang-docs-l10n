@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-03 08:19+0000\n"
+"POT-Creation-Date: 2025-12-01 08:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -89,7 +89,8 @@ msgid ""
 "unmodified HIP code."
 msgstr ""
 
-#: ../../../HIPSupport.rst:50 ../../../HIPSupport.rst:266
+#: ../../../HIPSupport.rst:50 ../../../HIPSupport.rst:355
+#: ../../../HIPSupport.rst:389
 msgid "Example Usage"
 msgstr ""
 
@@ -194,7 +195,7 @@ msgid "Environment Variable"
 msgstr ""
 
 #: ../../../HIPSupport.rst:125 ../../../HIPSupport.rst:152
-#: ../../../HIPSupport.rst:518
+#: ../../../HIPSupport.rst:644
 msgid "Description"
 msgstr ""
 
@@ -254,11 +255,11 @@ msgid ""
 "dependencies that might cause issues in the long run. Use them with caution."
 msgstr ""
 
-#: ../../../HIPSupport.rst:146 ../../../HIPSupport.rst:512
+#: ../../../HIPSupport.rst:146 ../../../HIPSupport.rst:638
 msgid "Predefined Macros"
 msgstr ""
 
-#: ../../../HIPSupport.rst:151 ../../../HIPSupport.rst:517
+#: ../../../HIPSupport.rst:151 ../../../HIPSupport.rst:643
 msgid "Macro"
 msgstr ""
 
@@ -461,10 +462,160 @@ msgid ""
 msgstr ""
 
 #: ../../../HIPSupport.rst:214
-msgid "Syntax Difference with CUDA"
+msgid "HIP Fat Binary Registration and Unregistration"
 msgstr ""
 
 #: ../../../HIPSupport.rst:216
+msgid ""
+"When compiling HIP for AMD GPUs, Clang embeds device code into HIP \"fat "
+"binaries\" and generates host-side helper functions that register these fat "
+"binaries with the HIP runtime at program start and unregister them at "
+"program exit. In non-RDC mode (``-fno-gpu-rdc``), each compilation unit "
+"typically produces its own HIP fat binary: a container that holds, for every "
+"enabled GPU architecture, a fully linked offloading device image (for "
+"example, a GPU code object) that can be loaded directly by the HIP runtime. "
+"In RDC mode (``-fgpu-rdc``), each compilation unit contributes device code "
+"in a relocatable form (for example, GPU object files or LLVM IR). A later "
+"device-link step links those relocatable inputs into fully linked device "
+"images per GPU architecture and then packages those images into a HIP fat "
+"binary container."
+msgstr ""
+
+#: ../../../HIPSupport.rst:228
+msgid ""
+"Registering a HIP fat binary allows the runtime to discover the kernels and "
+"device variables defined in that container and to associate host-side "
+"addresses and symbols with the corresponding GPU-side entities. For example, "
+"when a host-side kernel launch stub is called, the HIP runtime uses "
+"information established during registration (and the fat binary handle it "
+"returned) to identify which GPU kernel symbol to launch from which device "
+"image."
+msgstr ""
+
+#: ../../../HIPSupport.rst:235
+msgid ""
+"At the LLVM IR level, Clang/LLVM typically create an internal module "
+"constructor (for example ``__hip_module_ctor`` or a ``.hip.fatbin_reg`` "
+"function) and add it to ``@llvm.global_ctors``. This constructor is called "
+"by the C runtime before ``main`` and it:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:240
+msgid ""
+"calls ``__hipRegisterFatBinary`` with a pointer to an internal wrapper "
+"object that describes the HIP fat binary;"
+msgstr ""
+
+#: ../../../HIPSupport.rst:242
+msgid "stores the returned handle in an internal global variable;"
+msgstr ""
+
+#: ../../../HIPSupport.rst:243
+msgid ""
+"calls an internal helper such as ``__hip_register_globals`` to register "
+"kernels, device variables and other metadata associated with the fat binary;"
+msgstr ""
+
+#: ../../../HIPSupport.rst:245
+msgid ""
+"registers a corresponding module destructor with ``atexit`` so it will run "
+"during program termination and use the stored handle to unregister the fat "
+"binary from the HIP runtime."
+msgstr ""
+
+#: ../../../HIPSupport.rst:249
+msgid ""
+"The module destructor (for example ``__hip_module_dtor`` or a ``.hip."
+"fatbin_unreg`` function) loads the stored handle, checks that it is non-"
+"null, calls ``__hipUnregisterFatBinary`` to unregister the fat binary from "
+"the HIP runtime, and then clears the handle. This ensures that the HIP "
+"runtime sees each fat binary registered exactly once and that it is "
+"unregistered once at exit, even when multiple translation units contribute "
+"HIP kernels to the same host program."
+msgstr ""
+
+#: ../../../HIPSupport.rst:257
+msgid ""
+"These registration/unregistration helpers are implementation details of "
+"Clang's HIP code generation; user code should not call "
+"``__hipRegisterFatBinary`` or ``__hipUnregisterFatBinary`` directly."
+msgstr ""
+
+#: ../../../HIPSupport.rst:262
+msgid "Implications for HIP Application Developers"
+msgstr ""
+
+#: ../../../HIPSupport.rst:264
+msgid ""
+"From the point of view of HIP application code, Clang and the HIP runtime "
+"provide the following guarantees:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:267
+msgid ""
+"Kernels and device variables defined in HIP code will be registered with the "
+"HIP runtime before ``main`` begins execution."
+msgstr ""
+
+#: ../../../HIPSupport.rst:269
+msgid ""
+"Fat binaries will be unregistered via an ``atexit``-registered module "
+"destructor after ``main`` returns (or after ``exit`` is called)."
+msgstr ""
+
+#: ../../../HIPSupport.rst:272
+msgid ""
+"Beyond these points, the detailed ordering of fat binary registration and "
+"unregistration relative to user-defined global constructors, destructors and "
+"other ``atexit`` handlers is not specified and should not be relied upon. "
+"Applications should avoid depending on HIP kernels or device variables being "
+"usable from global constructors or destructors, and instead perform HIP "
+"initialization and teardown that touches device state in ``main`` (or in "
+"functions called from ``main``)."
+msgstr ""
+
+#: ../../../HIPSupport.rst:281
+msgid "Implications for HIP Runtime Developers"
+msgstr ""
+
+#: ../../../HIPSupport.rst:283
+msgid ""
+"HIP runtime implementations that are linked with Clang-generated host code "
+"must handle registration and unregistration in the presence of uncertain "
+"global ctor/dtor ordering:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:287
+msgid ""
+"``__hipRegisterFatBinary`` must accept a pointer to the compiler-generated "
+"wrapper object and return an opaque handle that remains valid for as long as "
+"the fat binary may be used."
+msgstr ""
+
+#: ../../../HIPSupport.rst:290
+msgid ""
+"``__hipUnregisterFatBinary`` must accept the handle previously returned by "
+"``__hipRegisterFatBinary`` and perform any necessary cleanup. It may be "
+"called late in process teardown, after other parts of the runtime have "
+"started shutting down, so it should be robust in the presence of partially "
+"torn-down state."
+msgstr ""
+
+#: ../../../HIPSupport.rst:295
+msgid ""
+"Runtimes should use appropriate synchronization and guards so that fat "
+"binary registration does not observe uninitialized resources and "
+"unregistration does not release resources that are still required by other "
+"runtime components. In particular, registration and unregistration routines "
+"should be written to be safe under repeated calls and in the presence of "
+"concurrent or overlapping initialization/teardown logic."
+msgstr ""
+
+#: ../../../HIPSupport.rst:303
+msgid "Syntax Difference with CUDA"
+msgstr ""
+
+#: ../../../HIPSupport.rst:305
 msgid ""
 "Clang's front end, used for both CUDA and HIP programming models, shares the "
 "same parsing and semantic analysis mechanisms. This includes the resolution "
@@ -476,24 +627,24 @@ msgid ""
 "compilation."
 msgstr ""
 
-#: ../../../HIPSupport.rst:219
+#: ../../../HIPSupport.rst:308
 msgid "Predefined Macros for Differentiation"
 msgstr ""
 
-#: ../../../HIPSupport.rst:221
+#: ../../../HIPSupport.rst:310
 msgid ""
 "To facilitate differentiation between HIP and CUDA code, as well as between "
 "device and host compilations within HIP, Clang defines specific macros:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:223
+#: ../../../HIPSupport.rst:312
 msgid ""
 "``__HIP__`` : This macro is defined only when compiling HIP code. It can be "
 "used to conditionally compile code specific to HIP, enabling developers to "
 "write portable code that can be compiled for both CUDA and HIP."
 msgstr ""
 
-#: ../../../HIPSupport.rst:225
+#: ../../../HIPSupport.rst:314
 msgid ""
 "``__HIP_DEVICE_COMPILE__`` : Defined exclusively during HIP device "
 "compilation, this macro allows for conditional compilation of device-"
@@ -502,51 +653,51 @@ msgid ""
 "environments."
 msgstr ""
 
-#: ../../../HIPSupport.rst:228
+#: ../../../HIPSupport.rst:317
 msgid "Function Pointers Support"
 msgstr ""
 
-#: ../../../HIPSupport.rst:230
+#: ../../../HIPSupport.rst:319
 msgid ""
 "Function pointers' support varies with the usage mode in Clang with HIP. The "
 "following table provides an overview of the support status across different "
 "use-cases and modes."
 msgstr ""
 
-#: ../../../HIPSupport.rst:232
+#: ../../../HIPSupport.rst:321
 msgid "Function Pointers Support Overview"
 msgstr ""
 
-#: ../../../HIPSupport.rst:236
+#: ../../../HIPSupport.rst:325
 msgid "Use Case"
 msgstr ""
 
-#: ../../../HIPSupport.rst:237
+#: ../../../HIPSupport.rst:326
 msgid "``-fno-gpu-rdc`` Mode (default)"
 msgstr ""
 
-#: ../../../HIPSupport.rst:238
+#: ../../../HIPSupport.rst:327
 msgid "``-fgpu-rdc`` Mode"
 msgstr ""
 
-#: ../../../HIPSupport.rst:239
+#: ../../../HIPSupport.rst:328
 msgid "Defined and used in the same TU"
 msgstr ""
 
-#: ../../../HIPSupport.rst:240 ../../../HIPSupport.rst:241
-#: ../../../HIPSupport.rst:244
+#: ../../../HIPSupport.rst:329 ../../../HIPSupport.rst:330
+#: ../../../HIPSupport.rst:333
 msgid "Supported"
 msgstr ""
 
-#: ../../../HIPSupport.rst:242
+#: ../../../HIPSupport.rst:331
 msgid "Defined in one TU and used in another TU"
 msgstr ""
 
-#: ../../../HIPSupport.rst:243
+#: ../../../HIPSupport.rst:332
 msgid "Not Supported"
 msgstr ""
 
-#: ../../../HIPSupport.rst:246
+#: ../../../HIPSupport.rst:335
 msgid ""
 "In the ``-fno-gpu-rdc`` mode, the compiler calculates the resource usage of "
 "kernels based only on functions present within the same TU. This mode does "
@@ -555,45 +706,45 @@ msgid ""
 "undefined behavior."
 msgstr ""
 
-#: ../../../HIPSupport.rst:248
+#: ../../../HIPSupport.rst:337
 msgid ""
 "On the other hand, the ``-fgpu-rdc`` mode allows the definition and use of "
 "function pointers across different TUs, as resource usage calculations can "
 "accommodate functions from disparate TUs."
 msgstr ""
 
-#: ../../../HIPSupport.rst:251
+#: ../../../HIPSupport.rst:340
 msgid "Virtual Function Support"
 msgstr ""
 
-#: ../../../HIPSupport.rst:253
+#: ../../../HIPSupport.rst:342
 msgid ""
 "In Clang with HIP, support for calling virtual functions of an object in "
 "device or host code is contingent on where the object is constructed."
 msgstr ""
 
-#: ../../../HIPSupport.rst:255
+#: ../../../HIPSupport.rst:344
 msgid ""
 "**Constructed in Device Code**: Virtual functions of an object can be called "
 "in device code on a specific offloading device if the object is constructed "
 "in device code on an offloading device with the same architecture."
 msgstr ""
 
-#: ../../../HIPSupport.rst:256
+#: ../../../HIPSupport.rst:345
 msgid ""
 "**Constructed in Host Code**: Virtual functions of an object can be called "
 "in host code if the object is constructed in host code."
 msgstr ""
 
-#: ../../../HIPSupport.rst:258
+#: ../../../HIPSupport.rst:347
 msgid "In other scenarios, calling virtual functions is not allowed."
 msgstr ""
 
-#: ../../../HIPSupport.rst:261
+#: ../../../HIPSupport.rst:350
 msgid "Explanation"
 msgstr ""
 
-#: ../../../HIPSupport.rst:263
+#: ../../../HIPSupport.rst:352
 msgid ""
 "An object constructed on the device side contains a pointer to the virtual "
 "function table on the device side, which is not accessible in host code, and "
@@ -606,11 +757,46 @@ msgid ""
 "disallowed."
 msgstr ""
 
-#: ../../../HIPSupport.rst:291
+#: ../../../HIPSupport.rst:380
+msgid "Alias Attribute Support"
+msgstr ""
+
+#: ../../../HIPSupport.rst:386
+msgid ""
+"Clang supports alias attributes in HIP code, allowing creation of "
+"alternative names for functions and variables."
+msgstr ""
+
+#: ../../../HIPSupport.rst:383
+msgid ""
+"Aliases work with ``__host__``, ``__device__``, and ``__host__ __device__`` "
+"functions and variables."
+msgstr ""
+
+#: ../../../HIPSupport.rst:384
+msgid ""
+"The alias attribute uses the syntax "
+"``__attribute__((alias(\"target_name\")))``. Both weak and strong aliases "
+"are supported."
+msgstr ""
+
+#: ../../../HIPSupport.rst:385
+msgid ""
+"Outside of ``extern \"C\"``, the alias target must use the mangled name of "
+"the aliasee"
+msgstr ""
+
+#: ../../../HIPSupport.rst:386
+msgid ""
+"The alias is only emitted if the aliasee is emitted on the same side (ie "
+"__host__ or __device__), otherwise it is ignored."
+msgstr ""
+
+#: ../../../HIPSupport.rst:417
 msgid "Host and Device Attributes of Default Destructors"
 msgstr ""
 
-#: ../../../HIPSupport.rst:293
+#: ../../../HIPSupport.rst:419
 msgid ""
 "If a default destructor does not have explicit host or device attributes, "
 "clang infers these attributes based on the destructors of its data members "
@@ -620,7 +806,7 @@ msgid ""
 "destructors can execute on the host or device side."
 msgstr ""
 
-#: ../../../HIPSupport.rst:300
+#: ../../../HIPSupport.rst:426
 msgid ""
 "For explicit template classes with virtual destructors, which must be "
 "emitted, the inference adopts a conservative approach. In this case, "
@@ -630,21 +816,21 @@ msgid ""
 "may call a non-constexpr function, which is by default a host function."
 msgstr ""
 
-#: ../../../HIPSupport.rst:307
+#: ../../../HIPSupport.rst:433
 msgid ""
 "Users can override the inferred host and device attributes of default "
 "destructors by adding explicit host and device attributes to them."
 msgstr ""
 
-#: ../../../HIPSupport.rst:311
+#: ../../../HIPSupport.rst:437
 msgid "C++ Standard Parallelism Offload Support: Compiler And Runtime"
 msgstr ""
 
-#: ../../../HIPSupport.rst:314
+#: ../../../HIPSupport.rst:440
 msgid "Introduction"
 msgstr ""
 
-#: ../../../HIPSupport.rst:316
+#: ../../../HIPSupport.rst:442
 msgid ""
 "This section describes the implementation of support for offloading the "
 "execution of standard C++ algorithms to accelerators that can be targeted "
@@ -652,11 +838,11 @@ msgid ""
 "well as the interactions with runtimes."
 msgstr ""
 
-#: ../../../HIPSupport.rst:322
+#: ../../../HIPSupport.rst:448
 msgid "Algorithm Offload: What, Why, Where"
 msgstr ""
 
-#: ../../../HIPSupport.rst:324
+#: ../../../HIPSupport.rst:450
 msgid ""
 "C++17 introduced overloads `for most algorithms in the standard library "
 "<https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0024r2.html>`_ "
@@ -675,31 +861,31 @@ msgid ""
 "hardware specific details. Putting it all together:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:339
+#: ../../../HIPSupport.rst:465
 msgid ""
 "**What**: standard library algorithms, when invoked with the "
 "``parallel_unsequenced_policy``"
 msgstr ""
 
-#: ../../../HIPSupport.rst:341
+#: ../../../HIPSupport.rst:467
 msgid ""
 "**Why**: democratise AMDGPU accelerator programming, without loss of user "
 "familiarity"
 msgstr ""
 
-#: ../../../HIPSupport.rst:343
+#: ../../../HIPSupport.rst:469
 msgid "**Where**: only AMDGPU accelerators targeted by Clang/LLVM via HIP"
 msgstr ""
 
-#: ../../../HIPSupport.rst:346
+#: ../../../HIPSupport.rst:472
 msgid "Small Example"
 msgstr ""
 
-#: ../../../HIPSupport.rst:348
+#: ../../../HIPSupport.rst:474
 msgid "Given the following C++ code:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:356
+#: ../../../HIPSupport.rst:482
 msgid ""
 "if Clang is invoked with the ``--hipstdpar --offload-arch=foo`` flags, the "
 "call to ``find`` will be offloaded to an accelerator that is part of the "
@@ -714,11 +900,11 @@ msgid ""
 "will be provided below."
 msgstr ""
 
-#: ../../../HIPSupport.rst:368
+#: ../../../HIPSupport.rst:494
 msgid "Implementation - General View"
 msgstr ""
 
-#: ../../../HIPSupport.rst:370
+#: ../../../HIPSupport.rst:496
 msgid ""
 "We built support for Algorithm Offload support atop the pre-existing HIP "
 "infrastructure. More specifically, when one requests offload via ``--"
@@ -729,7 +915,7 @@ msgid ""
 "g. ``__device__`` annotations are neither necessary nor guaranteed to work."
 msgstr ""
 
-#: ../../../HIPSupport.rst:378
+#: ../../../HIPSupport.rst:504
 msgid ""
 "Since there are no language restriction mechanisms in place, it is necessary "
 "to relax HIP language specific semantic checks performed by the FE; they "
@@ -741,7 +927,7 @@ msgid ""
 "interposition is also handled via a separate pass over IR."
 msgstr ""
 
-#: ../../../HIPSupport.rst:386
+#: ../../../HIPSupport.rst:512
 msgid ""
 "To interface with the client HIP runtime, and to forward offloaded algorithm "
 "invocations to the corresponding accelerator specific library "
@@ -751,29 +937,29 @@ msgid ""
 "Algorithm Offload support."
 msgstr ""
 
-#: ../../../HIPSupport.rst:393
+#: ../../../HIPSupport.rst:519
 msgid "Implementation - Driver"
 msgstr ""
 
-#: ../../../HIPSupport.rst:395
+#: ../../../HIPSupport.rst:521
 msgid "We augment the ``clang`` driver with the following flags:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:397
+#: ../../../HIPSupport.rst:523
 msgid ""
 "``--hipstdpar`` enables algorithm offload, which depending on phase, has the "
 "following effects:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:400
+#: ../../../HIPSupport.rst:526
 msgid "when compiling:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:402
+#: ../../../HIPSupport.rst:528
 msgid "``-x hip`` gets prepended to enable HIP support;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:403
+#: ../../../HIPSupport.rst:529
 msgid ""
 "the ``ROCmToolchain`` component checks for the ``hipstdpar_lib.hpp`` "
 "forwarding header, `rocThrust <https://rocm.docs.amd.com/projects/rocThrust/"
@@ -783,34 +969,34 @@ msgid ""
 "included, otherwise an error listing the missing component is generated;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:410
+#: ../../../HIPSupport.rst:536
 msgid "the ``LangOpts.HIPStdPar`` member is set."
 msgstr ""
 
-#: ../../../HIPSupport.rst:412
+#: ../../../HIPSupport.rst:538
 msgid "when linking:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:414
+#: ../../../HIPSupport.rst:540
 msgid ""
 "``--hip-link`` and ``-frtlib-add-rpath`` gets appended to enable HIP support."
 msgstr ""
 
-#: ../../../HIPSupport.rst:417
+#: ../../../HIPSupport.rst:543
 msgid ""
 "``--hipstdpar-interpose-alloc`` enables the interposition of standard "
 "allocation / deallocation functions with accelerator aware equivalents; the "
 "``LangOpts.HIPStdParInterposeAlloc`` member is set;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:420
+#: ../../../HIPSupport.rst:546
 msgid ""
 "``--hipstdpar-path=`` specifies a non-canonical path for the forwarding "
 "header; it must point to the folder where the header is located and not to "
 "the header itself;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:423
+#: ../../../HIPSupport.rst:549
 msgid ""
 "``--hipstdpar-thrust-path=`` specifies a non-canonical path for `rocThrust "
 "<https://rocm.docs.amd.com/projects/rocThrust/en/latest/>`_; it must point "
@@ -818,7 +1004,7 @@ msgid ""
 "subfolder;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:427
+#: ../../../HIPSupport.rst:553
 msgid ""
 "``--hipstdpar-prim-path=`` specifies a non-canonical path for `rocPrim "
 "<https://rocm.docs.amd.com/projects/rocPRIM/en/latest/>`_; it must point to "
@@ -826,38 +1012,38 @@ msgid ""
 "subfolder;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:432
+#: ../../../HIPSupport.rst:558
 msgid ""
 "The `--offload-arch <https://llvm.org/docs/AMDGPUUsage.html#amdgpu-"
 "processors>`_ flag can be used to specify the accelerator for which offload "
 "code is to be generated."
 msgstr ""
 
-#: ../../../HIPSupport.rst:437
+#: ../../../HIPSupport.rst:563
 msgid "Implementation - Front-End"
 msgstr ""
 
-#: ../../../HIPSupport.rst:439
+#: ../../../HIPSupport.rst:565
 msgid ""
 "When ``LangOpts.HIPStdPar`` is set, we relax some of the HIP language "
 "specific ``Sema`` checks to account for the fact that we want to consume "
 "pure unannotated C++ code:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:443
+#: ../../../HIPSupport.rst:569
 msgid ""
 "``__device__`` / ``__host__ __device__`` functions (which would originate in "
 "the accelerator specific algorithm library) are allowed to call implicitly "
 "``__host__`` functions;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:446
+#: ../../../HIPSupport.rst:572
 msgid ""
 "``__global__`` functions (which would originate in the accelerator specific "
 "algorithm library) are allowed to call implicitly ``__host__`` functions;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:448
+#: ../../../HIPSupport.rst:574
 msgid ""
 "resolving ``__builtin`` availability is deferred, because it is possible "
 "that a ``__builtin`` that is unavailable on the target accelerator is not "
@@ -865,7 +1051,7 @@ msgid ""
 "the middle-end;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:452
+#: ../../../HIPSupport.rst:578
 msgid ""
 "ASM parsing / checking is deferred, because it is possible that an ASM block "
 "that e.g. uses some constraints that are incompatible with the target "
@@ -873,40 +1059,40 @@ msgid ""
 "safely removed in the middle-end."
 msgstr ""
 
-#: ../../../HIPSupport.rst:457
+#: ../../../HIPSupport.rst:583
 msgid ""
 "``CodeGen`` is similarly relaxed, with implicitly ``__host__`` functions "
 "being emitted as well."
 msgstr ""
 
-#: ../../../HIPSupport.rst:461
+#: ../../../HIPSupport.rst:587
 msgid "Implementation - Middle-End"
 msgstr ""
 
-#: ../../../HIPSupport.rst:463
+#: ../../../HIPSupport.rst:589
 msgid "We add two ``opt`` passes:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:465
+#: ../../../HIPSupport.rst:591
 msgid "``HipStdParAcceleratorCodeSelectionPass``"
 msgstr ""
 
-#: ../../../HIPSupport.rst:467
+#: ../../../HIPSupport.rst:593
 msgid ""
 "For all kernels in a ``Module``, compute reachability, where a function "
 "``F`` is reachable from a kernel ``K`` if and only if there exists a direct "
 "call-chain rooted in ``F`` that includes ``K``;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:470
+#: ../../../HIPSupport.rst:596
 msgid "Remove all functions that are not reachable from kernels;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:471
+#: ../../../HIPSupport.rst:597
 msgid "This pass is only run when compiling for the accelerator."
 msgstr ""
 
-#: ../../../HIPSupport.rst:473
+#: ../../../HIPSupport.rst:599
 msgid ""
 "The first pass assumes that the only code that the user intended to offload "
 "was that which was directly or transitively invocable as part of an "
@@ -917,11 +1103,11 @@ msgid ""
 "observing how widespread accelerators, such as GPUs, work."
 msgstr ""
 
-#: ../../../HIPSupport.rst:481
+#: ../../../HIPSupport.rst:607
 msgid "``HipStdParAllocationInterpositionPass``"
 msgstr ""
 
-#: ../../../HIPSupport.rst:483
+#: ../../../HIPSupport.rst:609
 msgid ""
 "Iterate through all functions in a ``Module``, and replace standard "
 "allocation / deallocation functions with accelerator-aware equivalents, "
@@ -930,45 +1116,45 @@ msgid ""
 "stdpar#allocation--deallocation-interposition-status>`__;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:488
+#: ../../../HIPSupport.rst:614
 msgid "This is only run when compiling for the host."
 msgstr ""
 
-#: ../../../HIPSupport.rst:490
+#: ../../../HIPSupport.rst:616
 msgid "The second pass is optional."
 msgstr ""
 
-#: ../../../HIPSupport.rst:493
+#: ../../../HIPSupport.rst:619
 msgid "Implementation - Forwarding Header"
 msgstr ""
 
-#: ../../../HIPSupport.rst:495
+#: ../../../HIPSupport.rst:621
 msgid "The forwarding header implements two pieces of functionality:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:497
+#: ../../../HIPSupport.rst:623
 msgid ""
 "It forwards algorithms to a target accelerator, which is done by relying on "
 "C++ language rules around overloading:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:500
+#: ../../../HIPSupport.rst:626
 msgid ""
 "overloads taking an explicit argument of type "
 "``parallel_unsequenced_policy`` are introduced into the ``std`` namespace;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:502
+#: ../../../HIPSupport.rst:628
 msgid "these will get preferentially selected versus the master template;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:503
+#: ../../../HIPSupport.rst:629
 msgid ""
 "the body forwards to the equivalent algorithm from the accelerator specific "
 "library"
 msgstr ""
 
-#: ../../../HIPSupport.rst:506
+#: ../../../HIPSupport.rst:632
 msgid ""
 "It provides allocation / deallocation functions that are equivalent to the "
 "standard ones, but obtain memory by invoking `hipMallocManaged <https://rocm."
@@ -978,22 +1164,22 @@ msgid ""
 "group___memory.html#ga740d08da65cae1441ba32f8fedb863d1>`_."
 msgstr ""
 
-#: ../../../HIPSupport.rst:519
+#: ../../../HIPSupport.rst:645
 msgid "``__HIPSTDPAR__``"
 msgstr ""
 
-#: ../../../HIPSupport.rst:520
+#: ../../../HIPSupport.rst:646
 msgid ""
 "Defined when Clang is compiling code in algorithm offload mode, enabled with "
 "the ``--hipstdpar`` compiler option."
 msgstr ""
 
-#: ../../../HIPSupport.rst:522
+#: ../../../HIPSupport.rst:648
 msgid ""
 "``__HIPSTDPAR_INTERPOSE_ALLOC__`` / ``__HIPSTDPAR_INTERPOSE_ALLOC_V1__``"
 msgstr ""
 
-#: ../../../HIPSupport.rst:523
+#: ../../../HIPSupport.rst:649
 msgid ""
 "Defined only when compiling in algorithm offload mode, when the user enables "
 "interposition mode with the ``--hipstdpar-interpose-alloc`` compiler option, "
@@ -1001,15 +1187,15 @@ msgid ""
 "should be replaced with accelerator aware variants."
 msgstr ""
 
-#: ../../../HIPSupport.rst:530
+#: ../../../HIPSupport.rst:656
 msgid "Restrictions"
 msgstr ""
 
-#: ../../../HIPSupport.rst:532
+#: ../../../HIPSupport.rst:658
 msgid "We define two modes in which runtime execution can occur:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:534
+#: ../../../HIPSupport.rst:660
 msgid ""
 "**HMM Mode** - this assumes that the `HMM <https://docs.kernel.org/mm/hmm."
 "html>`_ subsystem of the Linux kernel is used to provide transparent on-"
@@ -1018,7 +1204,7 @@ msgid ""
 "accelerator and it follows the C++ memory model;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:539
+#: ../../../HIPSupport.rst:665
 msgid ""
 "**Interposition Mode** - this is a fallback mode for cases where transparent "
 "on-demand paging is unavailable (e.g. in the Windows OS), which means that "
@@ -1026,135 +1212,135 @@ msgid ""
 "allocated memory is inaccessible for the accelerator."
 msgstr ""
 
-#: ../../../HIPSupport.rst:544
+#: ../../../HIPSupport.rst:670
 msgid "The following restrictions imposed on user code apply to both modes:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:546
+#: ../../../HIPSupport.rst:672
 msgid ""
 "Pointers to function, and all associated features, such as e.g. dynamic "
 "polymorphism, cannot be used (directly or transitively) by the user provided "
 "callable passed to an algorithm invocation;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:549
+#: ../../../HIPSupport.rst:675
 msgid ""
 "``static`` (except for program-wide unique ones) / ``thread`` storage "
 "duration variables cannot be used (directly or transitively) in name by the "
 "user provided callable;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:552
+#: ../../../HIPSupport.rst:678
 msgid ""
 "User code must be compiled in ``-fgpu-rdc`` mode in order for global / "
 "namespace scope variables / program-wide unique ``static`` storage duration "
 "variables to be usable in name by the user provided callable;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:555
+#: ../../../HIPSupport.rst:681
 msgid ""
 "Only algorithms that are invoked with the ``parallel_unsequenced_policy`` "
 "are candidates for offload;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:557
+#: ../../../HIPSupport.rst:683
 msgid ""
 "Only algorithms that are invoked with iterator arguments that model "
 "`random_access_iterator <https://en.cppreference.com/w/cpp/iterator/"
 "random_access_iterator>`_ are candidates for offload;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:560
+#: ../../../HIPSupport.rst:686
 msgid ""
 "`Exceptions <https://en.cppreference.com/w/cpp/language/exceptions>`_ cannot "
 "be used by the user provided callable;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:562
+#: ../../../HIPSupport.rst:688
 msgid ""
 "Dynamic memory allocation (e.g. ``operator new``) cannot be used by the user "
 "provided callable;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:564
+#: ../../../HIPSupport.rst:690
 msgid ""
 "Selective offload is not possible i.e. it is not possible to indicate that "
 "only some algorithms invoked with the ``parallel_unsequenced_policy`` are to "
 "be executed on the accelerator."
 msgstr ""
 
-#: ../../../HIPSupport.rst:568
+#: ../../../HIPSupport.rst:694
 msgid ""
 "In addition to the above, using **Interposition Mode** imposes the following "
 "additional restrictions:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:571
+#: ../../../HIPSupport.rst:697
 msgid ""
 "All code that is expected to interoperate has to be recompiled with the ``--"
 "hipstdpar-interpose-alloc`` flag i.e. it is not safe to compose libraries "
 "that have been independently compiled;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:576
+#: ../../../HIPSupport.rst:702
 msgid "Current Support"
 msgstr ""
 
-#: ../../../HIPSupport.rst:578
+#: ../../../HIPSupport.rst:704
 msgid ""
 "At the moment, C++ Standard Parallelism Offload is only available for AMD "
 "GPUs, when the `ROCm <https://rocm.docs.amd.com/en/latest/>`_ stack is used, "
 "on the Linux operating system. Support is synthesised in the following table:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:585
+#: ../../../HIPSupport.rst:711
 msgid "`Processor <https://llvm.org/docs/AMDGPUUsage.html#amdgpu-processors>`_"
 msgstr ""
 
-#: ../../../HIPSupport.rst:586
+#: ../../../HIPSupport.rst:712
 msgid "HMM Mode"
 msgstr ""
 
-#: ../../../HIPSupport.rst:587
+#: ../../../HIPSupport.rst:713
 msgid "Interposition Mode"
 msgstr ""
 
-#: ../../../HIPSupport.rst:588
+#: ../../../HIPSupport.rst:714
 msgid "GCN GFX9 (Vega)"
 msgstr ""
 
-#: ../../../HIPSupport.rst:589 ../../../HIPSupport.rst:590
-#: ../../../HIPSupport.rst:593 ../../../HIPSupport.rst:596
-#: ../../../HIPSupport.rst:599 ../../../HIPSupport.rst:602
+#: ../../../HIPSupport.rst:715 ../../../HIPSupport.rst:716
+#: ../../../HIPSupport.rst:719 ../../../HIPSupport.rst:722
+#: ../../../HIPSupport.rst:725 ../../../HIPSupport.rst:728
 msgid "YES"
 msgstr ""
 
-#: ../../../HIPSupport.rst:591
+#: ../../../HIPSupport.rst:717
 msgid "GCN GFX10.1 (RDNA 1)"
 msgstr ""
 
-#: ../../../HIPSupport.rst:592 ../../../HIPSupport.rst:595
-#: ../../../HIPSupport.rst:598 ../../../HIPSupport.rst:601
+#: ../../../HIPSupport.rst:718 ../../../HIPSupport.rst:721
+#: ../../../HIPSupport.rst:724 ../../../HIPSupport.rst:727
 msgid "*NO*"
 msgstr ""
 
-#: ../../../HIPSupport.rst:594
+#: ../../../HIPSupport.rst:720
 msgid "GCN GFX10.3 (RDNA 2)"
 msgstr ""
 
-#: ../../../HIPSupport.rst:597
+#: ../../../HIPSupport.rst:723
 msgid "GCN GFX11 (RDNA 3)"
 msgstr ""
 
-#: ../../../HIPSupport.rst:600
+#: ../../../HIPSupport.rst:726
 msgid "GCN GFX12 (RDNA 4)"
 msgstr ""
 
-#: ../../../HIPSupport.rst:604
+#: ../../../HIPSupport.rst:730
 msgid "The minimum Linux kernel version for running in HMM mode is 6.4."
 msgstr ""
 
-#: ../../../HIPSupport.rst:606
+#: ../../../HIPSupport.rst:732
 msgid ""
 "The forwarding header is packaged by `ROCm <https://rocm.docs.amd.com/en/"
 "latest/>`_, and is obtainable by installing the `hipstdpar` packege. The "
@@ -1164,11 +1350,11 @@ msgid ""
 "hipstdpar/README.html>`_."
 msgstr ""
 
-#: ../../../HIPSupport.rst:614
+#: ../../../HIPSupport.rst:740
 msgid "HIP Specific Elements"
 msgstr ""
 
-#: ../../../HIPSupport.rst:616
+#: ../../../HIPSupport.rst:742
 msgid ""
 "There is no defined interop with the `HIP kernel language <https://rocm.docs."
 "amd.com/projects/HIP/en/latest/reference/kernel_language.html>`_; whilst "
@@ -1176,7 +1362,7 @@ msgid ""
 "are not guaranteed to, and thus cannot be relied upon by user code;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:621
+#: ../../../HIPSupport.rst:747
 msgid ""
 "A consequence of the above is that both bitcode linking and linking "
 "relocatable object files will \"work\", but it is not guaranteed to remain "
@@ -1184,13 +1370,13 @@ msgid ""
 "in the future."
 msgstr ""
 
-#: ../../../HIPSupport.rst:626
+#: ../../../HIPSupport.rst:752
 msgid ""
 "Combining explicit HIP, CUDA or OpenMP Offload compilation with ``--"
 "hipstdpar`` based offloading is not allowed or supported in any way."
 msgstr ""
 
-#: ../../../HIPSupport.rst:628
+#: ../../../HIPSupport.rst:754
 msgid ""
 "There is no way to target different accelerators via a standard algorithm "
 "invocation (`this might be addressed in future C++ standards <https://www."
@@ -1201,67 +1387,67 @@ msgid ""
 "html#ga43c1e7f15925eeb762195ccb5e063eae>`_ interface e.g.:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:659
+#: ../../../HIPSupport.rst:785
 msgid ""
 "Note that this is a temporary, unsafe workaround for a deficiency in the C++ "
 "Standard."
 msgstr ""
 
-#: ../../../HIPSupport.rst:663
+#: ../../../HIPSupport.rst:789
 msgid "Open Questions / Future Developments"
 msgstr ""
 
-#: ../../../HIPSupport.rst:665
+#: ../../../HIPSupport.rst:791
 msgid ""
 "The restriction on the use of ``static`` / ``thread`` storage duration "
 "variables in offloaded algorithms might be lifted;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:667
+#: ../../../HIPSupport.rst:793
 msgid ""
 "The restriction on the use of dynamic memory allocation in offloaded "
 "algorithms will be lifted in the future."
 msgstr ""
 
-#: ../../../HIPSupport.rst:669
+#: ../../../HIPSupport.rst:795
 msgid ""
 "The restriction on the use of pointers to function, and associated features "
 "such as dynamic polymorphism might be lifted in the future, when running in "
 "**HMM Mode**;"
 msgstr ""
 
-#: ../../../HIPSupport.rst:672
+#: ../../../HIPSupport.rst:798
 msgid ""
 "Offload support might be extended to cases where the ``parallel_policy`` is "
 "used for some or all targets."
 msgstr ""
 
-#: ../../../HIPSupport.rst:676
+#: ../../../HIPSupport.rst:802
 msgid "SPIR-V Support on HIPAMD ToolChain"
 msgstr ""
 
-#: ../../../HIPSupport.rst:678
+#: ../../../HIPSupport.rst:804
 msgid ""
 "The HIPAMD ToolChain supports targeting `AMDGCN Flavoured SPIR-V <https://"
 "llvm.org/docs/SPIRVUsage.html#target-triples>`_. The support for SPIR-V in "
 "the ROCm and HIPAMD ToolChain is under active development."
 msgstr ""
 
-#: ../../../HIPSupport.rst:684
+#: ../../../HIPSupport.rst:810
 msgid "Compilation Process"
 msgstr ""
 
-#: ../../../HIPSupport.rst:686
+#: ../../../HIPSupport.rst:812
 msgid ""
 "When compiling HIP programs with the intent of utilizing SPIR-V, the process "
 "diverges from the traditional compilation flow:"
 msgstr ""
 
-#: ../../../HIPSupport.rst:690
+#: ../../../HIPSupport.rst:816
 msgid "Using ``--offload-arch=amdgcnspirv``"
 msgstr ""
 
-#: ../../../HIPSupport.rst:692
+#: ../../../HIPSupport.rst:818
 msgid ""
 "**Target Triple**: The ``--offload-arch=amdgcnspirv`` flag instructs the "
 "compiler to use the target triple ``spirv64-amd-amdhsa``. This approach does "
@@ -1270,7 +1456,7 @@ msgid ""
 "be generated at run time, when the concrete target is known."
 msgstr ""
 
-#: ../../../HIPSupport.rst:698
+#: ../../../HIPSupport.rst:824
 msgid ""
 "**LLVM IR Translation**: The program is compiled to LLVM Intermediate "
 "Representation (IR), which is subsequently translated into SPIR-V. In the "
@@ -1278,17 +1464,17 @@ msgid ""
 "the SPIR-V Back-end."
 msgstr ""
 
-#: ../../../HIPSupport.rst:703
+#: ../../../HIPSupport.rst:829
 msgid ""
 "**Clang Offload Bundler**: The resulting SPIR-V is embedded in the Clang "
 "offload bundler with the bundle ID ``hip-spirv64-amd-amdhsa--amdgcnspirv``."
 msgstr ""
 
-#: ../../../HIPSupport.rst:707
+#: ../../../HIPSupport.rst:833
 msgid "Architecture Specific Macros"
 msgstr ""
 
-#: ../../../HIPSupport.rst:709
+#: ../../../HIPSupport.rst:835
 msgid ""
 "None of the architecture specific :doc:`AMDGPU macros <AMDGPUSupport>` are "
 "defined when targeting SPIR-V. An alternative, more flexible mechanism to "

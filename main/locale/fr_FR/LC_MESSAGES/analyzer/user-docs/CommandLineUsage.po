@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2025-12-01 08:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,96 +51,102 @@ msgid ""
 "Clang compiler:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:22
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:23
 msgid ""
 "scan-build_ is an old and simple command line tool that emits static "
 "analyzer warnings as HTML files while compiling your project. You can view "
-"the analysis results in your web browser."
+"the analysis results in your web browser; the utility script ``scan-view`` "
+"can provide a trivial HTTP server that servers these result files."
 msgstr ""
 
 #: ../../../analyzer/user-docs/CommandLineUsage.rst:20
+msgid ""
+"Is available as a part of the LLVM project (together with ``scan-view``)."
+msgstr ""
+
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:21
 msgid ""
 "Useful for individual developers who simply want to view static analysis "
 "results at their desk, or in a very simple collaborative environment."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:21
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:22
 msgid ""
 "Works on all major platforms (Windows, Linux, macOS) and is available as a "
 "package in many Linux distributions."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:22
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:23
 msgid "Does not include support for cross-translation-unit analysis."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:30
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:31
 msgid ""
 "CodeChecker_ is a driver and web server that runs the static analyzer on "
 "your projects on demand and maintains a database of issues."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:25
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:26
+msgid "Open source, but out-of-tree, i.e. not part of the LLVM project."
+msgstr ""
+
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:27
 msgid ""
 "Perfect for managing large amounts of thee static analyzer warnings in a "
 "collaborative environment."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:26
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:28
 msgid "Generally much more feature-rich than scan-build."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:27
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:29
 msgid ""
 "Supports incremental analysis: Results can be stored in a database, "
 "subsequent analysis runs can be compared to list the newly added defects."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:28
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:30
 msgid ""
 ":doc:`CrossTranslationUnit` is supported fully on Linux via CodeChecker."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:29
-msgid "Can run clang-tidy checkers too."
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:31
+msgid "Can also run clang-tidy checks and various other analysis tools."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:30
-msgid "Open source, but out-of-tree, i.e. not part of the LLVM project."
-msgstr ""
-
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:33
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:34
 msgid "scan-build"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:35
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:36
 msgid ""
 "**scan-build** is a command line utility that enables a user to run the "
 "static analyzer over their codebase as part of performing a regular build "
 "(from the command line)."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:38
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:39
 msgid "How does it work?"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:40
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:41
 msgid ""
 "During a project build, as source files are compiled they are also analyzed "
 "in tandem by the static analyzer."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:42
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:43
 msgid ""
 "Upon completion of the build, results are then presented to the user within "
 "a web browser."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:45
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:46
 msgid "Will it work with any build system?"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:47
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:48
 msgid ""
 "**scan-build** has little or no knowledge about how you build your code. It "
 "works by overriding the ``CC`` and ``CXX`` environment variables to "
@@ -150,7 +156,7 @@ msgid ""
 "then executes the static analyzer to analyze your code."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:49
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:50
 msgid ""
 "This \"poor man's interposition\" works amazingly well in many cases and "
 "falls down in others. Please consult the information on this page on making "
@@ -158,63 +164,63 @@ msgid ""
 "aforementioned hack fails to work."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:55
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:56
 msgid "**Viewing static analyzer results in a web browser**"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:58
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:203
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:59
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:204
 msgid "Basic Usage"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:60
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:61
 msgid ""
 "Basic usage of ``scan-build`` is designed to be simple: just place the word "
 "\"scan-build\" in front of your build command::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:65
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:66
 msgid ""
 "In the first case ``scan-build`` analyzes the code of a project built with "
 "``make`` and in the second case ``scan-build`` analyzes a project built "
 "using ``xcodebuild``."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:67
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:68
 msgid "Here is the general format for invoking ``scan-build``::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:71
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:72
 msgid ""
 "Operationally, ``scan-build`` literally runs <command> with all of the "
 "subsequent options passed to it. For example, one can pass ``-j4`` to "
 "``make`` get a parallel build over 4 cores::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:75
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:76
 msgid ""
 "In almost all cases, ``scan-build`` makes no effort to interpret the options "
 "after the build command; it simply passes them through. In general, ``scan-"
 "build`` should support parallel builds, but **not distributed builds**."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:77
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:78
 msgid "It is also possible to use ``scan-build`` to analyze specific files::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:81
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:82
 msgid "This example causes the files ``t1.c`` and ``t2.c`` to be analyzed."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:84
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:85
 msgid "For Windows Users"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:86
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:87
 msgid "Windows users must have Perl installed to use scan-build."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:88
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:89
 msgid ""
 "``scan-build.bat`` script allows you to launch scan-build in the same way as "
 "it described in the Basic Usage section above. To invoke scan-build from an "
@@ -222,13 +228,13 @@ msgid ""
 "your PATH environment variable."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:90
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:91
 msgid ""
 "If you have unexpected compilation/make problems when running scan-build "
 "with MinGW/MSYS the following information may be helpful:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:92
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:93
 msgid ""
 "If getting unexpected ``\"fatal error: no input files\"`` while building "
 "with MSYS make from the Windows cmd, try one of these solutions: - Use MinGW "
@@ -240,27 +246,27 @@ msgid ""
 "shell::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:98
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:99
 msgid ""
 "If getting ``\"Error : *** target pattern contains no `%'\"`` while using "
 "GNU Make 3.81, try to use another version of make."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:101
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:102
 msgid "Other Options"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:103
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:104
 msgid ""
 "As mentioned above, extra options can be passed to ``scan-build``. These "
 "options prefix the build command. For example::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:108
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:109
 msgid "Here is a subset of useful options:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:110
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:111
 msgid ""
 "**-o**: Target directory for HTML report files. Subdirectories will be "
 "created as needed to represent separate \"runs\" of the analyzer. If this "
@@ -268,11 +274,11 @@ msgid ""
 "reports."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:111
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:112
 msgid "**-h** *(or no arguments)*: Display all ``scan-build`` options."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:112
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:113
 msgid ""
 "**-k**, **--keep-going**: Add a \"keep on going\" option to the specified "
 "build command. This option currently supports ``make`` and ``xcodebuild``. "
@@ -280,20 +286,20 @@ msgid ""
 "build options."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:113
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:114
 msgid ""
 "**-v**: Verbose output from scan-build and the analyzer. **A second and "
 "third \"-v\" increases verbosity**, and is useful for filing bug reports "
 "against the analyzer."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:114
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:115
 msgid ""
 "**-V**: View analysis results in a web browser when the build command "
 "completes."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:115
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:116
 msgid ""
 "**--use-analyzer Xcode** *(or)* **--use-analyzer [path to clang]**: ``scan-"
 "build`` uses the 'clang' executable relative to itself for static analysis. "
@@ -301,17 +307,17 @@ msgid ""
 "packaged with Xcode (on OS X) or from the PATH."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:117
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:118
 msgid ""
 "A complete list of options can be obtained by running ``scan-build`` with no "
 "arguments."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:120
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:121
 msgid "Output of scan-build"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:122
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:123
 msgid ""
 "The output of scan-build is a set of HTML files, each one which represents a "
 "separate bug report. A single ``index.html`` file is generated for surveying "
@@ -319,7 +325,7 @@ msgid ""
 "view the bug reports."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:124
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:125
 msgid ""
 "Where the HTML files are generated is specified with a **-o** option to "
 "``scan-build``. If **-o** isn't specified, a directory in ``/tmp`` is "
@@ -328,19 +334,19 @@ msgid ""
 "completes, pass **-V** to ``scan-build``."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:127
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:128
 msgid "Recommended Usage Guidelines"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:129
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:130
 msgid "This section describes a few recommendations with running the analyzer."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:132
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:133
 msgid "Always Analyze a Project in its \"Debug\" Configuration"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:134
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:135
 msgid ""
 "Most projects can be built in a \"debug\" mode that enables assertions. "
 "Assertions are picked up by the static analyzer to prune infeasible paths, "
@@ -348,17 +354,17 @@ msgid ""
 "error reports) emitted by the tool."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:136
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:137
 msgid ""
 "Another option is to use ``--force-analyze-debug-code`` flag of **scan-"
 "build** tool which would enable assertions automatically."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:139
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:140
 msgid "Use Verbose Output when Debugging scan-build"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:141
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:142
 msgid ""
 "``scan-build`` takes a **-v** option to emit verbose output about what it's "
 "doing; two **-v** options emit more information. Redirecting the output of "
@@ -368,22 +374,22 @@ msgid ""
 "comprehensible logs, don't perform a parallel build."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:144
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:145
 msgid "Run './configure' through scan-build"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:146
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:147
 msgid ""
 "If an analyzed project uses an autoconf generated ``configure`` script, you "
 "will probably need to run ``configure`` script through ``scan-build`` in "
 "order to analyze the project."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:148
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:149
 msgid "**Example**::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:153
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:154
 msgid ""
 "The reason ``configure`` also needs to be run through ``scan-build`` is "
 "because ``scan-build`` scans your source files by *interposing* on the "
@@ -394,18 +400,18 @@ msgid ""
 "to perform static analysis."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:155
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:156
 msgid ""
 "Running ``configure`` typically generates makefiles that have hardwired "
 "paths to the compiler, and by running ``configure`` through ``scan-build`` "
 "that path is set to ``ccc-analyzer``."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:158
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:159
 msgid "Analyzing iPhone Projects"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:160
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:161
 msgid ""
 "Conceptually Xcode projects for iPhone applications are nearly the same as "
 "their cousins for desktop applications. **scan-build** can analyze these "
@@ -414,11 +420,11 @@ msgid ""
 "preparative steps they need to take (e.g., setup code signing)."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:163
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:164
 msgid "Recommendation: use \"Build and Analyze\""
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:165
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:166
 msgid ""
 "The absolute easiest way to analyze iPhone projects is to use the `Analyze "
 "feature in Xcode <https://developer.apple.com/library/ios/recipes/xcode_help-"
@@ -427,59 +433,59 @@ msgid ""
 "their project right from a menu without most of the setup described later."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:167
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:168
 msgid ""
 "`Instructions are available <../xcode.html>`_ on this website on how to use "
 "open source builds of the analyzer as a replacement for the one bundled with "
 "Xcode."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:170
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:171
 msgid "Using scan-build directly"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:172
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:173
 msgid ""
 "If you wish to use **scan-build** with your iPhone project, keep the "
 "following things in mind:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:174
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:175
 msgid ""
 "Analyze your project in the ``Debug`` configuration, either by setting this "
 "as your configuration with Xcode or by passing ``-configuration Debug`` to "
 "``xcodebuild``."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:175
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:176
 msgid ""
 "Analyze your project using the ``Simulator`` as your base SDK. It is "
 "possible to analyze your code when targeting the device, but this is much "
 "easier to do when using Xcode's *Build and Analyze* feature."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:176
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:177
 msgid ""
 "Check that your code signing SDK is set to the simulator SDK as well, and "
 "make sure this option is set to ``Don't Code Sign``."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:178
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:179
 msgid ""
 "Note that you can most of this without actually modifying your project. For "
 "example, if your application targets iPhoneOS 2.2, you could run **scan-"
 "build** in the following manner from the command line::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:182
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:183
 msgid "Alternatively, if your application targets iPhoneOS 3.0::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:187
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:188
 msgid "Gotcha: using the right compiler"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:189
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:190
 msgid ""
 "Recall that **scan-build** analyzes your project by using a compiler to "
 "compile the project and ``clang`` to analyze your project. The script uses "
@@ -491,7 +497,7 @@ msgid ""
 "are developing for the iPhone."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:191
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:192
 msgid ""
 "When compiling your application to run on the simulator, it is important "
 "that **scan-build** finds the correct version of ``gcc/clang``. Otherwise, "
@@ -499,7 +505,7 @@ msgid ""
 "build``."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:193
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:194
 msgid ""
 "**scan-build** provides the ``--use-cc`` and ``--use-c++`` options to "
 "hardwire which compiler scan-build should use for building your code. Note "
@@ -509,7 +515,7 @@ msgid ""
 "all)."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:195
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:196
 msgid ""
 "If you aren't certain which compiler Xcode uses to build your project, try "
 "just running ``xcodebuild`` (without **scan-build**). You should see the "
@@ -517,17 +523,17 @@ msgid ""
 "to ``--use-cc``."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:200
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:201
 msgid "CodeChecker"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:205
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:206
 msgid ""
 "Install CodeChecker as described here: `CodeChecker Install Guide <https://"
 "github.com/Ericsson/codechecker/#Install-guide>`_."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:207
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:208
 msgid ""
 "Create a compilation database. If you use cmake then pass the ``-"
 "DCMAKE_EXPORT_COMPILE_COMMANDS=1`` parameter to cmake. Cmake will create a "
@@ -536,33 +542,33 @@ msgid ""
 "CodeChecker::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:213
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:214
 msgid "Analyze your project::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:217
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:218
 msgid ""
 "View the analysis results. Print the detailed results in the command line::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:222
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:223
 msgid "Or view the detailed results in a browser::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:227
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:228
 msgid "Optional: store the analysis results in a DB::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:233
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:234
 msgid ""
 "Optional: manage (categorize, suppress) the results in your web browser::"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:238
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:239
 msgid "Detailed Usage"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CommandLineUsage.rst:240
+#: ../../../analyzer/user-docs/CommandLineUsage.rst:241
 msgid ""
 "For extended documentation please refer to the `official site of CodeChecker "
 "<https://github.com/Ericsson/codechecker/blob/master/docs/usage.md>`_!"
