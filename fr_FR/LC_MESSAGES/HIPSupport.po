@@ -1,0 +1,670 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 19\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../HIPSupport.rst:1
+msgid ""
+"<style type=\"text/css\">\n"
+"  .none { background-color: #FFCCCC }\n"
+"  .part { background-color: #FFFF99 }\n"
+"  .good { background-color: #CCFF99 }\n"
+"</style>"
+msgstr ""
+
+#: ../../../HIPSupport.rst:18
+msgid "HIP Support"
+msgstr ""
+
+#: ../../../HIPSupport.rst:20
+msgid ""
+"HIP (Heterogeneous-Compute Interface for Portability) `<https://github.com/"
+"ROCm-Developer-Tools/HIP>`_ is a C++ Runtime API and Kernel Language. It "
+"enables developers to create portable applications for offloading "
+"computation to different hardware platforms from a single source code."
+msgstr ""
+
+#: ../../../HIPSupport.rst:25
+msgid "AMD GPU Support"
+msgstr ""
+
+#: ../../../HIPSupport.rst:27
+msgid ""
+"Clang provides HIP support on AMD GPUs via the ROCm platform `<https://rocm."
+"docs.amd.com/en/latest/#>`_. The ROCm runtime forms the base for HIP host "
+"APIs, while HIP device APIs are realized through HIP header files and the "
+"ROCm device library. The Clang driver uses the HIPAMD toolchain to compile "
+"HIP device code to AMDGPU ISA via the AMDGPU backend. The compiled code is "
+"then bundled and embedded in the host executables."
+msgstr ""
+
+#: ../../../HIPSupport.rst:33
+msgid "Intel GPU Support"
+msgstr ""
+
+#: ../../../HIPSupport.rst:35
+msgid ""
+"Clang provides partial HIP support on Intel GPUs using the CHIP-Star project "
+"`<https://github.com/CHIP-SPV/chipStar>`_. CHIP-Star implements the HIP "
+"runtime over oneAPI Level Zero or OpenCL runtime. The Clang driver uses the "
+"HIPSPV toolchain to compile HIP device code into LLVM IR, which is "
+"subsequently translated to SPIR-V via the SPIR-V backend or the out-of-tree "
+"LLVM-SPIRV translator. The SPIR-V is then bundled and embedded into the host "
+"executables."
+msgstr ""
+
+#: ../../../HIPSupport.rst:41
+msgid ""
+"While Clang does not directly provide HIP support for NVIDIA GPUs and CPUs, "
+"these platforms are supported via other means:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:43
+msgid ""
+"NVIDIA GPUs: HIP support is offered through the HIP project `<https://github."
+"com/ROCm-Developer-Tools/HIP>`_, which provides a header-only library for "
+"translating HIP runtime APIs into CUDA runtime APIs. The code is "
+"subsequently compiled using NVIDIA's `nvcc`."
+msgstr ""
+
+#: ../../../HIPSupport.rst:45
+msgid ""
+"CPUs: HIP support is available through the HIP-CPU runtime library `<https://"
+"github.com/ROCm-Developer-Tools/HIP-CPU>`_. This header-only library enables "
+"CPUs to execute unmodified HIP code."
+msgstr ""
+
+#: ../../../HIPSupport.rst:49 ../../../HIPSupport.rst:264
+msgid "Example Usage"
+msgstr ""
+
+#: ../../../HIPSupport.rst:51
+msgid "To compile a HIP program, use the following command:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:57
+msgid ""
+"The ``-xhip`` option indicates that the source is a HIP program. If the file "
+"has a ``.hip`` extension, Clang will automatically recognize it as a HIP "
+"program:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:64
+msgid "To link a HIP program, use this command:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:70
+msgid ""
+"In the above command, the ``--hip-link`` flag instructs Clang to link the "
+"HIP runtime library. However, the use of this flag is unnecessary if a HIP "
+"input file is already present in your program."
+msgstr ""
+
+#: ../../../HIPSupport.rst:73
+msgid ""
+"For convenience, Clang also supports compiling and linking in a single step:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:79
+msgid ""
+"In the above commands, ``gfx906`` is the GPU architecture that the code is "
+"being compiled for. The supported GPU architectures can be found in the "
+"`AMDGPU Processor Table <https://llvm.org/docs/AMDGPUUsage."
+"html#processors>`_. Alternatively, you can use the ``amdgpu-arch`` tool that "
+"comes with Clang to list the GPU architecture on your system:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:87
+msgid ""
+"You can use ``--offload-arch=native`` to automatically detect the GPU "
+"architectures on your system:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:95
+msgid "Path Setting for Dependencies"
+msgstr ""
+
+#: ../../../HIPSupport.rst:97
+msgid ""
+"Compiling a HIP program depends on the HIP runtime and device library. The "
+"paths to the HIP runtime and device libraries can be specified either using "
+"compiler options or environment variables. The paths can also be set through "
+"the ROCm path if they follow the ROCm installation directory structure."
+msgstr ""
+
+#: ../../../HIPSupport.rst:102
+msgid "Order of Precedence for HIP Path"
+msgstr ""
+
+#: ../../../HIPSupport.rst:104
+msgid "``--hip-path`` compiler option"
+msgstr ""
+
+#: ../../../HIPSupport.rst:105
+msgid "``HIP_PATH`` environment variable *(use with caution)*"
+msgstr ""
+
+#: ../../../HIPSupport.rst:106 ../../../HIPSupport.rst:115
+msgid "``--rocm-path`` compiler option"
+msgstr ""
+
+#: ../../../HIPSupport.rst:107 ../../../HIPSupport.rst:116
+msgid "``ROCM_PATH`` environment variable *(use with caution)*"
+msgstr ""
+
+#: ../../../HIPSupport.rst:108 ../../../HIPSupport.rst:117
+msgid ""
+"Default automatic detection (relative to Clang or at the default ROCm "
+"installation location)"
+msgstr ""
+
+#: ../../../HIPSupport.rst:111
+msgid "Order of Precedence for Device Library Path"
+msgstr ""
+
+#: ../../../HIPSupport.rst:113
+msgid "``--hip-device-lib-path`` compiler option"
+msgstr ""
+
+#: ../../../HIPSupport.rst:114
+msgid "``HIP_DEVICE_LIB_PATH`` environment variable *(use with caution)*"
+msgstr ""
+
+#: ../../../HIPSupport.rst:122
+msgid "Compiler Option"
+msgstr ""
+
+#: ../../../HIPSupport.rst:123
+msgid "Environment Variable"
+msgstr ""
+
+#: ../../../HIPSupport.rst:124 ../../../HIPSupport.rst:151
+msgid "Description"
+msgstr ""
+
+#: ../../../HIPSupport.rst:125
+msgid "Default Value"
+msgstr ""
+
+#: ../../../HIPSupport.rst:126
+msgid "``--rocm-path=<path>``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:127
+msgid "``ROCM_PATH``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:128
+msgid "Specifies the ROCm installation path."
+msgstr ""
+
+#: ../../../HIPSupport.rst:129
+msgid "Automatic detection"
+msgstr ""
+
+#: ../../../HIPSupport.rst:130
+msgid "``--hip-path=<path>``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:131
+msgid "``HIP_PATH``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:132
+msgid "Specifies the HIP runtime installation path."
+msgstr ""
+
+#: ../../../HIPSupport.rst:133 ../../../HIPSupport.rst:137
+msgid "Determined by ROCm directory structure"
+msgstr ""
+
+#: ../../../HIPSupport.rst:134
+msgid "``--hip-device-lib-path=<path>``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:135
+msgid "``HIP_DEVICE_LIB_PATH``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:136
+msgid "Specifies the HIP device library installation path."
+msgstr ""
+
+#: ../../../HIPSupport.rst:141
+msgid ""
+"We recommend using the compiler options as the primary method for specifying "
+"these paths. While the environment variables ``ROCM_PATH``, ``HIP_PATH``, "
+"and ``HIP_DEVICE_LIB_PATH`` are supported, their use can lead to implicit "
+"dependencies that might cause issues in the long run. Use them with caution."
+msgstr ""
+
+#: ../../../HIPSupport.rst:145
+msgid "Predefined Macros"
+msgstr ""
+
+#: ../../../HIPSupport.rst:150
+msgid "Macro"
+msgstr ""
+
+#: ../../../HIPSupport.rst:152
+msgid "``__CLANG_RDC__``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:153
+msgid ""
+"Defined when Clang is compiling code in Relocatable Device Code (RDC) mode. "
+"RDC, enabled with the ``-fgpu-rdc`` compiler option, is necessary for "
+"linking device codes across translation units."
+msgstr ""
+
+#: ../../../HIPSupport.rst:154
+msgid "``__HIP__``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:155
+msgid ""
+"Defined when compiling with HIP language support, indicating that the code "
+"targets the HIP environment."
+msgstr ""
+
+#: ../../../HIPSupport.rst:156
+msgid "``__HIPCC__``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:157
+msgid "Alias to ``__HIP__``."
+msgstr ""
+
+#: ../../../HIPSupport.rst:158
+msgid "``__HIP_DEVICE_COMPILE__``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:159
+msgid ""
+"Defined during device code compilation in Clang's separate compilation "
+"process for the host and each offloading GPU architecture."
+msgstr ""
+
+#: ../../../HIPSupport.rst:160
+msgid "``__HIP_MEMORY_SCOPE_SINGLETHREAD``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:161
+msgid "Represents single-thread memory scope in HIP (value is 1)."
+msgstr ""
+
+#: ../../../HIPSupport.rst:162
+msgid "``__HIP_MEMORY_SCOPE_WAVEFRONT``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:163
+msgid "Represents wavefront memory scope in HIP (value is 2)."
+msgstr ""
+
+#: ../../../HIPSupport.rst:164
+msgid "``__HIP_MEMORY_SCOPE_WORKGROUP``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:165
+msgid "Represents workgroup memory scope in HIP (value is 3)."
+msgstr ""
+
+#: ../../../HIPSupport.rst:166
+msgid "``__HIP_MEMORY_SCOPE_AGENT``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:167
+msgid "Represents agent memory scope in HIP (value is 4)."
+msgstr ""
+
+#: ../../../HIPSupport.rst:168
+msgid "``__HIP_MEMORY_SCOPE_SYSTEM``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:169
+msgid "Represents system-wide memory scope in HIP (value is 5)."
+msgstr ""
+
+#: ../../../HIPSupport.rst:170
+msgid "``__HIP_NO_IMAGE_SUPPORT__``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:171
+msgid ""
+"Defined with a value of 1 when the target device lacks support for HIP image "
+"functions."
+msgstr ""
+
+#: ../../../HIPSupport.rst:172
+msgid "``__HIP_NO_IMAGE_SUPPORT``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:173
+msgid "Alias to ``__HIP_NO_IMAGE_SUPPORT__``. Deprecated."
+msgstr ""
+
+#: ../../../HIPSupport.rst:174
+msgid "``__HIP_API_PER_THREAD_DEFAULT_STREAM__``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:175
+msgid "Defined when the GPU default stream is set to per-thread mode."
+msgstr ""
+
+#: ../../../HIPSupport.rst:176
+msgid "``HIP_API_PER_THREAD_DEFAULT_STREAM``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:177
+msgid "Alias to ``__HIP_API_PER_THREAD_DEFAULT_STREAM__``. Deprecated."
+msgstr ""
+
+#: ../../../HIPSupport.rst:179
+msgid ""
+"Note that some architecture specific AMDGPU macros will have default values "
+"when used from the HIP host compilation. Other :doc:`AMDGPU macros "
+"<AMDGPUSupport>` like ``__AMDGCN_WAVEFRONT_SIZE__`` will default to 64 for "
+"example."
+msgstr ""
+
+#: ../../../HIPSupport.rst:184
+msgid "Compilation Modes"
+msgstr ""
+
+#: ../../../HIPSupport.rst:186
+msgid ""
+"Each HIP source file contains intertwined device and host code. Depending on "
+"the chosen compilation mode by the compiler options ``-fno-gpu-rdc`` and ``-"
+"fgpu-rdc``, these portions of code are compiled differently."
+msgstr ""
+
+#: ../../../HIPSupport.rst:189
+msgid "Device Code Compilation"
+msgstr ""
+
+#: ../../../HIPSupport.rst:191
+msgid "**``-fno-gpu-rdc`` Mode (default)**:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:193
+msgid ""
+"Compiles to a self-contained, fully linked offloading device binary for each "
+"offloading device architecture."
+msgstr ""
+
+#: ../../../HIPSupport.rst:194
+msgid ""
+"Device code within a Translation Unit (TU) cannot call functions located in "
+"another TU."
+msgstr ""
+
+#: ../../../HIPSupport.rst:196
+msgid "**``-fgpu-rdc`` Mode**:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:198
+msgid "Compiles to a bitcode for each GPU architecture."
+msgstr ""
+
+#: ../../../HIPSupport.rst:199
+msgid ""
+"For each offloading device architecture, the bitcode from different TUs are "
+"linked together to create a single offloading device binary."
+msgstr ""
+
+#: ../../../HIPSupport.rst:200
+msgid "Device code in one TU can call functions located in another TU."
+msgstr ""
+
+#: ../../../HIPSupport.rst:203
+msgid "Host Code Compilation"
+msgstr ""
+
+#: ../../../HIPSupport.rst:205
+msgid "**Both Modes**:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:207
+msgid "Compiles to a relocatable object for each TU."
+msgstr ""
+
+#: ../../../HIPSupport.rst:208
+msgid "These relocatable objects are then linked together."
+msgstr ""
+
+#: ../../../HIPSupport.rst:209
+msgid ""
+"Host code within a TU can call host functions and launch kernels from "
+"another TU."
+msgstr ""
+
+#: ../../../HIPSupport.rst:212
+msgid "Syntax Difference with CUDA"
+msgstr ""
+
+#: ../../../HIPSupport.rst:214
+msgid ""
+"Clang's front end, used for both CUDA and HIP programming models, shares the "
+"same parsing and semantic analysis mechanisms. This includes the resolution "
+"of overloads concerning device and host functions. While there exists a "
+"comprehensive documentation on the syntax differences between Clang and NVCC "
+"for CUDA at `Dialect Differences Between Clang and NVCC <https://llvm.org/"
+"docs/CompileCudaWithLLVM.html#dialect-differences-between-clang-and-nvcc>`_, "
+"it is important to note that these differences also apply to HIP code "
+"compilation."
+msgstr ""
+
+#: ../../../HIPSupport.rst:217
+msgid "Predefined Macros for Differentiation"
+msgstr ""
+
+#: ../../../HIPSupport.rst:219
+msgid ""
+"To facilitate differentiation between HIP and CUDA code, as well as between "
+"device and host compilations within HIP, Clang defines specific macros:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:221
+msgid ""
+"``__HIP__`` : This macro is defined only when compiling HIP code. It can be "
+"used to conditionally compile code specific to HIP, enabling developers to "
+"write portable code that can be compiled for both CUDA and HIP."
+msgstr ""
+
+#: ../../../HIPSupport.rst:223
+msgid ""
+"``__HIP_DEVICE_COMPILE__`` : Defined exclusively during HIP device "
+"compilation, this macro allows for conditional compilation of device-"
+"specific code. It provides a mechanism to segregate device and host code, "
+"ensuring that each can be optimized for their respective execution "
+"environments."
+msgstr ""
+
+#: ../../../HIPSupport.rst:226
+msgid "Function Pointers Support"
+msgstr ""
+
+#: ../../../HIPSupport.rst:228
+msgid ""
+"Function pointers' support varies with the usage mode in Clang with HIP. The "
+"following table provides an overview of the support status across different "
+"use-cases and modes."
+msgstr ""
+
+#: ../../../HIPSupport.rst:230
+msgid "Function Pointers Support Overview"
+msgstr ""
+
+#: ../../../HIPSupport.rst:234
+msgid "Use Case"
+msgstr ""
+
+#: ../../../HIPSupport.rst:235
+msgid "``-fno-gpu-rdc`` Mode (default)"
+msgstr ""
+
+#: ../../../HIPSupport.rst:236
+msgid "``-fgpu-rdc`` Mode"
+msgstr ""
+
+#: ../../../HIPSupport.rst:237
+msgid "Defined and used in the same TU"
+msgstr ""
+
+#: ../../../HIPSupport.rst:238 ../../../HIPSupport.rst:239
+#: ../../../HIPSupport.rst:242
+msgid "Supported"
+msgstr ""
+
+#: ../../../HIPSupport.rst:240
+msgid "Defined in one TU and used in another TU"
+msgstr ""
+
+#: ../../../HIPSupport.rst:241
+msgid "Not Supported"
+msgstr ""
+
+#: ../../../HIPSupport.rst:244
+msgid ""
+"In the ``-fno-gpu-rdc`` mode, the compiler calculates the resource usage of "
+"kernels based only on functions present within the same TU. This mode does "
+"not support the use of function pointers defined in a different TU due to "
+"the possibility of incorrect resource usage calculations, leading to "
+"undefined behavior."
+msgstr ""
+
+#: ../../../HIPSupport.rst:246
+msgid ""
+"On the other hand, the ``-fgpu-rdc`` mode allows the definition and use of "
+"function pointers across different TUs, as resource usage calculations can "
+"accommodate functions from disparate TUs."
+msgstr ""
+
+#: ../../../HIPSupport.rst:249
+msgid "Virtual Function Support"
+msgstr ""
+
+#: ../../../HIPSupport.rst:251
+msgid ""
+"In Clang with HIP, support for calling virtual functions of an object in "
+"device or host code is contingent on where the object is constructed."
+msgstr ""
+
+#: ../../../HIPSupport.rst:253
+msgid ""
+"**Constructed in Device Code**: Virtual functions of an object can be called "
+"in device code on a specific offloading device if the object is constructed "
+"in device code on an offloading device with the same architecture."
+msgstr ""
+
+#: ../../../HIPSupport.rst:254
+msgid ""
+"**Constructed in Host Code**: Virtual functions of an object can be called "
+"in host code if the object is constructed in host code."
+msgstr ""
+
+#: ../../../HIPSupport.rst:256
+msgid "In other scenarios, calling virtual functions is not allowed."
+msgstr ""
+
+#: ../../../HIPSupport.rst:259
+msgid "Explanation"
+msgstr ""
+
+#: ../../../HIPSupport.rst:261
+msgid ""
+"An object constructed on the device side contains a pointer to the virtual "
+"function table on the device side, which is not accessible in host code, and "
+"vice versa. Thus, trying to invoke virtual functions from a context "
+"different from where the object was constructed will be disallowed because "
+"the appropriate virtual table cannot be accessed. The virtual function "
+"tables for offloading devices with different architecures are different, "
+"therefore trying to invoke virtual functions from an offloading device with "
+"a different architecture than where the object is constructed is also "
+"disallowed."
+msgstr ""
+
+#: ../../../HIPSupport.rst:289
+msgid "SPIR-V Support on HIPAMD ToolChain"
+msgstr ""
+
+#: ../../../HIPSupport.rst:291
+msgid ""
+"The HIPAMD ToolChain supports targetting `AMDGCN Flavoured SPIR-V <https://"
+"llvm.org/docs/SPIRVUsage.html#target-triples>`_. The support for SPIR-V in "
+"the ROCm and HIPAMD ToolChain is under active development."
+msgstr ""
+
+#: ../../../HIPSupport.rst:297
+msgid "Compilation Process"
+msgstr ""
+
+#: ../../../HIPSupport.rst:299
+msgid ""
+"When compiling HIP programs with the intent of utilizing SPIR-V, the process "
+"diverges from the traditional compilation flow:"
+msgstr ""
+
+#: ../../../HIPSupport.rst:303
+msgid "Using ``--offload-arch=amdgcnspirv``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:305
+msgid ""
+"**Target Triple**: The ``--offload-arch=amdgcnspirv`` flag instructs the "
+"compiler to use the target triple ``spirv64-amd-amdhsa``. This approach does "
+"generates generic AMDGCN SPIR-V which retains architecture specific elements "
+"without hardcoding them, thus allowing for optimal target specific code to "
+"be generated at run time, when the concrete target is known."
+msgstr ""
+
+#: ../../../HIPSupport.rst:311
+msgid ""
+"**LLVM IR Translation**: The program is compiled to LLVM Intermediate "
+"Representation (IR), which is subsequently translated into SPIR-V. In the "
+"future, this translation step will be replaced by direct SPIR-V emission via "
+"the SPIR-V Back-end."
+msgstr ""
+
+#: ../../../HIPSupport.rst:316
+msgid ""
+"**Clang Offload Bundler**: The resulting SPIR-V is embedded in the Clang "
+"offload bundler with the bundle ID ``hip-spirv64-amd-amdhsa--amdgcnspirv``."
+msgstr ""
+
+#: ../../../HIPSupport.rst:320
+msgid "Mixed with Normal ``--offload-arch``"
+msgstr ""
+
+#: ../../../HIPSupport.rst:322
+msgid ""
+"**Mixing ``amdgcnspirv`` and concrete ``gfx###`` targets via ``--offload-"
+"arch`` is not currently supported; this limitation is temporary and will be "
+"removed in a future release**"
+msgstr ""
+
+#: ../../../HIPSupport.rst:327
+msgid "Architecture Specific Macros"
+msgstr ""
+
+#: ../../../HIPSupport.rst:329
+msgid ""
+"None of the architecture specific :doc:`AMDGPU macros <AMDGPUSupport>` are "
+"defined when targeting SPIR-V. An alternative, more flexible mechanism to "
+"enable doing per target / per feature code selection will be added in the "
+"future."
+msgstr ""
