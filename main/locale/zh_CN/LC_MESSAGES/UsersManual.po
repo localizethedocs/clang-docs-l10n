@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-24 08:19+0000\n"
+"POT-Creation-Date: 2025-12-08 08:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3214,6 +3214,40 @@ msgstr ""
 
 #: ../../../UsersManual.rst:2357
 msgid ""
+"Enable speculative devirtualization optimization where a virtual call can be "
+"transformed into a direct call under the assumption that its object is of a "
+"particular type. A runtime check is inserted to validate the assumption "
+"before making the direct call, and if the check fails, the original virtual "
+"call is made instead. This optimization can enable more inlining "
+"opportunities and better optimization of the direct call. This is different "
+"from whole program devirtualization optimization that rely on global "
+"analysis and hidden visibility of the objects to prove that the object is "
+"always of a particular type at a virtual call site. This optimization "
+"doesn't require global analysis or hidden visibility. This optimization "
+"doesn't devirtualize all virtual calls, but only when there's a single "
+"implementation of the virtual function in the module. There could be a "
+"single implementation of the virtual function either because the function is "
+"not overridden in any derived class, or because all objects are instances of "
+"the same class/type."
+msgstr ""
+
+#: ../../../UsersManual.rst:2373
+msgid "Ex of IR before the optimization:"
+msgstr ""
+
+#: ../../../UsersManual.rst:2384
+msgid "IR after the optimization:"
+msgstr ""
+
+#: ../../../UsersManual.rst:2401
+msgid ""
+"This feature is temporarily ignored at the LLVM side when LTO is enabled. "
+"TODO: Update the comment when the LLVM side supports this feature for LTO. "
+"This feature is turned off by default."
+msgstr ""
+
+#: ../../../UsersManual.rst:2407
+msgid ""
 "When enabled, allows the compiler to assume that each object file passed to "
 "the linker has a unique identifier. The identifier for an object file is "
 "either the source file path or the value of the argument `-funique-source-"
@@ -3221,52 +3255,52 @@ msgid ""
 "doing ThinLTO in combination with whole-program devirtualization or CFI."
 msgstr ""
 
-#: ../../../UsersManual.rst:2364
+#: ../../../UsersManual.rst:2414
 msgid ""
 "The full source path or identifier passed to the compiler must be unique. "
 "This means that, for example, the following is a usage error:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2376
+#: ../../../UsersManual.rst:2426
 msgid "but this is not:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2384
+#: ../../../UsersManual.rst:2434
 msgid ""
 "A misuse of this flag may result in a duplicate symbol error at link time."
 msgstr ""
 
-#: ../../../UsersManual.rst:2389
+#: ../../../UsersManual.rst:2439
 msgid ""
 "Used with `-funique-source-file-names` to specify a source file identifier."
 msgstr ""
 
-#: ../../../UsersManual.rst:2394
+#: ../../../UsersManual.rst:2444
 msgid ""
 "In order to improve devirtualization, forces emitting of vtables even in "
 "modules where it isn't necessary. It causes more inline virtual functions to "
 "be emitted."
 msgstr ""
 
-#: ../../../UsersManual.rst:2400
+#: ../../../UsersManual.rst:2450
 msgid "Don't assume that the C++'s new operator is sane."
 msgstr ""
 
-#: ../../../UsersManual.rst:2402
+#: ../../../UsersManual.rst:2452
 msgid ""
 "This option tells the compiler to do not assume that C++'s global new "
 "operator will always return a pointer that does not alias any other pointer "
 "when the function returns."
 msgstr ""
 
-#: ../../../UsersManual.rst:2408
+#: ../../../UsersManual.rst:2458
 msgid ""
 "Assume that an exception object' destructor will not throw, and generate "
 "less code for catch handlers. A throw expression of a type with a "
 "potentially-throwing destructor will lead to an error."
 msgstr ""
 
-#: ../../../UsersManual.rst:2412
+#: ../../../UsersManual.rst:2462
 msgid ""
 "By default, Clang assumes that the exception object may have a throwing "
 "destructor. For the Itanium C++ ABI, Clang generates a landing pad to "
@@ -3275,13 +3309,13 @@ msgid ""
 "destructor will not throw and code simplification is possible."
 msgstr ""
 
-#: ../../../UsersManual.rst:2420
+#: ../../../UsersManual.rst:2470
 msgid ""
 "Instruct code generator to emit a function call to the specified function "
 "name for ``__builtin_trap()``."
 msgstr ""
 
-#: ../../../UsersManual.rst:2423
+#: ../../../UsersManual.rst:2473
 msgid ""
 "LLVM code generator translates ``__builtin_trap()`` to a trap instruction if "
 "it is supported by the target ISA. Otherwise, the builtin is translated into "
@@ -3292,11 +3326,11 @@ msgid ""
 "or when some custom behavior is desired."
 msgstr ""
 
-#: ../../../UsersManual.rst:2434
+#: ../../../UsersManual.rst:2484
 msgid "Select which TLS model to use."
 msgstr ""
 
-#: ../../../UsersManual.rst:2436
+#: ../../../UsersManual.rst:2486
 msgid ""
 "Valid values are: ``global-dynamic``, ``local-dynamic``, ``initial-exec`` "
 "and ``local-exec``. The default value is ``global-dynamic``. The compiler "
@@ -3305,58 +3339,58 @@ msgid ""
 "overridden per variable using the ``tls_model`` attribute."
 msgstr ""
 
-#: ../../../UsersManual.rst:2445
+#: ../../../UsersManual.rst:2495
 msgid "Select emulated TLS model, which overrides all -ftls-model choices."
 msgstr ""
 
-#: ../../../UsersManual.rst:2447
+#: ../../../UsersManual.rst:2497
 msgid ""
 "In emulated TLS mode, all access to TLS variables are converted to calls to "
 "__emutls_get_address in the runtime library."
 msgstr ""
 
-#: ../../../UsersManual.rst:2452
+#: ../../../UsersManual.rst:2502
 msgid ""
 "Select the ARM modes (arm or thumb) that support hardware division "
 "instructions."
 msgstr ""
 
-#: ../../../UsersManual.rst:2455
+#: ../../../UsersManual.rst:2505
 msgid ""
 "Valid values are: ``arm``, ``thumb`` and ``arm,thumb``. This option is used "
 "to indicate which mode (arm or thumb) supports hardware division "
 "instructions. This only applies to the ARM architecture."
 msgstr ""
 
-#: ../../../UsersManual.rst:2462
+#: ../../../UsersManual.rst:2512
 msgid "Enable or disable CRC instructions."
 msgstr ""
 
-#: ../../../UsersManual.rst:2464
+#: ../../../UsersManual.rst:2514
 msgid ""
 "This option is used to indicate whether CRC instructions are to be "
 "generated. This only applies to the ARM architecture."
 msgstr ""
 
-#: ../../../UsersManual.rst:2467
+#: ../../../UsersManual.rst:2517
 msgid "CRC instructions are enabled by default on ARMv8."
 msgstr ""
 
-#: ../../../UsersManual.rst:2471
+#: ../../../UsersManual.rst:2521
 msgid "Generate code which only uses the general purpose registers."
 msgstr ""
 
-#: ../../../UsersManual.rst:2473
+#: ../../../UsersManual.rst:2523
 msgid ""
 "This option restricts the generated code to use general registers only. This "
 "only applies to the AArch64 architecture."
 msgstr ""
 
-#: ../../../UsersManual.rst:2478
+#: ../../../UsersManual.rst:2528
 msgid "Control the usage of compact branches for MIPSR6."
 msgstr ""
 
-#: ../../../UsersManual.rst:2480
+#: ../../../UsersManual.rst:2530
 msgid ""
 "Valid values are: ``never``, ``optimal`` and ``always``. The default value "
 "is ``optimal`` which generates compact branches when a delay slot cannot be "
@@ -3364,7 +3398,7 @@ msgid ""
 "generates compact branches whenever possible."
 msgstr ""
 
-#: ../../../UsersManual.rst:2488
+#: ../../../UsersManual.rst:2538
 msgid ""
 "Instruct the code generator to not enforce a higher alignment than the given "
 "number (of bytes) when accessing memory via an opaque pointer or reference. "
@@ -3372,7 +3406,7 @@ msgid ""
 "type has an explicit “aligned” attribute."
 msgstr ""
 
-#: ../../../UsersManual.rst:2493
+#: ../../../UsersManual.rst:2543
 msgid ""
 "The value should usually be determined by the properties of the system "
 "allocator. Some builtin types, especially vector types, have very high "
@@ -3383,20 +3417,20 @@ msgid ""
 "compiler can assume for an arbitrary pointer, which may point onto the heap."
 msgstr ""
 
-#: ../../../UsersManual.rst:2501
+#: ../../../UsersManual.rst:2551
 msgid ""
 "This option does not affect the ABI alignment of types; the layout of "
 "structs and unions and the value returned by the alignof operator remain the "
 "same."
 msgstr ""
 
-#: ../../../UsersManual.rst:2504
+#: ../../../UsersManual.rst:2554
 msgid ""
 "This option can be overridden on a case-by-case basis by putting an explicit "
 "“aligned” alignment on a struct, union, or typedef.  For example:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2520
+#: ../../../UsersManual.rst:2570
 msgid ""
 "Controls whether Clang emits an address-significance table into the object "
 "file. Address-significance tables allow linkers to implement `safe ICF "
@@ -3407,7 +3441,7 @@ msgid ""
 "has an effect on ELF targets."
 msgstr ""
 
-#: ../../../UsersManual.rst:2532
+#: ../../../UsersManual.rst:2582
 msgid ""
 "Controls whether Clang emits a unique (best-effort) symbol name for internal "
 "linkage symbols.  When this option is set, compiler hashes the main source "
@@ -3419,21 +3453,21 @@ msgid ""
 "the binary."
 msgstr ""
 
-#: ../../../UsersManual.rst:2541
+#: ../../../UsersManual.rst:2591
 msgid ""
 "It should be noted that this option cannot guarantee uniqueness and the "
 "following is an example where it is not unique when two modules contain "
 "symbols with the same private linkage name:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2558
+#: ../../../UsersManual.rst:2608
 msgid ""
 "Controls how Clang emits text sections for basic blocks. With values ``all`` "
 "and ``list=<arg>``, each basic block or a subset of basic blocks can be "
 "placed in its own unique section."
 msgstr ""
 
-#: ../../../UsersManual.rst:2562
+#: ../../../UsersManual.rst:2612
 msgid ""
 "With the ``list=<arg>`` option, a file containing the subset of basic blocks "
 "that need to placed in unique sections can be specified.  The format of the "
@@ -3441,34 +3475,34 @@ msgid ""
 "the following:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2573
+#: ../../../UsersManual.rst:2623
 msgid ""
 "will place the machine basic block with ``id 2`` in function ``foo`` in a "
 "unique section.  It will also place all basic blocks of functions ``bar`` in "
 "unique sections."
 msgstr ""
 
-#: ../../../UsersManual.rst:2577
+#: ../../../UsersManual.rst:2627
 msgid ""
 "Further, section clusters can also be specified using the ``list=<arg>`` "
 "option.  For example, ``list=spec.txt`` where ``spec.txt`` contains:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2586
+#: ../../../UsersManual.rst:2636
 msgid ""
 "will create two unique sections for function ``foo`` with the first "
 "containing the odd numbered basic blocks and the second containing the even "
 "numbered basic blocks."
 msgstr ""
 
-#: ../../../UsersManual.rst:2590
+#: ../../../UsersManual.rst:2640
 msgid ""
 "Basic block sections allow the linker to reorder basic blocks and enables "
 "link-time optimizations like whole program inter-procedural basic block "
 "reordering."
 msgstr ""
 
-#: ../../../UsersManual.rst:2596
+#: ../../../UsersManual.rst:2646
 msgid ""
 "Emit the raw codegen (CG) data into custom sections in the object file. "
 "Currently, this option also combines the raw CG data from the object files "
@@ -3478,13 +3512,13 @@ msgid ""
 "object file."
 msgstr ""
 
-#: ../../../UsersManual.rst:2607
+#: ../../../UsersManual.rst:2657
 msgid ""
 "For linkers that do not yet support this feature, `llvm-cgdata` can be used "
 "manually to merge this CG data in object files."
 msgstr ""
 
-#: ../../../UsersManual.rst:2617
+#: ../../../UsersManual.rst:2667
 msgid ""
 "Read the codegen data from the specified path to more effectively outline "
 "functions across compilation units. When the <path> is not specified, "
@@ -3493,11 +3527,11 @@ msgid ""
 "folding (ICF)."
 msgstr ""
 
-#: ../../../UsersManual.rst:2630
+#: ../../../UsersManual.rst:2680
 msgid "Strict Aliasing"
 msgstr ""
 
-#: ../../../UsersManual.rst:2632
+#: ../../../UsersManual.rst:2682
 msgid ""
 "The C and C++ standards require accesses to objects in memory to use l-"
 "values of an appropriate type for the object. This is called *strict "
@@ -3507,14 +3541,14 @@ msgid ""
 "behavior in code that violates the strict aliasing rules. For example:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2651
+#: ../../../UsersManual.rst:2701
 msgid ""
 "Strict aliasing can be explicitly enabled with ``-fstrict-aliasing`` and "
 "disabled with ``-fno-strict-aliasing``. ``clang-cl`` defaults to ``-fno-"
 "strict-aliasing``. Otherwise, Clang defaults to ``-fstrict-aliasing``."
 msgstr ""
 
-#: ../../../UsersManual.rst:2655
+#: ../../../UsersManual.rst:2705
 msgid ""
 "C and C++ specify slightly different rules for strict aliasing. To improve "
 "language interoperability, Clang allows two types to alias if either "
@@ -3523,19 +3557,19 @@ msgid ""
 "relaxes the standard aliasing rules in the following ways:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2661
+#: ../../../UsersManual.rst:2711
 msgid ""
 "All integer types of the same size are permitted to alias each other, "
 "including signed and unsigned types."
 msgstr ""
 
-#: ../../../UsersManual.rst:2663
+#: ../../../UsersManual.rst:2713
 msgid ""
 "``void*`` is permitted to alias any pointer type, ``void**`` is permitted to "
 "alias any pointer to pointer type, and so on."
 msgstr ""
 
-#: ../../../UsersManual.rst:2666
+#: ../../../UsersManual.rst:2716
 msgid ""
 "Code which violates strict aliasing has undefined behavior. A program that "
 "works in one version of Clang may not work in another because of changes to "
@@ -3545,18 +3579,18 @@ msgid ""
 "be built with ``-fno-strict-aliasing`` if the violation cannot be fixed."
 msgstr ""
 
-#: ../../../UsersManual.rst:2673
+#: ../../../UsersManual.rst:2723
 msgid "Clang supports several ways to fix a violation of strict aliasing:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2675
+#: ../../../UsersManual.rst:2725
 msgid ""
 "L-values of the character types ``char`` and ``unsigned char`` (as well as "
 "other types, depending on the standard) are permitted to access objects of "
 "any type."
 msgstr ""
 
-#: ../../../UsersManual.rst:2679
+#: ../../../UsersManual.rst:2729
 msgid ""
 "Library functions such as ``memcpy`` and ``memset`` are specified as "
 "treating memory as characters and therefore are not limited by strict "
@@ -3568,13 +3602,13 @@ msgid ""
 "constant sizes."
 msgstr ""
 
-#: ../../../UsersManual.rst:2687
+#: ../../../UsersManual.rst:2737
 msgid ""
 "The attribute ``may_alias`` can be added to a ``typedef`` to give l-values "
 "of that type the same aliasing power as the character types."
 msgstr ""
 
-#: ../../../UsersManual.rst:2690
+#: ../../../UsersManual.rst:2740
 msgid ""
 "Clang makes a best effort to avoid obvious miscompilations from strict "
 "aliasing by only considering type information when it cannot prove that two "
@@ -3584,7 +3618,7 @@ msgid ""
 "surprising ways."
 msgstr ""
 
-#: ../../../UsersManual.rst:2696
+#: ../../../UsersManual.rst:2746
 msgid ""
 "In Clang 20, Clang strengthened its implementation of strict aliasing for "
 "accesses of pointer type. Previously, all accesses of pointer type were "
@@ -3594,11 +3628,11 @@ msgid ""
 "all pointers as aliasing can be restored using ``-fno-pointer-tbaa``."
 msgstr ""
 
-#: ../../../UsersManual.rst:2704
+#: ../../../UsersManual.rst:2754
 msgid "Profile Guided Optimization"
 msgstr ""
 
-#: ../../../UsersManual.rst:2706
+#: ../../../UsersManual.rst:2756
 msgid ""
 "Profile information enables better optimization. For example, knowing that a "
 "branch is taken very frequently helps the compiler make better decisions "
@@ -3608,7 +3642,7 @@ msgid ""
 "optimization."
 msgstr ""
 
-#: ../../../UsersManual.rst:2712
+#: ../../../UsersManual.rst:2762
 msgid ""
 "Clang supports profile guided optimization with two different kinds of "
 "profiling. A sampling profiler can generate a profile with very low runtime "
@@ -3618,7 +3652,7 @@ msgid ""
 "taken and function invocation."
 msgstr ""
 
-#: ../../../UsersManual.rst:2719
+#: ../../../UsersManual.rst:2769
 msgid ""
 "Regardless of which kind of profiling you use, be careful to collect "
 "profiles by running your code with inputs that are representative of the "
@@ -3628,17 +3662,17 @@ msgid ""
 "profiling."
 msgstr ""
 
-#: ../../../UsersManual.rst:2726
+#: ../../../UsersManual.rst:2776
 msgid "Differences Between Sampling and Instrumentation"
 msgstr ""
 
-#: ../../../UsersManual.rst:2728
+#: ../../../UsersManual.rst:2778
 msgid ""
 "Although both techniques are used for similar purposes, there are important "
 "differences between the two:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2731
+#: ../../../UsersManual.rst:2781
 msgid ""
 "Profile data generated with one cannot be used by the other, and there is no "
 "conversion tool that can convert one to the other. So, a profile generated "
@@ -3648,13 +3682,13 @@ msgid ""
 "sample-use`` or ``-fauto-profile``."
 msgstr ""
 
-#: ../../../UsersManual.rst:2738
+#: ../../../UsersManual.rst:2788
 msgid ""
 "Instrumentation profile data can be used for code coverage analysis and "
 "optimization."
 msgstr ""
 
-#: ../../../UsersManual.rst:2741
+#: ../../../UsersManual.rst:2791
 msgid ""
 "Sampling profiles can only be used for optimization. They cannot be used for "
 "code coverage analysis. Although it would be technically possible to use "
@@ -3662,7 +3696,7 @@ msgid ""
 "grained for code coverage purposes; it would yield poor results."
 msgstr ""
 
-#: ../../../UsersManual.rst:2746
+#: ../../../UsersManual.rst:2796
 msgid ""
 "Sampling profiles must be generated by an external tool. The profile "
 "generated by that tool must then be converted into a format that can be read "
@@ -3670,11 +3704,11 @@ msgid ""
 "sampling profile formats."
 msgstr ""
 
-#: ../../../UsersManual.rst:2753
+#: ../../../UsersManual.rst:2803
 msgid "Using Sampling Profilers"
 msgstr ""
 
-#: ../../../UsersManual.rst:2755
+#: ../../../UsersManual.rst:2805
 msgid ""
 "Sampling profilers are used to collect runtime information, such as hardware "
 "counters, while your application executes. They are typically very efficient "
@@ -3683,7 +3717,7 @@ msgid ""
 "areas of the code are."
 msgstr ""
 
-#: ../../../UsersManual.rst:2761
+#: ../../../UsersManual.rst:2811
 msgid ""
 "Using the data from a sample profiler requires some changes in the way a "
 "program is built. Before the compiler can use profiling information, the "
@@ -3691,7 +3725,7 @@ msgid ""
 "cycle when using sample profilers for optimization:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2766
+#: ../../../UsersManual.rst:2816
 msgid ""
 "Build the code with source line table information. You can use all the usual "
 "build flags that you always build your application with. The only "
@@ -3702,30 +3736,30 @@ msgid ""
 "and ``-funique-internal-linkage-names`` options."
 msgstr ""
 
-#: ../../../UsersManual.rst:2774 ../../../UsersManual.rst:2795
-#: ../../../UsersManual.rst:2896 ../../../UsersManual.rst:2915
+#: ../../../UsersManual.rst:2824 ../../../UsersManual.rst:2845
+#: ../../../UsersManual.rst:2946 ../../../UsersManual.rst:2965
 msgid "On Linux:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2782
+#: ../../../UsersManual.rst:2832
 msgid ""
 "While MSVC-style targets default to CodeView debug information, DWARF debug "
 "information is required to generate source-level LLVM profiles. Use ``-"
 "gdwarf`` to include DWARF debug information:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2792 ../../../UsersManual.rst:2912
+#: ../../../UsersManual.rst:2842 ../../../UsersManual.rst:2962
 msgid ""
 "[OPTIONAL] Pseudo instrumentation can be used as the anchor for accurate "
 "profile mapping with the ``-fpseudo-probe-for-profiling`` option."
 msgstr ""
 
-#: ../../../UsersManual.rst:2803 ../../../UsersManual.rst:2904
-#: ../../../UsersManual.rst:2923 ../../../UsersManual.rst:2942
+#: ../../../UsersManual.rst:2853 ../../../UsersManual.rst:2954
+#: ../../../UsersManual.rst:2973 ../../../UsersManual.rst:2992
 msgid "On Windows:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2813
+#: ../../../UsersManual.rst:2863
 msgid ""
 ":ref:`-funique-internal-linkage-names <funique_internal_linkage_names>` "
 "generates unique names based on given command-line source file paths. If "
@@ -3734,14 +3768,14 @@ msgid ""
 "in unused profile data. Consider omitting this option in such cases."
 msgstr ""
 
-#: ../../../UsersManual.rst:2819
+#: ../../../UsersManual.rst:2869
 msgid ""
 "Run the executable under a sampling profiler. The specific profiler you use "
 "does not really matter, as long as its output can be converted into the "
 "format that the LLVM optimizer understands."
 msgstr ""
 
-#: ../../../UsersManual.rst:2823
+#: ../../../UsersManual.rst:2873
 msgid ""
 "Two such profilers are the Linux Perf profiler (https://perf.wiki.kernel."
 "org/) and Intel's Sampling Enabling Product (SEP), available as part of "
@@ -3750,23 +3784,23 @@ msgid ""
 "can be used on Linux, Windows, and FreeBSD."
 msgstr ""
 
-#: ../../../UsersManual.rst:2829
+#: ../../../UsersManual.rst:2879
 msgid ""
 "The LLVM tool ``llvm-profgen`` can convert output of either Perf or SEP. An "
 "external project, `AutoFDO <https://github.com/google/autofdo>`_, also "
 "provides a ``create_llvm_prof`` tool which supports Linux Perf output."
 msgstr ""
 
-#: ../../../UsersManual.rst:2833
+#: ../../../UsersManual.rst:2883
 msgid "When using Perf:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2839
+#: ../../../UsersManual.rst:2889
 msgid ""
 "If the event above is unavailable, ``branches:u`` is probably next-best."
 msgstr ""
 
-#: ../../../UsersManual.rst:2841
+#: ../../../UsersManual.rst:2891
 msgid ""
 "Note the use of the ``-b`` flag. This tells Perf to use the Last Branch "
 "Record (LBR) to record call chains. While this is not strictly required, it "
@@ -3774,17 +3808,17 @@ msgid ""
 "data."
 msgstr ""
 
-#: ../../../UsersManual.rst:2846
+#: ../../../UsersManual.rst:2896
 msgid "When using SEP:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2852
+#: ../../../UsersManual.rst:2902
 msgid ""
 "This produces a ``code.perf.data.script`` output which can be used with "
 "``llvm-profgen``'s ``--perfscript`` input option."
 msgstr ""
 
-#: ../../../UsersManual.rst:2855
+#: ../../../UsersManual.rst:2905
 msgid ""
 "Convert the collected profile data to LLVM's sample profile format. This is "
 "currently supported via the `AutoFDO <https://github.com/google/autofdo>`_ "
@@ -3792,7 +3826,7 @@ msgid ""
 "the ``perf.data`` file to LLVM using the command:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2864
+#: ../../../UsersManual.rst:2914
 msgid ""
 "This will read ``perf.data`` and the binary file ``./code`` and emit the "
 "profile data in ``code.prof``. Note that if you ran ``perf`` without the ``-"
@@ -3800,25 +3834,25 @@ msgid ""
 "``create_llvm_prof``."
 msgstr ""
 
-#: ../../../UsersManual.rst:2869
+#: ../../../UsersManual.rst:2919
 msgid ""
 "Alternatively, the LLVM tool ``llvm-profgen`` can also be used to generate "
 "the LLVM sample profile:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2876
+#: ../../../UsersManual.rst:2926
 msgid ""
 "Please note, ``perf.data`` must be collected with ``-b`` flag to Linux "
 "``perf`` for the above step to work."
 msgstr ""
 
-#: ../../../UsersManual.rst:2879
+#: ../../../UsersManual.rst:2929
 msgid ""
 "When using SEP the output is in the textual format corresponding to ``llvm-"
 "profgen --perfscript``. For example:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2887
+#: ../../../UsersManual.rst:2937
 msgid ""
 "Build the code again using the collected profile. This step feeds the "
 "profile back to the optimizers. This should result in a binary that executes "
@@ -3829,7 +3863,7 @@ msgid ""
 "omitted if you do not need debug info in the final binary."
 msgstr ""
 
-#: ../../../UsersManual.rst:2931
+#: ../../../UsersManual.rst:2981
 msgid ""
 "[OPTIONAL] Sampling-based profiles can have inaccuracies or missing block/ "
 "edge counters. The profile inference algorithm (profi) can be used to infer "
@@ -3837,11 +3871,11 @@ msgid ""
 "Enable it with ``-fsample-profile-use-profi``. For example, on Linux:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2951
+#: ../../../UsersManual.rst:3001
 msgid "Sample Profile Formats"
 msgstr ""
 
-#: ../../../UsersManual.rst:2953
+#: ../../../UsersManual.rst:3003
 msgid ""
 "Since external profilers generate profile data in a variety of custom "
 "formats, the data generated by the profiler must be converted into a format "
@@ -3849,7 +3883,7 @@ msgid ""
 "profile formats:"
 msgstr ""
 
-#: ../../../UsersManual.rst:2957
+#: ../../../UsersManual.rst:3007
 msgid ""
 "ASCII text. This is the easiest one to generate. The file is divided into "
 "sections, which correspond to each of the functions with profile "
@@ -3857,14 +3891,14 @@ msgid ""
 "the binary or gcov formats using the ``llvm-profdata`` tool."
 msgstr ""
 
-#: ../../../UsersManual.rst:2962
+#: ../../../UsersManual.rst:3012
 msgid ""
 "Binary encoding. This uses a more efficient encoding that yields smaller "
 "profile files. This is the format generated by the ``create_llvm_prof`` tool "
 "in https://github.com/google/autofdo."
 msgstr ""
 
-#: ../../../UsersManual.rst:2966
+#: ../../../UsersManual.rst:3016
 msgid ""
 "GCC encoding. This is based on the gcov format, which is accepted by GCC. It "
 "is only interesting in environments where GCC and Clang co-exist. This "
@@ -3873,7 +3907,7 @@ msgid ""
 "be generated by either."
 msgstr ""
 
-#: ../../../UsersManual.rst:2972
+#: ../../../UsersManual.rst:3022
 msgid ""
 "If you are using Linux Perf to generate sampling profiles, you can use the "
 "conversion tool ``create_llvm_prof`` described in the previous section. "
@@ -3881,11 +3915,11 @@ msgid ""
 "profiler's native format into one of these three."
 msgstr ""
 
-#: ../../../UsersManual.rst:2979
+#: ../../../UsersManual.rst:3029
 msgid "Sample Profile Text Format"
 msgstr ""
 
-#: ../../../UsersManual.rst:2981
+#: ../../../UsersManual.rst:3031
 msgid ""
 "This section describes the ASCII text format for sampling profiles. It is, "
 "arguably, the easiest one to generate. If you are interested in generating "
@@ -3893,7 +3927,7 @@ msgid ""
 "tree (specifically, ``include/llvm/ProfileData/SampleProfReader.h``)."
 msgstr ""
 
-#: ../../../UsersManual.rst:2999
+#: ../../../UsersManual.rst:3049
 msgid ""
 "This is a nested tree in which the indentation represents the nesting level "
 "of the inline stack. There are no blank lines in the file. And the spacing "
@@ -3901,11 +3935,11 @@ msgid ""
 "while reading the file."
 msgstr ""
 
-#: ../../../UsersManual.rst:3004
+#: ../../../UsersManual.rst:3054
 msgid "Any line starting with the '#' character is completely ignored."
 msgstr ""
 
-#: ../../../UsersManual.rst:3006
+#: ../../../UsersManual.rst:3056
 msgid ""
 "Inlined calls are represented with indentation. The Inline stack is a stack "
 "of source locations in which the top of the stack represents the leaf "
@@ -3913,7 +3947,7 @@ msgid ""
 "the instruction belongs."
 msgstr ""
 
-#: ../../../UsersManual.rst:3011
+#: ../../../UsersManual.rst:3061
 msgid ""
 "Function names must be mangled in order for the profile loader to match them "
 "in the current translation unit. The two numbers in the function header "
@@ -3923,29 +3957,29 @@ msgid ""
 "how frequently the function is invoked."
 msgstr ""
 
-#: ../../../UsersManual.rst:3018
+#: ../../../UsersManual.rst:3068
 msgid "There are two types of lines in the function body."
 msgstr ""
 
-#: ../../../UsersManual.rst:3020
+#: ../../../UsersManual.rst:3070
 msgid ""
 "Sampled line represents the profile information of a source location. "
 "``offsetN[.discriminator]: number_of_samples [fn5:num fn6:num ... ]``"
 msgstr ""
 
-#: ../../../UsersManual.rst:3023
+#: ../../../UsersManual.rst:3073
 msgid ""
 "Callsite line represents the profile information of an inlined callsite. "
 "``offsetA[.discriminator]: fnA:num_of_total_samples``"
 msgstr ""
 
-#: ../../../UsersManual.rst:3026
+#: ../../../UsersManual.rst:3076
 msgid ""
 "Each sampled line may contain several items. Some are optional (marked "
 "below):"
 msgstr ""
 
-#: ../../../UsersManual.rst:3029
+#: ../../../UsersManual.rst:3079
 msgid ""
 "Source line offset. This number represents the line number in the function "
 "where the sample was collected. The line number is always relative to the "
@@ -3953,7 +3987,7 @@ msgid ""
 "header at line 280, the offset 13 is at line 293 in the file."
 msgstr ""
 
-#: ../../../UsersManual.rst:3035
+#: ../../../UsersManual.rst:3085
 msgid ""
 "Note that this offset should never be a negative number. This could happen "
 "in cases like macros. The debug machinery will register the line number at "
@@ -3963,7 +3997,7 @@ msgid ""
 "meaningful weight to the instructions in the macro)."
 msgstr ""
 
-#: ../../../UsersManual.rst:3043
+#: ../../../UsersManual.rst:3093
 msgid ""
 "[OPTIONAL] Discriminator. This is used if the sampled program was compiled "
 "with DWARF discriminator support (http://wiki.dwarfstd.org/index.php?"
@@ -3972,7 +4006,7 @@ msgid ""
 "the same source line location."
 msgstr ""
 
-#: ../../../UsersManual.rst:3050
+#: ../../../UsersManual.rst:3100
 msgid ""
 "For example, consider the line of code ``if (cond) foo(); else bar();``. If "
 "the predicate ``cond`` is true 80% of the time, then the edge into function "
@@ -3982,7 +4016,7 @@ msgid ""
 "is taken more frequently."
 msgstr ""
 
-#: ../../../UsersManual.rst:3058
+#: ../../../UsersManual.rst:3108
 msgid ""
 "This is what discriminators provide. In this case, the calls to ``foo`` and "
 "``bar`` will be at the same line, but will have different discriminator "
@@ -3990,27 +4024,27 @@ msgid ""
 "and ``bar``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3063
+#: ../../../UsersManual.rst:3113
 msgid ""
 "Number of samples. This is an integer quantity representing the number of "
 "samples collected by the profiler at this source location."
 msgstr ""
 
-#: ../../../UsersManual.rst:3067
+#: ../../../UsersManual.rst:3117
 msgid ""
 "[OPTIONAL] Potential call targets and samples. If present, this line "
 "contains a call instruction. This models both direct and number of samples. "
 "For example,"
 msgstr ""
 
-#: ../../../UsersManual.rst:3075
+#: ../../../UsersManual.rst:3125
 msgid ""
 "The above means that at relative line offset 130 there is a call instruction "
 "that calls one of ``foo()``, ``bar()`` and ``baz()``, with ``baz()`` being "
 "the relatively more frequently called target."
 msgstr ""
 
-#: ../../../UsersManual.rst:3079
+#: ../../../UsersManual.rst:3129
 msgid ""
 "As an example, consider a program with the call chain ``main -> foo -> "
 "bar``. When built with optimizations enabled, the compiler may inline the "
@@ -4018,7 +4052,7 @@ msgid ""
 "then be something like this:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3092
+#: ../../../UsersManual.rst:3142
 msgid ""
 "This profile indicates that there were a total of 35,504 samples collected "
 "in main. All of those were at line 1 (the call to ``foo``). Of those, 31,977 "
@@ -4026,11 +4060,11 @@ msgid ""
 "0``) corresponds to line 2 inside ``main``. No samples were collected there."
 msgstr ""
 
-#: ../../../UsersManual.rst:3101
+#: ../../../UsersManual.rst:3151
 msgid "Profiling with Instrumentation"
 msgstr ""
 
-#: ../../../UsersManual.rst:3103
+#: ../../../UsersManual.rst:3153
 msgid ""
 "Clang also supports profiling via instrumentation. This requires building a "
 "special instrumented version of the code and has some runtime overhead "
@@ -4039,7 +4073,7 @@ msgid ""
 "the code behaves consistently across runs."
 msgstr ""
 
-#: ../../../UsersManual.rst:3109
+#: ../../../UsersManual.rst:3159
 msgid ""
 "Clang supports two types of instrumentation: frontend-based and IR-based. "
 "Frontend-based instrumentation can be enabled with the option ``-fprofile-"
@@ -4051,26 +4085,26 @@ msgid ""
 "it should be used with source line-based coverage testing."
 msgstr ""
 
-#: ../../../UsersManual.rst:3118
+#: ../../../UsersManual.rst:3168
 msgid ""
 "The flag ``-fcs-profile-generate`` also instruments programs using the same "
 "instrumentation method as ``-fprofile-generate``. However, it performs a "
 "post-inline late instrumentation and can produce context-sensitive profiles."
 msgstr ""
 
-#: ../../../UsersManual.rst:3123
+#: ../../../UsersManual.rst:3173
 msgid ""
 "Here are the steps for using profile guided optimization with "
 "instrumentation:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3126
+#: ../../../UsersManual.rst:3176
 msgid ""
 "Build an instrumented version of the code by compiling and linking with the "
 "``-fprofile-generate`` or ``-fprofile-instr-generate`` option."
 msgstr ""
 
-#: ../../../UsersManual.rst:3133
+#: ../../../UsersManual.rst:3183
 msgid ""
 "Run the instrumented executable with inputs that reflect the typical usage. "
 "By default, the profile data will be written to a ``default.profraw`` file "
@@ -4083,13 +4117,13 @@ msgid ""
 "``%c``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3143
+#: ../../../UsersManual.rst:3193
 msgid ""
 "Any instance of ``%p`` in that file name will be replaced by the process ID, "
 "so that you can easily distinguish the profile output from multiple runs."
 msgstr ""
 
-#: ../../../UsersManual.rst:3151
+#: ../../../UsersManual.rst:3201
 msgid ""
 "The modifier ``%h`` can be used in scenarios where the same instrumented "
 "binary is run in multiple different host machines dumping profile data to a "
@@ -4098,7 +4132,7 @@ msgid ""
 "each other."
 msgstr ""
 
-#: ../../../UsersManual.rst:3157
+#: ../../../UsersManual.rst:3207
 msgid ""
 "While the use of ``%p`` specifier can reduce the likelihood for the profiles "
 "dumped from different processes to clobber each other, such clobbering can "
@@ -4118,7 +4152,7 @@ msgid ""
 "expected by the compiler ( see step 3 below)."
 msgstr ""
 
-#: ../../../UsersManual.rst:3177
+#: ../../../UsersManual.rst:3227
 msgid ""
 "Although rare, binary signatures used by the ``%m`` specifier can have "
 "collisions. In this case, the ``%b`` specifier, which expands to the binary "
@@ -4128,39 +4162,39 @@ msgid ""
 "supported."
 msgstr ""
 
-#: ../../../UsersManual.rst:3183
+#: ../../../UsersManual.rst:3233
 msgid ""
 "See `this <SourceBasedCodeCoverage.html#running-the-instrumented-program>`_ "
 "section about the ``%t``, and ``%c`` modifiers."
 msgstr ""
 
-#: ../../../UsersManual.rst:3186
+#: ../../../UsersManual.rst:3236
 msgid ""
 "Combine profiles from multiple runs and convert the \"raw\" profile format "
 "to the input expected by clang. Use the ``merge`` command of the ``llvm-"
 "profdata`` tool to do this."
 msgstr ""
 
-#: ../../../UsersManual.rst:3194
+#: ../../../UsersManual.rst:3244
 msgid ""
 "Note that this step is necessary even when there is only one \"raw\" "
 "profile, since the merge operation also changes the file format."
 msgstr ""
 
-#: ../../../UsersManual.rst:3197
+#: ../../../UsersManual.rst:3247
 msgid ""
 "Build the code again using the ``-fprofile-use`` or ``-fprofile-instr-use`` "
 "option to specify the collected profile data."
 msgstr ""
 
-#: ../../../UsersManual.rst:3204
+#: ../../../UsersManual.rst:3254
 msgid ""
 "You can repeat step 4 as often as you like without regenerating the profile. "
 "As you make changes to your code, clang may no longer be able to use the "
 "profile data. It will warn you when this happens."
 msgstr ""
 
-#: ../../../UsersManual.rst:3208
+#: ../../../UsersManual.rst:3258
 msgid ""
 "Note that ``-fprofile-use`` option is semantically equivalent to its GCC "
 "counterpart, it *does not* handle profile formats produced by GCC. Both ``-"
@@ -4168,7 +4202,7 @@ msgid ""
 "format, regardeless whether it is produced by frontend or the IR pass."
 msgstr ""
 
-#: ../../../UsersManual.rst:3215
+#: ../../../UsersManual.rst:3265
 msgid ""
 "The ``-fprofile-generate`` and ``-fprofile-generate=`` flags will use an "
 "alternative instrumentation method for profile generation. When given a "
@@ -4181,19 +4215,19 @@ msgid ""
 "from different running processes.  For example,"
 msgstr ""
 
-#: ../../../UsersManual.rst:3229
+#: ../../../UsersManual.rst:3279
 msgid ""
 "When ``code`` is executed, the profile will be written to the file ``yyy/zzz/"
 "default_xxxx.profraw``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3232
+#: ../../../UsersManual.rst:3282
 msgid ""
 "To generate the profile data file with the compiler readable format, the "
 "``llvm-profdata`` tool can be used with the profile directory as the input:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3239
+#: ../../../UsersManual.rst:3289
 msgid ""
 "If the user wants to turn off the auto-merging feature, or simply override "
 "the the profile dumping path specified at command line, the environment "
@@ -4203,7 +4237,7 @@ msgid ""
 "file_pattern.profraw``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3248
+#: ../../../UsersManual.rst:3298
 msgid ""
 "The ``-fcs-profile-generate`` and ``-fcs-profile-generate=`` flags will use "
 "the same instrumentation method, and generate the same profile as in the ``-"
@@ -4216,26 +4250,26 @@ msgid ""
 "merged by llvm-profdata. A use example:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3264
+#: ../../../UsersManual.rst:3314
 msgid ""
 "The first few steps are the same as that in ``-fprofile-generate`` "
 "compilation. Then perform a second round of instrumentation."
 msgstr ""
 
-#: ../../../UsersManual.rst:3274
+#: ../../../UsersManual.rst:3324
 msgid ""
 "The resulted ``cs_code.prodata`` combines ``code.profdata`` and the profile "
 "generated from binary ``cs_code``. Profile ``cs_code.profata`` can be used "
 "by ``-fprofile-use`` compilation."
 msgstr ""
 
-#: ../../../UsersManual.rst:3282
+#: ../../../UsersManual.rst:3332
 msgid ""
 "The above command will read both profiles to the compiler at the identical "
 "point of instrumentations."
 msgstr ""
 
-#: ../../../UsersManual.rst:3287
+#: ../../../UsersManual.rst:3337
 msgid ""
 "Without any other arguments, ``-fprofile-use`` behaves identically to ``-"
 "fprofile-instr-use``. Otherwise, if ``pathname`` is the full path to a "
@@ -4243,7 +4277,7 @@ msgid ""
 "it reads from ``pathname/default.profdata``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3294
+#: ../../../UsersManual.rst:3344
 msgid ""
 "Unless ``-fsanitize=thread`` is specified, the default is ``single``, which "
 "uses non-atomic increments. The counters can be inaccurate under thread "
@@ -4252,7 +4286,7 @@ msgid ""
 "by the target, or ``single`` otherwise."
 msgstr ""
 
-#: ../../../UsersManual.rst:3302
+#: ../../../UsersManual.rst:3352
 msgid ""
 "Enables the continuous instrumentation profiling where profile counter "
 "updates are continuously synced to a file. This option sets any necessary "
@@ -4261,7 +4295,7 @@ msgid ""
 "not supported in continuous mode."
 msgstr ""
 
-#: ../../../UsersManual.rst:3312
+#: ../../../UsersManual.rst:3362
 msgid ""
 "Running ``./code`` will collect the profile and write it to the "
 "``default_xxxx.profraw`` file. However, if ``./code`` abruptly terminates or "
@@ -4270,7 +4304,7 @@ msgid ""
 "the non-continuous mode, no profile file is generated."
 msgstr ""
 
-#: ../../../UsersManual.rst:3320
+#: ../../../UsersManual.rst:3370
 msgid ""
 "Enables the temporal profiling extension for IRPGO to improve startup time "
 "by reducing ``.text`` section page faults. To do this, we instrument "
@@ -4278,31 +4312,31 @@ msgid ""
 "time and use this data to generate a function order to improve startup."
 msgstr ""
 
-#: ../../../UsersManual.rst:3325
+#: ../../../UsersManual.rst:3375
 msgid "The profile is generated as normal."
 msgstr ""
 
-#: ../../../UsersManual.rst:3333
+#: ../../../UsersManual.rst:3383
 msgid ""
 "Using the resulting profile, we can generate a function order to pass to the "
 "linker via ``--symbol-ordering-file`` for ELF or ``-order_file`` for Mach-O."
 msgstr ""
 
-#: ../../../UsersManual.rst:3341
+#: ../../../UsersManual.rst:3391
 msgid "Or the profile can be passed to LLD directly."
 msgstr ""
 
-#: ../../../UsersManual.rst:3347
+#: ../../../UsersManual.rst:3397
 msgid ""
 "For more information, please read the RFC: https://discourse.llvm.org/t/rfc-"
 "temporal-profiling-extension-for-irpgo/68068"
 msgstr ""
 
-#: ../../../UsersManual.rst:3351
+#: ../../../UsersManual.rst:3401
 msgid "Fine Tuning Profile Collection"
 msgstr ""
 
-#: ../../../UsersManual.rst:3353
+#: ../../../UsersManual.rst:3403
 msgid ""
 "The PGO infrastructure provides user program knobs to fine tune profile "
 "collection. Specifically, the PGO runtime provides the following functions "
@@ -4310,80 +4344,80 @@ msgid ""
 "be collected."
 msgstr ""
 
-#: ../../../UsersManual.rst:3358
+#: ../../../UsersManual.rst:3408
 msgid ""
 "``void __llvm_profile_set_filename(const char *Name)``: changes the name of "
 "the profile file to ``Name``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3360
+#: ../../../UsersManual.rst:3410
 msgid ""
 "``void __llvm_profile_reset_counters(void)``: resets all counters to zero."
 msgstr ""
 
-#: ../../../UsersManual.rst:3361
+#: ../../../UsersManual.rst:3411
 msgid "``int __llvm_profile_dump(void)``: write the profile data to disk."
 msgstr ""
 
-#: ../../../UsersManual.rst:3363
+#: ../../../UsersManual.rst:3413
 msgid ""
 "For example, the following pattern can be used to skip profiling program "
 "initialization, profile two specific hot regions, and skip profiling program "
 "cleanup:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3393
+#: ../../../UsersManual.rst:3443
 msgid ""
 "These APIs' names can be introduced to user programs in two ways. They can "
 "be declared as weak symbols on platforms which support treating weak symbols "
 "as ``null`` during linking. For example, the user can have"
 msgstr ""
 
-#: ../../../UsersManual.rst:3410
+#: ../../../UsersManual.rst:3460
 msgid ""
 "Alternatively, the user program can include the header ``profile/"
 "instr_prof_interface.h``, which contains the API names. For example,"
 msgstr ""
 
-#: ../../../UsersManual.rst:3420
+#: ../../../UsersManual.rst:3470
 msgid ""
 "The user code does not need to check if the API names are defined, because "
 "these names are automatically replaced by ``(0)`` or the equivalence of noop "
 "if the ``clang`` is not compiling for profile generation."
 msgstr ""
 
-#: ../../../UsersManual.rst:3424
+#: ../../../UsersManual.rst:3474
 msgid ""
 "Such replacement can happen because ``clang`` adds one of two macros "
 "depending on the ``-fprofile-generate`` and the ``-fprofile-use`` flags."
 msgstr ""
 
-#: ../../../UsersManual.rst:3427
+#: ../../../UsersManual.rst:3477
 msgid ""
 "``__LLVM_INSTR_PROFILE_GENERATE``: defined when one of ``-fprofile[-instr]-"
 "generate``/``-fcs-profile-generate`` is in effect."
 msgstr ""
 
-#: ../../../UsersManual.rst:3429
+#: ../../../UsersManual.rst:3479
 msgid ""
 "``__LLVM_INSTR_PROFILE_USE``: defined when one of ``-fprofile-use``/``-"
 "fprofile-instr-use`` is in effect."
 msgstr ""
 
-#: ../../../UsersManual.rst:3432
+#: ../../../UsersManual.rst:3482
 msgid ""
 "The two macros can be used to provide more flexibility so a user program can "
 "execute code specifically intended for profile generate or profile use. For "
 "example, a user program can have special logging during profile generate:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3442
+#: ../../../UsersManual.rst:3492
 msgid ""
 "The logging is automatically excluded during a normal build of the program, "
 "hence it does not impact performance during a normal execution."
 msgstr ""
 
-#: ../../../UsersManual.rst:3445
+#: ../../../UsersManual.rst:3495
 msgid ""
 "It is advised to use such fine tuning only in a program's cold regions. The "
 "weak symbols can introduce extra control flow (the ``if`` checks), while the "
@@ -4394,31 +4428,31 @@ msgid ""
 "overhead and leads to more optimized code."
 msgstr ""
 
-#: ../../../UsersManual.rst:3454
+#: ../../../UsersManual.rst:3504
 msgid "Disabling Instrumentation"
 msgstr ""
 
-#: ../../../UsersManual.rst:3456
+#: ../../../UsersManual.rst:3506
 msgid ""
 "In certain situations, it may be useful to disable profile generation or use "
 "for specific files in a build, without affecting the main compilation flags "
 "used for the other files in the project."
 msgstr ""
 
-#: ../../../UsersManual.rst:3460
+#: ../../../UsersManual.rst:3510
 msgid ""
 "In these cases, you can use the flag ``-fno-profile-instr-generate`` (or ``-"
 "fno-profile-generate``) to disable profile generation, and ``-fno-profile-"
 "instr-use`` (or ``-fno-profile-use``) to disable profile use."
 msgstr ""
 
-#: ../../../UsersManual.rst:3464
+#: ../../../UsersManual.rst:3514
 msgid ""
 "Note that these flags should appear after the corresponding profile flags to "
 "have an effect."
 msgstr ""
 
-#: ../../../UsersManual.rst:3469
+#: ../../../UsersManual.rst:3519
 msgid ""
 "When none of the translation units inside a binary is instrumented, in the "
 "case of Fuchsia the profile runtime will not be linked into the binary and "
@@ -4427,11 +4461,11 @@ msgid ""
 "counters."
 msgstr ""
 
-#: ../../../UsersManual.rst:3476
+#: ../../../UsersManual.rst:3526
 msgid "Instrumenting only selected files or functions"
 msgstr ""
 
-#: ../../../UsersManual.rst:3478
+#: ../../../UsersManual.rst:3528
 msgid ""
 "Sometimes it's useful to only instrument certain files or functions.  For "
 "example in automated testing infrastructure, it may be desirable to only "
@@ -4439,11 +4473,11 @@ msgid ""
 "overhead of instrumenting a full system."
 msgstr ""
 
-#: ../../../UsersManual.rst:3483
+#: ../../../UsersManual.rst:3533
 msgid "This can be done using the ``-fprofile-list`` option."
 msgstr ""
 
-#: ../../../UsersManual.rst:3487
+#: ../../../UsersManual.rst:3537
 msgid ""
 "This option can be used to apply profile instrumentation only to selected "
 "files or functions. ``pathname`` should point to a file in the :doc:"
@@ -4451,11 +4485,11 @@ msgid ""
 "instrument."
 msgstr ""
 
-#: ../../../UsersManual.rst:3496
+#: ../../../UsersManual.rst:3546
 msgid "The option can be specified multiple times to pass multiple files."
 msgstr ""
 
-#: ../../../UsersManual.rst:3502
+#: ../../../UsersManual.rst:3552
 msgid ""
 "Supported sections are ``[clang]``, ``[llvm]``, ``[csllvm]``, and ``[sample-"
 "coldcov]`` representing clang PGO, IRPGO, CSIRPGO and sample PGO based cold "
@@ -4466,11 +4500,11 @@ msgid ""
 "skip|forbid>`` to specify the default category."
 msgstr ""
 
-#: ../../../UsersManual.rst:3525
+#: ../../../UsersManual.rst:3575
 msgid "Older Prefixes"
 msgstr ""
 
-#: ../../../UsersManual.rst:3526
+#: ../../../UsersManual.rst:3576
 msgid ""
 "An older format is also supported, but it is only able to add the "
 "``noprofile`` attribute. To filter individual functions or entire source "
@@ -4482,18 +4516,18 @@ msgid ""
 "by using a named section."
 msgstr ""
 
-#: ../../../UsersManual.rst:3551
+#: ../../../UsersManual.rst:3601
 msgid ""
 "When the file contains only excludes, all files and functions except for the "
 "excluded ones will be instrumented. Otherwise, only the files and functions "
 "specified will be instrumented."
 msgstr ""
 
-#: ../../../UsersManual.rst:3556
+#: ../../../UsersManual.rst:3606
 msgid "Instrument function groups"
 msgstr ""
 
-#: ../../../UsersManual.rst:3558
+#: ../../../UsersManual.rst:3608
 msgid ""
 "Sometimes it is desirable to minimize the size overhead of instrumented "
 "binaries. One way to do this is to partition functions into groups and only "
@@ -4501,63 +4535,63 @@ msgid ""
 "fprofile-function-groups` and `-fprofile-selected-function-group` options."
 msgstr ""
 
-#: ../../../UsersManual.rst:3565
+#: ../../../UsersManual.rst:3615
 msgid "The following uses 3 groups"
 msgstr ""
 
-#: ../../../UsersManual.rst:3573
+#: ../../../UsersManual.rst:3623
 msgid ""
 "After collecting raw profiles from the three binaries, they can be merged "
 "into a single profile like normal."
 msgstr ""
 
-#: ../../../UsersManual.rst:3582
+#: ../../../UsersManual.rst:3632
 msgid "Profile remapping"
 msgstr ""
 
-#: ../../../UsersManual.rst:3584
+#: ../../../UsersManual.rst:3634
 msgid ""
 "When the program is compiled after a change that affects many symbol names, "
 "pre-existing profile data may no longer match the program. For example:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3587
+#: ../../../UsersManual.rst:3637
 msgid ""
 "switching from libstdc++ to libc++ will result in the mangled names of all "
 "functions taking standard library types to change"
 msgstr ""
 
-#: ../../../UsersManual.rst:3589
+#: ../../../UsersManual.rst:3639
 msgid ""
 "renaming a widely-used type in C++ will result in the mangled names of all "
 "functions that have parameters involving that type to change"
 msgstr ""
 
-#: ../../../UsersManual.rst:3591
+#: ../../../UsersManual.rst:3641
 msgid ""
 "moving from a 32-bit compilation to a 64-bit compilation may change the "
 "underlying type of ``size_t`` and similar types, resulting in changes to "
 "manglings"
 msgstr ""
 
-#: ../../../UsersManual.rst:3595
+#: ../../../UsersManual.rst:3645
 msgid ""
 "Clang allows use of a profile remapping file to specify that such "
 "differences in mangled names should be ignored when matching the profile "
 "data against the program."
 msgstr ""
 
-#: ../../../UsersManual.rst:3601
+#: ../../../UsersManual.rst:3651
 msgid ""
 "Specifies a file containing profile remapping information, that will be used "
 "to match mangled names in the profile data to mangled names in the program."
 msgstr ""
 
-#: ../../../UsersManual.rst:3605
+#: ../../../UsersManual.rst:3655
 msgid "The profile remapping file is a text file containing lines of the form"
 msgstr ""
 
-#: ../../../UsersManual.rst:3611
+#: ../../../UsersManual.rst:3661
 msgid ""
 "where ``fragmentkind`` is one of ``name``, ``type``, or ``encoding``, "
 "indicating whether the following mangled name fragments are <`name <https://"
@@ -4567,20 +4601,20 @@ msgid ""
 "respectively. Blank lines and lines starting with ``#`` are ignored."
 msgstr ""
 
-#: ../../../UsersManual.rst:3619
+#: ../../../UsersManual.rst:3669
 msgid ""
 "For convenience, built-in <substitution>s such as ``St`` and ``Ss`` are "
 "accepted as <name>s (even though they technically are not <name>s)."
 msgstr ""
 
-#: ../../../UsersManual.rst:3622
+#: ../../../UsersManual.rst:3672
 msgid ""
 "For example, to specify that ``absl::string_view`` and ``std::string_view`` "
 "should be treated as equivalent when matching profile data, the following "
 "remapping file could be used:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3635
+#: ../../../UsersManual.rst:3685
 msgid ""
 "Matching profile data using a profile remapping file is supported on a best-"
 "effort basis. For example, information regarding indirect call targets is "
@@ -4589,98 +4623,98 @@ msgid ""
 "using the ``llvm-cxxmap`` and ``llvm-profdata merge`` tools."
 msgstr ""
 
-#: ../../../UsersManual.rst:3643
+#: ../../../UsersManual.rst:3693
 msgid ""
 "Profile data remapping is currently only supported for C++ mangled names "
 "following the Itanium C++ ABI mangling scheme. This covers all C++ targets "
 "supported by Clang other than Windows."
 msgstr ""
 
-#: ../../../UsersManual.rst:3648
+#: ../../../UsersManual.rst:3698
 msgid "GCOV-based Profiling"
 msgstr ""
 
-#: ../../../UsersManual.rst:3650
+#: ../../../UsersManual.rst:3700
 msgid ""
 "GCOV is a test coverage program, it helps to know how often a line of code "
 "is executed. When instrumenting the code with ``--coverage`` option, some "
 "counters are added for each edge linking basic blocks."
 msgstr ""
 
-#: ../../../UsersManual.rst:3654
+#: ../../../UsersManual.rst:3704
 msgid ""
 "At compile time, gcno files are generated containing information about "
 "blocks and edges between them. At runtime the counters are incremented and "
 "at exit the counters are dumped in gcda files."
 msgstr ""
 
-#: ../../../UsersManual.rst:3658
+#: ../../../UsersManual.rst:3708
 msgid ""
 "The tool ``llvm-cov gcov`` will parse gcno, gcda and source files to "
 "generate a report ``.c.gcov``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3663
+#: ../../../UsersManual.rst:3713
 msgid ""
 "Define a list of regexes separated by a semi-colon. If a file name matches "
 "any of the regexes then the file is instrumented."
 msgstr ""
 
-#: ../../../UsersManual.rst:3670
+#: ../../../UsersManual.rst:3720
 msgid ""
 "For example, this will only instrument files finishing with ``.c``, skipping "
 "``.h`` files."
 msgstr ""
 
-#: ../../../UsersManual.rst:3674
+#: ../../../UsersManual.rst:3724
 msgid ""
 "Define a list of regexes separated by a semi-colon. If a file name doesn't "
 "match all the regexes then the file is instrumented."
 msgstr ""
 
-#: ../../../UsersManual.rst:3681
+#: ../../../UsersManual.rst:3731
 msgid ""
 "For example, this will instrument all the files except the ones in ``/usr/"
 "include``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3683
+#: ../../../UsersManual.rst:3733
 msgid ""
 "If both options are used then a file is instrumented if its name matches any "
 "of the regexes from ``-fprofile-filter-list`` and doesn't match all the "
 "regexes from ``-fprofile-exclude-list``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3692
+#: ../../../UsersManual.rst:3742
 msgid ""
 "In that case ``/usr/foo/oof.h`` is instrumented since it matches the filter "
 "regex and doesn't match the exclude regex, but ``/usr/include/foo.h`` "
 "doesn't since it matches the exclude regex."
 msgstr ""
 
-#: ../../../UsersManual.rst:3697
+#: ../../../UsersManual.rst:3747
 msgid "Controlling Debug Information"
 msgstr ""
 
-#: ../../../UsersManual.rst:3700
+#: ../../../UsersManual.rst:3750
 msgid "Controlling Size of Debug Information"
 msgstr ""
 
-#: ../../../UsersManual.rst:3702
+#: ../../../UsersManual.rst:3752
 msgid ""
 "Debug info kind generated by Clang can be set by one of the flags listed "
 "below. If multiple flags are present, the last one is used."
 msgstr ""
 
-#: ../../../UsersManual.rst:3707
+#: ../../../UsersManual.rst:3757
 msgid "Don't generate any debug info (default)."
 msgstr ""
 
-#: ../../../UsersManual.rst:3711
+#: ../../../UsersManual.rst:3761
 msgid "Generate line number tables only."
 msgstr ""
 
-#: ../../../UsersManual.rst:3713
+#: ../../../UsersManual.rst:3763
 msgid ""
 "This kind of debug info allows to obtain stack traces with function names, "
 "file names and line numbers (by such tools as ``gdb`` or ``addr2line``).  It "
@@ -4688,7 +4722,7 @@ msgid ""
 "function parameters)."
 msgstr ""
 
-#: ../../../UsersManual.rst:3720
+#: ../../../UsersManual.rst:3770
 msgid ""
 "Clang supports a number of optimizations to reduce the size of debug "
 "information in the binary. They work based on the assumption that the debug "
@@ -4696,32 +4730,32 @@ msgid ""
 "Specifically, the optimizations are:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3725
+#: ../../../UsersManual.rst:3775
 msgid ""
 "will not emit type definitions for types that are not needed by a module and "
 "could be replaced with a forward declaration."
 msgstr ""
 
-#: ../../../UsersManual.rst:3727
+#: ../../../UsersManual.rst:3777
 msgid ""
 "will only emit type info for a dynamic C++ class in the module that contains "
 "the vtable for the class."
 msgstr ""
 
-#: ../../../UsersManual.rst:3729
+#: ../../../UsersManual.rst:3779
 msgid ""
 "will only emit type info for a C++ class (non-trivial, non-aggregate) in the "
 "modules that contain a definition for one of its constructors."
 msgstr ""
 
-#: ../../../UsersManual.rst:3731
+#: ../../../UsersManual.rst:3781
 msgid ""
 "will only emit type definitions for types that are the subject of explicit "
 "template instantiation declarations in the presence of an explicit "
 "instantiation definition for the type."
 msgstr ""
 
-#: ../../../UsersManual.rst:3735
+#: ../../../UsersManual.rst:3785
 msgid ""
 "The **-fstandalone-debug** option turns off these optimizations. This is "
 "useful when working with 3rd-party libraries that don't come with debug "
@@ -4729,18 +4763,18 @@ msgid ""
 "that are not referenced at all by the program."
 msgstr ""
 
-#: ../../../UsersManual.rst:3742
+#: ../../../UsersManual.rst:3792
 msgid ""
 "On Darwin **-fstandalone-debug** is enabled by default. The **-fno-"
 "standalone-debug** option can be used to get to turn on the vtable-based "
 "optimization described above."
 msgstr ""
 
-#: ../../../UsersManual.rst:3748
+#: ../../../UsersManual.rst:3798
 msgid "Generate complete debug info."
 msgstr ""
 
-#: ../../../UsersManual.rst:3752
+#: ../../../UsersManual.rst:3802
 msgid ""
 "By default, Clang does not emit type information for types that are defined "
 "but not used in a program. To retain the debug info for these unused types, "
@@ -4750,32 +4784,32 @@ msgid ""
 "standalone debug modes."
 msgstr ""
 
-#: ../../../UsersManual.rst:3760
+#: ../../../UsersManual.rst:3810
 msgid "Controlling Macro Debug Info Generation"
 msgstr ""
 
-#: ../../../UsersManual.rst:3762
+#: ../../../UsersManual.rst:3812
 msgid ""
 "Debug info for C preprocessor macros increases the size of debug information "
 "in the binary. Macro debug info generated by Clang can be controlled by the "
 "flags listed below."
 msgstr ""
 
-#: ../../../UsersManual.rst:3768
+#: ../../../UsersManual.rst:3818
 msgid ""
 "Generate debug info for preprocessor macros. This flag is discarded when **-"
 "g0** is enabled."
 msgstr ""
 
-#: ../../../UsersManual.rst:3773
+#: ../../../UsersManual.rst:3823
 msgid "Do not generate debug info for preprocessor macros (default)."
 msgstr ""
 
-#: ../../../UsersManual.rst:3776
+#: ../../../UsersManual.rst:3826
 msgid "Controlling Debugger \"Tuning\""
 msgstr ""
 
-#: ../../../UsersManual.rst:3778
+#: ../../../UsersManual.rst:3828
 msgid ""
 "While Clang generally emits standard DWARF debug info (http://dwarfstd.org), "
 "different debuggers may know how to take advantage of different specific "
@@ -4783,7 +4817,7 @@ msgid ""
 "debuggers."
 msgstr ""
 
-#: ../../../UsersManual.rst:3784
+#: ../../../UsersManual.rst:3834
 msgid ""
 "Tune the debug info for the ``gdb``, ``lldb``, Sony PlayStation\\ |reg| "
 "debugger, or ``dbx``, respectively. Each of these options implies **-g**. "
@@ -4791,15 +4825,15 @@ msgid ""
 "tuning option must come first.)"
 msgstr ""
 
-#: ../../../UsersManual.rst:3790
+#: ../../../UsersManual.rst:3840
 msgid "Controlling LLVM IR Output"
 msgstr ""
 
-#: ../../../UsersManual.rst:3793
+#: ../../../UsersManual.rst:3843
 msgid "Controlling Value Names in LLVM IR"
 msgstr ""
 
-#: ../../../UsersManual.rst:3795
+#: ../../../UsersManual.rst:3845
 msgid ""
 "Emitting value names in LLVM IR increases the size and verbosity of the IR. "
 "By default, value names are only emitted in assertion-enabled builds of "
@@ -4807,21 +4841,21 @@ msgid ""
 "of value names to improve readability."
 msgstr ""
 
-#: ../../../UsersManual.rst:3802
+#: ../../../UsersManual.rst:3852
 msgid "Discard value names when generating LLVM IR."
 msgstr ""
 
-#: ../../../UsersManual.rst:3806
+#: ../../../UsersManual.rst:3856
 msgid ""
 "Do not discard value names when generating LLVM IR. This option can be used "
 "to re-enable names for release builds of Clang."
 msgstr ""
 
-#: ../../../UsersManual.rst:3811
+#: ../../../UsersManual.rst:3861
 msgid "Comment Parsing Options"
 msgstr ""
 
-#: ../../../UsersManual.rst:3813
+#: ../../../UsersManual.rst:3863
 msgid ""
 "Clang parses Doxygen and non-Doxygen style documentation comments and "
 "attaches them to the appropriate declaration nodes.  By default, it only "
@@ -4829,30 +4863,30 @@ msgid ""
 "``//`` and ``/*``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3820
+#: ../../../UsersManual.rst:3870
 msgid ""
 "Emit warnings about use of documentation comments.  This warning group is "
 "off by default."
 msgstr ""
 
-#: ../../../UsersManual.rst:3823
+#: ../../../UsersManual.rst:3873
 msgid ""
 "This includes checking that ``\\param`` commands name parameters that "
 "actually present in the function signature, checking that ``\\returns`` is "
 "used only on functions that actually return a value etc."
 msgstr ""
 
-#: ../../../UsersManual.rst:3829
+#: ../../../UsersManual.rst:3879
 msgid "Don't warn when encountering an unknown Doxygen command."
 msgstr ""
 
-#: ../../../UsersManual.rst:3833
+#: ../../../UsersManual.rst:3883
 msgid ""
 "Parse all comments as documentation comments (including ordinary comments "
 "starting with ``//`` and ``/*``)."
 msgstr ""
 
-#: ../../../UsersManual.rst:3838
+#: ../../../UsersManual.rst:3888
 msgid ""
 "Define custom documentation commands as block commands.  This allows Clang "
 "to construct the correct AST for these custom commands, and silences "
@@ -4861,18 +4895,18 @@ msgid ""
 "defines custom commands ``\\foo`` and ``\\bar``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3844
+#: ../../../UsersManual.rst:3894
 msgid ""
 "It is also possible to use ``-fcomment-block-commands`` several times; e.g. "
 "``-fcomment-block-commands=foo -fcomment-block-commands=bar`` does the same "
 "as above."
 msgstr ""
 
-#: ../../../UsersManual.rst:3851
+#: ../../../UsersManual.rst:3901
 msgid "CCC_OVERRIDE_OPTIONS"
 msgstr ""
 
-#: ../../../UsersManual.rst:3852
+#: ../../../UsersManual.rst:3902
 msgid ""
 "The environment variable ``CCC_OVERRIDE_OPTIONS`` can be used to edit "
 "clang's command line arguments. The value of this variable is a space-"
@@ -4881,72 +4915,72 @@ msgid ""
 "the following forms:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3857
+#: ../../../UsersManual.rst:3907
 msgid ""
 "``#``: Silence information about the changes to the command line arguments."
 msgstr ""
 
-#: ../../../UsersManual.rst:3859
+#: ../../../UsersManual.rst:3909
 msgid ""
 "``^FOO``: Add ``FOO`` as a new argument at the beginning of the command line "
 "right after the name of the compiler executable."
 msgstr ""
 
-#: ../../../UsersManual.rst:3862
+#: ../../../UsersManual.rst:3912
 msgid "``+FOO``: Add ``FOO`` as a new argument at the end of the command line."
 msgstr ""
 
-#: ../../../UsersManual.rst:3864
+#: ../../../UsersManual.rst:3914
 msgid ""
 "``s/XXX/YYY/``: Substitute the regular expression ``XXX`` with ``YYY`` in "
 "the command line."
 msgstr ""
 
-#: ../../../UsersManual.rst:3867
+#: ../../../UsersManual.rst:3917
 msgid "``xOPTION``: Removes all instances of the literal argument ``OPTION``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3869
+#: ../../../UsersManual.rst:3919
 msgid ""
 "``XOPTION``: Removes all instances of the literal argument ``OPTION``, and "
 "the following argument."
 msgstr ""
 
-#: ../../../UsersManual.rst:3872
+#: ../../../UsersManual.rst:3922
 msgid ""
 "``Ox``: Removes all flags matching ``O`` or ``O[sz0-9]`` and adds ``Ox`` at "
 "the end of the command line."
 msgstr ""
 
-#: ../../../UsersManual.rst:3875
+#: ../../../UsersManual.rst:3925
 msgid ""
 "This environment variable does not affect the options added by the config "
 "files."
 msgstr ""
 
-#: ../../../UsersManual.rst:3880
+#: ../../../UsersManual.rst:3930
 msgid "C Language Features"
 msgstr ""
 
-#: ../../../UsersManual.rst:3882
+#: ../../../UsersManual.rst:3932
 msgid ""
 "The support for standard C in Clang is mostly feature-complete, see the `C "
 "status page <https://clang.llvm.org/c_status.html>`_ for more details."
 msgstr ""
 
-#: ../../../UsersManual.rst:3886
+#: ../../../UsersManual.rst:3936
 msgid "Extensions supported by clang"
 msgstr ""
 
-#: ../../../UsersManual.rst:3888
+#: ../../../UsersManual.rst:3938
 msgid "See :doc:`LanguageExtensions`."
 msgstr ""
 
-#: ../../../UsersManual.rst:3891
+#: ../../../UsersManual.rst:3941
 msgid "Differences between various standard modes"
 msgstr ""
 
-#: ../../../UsersManual.rst:3893
+#: ../../../UsersManual.rst:3943
 msgid ""
 "clang supports the ``-std`` option, which changes what language mode clang "
 "uses. The supported modes for C are c89, gnu89, c94, c99, gnu99, c11, gnu11, "
@@ -4957,58 +4991,58 @@ msgid ""
 "later standard revision is used in an earlier mode."
 msgstr ""
 
-#: ../../../UsersManual.rst:3901
+#: ../../../UsersManual.rst:3951
 msgid "Differences between all ``c*`` and ``gnu*`` modes:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3903
+#: ../../../UsersManual.rst:3953
 msgid "``c*`` modes define \"``__STRICT_ANSI__``\"."
 msgstr ""
 
-#: ../../../UsersManual.rst:3904
+#: ../../../UsersManual.rst:3954
 msgid ""
 "Target-specific defines not prefixed by underscores, like ``linux``, are "
 "defined in ``gnu*`` modes."
 msgstr ""
 
-#: ../../../UsersManual.rst:3906
+#: ../../../UsersManual.rst:3956
 msgid ""
 "Trigraphs default to being off in ``gnu*`` modes; they can be enabled by the "
 "``-trigraphs`` option."
 msgstr ""
 
-#: ../../../UsersManual.rst:3908
+#: ../../../UsersManual.rst:3958
 msgid ""
 "The parser recognizes ``asm`` and ``typeof`` as keywords in ``gnu*`` modes; "
 "the variants ``__asm__`` and ``__typeof__`` are recognized in all modes."
 msgstr ""
 
-#: ../../../UsersManual.rst:3910
+#: ../../../UsersManual.rst:3960
 msgid ""
 "The parser recognizes ``inline`` as a keyword in ``gnu*`` mode, in addition "
 "to recognizing it in the ``*99`` and later modes for which it is part of the "
 "ISO C standard. The variant ``__inline__`` is recognized in all modes."
 msgstr ""
 
-#: ../../../UsersManual.rst:3914
+#: ../../../UsersManual.rst:3964
 msgid ""
 "The Apple \"blocks\" extension is recognized by default in ``gnu*`` modes on "
 "some platforms; it can be enabled in any mode with the ``-fblocks`` option."
 msgstr ""
 
-#: ../../../UsersManual.rst:3918
+#: ../../../UsersManual.rst:3968
 msgid "Differences between ``*89`` and ``*94`` modes:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3920
+#: ../../../UsersManual.rst:3970
 msgid "Digraphs are not recognized in c89 mode."
 msgstr ""
 
-#: ../../../UsersManual.rst:3922
+#: ../../../UsersManual.rst:3972
 msgid "Differences between ``*94`` and ``*99`` modes:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3924
+#: ../../../UsersManual.rst:3974
 msgid ""
 "The ``*99`` modes default to implementing ``inline`` / ``__inline__`` as "
 "specified in C99, while the ``*89`` modes implement the GNU version. This "
@@ -5016,122 +5050,122 @@ msgid ""
 "attribute."
 msgstr ""
 
-#: ../../../UsersManual.rst:3928
+#: ../../../UsersManual.rst:3978
 msgid ""
 "The scope of names defined inside a ``for``, ``if``, ``switch``, ``while``, "
 "or ``do`` statement is different. (example: ``if ((struct x {int x;}*)0) {}"
 "``.)"
 msgstr ""
 
-#: ../../../UsersManual.rst:3930
+#: ../../../UsersManual.rst:3980
 msgid "``__STDC_VERSION__`` is not defined in ``*89`` modes."
 msgstr ""
 
-#: ../../../UsersManual.rst:3931
+#: ../../../UsersManual.rst:3981
 msgid "``inline`` is not recognized as a keyword in ``c89`` mode."
 msgstr ""
 
-#: ../../../UsersManual.rst:3932
+#: ../../../UsersManual.rst:3982
 msgid "``restrict`` is not recognized as a keyword in ``*89`` modes."
 msgstr ""
 
-#: ../../../UsersManual.rst:3933
+#: ../../../UsersManual.rst:3983
 msgid "Commas are allowed in integer constant expressions in ``*99`` modes."
 msgstr ""
 
-#: ../../../UsersManual.rst:3934
+#: ../../../UsersManual.rst:3984
 msgid ""
 "Arrays which are not lvalues are not implicitly promoted to pointers in "
 "``*89`` modes."
 msgstr ""
 
-#: ../../../UsersManual.rst:3936
+#: ../../../UsersManual.rst:3986
 msgid "Some warnings are different."
 msgstr ""
 
-#: ../../../UsersManual.rst:3938
+#: ../../../UsersManual.rst:3988
 msgid "Differences between ``*99`` and ``*11`` modes:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3940
+#: ../../../UsersManual.rst:3990
 msgid "Warnings for use of C11 features are disabled."
 msgstr ""
 
-#: ../../../UsersManual.rst:3941
+#: ../../../UsersManual.rst:3991
 msgid "``__STDC_VERSION__`` is defined to ``201112L`` rather than ``199901L``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3943
+#: ../../../UsersManual.rst:3993
 msgid "Differences between ``*11`` and ``*17`` modes:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3945
+#: ../../../UsersManual.rst:3995
 msgid "``__STDC_VERSION__`` is defined to ``201710L`` rather than ``201112L``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3947
+#: ../../../UsersManual.rst:3997
 msgid "Differences between ``*17`` and ``*23`` modes:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3949
+#: ../../../UsersManual.rst:3999
 msgid "``__STDC_VERSION__`` is defined to ``202311L`` rather than ``201710L``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3950
+#: ../../../UsersManual.rst:4000
 msgid "``nullptr`` and ``nullptr_t`` are supported, only in ``*23`` mode."
 msgstr ""
 
-#: ../../../UsersManual.rst:3951
+#: ../../../UsersManual.rst:4001
 msgid "``ATOMIC_VAR_INIT`` is removed from ``*23`` mode."
 msgstr ""
 
-#: ../../../UsersManual.rst:3952
+#: ../../../UsersManual.rst:4002
 msgid ""
 "``bool``, ``true``, ``false``, ``alignas``, ``alignof``, ``static_assert``, "
 "and ``thread_local`` are now first-class keywords, only in ``*23`` mode."
 msgstr ""
 
-#: ../../../UsersManual.rst:3954
+#: ../../../UsersManual.rst:4004
 msgid "``typeof`` and ``typeof_unqual`` are supported, only ``*23`` mode."
 msgstr ""
 
-#: ../../../UsersManual.rst:3955
+#: ../../../UsersManual.rst:4005
 msgid ""
 "Bit-precise integers (``_BitInt(N)``) are supported by default in ``*23`` "
 "mode, and as an extension in ``*17`` and earlier modes."
 msgstr ""
 
-#: ../../../UsersManual.rst:3957
+#: ../../../UsersManual.rst:4007
 msgid ""
 "``[[]]`` attributes are supported by default in ``*23`` mode, and as an "
 "extension in ``*17`` and earlier modes."
 msgstr ""
 
-#: ../../../UsersManual.rst:3960
+#: ../../../UsersManual.rst:4010
 msgid "Differences between ``*23`` and ``*2y`` modes:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3962
+#: ../../../UsersManual.rst:4012
 msgid "``__STDC_VERSION__`` is defined to ``202400L`` rather than ``202311L``."
 msgstr ""
 
-#: ../../../UsersManual.rst:3965
+#: ../../../UsersManual.rst:4015
 msgid "GCC extensions not implemented yet"
 msgstr ""
 
-#: ../../../UsersManual.rst:3967
+#: ../../../UsersManual.rst:4017
 msgid ""
 "clang tries to be compatible with gcc as much as possible, but some gcc "
 "extensions are not implemented:"
 msgstr ""
 
-#: ../../../UsersManual.rst:3970
+#: ../../../UsersManual.rst:4020
 msgid ""
 "clang does not support decimal floating point types (``_Decimal32`` and "
 "friends) yet."
 msgstr ""
 
-#: ../../../UsersManual.rst:3972
+#: ../../../UsersManual.rst:4022
 msgid ""
 "clang only supports global register variables when the register specified is "
 "non-allocatable (e.g. the stack pointer). Support for general global "
@@ -5139,14 +5173,14 @@ msgid ""
 "additional LLVM backend support."
 msgstr ""
 
-#: ../../../UsersManual.rst:3976
+#: ../../../UsersManual.rst:4026
 msgid ""
 "clang does not support static initialization of flexible array members. This "
 "appears to be a rarely used extension, but could be implemented pending user "
 "demand."
 msgstr ""
 
-#: ../../../UsersManual.rst:3979
+#: ../../../UsersManual.rst:4029
 msgid ""
 "clang does not support ``__builtin_va_arg_pack``/"
 "``__builtin_va_arg_pack_len``. This is used rarely, but in some potentially "
@@ -5156,7 +5190,7 @@ msgid ""
 "extension with clang at the moment."
 msgstr ""
 
-#: ../../../UsersManual.rst:3987
+#: ../../../UsersManual.rst:4037
 msgid ""
 "This is not a complete list; if you find an unsupported extension missing "
 "from this list, please file a `feature request <https://github.com/llvm/llvm-"
@@ -5166,11 +5200,11 @@ msgid ""
 "issues/>`_ for known existing bugs."
 msgstr ""
 
-#: ../../../UsersManual.rst:3995
+#: ../../../UsersManual.rst:4045
 msgid "Intentionally unsupported GCC extensions"
 msgstr ""
 
-#: ../../../UsersManual.rst:3997
+#: ../../../UsersManual.rst:4047
 msgid ""
 "clang does not support the gcc extension that allows variable-length arrays "
 "in structures. This is for a few reasons: one, it is tricky to implement, "
@@ -5179,7 +5213,7 @@ msgid ""
 "members (arrays with a zero or unspecified size at the end of a structure)."
 msgstr ""
 
-#: ../../../UsersManual.rst:4003
+#: ../../../UsersManual.rst:4053
 msgid ""
 "GCC accepts many expression forms that are not valid integer constant "
 "expressions in bit-field widths, enumerator constants, case labels, and in "
@@ -5189,30 +5223,30 @@ msgid ""
 "will likely never be accepted by Clang."
 msgstr ""
 
-#: ../../../UsersManual.rst:4009
+#: ../../../UsersManual.rst:4059
 msgid ""
 "clang does not support ``__builtin_apply`` and friends; this extension is "
 "extremely obscure and difficult to implement reliably."
 msgstr ""
 
-#: ../../../UsersManual.rst:4011
+#: ../../../UsersManual.rst:4061
 msgid ""
 "clang does not support the gcc extension for forward-declaring function "
 "parameters."
 msgstr ""
 
-#: ../../../UsersManual.rst:4013
+#: ../../../UsersManual.rst:4063
 msgid ""
 "clang does not support nested functions; this is a complex feature which is "
 "infrequently used, so it is unlikely to be implemented. In C++11 it can be "
 "emulated by assigning lambda functions to local variables, e.g:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4029
+#: ../../../UsersManual.rst:4079
 msgid "Microsoft extensions"
 msgstr ""
 
-#: ../../../UsersManual.rst:4031
+#: ../../../UsersManual.rst:4081
 msgid ""
 "clang has support for many extensions from Microsoft Visual C++. To enable "
 "these extensions, use the ``-fms-extensions`` command-line option. This is "
@@ -5221,7 +5255,7 @@ msgid ""
 "``__declspec(dllexport)`` and ``#pragma comment(lib)`` are well supported."
 msgstr ""
 
-#: ../../../UsersManual.rst:4037
+#: ../../../UsersManual.rst:4087
 msgid ""
 "clang has a ``-fms-compatibility`` flag that makes clang accept enough "
 "invalid C++ to be able to parse most Microsoft headers. For example, it "
@@ -5231,14 +5265,14 @@ msgid ""
 "targets."
 msgstr ""
 
-#: ../../../UsersManual.rst:4044
+#: ../../../UsersManual.rst:4094
 msgid ""
 "``-fdelayed-template-parsing`` lets clang delay parsing of function template "
 "definitions until the end of a translation unit. This flag is enabled by "
 "default for Windows targets."
 msgstr ""
 
-#: ../../../UsersManual.rst:4048
+#: ../../../UsersManual.rst:4098
 msgid ""
 "For compatibility with existing code that compiles with MSVC, clang defines "
 "the ``_MSC_VER`` and ``_MSC_FULL_VER`` macros. When on Windows, these "
@@ -5251,39 +5285,39 @@ msgid ""
 "``char32_t`` as builtin types."
 msgstr ""
 
-#: ../../../UsersManual.rst:4060
+#: ../../../UsersManual.rst:4110
 msgid "C++ Language Features"
 msgstr ""
 
-#: ../../../UsersManual.rst:4062
+#: ../../../UsersManual.rst:4112
 msgid ""
 "clang fully implements all of standard C++98 except for exported templates "
 "(which were removed in C++11), all of standard C++11, C++14, and C++17, and "
 "most of C++20 and C++23."
 msgstr ""
 
-#: ../../../UsersManual.rst:4066
+#: ../../../UsersManual.rst:4116
 msgid ""
 "See the `C++ support in Clang <https://clang.llvm.org/cxx_status.html>`_ "
 "page for detailed information on C++ feature support across Clang versions."
 msgstr ""
 
-#: ../../../UsersManual.rst:4070 ../../../UsersManual.rst:4125
+#: ../../../UsersManual.rst:4120 ../../../UsersManual.rst:4175
 msgid "Controlling implementation limits"
 msgstr ""
 
-#: ../../../UsersManual.rst:4074
+#: ../../../UsersManual.rst:4124
 msgid ""
 "Sets the limit for nested parentheses, brackets, and braces to N.  The "
 "default is 256."
 msgstr ""
 
-#: ../../../UsersManual.rst:4079
+#: ../../../UsersManual.rst:4129
 msgid ""
 "Sets the limit for constexpr function invocations to N. The default is 512."
 msgstr ""
 
-#: ../../../UsersManual.rst:4083
+#: ../../../UsersManual.rst:4133
 msgid ""
 "Sets the limit for the number of full-expressions evaluated in a single "
 "constant expression evaluation. This also controls the maximum size of array "
@@ -5291,43 +5325,43 @@ msgid ""
 "1048576, and the limit can be disabled with `-fconstexpr-steps=0`."
 msgstr ""
 
-#: ../../../UsersManual.rst:4090
+#: ../../../UsersManual.rst:4140
 msgid ""
 "Sets the limit for recursively nested template instantiations to N.  The "
 "default is 1024."
 msgstr ""
 
-#: ../../../UsersManual.rst:4095
+#: ../../../UsersManual.rst:4145
 msgid ""
 "Sets the limit for iterative calls to 'operator->' functions to N.  The "
 "default is 256."
 msgstr ""
 
-#: ../../../UsersManual.rst:4101
+#: ../../../UsersManual.rst:4151
 msgid "Objective-C Language Features"
 msgstr ""
 
-#: ../../../UsersManual.rst:4106
+#: ../../../UsersManual.rst:4156
 msgid "Objective-C++ Language Features"
 msgstr ""
 
-#: ../../../UsersManual.rst:4111
+#: ../../../UsersManual.rst:4161
 msgid "OpenMP Features"
 msgstr ""
 
-#: ../../../UsersManual.rst:4113
+#: ../../../UsersManual.rst:4163
 msgid ""
 "Clang supports all OpenMP 4.5 directives and clauses. See :doc:"
 "`OpenMPSupport` for additional details."
 msgstr ""
 
-#: ../../../UsersManual.rst:4116
+#: ../../../UsersManual.rst:4166
 msgid ""
 "Use `-fopenmp` to enable OpenMP. Support for OpenMP can be disabled with `-"
 "fno-openmp`."
 msgstr ""
 
-#: ../../../UsersManual.rst:4119
+#: ../../../UsersManual.rst:4169
 msgid ""
 "Use `-fopenmp-simd` to enable OpenMP simd features only, without linking the "
 "runtime library; for combined constructs (e.g. ``#pragma omp parallel for "
@@ -5335,7 +5369,7 @@ msgid ""
 "disabled with `-fno-openmp-simd`."
 msgstr ""
 
-#: ../../../UsersManual.rst:4129
+#: ../../../UsersManual.rst:4179
 msgid ""
 "Controls code generation for OpenMP threadprivate variables. In presence of "
 "this option all threadprivate variables are generated the same way as thread "
@@ -5344,11 +5378,11 @@ msgid ""
 "relies on OpenMP runtime library."
 msgstr ""
 
-#: ../../../UsersManual.rst:4138
+#: ../../../UsersManual.rst:4188
 msgid "OpenCL Features"
 msgstr ""
 
-#: ../../../UsersManual.rst:4140
+#: ../../../UsersManual.rst:4190
 msgid ""
 "Clang can be used to compile OpenCL kernels for execution on a device (e.g. "
 "GPU). It is possible to compile the kernel into a binary (e.g. for AMDGPU) "
@@ -5358,29 +5392,29 @@ msgid ""
 "toolchains."
 msgstr ""
 
-#: ../../../UsersManual.rst:4147
+#: ../../../UsersManual.rst:4197
 msgid ""
 "Compiling to a binary using the default target from the installation can be "
 "done as follows:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4155
+#: ../../../UsersManual.rst:4205
 msgid ""
 "Compiling for a specific target can be done by specifying the triple "
 "corresponding to the target, for example:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4163
+#: ../../../UsersManual.rst:4213
 msgid "Compiling to bitcode can be done as follows:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4169
+#: ../../../UsersManual.rst:4219
 msgid ""
 "This will produce a file `test.bc` that can be used in vendor toolchains to "
 "perform machine code generation."
 msgstr ""
 
-#: ../../../UsersManual.rst:4172
+#: ../../../UsersManual.rst:4222
 msgid ""
 "Note that if compiled to bitcode for generic targets such as SPIR/SPIR-V, "
 "portable IR is produced that can be used with various vendor tools as well "
@@ -5392,7 +5426,7 @@ msgid ""
 "generated directly as detailed in :ref:`the SPIR-V support section <spir-v>`."
 msgstr ""
 
-#: ../../../UsersManual.rst:4183
+#: ../../../UsersManual.rst:4233
 msgid ""
 "Clang currently supports OpenCL C language standards up to v2.0. Clang "
 "mainly supports full profile. There is only very limited support of the "
@@ -5400,40 +5434,40 @@ msgid ""
 "`C++ for OpenCL <cxx_for_opencl>`)."
 msgstr ""
 
-#: ../../../UsersManual.rst:4189
+#: ../../../UsersManual.rst:4239
 msgid ""
 "OpenCL v3.0 support is complete but it remains in experimental state, see "
 "more details about the experimental features and limitations in :doc:"
 "`OpenCLSupport` page."
 msgstr ""
 
-#: ../../../UsersManual.rst:4194
+#: ../../../UsersManual.rst:4244
 msgid "OpenCL Specific Options"
 msgstr ""
 
-#: ../../../UsersManual.rst:4196
+#: ../../../UsersManual.rst:4246
 msgid ""
 "Most of the OpenCL build options from `the specification v2.0 section 5.8.4 "
 "<https://www.khronos.org/registry/cl/specs/opencl-2.0.pdf#200>`_ are "
 "available."
 msgstr ""
 
-#: ../../../UsersManual.rst:4199
+#: ../../../UsersManual.rst:4249
 msgid "Examples:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4206
+#: ../../../UsersManual.rst:4256
 msgid ""
 "Many flags used for the compilation for C sources can also be passed while "
 "compiling for OpenCL, examples: ``-c``, ``-O<1-4|s>``, ``-o``, ``-emit-"
 "llvm``, etc."
 msgstr ""
 
-#: ../../../UsersManual.rst:4209
+#: ../../../UsersManual.rst:4259
 msgid "Some extra options are available to support special OpenCL features."
 msgstr ""
 
-#: ../../../UsersManual.rst:4213
+#: ../../../UsersManual.rst:4263
 msgid ""
 "Allows to disable all extra types and functions that are not native to the "
 "compiler. This might reduce the compilation speed marginally but many "
@@ -5441,13 +5475,13 @@ msgid ""
 "the following will fail to compile."
 msgstr ""
 
-#: ../../../UsersManual.rst:4225
+#: ../../../UsersManual.rst:4275
 msgid ""
 "More information about the standard types and functions is provided in :ref:"
 "`the section on the OpenCL Header <opencl_header>`."
 msgstr ""
 
-#: ../../../UsersManual.rst:4232
+#: ../../../UsersManual.rst:4282
 msgid ""
 "Enables/Disables support of OpenCL extensions and optional features. All "
 "OpenCL targets set a list of extensions that they support. Clang allows to "
@@ -5459,64 +5493,64 @@ msgid ""
 "disable all known extensions."
 msgstr ""
 
-#: ../../../UsersManual.rst:4241
+#: ../../../UsersManual.rst:4291
 msgid "Example disabling double support for the 64-bit SPIR-V target:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4247
+#: ../../../UsersManual.rst:4297
 msgid ""
 "Enabling all extensions except double support in R600 AMD GPU can be done "
 "using:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4253
+#: ../../../UsersManual.rst:4303
 msgid ""
 "Note that some generic targets e.g. SPIR/SPIR-V enable all extensions/"
 "features in clang by default."
 msgstr ""
 
-#: ../../../UsersManual.rst:4257
+#: ../../../UsersManual.rst:4307
 msgid "OpenCL Targets"
 msgstr ""
 
-#: ../../../UsersManual.rst:4259
+#: ../../../UsersManual.rst:4309
 msgid ""
 "OpenCL targets are derived from the regular Clang target classes. The OpenCL "
 "specific parts of the target representation provide address space mapping as "
 "well as a set of supported extensions."
 msgstr ""
 
-#: ../../../UsersManual.rst:4264
+#: ../../../UsersManual.rst:4314
 msgid "Specific Targets"
 msgstr ""
 
-#: ../../../UsersManual.rst:4266
+#: ../../../UsersManual.rst:4316
 msgid ""
 "There is a set of concrete HW architectures that OpenCL can be compiled for."
 msgstr ""
 
-#: ../../../UsersManual.rst:4268
+#: ../../../UsersManual.rst:4318
 msgid "For AMD target:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4274
+#: ../../../UsersManual.rst:4324
 msgid "For Nvidia architectures:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4282
+#: ../../../UsersManual.rst:4332
 msgid "Generic Targets"
 msgstr ""
 
-#: ../../../UsersManual.rst:4284
+#: ../../../UsersManual.rst:4334
 msgid "A SPIR-V binary can be produced for 32- or 64-bit targets."
 msgstr ""
 
-#: ../../../UsersManual.rst:4291
+#: ../../../UsersManual.rst:4341
 msgid ""
 "More details can be found in :ref:`the SPIR-V support section <spir-v>`."
 msgstr ""
 
-#: ../../../UsersManual.rst:4293
+#: ../../../UsersManual.rst:4343
 msgid ""
 "SPIR is available as a generic target to allow portable bitcode to be "
 "produced that can be used across GPU toolchains. The implementation follows "
@@ -5524,13 +5558,13 @@ msgid ""
 "flavors available for 32 and 64 bits."
 msgstr ""
 
-#: ../../../UsersManual.rst:4303
+#: ../../../UsersManual.rst:4353
 msgid ""
 "Clang will generate SPIR v1.2 compatible IR for OpenCL versions up to 2.0 "
 "and SPIR v2.0 for OpenCL v2.0 or C++ for OpenCL."
 msgstr ""
 
-#: ../../../UsersManual.rst:4306
+#: ../../../UsersManual.rst:4356
 msgid ""
 "x86 is used by some implementations that are x86 compatible and currently "
 "remains for backwards compatibility (with older implementations prior to "
@@ -5541,25 +5575,25 @@ msgid ""
 "toolchain, such as for example `POCL <http://portablecl.org/>`_, can be used."
 msgstr ""
 
-#: ../../../UsersManual.rst:4314
+#: ../../../UsersManual.rst:4364
 msgid ""
 "This target does not support multiple memory segments and, therefore, the "
 "fake address space map can be added using the :ref:`-ffake-address-space-map "
 "<opencl_fake_address_space_map>` flag."
 msgstr ""
 
-#: ../../../UsersManual.rst:4318
+#: ../../../UsersManual.rst:4368
 msgid ""
 "All known OpenCL extensions and features are set to supported in the generic "
 "targets, however :option:`-cl-ext` flag can be used to toggle individual "
 "extensions and features."
 msgstr ""
 
-#: ../../../UsersManual.rst:4325
+#: ../../../UsersManual.rst:4375
 msgid "OpenCL Header"
 msgstr ""
 
-#: ../../../UsersManual.rst:4327
+#: ../../../UsersManual.rst:4377
 msgid ""
 "By default Clang will include standard headers and therefore most of OpenCL "
 "builtin functions and types are available during compilation. The default "
@@ -5567,24 +5601,24 @@ msgid ""
 "using flag :option:`-cl-no-stdinc`."
 msgstr ""
 
-#: ../../../UsersManual.rst:4332
+#: ../../../UsersManual.rst:4382
 msgid ""
 "The following example demonstrates that OpenCL kernel sources with various "
 "standard builtin functions can be compiled without the need for an explicit "
 "includes or compiler flags."
 msgstr ""
 
-#: ../../../UsersManual.rst:4341
+#: ../../../UsersManual.rst:4391
 msgid ""
 "More information about the default headers is provided in :doc:"
 "`OpenCLSupport`."
 msgstr ""
 
-#: ../../../UsersManual.rst:4344
+#: ../../../UsersManual.rst:4394
 msgid "OpenCL Extensions"
 msgstr ""
 
-#: ../../../UsersManual.rst:4346
+#: ../../../UsersManual.rst:4396
 msgid ""
 "Most of the ``cl_khr_*`` extensions to OpenCL C from `the official OpenCL "
 "registry <https://www.khronos.org/registry/OpenCL/>`_ are available and "
@@ -5592,27 +5626,27 @@ msgid ""
 "architecture."
 msgstr ""
 
-#: ../../../UsersManual.rst:4351
+#: ../../../UsersManual.rst:4401
 msgid ""
 "It is possible to alter the default extensions setting per target using ``-"
 "cl-ext`` flag. (See :ref:`flags description <opencl_cl_ext>` for more "
 "details)."
 msgstr ""
 
-#: ../../../UsersManual.rst:4354
+#: ../../../UsersManual.rst:4404
 msgid ""
 "Vendor extensions can be added flexibly by declaring the list of types and "
 "functions associated with each extensions enclosed within the following "
 "compiler pragma directives:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4364
+#: ../../../UsersManual.rst:4414
 msgid ""
 "For example, parsing the following code adds ``my_t`` type and ``my_func`` "
 "function to the custom ``my_ext`` extension."
 msgstr ""
 
-#: ../../../UsersManual.rst:4376
+#: ../../../UsersManual.rst:4426
 msgid ""
 "There is no conflict resolution for identifier clashes among extensions. It "
 "is therefore recommended that the identifiers are prefixed with a double "
@@ -5620,32 +5654,32 @@ msgid ""
 "should use reserved identifier prefix e.g. amd, arm, intel."
 msgstr ""
 
-#: ../../../UsersManual.rst:4381
+#: ../../../UsersManual.rst:4431
 msgid ""
 "Clang also supports language extensions documented in `The OpenCL C Language "
 "Extensions Documentation <https://github.com/KhronosGroup/Khronosdotorg/blob/"
 "main/api/opencl/assets/OpenCL_LangExt.pdf>`_."
 msgstr ""
 
-#: ../../../UsersManual.rst:4386
+#: ../../../UsersManual.rst:4436
 msgid "OpenCL-Specific Attributes"
 msgstr ""
 
-#: ../../../UsersManual.rst:4388
+#: ../../../UsersManual.rst:4438
 msgid ""
 "OpenCL support in Clang contains a set of attribute taken directly from the "
 "specification as well as additional attributes."
 msgstr ""
 
-#: ../../../UsersManual.rst:4391
+#: ../../../UsersManual.rst:4441
 msgid "See also :doc:`AttributeReference`."
 msgstr ""
 
-#: ../../../UsersManual.rst:4394
+#: ../../../UsersManual.rst:4444
 msgid "nosvm"
 msgstr ""
 
-#: ../../../UsersManual.rst:4396
+#: ../../../UsersManual.rst:4446
 msgid ""
 "Clang supports this attribute to comply to OpenCL v2.0 conformance, but it "
 "does not have any effect on the IR. For more details refer to the "
@@ -5653,22 +5687,22 @@ msgid ""
 "opencl-2.0-openclc.pdf#49>`_"
 msgstr ""
 
-#: ../../../UsersManual.rst:4403
+#: ../../../UsersManual.rst:4453
 msgid "opencl_unroll_hint"
 msgstr ""
 
-#: ../../../UsersManual.rst:4405
+#: ../../../UsersManual.rst:4455
 msgid ""
 "The implementation of this feature mirrors the unroll hint for C. More "
 "details on the syntax can be found in the specification `section 6.11.5 "
 "<https://www.khronos.org/registry/cl/specs/opencl-2.0-openclc.pdf#61>`_"
 msgstr ""
 
-#: ../../../UsersManual.rst:4411
+#: ../../../UsersManual.rst:4461
 msgid "convergent"
 msgstr ""
 
-#: ../../../UsersManual.rst:4413
+#: ../../../UsersManual.rst:4463
 msgid ""
 "To make sure no invalid optimizations occur for single program multiple data "
 "(SPMD) / single instruction multiple thread (SIMT) Clang provides attributes "
@@ -5678,18 +5712,18 @@ msgid ""
 "txt>`_"
 msgstr ""
 
-#: ../../../UsersManual.rst:4430
+#: ../../../UsersManual.rst:4480
 msgid ""
 "with non-SPMD semantics this is optimized to the following equivalent code:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4445
+#: ../../../UsersManual.rst:4495
 msgid ""
 "Declaring the function ``my_sub_group_shuffle`` with the convergent "
 "attribute would prevent this:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4452
+#: ../../../UsersManual.rst:4502
 msgid ""
 "Using ``convergent`` guarantees correct execution by keeping CFG equivalence "
 "wrt operations marked as ``convergent``. CFG ``G´`` is equivalent to ``G`` "
@@ -5697,11 +5731,11 @@ msgid ""
 "relations with respect to ``Ni`` remain the same in both ``G`` and ``G´``."
 msgstr ""
 
-#: ../../../UsersManual.rst:4458
+#: ../../../UsersManual.rst:4508
 msgid "noduplicate"
 msgstr ""
 
-#: ../../../UsersManual.rst:4460
+#: ../../../UsersManual.rst:4510
 msgid ""
 "``noduplicate`` is more restrictive with respect to optimizations than "
 "``convergent`` because a convergent function only preserves CFG equivalence. "
@@ -5709,28 +5743,28 @@ msgid ""
 "unmodified."
 msgstr ""
 
-#: ../../../UsersManual.rst:4470
+#: ../../../UsersManual.rst:4520
 msgid "can be modified to:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4479
+#: ../../../UsersManual.rst:4529
 msgid ""
 "while using ``noduplicate`` would disallow this. Also ``noduplicate`` "
 "doesn't have the same safe semantics of CFG as ``convergent`` and can cause "
 "changes in CFG that modify semantics of the original program."
 msgstr ""
 
-#: ../../../UsersManual.rst:4483
+#: ../../../UsersManual.rst:4533
 msgid ""
 "``noduplicate`` is kept for backwards compatibility only and it considered "
 "to be deprecated for future uses."
 msgstr ""
 
-#: ../../../UsersManual.rst:4489
+#: ../../../UsersManual.rst:4539
 msgid "C++ for OpenCL"
 msgstr ""
 
-#: ../../../UsersManual.rst:4491
+#: ../../../UsersManual.rst:4541
 msgid ""
 "Starting from clang 9 kernel code can contain C++17 features: classes, "
 "templates, function overloading, type deduction, etc. Please note that this "
@@ -5739,7 +5773,7 @@ msgid ""
 "clang in any new releases in the near future."
 msgstr ""
 
-#: ../../../UsersManual.rst:4497
+#: ../../../UsersManual.rst:4547
 msgid ""
 "Clang currently supports C++ for OpenCL 1.0 and 2021. For detailed "
 "information about this language refer to the C++ for OpenCL Programming "
@@ -5749,60 +5783,60 @@ msgid ""
 "docrev2021.12>`_."
 msgstr ""
 
-#: ../../../UsersManual.rst:4505
+#: ../../../UsersManual.rst:4555
 msgid ""
 "To enable the C++ for OpenCL mode, pass one of following command line "
 "options when compiling ``.clcpp`` file:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4508
+#: ../../../UsersManual.rst:4558
 msgid ""
 "C++ for OpenCL 1.0: ``-cl-std=clc++``, ``-cl-std=CLC++``, ``-cl-std=clc+"
 "+1.0``, ``-cl-std=CLC++1.0``, ``-std=clc++``, ``-std=CLC++``, ``-std=clc+"
 "+1.0`` or ``-std=CLC++1.0``."
 msgstr ""
 
-#: ../../../UsersManual.rst:4512
+#: ../../../UsersManual.rst:4562
 msgid ""
 "C++ for OpenCL 2021: ``-cl-std=clc++2021``, ``-cl-std=CLC++2021``, ``-"
 "std=clc++2021``, ``-std=CLC++2021``."
 msgstr ""
 
-#: ../../../UsersManual.rst:4534
+#: ../../../UsersManual.rst:4584
 msgid "Example of use:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4536
+#: ../../../UsersManual.rst:4586
 msgid ""
 "By default, files with ``.clcpp`` extension are compiled with the C++ for "
 "OpenCL 1.0 mode."
 msgstr ""
 
-#: ../../../UsersManual.rst:4543
+#: ../../../UsersManual.rst:4593
 msgid ""
 "For backward compatibility files with ``.cl`` extensions can also be "
 "compiled in C++ for OpenCL mode but the desirable language mode must be "
 "activated with a flag."
 msgstr ""
 
-#: ../../../UsersManual.rst:4551
+#: ../../../UsersManual.rst:4601
 msgid ""
 "Support of C++ for OpenCL 2021 is currently in experimental phase, refer to :"
 "doc:`OpenCLSupport` for more details."
 msgstr ""
 
-#: ../../../UsersManual.rst:4554
+#: ../../../UsersManual.rst:4604
 msgid ""
 "C++ for OpenCL kernel sources can also be compiled online in drivers "
 "supporting `cl_ext_cxx_for_opencl <https://www.khronos.org/registry/OpenCL/"
 "extensions/ext/cl_ext_cxx_for_opencl.html>`_ extension."
 msgstr ""
 
-#: ../../../UsersManual.rst:4560
+#: ../../../UsersManual.rst:4610
 msgid "Constructing and destroying global objects"
 msgstr ""
 
-#: ../../../UsersManual.rst:4562
+#: ../../../UsersManual.rst:4612
 msgid ""
 "Global objects with non-trivial constructors require the constructors to be "
 "run before the first kernel using the global objects is executed. Similarly "
@@ -5819,76 +5853,76 @@ msgid ""
 "constructor initialization kernel above."
 msgstr ""
 
-#: ../../../UsersManual.rst:4576
+#: ../../../UsersManual.rst:4626
 msgid ""
 "Note that if multiple files are compiled and linked into libraries, multiple "
 "kernels that initialize global objects for multiple modules would have to be "
 "invoked."
 msgstr ""
 
-#: ../../../UsersManual.rst:4580
+#: ../../../UsersManual.rst:4630
 msgid ""
 "Applications are currently required to run initialization of global objects "
 "manually before running any kernels in which the objects are used."
 msgstr ""
 
-#: ../../../UsersManual.rst:4587
+#: ../../../UsersManual.rst:4637
 msgid ""
 "If there are any global objects to be initialized, the final binary will "
 "contain the ``_GLOBAL__sub_I_test.cl`` kernel to be enqueued."
 msgstr ""
 
-#: ../../../UsersManual.rst:4590
+#: ../../../UsersManual.rst:4640
 msgid ""
 "Note that the manual workaround only applies to objects declared at the "
 "program scope. There is no manual workaround for the construction of static "
 "objects with non-trivial constructors inside functions."
 msgstr ""
 
-#: ../../../UsersManual.rst:4594
+#: ../../../UsersManual.rst:4644
 msgid ""
 "Global destructors can not be invoked manually in the OpenCL v2.0 drivers. "
 "However, all memory used for program scope objects should be released on "
 "``clReleaseProgram``."
 msgstr ""
 
-#: ../../../UsersManual.rst:4599
+#: ../../../UsersManual.rst:4649
 msgid "Libraries"
 msgstr ""
 
-#: ../../../UsersManual.rst:4600
+#: ../../../UsersManual.rst:4650
 msgid ""
 "Limited experimental support of C++ standard libraries for OpenCL is "
 "described in :doc:`OpenCLSupport` page."
 msgstr ""
 
-#: ../../../UsersManual.rst:4606
+#: ../../../UsersManual.rst:4656
 msgid "Target-Specific Features and Limitations"
 msgstr ""
 
-#: ../../../UsersManual.rst:4609
+#: ../../../UsersManual.rst:4659
 msgid "CPU Architectures Features and Limitations"
 msgstr ""
 
-#: ../../../UsersManual.rst:4612
+#: ../../../UsersManual.rst:4662
 msgid "X86"
 msgstr ""
 
-#: ../../../UsersManual.rst:4614
+#: ../../../UsersManual.rst:4664
 msgid ""
 "The support for X86 (both 32-bit and 64-bit) is considered stable on Darwin "
 "(macOS), Linux, FreeBSD, and Dragonfly BSD: it has been tested to correctly "
 "compile many large C, C++, Objective-C, and Objective-C++ codebases."
 msgstr ""
 
-#: ../../../UsersManual.rst:4619
+#: ../../../UsersManual.rst:4669
 msgid ""
 "On ``x86_64-mingw32``, passing i128(by value) is incompatible with the "
 "Microsoft x64 calling convention. You might need to tweak "
 "``WinX86_64ABIInfo::classify()`` in ``lib/CodeGen/Targets/X86.cpp``."
 msgstr ""
 
-#: ../../../UsersManual.rst:4623
+#: ../../../UsersManual.rst:4673
 msgid ""
 "For the X86 target, clang supports the `-m16` command line argument which "
 "enables 16-bit code output. This is broadly similar to using ``asm(\"."
@@ -5898,35 +5932,35 @@ msgid ""
 "enable 32-bit addressing and operations."
 msgstr ""
 
-#: ../../../UsersManual.rst:4630
+#: ../../../UsersManual.rst:4680
 msgid ""
 "Several micro-architecture levels as specified by the x86-64 psABI are "
 "defined. They are cumulative in the sense that features from previous levels "
 "are implicitly included in later levels."
 msgstr ""
 
-#: ../../../UsersManual.rst:4634
+#: ../../../UsersManual.rst:4684
 msgid ""
 "``-march=x86-64``: CMOV, CMPXCHG8B, FPU, FXSR, MMX, FXSR, SCE, SSE, SSE2"
 msgstr ""
 
-#: ../../../UsersManual.rst:4635
+#: ../../../UsersManual.rst:4685
 msgid ""
 "``-march=x86-64-v2``: (close to Nehalem) CMPXCHG16B, LAHF-SAHF, POPCNT, "
 "SSE3, SSE4.1, SSE4.2, SSSE3"
 msgstr ""
 
-#: ../../../UsersManual.rst:4636
+#: ../../../UsersManual.rst:4686
 msgid ""
 "``-march=x86-64-v3``: (close to Haswell) AVX, AVX2, BMI1, BMI2, F16C, FMA, "
 "LZCNT, MOVBE, XSAVE"
 msgstr ""
 
-#: ../../../UsersManual.rst:4637
+#: ../../../UsersManual.rst:4687
 msgid "``-march=x86-64-v4``: AVX512F, AVX512BW, AVX512CD, AVX512DQ, AVX512VL"
 msgstr ""
 
-#: ../../../UsersManual.rst:4639
+#: ../../../UsersManual.rst:4689
 msgid ""
 "`Intel AVX10 ISA <https://cdrdv2.intel.com/v1/dl/getContent/784343>`_ is a "
 "major new vector ISA incorporating the modern vectorization aspects of Intel "
@@ -5938,11 +5972,11 @@ msgid ""
 "processors without re-compile."
 msgstr ""
 
-#: ../../../UsersManual.rst:4649
+#: ../../../UsersManual.rst:4699
 msgid "ARM"
 msgstr ""
 
-#: ../../../UsersManual.rst:4651
+#: ../../../UsersManual.rst:4701
 msgid ""
 "The support for ARM (specifically ARMv6 and ARMv7) is considered stable on "
 "Darwin (iOS): it has been tested to correctly compile many large C, C++, "
@@ -5951,11 +5985,11 @@ msgid ""
 "example."
 msgstr ""
 
-#: ../../../UsersManual.rst:4658
+#: ../../../UsersManual.rst:4708
 msgid "PowerPC"
 msgstr ""
 
-#: ../../../UsersManual.rst:4660
+#: ../../../UsersManual.rst:4710
 msgid ""
 "The support for PowerPC (especially PowerPC64) is considered stable on Linux "
 "and FreeBSD: it has been tested to correctly compile many large C and C++ "
@@ -5963,24 +5997,24 @@ msgid ""
 "on ELF platforms)."
 msgstr ""
 
-#: ../../../UsersManual.rst:4666
+#: ../../../UsersManual.rst:4716
 msgid "Other platforms"
 msgstr ""
 
-#: ../../../UsersManual.rst:4668
+#: ../../../UsersManual.rst:4718
 msgid ""
 "clang currently contains some support for other architectures (e.g. Sparc); "
 "however, significant pieces of code generation are still missing, and they "
 "haven't undergone significant testing."
 msgstr ""
 
-#: ../../../UsersManual.rst:4672
+#: ../../../UsersManual.rst:4722
 msgid ""
 "clang contains limited support for the MSP430 embedded processor, but both "
 "the clang support and the LLVM backend support are highly experimental."
 msgstr ""
 
-#: ../../../UsersManual.rst:4676
+#: ../../../UsersManual.rst:4726
 msgid ""
 "Other platforms are completely unsupported at the moment. Adding the minimal "
 "support needed for parsing and semantic analysis on a new platform is quite "
@@ -5991,141 +6025,141 @@ msgid ""
 "Generating assembly requires a suitable LLVM backend."
 msgstr ""
 
-#: ../../../UsersManual.rst:4686
+#: ../../../UsersManual.rst:4736
 msgid "Operating System Features and Limitations"
 msgstr ""
 
-#: ../../../UsersManual.rst:4689
+#: ../../../UsersManual.rst:4739
 msgid "Windows"
 msgstr ""
 
-#: ../../../UsersManual.rst:4691
+#: ../../../UsersManual.rst:4741
 msgid ""
 "Clang has experimental support for targeting \"Cygming\" (Cygwin / MinGW) "
 "platforms."
 msgstr ""
 
-#: ../../../UsersManual.rst:4694
+#: ../../../UsersManual.rst:4744
 msgid "See also :ref:`Microsoft Extensions <c_ms>`."
 msgstr ""
 
-#: ../../../UsersManual.rst:4697
+#: ../../../UsersManual.rst:4747
 msgid "Cygwin"
 msgstr ""
 
-#: ../../../UsersManual.rst:4699
+#: ../../../UsersManual.rst:4749
 msgid "Clang works on Cygwin-1.7."
 msgstr ""
 
-#: ../../../UsersManual.rst:4702
+#: ../../../UsersManual.rst:4752
 msgid "MinGW32"
 msgstr ""
 
-#: ../../../UsersManual.rst:4704
+#: ../../../UsersManual.rst:4754
 msgid ""
 "Clang works on some mingw32 distributions. Clang assumes directories as "
 "below;"
 msgstr ""
 
-#: ../../../UsersManual.rst:4707
+#: ../../../UsersManual.rst:4757
 msgid "``C:/mingw/include``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4708
+#: ../../../UsersManual.rst:4758
 msgid "``C:/mingw/lib``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4709
+#: ../../../UsersManual.rst:4759
 msgid "``C:/mingw/lib/gcc/mingw32/4.[3-5].0/include/c++``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4711
+#: ../../../UsersManual.rst:4761
 msgid "On MSYS, a few tests might fail."
 msgstr ""
 
-#: ../../../UsersManual.rst:4714
+#: ../../../UsersManual.rst:4764
 msgid "MinGW-w64"
 msgstr ""
 
-#: ../../../UsersManual.rst:4716
+#: ../../../UsersManual.rst:4766
 msgid ""
 "For 32-bit (i686-w64-mingw32), and 64-bit (x86\\_64-w64-mingw32), Clang "
 "assumes as below;"
 msgstr ""
 
-#: ../../../UsersManual.rst:4719
+#: ../../../UsersManual.rst:4769
 msgid ""
 "``GCC versions 4.5.0 to 4.5.3, 4.6.0 to 4.6.2, or 4.7.0 (for the C++ header "
 "search path)``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4720
+#: ../../../UsersManual.rst:4770
 msgid "``some_directory/bin/gcc.exe``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4721
+#: ../../../UsersManual.rst:4771
 msgid "``some_directory/bin/clang.exe``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4722
+#: ../../../UsersManual.rst:4772
 msgid "``some_directory/bin/clang++.exe``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4723
+#: ../../../UsersManual.rst:4773
 msgid "``some_directory/bin/../include/c++/GCC_version``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4724
+#: ../../../UsersManual.rst:4774
 msgid "``some_directory/bin/../include/c++/GCC_version/x86_64-w64-mingw32``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4725
+#: ../../../UsersManual.rst:4775
 msgid "``some_directory/bin/../include/c++/GCC_version/i686-w64-mingw32``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4726
+#: ../../../UsersManual.rst:4776
 msgid "``some_directory/bin/../include/c++/GCC_version/backward``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4727
+#: ../../../UsersManual.rst:4777
 msgid "``some_directory/bin/../x86_64-w64-mingw32/include``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4728
+#: ../../../UsersManual.rst:4778
 msgid "``some_directory/bin/../i686-w64-mingw32/include``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4729
+#: ../../../UsersManual.rst:4779
 msgid "``some_directory/bin/../include``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4731
+#: ../../../UsersManual.rst:4781
 msgid ""
 "This directory layout is standard for any toolchain you will find on the "
 "official `MinGW-w64 website <http://mingw-w64.sourceforge.net>`_."
 msgstr ""
 
-#: ../../../UsersManual.rst:4734
+#: ../../../UsersManual.rst:4784
 msgid ""
 "Clang expects the GCC executable \"gcc.exe\" compiled for ``i686-w64-"
 "mingw32`` (or ``x86_64-w64-mingw32``) to be present on PATH."
 msgstr ""
 
-#: ../../../UsersManual.rst:4737
+#: ../../../UsersManual.rst:4787
 msgid ""
 "`Some tests might fail <https://bugs.llvm.org/show_bug.cgi?id=9072>`_ on "
 "``x86_64-w64-mingw32``."
 msgstr ""
 
-#: ../../../UsersManual.rst:4741
+#: ../../../UsersManual.rst:4791
 msgid "AIX"
 msgstr ""
 
-#: ../../../UsersManual.rst:4743
+#: ../../../UsersManual.rst:4793
 msgid "TOC Data Transformation"
 msgstr ""
 
-#: ../../../UsersManual.rst:4744
+#: ../../../UsersManual.rst:4794
 msgid ""
 "TOC data transformation is off by default (``-mno-tocdata``). When ``-"
 "mtocdata`` is specified, the TOC data transformation will be applied to all "
@@ -6134,127 +6168,127 @@ msgid ""
 "exceptions, see further below)."
 msgstr ""
 
-#: ../../../UsersManual.rst:4750
+#: ../../../UsersManual.rst:4800
 msgid "Suitable variables must:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4752
+#: ../../../UsersManual.rst:4802
 msgid "have complete types"
 msgstr ""
 
-#: ../../../UsersManual.rst:4753
+#: ../../../UsersManual.rst:4803
 msgid "be independently generated (i.e., not placed in a pool)"
 msgstr ""
 
-#: ../../../UsersManual.rst:4754
+#: ../../../UsersManual.rst:4804
 msgid "be at most as large as a pointer"
 msgstr ""
 
-#: ../../../UsersManual.rst:4755
+#: ../../../UsersManual.rst:4805
 msgid "not be aligned more strictly than a pointer"
 msgstr ""
 
-#: ../../../UsersManual.rst:4756
+#: ../../../UsersManual.rst:4806
 msgid "not be structs containing flexible array members"
 msgstr ""
 
-#: ../../../UsersManual.rst:4757
+#: ../../../UsersManual.rst:4807
 msgid "not have internal linkage"
 msgstr ""
 
-#: ../../../UsersManual.rst:4758
+#: ../../../UsersManual.rst:4808
 msgid "not have aliases"
 msgstr ""
 
-#: ../../../UsersManual.rst:4759
+#: ../../../UsersManual.rst:4809
 msgid "not have section attributes"
 msgstr ""
 
-#: ../../../UsersManual.rst:4760
+#: ../../../UsersManual.rst:4810
 msgid "not be thread local storage"
 msgstr ""
 
-#: ../../../UsersManual.rst:4762
+#: ../../../UsersManual.rst:4812
 msgid ""
 "The TOC data transformation results in the variable, not its address, being "
 "placed in the TOC. This eliminates the need to load the address of the "
 "variable from the TOC."
 msgstr ""
 
-#: ../../../UsersManual.rst:4766
+#: ../../../UsersManual.rst:4816
 msgid ""
 "Note: If the TOC data transformation is applied to a variable whose "
 "definition is imported, the linker will generate fixup code for reading or "
 "writing to the variable."
 msgstr ""
 
-#: ../../../UsersManual.rst:4771
+#: ../../../UsersManual.rst:4821
 msgid ""
 "When multiple toc-data options are used, the last option used has the "
 "affect. For example: ``-mno-tocdata=g5,g1 -mtocdata=g1,g2 -mno-tocdata=g2 -"
 "mtocdata=g3,g4`` results in ``-mtocdata=g1,g3,g4``"
 msgstr ""
 
-#: ../../../UsersManual.rst:4775
+#: ../../../UsersManual.rst:4825
 msgid "Names of variables not having external linkage will be ignored."
 msgstr ""
 
-#: ../../../UsersManual.rst:4777
+#: ../../../UsersManual.rst:4827
 msgid "**Options:**"
 msgstr ""
 
-#: ../../../UsersManual.rst:4781
+#: ../../../UsersManual.rst:4831
 msgid ""
 "This is the default behaviour. Only variables explicitly specified with ``-"
 "mtocdata=`` will have the TOC data transformation applied."
 msgstr ""
 
-#: ../../../UsersManual.rst:4786
+#: ../../../UsersManual.rst:4836
 msgid ""
 "Apply the TOC data transformation to all suitable variables with static "
 "storage duration (including static data members of classes and block-scope "
 "static variables) that are not explicitly specified with ``-mno-tocdata=``."
 msgstr ""
 
-#: ../../../UsersManual.rst:4792
+#: ../../../UsersManual.rst:4842
 msgid ""
 "Can be used in conjunction with ``-mtocdata`` to mark the comma-separated "
 "list of external linkage variables, specified using their mangled names, as "
 "exceptions to ``-mtocdata``."
 msgstr ""
 
-#: ../../../UsersManual.rst:4798
+#: ../../../UsersManual.rst:4848
 msgid ""
 "Apply the TOC data transformation to the comma-separated list of external "
 "linkage variables, specified using their mangled names, if they are "
 "suitable. Emit diagnostics for all unsuitable variables specified."
 msgstr ""
 
-#: ../../../UsersManual.rst:4803
+#: ../../../UsersManual.rst:4853
 msgid "Default Visibility Export Mapping"
 msgstr ""
 
-#: ../../../UsersManual.rst:4804
+#: ../../../UsersManual.rst:4854
 msgid ""
 "The ``-mdefault-visibility-export-mapping=`` option can be used to control "
 "mapping of default visibility to an explicit shared object export (i.e. "
 "XCOFF exported visibility). Three values are provided for the option:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4808
+#: ../../../UsersManual.rst:4858
 msgid ""
 "``-mdefault-visibility-export-mapping=none``: no additional export "
 "information is created for entities with default visibility."
 msgstr ""
 
-#: ../../../UsersManual.rst:4810
+#: ../../../UsersManual.rst:4860
 msgid ""
 "``-mdefault-visibility-export-mapping=explicit``: mark entities for export "
 "if they have explicit (e.g. via an attribute) default visibility from the "
 "source, including RTTI."
 msgstr ""
 
-#: ../../../UsersManual.rst:4813
+#: ../../../UsersManual.rst:4863
 msgid ""
 "``-mdefault-visibility-export-mapping=all``: set XCOFF exported visibility "
 "for all entities with default visibility from any source. This gives a "
@@ -6262,27 +6296,27 @@ msgid ""
 "visibility are exported."
 msgstr ""
 
-#: ../../../UsersManual.rst:4821
+#: ../../../UsersManual.rst:4871
 msgid "SPIR-V support"
 msgstr ""
 
-#: ../../../UsersManual.rst:4823
+#: ../../../UsersManual.rst:4873
 msgid ""
 "Clang supports generation of SPIR-V conformant to `the OpenCL Environment "
 "Specification <https://www.khronos.org/registry/OpenCL/specs/3.0-unified/"
 "html/OpenCL_Env.html>`_."
 msgstr ""
 
-#: ../../../UsersManual.rst:4827
+#: ../../../UsersManual.rst:4877
 msgid ""
 "To generate SPIR-V binaries, Clang uses the in-tree LLVM SPIR-V backend."
 msgstr ""
 
-#: ../../../UsersManual.rst:4829
+#: ../../../UsersManual.rst:4879
 msgid "Example usage for OpenCL kernel compilation:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4836
+#: ../../../UsersManual.rst:4886
 msgid ""
 "Both invocations of Clang will result in the generation of a SPIR-V binary "
 "file `test.o` for 32 bit and 64 bit respectively. This file can be imported "
@@ -6290,14 +6324,14 @@ msgid ""
 "further by offline SPIR-V consumer tools."
 msgstr ""
 
-#: ../../../UsersManual.rst:4841
+#: ../../../UsersManual.rst:4891
 msgid ""
 "Converting to SPIR-V produced with the optimization levels other than `-O0` "
 "is currently available as an experimental feature and it is not guaranteed "
 "to work in all cases."
 msgstr ""
 
-#: ../../../UsersManual.rst:4845
+#: ../../../UsersManual.rst:4895
 msgid ""
 "Linking is done using ``spirv-link`` from `the SPIRV-Tools project <https://"
 "github.com/KhronosGroup/SPIRV-Tools#linker>`_. Similar to other external "
@@ -6307,24 +6341,24 @@ msgid ""
 "Tools#build>`_."
 msgstr ""
 
-#: ../../../UsersManual.rst:4856
+#: ../../../UsersManual.rst:4906
 msgid ""
 "More information about the SPIR-V target settings and supported versions of "
 "SPIR-V format can be found in `the SPIR-V target guide <https://llvm.org/"
 "docs/SPIRVUsage.html>`__."
 msgstr ""
 
-#: ../../../UsersManual.rst:4863
+#: ../../../UsersManual.rst:4913
 msgid "clang-cl"
 msgstr ""
 
-#: ../../../UsersManual.rst:4865
+#: ../../../UsersManual.rst:4915
 msgid ""
 "clang-cl is an alternative command-line interface to Clang, designed for "
 "compatibility with the Visual C++ compiler, cl.exe."
 msgstr ""
 
-#: ../../../UsersManual.rst:4868
+#: ../../../UsersManual.rst:4918
 msgid ""
 "To enable clang-cl to find system headers, libraries, and the linker when "
 "run from the command-line, it should be executed inside a Visual Studio "
@@ -6333,7 +6367,7 @@ msgid ""
 "microsoft.com/en-us/library/f2ccy3wt.aspx>`_."
 msgstr ""
 
-#: ../../../UsersManual.rst:4873
+#: ../../../UsersManual.rst:4923
 msgid ""
 "clang-cl can also be used from inside Visual Studio by selecting the LLVM "
 "Platform Toolset. The toolset is not part of the installer, but may be "
@@ -6346,55 +6380,55 @@ msgid ""
 "use for builds."
 msgstr ""
 
-#: ../../../UsersManual.rst:4882
+#: ../../../UsersManual.rst:4932
 msgid ""
 "To use the toolset with MSBuild directly, invoke it with e.g. ``/p:"
 "PlatformToolset=LLVM``. This allows trying out the clang-cl toolchain "
 "without modifying your project files."
 msgstr ""
 
-#: ../../../UsersManual.rst:4886
+#: ../../../UsersManual.rst:4936
 msgid ""
 "It's also possible to point MSBuild at clang-cl without changing toolset by "
 "passing ``/p:CLToolPath=c:\\llvm\\bin /p:CLToolExe=clang-cl.exe``."
 msgstr ""
 
-#: ../../../UsersManual.rst:4889
+#: ../../../UsersManual.rst:4939
 msgid ""
 "When using CMake and the Visual Studio generators, the toolset can be set "
 "with the ``-T`` flag:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4895
+#: ../../../UsersManual.rst:4945
 msgid ""
 "When using CMake with the Ninja generator, set the ``CMAKE_C_COMPILER`` and "
 "``CMAKE_CXX_COMPILER`` variables to clang-cl:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4905
+#: ../../../UsersManual.rst:4955
 msgid "Command-Line Options"
 msgstr ""
 
-#: ../../../UsersManual.rst:4907
+#: ../../../UsersManual.rst:4957
 msgid ""
 "To be compatible with cl.exe, clang-cl supports most of the same command-"
 "line options. Those options can start with either ``/`` or ``-``. It also "
 "supports some of Clang's core options, such as the ``-W`` options."
 msgstr ""
 
-#: ../../../UsersManual.rst:4911
+#: ../../../UsersManual.rst:4961
 msgid ""
 "Options that are known to clang-cl, but not currently supported, are ignored "
 "with a warning. For example:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4918
+#: ../../../UsersManual.rst:4968
 msgid ""
 "To suppress warnings about unused arguments, use the ``-Qunused-arguments`` "
 "option."
 msgstr ""
 
-#: ../../../UsersManual.rst:4920
+#: ../../../UsersManual.rst:4970
 msgid ""
 "Options that are not known to clang-cl will be ignored by default. Use the "
 "``-Werror=unknown-argument`` option in order to treat them as errors. If "
@@ -6402,22 +6436,22 @@ msgid ""
 "filename:"
 msgstr ""
 
-#: ../../../UsersManual.rst:4928
+#: ../../../UsersManual.rst:4978
 msgid ""
 "Please `file a bug <https://github.com/llvm/llvm-project/issues/new?"
 "labels=clang-cl>`_ for any valid cl.exe flags that clang-cl does not "
 "understand."
 msgstr ""
 
-#: ../../../UsersManual.rst:4931
+#: ../../../UsersManual.rst:4981
 msgid "Execute ``clang-cl /?`` to see a list of supported options:"
 msgstr ""
 
-#: ../../../UsersManual.rst:5237
+#: ../../../UsersManual.rst:5289
 msgid "The /clang: Option"
 msgstr ""
 
-#: ../../../UsersManual.rst:5239
+#: ../../../UsersManual.rst:5291
 msgid ""
 "When clang-cl is run with a set of ``/clang:<arg>`` options, it will gather "
 "all of the ``<arg>`` arguments and process them as if they were passed to "
@@ -6428,11 +6462,11 @@ msgid ""
 "end of the clang-cl command line."
 msgstr ""
 
-#: ../../../UsersManual.rst:5248
+#: ../../../UsersManual.rst:5300
 msgid "The /Zc:dllexportInlines- Option"
 msgstr ""
 
-#: ../../../UsersManual.rst:5250
+#: ../../../UsersManual.rst:5302
 msgid ""
 "This causes the class-level `dllexport` and `dllimport` attributes to not "
 "apply to inline member functions, as they otherwise would. For example, in "
@@ -6440,7 +6474,7 @@ msgid ""
 "but when using the ``/Zc:dllexportInlines-`` flag it is not:"
 msgstr ""
 
-#: ../../../UsersManual.rst:5261
+#: ../../../UsersManual.rst:5313
 msgid ""
 "This has the benefit that the compiler doesn't need to emit a definition of "
 "`S::foo()` in every translation unit where the declaration is included, as "
@@ -6454,7 +6488,7 @@ msgid ""
 "DLL."
 msgstr ""
 
-#: ../../../UsersManual.rst:5271
+#: ../../../UsersManual.rst:5323
 msgid ""
 "Note that the Microsoft Visual C++ compiler does not support this option, "
 "and if code in a DLL is compiled with ``/Zc:dllexportInlines-``, the code "
@@ -6466,14 +6500,14 @@ msgid ""
 "instead of importing them from the DLL."
 msgstr ""
 
-#: ../../../UsersManual.rst:5280
+#: ../../../UsersManual.rst:5332
 msgid ""
 "Also note that like when using ``-fvisibility-inlines-hidden``, the address "
 "of `S::foo()` will be different inside and outside the DLL, breaking the C/C+"
 "+ standard requirement that functions have a unique address."
 msgstr ""
 
-#: ../../../UsersManual.rst:5284
+#: ../../../UsersManual.rst:5336
 msgid ""
 "The flag does not apply to explicit class template instantiation definitions "
 "or declarations, as those are typically used to explicitly provide a single "
@@ -6484,13 +6518,13 @@ msgid ""
 "and outside the DLL."
 msgstr ""
 
-#: ../../../UsersManual.rst:5291
+#: ../../../UsersManual.rst:5343
 msgid ""
 "Using this flag can cause problems when inline functions that would "
 "otherwise be dllexported refer to internal symbols of a DLL. For example:"
 msgstr ""
 
-#: ../../../UsersManual.rst:5302
+#: ../../../UsersManual.rst:5354
 msgid ""
 "Normally, references to `S::foo()` would use the definition in the DLL from "
 "which it was exported, and which presumably also has the definition of "
@@ -6501,43 +6535,43 @@ msgid ""
 "different instance of that variable than in the DLL:"
 msgstr ""
 
-#: ../../../UsersManual.rst:5318
+#: ../../../UsersManual.rst:5370
 msgid ""
 "This could lead to very subtle bugs. Using ``-fvisibility-inlines-hidden`` "
 "can lead to the same issue. To avoid it in this case, make `S::foo()` or "
 "`internal()` non-inline, or mark them `dllimport/dllexport` explicitly."
 msgstr ""
 
-#: ../../../UsersManual.rst:5323
+#: ../../../UsersManual.rst:5375
 msgid "Finding Clang runtime libraries"
 msgstr ""
 
-#: ../../../UsersManual.rst:5325
+#: ../../../UsersManual.rst:5377
 msgid ""
 "clang-cl supports several features that require runtime library support:"
 msgstr ""
 
-#: ../../../UsersManual.rst:5327
+#: ../../../UsersManual.rst:5379
 msgid "Address Sanitizer (ASan): ``-fsanitize=address``"
 msgstr ""
 
-#: ../../../UsersManual.rst:5328
+#: ../../../UsersManual.rst:5380
 msgid "Undefined Behavior Sanitizer (UBSan): ``-fsanitize=undefined``"
 msgstr ""
 
-#: ../../../UsersManual.rst:5329
+#: ../../../UsersManual.rst:5381
 msgid "Code coverage: ``-fprofile-instr-generate -fcoverage-mapping``"
 msgstr ""
 
-#: ../../../UsersManual.rst:5330
+#: ../../../UsersManual.rst:5382
 msgid "Profile Guided Optimization (PGO): ``-fprofile-generate``"
 msgstr ""
 
-#: ../../../UsersManual.rst:5331
+#: ../../../UsersManual.rst:5383
 msgid "Certain math operations (int128 division) require the builtins library"
 msgstr ""
 
-#: ../../../UsersManual.rst:5333
+#: ../../../UsersManual.rst:5385
 msgid ""
 "In order to use these features, the user must link the right runtime "
 "libraries into their program. These libraries are distributed alongside "
@@ -6548,7 +6582,7 @@ msgid ""
 "Files\\LLVM\\lib\\clang\\11.0.0\\lib\\windows\\clang_rt.profile-x86_64.lib``."
 msgstr ""
 
-#: ../../../UsersManual.rst:5341
+#: ../../../UsersManual.rst:5393
 msgid ""
 "For UBSan, PGO, and coverage, Clang will emit object files that auto-link "
 "the appropriate runtime library, but the user generally needs to help the "
@@ -6560,31 +6594,31 @@ msgid ""
 "will pass this flag for them."
 msgstr ""
 
-#: ../../../UsersManual.rst:5349
+#: ../../../UsersManual.rst:5401
 msgid ""
 "The auto-linking can be disabled with -fno-rtlib-defaultlib. If that flag is "
 "used, pass the complete flag to required libraries as described for ASan "
 "below."
 msgstr ""
 
-#: ../../../UsersManual.rst:5352
+#: ../../../UsersManual.rst:5404
 msgid ""
 "If the linker cannot find the appropriate library, it will emit an error "
 "like this::"
 msgstr ""
 
-#: ../../../UsersManual.rst:5364
+#: ../../../UsersManual.rst:5416
 msgid ""
 "To fix the error, add the appropriate ``/libpath:`` flag to the link line."
 msgstr ""
 
-#: ../../../UsersManual.rst:5366
+#: ../../../UsersManual.rst:5418
 msgid ""
 "For ASan, as of this writing, the user is also responsible for linking "
 "against the correct ASan libraries."
 msgstr ""
 
-#: ../../../UsersManual.rst:5369
+#: ../../../UsersManual.rst:5421
 msgid ""
 "If the user is using the dynamic CRT (``/MD``), then they should add "
 "``clang_rt.asan_dynamic-x86_64.lib`` to the link line as a regular input. "
@@ -6592,7 +6626,7 @@ msgid ""
 "below."
 msgstr ""
 
-#: ../../../UsersManual.rst:5373
+#: ../../../UsersManual.rst:5425
 msgid ""
 "If the user is using the static CRT (``/MT``), then different runtimes are "
 "used to produce DLLs and EXEs. To link a DLL, pass ``clang_rt.asan_dll_thunk-"
@@ -6600,37 +6634,37 @@ msgid ""
 "lib``."
 msgstr ""
 
-#: ../../../UsersManual.rst:5379
+#: ../../../UsersManual.rst:5431
 msgid "Windows System Headers and Library Lookup"
 msgstr ""
 
-#: ../../../UsersManual.rst:5381
+#: ../../../UsersManual.rst:5433
 msgid ""
 "clang-cl uses a set of different approaches to locate the right system "
 "libraries to link against when building code.  The Windows environment uses "
 "libraries from three distinct sources:"
 msgstr ""
 
-#: ../../../UsersManual.rst:5385
+#: ../../../UsersManual.rst:5437
 msgid "Windows SDK"
 msgstr ""
 
-#: ../../../UsersManual.rst:5386
+#: ../../../UsersManual.rst:5438
 msgid "UCRT (Universal C Runtime)"
 msgstr ""
 
-#: ../../../UsersManual.rst:5387
+#: ../../../UsersManual.rst:5439
 msgid "Visual C++ Tools (VCRuntime)"
 msgstr ""
 
-#: ../../../UsersManual.rst:5389
+#: ../../../UsersManual.rst:5441
 msgid ""
 "The Windows SDK provides the import libraries and headers required to build "
 "programs against the Windows system packages.  Underlying the Windows SDK is "
 "the UCRT, the universal C runtime."
 msgstr ""
 
-#: ../../../UsersManual.rst:5393
+#: ../../../UsersManual.rst:5445
 msgid ""
 "This difference is best illustrated by the various headers that one would "
 "find in the different categories.  The WinSDK would contain headers such as "
@@ -6640,28 +6674,28 @@ msgid ""
 "underlying Visual C++ Runtime headers such as `stdint.h` or `crtdefs.h`."
 msgstr ""
 
-#: ../../../UsersManual.rst:5400
+#: ../../../UsersManual.rst:5452
 msgid ""
 "There are various controls that allow the user control over where clang-cl "
 "will locate these headers.  The default behaviour for the Windows SDK and "
 "UCRT is as follows:"
 msgstr ""
 
-#: ../../../UsersManual.rst:5404 ../../../UsersManual.rst:5446
+#: ../../../UsersManual.rst:5456 ../../../UsersManual.rst:5498
 msgid "Consult the command line."
 msgstr ""
 
-#: ../../../UsersManual.rst:5406
+#: ../../../UsersManual.rst:5458
 msgid ""
 "Anything the user specifies is always given precedence.  The following "
 "extensions are part of the clang-cl toolset:"
 msgstr ""
 
-#: ../../../UsersManual.rst:5409 ../../../UsersManual.rst:5448
+#: ../../../UsersManual.rst:5461 ../../../UsersManual.rst:5500
 msgid "`/winsysroot:`"
 msgstr ""
 
-#: ../../../UsersManual.rst:5411
+#: ../../../UsersManual.rst:5463
 msgid ""
 "The `/winsysroot:` is used as an equivalent to `-sysroot` on Unix "
 "environments.  It allows the control of an alternate location to be treated "
@@ -6669,15 +6703,15 @@ msgid ""
 "`Windows Kits` is located."
 msgstr ""
 
-#: ../../../UsersManual.rst:5416
+#: ../../../UsersManual.rst:5468
 msgid "`/winsdkversion:`"
 msgstr ""
 
-#: ../../../UsersManual.rst:5417
+#: ../../../UsersManual.rst:5469
 msgid "`/winsdkdir:`"
 msgstr ""
 
-#: ../../../UsersManual.rst:5419
+#: ../../../UsersManual.rst:5471
 msgid ""
 "If `/winsysroot:` is not specified, the `/winsdkdir:` argument is consulted "
 "as a location to identify where the Windows SDK is located.  Contrary to `/"
@@ -6685,7 +6719,7 @@ msgid ""
 "a root to locate `Windows Kits`."
 msgstr ""
 
-#: ../../../UsersManual.rst:5424
+#: ../../../UsersManual.rst:5476
 msgid ""
 "The `/winsdkversion:` flag allows the user to specify a version identifier "
 "for the SDK to prefer.  When this is specified, no additional validation is "
@@ -6693,43 +6727,43 @@ msgid ""
 "the highest detected version number will be used."
 msgstr ""
 
-#: ../../../UsersManual.rst:5429 ../../../UsersManual.rst:5463
+#: ../../../UsersManual.rst:5481 ../../../UsersManual.rst:5515
 msgid "Consult the environment."
 msgstr ""
 
-#: ../../../UsersManual.rst:5431
+#: ../../../UsersManual.rst:5483
 msgid "TODO: This is not yet implemented."
 msgstr ""
 
-#: ../../../UsersManual.rst:5433
+#: ../../../UsersManual.rst:5485
 msgid "This will consult the environment variables:"
 msgstr ""
 
-#: ../../../UsersManual.rst:5435
+#: ../../../UsersManual.rst:5487
 msgid "`WindowsSdkDir`"
 msgstr ""
 
-#: ../../../UsersManual.rst:5436
+#: ../../../UsersManual.rst:5488
 msgid "`UCRTVersion`"
 msgstr ""
 
-#: ../../../UsersManual.rst:5438
+#: ../../../UsersManual.rst:5490
 msgid "Fallback to the registry."
 msgstr ""
 
-#: ../../../UsersManual.rst:5440
+#: ../../../UsersManual.rst:5492
 msgid ""
 "If no arguments are used to indicate where the SDK is present, and the "
 "compiler is running on Windows, the registry is consulted to locate the "
 "installation."
 msgstr ""
 
-#: ../../../UsersManual.rst:5444
+#: ../../../UsersManual.rst:5496
 msgid ""
 "The Visual C++ Toolset has a slightly more elaborate mechanism for detection."
 msgstr ""
 
-#: ../../../UsersManual.rst:5450
+#: ../../../UsersManual.rst:5502
 msgid ""
 "The `/winsysroot:` is used as an equivalent to `-sysroot` on Unix "
 "environments.  It allows the control of an alternate location to be treated "
@@ -6737,15 +6771,15 @@ msgid ""
 "`VC` directory is located."
 msgstr ""
 
-#: ../../../UsersManual.rst:5455
+#: ../../../UsersManual.rst:5507
 msgid "`/vctoolsdir:`"
 msgstr ""
 
-#: ../../../UsersManual.rst:5456
+#: ../../../UsersManual.rst:5508
 msgid "`/vctoolsversion:`"
 msgstr ""
 
-#: ../../../UsersManual.rst:5458
+#: ../../../UsersManual.rst:5510
 msgid ""
 "If `/winsysroot:` is not specified, the `/vctoolsdir:` argument is consulted "
 "as a location to identify where the Visual C++ Tools are located.  If `/"
@@ -6753,83 +6787,83 @@ msgid ""
 "highest version detected is used."
 msgstr ""
 
-#: ../../../UsersManual.rst:5465
+#: ../../../UsersManual.rst:5517
 msgid "`/external:[VARIABLE]`"
 msgstr ""
 
-#: ../../../UsersManual.rst:5467
+#: ../../../UsersManual.rst:5519
 msgid ""
 "This specifies a user identified environment variable which is treated as a "
 "path delimiter (`;`) separated list of paths to map into `-imsvc` arguments "
 "which are treated as `-isystem`."
 msgstr ""
 
-#: ../../../UsersManual.rst:5471
+#: ../../../UsersManual.rst:5523
 msgid "`INCLUDE` and `EXTERNAL_INCLUDE`"
 msgstr ""
 
-#: ../../../UsersManual.rst:5473
+#: ../../../UsersManual.rst:5525
 msgid ""
 "The path delimiter (`;`) separated list of paths will be mapped to `-imsvc` "
 "arguments which are treated as `-isystem`."
 msgstr ""
 
-#: ../../../UsersManual.rst:5476
+#: ../../../UsersManual.rst:5528
 msgid "`LIB` (indirectly)"
 msgstr ""
 
-#: ../../../UsersManual.rst:5478
+#: ../../../UsersManual.rst:5530
 msgid ""
 "The linker `link.exe` or `lld-link.exe` will honour the environment variable "
 "`LIB` which is a path delimiter (`;`) set of paths to consult for the import "
 "libraries to use when linking the final target."
 msgstr ""
 
-#: ../../../UsersManual.rst:5482
+#: ../../../UsersManual.rst:5534
 msgid ""
 "The following environment variables will be consulted and used to form paths "
 "to validate and load content from as appropriate:"
 msgstr ""
 
-#: ../../../UsersManual.rst:5485
+#: ../../../UsersManual.rst:5537
 msgid "`VCToolsInstallDir`"
 msgstr ""
 
-#: ../../../UsersManual.rst:5486
+#: ../../../UsersManual.rst:5538
 msgid "`VCINSTALLDIR`"
 msgstr ""
 
-#: ../../../UsersManual.rst:5487
+#: ../../../UsersManual.rst:5539
 msgid "`Path`"
 msgstr ""
 
-#: ../../../UsersManual.rst:5489
+#: ../../../UsersManual.rst:5541
 msgid "Consult `ISetupConfiguration` [Windows Only]"
 msgstr ""
 
-#: ../../../UsersManual.rst:5491
+#: ../../../UsersManual.rst:5543
 msgid ""
 "Assuming that the toolchain is built with `USE_MSVC_SETUP_API` defined and "
 "is running on Windows, the Visual Studio COM interface `ISetupConfiguration` "
 "will be used to locate the installation of the MSVC toolset."
 msgstr ""
 
-#: ../../../UsersManual.rst:5495
+#: ../../../UsersManual.rst:5547
 msgid "Fallback to the registry [DEPRECATED]"
 msgstr ""
 
-#: ../../../UsersManual.rst:5497
+#: ../../../UsersManual.rst:5549
 msgid ""
 "The registry information is used to help locate the installation as a final "
 "fallback.  This is only possible for pre-VS2017 installations and is "
 "considered deprecated."
 msgstr ""
 
-#: ../../../UsersManual.rst:5502
+#: ../../../UsersManual.rst:5554
 msgid "Restrictions and Limitations compared to Clang"
 msgstr ""
 
-#: ../../../UsersManual.rst:5504
+#: ../../../UsersManual.rst:5556
 msgid ""
 "Strict aliasing (TBAA) is always off by default in clang-cl whereas in "
 "clang, strict aliasing is turned on by default for all optimization levels. "
