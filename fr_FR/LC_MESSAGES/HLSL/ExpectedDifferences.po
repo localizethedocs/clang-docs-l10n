@@ -1,0 +1,234 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../HLSL/ExpectedDifferences.rst:3
+msgid "Expected Differences vs DXC and FXC"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:11
+msgid ""
+"HLSL currently has two reference compilers, the `DirectX Shader Compiler "
+"(DXC) <https://github.com/microsoft/DirectXShaderCompiler/>`_ and the "
+"`Effect-Compiler (FXC) <https://learn.microsoft.com/en-us/windows/win32/"
+"direct3dtools/fxc>`_. The two reference compilers do not fully agree. Some "
+"known disagreements in the references are tracked on `DXC's GitHub <https://"
+"github.com/microsoft/DirectXShaderCompiler/issues?"
+"q=is%3Aopen+is%3Aissue+label%3Afxc-disagrees>`_, but many more are known to "
+"exist."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:20
+msgid ""
+"HLSL as implemented by Clang will also not fully match either of the "
+"reference implementations, it is instead being written to match the `draft "
+"language specification <https://microsoft.github.io/hlsl-specs/specs/hlsl."
+"pdf>`_."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:24
+msgid ""
+"This document is a non-exhaustive collection the known differences between "
+"Clang's implementation of HLSL and the existing reference compilers."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:28
+msgid "General Principles"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:30
+msgid ""
+"Most of the intended differences between Clang and the earlier reference "
+"compilers are focused on increased consistency and correctness. Both "
+"reference compilers do not always apply language rules the same in all "
+"contexts."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:34
+msgid ""
+"Clang also deviates from the reference compilers by providing different "
+"diagnostics, both in terms of the textual messages and the contexts in which "
+"diagnostics are produced. While striving for a high level of source "
+"compatibility with conforming HLSL code, Clang may produce earlier and more "
+"robust diagnostics for incorrect code or reject code that a reference "
+"compiler incorrectly accepted."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:42
+msgid "Language Version"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:44
+msgid ""
+"Clang targets language compatibility for HLSL 2021 as implemented by DXC. "
+"Language features that were removed in earlier versions of HLSL may be added "
+"on a case-by-case basis, but are not planned for the initial implementation."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:49
+msgid "Overload Resolution"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:51
+msgid ""
+"Clang's HLSL implementation adopts C++ overload resolution rules as proposed "
+"for HLSL 202x based on proposal `0007 <https://github.com/microsoft/hlsl-"
+"specs/blob/main/proposals/0007-const-instance-methods.md>`_ and `0008 "
+"<https://github.com/microsoft/hlsl-specs/blob/main/proposals/0008-non-member-"
+"operator-overloading.md>`_."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:57
+msgid ""
+"The largest difference between Clang and DXC's overload resolution is the "
+"algorithm used for identifying best-match overloads. There are more details "
+"about the algorithmic differences in the :ref:`multi_argument_overloads` "
+"section below. There are three high level differences that should be "
+"highlighted:"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:62
+msgid ""
+"**There should be no cases** where DXC and Clang both successfully resolve "
+"an overload where the resolved overload is different between the two."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:64
+msgid ""
+"There are cases where Clang will successfully resolve an overload that DXC "
+"wouldn't because we've trimmed the overload set in Clang to remove ambiguity."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:66
+msgid ""
+"There are cases where DXC will successfully resolve an overload that Clang "
+"will not for two reasons: (1) DXC only generates partial overload sets for "
+"builtin functions and (2) DXC resolves cases that probably should be "
+"ambiguous."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:70
+msgid ""
+"Clang's implementation extends standard overload resolution rules to HLSL "
+"library functionality. This causes subtle changes in overload resolution "
+"behavior between Clang and DXC. Some examples include:"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:141
+msgid ""
+"In Clang, a conscious decision was made to exclude the ``dot(vector<double,"
+"N>, vector<double,N>)`` overload and allow overload resolution to resolve "
+"the ``vector<float,N>`` overload. This approach provides ``-Wconversion`` "
+"diagnostic notifying the user of the conversion rather than silently "
+"altering precision relative to the other overloads (as FXC does) or "
+"generating code that will fail validation (as DXC does)."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:151
+msgid "Multi-Argument Overloads"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:153
+msgid ""
+"In addition to the differences in single-element conversions, Clang and DXC "
+"differ dramatically in multi-argument overload resolution. C++ multi-"
+"argument overload resolution behavior (or something very similar) is "
+"required to implement `non-member operator overloading <https://github.com/"
+"microsoft/hlsl-specs/blob/main/proposals/0008-non-member-operator-"
+"overloading.md>`_."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:159
+msgid ""
+"Clang adopts the C++ inspired language from the `draft HLSL specification "
+"<https://microsoft.github.io/hlsl-specs/specs/hlsl.pdf>`_, where an overload "
+"``f1`` is a better candidate than ``f2`` if for all arguments the conversion "
+"sequences is not worse than the corresponding conversion sequence and for at "
+"least one argument it is better."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:186
+msgid ""
+"For the examples above since ``twoParams`` called with mixed parameters "
+"produces implicit conversion sequences that are { ExactMatch, "
+"FloatingIntegral }  and { FloatingIntegral, ExactMatch }. In both cases an "
+"argument has a worse conversion in the other sequence, so the overload is "
+"ambiguous."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:191
+msgid ""
+"In the ``threeParams`` example the sequences are { ExactMatch, "
+"VectorTruncation, VectorTruncation } or { VectorSplat, ExactMatch, "
+"ExactMatch }, again in both cases at least one parameter has a worse "
+"conversion in the other sequence, so the overload is ambiguous."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:198
+msgid ""
+"The behavior of DXC documented below is undocumented so this is gleaned from "
+"observation and a bit of reading the source."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:201
+msgid ""
+"DXC's approach for determining the best overload produces an integer score "
+"value for each implicit conversion sequence for each argument expression. "
+"Scores for casts are based on a bitmask construction that is complicated to "
+"reverse engineer. It seems that:"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:206
+msgid "Exact match is 0"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:207
+msgid "Dimension increase is 1"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:208
+msgid "Promotion is 2"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:209
+msgid "Integral -> Float conversion is 4"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:210
+msgid "Float -> Integral conversion is 8"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:211
+msgid "Cast is 16"
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:213
+msgid "The masks are or'd against each other to produce a score for the cast."
+msgstr ""
+
+#: ../../../HLSL/ExpectedDifferences.rst:215
+msgid ""
+"The scores of each conversion sequence are then summed to generate a score "
+"for the overload candidate. The overload candidate with the lowest score is "
+"the best candidate. If more than one overload are matched for the lowest "
+"score the call is ambiguous."
+msgstr ""
