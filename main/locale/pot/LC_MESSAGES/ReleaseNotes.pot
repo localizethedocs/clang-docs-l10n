@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-08 08:19+0000\n"
+"POT-Creation-Date: 2025-12-29 08:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -122,17 +122,28 @@ msgid ""
 "may break downstream projects that relied on this transitive dependency."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:91
+#: ../../../ReleaseNotes.rst:89
+msgid ""
+"Clang now supports MSVC vector deleting destructors when targeting Windows. "
+"This means that vtables of classes with virtual destructors will contain a "
+"pointer to vector deleting destructor (instead of scalar deleting "
+"destructor) which in fact is a different symbol with different name and "
+"linkage. This may cause runtime failures if two binaries using the same "
+"class defining a virtual destructor are compiled with different versions of "
+"clang."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:97
 msgid "C/C++ Language Potentially Breaking Changes"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:93
+#: ../../../ReleaseNotes.rst:99
 msgid ""
 "The ``__has_builtin`` function now only considers the currently active "
 "target when being used with target offloading."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:95
+#: ../../../ReleaseNotes.rst:101
 msgid ""
 "The ``-Wincompatible-pointer-types`` diagnostic now defaults to an error; it "
 "can still be downgraded to a warning by passing ``-Wno-error=incompatible-"
@@ -140,11 +151,11 @@ msgid ""
 "issues/74605>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:99
+#: ../../../ReleaseNotes.rst:105
 msgid "C++ Specific Potentially Breaking Changes"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:100
+#: ../../../ReleaseNotes.rst:106
 msgid ""
 "For C++20 modules, the Reduced BMI mode will be the default option. This may "
 "introduce regressions if your build system supports two-phase compilation "
@@ -152,7 +163,7 @@ msgid ""
 "users code."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:104
+#: ../../../ReleaseNotes.rst:110
 msgid ""
 "Clang now correctly diagnoses during constant expression evaluation "
 "undefined behavior due to member pointer access to a member which is not a "
@@ -164,89 +175,89 @@ msgid ""
 "project/issues/150709>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:124
+#: ../../../ReleaseNotes.rst:130
 msgid ""
 "``VarTemplateSpecializationDecl::getTemplateArgsAsWritten()`` method now "
 "returns ``nullptr`` for implicitly instantiated declarations."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:128
+#: ../../../ReleaseNotes.rst:134
 msgid "ABI Changes in This Version"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:129
+#: ../../../ReleaseNotes.rst:135
 msgid ""
 "Fix AArch64 argument passing for C++ empty classes with large explicitly "
 "specified alignment."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:132
+#: ../../../ReleaseNotes.rst:138
 msgid "AST Dumping Potentially Breaking Changes"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:133
+#: ../../../ReleaseNotes.rst:139
 msgid ""
 "How nested name specifiers are dumped and printed changes, keeping track of "
 "clang AST changes."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:135
+#: ../../../ReleaseNotes.rst:141
 msgid ""
 "Pretty-printing of atomic builtins ``__atomic_test_and_set`` and "
 "``__atomic_clear`` in ``-ast-print`` output. These previously displayed an "
 "extra ``<null expr>`` argument, e.g.:"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:138
+#: ../../../ReleaseNotes.rst:144
 msgid "``__atomic_test_and_set(p, <null expr>, 0)``"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:140
+#: ../../../ReleaseNotes.rst:146
 msgid "Now they are printed as:"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:142
+#: ../../../ReleaseNotes.rst:148
 msgid "``__atomic_test_and_set(p, 0)``"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:144
+#: ../../../ReleaseNotes.rst:150
 msgid ""
 "Pretty-printing of templates with inherited (i.e. specified in a previous "
 "redeclaration) default arguments has been fixed."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:147
+#: ../../../ReleaseNotes.rst:153
 msgid ""
 "Default arguments of template template parameters are pretty-printed now."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:149
+#: ../../../ReleaseNotes.rst:155
 msgid ""
 "Pretty-printing of ``asm`` attributes are now always the first attribute on "
 "the right side of the declaration.  Before we had, e.g.:"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:152
+#: ../../../ReleaseNotes.rst:158
 msgid "``__attribute__((\"visibility\")) asm(\"string\")``"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:154
+#: ../../../ReleaseNotes.rst:160
 msgid "Now we have:"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:156
+#: ../../../ReleaseNotes.rst:162
 msgid "``asm(\"string\") __attribute__((\"visibility\"))``"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:158
+#: ../../../ReleaseNotes.rst:164
 msgid "Which is accepted by both clang and gcc parsers."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:161
+#: ../../../ReleaseNotes.rst:167
 msgid "Clang Frontend Potentially Breaking Changes"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:162
+#: ../../../ReleaseNotes.rst:168
 msgid ""
 "Members of anonymous unions/structs are now injected as "
 "``IndirectFieldDecl`` into the enclosing record even if their names conflict "
@@ -254,36 +265,49 @@ msgid ""
 "invalid."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:167
+#: ../../../ReleaseNotes.rst:173
 msgid "Clang Python Bindings Potentially Breaking Changes"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:168
+#: ../../../ReleaseNotes.rst:174
 msgid "Return ``None`` instead of null cursors from ``Token.cursor``"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:169
+#: ../../../ReleaseNotes.rst:175
 msgid ""
 "TypeKind ``ELABORATED`` is not used anymore, per clang AST changes removing "
 "ElaboratedTypes. The value becomes unused, and all the existing users should "
 "expect the former underlying type to be reported instead."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:172
+#: ../../../ReleaseNotes.rst:178
 msgid ""
 "Remove ``AccessSpecifier.NONE`` kind. No libclang interfaces ever returned "
 "this kind."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:175
+#: ../../../ReleaseNotes.rst:179
+msgid ""
+"Allow setting the path to the libclang library via environment variables: "
+"``LIBCLANG_LIBRARY_PATH`` to specifiy the path to the containing folder, or "
+"``LIBCLANG_LIBRARY_FILE`` to specify the path to the library file"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:182
+msgid ""
+"``TranslationUnit.reparse`` will now throw an exception when an error "
+"occurs. Previously, errors were silently ignored."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:186
 msgid "What's New in Clang |release|?"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:178
+#: ../../../ReleaseNotes.rst:189
 msgid "C++ Language Changes"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:180
+#: ../../../ReleaseNotes.rst:191
 msgid ""
 "A new family of builtins ``__builtin_*_synthesizes_from_spaceship`` has been "
 "added. These can be queried to know whether the ``<`` (``lt``), ``>`` "
@@ -292,11 +316,11 @@ msgid ""
 "the ``<=>`` operation directly instead of doing multiple comparisons."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:186
+#: ../../../ReleaseNotes.rst:197
 msgid "C++2c Feature Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:188
+#: ../../../ReleaseNotes.rst:199
 msgid ""
 "Started the implementation of `P2686R5 <https://wg21.link/P2686R5>`_ "
 "Constexpr structured bindings. At this timem, references to constexpr and "
@@ -304,15 +328,15 @@ msgid ""
 "aggregates are)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:193
+#: ../../../ReleaseNotes.rst:204
 msgid "C++23 Feature Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:196
+#: ../../../ReleaseNotes.rst:207
 msgid "C++20 Feature Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:198
+#: ../../../ReleaseNotes.rst:209
 msgid ""
 "Clang now normalizes constraints before checking whether they are satisfied, "
 "as mandated by the standard. As a result, Clang no longer incorrectly "
@@ -322,23 +346,32 @@ msgid ""
 "github.com/llvm/llvm-project/issues/135190>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:203
+#: ../../../ReleaseNotes.rst:214
 msgid "C++17 Feature Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:206
+#: ../../../ReleaseNotes.rst:217
 msgid "Resolutions to C++ Defect Reports"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:209
+#: ../../../ReleaseNotes.rst:220
 msgid "C Language Changes"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:212
+#: ../../../ReleaseNotes.rst:222
+msgid ""
+"Implemented the ``defer`` draft Technical Specification (`WG14 N3734 "
+"<https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3734.pdf>`_); it is "
+"enabled in C mode by passing ``-fdefer-ts``. Note, the details of this "
+"feature are subject to change given that the Technical Specification is not "
+"yet ratified."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:228
 msgid "C2y Feature Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:213
+#: ../../../ReleaseNotes.rst:229
 msgid ""
 "No longer triggering ``-Wstatic-in-inline`` in C2y mode; use of a static "
 "function or variable within an extern inline function is no longer a "
@@ -346,13 +379,13 @@ msgid ""
 "n3622.txt>`_."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:216
+#: ../../../ReleaseNotes.rst:232
 msgid ""
 "Clang now supports `N3355 <https://www.open-std.org/jtc1/sc22/wg14/www/docs/"
 "n3355.htm>`_ Named Loops."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:217
+#: ../../../ReleaseNotes.rst:233
 msgid ""
 "Clang's implementation of ``__COUNTER__`` was updated to conform to `WG14 "
 "N3457 <https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3457.htm>`_. This "
@@ -361,39 +394,39 @@ msgid ""
 "than 2147483647 times."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:224
+#: ../../../ReleaseNotes.rst:240
 msgid "C23 Feature Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:225
+#: ../../../ReleaseNotes.rst:241
 msgid ""
 "Added ``FLT_SNAN``, ``DBL_SNAN``, and ``LDBL_SNAN`` to Clang's ``<float.h>`` "
 "header in C23 and later modes. This implements `WG14 N2710 <https://www.open-"
 "std.org/jtc1/sc22/wg14/www/docs/n2710.htm>`_."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:228
+#: ../../../ReleaseNotes.rst:244
 msgid ""
 "Fixed accepting as compatible unnamed tag types with the same fields within "
 "the same translation unit but from different types."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:230
+#: ../../../ReleaseNotes.rst:246
 msgid ""
 "``-MG`` now silences the \"file not found\" errors with ``#embed`` when "
 "scanning for dependencies and encountering an unknown file. `#165632 "
 "<https://github.com/llvm/llvm-project/issues/165632>`_"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:234
+#: ../../../ReleaseNotes.rst:250
 msgid "Non-comprehensive list of changes in this release"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:235
+#: ../../../ReleaseNotes.rst:251
 msgid "Added ``__scoped_atomic_uinc_wrap`` and ``__scoped_atomic_udec_wrap``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:237
+#: ../../../ReleaseNotes.rst:253
 msgid ""
 "Removed OpenCL header-only feature macros (previously unconditionally "
 "enabled on SPIR-V and only selectively disabled via ``-"
@@ -402,26 +435,26 @@ msgid ""
 "``getSupportedOpenCLOpts`` and ``-cl-ext``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:242
+#: ../../../ReleaseNotes.rst:258
 msgid "Added ``__builtin_elementwise_ldexp``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:244
+#: ../../../ReleaseNotes.rst:260
 msgid ""
 "Added ``__builtin_elementwise_fshl`` and ``__builtin_elementwise_fshr``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:246
+#: ../../../ReleaseNotes.rst:262
 msgid "``__builtin_elementwise_abs`` can now be used in constant expression."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:248
+#: ../../../ReleaseNotes.rst:264
 msgid ""
 "Added ``__builtin_elementwise_minnumnum`` and "
 "``__builtin_elementwise_maxnumnum``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:250
+#: ../../../ReleaseNotes.rst:266
 msgid ""
 "Trapping UBSan (e.g. ``-fsanitize=undefined -fsanitize-trap=undefined``) now "
 "emits a string describing the reason for trapping into the generated debug "
@@ -447,19 +480,19 @@ msgid ""
 "merge=` flag in optimized builds."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:272
+#: ../../../ReleaseNotes.rst:288
 msgid ""
 "``__builtin_elementwise_max`` and ``__builtin_elementwise_min`` functions "
 "for integer types can now be used in constant expressions."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:275
+#: ../../../ReleaseNotes.rst:291
 msgid ""
 "A vector of booleans is now a valid condition for the ternary ``?:`` "
 "operator. This binds to a simple vector select operation."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:278
+#: ../../../ReleaseNotes.rst:294
 msgid ""
 "Added ``__builtin_masked_load``, ``__builtin_masked_expand_load``, "
 "``__builtin_masked_store``, ``__builtin_masked_compress_store`` for "
@@ -467,20 +500,20 @@ msgid ""
 "same name."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:283
+#: ../../../ReleaseNotes.rst:299
 msgid ""
 "Added ``__builtin_masked_gather`` and ``__builtin_masked_scatter`` for "
 "conditional gathering and scattering operations on vectors. Binds to the "
 "LLVM intrinsics of the same name."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:287
+#: ../../../ReleaseNotes.rst:303
 msgid ""
 "The ``__builtin_popcountg``, ``__builtin_ctzg``, and ``__builtin_clzg`` "
 "functions now accept fixed-size boolean vectors."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:290
+#: ../../../ReleaseNotes.rst:306
 msgid ""
 "Use of ``__has_feature`` to detect the ``ptrauth_qualifier`` and "
 "``ptrauth_intrinsics`` features has been deprecated, and is restricted to "
@@ -488,7 +521,7 @@ msgid ""
 "test for the ``__PTRAUTH__`` macro."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:295
+#: ../../../ReleaseNotes.rst:311
 msgid ""
 "Added a new builtin, ``__builtin_dedup_pack``, to remove duplicate types "
 "from a parameter pack. This feature is particularly useful in template "
@@ -497,26 +530,26 @@ msgid ""
 "argument lists or base specifiers."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:307
+#: ../../../ReleaseNotes.rst:323
 msgid ""
 "Currently, the use of ``__builtin_dedup_pack`` is limited to template "
 "arguments and base specifiers, it also must be used within a template "
 "context."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:310
+#: ../../../ReleaseNotes.rst:326
 msgid ""
 "``__builtin_assume_dereferenceable`` now accepts non-constant size operands."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:312
+#: ../../../ReleaseNotes.rst:328
 msgid ""
 "Fixed a crash when the second argument to ``__builtin_assume_aligned`` was "
 "not constant (`#161314 <https://github.com/llvm/llvm-project/"
 "issues/161314>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:314
+#: ../../../ReleaseNotes.rst:330
 msgid ""
 "Introduce support for :doc:`allocation tokens <AllocToken>` to enable "
 "allocator-level heap organization strategies. A feature to instrument all "
@@ -524,103 +557,110 @@ msgid ""
 "fsanitize=alloc-token`` flag."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:319
+#: ../../../ReleaseNotes.rst:335
 msgid ""
 "A new generic byte swap builtin function ``__builtin_bswapg`` that extends "
 "the existing __builtin_bswap{16,32,64} function family to support all "
 "standard integer types."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:322
+#: ../../../ReleaseNotes.rst:338
 msgid ""
 "A builtin ``__builtin_infer_alloc_token(<args>, ...)`` is provided to allow "
 "compile-time querying of allocation token IDs, where the builtin arguments "
 "mirror those normally passed to an allocation function."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:326
+#: ../../../ReleaseNotes.rst:342
 msgid ""
 "Clang now rejects the invalid use of ``constexpr`` with ``auto`` and an "
 "explicit type in C. (`#163090 <https://github.com/llvm/llvm-project/"
 "issues/163090>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:329
+#: ../../../ReleaseNotes.rst:345
 msgid "New Compiler Flags"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:330
+#: ../../../ReleaseNotes.rst:346
 msgid ""
 "New option ``-fno-sanitize-debug-trap-reasons`` added to disable emitting "
 "trap reasons into the debug info when compiling with trapping UBSan (e.g. ``-"
 "fsanitize-trap=undefined``)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:331
+#: ../../../ReleaseNotes.rst:347
 msgid ""
 "New option ``-fsanitize-debug-trap-reasons=`` added to control emitting trap "
 "reasons into the debug info when compiling with trapping UBSan (e.g. ``-"
 "fsanitize-trap=undefined``)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:332
+#: ../../../ReleaseNotes.rst:348
 msgid ""
 "New options for enabling allocation token instrumentation: ``-"
 "fsanitize=alloc-token``, ``-falloc-token-max=``, ``-fsanitize-alloc-token-"
 "fast-abi``, ``-fsanitize-alloc-token-extended``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:333
+#: ../../../ReleaseNotes.rst:349
 msgid ""
 "The ``-resource-dir`` option is now displayed in the list of options shown "
 "by ``--help``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:336
+#: ../../../ReleaseNotes.rst:350
+msgid ""
+"New option ``-fmatrix-memory-layout`` added to control the memory layout of "
+"Clang matrix types. (e.g. ``-fmatrix-memory-layout=column-major`` or ``-"
+"fmatrix-memory-layout=row-major``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:353
 msgid "Lanai Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:337
+#: ../../../ReleaseNotes.rst:354
 msgid "The option ``-mcmodel={small,medium,large}`` is supported again."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:340
+#: ../../../ReleaseNotes.rst:357
 msgid "Deprecated Compiler Flags"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:343
+#: ../../../ReleaseNotes.rst:360
 msgid "Modified Compiler Flags"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:344
+#: ../../../ReleaseNotes.rst:361
 msgid ""
 "The `-gkey-instructions` compiler flag is now enabled by default when DWARF "
 "is emitted for plain C/C++ and optimizations are enabled. (`#149509 <https://"
 "github.com/llvm/llvm-project/issues/149509>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:345
+#: ../../../ReleaseNotes.rst:362
 msgid ""
 "The `-fconstexpr-steps` compiler flag now accepts value `0` to opt out of "
 "this limit. (`#160440 <https://github.com/llvm/llvm-project/issues/160440>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:346
+#: ../../../ReleaseNotes.rst:363
 msgid ""
 "The `-fdevirtualize-speculatively` compiler flag is now supported to enable "
 "speculative devirtualization of virtual function calls, it's disabled by "
 "default. (`#159685 <https://github.com/llvm/llvm-project/issues/159685>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:349
+#: ../../../ReleaseNotes.rst:366
 msgid "Removed Compiler Flags"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:352
+#: ../../../ReleaseNotes.rst:369
 msgid "Attribute Changes in Clang"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:353
+#: ../../../ReleaseNotes.rst:370
 msgid ""
 "The definition of a function declaration with ``[[clang::"
 "cfi_unchecked_callee]]`` inherits this attribute, allowing the attribute to "
@@ -628,7 +668,14 @@ msgid ""
 "error where the definition and declaration would have differing types."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:357
+#: ../../../ReleaseNotes.rst:374
+msgid ""
+"Instrumentation added by ``-fsanitize=function`` will also be omitted for "
+"indirect calls to function pointers and function declarations marked with "
+"``[[clang::cfi_unchecked_callee]]``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:377
 msgid ""
 "New format attributes ``gnu_printf``, ``gnu_scanf``, ``gnu_strftime`` and "
 "``gnu_strfmon`` are added as aliases for ``printf``, ``scanf``, ``strftime`` "
@@ -636,7 +683,7 @@ msgid ""
 "issues/16219>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:360
+#: ../../../ReleaseNotes.rst:380
 msgid ""
 "New function attribute `malloc_span` is added. It has semantics similar to "
 "that of the `malloc` attribute, but `malloc_span` applies not to functions "
@@ -644,7 +691,7 @@ msgid ""
 "those that contain a pointer field and a size integer field or two pointers)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:364
+#: ../../../ReleaseNotes.rst:384
 msgid ""
 "Added new attribute ``modular_format`` to allow dynamically selecting at "
 "link time which aspects of a statically linked libc's printf (et al) "
@@ -653,11 +700,21 @@ msgid ""
 "implementation."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:371
+#: ../../../ReleaseNotes.rst:390
+msgid ""
+"On targets with Itanium C++ ABI, Clang now supports ``[[gnu:gcc_struct]]`` "
+"with the behavior similar to one existing in GCC. In particular, whenever ``-"
+"mms-bitfields`` command line option is provided (or if Microsoft-compatible "
+"structure layout is default on the target), ``[[gnu::gcc_struct]]`` requests "
+"the compiler to follow Itanium rules for the layout of an annotated "
+"structure."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:397
 msgid "Improvements to Clang's diagnostics"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:372
+#: ../../../ReleaseNotes.rst:398
 msgid ""
 "Diagnostics messages now refer to ``structured binding`` instead of "
 "``decomposition``, to align with `P0615R0 <https://www.open-std.org/jtc1/"
@@ -665,7 +722,7 @@ msgid ""
 "<https://github.com/llvm/llvm-project/issues/157880>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:374
+#: ../../../ReleaseNotes.rst:400
 msgid ""
 "Clang now suppresses runtime behavior warnings for unreachable code in file-"
 "scope variable initializers, matching the behavior for functions. This "
@@ -673,7 +730,7 @@ msgid ""
 "expressions."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:377
+#: ../../../ReleaseNotes.rst:403
 msgid ""
 "Added a separate diagnostic group ``-Wfunction-effect-redeclarations``, for "
 "the more pedantic diagnostics for function effects (``[[clang::"
@@ -683,7 +740,7 @@ msgid ""
 "implicit on an override of a virtual method."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:382
+#: ../../../ReleaseNotes.rst:408
 msgid ""
 "Remove ``-Wperf-constraint-implies-noexcept`` from ``-Wall``. This warning "
 "is somewhat nit-picky and attempts to resolve it, by adding ``noexcept``, "
@@ -691,7 +748,7 @@ msgid ""
 "llvm/llvm-project/issues/167540>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:384
+#: ../../../ReleaseNotes.rst:410
 msgid ""
 "Implemented diagnostics when retrieving the tuple size for types where its "
 "specialization of `std::tuple_size` produces an invalid size (either "
@@ -699,27 +756,27 @@ msgid ""
 "github.com/llvm/llvm-project/issues/159563>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:386
+#: ../../../ReleaseNotes.rst:412
 msgid ""
 "Fixed fix-it hint for fold expressions. Clang now correctly places the "
 "suggested right parenthesis when diagnosing malformed fold expressions. "
 "(`#151787 <https://github.com/llvm/llvm-project/issues/151787>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:388
+#: ../../../ReleaseNotes.rst:414
 msgid ""
 "Added fix-it hint for when scoped enumerations require explicit conversions "
 "for binary operations. (`#24265 <https://github.com/llvm/llvm-project/"
 "issues/24265>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:389
+#: ../../../ReleaseNotes.rst:415
 msgid ""
 "Constant template parameters are now type checked in template definitions, "
 "including template template parameters."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:391
+#: ../../../ReleaseNotes.rst:417
 msgid ""
 "Fixed an issue where emitted format-signedness diagnostics were not "
 "associated with an appropriate diagnostic id. Besides being incorrect from "
@@ -736,41 +793,41 @@ msgid ""
 "appropriate."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:401
+#: ../../../ReleaseNotes.rst:427
 msgid ""
 "Clang now produces better diagnostics for template template parameter "
 "matching involving 'auto' template parameters."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:403
+#: ../../../ReleaseNotes.rst:429
 msgid ""
 "Fixed false positives in ``-Waddress-of-packed-member`` diagnostics when "
 "potential misaligned members get processed before they can get discarded. "
 "(`#144729 <https://github.com/llvm/llvm-project/issues/144729>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:406
+#: ../../../ReleaseNotes.rst:432
 msgid ""
 "Fix a false positive warning in ``-Wignored-qualifiers`` when the return "
 "type is undeduced. (`#43054 <https://github.com/llvm/llvm-project/"
 "issues/43054>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:408
+#: ../../../ReleaseNotes.rst:434
 msgid ""
 "Clang now emits a diagnostic with the correct message in case of assigning "
 "to const reference captured in lambda. (`#105647 <https://github.com/llvm/"
 "llvm-project/issues/105647>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:410
+#: ../../../ReleaseNotes.rst:436
 msgid ""
 "Fixed false positive in ``-Wmissing-noreturn`` diagnostic when it was "
 "requiring the usage of ``[[noreturn]]`` on lambdas before C++23 (`#154493 "
 "<https://github.com/llvm/llvm-project/issues/154493>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:413
+#: ../../../ReleaseNotes.rst:439
 msgid ""
 "Clang now diagnoses the use of ``#`` and ``##`` preprocessor tokens in "
 "attribute argument lists in C++ when ``-pedantic`` is enabled. The operators "
@@ -781,47 +838,47 @@ msgid ""
 "issues/147217>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:419
+#: ../../../ReleaseNotes.rst:445
 msgid ""
 "Clang now diagnoses misplaced array bounds on declarators for template "
 "specializations in th same way as it already did for other declarators. "
 "(`#147333 <https://github.com/llvm/llvm-project/issues/147333>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:423
+#: ../../../ReleaseNotes.rst:449
 msgid ""
 "A new warning ``-Walloc-size`` has been added to detect calls to functions "
 "decorated with the ``alloc_size`` attribute don't allocate enough space for "
 "the target pointer type."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:427
+#: ../../../ReleaseNotes.rst:453
 msgid ""
 "The :doc:`ThreadSafetyAnalysis` attributes ``ACQUIRED_BEFORE(...)`` and "
 "``ACQUIRED_AFTER(...)`` have been moved to the stable feature set and no "
 "longer require ``-Wthread-safety-beta`` to be used."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:430
+#: ../../../ReleaseNotes.rst:456
 msgid ""
 "The :doc:`ThreadSafetyAnalysis` gains basic alias-analysis of capability "
 "pointers under ``-Wthread-safety-beta`` (still experimental), which reduces "
 "both false positives but also false negatives through more precise analysis."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:434
+#: ../../../ReleaseNotes.rst:460
 msgid ""
 "Clang now looks through parenthesis for ``-Wundefined-reinterpret-cast`` "
 "diagnostic."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:436
+#: ../../../ReleaseNotes.rst:462
 msgid ""
 "Fixed a bug where the source location was missing when diagnosing ill-formed "
 "placeholder constraints."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:439
+#: ../../../ReleaseNotes.rst:465
 msgid ""
 "The two-element, unary mask variant of ``__builtin_shufflevector`` is now "
 "properly being rejected when used at compile-time. It was not implemented "
@@ -829,7 +886,7 @@ msgid ""
 "project/issues/158471>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:443
+#: ../../../ReleaseNotes.rst:469
 msgid ""
 "Closed a loophole in the diagnosis of function pointer conversions changing "
 "extended function type information in C mode (`#41465 <https://github.com/"
@@ -838,28 +895,28 @@ msgid ""
 "now consistently diagnosed, identical to C++ mode."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:448
+#: ../../../ReleaseNotes.rst:474
 msgid ""
 "Fix false-positive unused label diagnostic when a label is used in a named "
 "break or continue (`#166013 <https://github.com/llvm/llvm-project/"
 "issues/166013>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:450
+#: ../../../ReleaseNotes.rst:476
 msgid ""
 "Clang now emits a diagnostic in case `vector_size` or `ext_vector_type` "
 "attributes are used with a negative size (`#165463 <https://github.com/llvm/"
 "llvm-project/issues/165463>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:452
+#: ../../../ReleaseNotes.rst:478
 msgid ""
 "Clang no longer emits ``-Wmissing-noreturn`` for virtual methods where the "
 "function body consists of a `throw` expression (`#167247 <https://github.com/"
 "llvm/llvm-project/issues/167247>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:455
+#: ../../../ReleaseNotes.rst:481
 msgid ""
 "A new warning ``-Wenum-compare-typo`` has been added to detect potential "
 "erroneous comparison operators when mixed with bitwise operators in enum "
@@ -867,20 +924,20 @@ msgid ""
 "initializer value."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:458
+#: ../../../ReleaseNotes.rst:484
 msgid ""
 "Clang now provides correct caret placement when attributes appear before "
 "`enum class` (`#163224 <https://github.com/llvm/llvm-project/"
 "issues/163224>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:461
+#: ../../../ReleaseNotes.rst:487
 msgid ""
 "A new warning ``-Wshadow-header`` has been added to detect when a header "
 "file is found in multiple search directories (excluding system paths)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:464
+#: ../../../ReleaseNotes.rst:490
 msgid ""
 "Clang now detects potential missing format and format_matches attributes on "
 "function, Objective-C method and block declarations when calling format "
@@ -888,33 +945,47 @@ msgid ""
 "github.com/llvm/llvm-project/issues/60718>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:469
+#: ../../../ReleaseNotes.rst:494
+msgid ""
+"Fixed a crash when enabling ``-fdiagnostics-format=sarif`` and the output "
+"carries messages like 'In file included from ...' or 'In module ...'. Now "
+"the include/import locations are written into `sarif.run.result."
+"relatedLocations`."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:498
+msgid ""
+"Clang now generates a fix-it for C++20 designated initializers when the "
+"initializers do not match the declaration order in the structure."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:502
 msgid "Improvements to Clang's time-trace"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:472
+#: ../../../ReleaseNotes.rst:505
 msgid "Improvements to Coverage Mapping"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:475
+#: ../../../ReleaseNotes.rst:508
 msgid "Bug Fixes in This Version"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:476
+#: ../../../ReleaseNotes.rst:509
 msgid ""
 "Fix a crash when marco name is empty in ``#pragma push_macro(\"\")`` or "
 "``#pragma pop_macro(\"\")``. (`#149762 <https://github.com/llvm/llvm-project/"
 "issues/149762>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:478
+#: ../../../ReleaseNotes.rst:511
 msgid ""
 "Fix a crash in variable length array (e.g. ``int a[*]``) function parameter "
 "type being used in ``_Countof`` expression. (`#152826 <https://github.com/"
 "llvm/llvm-project/issues/152826>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:480
+#: ../../../ReleaseNotes.rst:513
 msgid ""
 "``-Wunreachable-code`` now diagnoses tautological or contradictory "
 "comparisons such as ``x != 0 || x != 1.0`` and ``x == 0 && x == 1.0`` on "
@@ -924,40 +995,40 @@ msgid ""
 "issues/149967>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:485
+#: ../../../ReleaseNotes.rst:518
 msgid ""
 "Fix crash in ``__builtin_function_start`` by checking for invalid first "
 "parameter. (`#113323 <https://github.com/llvm/llvm-project/issues/113323>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:487
+#: ../../../ReleaseNotes.rst:520
 msgid ""
 "Fixed a crash with incompatible pointer to integer conversions in designated "
 "initializers involving string literals. (`#154046 <https://github.com/llvm/"
 "llvm-project/issues/154046>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:489
+#: ../../../ReleaseNotes.rst:522
 msgid ""
 "Fix crash on CTAD for alias template. (`#131342 <https://github.com/llvm/"
 "llvm-project/issues/131342>`_), (`#131408 <https://github.com/llvm/llvm-"
 "project/issues/131408>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:490
+#: ../../../ReleaseNotes.rst:523
 msgid ""
 "Clang now emits a frontend error when a function marked with the `flatten` "
 "attribute calls another function that requires target features not enabled "
 "in the caller. This prevents a fatal error in the backend."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:493
+#: ../../../ReleaseNotes.rst:526
 msgid ""
 "Fixed scope of typedefs present inside a template class. (`#91451 <https://"
 "github.com/llvm/llvm-project/issues/91451>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:494
+#: ../../../ReleaseNotes.rst:527
 msgid ""
 "Builtin elementwise operators now accept vector arguments that have "
 "different qualifiers on their elements. For example, vector of 4 ``const "
@@ -965,7 +1036,7 @@ msgid ""
 "com/llvm/llvm-project/issues/155405>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:497
+#: ../../../ReleaseNotes.rst:530
 msgid ""
 "Fixed inconsistent shadow warnings for lambda capture of structured "
 "bindings. Previously, ``[val = val]`` (regular parameter) produced no "
@@ -976,14 +1047,14 @@ msgid ""
 "project/issues/68605>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:502
+#: ../../../ReleaseNotes.rst:535
 msgid ""
 "Fixed a failed assertion with a negative limit parameter value inside of "
 "``__has_embed``. (`#157842 <https://github.com/llvm/llvm-project/"
 "issues/157842>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:504
+#: ../../../ReleaseNotes.rst:537
 msgid ""
 "Fixed an assertion when an improper use of the ``malloc`` attribute "
 "targeting a function without arguments caused us to try to access a non-"
@@ -991,45 +1062,45 @@ msgid ""
 "issues/159080>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:507
+#: ../../../ReleaseNotes.rst:540
 msgid ""
 "Fixed a failed assertion with empty filename arguments in ``__has_embed``. "
 "(`#159898 <https://github.com/llvm/llvm-project/issues/159898>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:508
+#: ../../../ReleaseNotes.rst:541
 msgid ""
 "Fixed a failed assertion with empty filename in ``#embed`` directive. "
 "(`#162951 <https://github.com/llvm/llvm-project/issues/162951>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:509
+#: ../../../ReleaseNotes.rst:542
 msgid ""
 "Fixed a crash triggered by unterminated ``__has_embed``. (`#162953 <https://"
 "github.com/llvm/llvm-project/issues/162953>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:510
+#: ../../../ReleaseNotes.rst:543
 msgid ""
 "Accept empty enumerations in MSVC-compatible C mode. (`#114402 <https://"
 "github.com/llvm/llvm-project/issues/114402>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:511
+#: ../../../ReleaseNotes.rst:544
 msgid ""
 "Fix a bug leading to incorrect code generation with complex number compound "
 "assignment and bitfield values, which also caused a crash with UBsan. "
 "(`#166798 <https://github.com/llvm/llvm-project/issues/166798>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:512
+#: ../../../ReleaseNotes.rst:545
 msgid ""
 "Fixed false-positive shadow diagnostics for lambdas in explicit object "
 "member functions. (`#163731 <https://github.com/llvm/llvm-project/"
 "issues/163731>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:513
+#: ../../../ReleaseNotes.rst:546
 msgid ""
 "Fix an assertion failure when a ``target_clones`` attribute is only on the "
 "forward declaration of a multiversioned function. (`#165517 <https://github."
@@ -1037,22 +1108,29 @@ msgid ""
 "llvm-project/issues/129483>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:517
+#: ../../../ReleaseNotes.rst:548
+msgid ""
+"Fix a crash caused by invalid format string in printf-like functions with ``-"
+"Wunsafe-buffer-usage-in-libc-call`` option enabled. (`#170496 <https://"
+"github.com/llvm/llvm-project/issues/170496>`_)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:551
 msgid "Bug Fixes to Compiler Builtins"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:518
+#: ../../../ReleaseNotes.rst:552
 msgid ""
 "Fix an ambiguous reference to the builtin `type_info` (available when using "
 "`-fms-compatibility`) with modules. (`#38400 <https://github.com/llvm/llvm-"
 "project/issues/38400>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:522
+#: ../../../ReleaseNotes.rst:556
 msgid "Bug Fixes to Attribute Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:524
+#: ../../../ReleaseNotes.rst:558
 msgid ""
 "``[[nodiscard]]`` is now respected on Objective-C and Objective-C++ methods "
 "(`#141504 <https://github.com/llvm/llvm-project/issues/141504>`_) and on "
@@ -1060,7 +1138,7 @@ msgid ""
 "project/issues/142453>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:526
+#: ../../../ReleaseNotes.rst:560
 msgid ""
 "Fixes some late parsed attributes, when applied to function definitions, not "
 "being parsed in function try blocks, and some situations where parsing of "
@@ -1069,32 +1147,32 @@ msgid ""
 "llvm-project/issues/153551>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:530
+#: ../../../ReleaseNotes.rst:564
 msgid ""
 "Using ``[[gnu::cleanup(some_func)]]`` where some_func is annotated with "
 "``[[gnu::error(\"some error\")]]`` now correctly triggers an error. "
 "(`#146520 <https://github.com/llvm/llvm-project/issues/146520>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:532
+#: ../../../ReleaseNotes.rst:566
 msgid ""
 "Fix a crash when the function name is empty in the `swift_name` attribute. "
 "(`#157075 <https://github.com/llvm/llvm-project/issues/157075>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:533
+#: ../../../ReleaseNotes.rst:567
 msgid ""
 "Fixes crashes or missing diagnostics with the `device_kernel` attribute. "
 "(`#161905 <https://github.com/llvm/llvm-project/issues/161905>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:534
+#: ../../../ReleaseNotes.rst:568
 msgid ""
 "Fix handling of parameter indexes when an attribute is applied to a C++23 "
 "explicit object member function."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:535
+#: ../../../ReleaseNotes.rst:569
 msgid ""
 "Fixed several false positives and false negatives in function effect "
 "(`nonblocking`) analysis. (`#166078 <https://github.com/llvm/llvm-project/"
@@ -1103,171 +1181,171 @@ msgid ""
 "issues/166110>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:536
+#: ../../../ReleaseNotes.rst:570
 msgid ""
 "Fix ``cleanup`` attribute by delaying type checks until after the type is "
 "deduced. (`#129631 <https://github.com/llvm/llvm-project/issues/129631>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:537
+#: ../../../ReleaseNotes.rst:571
 msgid ""
 "Fix a crash when instantiating a function template with ``constructor`` or "
 "``destructor`` attributes without a priority argument. (`#169072 <https://"
 "github.com/llvm/llvm-project/issues/169072>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:541
+#: ../../../ReleaseNotes.rst:575
 msgid "Bug Fixes to C++ Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:542
+#: ../../../ReleaseNotes.rst:576
 msgid ""
 "Diagnose binding a reference to ``*nullptr`` during constant evaluation. "
 "(`#48665 <https://github.com/llvm/llvm-project/issues/48665>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:543
+#: ../../../ReleaseNotes.rst:577
 msgid ""
 "Suppress ``-Wdeprecated-declarations`` in implicitly generated functions. "
 "(`#147293 <https://github.com/llvm/llvm-project/issues/147293>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:544
+#: ../../../ReleaseNotes.rst:578
 msgid ""
 "Fix a crash when deleting a pointer to an incomplete array (`#150359 "
 "<https://github.com/llvm/llvm-project/issues/150359>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:545
+#: ../../../ReleaseNotes.rst:579
 msgid ""
 "Fixed a mismatched lambda scope bug when propagating up ``consteval`` within "
 "nested lambdas. (`#145776 <https://github.com/llvm/llvm-project/"
 "issues/145776>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:546
+#: ../../../ReleaseNotes.rst:580
 msgid ""
 "Disallow immediate escalation in destructors. (`#109096 <https://github.com/"
 "llvm/llvm-project/issues/109096>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:547
+#: ../../../ReleaseNotes.rst:581
 msgid ""
 "Fix an assertion failure when expression in assumption attribute "
 "(``[[assume(expr)]]``) creates temporary objects."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:549
+#: ../../../ReleaseNotes.rst:583
 msgid ""
 "Fix the dynamic_cast to final class optimization to correctly handle casts "
 "that are guaranteed to fail (`#137518 <https://github.com/llvm/llvm-project/"
 "issues/137518>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:551
+#: ../../../ReleaseNotes.rst:585
 msgid ""
 "Fix bug rejecting partial specialization of variable templates with auto "
 "NTTPs (`#118190 <https://github.com/llvm/llvm-project/issues/118190>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:552
+#: ../../../ReleaseNotes.rst:586
 msgid ""
 "Fix a crash if errors \"member of anonymous [...] redeclares\" and "
 "\"initializing multiple members of union\" coincide (`#149985 <https://"
 "github.com/llvm/llvm-project/issues/149985>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:554
+#: ../../../ReleaseNotes.rst:588
 msgid ""
 "Fix a crash when using ``explicit(bool)`` in pre-C++11 language modes. "
 "(`#152729 <https://github.com/llvm/llvm-project/issues/152729>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:555
+#: ../../../ReleaseNotes.rst:589
 msgid ""
 "Fix the parsing of variadic member functions when the ellipis immediately "
 "follows a default argument.(`#153445 <https://github.com/llvm/llvm-project/"
 "issues/153445>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:556
+#: ../../../ReleaseNotes.rst:590
 msgid ""
 "Fixed a bug that caused ``this`` captured by value in a lambda with a "
 "dependent explicit object parameter to not be instantiated properly. "
 "(`#154054 <https://github.com/llvm/llvm-project/issues/154054>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:558
+#: ../../../ReleaseNotes.rst:592
 msgid ""
 "Fixed a bug where our ``member-like constrained friend`` checking caused an "
 "incorrect analysis of lambda captures. (`#156225 <https://github.com/llvm/"
 "llvm-project/issues/156225>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:559
+#: ../../../ReleaseNotes.rst:593
 msgid ""
 "Fixed a crash when implicit conversions from initialize list to arrays of "
 "unknown bound during constant evaluation. (`#151716 <https://github.com/llvm/"
 "llvm-project/issues/151716>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:561
+#: ../../../ReleaseNotes.rst:595
 msgid ""
 "Support the dynamic_cast to final class optimization with pointer "
 "authentication enabled. (`#152601 <https://github.com/llvm/llvm-project/"
 "issues/152601>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:563
+#: ../../../ReleaseNotes.rst:597
 msgid ""
 "Fix the check for narrowing int-to-float conversions, so that they are "
 "detected in cases where converting the float back to an integer is undefined "
 "behaviour (`#157067 <https://github.com/llvm/llvm-project/issues/157067>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:565
+#: ../../../ReleaseNotes.rst:599
 msgid ""
 "Stop rejecting C++11-style attributes on the first argument of constructors "
 "in older standards. (`#156809 <https://github.com/llvm/llvm-project/"
 "issues/156809>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:567
+#: ../../../ReleaseNotes.rst:601
 msgid ""
 "Fix a crash when applying binary or ternary operators to two same function "
 "types with different spellings, where at least one of the function "
 "parameters has an attribute which affects the function type."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:570
+#: ../../../ReleaseNotes.rst:604
 msgid ""
 "Fix an assertion failure when a ``constexpr`` variable is only referenced "
 "through ``__builtin_addressof``, and related issues with builtin arguments. "
 "(`#154034 <https://github.com/llvm/llvm-project/issues/154034>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:572
+#: ../../../ReleaseNotes.rst:606
 msgid ""
 "Fix an assertion failure when taking the address on a non-type template "
 "parameter argument of object type. (`#151531 <https://github.com/llvm/llvm-"
 "project/issues/151531>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:574
+#: ../../../ReleaseNotes.rst:608
 msgid ""
 "Suppress ``-Wdouble-promotion`` when explicitly asked for with C++ list "
 "initialization (`#33409 <https://github.com/llvm/llvm-project/"
 "issues/33409>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:575
+#: ../../../ReleaseNotes.rst:609
 msgid ""
 "Fix the result of `__builtin_is_implicit_lifetime` for types with a user-"
 "provided constructor. (`#160610 <https://github.com/llvm/llvm-project/"
 "issues/160610>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:576
+#: ../../../ReleaseNotes.rst:610
 msgid ""
 "Correctly deduce return types in ``decltype`` expressions. (`#160497 "
 "<https://github.com/llvm/llvm-project/issues/160497>`_) (`#56652 <https://"
@@ -1276,75 +1354,111 @@ msgid ""
 "project/issues/161196>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:577
+#: ../../../ReleaseNotes.rst:611
 msgid ""
 "Fixed a crash in the pre-C++23 warning for attributes before a lambda "
 "declarator (`#161070 <https://github.com/llvm/llvm-project/issues/161070>`_)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:578
+#: ../../../ReleaseNotes.rst:612
 msgid ""
 "Fix a crash when attempting to deduce a deduction guide from a non deducible "
 "template template parameter. (#130604)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:579
+#: ../../../ReleaseNotes.rst:613
 msgid ""
 "Fix for clang incorrectly rejecting the default construction of a union with "
 "nontrivial member when another member has an initializer. (`#81774 <https://"
 "github.com/llvm/llvm-project/issues/81774>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:581
+#: ../../../ReleaseNotes.rst:615
 msgid ""
 "Fixed a template depth issue when parsing lambdas inside a type constraint. "
 "(`#162092 <https://github.com/llvm/llvm-project/issues/162092>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:582
+#: ../../../ReleaseNotes.rst:616
 msgid ""
 "Fix the support of zero-length arrays in SFINAE context. (`#170040 <https://"
 "github.com/llvm/llvm-project/issues/170040>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:583
+#: ../../../ReleaseNotes.rst:617
 msgid ""
 "Diagnose unresolved overload sets in non-dependent compound requirements. "
 "(`#51246 <https://github.com/llvm/llvm-project/issues/51246>`_) (`#97753 "
 "<https://github.com/llvm/llvm-project/issues/97753>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:584
+#: ../../../ReleaseNotes.rst:618
 msgid ""
 "Fix a crash when extracting unavailable member type from alias in template "
 "deduction. (`#165560 <https://github.com/llvm/llvm-project/issues/165560>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:585
+#: ../../../ReleaseNotes.rst:619
 msgid ""
 "Fix incorrect diagnostics for lambdas with init-captures inside braced "
 "initializers. (`#163498 <https://github.com/llvm/llvm-project/"
 "issues/163498>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:586
+#: ../../../ReleaseNotes.rst:620
+msgid ""
+"Fixed an issue where templates prevented nested anonymous records from "
+"checking the deletion of special members. (`#167217 <https://github.com/llvm/"
+"llvm-project/issues/167217>`_)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:621
+msgid ""
+"Fixed serialization of pack indexing types, where we failed to expand those "
+"packs from a PCH/module. (`#172464 <https://github.com/llvm/llvm-project/"
+"issues/172464>`_)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:622
 msgid ""
 "Fixed spurious diagnoses of certain nested lambda expressions. (`#149121 "
 "<https://github.com/llvm/llvm-project/issues/149121>`_) (`#156579 <https://"
 "github.com/llvm/llvm-project/issues/156579>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:589
+#: ../../../ReleaseNotes.rst:623
+msgid ""
+"Fix the result of ``__is_pointer_interconvertible_base_of`` when arguments "
+"are qualified and passed via template parameters. (`#135273 <https://github."
+"com/llvm/llvm-project/issues/135273>`_)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:624
+msgid ""
+"Fixed a crash when evaluating nested requirements in requires-expressions "
+"that reference invented parameters. (`#166325 <https://github.com/llvm/llvm-"
+"project/issues/166325>`_)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:625
+msgid ""
+"Fixed a crash when standard comparison categories (e.g. ``std::"
+"partial_ordering``) are defined with incorrect static member types. "
+"(`#170015 <https://github.com/llvm/llvm-project/issues/170015>`_) (`#56571 "
+"<https://github.com/llvm/llvm-project/issues/56571>`_)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:628
 msgid "Bug Fixes to AST Handling"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:590
+#: ../../../ReleaseNotes.rst:629
 msgid ""
 "Fix incorrect name qualifiers applied to alias CTAD. (`#136624 <https://"
 "github.com/llvm/llvm-project/issues/136624>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:591
+#: ../../../ReleaseNotes.rst:630
 msgid ""
 "Fixed ElaboratedTypes appearing within NestedNameSpecifier, which was not a "
 "legal representation. This is fixed because ElaboratedTypes don't exist "
@@ -1353,151 +1467,162 @@ msgid ""
 "<https://github.com/llvm/llvm-project/issues/92757>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:593
+#: ../../../ReleaseNotes.rst:632
 msgid ""
 "Fix unrecognized html tag causing undesirable comment lexing (`#152944 "
 "<https://github.com/llvm/llvm-project/issues/152944>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:594
+#: ../../../ReleaseNotes.rst:633
 msgid ""
 "Fix comment lexing of special command names (`#152943 <https://github.com/"
 "llvm/llvm-project/issues/152943>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:595
+#: ../../../ReleaseNotes.rst:634
 msgid ""
 "Use `extern` as a hint to continue parsing when recovering from a malformed "
 "declaration."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:598
+#: ../../../ReleaseNotes.rst:637
 msgid "Miscellaneous Bug Fixes"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:599
+#: ../../../ReleaseNotes.rst:638
 msgid ""
 "Fixed missing diagnostics of ``diagnose_if`` on templates involved in "
 "initialization. (`#160776 <https://github.com/llvm/llvm-project/"
 "issues/160776>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:602
+#: ../../../ReleaseNotes.rst:641
 msgid "Miscellaneous Clang Crashes Fixed"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:605
+#: ../../../ReleaseNotes.rst:644
 msgid "OpenACC Specific Changes"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:608
+#: ../../../ReleaseNotes.rst:647
 msgid "Target Specific Changes"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:611
+#: ../../../ReleaseNotes.rst:650
 msgid "AMDGPU Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:614
+#: ../../../ReleaseNotes.rst:653
 msgid "NVPTX Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:617
+#: ../../../ReleaseNotes.rst:656
 msgid "X86 Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:618
+#: ../../../ReleaseNotes.rst:657
 msgid ""
 "More SSE, AVX and AVX512 intrinsics, including initializers and general "
 "arithmetic can now be used in C++ constant expressions."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:620
+#: ../../../ReleaseNotes.rst:659
 msgid ""
 "Some SSE, AVX and AVX512 intrinsics have been converted to wrap generic "
 "__builtin intrinsics."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:622
+#: ../../../ReleaseNotes.rst:661
 msgid ""
 "NOTE: Please avoid use of the __builtin_ia32_* intrinsics - these are not "
 "guaranteed to exist in future releases, or match behaviour with previous "
 "releases of clang or other compilers."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:625
+#: ../../../ReleaseNotes.rst:664
 msgid ""
 "Remove `m[no-]avx10.x-[256,512]` and `m[no-]evex512` options from Clang "
 "driver."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:627
+#: ../../../ReleaseNotes.rst:666
 msgid "Remove `[no-]evex512` feature request from intrinsics and builtins."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:628
+#: ../../../ReleaseNotes.rst:667
 msgid "Change features `avx10.x-[256,512]` to `avx10.x`."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:629
+#: ../../../ReleaseNotes.rst:668
 msgid "`-march=wildcatlake` is now supported."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:630
+#: ../../../ReleaseNotes.rst:669
 msgid "`-march=novalake` is now supported."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:633
+#: ../../../ReleaseNotes.rst:672
 msgid "Arm and AArch64 Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:634
+#: ../../../ReleaseNotes.rst:673
+msgid ""
+"Support has been added for the following processors (command-line "
+"identifiers in parentheses): - Arm C1-Nano (``c1-nano``) - Arm C1-Pro (``c1-"
+"pro``) - Arm C1-Premium (``c1-premium``) - Arm C1-Ultra (``c1-ultra``)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:678
 msgid ""
 "More intrinsics for the following AArch64 instructions: FCVTZ[US], "
 "FCVTN[US], FCVTM[US], FCVTP[US], FCVTA[US]"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:638
+#: ../../../ReleaseNotes.rst:682
 msgid "Android Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:641
+#: ../../../ReleaseNotes.rst:685
 msgid "Windows Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:642
+#: ../../../ReleaseNotes.rst:686
 msgid "clang-cl now supports /arch:AVX10.1 and /arch:AVX10.2."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:643
+#: ../../../ReleaseNotes.rst:687
 msgid "clang-cl now supports /vlen, /vlen=256 and /vlen=512."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:646
+#: ../../../ReleaseNotes.rst:689
+msgid "Clang now supports MSVC vector deleting destructors (GH19772)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:692
 msgid "LoongArch Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:647
+#: ../../../ReleaseNotes.rst:693
 msgid "Enable linker relaxation by default for loongarch64."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:650
+#: ../../../ReleaseNotes.rst:696
 msgid "RISC-V Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:652
+#: ../../../ReleaseNotes.rst:698
 msgid ""
 "Add support for `__attribute__((interrupt(\"rnmi\")))` to be used with the "
 "`Smrnmi` extension. With this the `Smrnmi` extension is fully supported."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:655
+#: ../../../ReleaseNotes.rst:701
 msgid ""
 "Add `-march=unset` to clear any previous `-march=` value. This ISA string "
 "will be computed from `-mcpu` or the platform default."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:658
+#: ../../../ReleaseNotes.rst:704
 msgid ""
 "`__GCC_CONSTRUCTIVE_SIZE` and `__GCC_DESTRUCTIVE_SIZE` are changed to 64. "
 "These values are unstable according to `Clang's documentation <https://clang."
@@ -1505,32 +1630,32 @@ msgid ""
 "constructive-size>`_."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:661
+#: ../../../ReleaseNotes.rst:707
 msgid ""
 "DWARF fission is now compatible with linker relaxations, allowing `-gsplit-"
 "dwarf` and `-mrelax` to be used together when building for the RISC-V "
 "platform."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:665
+#: ../../../ReleaseNotes.rst:711
 msgid "CUDA/HIP Language Changes"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:667
+#: ../../../ReleaseNotes.rst:713
 msgid ""
 "Clang now supports C++17 Class Template Argument Deduction (CTAD) in CUDA/"
 "HIP device code by treating deduction guides as if they were ``__host__ "
 "__device__``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:670
+#: ../../../ReleaseNotes.rst:716
 msgid ""
 "Clang avoids ambiguous CTAD in CUDA/HIP by not synthesizing duplicate "
 "implicit deduction guides when ``__host__`` and ``__device__`` constructors "
 "differ only in CUDA target attributes (same signature and constraints)."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:674
+#: ../../../ReleaseNotes.rst:720
 msgid ""
 "Clang diagnoses CUDA/HIP deduction guides that are annotated as host-only, "
 "device-only, or ``__global__`` as errors. Explicit ``__host__ __device__`` "
@@ -1539,131 +1664,131 @@ msgid ""
 "in code generation and are treated as implicitly host+device."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:680
+#: ../../../ReleaseNotes.rst:726
 msgid ""
 "Clang preserves distinct implicit deduction guides for constructors that "
 "differ by constraints, so constraint-based CTAD works in CUDA/HIP device "
 "code as in standard C++."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:685
+#: ../../../ReleaseNotes.rst:731
 msgid "CUDA Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:687
+#: ../../../ReleaseNotes.rst:733
 msgid "Support calling `consteval` function between different target."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:690
+#: ../../../ReleaseNotes.rst:736
 msgid "AIX Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:693
+#: ../../../ReleaseNotes.rst:739
 msgid "NetBSD Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:696
+#: ../../../ReleaseNotes.rst:742
 msgid "WebAssembly Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:698
+#: ../../../ReleaseNotes.rst:744
 msgid ""
 "Fix a bug so that ``__has_attribute(musttail)`` is no longer true when "
 "WebAssembly's tail-call is not enabled. (`#163256 <https://github.com/llvm/"
 "llvm-project/issues/163256>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:701
+#: ../../../ReleaseNotes.rst:747
 msgid "AVR Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:704
+#: ../../../ReleaseNotes.rst:750
 msgid "DWARF Support in Clang"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:707
+#: ../../../ReleaseNotes.rst:753
 msgid "Floating Point Support in Clang"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:710
+#: ../../../ReleaseNotes.rst:756
 msgid "Fixed Point Support in Clang"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:713
+#: ../../../ReleaseNotes.rst:759
 msgid "AST Matchers"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:714
+#: ../../../ReleaseNotes.rst:760
 msgid ""
 "Removed elaboratedType matchers, and related nested name specifier changes, "
 "following the corresponding changes in the clang AST."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:716
+#: ../../../ReleaseNotes.rst:762
 msgid ""
 "Ensure ``hasBitWidth`` doesn't crash on bit widths that are dependent on "
 "template parameters."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:718
+#: ../../../ReleaseNotes.rst:764
 msgid ""
 "Remove the ``dependentTemplateSpecializationType`` matcher, as the "
 "corresponding AST node was removed. This matcher was never very useful, "
 "since there was no way to match on its template name."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:721
+#: ../../../ReleaseNotes.rst:767
 msgid ""
 "Add a boolean member ``IgnoreSystemHeaders`` to ``MatchFinderOptions``. This "
 "allows it to ignore nodes in system headers when traversing the AST."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:724
+#: ../../../ReleaseNotes.rst:770
 msgid ""
 "``hasConditionVariableStatement`` now supports ``for`` loop, ``while`` loop "
 "and ``switch`` statements."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:726
+#: ../../../ReleaseNotes.rst:772
 msgid ""
 "Fixed detection of explicit parameter lists in ``LambdaExpr``. (`#168452 "
 "<https://github.com/llvm/llvm-project/issues/168452>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:727
+#: ../../../ReleaseNotes.rst:773
 msgid ""
 "Added ``hasExplicitParameters`` for ``LambdaExpr`` as an output attribute to "
 "AST JSON dumps."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:729
+#: ../../../ReleaseNotes.rst:775
 msgid "Add ``arrayTypeLoc`` matcher for matching ``ArrayTypeLoc``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:732
+#: ../../../ReleaseNotes.rst:778
 msgid "clang-format"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:733
+#: ../../../ReleaseNotes.rst:779
 msgid ""
 "Add ``SpaceInEmptyBraces`` option and set it to ``Always`` for WebKit style."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:734
+#: ../../../ReleaseNotes.rst:780
 msgid ""
 "Add ``NumericLiteralCase`` option for enforcing character case in numeric "
 "literals."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:736
+#: ../../../ReleaseNotes.rst:782
 msgid "Add ``Leave`` suboption to ``IndentPPDirectives``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:737
+#: ../../../ReleaseNotes.rst:783
 msgid "Add ``AllowBreakBeforeQtProperty`` option."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:738
+#: ../../../ReleaseNotes.rst:784
 msgid ""
 "Add ``BreakAfterOpenBracketBracedList'', ``BreakAfterOpenBracketFunction'', "
 "``BreakAfterOpenBracketIf``, ``BreakAfterOpenBracketLoop``, "
@@ -1672,196 +1797,231 @@ msgid ""
 "``BreakBeforeCloseBracketLoop``, ``BreakBeforeCloseBracketSwitch`` options."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:743
+#: ../../../ReleaseNotes.rst:789
 msgid ""
 "Deprecate ``AlwaysBreak`` and ``BlockIndent`` suboptions from the "
 "``AlignAfterOpenBracket`` option, and make ``AlignAfterOpenBracket`` a "
 "``bool`` type."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:746
+#: ../../../ReleaseNotes.rst:792
 msgid "Add ``AlignPPAndNotPP`` suboption to ``AlignTrailingComments``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:747
+#: ../../../ReleaseNotes.rst:793
 msgid ""
 "Rename ``(Binary|Decimal|Hex)MinDigits`` to ``...MinDigitsInsert`` and  add "
 "``(Binary|Decimal|Hex)MaxDigitsSeparator`` suboptions to "
 "``IntegerLiteralSeparator``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:752
+#: ../../../ReleaseNotes.rst:798
 msgid "libclang"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:755
+#: ../../../ReleaseNotes.rst:801
 msgid "Code Completion"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:758
+#: ../../../ReleaseNotes.rst:804
 msgid "Static Analyzer"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:759
+#: ../../../ReleaseNotes.rst:805
 msgid ""
 "The Clang Static Analyzer now handles parenthesized initialization. "
 "(`#148875 <https://github.com/llvm/llvm-project/issues/148875>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:761
+#: ../../../ReleaseNotes.rst:807
 msgid ""
 "``__datasizeof`` (C++) and ``_Countof`` (C) no longer cause a failed "
 "assertion when given an operand of VLA type. (`#151711 <https://github.com/"
 "llvm/llvm-project/issues/151711>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:765
+#: ../../../ReleaseNotes.rst:811
 msgid "New features"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:768
+#: ../../../ReleaseNotes.rst:814
 msgid "Crash and bug fixes"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:769
+#: ../../../ReleaseNotes.rst:815
 msgid ""
 "Fixed a crash in the static analyzer that when the expression in an "
 "``[[assume(expr)]]`` attribute was enclosed in parentheses.  (`#151529 "
 "<https://github.com/llvm/llvm-project/issues/151529>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:771
+#: ../../../ReleaseNotes.rst:817
 msgid ""
 "Fixed a crash when parsing ``#embed`` parameters with unmatched closing "
 "brackets. (`#152829 <https://github.com/llvm/llvm-project/issues/152829>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:772
+#: ../../../ReleaseNotes.rst:818
 msgid ""
 "Fixed a crash when compiling ``__real__`` or ``__imag__`` unary operator on "
 "scalar value with type promotion. (`#160583 <https://github.com/llvm/llvm-"
 "project/issues/160583>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:773
+#: ../../../ReleaseNotes.rst:819
 msgid ""
 "Fixed a crash when parsing invalid nested name specifier sequences "
 "containing a single colon. (`#167905 <https://github.com/llvm/llvm-project/"
 "issues/167905>`_)"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:777 ../../../ReleaseNotes.rst:817
+#: ../../../ReleaseNotes.rst:821
+msgid ""
+"Fixed a crash when parsing malformed #pragma clang loop "
+"vectorize_width(4,8,16) by diagnosing invalid comma-separated argument "
+"lists. (`#166325 <https://github.com/llvm/llvm-project/issues/166325>`_)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:825 ../../../ReleaseNotes.rst:865
 msgid "Improvements"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:780
+#: ../../../ReleaseNotes.rst:828
 msgid "Moved checkers"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:785
+#: ../../../ReleaseNotes.rst:833
 msgid "Sanitizers"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:786
+#: ../../../ReleaseNotes.rst:834
 msgid "Improved documentation for legacy ``no_sanitize`` attributes."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:789
+#: ../../../ReleaseNotes.rst:837
 msgid "Python Binding Changes"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:790
+#: ../../../ReleaseNotes.rst:838
 msgid "Exposed ``clang_Cursor_isFunctionInlined``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:791
+#: ../../../ReleaseNotes.rst:839
 msgid "Exposed ``clang_getCursorLanguage`` via ``Cursor.language``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:792
+#: ../../../ReleaseNotes.rst:840
 msgid ""
 "Add all missing ``CursorKind``s, ``TypeKind``s and "
 "``ExceptionSpecificationKind``s from ``Index.h``"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:796
+#: ../../../ReleaseNotes.rst:844
 msgid "OpenMP Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:797
+#: ../../../ReleaseNotes.rst:845
 msgid ""
 "Added parsing and semantic analysis support for the ``need_device_addr`` "
 "modifier in the ``adjust_args`` clause."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:799
+#: ../../../ReleaseNotes.rst:847
 msgid "Allow array length to be omitted in array section subscript expression."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:800
+#: ../../../ReleaseNotes.rst:848
 msgid ""
 "Fixed non-contiguous strided update in the ``omp target update`` directive "
 "with the ``from`` clause."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:801
+#: ../../../ReleaseNotes.rst:849
 msgid "Added support for threadset clause in task and taskloop directives."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:802
+#: ../../../ReleaseNotes.rst:850
 msgid ""
 "Properly handle array section/assumed-size array privatization in C/C++."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:803
+#: ../../../ReleaseNotes.rst:851
 msgid "Added support to handle new syntax of the ``uses_allocators`` clause."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:804
+#: ../../../ReleaseNotes.rst:852
 msgid "Added support for ``variable-category`` modifier in ``default clause``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:805
+#: ../../../ReleaseNotes.rst:853
 msgid ""
 "Added support for ``defaultmap`` directive implicit-behavior ``storage``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:806
+#: ../../../ReleaseNotes.rst:854
 msgid ""
 "Added support for ``defaultmap`` directive implicit-behavior ``private``."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:807
+#: ../../../ReleaseNotes.rst:855
 msgid ""
 "Added parsing and semantic analysis support for ``groupprivate`` directive."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:808
+#: ../../../ReleaseNotes.rst:856
 msgid "Added support for 'omp fuse' directive."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:809
+#: ../../../ReleaseNotes.rst:857
 msgid ""
 "Updated parsing and semantic analysis support for ``nowait`` clause to "
 "accept optional argument in OpenMP >= 60."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:811
+#: ../../../ReleaseNotes.rst:859
 msgid "Added support for ``default`` clause on ``target`` directive."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:812
+#: ../../../ReleaseNotes.rst:860
 msgid ""
 "Added parsing and semantic analysis support for ``need_device_ptr`` modifier "
 "to accept an optional fallback argument (``fb_nullify`` or ``fb_preserve``) "
 "with OpenMP >= 61."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:820
+#: ../../../ReleaseNotes.rst:866
+msgid ""
+"Mapping of expressions that have base-pointers now conforms to the OpenMP's "
+"conditional pointer-attachment based on both pointee and poitner being "
+"present, and one being new. This also lays the foundation of supporting "
+"OpenMP 6.1's attach map-type modifier."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:870
+msgid ""
+"Several improvements were made to the handling of maps on list items "
+"involving multiple levels of pointer dereferences, including not mapping "
+"intermediate expressions, and grouping the items that share the same base-"
+"pointer, as belonging to the same containing structure."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:874
+msgid ""
+"Support of array-sections on ``use_device_addr`` was made more robust, "
+"including diagnosing when the array-section's base is not a named-variable."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:876
+msgid ""
+"Handling of ``use_device_addr`` and ``use_device_ptr`` in the presence of "
+"other maps with the same base-pointer/variable, was improved."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:880
 msgid "Additional Information"
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:822
+#: ../../../ReleaseNotes.rst:882
 msgid ""
 "A wide variety of additional information is available on the `Clang web page "
 "<https://clang.llvm.org/>`_. The web page contains versions of the API "
@@ -1870,7 +2030,7 @@ msgid ""
 "into the \"``clang/docs/``\" directory in the Clang tree."
 msgstr ""
 
-#: ../../../ReleaseNotes.rst:829
+#: ../../../ReleaseNotes.rst:889
 msgid ""
 "If you have any questions or comments about Clang, please feel free to "
 "contact us on the `Discourse forums (Clang Frontend category) <https://"
