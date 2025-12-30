@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 08:18+0000\n"
+"POT-Creation-Date: 2025-12-29 08:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,11 +186,11 @@ msgstr ""
 
 #: ../../../MatrixTypes.rst:109
 msgid ""
-"Programs containing a single subscript expression into a matrix are ill-"
-"formed."
+"A single subscript expression into a matrix is legal in HLSL and denotes a "
+"vector for the specified row lane, but is ill-formed in C and C++."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:111
+#: ../../../MatrixTypes.rst:112
 msgid ""
 "**Note**: We considered providing an expression of the form ``postfix-"
 "expression [expression]`` to access columns of a matrix. We think that such "
@@ -201,11 +201,11 @@ msgid ""
 "operations more explicit."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:120
+#: ../../../MatrixTypes.rst:121
 msgid "Matrix Type Binary Operators"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:122
+#: ../../../MatrixTypes.rst:123
 msgid ""
 "Given two matrixes, the ``+`` and ``-`` operators perform element-wise "
 "addition and subtraction, while the ``*`` operator performs matrix "
@@ -214,97 +214,97 @@ msgid ""
 "matrix."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:127
+#: ../../../MatrixTypes.rst:128
 msgid ""
 "Earlier versions of this extension did not support division by a scalar. You "
 "can test for the availability of this feature with "
 "``__has_extension(matrix_types_scalar_division)``."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:131
+#: ../../../MatrixTypes.rst:132
 msgid "For the expression ``M1 BIN_OP M2`` where"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:133
+#: ../../../MatrixTypes.rst:134
 msgid ""
 "``BIN_OP`` is one of ``+`` or ``-``, one of ``M1`` and ``M2`` is of matrix "
 "type, and the other is of matrix type or real type; or"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:135
+#: ../../../MatrixTypes.rst:136
 msgid ""
 "``BIN_OP`` is ``*``, one of ``M1`` and ``M2`` is of matrix type, and the"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:136
+#: ../../../MatrixTypes.rst:137
 msgid "other is of a real type; or"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:137
+#: ../../../MatrixTypes.rst:138
 msgid ""
 "``BIN_OP`` is ``/``, ``M1`` is of matrix type, and ``M2`` is of a real type:"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:139
+#: ../../../MatrixTypes.rst:140
 msgid ""
 "The usual arithmetic conversions are applied to ``M1`` and ``M2``. [ Note: "
 "if ``M1`` or ``M2`` are of a real type, they are broadcast to matrices here. "
 "— end note ]"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:141
+#: ../../../MatrixTypes.rst:142
 msgid "``M1`` and ``M2`` shall be of the same matrix type."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:142
+#: ../../../MatrixTypes.rst:143
 msgid ""
 "The result is equivalent to Res in the following where col is the number of "
 "columns and row is the number of rows in the matrix type:"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:152
+#: ../../../MatrixTypes.rst:153
 msgid ""
 "Given the expression ``M1 * M2`` where ``M1`` and ``M2`` are of matrix type:"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:154
+#: ../../../MatrixTypes.rst:155
 msgid "The usual arithmetic conversions are applied to ``M1`` and ``M2``."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:155
+#: ../../../MatrixTypes.rst:156
 msgid ""
 "The type of ``M1`` shall have the same number of columns as the type of "
 "``M2`` has rows. The element types of ``M1`` and ``M2`` shall be the same "
 "type."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:157
+#: ../../../MatrixTypes.rst:158
 msgid ""
 "The resulting type, ``MTy``, is a matrix type with the common element type, "
 "the number of rows of ``M1`` and the number of columns of ``M2``."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:159
+#: ../../../MatrixTypes.rst:160
 msgid ""
 "The result is equivalent to ``Res`` in the following where ``EltTy`` is the "
 "element type of ``MTy``, ``col`` is the number of columns, ``row`` is the "
 "number of rows in ``MTy`` and ``inner`` is the number of columns of ``M1``:"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:175
+#: ../../../MatrixTypes.rst:176
 msgid ""
 "All operations on matrix types match the behavior of the element type with "
 "respect to signed overflows."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:178
+#: ../../../MatrixTypes.rst:179
 msgid ""
 "With respect to floating-point contraction, rounding and environment rules, "
 "operations on matrix types match the behavior of the elementwise operations "
 "in the corresponding expansions provided above."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:182
+#: ../../../MatrixTypes.rst:183
 msgid ""
 "Operations on floating-point matrices have the same rounding and floating-"
 "point environment behavior as ordinary floating-point operations in the "
@@ -316,17 +316,17 @@ msgid ""
 "FP_CONTRACT``."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:190
+#: ../../../MatrixTypes.rst:191
 msgid ""
 "For the ``+=``, ``-=`` and ``*=`` operators the semantics match their "
 "expanded variants."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:194
+#: ../../../MatrixTypes.rst:195
 msgid "Matrix Type Builtin Operations"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:196
+#: ../../../MatrixTypes.rst:197
 msgid ""
 "Each matrix type supports a collection of builtin expressions that look like "
 "function calls but do not form an overload set. Here they are described as "
@@ -335,61 +335,61 @@ msgid ""
 "description.structure.specifications]/3 in the C++ standard."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:202
+#: ../../../MatrixTypes.rst:203
 msgid "Definitions:"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:204
+#: ../../../MatrixTypes.rst:205
 msgid "*M*, *M1*, *M2*, *M3* - Matrix types"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:205
+#: ../../../MatrixTypes.rst:206
 msgid "*T* - Element type"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:206
+#: ../../../MatrixTypes.rst:207
 msgid "*row*, *col* - Row and column arguments respectively."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:209
+#: ../../../MatrixTypes.rst:210
 msgid "``M2 __builtin_matrix_transpose(M1 matrix)``"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:211
+#: ../../../MatrixTypes.rst:212
 msgid ""
 "**Remarks**: The return type is a cv-unqualified matrix type that has the "
 "same element type as ``M1`` and has the same number of rows as ``M1`` has "
 "columns and the same number of columns as ``M1`` has rows."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:215
+#: ../../../MatrixTypes.rst:216
 msgid ""
 "**Returns**: A matrix ``Res`` equivalent to the code below, where ``col`` "
 "refers to the number of columns of ``M``, and ``row`` to the number of rows "
 "of ``M``."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:218 ../../../MatrixTypes.rst:259
+#: ../../../MatrixTypes.rst:219 ../../../MatrixTypes.rst:260
 msgid "**Effects**: Equivalent to:"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:228
+#: ../../../MatrixTypes.rst:229
 msgid ""
 "``M __builtin_matrix_column_major_load(T *ptr, size_t row, size_t col, "
 "size_t columnStride)``"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:230
+#: ../../../MatrixTypes.rst:231
 msgid ""
 "**Mandates**: ``row`` and ``col`` shall be integral constants greater than 0."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:232
+#: ../../../MatrixTypes.rst:233
 msgid ""
 "**Preconditions**: ``columnStride`` is greater than or equal to ``row``."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:234
+#: ../../../MatrixTypes.rst:235
 msgid ""
 "**Remarks**: The return type is a cv-unqualified matrix type with an element "
 "type of the cv-unqualified version of ``T`` and a number of rows and columns "
@@ -397,34 +397,34 @@ msgid ""
 "optional and if omitted ``row`` is used as ``columnStride``."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:239
+#: ../../../MatrixTypes.rst:240
 msgid "**Returns**: A matrix ``Res`` equivalent to:"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:251
+#: ../../../MatrixTypes.rst:252
 msgid ""
 "``void __builtin_matrix_column_major_store(M matrix, T *ptr, size_t "
 "columnStride)``"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:253
+#: ../../../MatrixTypes.rst:254
 msgid ""
 "**Preconditions**: ``columnStride`` is greater than or equal to the number "
 "of rows in ``M``."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:255
+#: ../../../MatrixTypes.rst:256
 msgid ""
 "**Remarks**: The type ``T`` is the const-unqualified version of the matrix "
 "argument’s element type. The parameter ``columnStride`` is optional and if "
 "omitted, the number of rows of ``M`` is used as ``columnStride``."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:271
+#: ../../../MatrixTypes.rst:272
 msgid "TODOs"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:273
+#: ../../../MatrixTypes.rst:274
 msgid ""
 "TODO: Does it make sense to allow M::element_type, M::rows, and M::columns "
 "where M is a matrix type? We don’t support this anywhere else, but it’s "
@@ -432,32 +432,39 @@ msgid ""
 "information. Also add spelling for C."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:278
+#: ../../../MatrixTypes.rst:279
 msgid "Future Work: Initialization syntax."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:282
+#: ../../../MatrixTypes.rst:283
 msgid "Decisions for the Implementation in Clang"
 msgstr ""
 
-#: ../../../MatrixTypes.rst:284
+#: ../../../MatrixTypes.rst:285
 msgid ""
 "This section details decisions taken for the implementation in Clang and is "
 "not part of the draft specification."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:287
+#: ../../../MatrixTypes.rst:288
 msgid ""
 "The elements of a  value of a matrix type are laid out in column-major order "
 "without padding."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:290
+#: ../../../MatrixTypes.rst:291
+msgid ""
+"To change memory layout to row major use the `-fmatrix-memory-layout` flag. "
+"This flag supports two flag argument values either `column-major` or `row-"
+"major` used like so `-fmatrix-memory-layout=column-major`.`"
+msgstr ""
+
+#: ../../../MatrixTypes.rst:295
 msgid ""
 "We propose to provide a Clang option to override this behavior and allow "
 "contraction of those operations (e.g. *-ffp-contract=matrix*)."
 msgstr ""
 
-#: ../../../MatrixTypes.rst:293
+#: ../../../MatrixTypes.rst:298
 msgid "TODO: Specify how matrix values are passed to functions."
 msgstr ""
