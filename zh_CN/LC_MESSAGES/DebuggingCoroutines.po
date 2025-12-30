@@ -1,0 +1,840 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 21\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-21 08:51+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../DebuggingCoroutines.rst:3
+msgid "Debugging C++ Coroutines"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:11
+msgid ""
+"Coroutines in C++ were introduced in C++20, and the user experience for "
+"debugging them can still be challenging. This document guides you how to "
+"most efficiently debug coroutines and how to navigate existing shortcomings "
+"in debuggers and compilers."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:16
+msgid ""
+"Coroutines are generally used either as generators or for asynchronous "
+"programming. In this document, we will discuss both use cases. Even if you "
+"are using coroutines for asynchronous programming, you should still read the "
+"generators section, as it will introduce foundational debugging techniques "
+"also applicable to the debugging of asynchronous programs."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:22
+msgid ""
+"Both compilers (clang, gcc, ...) and debuggers (lldb, gdb, ...) are still "
+"improving their support for coroutines. As such, we recommend using the "
+"latest available version of your toolchain."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:26
+msgid ""
+"This document focuses on clang and lldb. The screenshots show `lldb-dap "
+"<https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions."
+"lldb-dap>`_ in combination with VS Code. The same techniques can also be "
+"used in other IDEs."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:31
+msgid ""
+"Debugging clang-compiled binaries with gdb is possible, but requires more "
+"scripting. This guide comes with a basic GDB script for coroutine debugging."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:34
+msgid ""
+"This guide will first showcase the more polished, bleeding-edge experience, "
+"but will also show you how to debug coroutines with older toolchains. In "
+"general, the older your toolchain, the deeper you will have to dive into the "
+"implementation details of coroutines (such as their ABI). The further down "
+"in this document you go, the more low-level, technical the content will "
+"become. If you are on an up-to-date toolchain, you will hopefully be able to "
+"stop reading earlier."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:43
+msgid "Debugging generators"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:45
+msgid ""
+"One of the two major use cases for coroutines in C++ are generators, i.e., "
+"functions which can produce values via ``co_yield``. Values are produced "
+"lazily, on-demand. For this purpose, every time a new value is requested, "
+"the coroutine gets resumed. As soon as it reaches a ``co_yield`` and thereby "
+"returns the requested value, the coroutine is suspended again."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:51
+msgid "This logic is encapsulated in a ``generator`` type similar to this one:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:87
+msgid ""
+"We can then use this ``generator`` class to print the Fibonacci sequence:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:124
+msgid ""
+"To compile this code, use ``clang++ --std=c++23 generator-example.cpp -g``."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:127
+msgid "Breakpoints inside the generators"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:129
+msgid ""
+"We can set breakpoints inside coroutines just as we set them in regular "
+"functions. For VS Code, that means clicking next the line number in the "
+"editor. In the ``lldb`` CLI or in ``gdb``, you can use ``b`` to set a "
+"breakpoint."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:134
+msgid "Inspecting variables in a coroutine"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:136
+msgid ""
+"If you hit a breakpoint inside the ``fibonacci`` function, you should be "
+"able to inspect all local variables (``prev``, ``current``, ``next``) just "
+"like in a regular function."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:142
+msgid ""
+"Note the two additional variables ``__promise`` and ``__coro_frame``. Those "
+"show the internal state of the coroutine. They are not relevant for our "
+"generator example, but will be relevant for asynchronous programming "
+"described in the next section."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:148
+msgid "Stepping out of a coroutine"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:150
+msgid ""
+"When single-stepping, you will notice that the debugger will leave the "
+"``fibonacci`` function as soon as you hit a ``co_yield`` statement. You "
+"might find yourself inside some standard library code. After stepping out of "
+"the library code, you will be back in the ``main`` function."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:156
+msgid "Stepping into a coroutine"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:158
+msgid ""
+"If you stop at ``++fib`` and try to step into the generator, you will first "
+"find yourself inside ``operator++``. Stepping into the ``handle.resume()`` "
+"will not work by default."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:162
+msgid ""
+"This is because lldb does not step into functions from the standard library "
+"by default. To make this work, you first need to run ``settings set target."
+"process.thread.step-avoid-regexp \"\"``. You can do so from the \"Debug "
+"Console\" towards the bottom of the screen. With that setting change, you "
+"can step through ``coroutine_handle::resume`` and into your generator."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:168
+msgid ""
+"You might find yourself at the top of the coroutine at first, instead of at "
+"your previous suspension point. In that case, single-step and you will "
+"arrive at the previously suspended ``co_yield`` statement."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:174
+msgid "Inspecting a suspended coroutine"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:176
+msgid ""
+"The ``print10Elements`` function receives an opaque ``generator`` type. "
+"Let's assume we are suspended at the ``++gen;`` line, and want to inspect "
+"the generator and its internal state."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:180
+msgid ""
+"To do so, we can simply look into the ``gen.hdl`` variable. LLDB comes with "
+"a pretty printer for ``std::coroutine_handle`` which will show us the "
+"internal state of the coroutine. For GDB, you will have to use the ``show-"
+"coro-frame`` command provided by the :ref:`gdb-script`."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:187
+msgid ""
+"We can see two function pointers ``resume`` and ``destroy``. These pointers "
+"point to the resume / destroy functions. By inspecting those function "
+"pointers, we can see that our ``generator`` is actually backed by our "
+"``fibonacci`` coroutine. When using VS Code + lldb-dap, you can Cmd+Click on "
+"the function address (``0x555...`` in the screenshot) to directly jump to "
+"the function definition backing your coroutine handle."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:194
+msgid ""
+"Next, we see the ``promise``. In our case, this reveals the current value of "
+"our generator."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:197
+msgid ""
+"The ``coro_frame`` member represents the internal state of the coroutine. It "
+"contains our internal coroutine state ``prev``, ``current``, ``next``. "
+"Furthermore, it contains many internal, compiler-specific members, which are "
+"named based on their type. These represent temporary values which the "
+"compiler decided to spill across suspension points, but which were not "
+"declared in our original source code and hence have no proper user-provided "
+"name."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:205
+msgid "Tracking the exact suspension point"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:207
+msgid ""
+"Among the compiler-generated members, the ``__coro_index`` is particularly "
+"important. This member identifies the suspension point at which the "
+"coroutine is currently suspended."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:211
+msgid ""
+"However, it is non-trivial to map this number back to a source code "
+"location. The compiler emits debug info labels for the suspension points. "
+"This allows us to map the suspension point index back to a source code "
+"location. In gdb, we can use the ``info line`` command to get the source "
+"code location of the suspension point."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:224
+msgid ""
+"LLDB does not support looking up labels. Furthermore, those labels are only "
+"emitted starting with clang 21.0."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:227
+msgid ""
+"For simple cases, you might still be able to guess the suspension point "
+"correctly. Alternatively, you might also want to modify your coroutine "
+"library to store the line number of the current suspension point in the "
+"promise:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:249
+msgid ""
+"This stores the return address of ``await_suspend`` within the promise. "
+"Thereby, we can read it back from the promise of a suspended coroutine, and "
+"map it to an exact source code location. For a complete example, see the "
+"``task`` type used below for asynchronous programming."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:254
+msgid ""
+"Alternatively, we can modify the C++ code to store the line number in the "
+"promise type. We can use a ``std::source_location`` to get the line number "
+"of the await and store it inside the ``promise_type``. In the debugger, we "
+"can then read the line number from the promise of the suspended coroutine."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:272
+msgid ""
+"The downside of both approaches is that they come at the price of additional "
+"runtime cost. In particular the second approach increases binary size, since "
+"it requires additional ``std::source_location`` objects, and those source "
+"locations are not stripped by split-dwarf. Whether the first approach is "
+"worth the additional runtime cost is a trade-off you need to make yourself."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:279
+msgid "Async stack traces"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:281
+msgid ""
+"Besides generators, the second common use case for coroutines in C++ is "
+"asynchronous programming, usually involving libraries such as stdexec, "
+"folly, cppcoro, boost::asio, or similar libraries. Some of those libraries "
+"already provide custom debugging support, so in addition to this guide, you "
+"might want to check out their documentation."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:287
+msgid ""
+"When using coroutines for asynchronous programming, your library usually "
+"provides you some ``task`` type. This type usually looks similar to this:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:363
+msgid ""
+"Note how the ``task::promise_type`` has a member variable ``std::"
+"coroutine_handle<> continuation``. This is the handle of the coroutine that "
+"will be resumed when the current coroutine is finished executing (see "
+"``final_suspend``). In a sense, this is the \"return address\" of the "
+"coroutine. It is set inside ``operator co_await`` when another coroutine "
+"calls our generator and awaits for the next value to be produced."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:370
+msgid ""
+"The result value is returned via the ``int result`` member. It is written in "
+"``return_value`` and read by ``Awaiter::await_resume``. Usually, the result "
+"type of a task is a template argument. For simplicity's sake, we hard-coded "
+"the ``int`` type in this example."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:376
+msgid "Stack traces of in-flight coroutines"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:378
+msgid ""
+"Let's assume you have the following program and set a breakpoint inside the "
+"``write_output`` function. There are multiple call paths through which this "
+"function could have been reached. How can we find out said call path?"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:406
+msgid ""
+"To do so, let's break inside ``write_output``. We can understand our call-"
+"stack by looking into the special ``__promise`` variable. This artificial "
+"variable is generated by the compiler and points to the ``promise_type`` "
+"instance corresponding to the currently in-flight coroutine. In this case, "
+"the ``__promise`` variable contains the ``continuation`` which points to our "
+"caller. That caller again contains a ``promise`` with a ``continuation`` "
+"which points to our caller's caller."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:416
+msgid ""
+"We can figure out the involved coroutine functions and their current "
+"suspension points as discussed above in the \"Inspecting a suspended "
+"coroutine\" section."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:419
+msgid ""
+"When using LLDB's CLI, the command ``p --ptr-depth 4 __promise`` might also "
+"be useful to automatically dereference all the pointers up to the given "
+"depth."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:422
+msgid ""
+"To get a flat representation of that call stack, we can use a debugger "
+"script, such as the one shown in the :ref:`lldb-script` section. With that "
+"script, we can run ``coro bt`` to get the following stack trace:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:439
+msgid "Note how the frames #1 and #2 are async frames."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:441
+msgid ""
+"The ``coro bt`` command already includes logic to identify the exact "
+"suspension point of each frame based on the ``_coro_suspension_point_addr`` "
+"stored inside the promise."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:446
+msgid "Stack traces of suspended coroutines"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:448
+msgid ""
+"Usually, while a coroutine is waiting for, e.g., an in-flight network "
+"request, the suspended ``coroutine_handle`` is stored within the work queues "
+"inside the IO scheduler. As soon as we get hold of the coroutine handle, we "
+"can backtrace it by using ``coro bt <coro_handle>`` where ``<coro_handle>`` "
+"is an expression evaluating to the coroutine handle of the suspended "
+"coroutine."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:455
+msgid "Keeping track of all existing coroutines"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:457
+msgid ""
+"Usually, we should be able to get hold of all currently suspended coroutines "
+"by inspecting the worker queues of the IO scheduler. In cases where this is "
+"not possible, we can use the following approach to keep track of all "
+"currently suspended coroutines."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:462
+msgid ""
+"One such solution is to store the list of in-flight coroutines in a "
+"collection:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:481
+msgid ""
+"With this in place, it is possible to inspect ``inflight_coroutines`` from "
+"the debugger, and rely on LLDB's ``std::coroutine_handle`` pretty-printer to "
+"inspect the coroutines."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:485
+msgid ""
+"This technique will track *all* coroutines, also the ones which are "
+"currently awaiting another coroutine, though. To identify just the \"roots\" "
+"of our in-flight coroutines, we can use the ``coro in-flight "
+"inflight_coroutines`` command provided by the :ref:`lldb-script`."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:490
+msgid ""
+"Please note that the above is expensive from a runtime performance "
+"perspective, and requires locking to prevent data races. As such, it is not "
+"recommended to use this approach in production code."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:495
+msgid "Known issues & workarounds for older LLDB versions"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:497
+msgid ""
+"LLDB before 21.0 did not yet show the ``__coro_frame`` inside "
+"``coroutine_handle``. To inspect the coroutine frame, you had to use the "
+"approach described in the :ref:`devirtualization` section."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:501
+msgid ""
+"LLDB before 18.0 was hiding the ``__promise`` and ``__coro_frame`` variable "
+"by default. The variables are still present, but they need to be explicitly "
+"added to the \"watch\" pane in VS Code or requested via ``print __promise`` "
+"and ``print __coro_frame`` from the debugger console."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:506
+msgid ""
+"LLDB before 16.0 did not yet provide a pretty-printer for ``std::"
+"coroutine_handle``. To inspect the coroutine handle, you had to manually use "
+"the approach described in the :ref:`devirtualization` section."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:512
+msgid "Toolchain Implementation Details"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:514
+msgid ""
+"This section covers the ABI, as well as additional compiler-specific "
+"behavior. The ABI is followed by all compilers, on all major systems, "
+"including Windows, Linux and macOS. Different compilers emit different debug "
+"information, though."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:519
+msgid "Ramp, resume and destroy functions"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:521
+msgid "Every coroutine is split into three parts:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:523
+msgid ""
+"The ramp function allocates the coroutine frame and initializes it, usually "
+"copying over all variables into the coroutine frame"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:525
+msgid ""
+"The resume function continues the coroutine from its previous suspension "
+"point"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:526
+msgid "The destroy function destroys and deallocates the coroutine frame"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:527
+msgid ""
+"The cleanup function destroys the coroutine frame but does not deallocate "
+"it. It is used when the coroutine's allocation was elided thanks to `Heap "
+"Allocation Elision (HALO) <https://www.open-std.org/JTC1/SC22/WG21/docs/"
+"papers/2018/p0981r0.html>`_"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:531
+msgid ""
+"The ramp function is called by the coroutine's caller, and available under "
+"the original function name used in the C++ source code. The resume function "
+"is called via ``std::coroutine_handle::resume``. The destroy function is "
+"called via ``std::coroutine_handle::destroy``."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:536
+msgid ""
+"Information between the three functions is passed via the coroutine frame, a "
+"compiler-synthesized struct that contains all necessary internal state. The "
+"resume function knows where to resume execution by reading the suspension "
+"point index from the coroutine frame. Similarly, the destroy function relies "
+"on the suspension point index to know which variables are currently in scope "
+"and need to be destructed."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:543
+msgid ""
+"Usually, the destroy function calls all destructors and deallocates the "
+"coroutine frame. When a coroutine frame was elided thanks to HALO, only the "
+"destructors need to be called, but the coroutine frame must not be "
+"deallocated. In those cases, the cleanup function is used instead of the "
+"destroy function."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:548
+msgid ""
+"For coroutines allocated with ``[[clang::coro_await_elidable]]``, clang also "
+"generates a ``.noalloc`` variant of the ramp function, which does not "
+"allocate the coroutine frame by itself, but instead expects the caller to "
+"allocate the coroutine frame and pass it to the ramp function."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:553
+msgid ""
+"When trying to intercept all creations of new coroutines in the debugger, "
+"you hence might have to set breakpoints in the ramp function and its ``."
+"noalloc`` variant."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:558
+msgid "Artificial ``__promise`` and ``__coro_frame`` variables"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:560
+msgid ""
+"Inside all coroutine functions, clang / LLVM synthesize a ``__promise`` and "
+"``__coro_frame`` variable. These variables are used to store the coroutine's "
+"state. When inside the coroutine function, those can be used to directly "
+"inspect the promise and the coroutine frame of the own function."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:566
+msgid "The ABI of a coroutine"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:568
+msgid ""
+"A ``std::coroutine_handle`` essentially only holds a pointer to a coroutine "
+"frame. It resembles the following struct:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:578
+msgid "The structure of coroutine frames is defined as"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:589
+msgid ""
+"For each coroutine, the compiler synthesizes a different coroutine type, "
+"storing all necessary internal state. The actual coroutine type is type-"
+"erased behind the ``std::coroutine_handle``."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:593
+msgid ""
+"However, all coroutine frames always contain the ``resume`` and ``destroy`` "
+"functions as their first two members. As such, we can read the function "
+"pointers from the coroutine frame and then obtain the function's name from "
+"its address."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:598
+msgid ""
+"The promise is guaranteed to be at a 16 byte offset from the coroutine "
+"frame. If we have a coroutine handle at address 0x416eb0, we can hence "
+"reinterpret-cast the promise as follows:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:607
+msgid "Implementation in clang / LLVM"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:609
+msgid ""
+"The C++ Coroutines feature in the Clang compiler is implemented in two parts "
+"of the compiler. Semantic analysis is performed in Clang, and Coroutine "
+"construction and optimization takes place in the LLVM middle-end."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:613
+msgid ""
+"For each coroutine function, the frontend generates a single corresponding "
+"LLVM-IR function. This function uses special ``llvm.coro.suspend`` "
+"intrinsics to mark the suspension points of the coroutine. The middle end "
+"first optimizes this function and applies, e.g., constant propagation across "
+"the whole, non-split coroutine."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:619
+msgid ""
+"CoroSplit then splits the function into ramp, resume and destroy functions. "
+"This pass also moves stack-local variables which are alive across suspension "
+"points into the coroutine frame. Most of the heavy lifting to preserve "
+"debugging information is done in this pass. This pass needs to rewrite all "
+"variable locations to point into the coroutine frame."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:625
+msgid ""
+"Afterwards, a couple of additional optimizations are applied, before code "
+"gets emitted, but none of them are really interesting regarding debugging "
+"information."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:629
+msgid ""
+"For more details on the IR representation of coroutines and the relevant "
+"optimization passes, see `Coroutines in LLVM <https://llvm.org/docs/"
+"Coroutines.html>`_."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:632
+msgid ""
+"Emitting debug information inside ``CoroSplit`` forces us to generate "
+"insufficient debugging information. Usually, the compiler generates debug "
+"information in the frontend, as debug information is highly language "
+"specific. However, this is not possible for coroutine frames because the "
+"frames are constructed in the LLVM middle-end."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:638
+msgid ""
+"To mitigate this problem, the LLVM middle end attempts to generate some "
+"debug information, which is unfortunately incomplete, since much of the "
+"language specific information is missing in the middle end."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:645
+msgid "Devirtualization of coroutine handles"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:647
+msgid ""
+"Figuring out the promise type and the coroutine frame type of a coroutine "
+"handle requires inspecting the ``resume`` and ``destroy`` function pointers. "
+"There are two possible approaches to do so:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:651
+msgid ""
+"clang always names the type by appending ``.coro_frame_ty`` to the linkage "
+"name of the ramp function."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:653
+msgid ""
+"Both clang and GCC add the function-local ``__promise`` and ``__coro_frame`` "
+"variables to the resume and destroy functions. We can lookup their types and "
+"thereby get the types of promise and coroutine frame."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:658
+msgid ""
+"In gdb, one can use the following approach to devirtualize coroutine type, "
+"assuming we have a ``std::coroutine_handle`` is at address 0x418eb0:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:675
+msgid ""
+"In practice, one would use the ``show-coro-frame`` command provided by the :"
+"ref:`gdb-script`."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:678
+msgid ""
+"LLDB comes with devirtualization support out of the box, as part of the "
+"pretty-printer for ``std::coroutine_handle``. Internally, this pretty-"
+"printer uses the second approach. We look up the types in the destroy "
+"function and not the resume function because the resume function pointer "
+"will be set to a nullptr as soon as a coroutine reaches its final suspension "
+"point. If we used the resume function, devirtualization would hence fail for "
+"all coroutines that have reached their final suspension point."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:687
+msgid "Interpreting the coroutine frame in optimized builds"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:689
+msgid ""
+"The ``__coro_frame`` variable usually refers to the coroutine frame of an "
+"*in-flight* coroutine. This means, the coroutine is currently executing. "
+"However, the compiler only guarantees the coroutine frame to be in a "
+"consistent state while the coroutine is suspended. As such, the variables "
+"inside the ``__coro_frame`` variable might be outdated, in particular when "
+"optimizations are enabled."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:696
+msgid ""
+"Furthermore, when optimizations are enabled, the compiler will layout the "
+"coroutine frame more aggressively. Unused values are optimized out, and the "
+"state will usually contain only the minimal information required to "
+"reconstruct the coroutine's state."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:701
+msgid ""
+"clang / LLVM usually use variables like ``__int_32_0`` to represent this "
+"optimized storage. Those values usually do not directly correspond to "
+"variables in the source code."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:705
+msgid "When compiling the program"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:725
+msgid "clang creates a single entry ``__int_32_0`` in the coroutine state."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:727
+msgid ""
+"Intuitively, one might assume that ``__int_32_0`` represents the value of "
+"the local variable ``a``. However, inspecting ``__int_32_0`` in the debugger "
+"while single-stepping will reveal that the value of ``__int_32_0`` stays "
+"constant, despite ``a`` being frequently incremented."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:732
+msgid ""
+"While this might be surprising, this is a result of the optimizer "
+"recognizing that it can eliminate most of the load/store operations. The "
+"above code gets optimized to the equivalent of:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:751
+msgid ""
+"It should now be obvious why the value of ``__int_32_0`` remains unchanged "
+"throughout the function. It is important to recognize that ``__int_32_0`` "
+"does not directly correspond to ``a``, but is instead a variable generated "
+"to assist the compiler in code generation. The variables in an optimized "
+"coroutine frame should not be thought of as directly representing the "
+"variables in the C++ source."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:760
+msgid "Resources"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:765
+msgid "LLDB Debugger Script"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:767
+msgid ""
+"The following script provides the ``coro bt`` and ``coro in-flight`` "
+"commands discussed above. It can be loaded into LLDB using ``command script "
+"import lldb_coro_debugging.py``. To load this by default, add this command "
+"to your ``~/.lldbinit`` file."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:772
+msgid "Note that this script requires LLDB 21.0 or newer."
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:1018
+msgid "GDB Debugger Script"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:1020
+msgid "For GDB, the following script provides a couple of useful commands:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:1022
+msgid "``async-bt`` to print the stack trace of a coroutine"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:1023
+msgid ""
+"``show-coro-frame`` to print the coroutine frame, similar to LLDB's builtin "
+"pretty-printer for coroutine frames"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:1172
+msgid "Further Reading"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:1174
+msgid ""
+"The authors of the Folly libraries wrote a blog post series on how they "
+"debug coroutines:"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:1176
+msgid ""
+"`Async stack traces in folly: Introduction <https://developers.facebook.com/"
+"blog/post/2021/09/16/async-stack-traces-folly-Introduction/>`_"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:1177
+msgid ""
+"`Async stack traces in folly: Synchronous and asynchronous stack traces "
+"<https://developers.facebook.com/blog/post/2021/09/23/async-stack-traces-"
+"folly-synchronous-asynchronous-stack-traces/>`_"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:1178
+msgid ""
+"`Async stack traces in folly: Forming an async stack from individual frames "
+"<https://developers.facebook.com/blog/post/2021/09/30/async-stack-traces-"
+"folly-forming-async-stack-individual-frames/>`_"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:1179
+msgid ""
+"`Async Stack Traces for C++ Coroutines in Folly: Walking the async stack "
+"<https://developers.facebook.com/blog/post/2021/10/14/async-stack-traces-c-"
+"plus-plus-coroutines-folly-walking-async-stack/>`_"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:1180
+msgid ""
+"`Async stack traces in folly: Improving debugging in the developer lifecycle "
+"<https://developers.facebook.com/blog/post/2021/10/21/async-stack-traces-"
+"folly-improving-debugging-developer-lifecycle/>`_"
+msgstr ""
+
+#: ../../../DebuggingCoroutines.rst:1182
+msgid ""
+"Besides some topics also covered here (stack traces from the debugger), "
+"Folly's blog post series also covers more additional topics, such as "
+"capturing async stack traces in performance profiles via eBPF filters and "
+"printing async stack traces on crashes."
+msgstr ""
