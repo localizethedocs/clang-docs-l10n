@@ -1,0 +1,161 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-17 08:18+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../CXXTypeAwareAllocators.rst:3
+msgid "C++ Type Aware Allocators"
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:11
+msgid ""
+"Clang includes an implementation of P2719 \"Type-aware allocation and "
+"deallocation functions\"."
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:14
+msgid ""
+"This is a feature that extends the semantics of `new`, `new[]`, `delete` and "
+"`delete[]` operators to expose the type being allocated to the operator. "
+"This can be used to customize allocation of types without needing to modify "
+"the type declaration, or via template definitions fully generic type aware "
+"allocators."
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:20
+msgid ""
+"P2719 introduces a type-identity tag as valid parameter type for all "
+"allocation operators. This tag is a default initialized value of type `std::"
+"type_identity<T>` where T is the type being allocated or deallocated.  "
+"Unlike the other placement arguments this tag is passed as the first "
+"parameter to the operator."
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:25
+msgid "The most basic use case is as follows"
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:44
+msgid ""
+"While this functionality alone is powerful and useful, the true power comes "
+"by using templates. In addition to adding the type-identity tag, P2719 "
+"allows the tag parameter to be a dependent specialization of `std::"
+"type_identity`, updates the overload resolution rules to support full "
+"template deduction and constraint semantics, and updates the definition of "
+"usual deallocation functions to include `operator delete` definitions that "
+"are templatized on the type-identity tag."
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:52
+msgid ""
+"This allows arbitrarily constrained definitions of the operators that "
+"resolve as would be expected for any other template function resolution, e.g "
+"(only showing `operator new` for brevity)"
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:89
+msgid ""
+"Operator selection then proceeds according to the usual rules for choosing "
+"the best/most constrained match."
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:92
+msgid ""
+"Any declaration of a type aware operator new or operator delete must include "
+"a matching complementary operator defined in the same scope."
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:96
+msgid "Notes"
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:99
+msgid "Unconstrained Global Operators"
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:101
+msgid ""
+"Declaring an unconstrained type aware global operator `new` or `delete` (or "
+"`[]` variants) creates numerous hazards, similar to, but different from, "
+"those created by attempting to replace the non-type aware global operators. "
+"For that reason unconstrained operators are strongly discouraged."
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:107
+msgid "Mismatching Constraints"
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:109
+msgid ""
+"When declaring global type aware operators you should ensure the constraints "
+"applied to new and delete match exactly, and declare them together. This "
+"limits the risk of having mismatching operators selected due to differing "
+"constraints resulting in changes to prioritization when determining the most "
+"viable candidate."
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:116
+msgid "Declarations Across Libraries"
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:118
+msgid ""
+"Declaring a typed allocator for a type in a separate TU or library creates "
+"similar hazards as different libraries and TUs may see (or select) different "
+"definitions."
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:122
+msgid "Under this model something like this would be risky"
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:129
+msgid ""
+"However this hazard is not present simply due to the use of the a type from "
+"another library:"
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:141
+msgid ""
+"Here we see `std::vector` being used, but that is not the actual type being "
+"allocated."
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:145
+msgid "Implicit and Placement Parameters"
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:147
+msgid ""
+"Type aware allocators are always passed both the implicit alignment and size "
+"parameters in all cases. Explicit placement parameters are supported after "
+"the mandatory implicit parameters."
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:152
+msgid "Publication"
+msgstr ""
+
+#: ../../../CXXTypeAwareAllocators.rst:154
+msgid ""
+"`Type-aware allocation and deallocation functions <https://wg21.link/"
+"P2719>`_. Louis Dionne, Oliver Hunt."
+msgstr ""
