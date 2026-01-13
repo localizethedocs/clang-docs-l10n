@@ -1,0 +1,965 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 14\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ReleaseNotes.rst:3
+msgid "Clang |release| |ReleaseNotesTitle|"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:9
+msgid "Written by the `LLVM Team <https://llvm.org/>`_"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:14
+msgid ""
+"These are in-progress notes for the upcoming Clang |version| release. "
+"Release notes for previous releases can be found on `the Download Page "
+"<https://releases.llvm.org/download.html>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:19
+msgid "Introduction"
+msgstr "簡介"
+
+#: ../../../ReleaseNotes.rst:21
+msgid ""
+"This document contains the release notes for the Clang C/C++/Objective-C/"
+"OpenCL frontend, part of the LLVM Compiler Infrastructure, release |"
+"release|. Here we describe the status of Clang in some detail, including "
+"major improvements from the previous release and new feature work. For the "
+"general LLVM release notes, see `the LLVM documentation <https://llvm.org/"
+"docs/ReleaseNotes.html>`_. All LLVM releases may be downloaded from the "
+"`LLVM releases web site <https://llvm.org/releases/>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:30
+msgid ""
+"For more information about Clang or LLVM, including information about the "
+"latest release, please see the `Clang Web Site <https://clang.llvm.org>`_ or "
+"the `LLVM Web Site <https://llvm.org>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:34
+msgid ""
+"Note that if you are reading this file from a Git checkout or the main Clang "
+"web page, this document applies to the *next* release, not the current one. "
+"To see the release notes for a specific release, please see the `releases "
+"page <https://llvm.org/releases/>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:40
+msgid "What's New in Clang |release|?"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:42
+msgid ""
+"Some of the major new features and improvements to Clang are listed here. "
+"Generic improvements to Clang as a whole or to its underlying infrastructure "
+"are described first, followed by language-specific sections with "
+"improvements to Clang's support for those languages."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:48
+msgid "Major New Features"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:50
+msgid ""
+"Added SPIR-V triple and binary generation using external ``llvm-spirv`` "
+"tool. For more details refer to :ref:`the SPIR-V support section <spir-v>`."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:52
+msgid ""
+"Completed support of OpenCL C 3.0 and C++ for OpenCL 2021 at experimental "
+"state."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:55
+msgid ""
+"Prebuilt AIX7.2 TL5 SP3+ binary available with following notes and "
+"limitations:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:58
+msgid ""
+"C++ driver modes use the system libc++ headers. These headers are included "
+"in the optional ``libc++.adt.include`` fileset on AIX."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:60
+msgid ""
+"LTO, although not disabled, is not meaningfully functional for practical use."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:62
+msgid ""
+"Shared libraries builds (``-shared``) must use explicit symbol export "
+"options and/or export lists (e.g., with ``-bE:``) on the link step. Clang "
+"currently will not automatically generate symbol export lists as implicit "
+"linker inputs."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:67
+msgid ""
+"``float.h`` now exposes (in hosted mode) extensions made available from the "
+"AIX system header."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:71
+msgid "Improvements to Clang's diagnostics"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:73
+msgid ""
+"-Wbitwise-instead-of-logical (part of -Wbool-operation) warns about use of "
+"bitwise operators with boolean operands which have side effects."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:75
+msgid ""
+"Added diagnostic groups to control diagnostics for attribute extensions by "
+"adding groups ``-Wc++N-attribute-extensions`` (where ``N`` is the standard "
+"release being diagnosed against). These new groups are automatically implied "
+"when passing ``-Wc++N-extensions``. Resolves PR33518."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:80
+msgid ""
+"Support ``-Wdeclaration-after-statement`` with C99 and later standards, and "
+"not just C89, matching GCC's behaviour. A notable usecase is supporting "
+"style guides that forbid mixing declarations and code, but want to move to "
+"newer C standards."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:86
+msgid "Non-comprehensive list of changes in this release"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:88
+msgid ""
+"Maximum _ExtInt size was decreased from 16,777,215 bits to 8,388,608 bits. "
+"Motivation for this was discussed in PR51829."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:90
+msgid ""
+"Configuration file syntax extended with ``<CFGDIR>`` token. This expands to "
+"the base path of the current config file. See :ref:`configuration-files` for "
+"details."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:93
+msgid ""
+"The ``-E -P`` preprocessor output now always omits blank lines, matching gcc "
+"behaviour. Previously, up to 8 consecutive blank lines could appear in the "
+"output."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:96
+msgid ""
+"AIX platform-related predefined macros added: ``_ARCH_PPC64``, "
+"``__HOS_AIX__``, ``__PPC``, ``__THW_BIG_ENDIAN__``, ``__THW_PPC__``, and "
+"``__powerpc``"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:101
+msgid "New Compiler Flags"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:103
+msgid ""
+"Clang plugin arguments can now be passed through the compiler driver via ``-"
+"fplugin-arg-pluginname-arg``, similar to GCC's ``-fplugin-arg``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:105
+msgid ""
+"The ``-mno-bti-at-return-twice`` flag will make sure a BTI instruction won't "
+"be added after a setjmp or possible other return-twice construct (ARM "
+"backend only)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:108
+msgid ""
+"The ``--start-no-unused-arguments`` and ``--end-no-unused-arguments`` flags "
+"allow silencing warnings about unused arguments for only a subset of the "
+"command line arguments, keeping potential warnings for other arguments "
+"outside of such a region."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:112
+msgid ""
+"``-falign-loops=N`` (N is a power of 2) is now supported for non-LTO cases. "
+"(`D106701 <https://reviews.llvm.org/D106701>`_)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:114
+msgid ""
+"The ``-fminimize-whitespace`` flag allows removing redundant whitespace from "
+"preprocessor output (``-E`` flag). When combined with ``-P``, this includes "
+"newlines. Otherwise, only indention is removed (other horizontal whitespace "
+"is always collapsed). The motivation is to improve compiler cache hit rate "
+"by becoming invariant to whitespace changes, such as reformatting using "
+"clang-format. Patches for `ccache <https://github.com/ccache/ccache/"
+"pull/815>`_ and `sccache <https://github.com/mozilla/sccache/pull/1055>`_ "
+"are under review."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:123
+msgid ""
+"Clang now accepts \"allowlist\" spelling for ``-objcmt-allowlist-dir-path``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:126
+msgid "Deprecated Compiler Flags"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:128
+msgid ""
+"-Wweak-template-vtables has been deprecated and no longer has any effect. "
+"The flag will be removed in the next release."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:132
+msgid "Modified Compiler Flags"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:134
+msgid ""
+"Support has been added for the following processors (``-mcpu`` identifiers "
+"in parentheses):"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:136
+msgid "RISC-V SiFive E20 (``sifive-e20``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:137
+msgid "RISC-V SiFive E21 (``sifive-e21``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:138
+msgid "RISC-V SiFive E24 (``sifive-e24``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:139
+msgid "RISC-V SiFive E34 (``sifive-e34``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:140
+msgid "RISC-V SiFive S21 (``sifive-s21``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:141
+msgid "RISC-V SiFive S51 (``sifive-s51``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:142
+msgid "RISC-V SiFive S54 (``sifive-s54``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:143
+msgid "RISC-V SiFive S76 (``sifive-s76``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:144
+msgid "Arm Cortex-X1C (``cortex-x1c``)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:145
+msgid "Arm Cortex-X2 (``cortex-x2``)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:146
+msgid "Arm Cortex-A510 (``cortex-a510``)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:147
+msgid "Arm Cortex-A710 (``cortex-a710``)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:149
+msgid ""
+"Support has been added for the following architectures (``-march`` "
+"identifiers in parentheses):"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:151
+msgid "Armv9-A (``armv9-a``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:152
+msgid "Armv9.1-A (``armv9.1-a``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:153
+msgid "Armv9.2-A (``armv9.2-a``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:155
+msgid ""
+"``-r`` now implies ``-nostdlib`` for many toolchains, matching GCC. "
+"(`D116843 <https://reviews.llvm.org/D116843>`_)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:159
+msgid "Removed Compiler Flags"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:161
+msgid ""
+"The legacy ``-gz=zlib-gnu`` and ``-Wa,--compress-debug-sections=zlib-gnu`` "
+"have been removed."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:163
+msgid ""
+"``-fno-experimental-new-pass-manager`` has been removed. ``-flegacy-pass-"
+"manager`` can be used as a makeshift, Using the legacy pass manager for the "
+"optimization pipeline was deprecated in 13.0.0 and will be removed after "
+"14.0.0."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:169
+msgid "New Pragmas in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:171 ../../../ReleaseNotes.rst:270
+#: ../../../ReleaseNotes.rst:350 ../../../ReleaseNotes.rst:500
+#: ../../../ReleaseNotes.rst:505 ../../../ReleaseNotes.rst:515
+#: ../../../ReleaseNotes.rst:520 ../../../ReleaseNotes.rst:527
+msgid "..."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:174
+msgid "Attribute Changes in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:176
+msgid ""
+"Attributes loaded as clang plugins which are sensitive to LangOpts must now "
+"override ``acceptsLangOpts`` instead of ``diagLangOpts``. Returning false "
+"will produce a generic \"attribute ignored\" diagnostic, as with clang's "
+"built-in attributes. If plugins want to provide richer diagnostics, they can "
+"do so when the attribute is handled instead, e.g. in "
+"``handleDeclAttribute``. (This was changed in order to better support "
+"attributes in code completion)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:184
+msgid ""
+"__has_cpp_attribute, __has_c_attribute, __has_attribute, and __has_declspec "
+"will now macro expand their argument. This causes a change in behavior for "
+"code using ``__has_cpp_attribute(__clang__::attr)`` (and same for "
+"``__has_c_attribute``) where it would previously expand to ``0`` for all "
+"attributes, but will now issue an error due to the expansion of the "
+"predefined ``__clang__`` macro."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:191
+msgid ""
+"Improved handling of ``__attribute__((__aligned__))`` on AIX to match GCC."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:194
+msgid "Windows Support"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:196
+msgid ""
+"An MSVC compatibility workaround for C++ operator names was removed. As a "
+"result, the ``<query.h>`` Windows SDK header may not compile out of the box. "
+"Users should use a recent SDK and pass ``-DQUERY_H_RESTRICTION_PERMISSIVE`` "
+"or pass ``/permissive`` to disable C++ operator names altogether. See "
+"`PR42427 <https://llvm.org/pr42427>` for more info."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:202
+msgid ""
+"Add support for MSVC-compatible ``/hotpatch`` flag in clang-cl, and "
+"equivalent -cc1 flag ``-fms-hotpatch``. Along with the linker flag ``/"
+"functionpadmin`` this creates executable images suitable for runtime code "
+"patching. This flag is only required for x86/x64 targets; ARM/ARM64 simply "
+"needs the linker ``/functionpadmin``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:208
+msgid ""
+"With this addition, clang-cl can be used in live code patching scenarios, "
+"along with tools such as Live++ or Recode. Microsoft Edit and Continue isn't "
+"currently supported."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:212
+msgid "Support for on-demand initialization of TLS variables was added."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:214
+msgid ""
+"Improved code generation for ARM, by assuming less strict alignment "
+"requirements for instructions (just like other OSes do)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:217
+msgid ""
+"Fixed using the ``-m32`` flag in x86_64 MinGW setups, by e.g. making ``-"
+"m32`` pick i686 instead of i386, if there is no i386 sysroot, but only one "
+"for i686."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:221
+msgid ""
+"Fixed passing the ``--no-demangle`` option through to the linker for MinGW "
+"targets."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:225
+msgid "C Language Changes in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:227
+msgid ""
+"The value of ``__STDC_VERSION__`` has been bumped to ``202000L`` when "
+"passing ``-std=c2x`` so that it can be distinguished from C17 mode. This "
+"value is expected to change again when C23 is published."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:230
+msgid ""
+"Wide multi-characters literals such as ``L'ab'`` that would previously be "
+"interpreted as ``L'b'`` are now ill-formed in all language modes. The "
+"motivation for this change is outlined in `P2362 <wg21.link/P2362>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:233
+msgid ""
+"Support for ``__attribute__((error(\"\")))`` and "
+"``__attribute__((warning(\"\")))`` function attributes have been added."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:235
+msgid "The maximum allowed alignment has been increased from 2^29 to 2^32."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:236
+msgid ""
+"Clang now supports the ``_BitInt(N)`` family of bit-precise integer types "
+"from C23. This type was previously exposed as ``_ExtInt(N)``, which is now a "
+"deprecated alias for ``_BitInt(N)`` (so diagnostics will mention ``_BitInt`` "
+"even if source uses ``_ExtInt``). ``_BitInt(N)`` and ``_ExtInt(N)`` are the "
+"same types in all respects beyond spelling and the deprecation warning. "
+"``_BitInt(N)`` is supported as an extension in older C modes and in all C++ "
+"modes. Note: the ABI for ``_BitInt(N)`` is still in the process of being "
+"stabilized, so this type should not yet be used in interfaces that require "
+"ABI stability. The maximum width supported by Clang can be obtained from the "
+"``BITINT_MAXWIDTH`` macro in ``<limits.h>``. Currently, Clang supports bit "
+"widths <= 128 because backends are not yet able to cope with some math "
+"operations (like division) on wider integer types. See `PR44994 <https://"
+"github.com/llvm/llvm-project/issues/44994>`_ for more information."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:250
+msgid ""
+"When using ``asm goto`` with outputs whose constraint modifier is ``\"+\"``, "
+"we now change the numbering of the labels to occur after hidden tied inputs "
+"for better compatibility with GCC.  For better portability between different "
+"compilers and versions, symbolic references rather than numbered references "
+"should be preferred. See `this thread <https://gcc.gnu.org/bugzilla/show_bug."
+"cgi?id=103640>` for more info."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:258
+msgid ""
+"Implemented `WG14 N2412 <http://www.open-std.org/jtc1/sc22/wg14/www/docs/"
+"n2412.pdf>`_, which adds ``*_WIDTH`` macros to limits.h and stdint.h to "
+"report the bit width of various integer datatypes."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:262
+msgid ""
+"The ``ATOMIC_VAR_INIT`` macro from ``<stdatomic.h>`` is now diagnosed as "
+"deprecated in C17 and later. The diagnostic can be disabled by defining the "
+"``_CLANG_DISABLE_CRT_DEPRECATION_WARNINGS`` macro prior to including the "
+"header."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:268
+msgid "C++ Language Changes in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:273
+msgid "C++20 Feature Support"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:275
+msgid ""
+"The ``ATOMIC_VAR_INIT`` and ``ATOMIC_FLAG_INIT`` macros from the C standard "
+"library ``<stdatomic.h>`` header are now diagnosed as deprecated in C++20 "
+"and later. Note, the behavior is specific to the inclusion of ``<stdatomic."
+"h>`` in C++ code; the STL ``<atomic>`` header also controls the behavior of "
+"these macros and is not affected by these changes. The ``<stdatomic.h>`` "
+"diagnostic can be disabled by defining the "
+"``_CLANG_DISABLE_CRT_DEPRECATION_WARNINGS`` macro prior to including the "
+"header."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:285
+msgid "C++2b Feature Support"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:286
+msgid "Implemented `P1938R3: if consteval <https://wg21.link/P1938R3>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:287
+msgid ""
+"Implemented `P2360R0: Extend init-statement to allow alias-declaration "
+"<https://wg21.link/P2360R0>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:291
+msgid "CUDA Language Changes in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:293
+msgid "Clang now supports CUDA versions up to 11.5."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:294
+msgid "Default GPU architecture has been changed from sm_20 to sm_35."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:297
+msgid "Objective-C Language Changes in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:300
+msgid "OpenCL Kernel Language Changes in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:302
+msgid "OpenCL 3.0 is completed, but remains experimental:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:304
+msgid ""
+"Added parsing support for optionality of device-side enqueue and blocks."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:305
+msgid "Added missing support for optionality of various builtin functions:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:307
+msgid ""
+"``read_write`` images, pipes, collective workgroup in the default header."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:308
+msgid ""
+"``read_write`` images, named address space atomics in internal ``opencl-c."
+"h`` (enabled via ``-finclude-default-header`` frontend flag)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:311
+msgid "C++ for OpenCL:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:313
+msgid ""
+"Added experimental support of C++ for OpenCL 2021 as per `the provisional "
+"language documentation <https://github.com/KhronosGroup/OpenCL-Docs/releases/"
+"tag/cxxforopencl-docrev2021.12>`_. Support of all optional features is "
+"aligned with OpenCL 3.0."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:317
+msgid ""
+"Added ``__remove_address_space`` utility (documentation available in :doc:"
+"`LanguageExtensions`)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:319
+msgid "Fixed address space for temporaries (to be ``__private``)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:320
+msgid "Disallowed static kernel functions."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:321
+msgid "Fixed implicit definition of ``__cpp_threadsafe_static_init`` macro."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:323
+msgid "Misc changes:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:325
+msgid ""
+"Added generation of SPIR-V binaries via external ``llvm-spirv`` tool. For "
+"more details refer to :ref:`the SPIR-V support section <spir-v>`."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:327
+msgid "Added new extensions for ``atomic_half`` and ``cl_ext_float_atomics``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:328
+msgid "Fixed/improved support of ``vload``/``vstore``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:329
+msgid "Fixed incorrect ``as_type`` support for 3-element vector types."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:332
+msgid "ABI Changes in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:334
+msgid ""
+"The ``_ExtInt(N)`` extension has been standardized in C23 as ``_BitInt(N)``. "
+"The mangling of this type in C++ has accordingly changed: under the "
+"Microsoft ABI it is now mangled using the ``_BitInt`` spelling, and under "
+"the Itanium ABI it is now mangled using a dedicated production. Note: the "
+"ABI for ``_BitInt(N)`` is still in the process of being stabilized, so this "
+"type should not yet be used in interfaces that require ABI stability."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:342
+msgid "OpenMP Support in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:344
+msgid ""
+"``clang-nvlink-wrapper`` tool introduced to support linking of cubin files "
+"archived in an archive. See :doc:`ClangNvlinkWrapper`."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:345
+msgid ""
+"``clang-linker-wrapper`` tool introduced to support linking using a new "
+"OpenMP target offloading method. See :doc:`ClangLinkerWrapper`."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:348
+msgid "CUDA Support in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:353
+msgid "X86 Support in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:355
+msgid "Support for ``AVX512-FP16`` instructions has been added."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:358
+msgid "DWARF Support in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:360
+msgid ""
+"The default DWARF version has increased from DWARFv4 to DWARFv5.  You can "
+"opt back in to the old behavior with ``-gdwarf-4`` or ``-fdebug-default-"
+"version=4``. Some platforms (Darwin, Android, and SCE for instance) already "
+"opt out of this version bump as is suitable for the platform"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:366
+msgid "Arm and AArch64 Support in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:368
+msgid ""
+"The -mtune flag is no longer ignored for AArch64. It is now possible to tune "
+"code generation for a particular CPU with -mtune without setting any "
+"architectural features. For example, compiling with \"-mcpu=generic -"
+"mtune=cortex-a57\" will not enable any Cortex-A57 specific architecture "
+"features, but will enable certain optimizations specific to Cortex-A57 CPUs "
+"and enable the use of a more accurate scheduling model."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:375
+msgid ""
+"The --aarch64-none-elf target now uses the BareMetal driver rather than the "
+"GNU driver. Programs that depend on clang invoking GCC as the linker driver "
+"should use GCC as the linker in the build system."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:379
+msgid ""
+"The ``-mbranch-protection`` flag will now also work for the ARM backend."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:381
+msgid ""
+"The ``attribute((target(\"branch-protection=...)))`` attributes will now "
+"also work for the ARM backend."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:384
+msgid ""
+"When using ``-mbranch-protection=bti`` with AArch64, calls to setjmp will "
+"now be followed by a BTI instruction. This is done to be compatible with "
+"setjmp implementations that return with a br instead of a ret. You can "
+"disable this behaviour using the ``-mno-bti-at-return-twice`` option."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:390
+msgid "SPIR-V Support in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:392
+msgid ""
+"Added triple/target ``spirv32`` and ``spirv64`` for 32-bit and 64-bit SPIR-V "
+"respectively."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:394
+msgid ""
+"Added generation of binaries via external ``llvm-spirv`` tool. This can now "
+"be used for HIP or OpenCL."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:396
+msgid ""
+"Added linking of separate object files in SPIR-V format using external "
+"``spirv-link`` tool."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:400
+msgid "Floating Point Support in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:401
+msgid ""
+"The default setting of FP contraction (FMA) is now -ffp-contract=on (for "
+"languages other than CUDA/HIP) even when optimization is off. Previously, "
+"the default behavior was equivalent to -ffp-contract=off (-ffp-contract was "
+"not set). Related to this, the switch -ffp-model=precise now implies -ffp-"
+"contract=on rather than -ffp-contract=fast, and the documentation of these "
+"features has been clarified. Previously, the documentation claimed that -ffp-"
+"model=precise was the default, but this was incorrect because the precise "
+"model implied -ffp-contract=fast, whereas the (now corrected) default "
+"behavior is -ffp-contract=on. -ffp-model=precise is now exactly the default "
+"mode of the compiler."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:412
+msgid ""
+"-fstrict-float-cast-overflow no longer has target specific behavior. Clang "
+"will saturate towards the smallest and largest representable integer values. "
+"NaNs will be converted to zero."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:417
+msgid "Internal API Changes"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:419
+msgid ""
+"A new sugar ``Type`` AST node represents types accessed via a C++ using "
+"declaration. Given code ``using std::error_code; error_code x;``, ``x`` has "
+"a ``UsingType`` which desugars to the previous ``RecordType``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:424
+msgid "Build System Changes"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:426
+msgid ""
+"Linux distros can specify ``-DCLANG_DEFAULT_PIE_ON_LINUX=On`` to use ``-"
+"fPIE`` and ``-pie`` by default. This matches GCC installations on many Linux "
+"distros (configured with ``--enable-default-pie``). (`D113372 <https://"
+"reviews.llvm.org/D113372>`_)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:432
+msgid "AST Matchers"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:434
+msgid ""
+"``TypeLoc`` AST Matchers are now available. These matchers provide helpful "
+"utilities for matching ``TypeLoc`` nodes, such as the ``pointerTypeLoc`` "
+"matcher or the ``hasReturnTypeLoc`` matcher. The addition of these matchers "
+"was made possible by changes to the handling of ``TypeLoc`` nodes that "
+"allows them to enjoy the same static type checking as other AST node kinds."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:439
+msgid ""
+"``LambdaCapture`` AST Matchers are now available. These matchers allow for "
+"the binding of ``LambdaCapture`` nodes. The ``LambdaCapture`` matchers added "
+"include the ``lambdaCapture`` node matcher, the ``capturesVar`` traversal "
+"matcher, and ``capturesThis`` narrowing matcher."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:443
+msgid ""
+"The ``hasAnyCapture`` matcher now only accepts an inner matcher of type "
+"``Matcher<LambdaCapture>``. The matcher originally accepted an inner matcher "
+"of type ``Matcher<CXXThisExpr>`` or ``Matcher<VarDecl>``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:446
+msgid ""
+"The ``usingType`` matcher is now available and needed to refer to types that "
+"are referred to via using C++ using declarations. The associated "
+"``UsingShadowDecl`` can be matched using ``throughUsingDecl`` and the "
+"underlying ``Type`` with ``hasUnderlyingType``. ``hasDeclaration`` continues "
+"to see through the alias and apply to the underlying type."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:452
+msgid ""
+"Added the ``isConsteval`` matcher to match ``consteval`` function "
+"declarations as well as `if consteval` and `if ! consteval` statements."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:454
+msgid ""
+"Added the ``isConstinit`` matcher to match ``constinit`` variable "
+"declarations."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:458
+msgid "clang-format"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:460
+msgid ""
+"Option ``AllowShortEnumsOnASingleLine: false`` has been improved, it now "
+"correctly places the opening brace according to ``BraceWrapping.AfterEnum``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:463
+msgid ""
+"Option ``AlignAfterOpenBracket: BlockIndent`` has been added. If set, it "
+"will always break after an open bracket, if the parameters don't fit on a "
+"single line. Closing brackets will be placed on a new line."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:467
+msgid ""
+"Option ``QualifierAlignment`` has been added in order to auto-arrange the "
+"positioning of specifiers/qualifiers `const` `volatile` `static` `inline` "
+"`constexpr` `restrict` in variable and parameter declarations to be either "
+"``Right`` aligned or ``Left`` aligned or ``Custom`` using ``QualifierOrder``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:473
+msgid ""
+"Option ``QualifierOrder`` has been added to allow the order `const` "
+"`volatile` `static` `inline` `constexpr` `restrict` to be controlled "
+"relative to the `type`."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:477
+msgid ""
+"Option ``RemoveBracesLLVM`` has been added to remove optional braces of "
+"control statements for the LLVM style."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:480
+msgid ""
+"Option ``SeparateDefinitionBlocks`` has been added to insert or remove empty "
+"lines between definition blocks including functions, classes, structs, "
+"enums, and namespaces."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:484
+msgid ""
+"Add a ``Custom`` style to ``SpaceBeforeParens``, to better configure the "
+"space before parentheses. The custom options can be set using "
+"``SpaceBeforeParensOptions``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:488
+msgid ""
+"The command line argument `-style=<string>` has been extended so that a "
+"specific format file at location <format_file_path> can be selected. This is "
+"supported via the syntax: `-style=file:<format_file_path>`."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:492
+msgid "Improved C++20 Modules and Coroutines support."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:494
+msgid ""
+"Option ``AfterOverloadedOperator`` has been added in "
+"``SpaceBeforeParensOptions`` to allow space between overloaded operator and "
+"opening parentheses."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:498
+msgid "libclang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:503
+msgid "Static Analyzer"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:510
+msgid "Undefined Behavior Sanitizer (UBSan)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:513
+msgid "Core Analysis Improvements"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:518
+msgid "New Issues Found"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:523
+msgid "Python Binding Changes"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:525
+msgid "The following methods have been added:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:530
+msgid "Significant Known Problems"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:533
+msgid "Additional Information"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:535
+msgid ""
+"A wide variety of additional information is available on the `Clang web page "
+"<https://clang.llvm.org/>`_. The web page contains versions of the API "
+"documentation which are up-to-date with the Git version of the source code. "
+"You can access versions of these documents specific to this release by going "
+"into the \"``clang/docs/``\" directory in the Clang tree."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:542
+msgid ""
+"If you have any questions or comments about Clang, please feel free to "
+"contact us via the `mailing list <https://lists.llvm.org/mailman/listinfo/"
+"cfe-dev>`_."
+msgstr ""
