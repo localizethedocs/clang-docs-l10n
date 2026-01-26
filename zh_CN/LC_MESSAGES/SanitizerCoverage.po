@@ -1,0 +1,496 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-29 08:19+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../SanitizerCoverage.rst:3
+msgid "SanitizerCoverage"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:9
+msgid "Introduction"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:11
+msgid ""
+"LLVM has a simple code coverage instrumentation built in "
+"(SanitizerCoverage). It inserts calls to user-defined functions on "
+"function-, basic-block-, and edge- levels. Default implementations of those "
+"callbacks are provided and implement simple coverage reporting and "
+"visualization, however if you need *just* coverage visualization you may "
+"want to use :doc:`SourceBasedCodeCoverage <SourceBasedCodeCoverage>` instead."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:19
+msgid "Tracing PCs with guards"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:21
+msgid ""
+"With ``-fsanitize-coverage=trace-pc-guard`` the compiler will insert the "
+"following code on every edge:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:28
+msgid "Every edge will have its own `guard_variable` (uint32_t)."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:30
+msgid "The compiler will also insert calls to a module constructor:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:39
+msgid ""
+"With an additional ``...=trace-pc,indirect-calls`` flag "
+"``__sanitizer_cov_trace_pc_indirect(void *callee)`` will be inserted on "
+"every indirect call."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:42
+msgid ""
+"The functions `__sanitizer_cov_trace_pc_*` should be defined by the user."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:44 ../../../SanitizerCoverage.rst:350
+#: ../../../SanitizerCoverage.rst:515
+msgid "Example:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:123
+msgid "Inline 8bit-counters"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:125 ../../../SanitizerCoverage.rst:146
+#: ../../../SanitizerCoverage.rst:167
+msgid "**Experimental, may change or disappear in future**"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:127
+msgid ""
+"With ``-fsanitize-coverage=inline-8bit-counters`` the compiler will insert "
+"inline counter increments on every edge. This is similar to ``-fsanitize-"
+"coverage=trace-pc-guard`` but instead of a callback the instrumentation "
+"simply increments a counter."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:132
+msgid ""
+"Users need to implement a single function to capture the counters at startup."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:144
+msgid "Inline bool-flag"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:148
+msgid ""
+"With ``-fsanitize-coverage=inline-bool-flag`` the compiler will insert "
+"setting an inline boolean to true on every edge. This is similar to ``-"
+"fsanitize-coverage=inline-8bit-counter`` but instead of an increment of a "
+"counter, it just sets a boolean to true."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:153
+msgid ""
+"Users need to implement a single function to capture the flags at startup."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:165
+msgid "PC-Table"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:169
+msgid ""
+"**Note:** this instrumentation might be incompatible with dead code "
+"stripping (``-Wl,-gc-sections``) for linkers other than LLD, thus resulting "
+"in a significant binary size overhead. For more information, see `Bug 34636 "
+"<https://bugs.llvm.org/show_bug.cgi?id=34636>`_."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:174
+msgid ""
+"With ``-fsanitize-coverage=pc-table`` the compiler will create a table of "
+"instrumented PCs. Requires either ``-fsanitize-coverage=inline-8bit-"
+"counters``, or ``-fsanitize-coverage=inline-bool-flag``, or ``-fsanitize-"
+"coverage=trace-pc-guard``."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:178
+msgid ""
+"Users need to implement a single function to capture the PC table at startup:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:198
+msgid "Tracing PCs"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:200
+msgid ""
+"With ``-fsanitize-coverage=trace-pc`` the compiler will insert "
+"``__sanitizer_cov_trace_pc()`` on every edge. With an additional ``...=trace-"
+"pc,indirect-calls`` flag ``__sanitizer_cov_trace_pc_indirect(void *callee)`` "
+"will be inserted on every indirect call. These callbacks are not implemented "
+"in the Sanitizer run-time and should be defined by the user. This mechanism "
+"is used for fuzzing the Linux kernel (https://github.com/google/syzkaller)."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:210
+msgid "Instrumentation points"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:211
+msgid "Sanitizer Coverage offers different levels of instrumentation."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:213
+msgid "``edge`` (default): edges are instrumented (see below)."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:214
+msgid "``bb``: basic blocks are instrumented."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:215
+msgid "``func``: only the entry block of every function will be instrumented."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:217
+msgid ""
+"Use these flags together with ``trace-pc-guard`` or ``trace-pc``, like this: "
+"``-fsanitize-coverage=func,trace-pc-guard``."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:220
+msgid ""
+"When ``edge`` or ``bb`` is used, some of the edges/blocks may still be left "
+"uninstrumented (pruned) if such instrumentation is considered redundant. Use "
+"``no-prune`` (e.g. ``-fsanitize-coverage=bb,no-prune,trace-pc-guard``) to "
+"disable pruning. This could be useful for better coverage visualization."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:227
+msgid "Edge coverage"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:229
+msgid "Consider this code:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:238
+msgid "It contains 3 basic blocks, let's name them A, B, C:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:250
+msgid ""
+"If blocks A, B, and C are all covered we know for certain that the edges "
+"A=>B and B=>C were executed, but we still don't know if the edge A=>C was "
+"executed. Such edges of control flow graph are called `critical <https://en."
+"wikipedia.org/wiki/Control_flow_graph#Special_edges>`_. The edge-level "
+"coverage simply splits all critical edges by introducing new dummy blocks "
+"and then instruments those blocks:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:268
+msgid "Tracing data flow"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:270
+msgid ""
+"Support for data-flow-guided fuzzing. With ``-fsanitize-coverage=trace-cmp`` "
+"the compiler will insert extra instrumentation around comparison "
+"instructions and switch statements. Similarly, with ``-fsanitize-"
+"coverage=trace-div`` the compiler will instrument integer division "
+"instructions (to capture the right argument of division) and with  ``-"
+"fsanitize-coverage=trace-gep`` -- the `LLVM GEP instructions <https://llvm."
+"org/docs/GetElementPtr.html>`_ (to capture array indices). Similarly, with "
+"``-fsanitize-coverage=trace-loads`` and ``-fsanitize-coverage=trace-stores`` "
+"the compiler will instrument loads and stores, respectively."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:281
+msgid ""
+"Currently, these flags do not work by themselves - they require one of ``-"
+"fsanitize-coverage={trace-pc,inline-8bit-counters,inline-bool}`` flags to "
+"work."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:285
+msgid ""
+"Unless ``no-prune`` option is provided, some of the comparison instructions "
+"will not be instrumented."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:336
+msgid "Tracing control flow"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:338
+msgid ""
+"With ``-fsanitize-coverage=control-flow`` the compiler will create a table "
+"to collect control flow for each function. More specifically, for each basic "
+"block in the function, two lists are populated. One list for successors of "
+"the basic block and another list for non-intrinsic called functions."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:343
+msgid ""
+"**TODO:** in the current implementation, indirect calls are not tracked and "
+"are only marked with special value (-1) in the list."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:346
+msgid ""
+"Each table row consists of the basic block address followed by ``null``-"
+"ended lists of successors and callees. The table is encoded in a special "
+"section named ``sancov_cfs``"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:362
+msgid "The code above contains 4 basic blocks, let's name them A, B, C, D:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:374
+msgid ""
+"The collected control flow table is as follows: ``A, B, C, null, null, B, D, "
+"null, @bar, null, C, D, null, null, D, null, null.``"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:377
+msgid ""
+"Users need to implement a single function to capture the CF table at startup:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:389
+msgid "Tracing Stack Depth"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:391
+msgid ""
+"With ``-fsanitize-coverage=stack-depth`` the compiler will track how much "
+"stack space has been used for a function call chain. Leaf functions are not "
+"included in this tracing."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:395
+msgid ""
+"The maximum depth of a function call graph is stored in the thread-local "
+"``__sancov_lowest_stack`` variable. Instrumentation is inserted in every non-"
+"leaf function to check the frame pointer against this variable, and if it is "
+"lower, store the current frame pointer. This effectively inserts the "
+"following:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:409
+msgid ""
+"If ``-fsanitize-coverage-stack-depth-callback-min=N`` (where ``N > 0``) is "
+"also used, the tracking is delegated to a callback, "
+"``__sanitizer_cov_stack_depth``, instead of adding instrumentation to update "
+"``__sancov_lowest_stack``. The ``N`` of the argument is used to determine "
+"which functions to instrument. Only functions estimated to be using ``N`` "
+"bytes or more of stack space will be instrumented to call the tracing "
+"callback. In the case of a dynamically sized stack, the callback is "
+"unconditionally added."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:418
+msgid ""
+"The callback takes no arguments and is responsible for determining the stack "
+"usage and doing any needed comparisons and storage. A roughly equivalent "
+"implementation of ``__sancov_lowest_stack`` using the callback would look "
+"like this:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:433
+msgid "Gated Trace Callbacks"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:435
+msgid ""
+"Gate the invocation of the tracing callbacks with ``-sanitizer-coverage-"
+"gated-trace-callbacks``."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:438
+msgid ""
+"When this option is enabled, the instrumentation will not call into the "
+"runtime-provided callbacks for tracing, thus only incurring in a trivial "
+"branch without going through a function call."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:442
+msgid ""
+"It is up to the runtime to toggle the value of the global variable in order "
+"to enable tracing."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:445
+msgid "This option is only supported for trace-pc-guard and trace-cmp."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:448
+msgid ""
+"Disabling instrumentation with ``__attribute__((no_sanitize(\"coverage\")))``"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:450
+msgid ""
+"It is possible to disable coverage instrumentation for select functions via "
+"the function attribute ``__attribute__((no_sanitize(\"coverage\")))``. "
+"Because this attribute may not be supported by other compilers, it is "
+"recommended to use it together with ``__has_feature(coverage_sanitizer)``."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:456
+msgid "Disabling instrumentation without source modification"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:458
+msgid ""
+"It is sometimes useful to tell SanitizerCoverage to instrument only a subset "
+"of the functions in your target without modifying source files. With ``-"
+"fsanitize-coverage-allowlist=allowlist.txt`` and ``-fsanitize-coverage-"
+"ignorelist=blocklist.txt``, you can specify such a subset through the "
+"combination of an allowlist and a blocklist."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:464
+msgid ""
+"SanitizerCoverage will only instrument functions that satisfy two "
+"conditions. First, the function should belong to a source file with a path "
+"that is both allowlisted and not blocklisted. Second, the function should "
+"have a mangled name that is both allowlisted and not blocklisted."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:469
+msgid ""
+"The allowlist and blocklist format is similar to that of the sanitizer "
+"blocklist format. The default allowlist will match every source file and "
+"every function. The default blocklist will match no source file and no "
+"function."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:473
+msgid ""
+"A common use case is to have the allowlist list folders or source files for "
+"which you want instrumentation and allow all function names, while the "
+"blocklist will opt out some specific files or functions that the allowlist "
+"loosely allowed."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:477
+msgid "Here is an example allowlist:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:488
+msgid "And an example blocklist:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:497
+msgid ""
+"The use of ``*`` wildcards above is required because function names are "
+"matched after mangling. Without the wildcards, one would have to write the "
+"whole mangled name."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:500
+msgid ""
+"Be careful that the paths of source files are matched exactly as they are "
+"provided on the clang command line. For example, the allowlist above would "
+"include file ``bar/b.cpp`` if the path was provided exactly like this, but "
+"would it would fail to include it with other ways to refer to the same file "
+"such as ``./bar/b.cpp``, or ``bar\\b.cpp`` on Windows. So, please make sure "
+"to always double check that your lists are correctly applied."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:508
+msgid "Default implementation"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:510
+msgid ""
+"The sanitizer run-time (AddressSanitizer, MemorySanitizer, etc) provide a "
+"default implementations of some of the coverage callbacks. You may use this "
+"implementation to dump the coverage on disk at the process exit."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:541
+msgid ""
+"Every time you run an executable instrumented with SanitizerCoverage one ``*."
+"sancov`` file is created during the process shutdown. If the executable is "
+"dynamically linked against instrumented DSOs, one ``*.sancov`` file will be "
+"also created for every DSO."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:547
+msgid "Sancov data format"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:549
+msgid ""
+"The format of ``*.sancov`` files is very simple: the first 8 bytes is the "
+"magic, one of ``0xC0BFFFFFFFFFFF64`` and ``0xC0BFFFFFFFFFFF32``. The last "
+"byte of the magic defines the size of the following offsets. The rest of the "
+"data is the offsets in the corresponding binary/DSO that were executed "
+"during the run."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:555
+msgid "Sancov Tool"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:557
+msgid ""
+"A simple ``sancov`` tool is provided to process coverage files. The tool is "
+"part of LLVM project and is currently supported only on Linux. It can handle "
+"symbolization tasks autonomously without any extra support from the "
+"environment. You need to pass .sancov files (named ``<module_name>.<pid>."
+"sancov`` and paths to all corresponding binary elf files. Sancov matches "
+"these files using module names and binaries file names."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:602
+msgid "Coverage Reports"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:604
+msgid "**Experimental**"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:606
+msgid ""
+"``.sancov`` files do not contain enough information to generate a source-"
+"level coverage report. The missing information is contained in debug info of "
+"the binary. Thus the ``.sancov`` has to be symbolized to produce a ``."
+"symcov`` file first:"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:615
+msgid ""
+"The ``.symcov`` file can be browsed overlaid over the source code by running "
+"``tools/sancov/coverage-report-server.py`` script that will start an HTTP "
+"server."
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:620
+msgid "Output directory"
+msgstr ""
+
+#: ../../../SanitizerCoverage.rst:622
+msgid ""
+"By default, .sancov files are created in the current working directory. This "
+"can be changed with ``ASAN_OPTIONS=coverage_dir=/path``:"
+msgstr ""
