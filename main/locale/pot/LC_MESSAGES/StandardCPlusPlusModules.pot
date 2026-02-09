@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-08 08:19+0000\n"
+"POT-Creation-Date: 2026-02-09 08:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -178,7 +178,7 @@ msgid "How to build projects using modules"
 msgstr ""
 
 #: ../../../StandardCPlusPlusModules.rst:106
-#: ../../../StandardCPlusPlusModules.rst:1495
+#: ../../../StandardCPlusPlusModules.rst:1742
 msgid "Quick Start"
 msgstr ""
 
@@ -1225,10 +1225,260 @@ msgid ""
 msgstr ""
 
 #: ../../../StandardCPlusPlusModules.rst:1324
+msgid "Using Clang Module Map to Avoid mixing #include and import problems"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1327
+msgid "Discussion in this section is experimental."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1330
+msgid "Problems Background"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1332
+msgid ""
+"As discussed before, the redeclaration in different TU is one of the major "
+"problems of using modules from the perspective of the compiler. The "
+"redeclaration pattern is a major trigger of compiler bugs. And even if the "
+"compiler accepts the redeclaration pattern as expected, the compilation "
+"performance will be affected too."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1337
+#: ../../../StandardCPlusPlusModules.rst:1397
+msgid "e.g,"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1356
+msgid ""
+"Here in ``a.cc``, we have redeclaration for ``A``, one from ``a.cppm`` and "
+"one from ``a.cc`` itself."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1359
+msgid ""
+"To avoid the redeclaration pattern, in previous section, we suggested users "
+"to comment out thirdparty headers manually."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1362
+msgid ""
+"And here we will introduce another approach to avoid such redeclaration "
+"pattern by using clang module map."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1366
+msgid "Clang Module Map Background"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1368
+msgid ""
+"Clang Module Map is a feature of Clang Header Modules. See `Clang Module "
+"<Modules.html>`_ for full introduction of Clang Header Modules. Here we "
+"would only introduce Clang Header Modules to make this document self "
+"contained."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1373
+msgid "Clang Implicit Header Modules"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1375
+msgid ""
+"In Clang Implicit Header Module mode, Clang will read the module map and "
+"compile the header in the module map into a module file and use the module "
+"file automatically. This sounds very nice. But due to the complexity, this "
+"is not so wonderful in practice. Clang has to compile the same header in "
+"different preprocessor context into different module file for correctness "
+"conservatively. Then this may trigger the redeclaration in different TU "
+"problems. So that the user of implicit header modules has to design a module "
+"system bottom up carefully. And clang implicit header module `has many "
+"issues with soundness and performance due to tradeoffs made for module reuse "
+"and filesystem contention <https://discourse.llvm.org/t/clang-modules-build-"
+"daemon-build-system-agnostic-support-for-explicitly-built-modules>`_."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1387
+msgid "Clang Explicit Header Modules"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1389
+msgid ""
+"Clang explicit header modules offloads the job of creating and managing "
+"module files to the build system. Given the C++20 modules and clang header "
+"modules actually share the same underlying implementation, it is actually "
+"possible to reuse the interface of clang module map for C++20 named modules."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1394
+msgid ""
+"Technically, Clang Explicit Header Modules may be able to solve the "
+"redeclaration problem. For the above example,"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1416
+msgid ""
+"The build system can build the header into a module file and use it in both "
+"``a.cppm`` and ``a.cc``. Then there is no redeclaration in the example. All "
+"the declaration of ``class A`` come from the synthesized TU ``a.h``."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1420
+msgid ""
+"But there are problems: (1) the build system needs to support clang explicit "
+"module. (2) The interaction between clang named modules and clang header "
+"modules are theoriticall fine but not verified in practice. And also the "
+"document itself is about standard C++ modules, so we won't expand here."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1426
+msgid "Examples"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1428
+msgid ""
+"To use Clang Module Map for C++20 Named Modules, end users have to wait for "
+"the support from build systems. Here we ignore the build systems to help "
+"users to understand the mechanism."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1432
+msgid ""
+"Here is an example of using clang module map to replace a header to an "
+"import of a module."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1462
+msgid "Then invoke Clang with:"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1471
+msgid ""
+"We can find that the header file ``a.h`` is not included actually (otherwise "
+"the compilation should fail due to the static assert). And it imports the "
+"module ``a`` and then the varaible in module ``a`` got initialized."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1474
+msgid ""
+"The secret comes from the flag ``-fmodule-map-file=a.cppm.modulemap``, the "
+"content of ``a.cppm.modulemap`` says: map the #include of ``a.h`` to the "
+"import to module ``a``. Then when the compiler sees ``#include \"a.h\"``, "
+"the compiler won't include ``a.h`` actually but tries to import the module "
+"``a``. And the from the command line ``-fmodule-file=a=a.pcm``, the compiler "
+"get the module file of module ``a``, then module file of module ``a`` get "
+"imported and the inclusion of ``a.h`` is skipped."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1480
+msgid ""
+"Then we can try to use the mechanism to avoid redeclaration pattern for "
+"header wrapping modules."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1504
+msgid ""
+"Similarly, when we compile ``a.cc``, if we add the flag ``-fmodule-map-"
+"file=a.cppm.modulemap``, the compiler will map the inclusion of ``a.h`` to "
+"the import of module ``a``. And the module ``a`` is already imported. So we "
+"avoid the redeclaration of class ``A`` in ``a.cc``."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1508
+msgid ""
+"An imaginable problem with this approach maybe the hidden inclusion. e.g,"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1546
+msgid "The example is valid if we don't use the module map:"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1554
+msgid "But if we enable the module map, the example is invalid:"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1568
+msgid "A suggested convention for end users and build systems"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1570
+msgid ""
+"As said, the build system is a vital role in this strategy. However, for "
+"build systems, it is not easy to support clang explicit header modules or "
+"support the module map with C++20 named modules generally. The complexity "
+"for build system won't be less than supporting C++20 named modules."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1575
+msgid ""
+"So here we suggest a convention between end users and build systems to ease "
+"the implementation burden of build systems and help end users to avoid the "
+"redeclaration problem from mixing #include and import."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1579
+msgid ""
+"For end users who is the author of header based library offering named "
+"module wrappers, The header's interface should be a subset of the module "
+"interface excluding user-facing macros."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1582
+msgid ""
+"Extract all user facing headers into a single header file. Since C++20 named "
+"modules"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1583
+msgid ""
+"For each named module interface, provide a module map file to map the "
+"interface headers to the named module. The name of the module map should be "
+"the name of the module interface unit plus ``.modulemap``."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1585
+msgid ""
+"The number of the module map may not be a lot sicne this is still a header "
+"based library."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1588
+msgid "For build systems,"
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1590
+msgid ""
+"For each Translation Units, if the unit doesn't import any named modules, "
+"stop. This is not what we want."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1591
+msgid ""
+"If the TU imports named module, for all imported named module unit, look up "
+"for the module map file in the same path of the imported module unit with "
+"the name of the module unit plus ``.modulemap``. e.g., if the name of the "
+"module unit is ``a.cppm``, we should lookup for ``a.cppm.modulemap``."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1592
+msgid ""
+"For the found module map, pass ``-fmodule-map-file=<module_map_file_path>`` "
+"to the clang compiler."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1594
+msgid ""
+"The point of the approach is, the build system can reuse the result of C++20 "
+"named modules to manage depencies. So that the implementation burden of "
+"build systems is largely reduced."
+msgstr ""
+
+#: ../../../StandardCPlusPlusModules.rst:1598
 msgid "Known Issues"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1326
+#: ../../../StandardCPlusPlusModules.rst:1600
 msgid ""
 "The following describes issues in the current implementation of modules. "
 "Please see `the issues list for modules <https://github.com/llvm/llvm-"
@@ -1238,32 +1488,32 @@ msgid ""
 "``[C++23] [Modules]``, etc) and add the label ``clang:modules`` if possible."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1334
+#: ../../../StandardCPlusPlusModules.rst:1608
 msgid ""
 "A high-level overview of support for standards features, including modules, "
 "can be found on the `C++ Feature Status <https://clang.llvm.org/cxx_status."
 "html>`_ page."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1339
+#: ../../../StandardCPlusPlusModules.rst:1613
 msgid "Including headers after import is not well-supported"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1341
+#: ../../../StandardCPlusPlusModules.rst:1615
 msgid "The following example is accepted:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1354
+#: ../../../StandardCPlusPlusModules.rst:1628
 msgid ""
 "but if the order of ``#include <iostream>`` and ``import foo;`` is reversed, "
 "then the code is currently rejected:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1368
+#: ../../../StandardCPlusPlusModules.rst:1642
 msgid "Both of the above examples should be accepted."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1370
+#: ../../../StandardCPlusPlusModules.rst:1644
 msgid ""
 "This is a limitation of the implementation. In the first example, the "
 "compiler will see and parse ``<iostream>`` first then it will see the "
@@ -1275,11 +1525,11 @@ msgid ""
 "github.com/llvm/llvm-project/issues/61465>`_."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1380
+#: ../../../StandardCPlusPlusModules.rst:1654
 msgid "Ignored ``preferred_name`` Attribute"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1382
+#: ../../../StandardCPlusPlusModules.rst:1656
 msgid ""
 "When Clang writes BMIs, it will ignore the ``preferred_name`` attribute on "
 "declarations which use it. Thus, the preferred name will not be displayed in "
@@ -1287,42 +1537,11 @@ msgid ""
 "llvm/llvm-project/issues/56490>`_."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1388
-msgid "Don't emit macros about module declaration"
-msgstr ""
-
-#: ../../../StandardCPlusPlusModules.rst:1390
-msgid ""
-"This is covered by `P1857R3 <https://wg21.link/P1857R3>`_. It is mentioned "
-"here because we want users to be aware that we don't yet implement it."
-msgstr ""
-
-#: ../../../StandardCPlusPlusModules.rst:1393
-msgid ""
-"A direct approach to write code that can be compiled by both modules and non-"
-"module builds may look like:"
-msgstr ""
-
-#: ../../../StandardCPlusPlusModules.rst:1404
-msgid ""
-"The intent of this is that this file can be compiled like a module unit or a "
-"non-module unit depending on the definition of some macros. However, this "
-"usage is forbidden by P1857R3 which is not yet implemented in Clang. This "
-"means that is possible to write invalid modules which will no longer be "
-"accepted once P1857R3 is implemented. This is tracked by `#54047 <https://"
-"github.com/llvm/llvm-project/issues/54047>`_."
-msgstr ""
-
-#: ../../../StandardCPlusPlusModules.rst:1411
-msgid ""
-"Until then, it is recommended not to mix macros with module declarations."
-msgstr ""
-
-#: ../../../StandardCPlusPlusModules.rst:1415
+#: ../../../StandardCPlusPlusModules.rst:1662
 msgid "Inconsistent filename suffix requirement for importable module units"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1417
+#: ../../../StandardCPlusPlusModules.rst:1664
 msgid ""
 "Currently, Clang requires the file name of an ``importable module unit`` to "
 "have ``.cppm`` (or ``.ccm``, ``.cxxm``, ``.c++m``) as the file extension. "
@@ -1330,18 +1549,18 @@ msgid ""
 "by `#57416 <https://github.com/llvm/llvm-project/issues/57416>`_."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1423
+#: ../../../StandardCPlusPlusModules.rst:1670
 msgid "Incorrect ODR violation diagnostics"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1425
+#: ../../../StandardCPlusPlusModules.rst:1672
 msgid ""
 "ODR violations are a common issue when using modules. Clang sometimes "
 "produces false-positive diagnostics or fails to produce true-positive "
 "diagnostics of the One Definition Rule. One often-reported example is:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1455
+#: ../../../StandardCPlusPlusModules.rst:1702
 msgid ""
 "Currently the compiler incorrectly diagnoses the inconsistent definition of "
 "``fun()`` in two module units. Because both definitions of ``fun()`` have "
@@ -1350,17 +1569,17 @@ msgid ""
 "issues/78850>`_."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1462
+#: ../../../StandardCPlusPlusModules.rst:1709
 msgid "Using TU-local entity in other units"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1464
+#: ../../../StandardCPlusPlusModules.rst:1711
 msgid ""
 "Module units are translation units, so the entities which should be local to "
 "the module unit itself should never be used by other units."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1467
+#: ../../../StandardCPlusPlusModules.rst:1714
 msgid ""
 "The C++ standard defines the concept of ``TU-local`` and ``exposure`` in "
 "`basic.link/p14 <https://eel.is/c++draft/basic.link#14>`_, `basic.link/p15 "
@@ -1369,7 +1588,7 @@ msgid ""
 "link#17>`_, and `basic.link/p18 <https://eel.is/c++draft/basic.link#18>`_."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1474
+#: ../../../StandardCPlusPlusModules.rst:1721
 msgid ""
 "However, Clang doesn't formally support these two concepts. This results in "
 "unclear or confusing diagnostic messages. Further, Clang may import ``TU-"
@@ -1377,15 +1596,15 @@ msgid ""
 "`#78173 <https://github.com/llvm/llvm-project/issues/78173>`_."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1482
+#: ../../../StandardCPlusPlusModules.rst:1729
 msgid "Header Units"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1485
+#: ../../../StandardCPlusPlusModules.rst:1732
 msgid "How to build projects using header units"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1489
+#: ../../../StandardCPlusPlusModules.rst:1736
 msgid ""
 "The support for header units, including related command line options, is "
 "experimental. There are still many unanswered questions about how tools "
@@ -1393,27 +1612,27 @@ msgid ""
 "the future."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1497
+#: ../../../StandardCPlusPlusModules.rst:1744
 msgid "The following example:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1506
-#: ../../../StandardCPlusPlusModules.rst:1539
+#: ../../../StandardCPlusPlusModules.rst:1753
+#: ../../../StandardCPlusPlusModules.rst:1786
 msgid "could be compiled with:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1514
+#: ../../../StandardCPlusPlusModules.rst:1761
 msgid "How to produce BMIs"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1516
+#: ../../../StandardCPlusPlusModules.rst:1763
 msgid ""
 "Similar to named modules, ``--precompile`` can be used to produce a BMI. "
 "However, that requires specifying that the input file is a header by using "
 "``-xc++-system-header`` or ``-xc++-user-header``."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1520
+#: ../../../StandardCPlusPlusModules.rst:1767
 msgid ""
 "The ``-fmodule-header={user,system}`` option can also be used to produce a "
 "BMI for header units which have a file extension like `.h` or `.hh`. The "
@@ -1422,31 +1641,31 @@ msgid ""
 "For example:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1546
+#: ../../../StandardCPlusPlusModules.rst:1793
 msgid ""
 "For headers which do not have a file extension, ``-xc++-header`` (or ``-xc++-"
 "system-header``, ``-xc++-user-header``) must be used to specify the file as "
 "a header. For example:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1564
+#: ../../../StandardCPlusPlusModules.rst:1811
 msgid "How to specify BMI dependencies"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1566
+#: ../../../StandardCPlusPlusModules.rst:1813
 msgid ""
 "``-fmodule-file`` can be used to specify a BMI dependency (or multiple times "
 "for more than one BMI dependency)."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1569
+#: ../../../StandardCPlusPlusModules.rst:1816
 msgid ""
 "With the existing implementation, ``-fprebuilt-module-path`` cannot be used "
 "for header units (because they are nominally anonymous). For header units, "
 "use ``-fmodule-file`` to include the relevant PCM file for each header unit."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1573
+#: ../../../StandardCPlusPlusModules.rst:1820
 msgid ""
 "This is expected to be solved in a future version of Clang either by the "
 "compiler finding and specifying ``-fmodule-file`` automatically, or by the "
@@ -1454,21 +1673,21 @@ msgid ""
 "PCMs."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1578
+#: ../../../StandardCPlusPlusModules.rst:1825
 msgid "Compiling a header unit to an object file"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1580
+#: ../../../StandardCPlusPlusModules.rst:1827
 msgid ""
 "A header unit cannot be compiled to an object file due to the semantics of "
 "header units. For example:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1590
+#: ../../../StandardCPlusPlusModules.rst:1837
 msgid "Include translation"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1592
+#: ../../../StandardCPlusPlusModules.rst:1839
 msgid ""
 "The C++ standard allows vendors to convert ``#include header-name`` to "
 "``import header-name;`` when possible. Currently, Clang does this "
@@ -1476,45 +1695,45 @@ msgid ""
 "the following example:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1606
+#: ../../../StandardCPlusPlusModules.rst:1853
 msgid "is the same as this example:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1622
+#: ../../../StandardCPlusPlusModules.rst:1869
 msgid ""
 "In the latter example, Clang can find the BMI for ``<iostream>`` and so it "
 "tries to replace the ``#include <iostream>`` with ``import <iostream>;`` "
 "automatically."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1628
+#: ../../../StandardCPlusPlusModules.rst:1875
 msgid "Differences between Clang modules and header units"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1630
+#: ../../../StandardCPlusPlusModules.rst:1877
 msgid ""
 "Header units have similar semantics to Clang modules. The semantics of both "
 "are like headers. Therefore, header units can be mimicked by Clang modules "
 "as in the following example:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1645
+#: ../../../StandardCPlusPlusModules.rst:1892
 msgid "This example is simplified when using libc++:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1651
+#: ../../../StandardCPlusPlusModules.rst:1898
 msgid ""
 "because libc++ already supplies a `module map <https://github.com/llvm/llvm-"
 "project/blob/main/libcxx/include/module.modulemap.in>`_."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1654
+#: ../../../StandardCPlusPlusModules.rst:1901
 msgid ""
 "This raises the question: why are header units not implemented through Clang "
 "modules?"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1657
+#: ../../../StandardCPlusPlusModules.rst:1904
 msgid ""
 "This is primarily because Clang modules have more hierarchical semantics "
 "when wrapping multiple headers together as one module, which is not "
@@ -1522,7 +1741,7 @@ msgid ""
 "these additional semantics get interpreted as Standard C++ behavior."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1662
+#: ../../../StandardCPlusPlusModules.rst:1909
 msgid ""
 "Another reason is that there are proposals to introduce module mappers to "
 "the C++ standard (for example, https://wg21.link/p1184r2). Reusing Clang's "
@@ -1530,18 +1749,18 @@ msgid ""
 "mapper."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1668
+#: ../../../StandardCPlusPlusModules.rst:1915
 msgid "Discovering Dependencies"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1670
+#: ../../../StandardCPlusPlusModules.rst:1917
 msgid ""
 "Without use of modules, all the translation units in a project can be "
 "compiled in parallel. However, the presence of module units requires "
 "compiling the translation units in a topological order."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1674
+#: ../../../StandardCPlusPlusModules.rst:1921
 msgid ""
 "The ``clang-scan-deps`` tool can extract dependency information and produce "
 "a JSON file conforming to the specification described in `P1689 <https://www."
@@ -1549,7 +1768,7 @@ msgid ""
 "modules are supported currently."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1679
+#: ../../../StandardCPlusPlusModules.rst:1926
 msgid ""
 "A compilation database is needed when using ``clang-scan-deps``. See `JSON "
 "Compilation Database Format Specification <JSONCompilationDatabase.html>`_ "
@@ -1558,34 +1777,34 @@ msgid ""
 "format. For example:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1726
+#: ../../../StandardCPlusPlusModules.rst:1973
 msgid "And here is the compilation database:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1763
+#: ../../../StandardCPlusPlusModules.rst:2010
 msgid "To get the dependency information in P1689 format, use:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1769
+#: ../../../StandardCPlusPlusModules.rst:2016
 msgid "to get:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1847
+#: ../../../StandardCPlusPlusModules.rst:2094
 msgid "See the P1689 paper for the meaning of the fields."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1849
+#: ../../../StandardCPlusPlusModules.rst:2096
 msgid ""
 "Getting dependency information per file with finer-grained control (such as "
 "scanning generated source files) is possible. For example:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1856
-#: ../../../StandardCPlusPlusModules.rst:1898
+#: ../../../StandardCPlusPlusModules.rst:2103
+#: ../../../StandardCPlusPlusModules.rst:2145
 msgid "will produce:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1882
+#: ../../../StandardCPlusPlusModules.rst:2129
 msgid ""
 "Individual command line options can be specified after ``--``. ``clang-scan-"
 "deps`` will extract the necessary information from the specified options. "
@@ -1593,7 +1812,7 @@ msgid ""
 "explicitly instead of using ``clang++`` directly."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1887
+#: ../../../StandardCPlusPlusModules.rst:2134
 msgid ""
 "Users may want the scanner to get the transitive dependency information for "
 "headers. Otherwise, the project has to be scanned twice, once for headers "
@@ -1602,17 +1821,17 @@ msgid ""
 "the corresponding dependency information. For example:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1910
+#: ../../../StandardCPlusPlusModules.rst:2157
 msgid ""
 "When ``clang-scan-deps`` detects the ``-MF`` option, it will try to write "
 "the dependency information for headers to the file specified by ``-MF``."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1914
+#: ../../../StandardCPlusPlusModules.rst:2161
 msgid "Possible Issues: Failed to find system headers"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1916
+#: ../../../StandardCPlusPlusModules.rst:2163
 msgid ""
 "If encountering an error like ``fatal error: 'stddef.h' file not found``, "
 "the specified ``<path-to-compiler-executable>/clang++`` probably refers to a "
@@ -1620,20 +1839,20 @@ msgid ""
 "problem:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1921
+#: ../../../StandardCPlusPlusModules.rst:2168
 msgid ""
 "Point the specified compiler executable to the real binary instead of the "
 "symlink."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1923
+#: ../../../StandardCPlusPlusModules.rst:2170
 msgid ""
 "Invoke ``<path-to-compiler-executable>/clang++ -print-resource-dir`` to get "
 "the corresponding resource directory for your compiler and add that "
 "directory to the include search paths manually in the build scripts."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1926
+#: ../../../StandardCPlusPlusModules.rst:2173
 msgid ""
 "For build systems that use a compilation database as the input for ``clang-"
 "scan-deps``, the build system can add the ``--resource-dir-recipe invoke-"
@@ -1642,7 +1861,7 @@ msgid ""
 "unique ``<path-to-compiler-executable>/clang++``."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1931
+#: ../../../StandardCPlusPlusModules.rst:2178
 msgid ""
 "For build systems that invoke ``clang-scan-deps`` per file, repeatedly "
 "calculating the resource directory may be inefficient. In such cases, the "
@@ -1650,34 +1869,34 @@ msgid ""
 "<resource-dir>`` explicitly, as in:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1942
+#: ../../../StandardCPlusPlusModules.rst:2189
 msgid "Import modules with clang-repl"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1944
+#: ../../../StandardCPlusPlusModules.rst:2191
 msgid "``clang-repl`` supports importing C++20 named modules. For example:"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1954
+#: ../../../StandardCPlusPlusModules.rst:2201
 msgid "The named module still needs to be compiled ahead of time."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1962
+#: ../../../StandardCPlusPlusModules.rst:2209
 msgid ""
 "Note that the module unit needs to be compiled as a dynamic library so that "
 "``clang-repl`` can load the object files of the module units. Then it is "
 "possible to import module ``M`` in clang-repl."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1978
+#: ../../../StandardCPlusPlusModules.rst:2225
 msgid "Possible Questions"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1981
+#: ../../../StandardCPlusPlusModules.rst:2228
 msgid "How modules speed up compilation"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1983
+#: ../../../StandardCPlusPlusModules.rst:2230
 msgid ""
 "A classic theory for the reason why modules speed up the compilation is: if "
 "there are ``n`` headers and ``m`` source files and each header is included "
@@ -1688,19 +1907,19 @@ msgid ""
 "many of the redundant compilations to no longer be necessary."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1991
+#: ../../../StandardCPlusPlusModules.rst:2238
 msgid ""
 "While this is accurate at a high level, this depends greatly on the "
 "optimization level, as illustrated below."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:1994
+#: ../../../StandardCPlusPlusModules.rst:2241
 msgid ""
 "First is ``-O0``. The compilation process is described in the following "
 "graph."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:2016
+#: ../../../StandardCPlusPlusModules.rst:2263
 msgid ""
 "In this case, the source file (which could be a non-module unit or a module "
 "unit) would get processed by the entire pipeline. However, the imported code "
@@ -1712,13 +1931,13 @@ msgid ""
 "could get a big win for the compilation time in ``-O0``."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:2025
+#: ../../../StandardCPlusPlusModules.rst:2272
 msgid ""
 "But with optimizations, things are different (the ``code generation`` part "
 "for each end is omitted due to limited space):"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:2047
+#: ../../../StandardCPlusPlusModules.rst:2294
 msgid ""
 "It would be very unfortunate if we end up with worse performance when using "
 "modules. The main concern is that when a source file is compiled, the "
@@ -1734,7 +1953,7 @@ msgid ""
 "after IPO and the whole backend."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:2059
+#: ../../../StandardCPlusPlusModules.rst:2306
 msgid ""
 "Overall, at ``-O0`` the implementations of functions defined in a module "
 "will not impact module users, but at higher optimization levels the "
@@ -1745,11 +1964,11 @@ msgid ""
 "does provide more optimization opportunities."
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:2068
+#: ../../../StandardCPlusPlusModules.rst:2315
 msgid "Interoperability with Clang Modules"
 msgstr ""
 
-#: ../../../StandardCPlusPlusModules.rst:2070
+#: ../../../StandardCPlusPlusModules.rst:2317
 msgid ""
 "We **wish** to support Clang modules and standard C++ modules at the same "
 "time, but the mixing them together is not well used/tested yet. Please file "
