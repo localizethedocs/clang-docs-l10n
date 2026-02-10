@@ -1,0 +1,691 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 12\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../Block-ABI-Apple.rst:3
+msgid "Block Implementation Specification"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:9
+msgid "History"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:11
+msgid "2008/7/14 - created."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:12
+msgid "2008/8/21 - revised, C++."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:13
+msgid "2008/9/24 - add ``NULL`` ``isa`` field to ``__block`` storage."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:14
+msgid ""
+"2008/10/1 - revise block layout to use a ``static`` descriptor structure."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:15
+msgid "2008/10/6 - revise block layout to use an unsigned long int flags."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:16
+msgid ""
+"2008/10/28 - specify use of ``_Block_object_assign`` and "
+"``_Block_object_dispose`` for all \"Object\" types in helper functions."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:18
+msgid "2008/10/30 - revise new layout to have invoke function in same place."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:19
+msgid "2008/10/30 - add ``__weak`` support."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:20
+msgid "2010/3/16 - rev for stret return, signature field."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:21
+msgid "2010/4/6 - improved wording."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:22
+msgid "2013/1/6 - improved wording and converted to rst."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:24
+msgid ""
+"This document describes the Apple ABI implementation specification of Blocks."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:26
+msgid ""
+"The first shipping version of this ABI is found in Mac OS X 10.6, and shall "
+"be referred to as 10.6.ABI. As of 2010/3/16, the following describes the ABI "
+"contract with the runtime and the compiler, and, as necessary, will be "
+"referred to as ABI.2010.3.16."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:31
+msgid ""
+"Since the Apple ABI references symbols from other elements of the system, "
+"any attempt to use this ABI on systems prior to SnowLeopard is undefined."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:35
+msgid "High Level"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:37
+msgid ""
+"The ABI of ``Blocks`` consist of their layout and the runtime functions "
+"required by the compiler.  A ``Block`` of type ``R (^)(P...)`` consists of a "
+"structure of the following form:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:60
+msgid ""
+"The following flags bits are in use thusly for a possible ABI.2010.3.16:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:80
+msgid ""
+"In 10.6.ABI the (1<<29) was usually set and was always ignored by the "
+"runtime - it had been a transitional marker that did not get deleted after "
+"the transition. This bit is now paired with (1<<30), and represented as the "
+"pair (3<<30), for the following combinations of valid bit settings, and "
+"their meanings:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:95
+msgid "The signature field is not always populated."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:97
+msgid "The following discussions are presented as 10.6.ABI otherwise."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:99
+msgid ""
+"``Block`` literals may occur within functions where the structure is created "
+"in stack local memory.  They may also appear as initialization expressions "
+"for ``Block`` variables of global or ``static`` local variables."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:103
+msgid ""
+"When a ``Block`` literal expression is evaluated the stack based structure "
+"is initialized as follows:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:106
+msgid ""
+"A ``static`` descriptor structure is declared and initialized as follows:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:108
+msgid ""
+"a. The ``invoke`` function pointer is set to a function that takes the "
+"``Block`` structure as its first argument and the rest of the arguments (if "
+"any) to the ``Block`` and executes the ``Block`` compound statement."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:112
+msgid ""
+"b. The ``size`` field is set to the size of the following ``Block`` literal "
+"structure."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:115
+msgid ""
+"c. The ``copy_helper`` and ``dispose_helper`` function pointers are set to "
+"respective helper functions if they are required by the ``Block`` literal."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:118
+msgid ""
+"A stack (or global) ``Block`` literal data structure is created and "
+"initialized as follows:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:121
+msgid ""
+"a. The ``isa`` field is set to the address of the external "
+"``_NSConcreteStackBlock``, which is a block of uninitialized memory supplied "
+"in ``libSystem``, or ``_NSConcreteGlobalBlock`` if this is a static or file "
+"level ``Block`` literal."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:126
+msgid ""
+"b. The ``flags`` field is set to zero unless there are variables imported "
+"into the ``Block`` that need helper functions for program level "
+"``Block_copy()`` and ``Block_release()`` operations, in which case the "
+"(1<<25) flags bit is set."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:131
+msgid "As an example, the ``Block`` literal expression:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:137
+msgid "would cause the following to be created on a 32-bit system:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:158
+msgid "and where the ``Block`` literal itself appears:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:169
+msgid ""
+"A ``Block`` imports other ``Block`` references, ``const`` copies of other "
+"variables, and variables marked ``__block``.  In Objective-C, variables may "
+"additionally be objects."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:173
+msgid ""
+"When a ``Block`` literal expression is used as the initial value of a global "
+"or ``static`` local variable, it is initialized as follows:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:185
+msgid ""
+"that is, a different address is provided as the first value and a particular "
+"(1<<28) bit is set in the ``flags`` field, and otherwise it is the same as "
+"for stack based ``Block`` literals.  This is an optimization that can be "
+"used for any ``Block`` literal that imports no ``const`` or ``__block`` "
+"storage variables."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:192
+msgid "Imported Variables"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:194
+msgid ""
+"Variables of ``auto`` storage class are imported as ``const`` copies.  "
+"Variables of ``__block`` storage class are imported as a pointer to an "
+"enclosing data structure.  Global variables are simply referenced and not "
+"considered as imported."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:200
+msgid "Imported ``const`` copy variables"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:202
+msgid ""
+"Automatic storage variables not marked with ``__block`` are imported as "
+"``const`` copies."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:205
+msgid "The simplest example is that of importing a variable of type ``int``:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:214
+msgid "which would be compiled to:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:236 ../../../Block-ABI-Apple.rst:467
+#: ../../../Block-ABI-Apple.rst:538 ../../../Block-ABI-Apple.rst:622
+msgid "and:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:248
+msgid ""
+"In summary, scalars, structures, unions, and function pointers are generally "
+"imported as ``const`` copies with no need for helper functions."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:252
+msgid "Imported ``const`` copy of ``Block`` reference"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:254
+msgid ""
+"The first case where copy and dispose helper functions are required is for "
+"the case of when a ``Block`` itself is imported.  In this case both a "
+"``copy_helper`` function and a ``dispose_helper`` function are needed.  The "
+"``copy_helper`` function is passed both the existing stack based pointer and "
+"the pointer to the new heap version and should call back into the runtime to "
+"actually do the copy operation on the imported fields within the ``Block``. "
+"The runtime functions are all described in :ref:`RuntimeHelperFunctions`."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:262
+msgid "A quick example:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:308
+msgid "and where said ``Block`` is used:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:321
+msgid "Importing ``__attribute__((NSObject))`` variables"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:323
+msgid ""
+"GCC introduces ``__attribute__((NSObject))`` on structure pointers to mean "
+"\"this is an object\".  This is useful because many low level data "
+"structures are declared as opaque structure pointers, e.g. ``CFStringRef``, "
+"``CFArrayRef``, etc.  When used from C, however, these are still really "
+"objects and are the second case where that requires copy and dispose helper "
+"functions to be generated.  The copy helper functions generated by the "
+"compiler should use the ``_Block_object_assign`` runtime helper function and "
+"in the dispose helper the ``_Block_object_dispose`` runtime helper function "
+"should be called."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:332
+msgid "For example, ``Block`` foo in the following:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:340
+msgid "would have the following helper functions generated:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:353
+msgid "Imported ``__block`` marked variables"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:356
+msgid "Layout of ``__block`` marked variables"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:358
+msgid ""
+"The compiler must embed variables that are marked ``__block`` in a "
+"specialized structure of the form:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:371
+msgid ""
+"Variables of certain types require helper functions for when "
+"``Block_copy()`` and ``Block_release()`` are performed upon a referencing "
+"``Block``.  At the \"C\" level only variables that are of type ``Block`` or "
+"ones that have ``__attribute__((NSObject))`` marked require helper "
+"functions.  In Objective-C objects require helper functions and in C++ stack "
+"based objects require helper functions. Variables that require helper "
+"functions use the form:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:391
+msgid "The structure is initialized such that:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:393
+msgid ""
+"a. The ``forwarding`` pointer is set to the beginning of its enclosing "
+"structure."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:396
+msgid ""
+"b. The ``size`` field is initialized to the total size of the enclosing "
+"structure."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:399
+msgid ""
+"c. The ``flags`` field is set to either 0 if no helper functions are needed "
+"or (1<<25) if they are."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:402
+msgid "The helper functions are initialized (if present)."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:404
+msgid "The variable itself is set to its initial value."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:406
+msgid "The ``isa`` field is set to ``NULL``."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:409
+msgid "Access to ``__block`` variables from within its lexical scope"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:411
+msgid ""
+"In order to \"move\" the variable to the heap upon a ``copy_helper`` "
+"operation the compiler must rewrite access to such a variable to be indirect "
+"through the structures ``forwarding`` pointer.  For example:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:420
+msgid "would be rewritten to be:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:434
+msgid ""
+"In the case of a ``Block`` reference variable being marked ``__block`` the "
+"helper code generated must use the ``_Block_object_assign`` and "
+"``_Block_object_dispose`` routines supplied by the runtime to make the "
+"copies. For example:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:444
+msgid "would translate into:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:478
+msgid "Importing ``__block`` variables into ``Blocks``"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:480
+msgid ""
+"A ``Block`` that uses a ``__block`` variable in its compound statement body "
+"must import the variable and emit ``copy_helper`` and ``dispose_helper`` "
+"helper functions that, in turn, call back into the runtime to actually copy "
+"or release the ``byref`` data block using the functions "
+"``_Block_object_assign`` and ``_Block_object_dispose``."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:486
+msgid "For example:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:493 ../../../Block-ABI-Apple.rst:650
+msgid "would translate to:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:552
+msgid "Importing ``__attribute__((NSObject))`` ``__block`` variables"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:554
+msgid ""
+"A ``__block`` variable that is also marked ``__attribute__((NSObject))`` "
+"should have ``byref_keep`` and ``byref_dispose`` helper functions that use "
+"``_Block_object_assign`` and ``_Block_object_dispose``."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:559
+msgid "``__block`` escapes"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:561
+msgid ""
+"Because ``Blocks`` referencing ``__block`` variables may have "
+"``Block_copy()`` performed upon them the underlying storage for the "
+"variables may move to the heap.  In Objective-C Garbage Collection Only "
+"compilation environments the heap used is the garbage collected one and no "
+"further action is required.  Otherwise the compiler must issue a call to "
+"potentially release any heap storage for ``__block`` variables at all "
+"escapes or terminations of their scope.  The call should be:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:574
+msgid "Nesting"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:576
+msgid ""
+"``Blocks`` may contain ``Block`` literal expressions.  Any variables used "
+"within inner blocks are imported into all enclosing ``Block`` scopes even if "
+"the variables are not used. This includes ``const`` imports as well as "
+"``__block`` variables."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:582
+msgid "Objective C Extensions to ``Blocks``"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:585
+msgid "Importing Objects"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:587
+msgid ""
+"Objects should be treated as ``__attribute__((NSObject))`` variables; all "
+"``copy_helper``, ``dispose_helper``, ``byref_keep``, and ``byref_dispose`` "
+"helper functions should use ``_Block_object_assign`` and "
+"``_Block_object_dispose``.  There should be no code generated that uses ``*-"
+"retain`` or ``*-release`` methods."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:594
+msgid "``Blocks`` as Objects"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:596
+msgid ""
+"The compiler will treat ``Blocks`` as objects when synthesizing property "
+"setters and getters, will characterize them as objects when generating "
+"garbage collection strong and weak layout information in the same manner as "
+"objects, and will issue strong and weak write-barrier assignments in the "
+"same manner as objects."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:603
+msgid "``__weak __block`` Support"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:605
+msgid ""
+"Objective-C (and Objective-C++) support the ``__weak`` attribute on "
+"``__block`` variables.  Under normal circumstances the compiler uses the "
+"Objective-C runtime helper support functions ``objc_assign_weak`` and "
+"``objc_read_weak``.  Both should continue to be used for all reads and "
+"writes of ``__weak __block`` variables:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:615
+msgid ""
+"The ``__weak`` variable is stored in a ``_block_byref_foo`` structure and "
+"the ``Block`` has copy and dispose helpers for this structure that call:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:628
+msgid ""
+"In turn, the ``block_byref`` copy support helpers distinguish between "
+"whether the ``__block`` variable is a ``Block`` or not and should either "
+"call:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:635
+msgid "for something declared as an object or:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:641
+msgid "for something declared as a ``Block``."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:643
+msgid "A full example follows:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:674
+msgid "for the block ``byref`` part and:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:708
+msgid "and within the compound statement:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:728
+msgid "C++ Support"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:730
+msgid ""
+"Within a block stack based C++ objects are copied into ``const`` copies "
+"using the copy constructor.  It is an error if a stack based C++ object is "
+"used within a block if it does not have a copy constructor.  In addition "
+"both copy and destroy helper routines must be synthesized for the block to "
+"support the ``Block_copy()`` operation, and the flags work marked with the "
+"(1<<26) bit in addition to the (1<<25) bit.  The copy helper should call the "
+"constructor using appropriate offsets of the variable within the supplied "
+"stack based block source and heap based destination for all ``const`` "
+"constructed copies, and similarly should call the destructor in the destroy "
+"routine."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:740
+msgid ""
+"As an example, suppose a C++ class ``FOO`` existed with a copy constructor. "
+"Within a code block a stack version of a ``FOO`` object is declared and used "
+"within a ``Block`` literal expression:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:751
+msgid "The compiler would synthesize:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:783
+msgid "and the code would be:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:804
+msgid ""
+"C++ objects stored in ``__block`` storage start out on the stack in a "
+"``block_byref`` data structure as do other variables.  Such objects (if not "
+"``const`` objects) must support a regular copy constructor.  The "
+"``block_byref`` data structure will have copy and destroy helper routines "
+"synthesized by the compiler.  The copy helper will have code created to "
+"perform the copy constructor based on the initial stack ``block_byref`` data "
+"structure, and will also set the (1<<26) bit in addition to the (1<<25) "
+"bit.  The destroy helper will have code to do the destructor on the object "
+"stored within the supplied ``block_byref`` heap data structure.  For example,"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:818
+msgid ""
+"requires the normal constructor for the embedded ``blockStorageFoo`` object:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:824
+msgid "and at scope termination the destructor:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:830
+msgid "Note that the forwarding indirection is *NOT* used."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:832
+msgid ""
+"The compiler would need to generate (if used from a block literal) the "
+"following copy/dispose helpers:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:845
+msgid ""
+"for the appropriately named constructor and destructor for the class/struct "
+"``FOO``."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:848
+msgid ""
+"To support member variable and function access the compiler will synthesize "
+"a ``const`` pointer to a block version of the ``this`` pointer."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:854
+msgid "Runtime Helper Functions"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:856
+msgid ""
+"The runtime helper functions are described in ``/usr/local/include/"
+"Block_private.h``.  To summarize their use, a ``Block`` requires copy/"
+"dispose helpers if it imports any block variables, ``__block`` storage "
+"variables, ``__attribute__((NSObject))`` variables, or C++ ``const`` copied "
+"objects with constructor/destructors.  The (1<<26) bit is set and functions "
+"are generated."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:863
+msgid ""
+"The block copy helper function should, for each of the variables of the type "
+"mentioned above, call:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:870
+msgid "in the copy helper and:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:876
+msgid "in the dispose helper where ``<apropos>`` is:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:890
+msgid ""
+"and of course the constructors/destructors for ``const`` copied C++ objects."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:892
+msgid ""
+"The ``block_byref`` data structure similarly requires copy/dispose helpers "
+"for block variables, ``__attribute__((NSObject))`` variables, or C++ "
+"``const`` copied objects with constructor/destructors, and again the (1<<26) "
+"bit is set and functions are generated in the same manner."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:897
+msgid ""
+"Under ObjC we allow ``__weak`` as an attribute on ``__block`` variables, and "
+"this causes the addition of ``BLOCK_FIELD_IS_WEAK`` orred onto the "
+"``BLOCK_FIELD_IS_BYREF`` flag when copying the ``block_byref`` structure in "
+"the ``Block`` copy helper, and onto the ``BLOCK_FIELD_<apropos>`` field "
+"within the ``block_byref`` copy/dispose helper calls."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:903
+msgid "The prototypes, and summary, of the helper functions are:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:925
+msgid "Copyright"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:927
+msgid ""
+"Copyright 2008-2010 Apple, Inc. Permission is hereby granted, free of "
+"charge, to any person obtaining a copy of this software and associated "
+"documentation files (the \"Software\"), to deal in the Software without "
+"restriction, including without limitation the rights to use, copy, modify, "
+"merge, publish, distribute, sublicense, and/or sell copies of the Software, "
+"and to permit persons to whom the Software is furnished to do so, subject to "
+"the following conditions:"
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:935
+msgid ""
+"The above copyright notice and this permission notice shall be included in "
+"all copies or substantial portions of the Software."
+msgstr ""
+
+#: ../../../Block-ABI-Apple.rst:938
+msgid ""
+"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR "
+"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, "
+"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE "
+"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER "
+"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING "
+"FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS "
+"IN THE SOFTWARE."
+msgstr ""
