@@ -1,0 +1,198 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 17\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:44+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ClangTools.rst:3
+msgid "Overview"
+msgstr ""
+
+#: ../../../ClangTools.rst:5
+msgid ""
+"Clang Tools are standalone command line (and potentially GUI) tools designed "
+"for use by C++ developers who are already using and enjoying Clang as their "
+"compiler. These tools provide developer-oriented functionality such as fast "
+"syntax checking, automatic formatting, refactoring, etc."
+msgstr ""
+
+#: ../../../ClangTools.rst:11
+msgid ""
+"Only a couple of the most basic and fundamental tools are kept in the "
+"primary Clang tree. The rest of the tools are kept in a separate directory "
+"tree, `clang-tools-extra <https://github.com/llvm/llvm-project/tree/main/"
+"clang-tools-extra>`_."
+msgstr ""
+
+#: ../../../ClangTools.rst:16
+msgid ""
+"This document describes a high-level overview of the organization of Clang "
+"Tools within the project as well as giving an introduction to some of the "
+"more important tools. However, it should be noted that this document is "
+"currently focused on Clang and Clang Tool developers, not on end users of "
+"these tools."
+msgstr ""
+
+#: ../../../ClangTools.rst:23
+msgid "Clang Tools Organization"
+msgstr ""
+
+#: ../../../ClangTools.rst:25
+msgid ""
+"Clang Tools are CLI or GUI programs that are intended to be directly used by "
+"C++ developers. That is they are *not* primarily for use by Clang "
+"developers, although they are hopefully useful to C++ developers who happen "
+"to work on Clang, and we try to actively dogfood their functionality. They "
+"are developed in three components: the underlying infrastructure for "
+"building a standalone tool based on Clang, core shared logic used by many "
+"different tools in the form of refactoring and rewriting libraries, and the "
+"tools themselves."
+msgstr ""
+
+#: ../../../ClangTools.rst:34
+msgid ""
+"The underlying infrastructure for Clang Tools is the :doc:`LibTooling "
+"<LibTooling>` platform. See its documentation for much more detailed "
+"information about how this infrastructure works. The common refactoring and "
+"rewriting toolkit-style library is also part of LibTooling organizationally."
+msgstr ""
+
+#: ../../../ClangTools.rst:40
+msgid ""
+"A few Clang Tools are developed along side the core Clang libraries as "
+"examples and test cases of fundamental functionality. However, most of the "
+"tools are developed in a side repository to provide easy separation from the "
+"core libraries. We intentionally do not support public libraries in the side "
+"repository, as we want to carefully review and find good APIs for libraries "
+"as they are lifted out of a few tools and into the core Clang library set."
+msgstr ""
+
+#: ../../../ClangTools.rst:48
+msgid ""
+"Regardless of which repository Clang Tools' code resides in, the development "
+"process and practices for all Clang Tools are exactly those of Clang itself. "
+"They are entirely within the Clang *project*, regardless of the version "
+"control scheme."
+msgstr ""
+
+#: ../../../ClangTools.rst:54
+msgid "Core Clang Tools"
+msgstr ""
+
+#: ../../../ClangTools.rst:56
+msgid ""
+"The core set of Clang tools that are within the main repository are tools "
+"that very specifically complement, and allow use and testing of *Clang* "
+"specific functionality."
+msgstr ""
+
+#: ../../../ClangTools.rst:61
+msgid "``clang-check``"
+msgstr ""
+
+#: ../../../ClangTools.rst:63
+msgid ""
+":doc:`ClangCheck` combines the LibTooling framework for running a Clang tool "
+"with the basic Clang diagnostics by syntax checking specific files in a "
+"fast, command line interface. It can also accept flags to re-display the "
+"diagnostics in different formats with different flags, suitable for use "
+"driving an IDE or editor. Furthermore, it can be used in fixit-mode to "
+"directly apply fixit-hints offered by clang. See :doc:"
+"`HowToSetupToolingForLLVM` for instructions on how to setup and used `clang-"
+"check`."
+msgstr ""
+
+#: ../../../ClangTools.rst:72
+msgid "``clang-format``"
+msgstr ""
+
+#: ../../../ClangTools.rst:74
+msgid ""
+"Clang-format is both a :doc:`library <LibFormat>` and a :doc:`stand-alone "
+"tool <ClangFormat>` with the goal of automatically reformatting C++ sources "
+"files according to configurable style guides.  To do so, clang-format uses "
+"Clang's ``Lexer`` to transform an input file into a token stream and then "
+"changes all the whitespace around those tokens.  The goal is for clang-"
+"format to serve both as a user tool (ideally with powerful IDE integrations) "
+"and as part of other refactoring tools, e.g. to do a reformatting of all the "
+"lines changed during a renaming."
+msgstr ""
+
+#: ../../../ClangTools.rst:85
+msgid "Extra Clang Tools"
+msgstr ""
+
+#: ../../../ClangTools.rst:87
+msgid ""
+"As various categories of Clang Tools are added to the extra repository, "
+"they'll be tracked here. The focus of this documentation is on the scope and "
+"features of the tools for other tool developers; each tool should provide "
+"its own user-focused documentation."
+msgstr ""
+
+#: ../../../ClangTools.rst:93
+msgid "``clang-tidy``"
+msgstr ""
+
+#: ../../../ClangTools.rst:95
+msgid ""
+"`clang-tidy <https://clang.llvm.org/extra/clang-tidy/>`_ is a clang-based C+"
+"+ linter tool. It provides an extensible framework for building compiler-"
+"based static analyses detecting and fixing bug-prone patterns, performance, "
+"portability and maintainability issues."
+msgstr ""
+
+#: ../../../ClangTools.rst:102
+msgid "Ideas for new Tools"
+msgstr ""
+
+#: ../../../ClangTools.rst:104
+msgid ""
+"C++ cast conversion tool.  Will convert C-style casts (``(type) value``) to "
+"appropriate C++ cast (``static_cast``, ``const_cast`` or "
+"``reinterpret_cast``)."
+msgstr ""
+
+#: ../../../ClangTools.rst:107
+msgid ""
+"Non-member ``begin()`` and ``end()`` conversion tool.  Will convert ``foo."
+"begin()`` into ``begin(foo)`` and similarly for ``end()``, where ``foo`` is "
+"a standard container.  We could also detect similar patterns for arrays."
+msgstr ""
+
+#: ../../../ClangTools.rst:111
+msgid ""
+"``tr1`` removal tool.  Will migrate source code from using TR1 library "
+"features to C++11 library.  For example:"
+msgstr ""
+
+#: ../../../ClangTools.rst:124 ../../../ClangTools.rst:149
+msgid "should be rewritten to:"
+msgstr ""
+
+#: ../../../ClangTools.rst:136
+msgid ""
+"A tool to remove ``auto``.  Will convert ``auto`` to an explicit type or add "
+"comments with deduced types.  The motivation is that there are developers "
+"that don't want to use ``auto`` because they are afraid that they might lose "
+"control over their code."
+msgstr ""
+
+#: ../../../ClangTools.rst:141
+msgid ""
+"C++14: less verbose operator function objects (`N3421 <http://www.open-std."
+"org/jtc1/sc22/wg21/docs/papers/2012/n3421.htm>`_). For example:"
+msgstr ""
