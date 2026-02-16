@@ -1,0 +1,403 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 21\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-21 08:51+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:3
+msgid "Hardware-assisted AddressSanitizer Design Documentation"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:5
+msgid ""
+"This page is a design document for **hardware-assisted AddressSanitizer** "
+"(or **HWASAN**) a tool similar to :doc:`AddressSanitizer`, but based on "
+"partial hardware assistance."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:12
+msgid "Introduction"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:14
+msgid ""
+":doc:`AddressSanitizer` tags every 8 bytes of the application memory with a "
+"1 byte tag (using *shadow memory*), uses *redzones* to find buffer-overflows "
+"and *quarantine* to find use-after-free. The redzones, the quarantine, and, "
+"to a less extent, the shadow, are the sources of AddressSanitizer's memory "
+"overhead. See the `AddressSanitizer paper`_ for details."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:22
+msgid ""
+"AArch64 has `Address Tagging`_ (or top-byte-ignore, TBI), a hardware feature "
+"that allows software to use the 8 most significant bits of a 64-bit pointer "
+"as a tag. HWASAN uses `Address Tagging`_ to implement a memory safety tool, "
+"similar to :doc:`AddressSanitizer`, but with smaller memory overhead and "
+"slightly different (mostly better) accuracy guarantees."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:29
+msgid ""
+"Intel's `Linear Address Masking`_ (LAM) also provides address tagging for "
+"x86_64, though it is not widely available in hardware yet.  For x86_64, "
+"HWASAN has a limited implementation using page aliasing instead."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:34
+msgid "Algorithm"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:35
+msgid ""
+"Every heap/stack/global memory object is forcibly aligned by `TG` bytes "
+"(`TG` is e.g. 16 or 64). We call `TG` the **tagging granularity**."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:37
+msgid ""
+"For every such object a random `TS`-bit tag `T` is chosen (`TS`, or tag "
+"size, is e.g. 4 or 8)"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:38
+msgid "The pointer to the object is tagged with `T`."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:39
+msgid ""
+"The memory for the object is also tagged with `T` (using a `TG=>1` shadow "
+"memory)"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:40
+msgid ""
+"Every load and store is instrumented to read the memory tag and compare it "
+"with the pointer tag, exception is raised on tag mismatch."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:43
+msgid ""
+"For a more detailed discussion of this approach see https://arxiv.org/"
+"pdf/1802.09517.pdf"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:46
+msgid "Short granules"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:48
+msgid ""
+"A short granule is a granule of size between 1 and `TG-1` bytes. The size of "
+"a short granule is stored at the location in shadow memory where the "
+"granule's tag is normally stored, while the granule's actual tag is stored "
+"in the last byte of the granule. This means that in order to verify that a "
+"pointer tag matches a memory tag, HWASAN must check for two possibilities:"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:54
+msgid "the pointer tag is equal to the memory tag in shadow memory, or"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:55
+msgid ""
+"the shadow memory tag is actually a short granule size, the value being "
+"loaded is in bounds of the granule and the pointer tag is equal to the last "
+"byte of the granule."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:59
+msgid ""
+"Pointer tags between 1 to `TG-1` are possible and are as likely as any other "
+"tag. This means that these tags in memory have two interpretations: the full "
+"tag interpretation (where the pointer tag is between 1 and `TG-1` and the "
+"last byte of the granule is ordinary data) and the short tag interpretation "
+"(where the pointer tag is stored in the granule)."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:65
+msgid ""
+"When HWASAN detects an error near a memory tag between 1 and `TG-1`, it will "
+"show both the memory tag and the last byte of the granule. Currently, it is "
+"up to the user to disambiguate the two possibilities."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:70
+msgid "Instrumentation"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:73
+msgid "Memory Accesses"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:74
+msgid ""
+"In the majority of cases, memory accesses are prefixed with a call to an "
+"outlined instruction sequence that verifies the tags. The code size and "
+"performance overhead of the call is reduced by using a custom calling "
+"convention that"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:79
+msgid "preserves most registers, and"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:80
+msgid ""
+"is specialized to the register containing the address, and the type and size "
+"of the memory access."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:83
+msgid "Currently, the following sequence is used:"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:129
+msgid "Heap"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:131
+msgid ""
+"Tagging the heap memory/pointers is done by `malloc`. This can be based on "
+"any malloc that forces all objects to be TG-aligned. `free` tags the memory "
+"with a different tag."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:136
+msgid "Stack"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:138
+msgid ""
+"Stack frames are instrumented by aligning all non-promotable allocas by `TG` "
+"and tagging stack memory in function prologue and epilogue."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:141
+msgid ""
+"Tags for different allocas in one function are **not** generated "
+"independently; doing that in a function with `M` allocas would require "
+"maintaining `M` live stack pointers, significantly increasing register "
+"pressure. Instead we generate a single base tag value in the prologue, and "
+"build the tag for alloca number `M` as `ReTag(BaseTag, M)`, where ReTag can "
+"be as simple as exclusive-or with constant `M`."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:148
+msgid ""
+"Stack instrumentation is expected to be a major source of overhead, but "
+"could be optional."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:152
+msgid "Globals"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:154
+msgid ""
+"Most globals in HWASAN instrumented code are tagged. This is accomplished "
+"using the following mechanisms:"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:157
+msgid ""
+"The address of each global has a static tag associated with it. The first "
+"defined global in a translation unit has a pseudorandom tag associated with "
+"it, based on the hash of the file path. Subsequent global tags are "
+"incremental from the previously-assigned tag."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:162
+msgid ""
+"The global's tag is added to its symbol address in the object file's symbol "
+"table. This causes the global's address to be tagged when its address is "
+"taken."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:166
+msgid ""
+"When the address of a global is taken directly (i.e. not via the GOT), a "
+"special instruction sequence needs to be used to add the tag to the address, "
+"because the tag would otherwise take the address outside of the small code "
+"model (4GB on AArch64). No changes are required when the address is taken "
+"via the GOT because the address stored in the GOT will contain the tag."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:172
+msgid ""
+"An associated ``hwasan_globals`` section is emitted for each tagged global, "
+"which indicates the address of the global, its size and its tag.  These "
+"sections are concatenated by the linker into a single ``hwasan_globals`` "
+"section that is enumerated by the runtime (via an ELF note) when a binary is "
+"loaded and the memory is tagged accordingly."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:178
+msgid "A complete example is given below:"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:217
+msgid "Error reporting"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:219
+msgid ""
+"Errors are generated by the `HLT` instruction and are handled by a signal "
+"handler."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:222
+msgid "Attribute"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:224
+msgid ""
+"HWASAN uses its own LLVM IR Attribute `sanitize_hwaddress` and a matching C "
+"function attribute. An alternative would be to re-use ASAN's attribute "
+"`sanitize_address`. The reasons to use a separate attribute are:"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:228
+msgid ""
+"Users may need to disable ASAN but not HWASAN, or vise versa, because the "
+"tools have different trade-offs and compatibility issues."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:230
+msgid ""
+"LLVM (ideally) does not use flags to decide which pass is being used, ASAN "
+"or HWASAN are being applied, based on the function attributes."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:233
+msgid ""
+"This does mean that users of HWASAN may need to add the new attribute to the "
+"code that already uses the old attribute."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:238
+msgid "Comparison with AddressSanitizer"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:258
+msgid "HWASAN:"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:241
+msgid ""
+"Is less portable than :doc:`AddressSanitizer` as it relies on hardware "
+"`Address Tagging`_ (AArch64). Address Tagging can be emulated with compiler "
+"instrumentation, but it will require the instrumentation to remove the tags "
+"before any load or store, which is infeasible in any realistic environment "
+"that contains non-instrumented code."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:247
+msgid ""
+"May have compatibility problems if the target code uses higher pointer bits "
+"for other purposes."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:249
+msgid ""
+"May require changes in the OS kernels (e.g. Linux seems to dislike tagged "
+"pointers passed from address space: https://www.kernel.org/doc/Documentation/"
+"arm64/tagged-pointers.txt)."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:252
+msgid ""
+"**Does not require redzones to detect buffer overflows**, but the buffer "
+"overflow detection is probabilistic, with roughly `1/(2**TS)` chance of "
+"missing a bug (6.25% or 0.39% with 4 and 8-bit TS respectively)."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:256
+msgid ""
+"**Does not require quarantine to detect heap-use-after-free, or stack-use-"
+"after-return**. The detection is similarly probabilistic."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:260
+msgid ""
+"The memory overhead of HWASAN is expected to be much smaller than that of "
+"AddressSanitizer: `1/TG` extra memory for the shadow and some overhead due "
+"to `TG`-aligning all objects."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:266
+msgid "Security Considerations"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:268
+msgid ""
+"HWASAN is a bug detection tool and its runtime is not meant to be linked "
+"against production executables. While it may be useful for testing, HWASAN's "
+"runtime was not developed with security-sensitive constraints in mind and "
+"may compromise the security of the resulting executable."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:274
+msgid "Supported architectures"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:275
+msgid ""
+"HWASAN relies on `Address Tagging`_ which is only available on AArch64. For "
+"other 64-bit architectures it is possible to remove the address tags before "
+"every load and store by compiler instrumentation, but this variant will have "
+"limited deployability since not all of the code is typically instrumented."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:281
+msgid ""
+"On x86_64, HWASAN utilizes page aliasing to place tags in userspace address "
+"bits.  Currently only heap tagging is supported.  The page aliases rely on "
+"shared memory, which will cause heap memory to be shared between processes "
+"if the application calls ``fork()``.  Therefore x86_64 is really only safe "
+"for applications that do not fork."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:287
+msgid ""
+"HWASAN does not currently support 32-bit architectures since they do not "
+"support `Address Tagging`_ and the address space is too constrained to "
+"easily implement page aliasing."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:293
+msgid "Related Work"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:294
+msgid "`SPARC ADI`_ implements a similar tool mostly in hardware."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:295
+msgid ""
+"`Effective and Efficient Memory Protection Using Dynamic Tainting`_ "
+"discusses similar approaches (\"lock & key\")."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:297
+msgid ""
+"`Watchdog`_ discussed a heavier, but still somewhat similar \"lock & key\" "
+"approach."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizerDesign.rst:299
+msgid "*TODO: add more \"related work\" links. Suggestions are welcome.*"
+msgstr ""

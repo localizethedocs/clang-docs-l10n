@@ -1,0 +1,281 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 21\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-21 08:51+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ClangFormat.rst:3
+msgid "ClangFormat"
+msgstr ""
+
+#: ../../../ClangFormat.rst:5
+msgid ""
+"`ClangFormat` describes a set of tools that are built on top of :doc:"
+"`LibFormat`. It can support your workflow in a variety of ways including a "
+"standalone tool and editor integrations."
+msgstr ""
+
+#: ../../../ClangFormat.rst:11
+msgid "Standalone Tool"
+msgstr ""
+
+#: ../../../ClangFormat.rst:13
+msgid ""
+":program:`clang-format` is located in `clang/tools/clang-format` and can be "
+"used to format C/C++/Java/JavaScript/JSON/Objective-C/Protobuf/C# code."
+msgstr ""
+
+#: ../../../ClangFormat.rst:122
+msgid ""
+"When the desired code formatting style is different from the available "
+"options, the style can be customized using the ``-style=\"{key: "
+"value, ...}\"`` option or by putting your style configuration in the ``."
+"clang-format`` or ``_clang-format`` file in your project's directory and "
+"using ``clang-format -style=file``."
+msgstr ""
+
+#: ../../../ClangFormat.rst:127
+msgid "An easy way to create the ``.clang-format`` file is:"
+msgstr ""
+
+#: ../../../ClangFormat.rst:133
+msgid ""
+"Available style options are described in :doc:`ClangFormatStyleOptions`."
+msgstr ""
+
+#: ../../../ClangFormat.rst:136
+msgid ".clang-format-ignore"
+msgstr ""
+
+#: ../../../ClangFormat.rst:138
+msgid ""
+"You can create ``.clang-format-ignore`` files to make ``clang-format`` "
+"ignore certain files. A ``.clang-format-ignore`` file consists of patterns "
+"of file path names. It has the following format:"
+msgstr ""
+
+#: ../../../ClangFormat.rst:142
+msgid "A blank line is skipped."
+msgstr ""
+
+#: ../../../ClangFormat.rst:143
+msgid "Leading and trailing spaces of a line are trimmed."
+msgstr ""
+
+#: ../../../ClangFormat.rst:144
+msgid "A line starting with a hash (``#``) is a comment."
+msgstr ""
+
+#: ../../../ClangFormat.rst:145
+msgid "A non-comment line is a single pattern."
+msgstr ""
+
+#: ../../../ClangFormat.rst:146
+msgid "The slash (``/``) is used as the directory separator."
+msgstr ""
+
+#: ../../../ClangFormat.rst:147
+msgid ""
+"A pattern is relative to the directory of the ``.clang-format-ignore`` file "
+"(or the root directory if the pattern starts with a slash). Patterns "
+"containing drive names (e.g. ``C:``) are not supported."
+msgstr ""
+
+#: ../../../ClangFormat.rst:150
+msgid ""
+"Patterns follow the rules specified in `POSIX 2.13.1, 2.13.2, and Rule 1 of "
+"2.13.3 <https://pubs.opengroup.org/onlinepubs/9699919799/utilities/ "
+"V3_chap02.html#tag_18_13>`_."
+msgstr ""
+
+#: ../../../ClangFormat.rst:153
+msgid "Bash globstar (``**``) is supported."
+msgstr ""
+
+#: ../../../ClangFormat.rst:154
+msgid "A pattern is negated if it starts with a bang (``!``)."
+msgstr ""
+
+#: ../../../ClangFormat.rst:156
+msgid ""
+"To match all files in a directory, use e.g. ``foo/bar/*``. To match all "
+"files in the directory of the ``.clang-format-ignore`` file, use ``*``. "
+"Multiple ``.clang-format-ignore`` files are supported similar to the ``."
+"clang-format`` files, with a lower directory level file voiding the higher "
+"level ones."
+msgstr ""
+
+#: ../../../ClangFormat.rst:163
+msgid "Vim Integration"
+msgstr ""
+
+#: ../../../ClangFormat.rst:165
+msgid ""
+"There is an integration for :program:`vim` which lets you run the :program:"
+"`clang-format` standalone tool on your current buffer, optionally selecting "
+"regions to reformat. The integration has the form of a `python`-file which "
+"can be found under `clang/tools/clang-format/clang-format.py`."
+msgstr ""
+
+#: ../../../ClangFormat.rst:170
+msgid "This can be integrated by adding the following to your `.vimrc`:"
+msgstr ""
+
+#: ../../../ClangFormat.rst:182
+msgid ""
+"The first line enables :program:`clang-format` for NORMAL and VISUAL mode, "
+"the second line adds support for INSERT mode. Change \"C-K\" to another "
+"binding if you need :program:`clang-format` on a different key (C-K stands "
+"for Ctrl+k)."
+msgstr ""
+
+#: ../../../ClangFormat.rst:186
+msgid ""
+"With this integration you can press the bound key and clang-format will "
+"format the current line in NORMAL and INSERT mode or the selected region in "
+"VISUAL mode. The line or region is extended to the next bigger syntactic "
+"entity."
+msgstr ""
+
+#: ../../../ClangFormat.rst:191
+msgid ""
+"It operates on the current, potentially unsaved buffer and does not create "
+"or save any files. To revert a formatting, just undo."
+msgstr ""
+
+#: ../../../ClangFormat.rst:194
+msgid ""
+"An alternative option is to format changes when saving a file and thus to "
+"have a zero-effort integration into the coding workflow. To do this, add "
+"this to your `.vimrc`:"
+msgstr ""
+
+#: ../../../ClangFormat.rst:208
+msgid "Emacs Integration"
+msgstr ""
+
+#: ../../../ClangFormat.rst:210
+msgid ""
+"Similar to the integration for :program:`vim`, there is an integration for :"
+"program:`emacs`. It can be found at `clang/tools/clang-format/clang-format."
+"el` and used by adding this to your `.emacs`:"
+msgstr ""
+
+#: ../../../ClangFormat.rst:219
+msgid ""
+"This binds the function `clang-format-region` to C-M-tab, which then formats "
+"the current line or selected region."
+msgstr ""
+
+#: ../../../ClangFormat.rst:224
+msgid "BBEdit Integration"
+msgstr ""
+
+#: ../../../ClangFormat.rst:226
+msgid ""
+":program:`clang-format` cannot be used as a text filter with BBEdit, but "
+"works well via a script. The AppleScript to do this integration can be found "
+"at `clang/tools/clang-format/clang-format-bbedit.applescript`; place a copy "
+"in `~/Library/Application Support/BBEdit/Scripts`, and edit the path within "
+"it to point to your local copy of :program:`clang-format`."
+msgstr ""
+
+#: ../../../ClangFormat.rst:232
+msgid ""
+"With this integration you can select the script from the Script menu and :"
+"program:`clang-format` will format the selection. Note that you can rename "
+"the menu item by renaming the script, and can assign the menu item a "
+"keyboard shortcut in the BBEdit preferences, under Menus & Shortcuts."
+msgstr ""
+
+#: ../../../ClangFormat.rst:239
+msgid "CLion Integration"
+msgstr ""
+
+#: ../../../ClangFormat.rst:241
+msgid ""
+":program:`clang-format` is integrated into `CLion <https://www.jetbrains ."
+"com/clion/>`_ as an alternative code formatter. CLion turns it on "
+"automatically when there is a ``.clang-format`` file under the project root. "
+"Code style rules are applied as you type, including indentation, auto-"
+"completion, code generation, and refactorings."
+msgstr ""
+
+#: ../../../ClangFormat.rst:247
+msgid ""
+":program:`clang-format` can also be enabled without a ``.clang-format`` "
+"file. In this case, CLion prompts you to create one based on the current IDE "
+"settings or the default LLVM style."
+msgstr ""
+
+#: ../../../ClangFormat.rst:253
+msgid "Visual Studio Integration"
+msgstr ""
+
+#: ../../../ClangFormat.rst:255
+msgid ""
+"Download the latest Visual Studio extension from the `alpha build site "
+"<https://llvm.org/builds/>`_. The default key-binding is Ctrl-R,Ctrl-F."
+msgstr ""
+
+#: ../../../ClangFormat.rst:260
+msgid "Visual Studio Code Integration"
+msgstr ""
+
+#: ../../../ClangFormat.rst:262
+msgid ""
+"Get the latest Visual Studio Code extension from the `Visual Studio "
+"Marketplace <https://marketplace.visualstudio.com/items?itemName=xaver.clang-"
+"format>`_. The default key-binding is Alt-Shift-F."
+msgstr ""
+
+#: ../../../ClangFormat.rst:265
+msgid "Git integration"
+msgstr ""
+
+#: ../../../ClangFormat.rst:267
+msgid ""
+"The script `clang/tools/clang-format/git-clang-format` can be used to format "
+"just the lines touched in git commits:"
+msgstr ""
+
+#: ../../../ClangFormat.rst:319
+msgid "Script for patch reformatting"
+msgstr ""
+
+#: ../../../ClangFormat.rst:321
+msgid ""
+"The python script `clang/tools/clang-format/clang-format-diff.py` parses the "
+"output of a unified diff and reformats all contained lines with :program:"
+"`clang-format`."
+msgstr ""
+
+#: ../../../ClangFormat.rst:356
+msgid ""
+"To reformat all the lines in the latest Mercurial/:program:`hg` commit, do:"
+msgstr ""
+
+#: ../../../ClangFormat.rst:362
+msgid ""
+"The option `-U0` will create a diff without context lines (the script would "
+"format those as well)."
+msgstr ""
+
+#: ../../../ClangFormat.rst:365
+msgid ""
+"These commands use the file paths shown in the diff output so they will only "
+"work from the root of the repository."
+msgstr ""

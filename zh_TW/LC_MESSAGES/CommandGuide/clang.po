@@ -1,0 +1,1167 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 21\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-21 08:51+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../CommandGuide/clang.rst:2
+msgid "clang - the Clang C, C++, and Objective-C compiler"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:5
+msgid "SYNOPSIS"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:7
+msgid ":program:`clang` [*options*] *filename ...*"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:10
+msgid "DESCRIPTION"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:12
+msgid ""
+":program:`clang` is a C, C++, and Objective-C compiler which encompasses "
+"preprocessing, parsing, optimization, code generation, assembly, and "
+"linking. Depending on which high-level mode setting is passed, Clang will "
+"stop before doing a full link.  While Clang is highly integrated, it is "
+"important to understand the stages of compilation, to understand how to "
+"invoke it.  These stages are:"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:23
+msgid "Driver"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:20
+msgid ""
+"The clang executable is actually a small driver which controls the overall "
+"execution of other tools such as the compiler, assembler and linker. "
+"Typically you do not need to interact with the driver, but you transparently "
+"use it to run the other tools."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:29
+msgid "Preprocessing"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:26
+msgid ""
+"This stage handles tokenization of the input source file, macro expansion, "
+"#include expansion and handling of other preprocessor directives.  The "
+"output of this stage is typically called a \".i\" (for C), \".ii\" (for C+"
+"+), \".mi\" (for Objective-C), or \".mii\" (for Objective-C++) file."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:37
+msgid "Parsing and Semantic Analysis"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:32
+msgid ""
+"This stage parses the input file, translating preprocessor tokens into a "
+"parse tree.  Once in the form of a parse tree, it applies semantic analysis "
+"to compute types for expressions as well and determine whether the code is "
+"well formed. This stage is responsible for generating most of the compiler "
+"warnings as well as parse errors. The output of this stage is an \"Abstract "
+"Syntax Tree\" (AST)."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:47
+msgid "Code Generation and Optimization"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:40
+msgid ""
+"This stage translates an AST into low-level intermediate code (known as "
+"\"LLVM IR\") and ultimately to machine code.  This phase is responsible for "
+"optimizing the generated code and handling target-specific code generation. "
+"The output of this stage is typically called a \".s\" file or \"assembly\" "
+"file."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:45
+msgid ""
+"Clang also supports the use of an integrated assembler, in which the code "
+"generator produces object files directly. This avoids the overhead of "
+"generating the \".s\" file and of calling the target assembler."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:52
+msgid "Assembler"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:50
+msgid ""
+"This stage runs the target assembler to translate the output of the compiler "
+"into a target object file. The output of this stage is typically called a \"."
+"o\" file or \"object\" file."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:57
+msgid "Linker"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:55
+msgid ""
+"This stage runs the target linker to merge multiple object files into an "
+"executable or dynamic library. The output of this stage is typically called "
+"an \"a.out\", \".dylib\" or \".so\" file."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:59
+msgid ":program:`Clang Static Analyzer`"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:61
+msgid ""
+"The Clang Static Analyzer is a tool that scans source code to try to find "
+"bugs through code analysis.  This tool uses many parts of Clang and is built "
+"into the same driver.  Please see <https://clang-analyzer.llvm.org> for more "
+"details on how to use the static analyzer."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:67
+msgid "OPTIONS"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:70
+msgid "Stage Selection Options"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:74
+msgid "Run the preprocessor stage."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:78
+msgid "Run the preprocessor, parser and semantic analysis stages."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:82
+msgid ""
+"Run the previous stages as well as LLVM generation and optimization stages "
+"and target-specific code generation, producing an assembly file."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:87
+msgid ""
+"Run all of the above, plus the assembler, generating a target \".o\" object "
+"file."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:91
+msgid ""
+"If no stage selection option is specified, all stages above are run, and the "
+"linker is run to combine the results into an executable or shared library."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:95
+msgid "Language Selection and Mode Options"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:99
+msgid "Treat subsequent input files as having type language."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:103
+msgid "Specify the language standard to compile for."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:105
+msgid "Supported values for the C language are:"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c89``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c90``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``iso9899:1990``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:111
+msgid "ISO C 1990"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``iso9899:199409``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:115
+msgid "ISO C 1990 with amendment 1"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu89``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu90``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:120
+msgid "ISO C 1990 with GNU extensions"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c99``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``iso9899:1999``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:125
+msgid "ISO C 1999"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu99``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:129
+msgid "ISO C 1999 with GNU extensions"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c11``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``iso9899:2011``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:134
+msgid "ISO C 2011"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu11``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:138
+msgid "ISO C 2011 with GNU extensions"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c17``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``iso9899:2017``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:143
+msgid "ISO C 2017"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu17``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:147
+msgid "ISO C 2017 with GNU extensions"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c23``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``iso9899:2024``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:152
+msgid "ISO C 2023"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu23``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:156
+msgid "ISO C 2023 with GNU extensions"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c2y``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:160
+msgid "ISO C 202y"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu2y``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:164
+msgid "ISO C 202y with GNU extensions"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:166
+msgid ""
+"The default C language standard is ``gnu17``, except on PS4, where it is "
+"``gnu99``."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:169
+msgid "Supported values for the C++ language are:"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c++98``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c++03``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:174
+msgid "ISO C++ 1998 with amendments"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu++98``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu++03``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:179
+msgid "ISO C++ 1998 with amendments and GNU extensions"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c++11``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:183
+msgid "ISO C++ 2011 with amendments"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu++11``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:187
+msgid "ISO C++ 2011 with amendments and GNU extensions"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c++14``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:191
+msgid "ISO C++ 2014 with amendments"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu++14``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:195
+msgid "ISO C++ 2014 with amendments and GNU extensions"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c++17``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:199
+msgid "ISO C++ 2017 with amendments"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu++17``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:203
+msgid "ISO C++ 2017 with amendments and GNU extensions"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c++20``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:207
+msgid "ISO C++ 2020 with amendments"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu++20``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:211
+msgid "ISO C++ 2020 with amendments and GNU extensions"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c++23``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:215
+msgid "ISO C++ 2023 with amendments"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu++23``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:219
+msgid "ISO C++ 2023 with amendments and GNU extensions"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``c++2c``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:223
+msgid "Working draft for C++2c"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``gnu++2c``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:227
+msgid "Working draft for C++2c with GNU extensions"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:229
+msgid "The default C++ language standard is ``gnu++17``."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:231
+msgid "Supported values for the OpenCL language are:"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``cl1.0``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:235
+msgid "OpenCL 1.0"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``cl1.1``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:239
+msgid "OpenCL 1.1"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``cl1.2``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:243
+msgid "OpenCL 1.2"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``cl2.0``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:247
+msgid "OpenCL 2.0"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:249
+msgid "The default OpenCL language standard is ``cl1.0``."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:251
+msgid "Supported values for the CUDA language are:"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:0
+msgid "``cuda``"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:255
+msgid "NVIDIA CUDA(tm)"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:259
+msgid ""
+"Specify the C++ standard library to use; supported options are libstdc++ and "
+"libc++. If not specified, platform default will be used."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:264
+msgid ""
+"Specify the compiler runtime library to use; supported options are libgcc "
+"and compiler-rt. If not specified, platform default will be used."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:269
+msgid "Same as -std=c89."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:273
+msgid ""
+"Treat source input files as Objective-C and Object-C++ inputs respectively."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:277
+msgid "Enable trigraphs."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:281
+msgid ""
+"Indicate that the file should be compiled for a freestanding, not a hosted, "
+"environment. Note that a freestanding build still requires linking against a "
+"C Standard Library which supports the freestanding interfaces for the "
+"specified language mode and target environment. This includes functions like "
+"`memcpy`, `memmove`, and `memset`."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:289
+msgid ""
+"Disable special handling and optimizations of well-known library functions, "
+"like :c:func:`strlen` and :c:func:`malloc`."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:294
+msgid ""
+"Disable special handling and optimizations for the specific library "
+"function. For example, ``-fno-builtin-strlen`` removes any special handling "
+"for the :c:func:`strlen` library function."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:300
+msgid ""
+"Disable special handling and optimizations for the specific C++ standard "
+"library function in namespace ``std``. For example, ``-fno-builtin-std-"
+"move_if_noexcept`` removes any special handling for the :cpp:func:`std::"
+"move_if_noexcept` library function."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:305
+msgid ""
+"For C standard library functions that the C++ standard library also provides "
+"in namespace ``std``, use :option:`-fno-builtin-\\<function\\>` instead."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:310
+msgid ""
+"Indicate that math functions should be treated as updating :c:data:`errno`."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:314
+msgid "Enable support for Pascal-style strings with \"\\\\pfoo\"."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:318
+msgid "Enable support for Microsoft extensions."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:322
+msgid ""
+"Set ``_MSC_VER``. When on Windows, this defaults to either the same value as "
+"the currently installed version of cl.exe, or ``1933``. Not set otherwise."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:327
+msgid "Enable support for Borland extensions."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:331
+msgid ""
+"Make all string literals default to writable.  This disables uniquing of "
+"strings and other optimizations."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:336
+msgid ""
+"Allow loose type checking rules for implicit vector conversions. Possible "
+"values of <kind>:"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:339
+msgid "``none``: allow no implicit conversions between vectors"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:340
+msgid ""
+"``integer``: allow implicit bitcasts between integer vectors of the same "
+"overall bit-width"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:342
+msgid ""
+"``all``: allow implicit bitcasts between any vectors of the same overall bit-"
+"width"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:345
+msgid "<kind> defaults to ``integer`` if unspecified."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:349
+msgid "Enable the \"Blocks\" language feature."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:353
+msgid ""
+"Select the Objective-C ABI version to use. Available versions are 1 (legacy "
+"\"fragile\" ABI), 2 (non-fragile ABI 1), and 3 (non-fragile ABI 2)."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:358
+msgid ""
+"Select the Objective-C non-fragile ABI version to use by default. This will "
+"only be used as the Objective-C ABI when the non-fragile ABI is enabled "
+"(either via :option:`-fobjc-nonfragile-abi`, or because it is the platform "
+"default)."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:365
+msgid ""
+"Enable use of the Objective-C non-fragile ABI. On platforms for which this "
+"is the default ABI, it can be disabled with :option:`-fno-objc-nonfragile-"
+"abi`."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:369
+msgid "Target Selection Options"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:371
+msgid ""
+"Clang fully supports cross compilation as an inherent part of its design. "
+"Depending on how your version of Clang is configured, it may have support "
+"for a number of cross compilers, or may only support a native target."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:377
+msgid "Specify the architecture to build for (Mac OS X specific)."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:381
+msgid "Specify the architecture to build for (all platforms)."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:385
+msgid ""
+"When building for macOS, specify the minimum version supported by your "
+"application."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:390
+msgid ""
+"When building for iPhone OS, specify the minimum version supported by your "
+"application."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:395
+msgid ""
+"Print out a list of supported processors for the given target (specified "
+"through ``--target=<architecture>`` or :option:`-arch` ``<architecture>``). "
+"If no target is specified, the system default target will be used."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:401 ../../../CommandGuide/clang.rst:405
+msgid "Acts as an alias for :option:`--print-supported-cpus`."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:409
+msgid ""
+"Specify that Clang should generate code for a specific processor family "
+"member and later.  For example, if you specify -march=i486, the compiler is "
+"allowed to generate instructions that are valid on i486 and later "
+"processors, but which may not exist on earlier ones."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:416
+msgid ""
+"Prints the list of extensions that are enabled for the target specified by "
+"the combination of `--target`, `-march`, and `-mcpu` values. Currently, this "
+"option is only supported on AArch64 and RISC-V. On RISC-V, this option also "
+"prints out the ISA string of enabled extensions."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:423
+msgid ""
+"Prints the list of all extensions that are supported for every CPU target "
+"for an architecture (specified through ``--target=<architecture>`` or :"
+"option:`-arch` ``<architecture>``). If no target is specified, the system "
+"default target will be used. Currently, this option is only supported on "
+"AArch64 and RISC-V."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:430
+msgid "Code Generation Options"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:434
+msgid "Specify which optimization level to use:"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:436
+msgid ""
+":option:`-O0` Means \"no optimization\": this level compiles the fastest and "
+"generates the most debuggable code."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:439
+msgid ":option:`-O1` Somewhere between :option:`-O0` and :option:`-O2`."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:441
+msgid ""
+":option:`-O2` Moderate level of optimization which enables most "
+"optimizations."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:444
+msgid ""
+":option:`-O3` Like :option:`-O2`, except that it enables optimizations that "
+"take longer to perform or that may generate larger code (in an attempt to "
+"make the program run faster)."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:448
+msgid ""
+":option:`-Ofast` Enables all the optimizations from :option:`-O3` along with "
+"other aggressive optimizations that may violate strict compliance with "
+"language standards. This is deprecated in Clang 19 and a warning is emitted "
+"that :option:`-O3` in combination with :option:`-ffast-math` should be used "
+"instead if the request for non-standard math behavior is intended. There is "
+"no timeline yet for removal; the aim is to discourage use of :option:`-"
+"Ofast` due to the surprising behavior of an optimization flag changing the "
+"observable behavior of correct code."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:457
+msgid ""
+":option:`-Os` Like :option:`-O2` with extra optimizations to reduce code "
+"size."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:460
+msgid ""
+":option:`-Oz` Like :option:`-Os` (and thus :option:`-O2`), but reduces code "
+"size further."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:463
+msgid ""
+":option:`-Og` Similar to :option:`-O1`, but with slightly reduced "
+"optimization and better variable visibility. The same optimizations are run "
+"as at :option:`-O1`, but the ``-fextend-variable-liveness`` flag is also "
+"set, which tries to prevent optimizations from reducing the liveness of user "
+"variables, improving their availability when debugging."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:469
+msgid ":option:`-O` Equivalent to :option:`-O1`."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:471
+msgid ":option:`-O4` and higher"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:473
+msgid "Currently equivalent to :option:`-O3`"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:477
+msgid ""
+"Control debug information output.  Note that Clang debug information works "
+"best at :option:`-O0`.  When more than one option starting with `-g` is "
+"specified, the last one wins:"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:481
+msgid ":option:`-g` Generate debug information."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:483
+msgid ""
+":option:`-gline-tables-only` Generate only line table debug information. "
+"This allows for symbolicated backtraces with inlining information, but does "
+"not include any information about variables, their locations or types."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:487
+msgid ""
+":option:`-gmodules` Generate debug information that contains external "
+"references to types defined in Clang modules or precompiled headers instead "
+"of emitting redundant debug type information into every object file.  This "
+"option transparently switches the Clang module format to object file "
+"containers that hold the Clang module together with the debug information. "
+"When compiling a program that uses Clang modules or precompiled headers, "
+"this option produces complete debug information with faster compile times "
+"and much smaller object files."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:496
+msgid ""
+"This option should not be used when building static libraries for "
+"distribution to other machines because the debug info will contain "
+"references to the module cache on the machine the object files in the "
+"library were built on."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:503
+msgid ""
+"Clang supports a number of optimizations to reduce the size of debug "
+"information in the binary. They work based on the assumption that the debug "
+"type information can be spread out over multiple compilation units. For "
+"instance, Clang will not emit type definitions for types that are not needed "
+"by a module and could be replaced with a forward declaration. Further, Clang "
+"will only emit type info for a dynamic C++ class in the module that contains "
+"the vtable for the class."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:511
+msgid ""
+"The :option:`-fstandalone-debug` option turns off these optimizations. This "
+"is useful when working with 3rd-party libraries that don't come with debug "
+"information.  This is the default on Darwin.  Note that Clang will never "
+"emit type information for types that are not referenced at all by the "
+"program."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:519
+msgid ""
+"By default, Clang does not emit type information for types that are defined "
+"but not used in a program. To retain the debug info for these unused types, "
+"the negation **-fno-eliminate-unused-debug-types** can be used."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:525
+msgid ""
+"Allow exceptions to be thrown through Clang compiled stack frames (on many "
+"targets, this will enable unwind information for functions that might have "
+"an exception thrown through them). For most targets, this is enabled by "
+"default for C++."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:532
+msgid ""
+"Generate code to catch integer overflow errors.  Signed integer overflow is "
+"undefined in C. With this flag, extra code is generated to detect this and "
+"abort when it happens."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:538
+msgid "This flag sets the default visibility level."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:542
+msgid ""
+"This flag specifies that variables without initializers get common linkage. "
+"It can be disabled with :option:`-fno-common`."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:547
+msgid ""
+"Set the default thread-local storage (TLS) model to use for thread-local "
+"variables. Valid values are: \"global-dynamic\", \"local-dynamic\", "
+"\"initial-exec\" and \"local-exec\". The default is \"global-dynamic\". The "
+"default model can be overridden with the tls_model attribute. The compiler "
+"will try to choose a more efficient model if possible."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:555
+msgid ""
+"Generate output files in LLVM formats, suitable for link time optimization. "
+"When used with :option:`-S` this generates LLVM intermediate language "
+"assembly files, otherwise this generates LLVM bitcode format object files "
+"(which may be passed to the linker depending on the stage selection options)."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:560
+msgid ""
+"The default for :option:`-flto` is \"full\", in which the LLVM bitcode is "
+"suitable for monolithic Link Time Optimization (LTO), where the linker "
+"merges all such modules into a single combined module for optimization. With "
+"\"thin\", :doc:`ThinLTO <../ThinLTO>` compilation is invoked instead."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:568
+msgid ""
+"On Darwin, when using :option:`-flto` along with :option:`-g` and compiling "
+"and linking in separate steps, you also need to pass ``-Wl,-object_path_lto,"
+"<lto-filename>.o`` at the linking step to instruct the ld64 linker not to "
+"delete the temporary object file generated during Link Time Optimization "
+"(this flag is automatically passed to the linker by Clang if compilation and "
+"linking are done in a single step). This allows debugging the executable as "
+"well as generating the ``.dSYM`` bundle using :manpage:`dsymutil(1)`."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:577
+msgid "Driver Options"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:581
+msgid "Print (but do not run) the commands to run for this compilation."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:585
+msgid "Display available options."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:589
+msgid "Do not emit any warnings for unused driver arguments."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:593
+msgid "Pass the comma separated arguments in args to the assembler."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:597
+msgid "Pass the comma separated arguments in args to the linker."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:601
+msgid "Pass the comma separated arguments in args to the preprocessor."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:605
+msgid "Pass arg to the static analyzer."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:609
+msgid "Pass arg to the assembler."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:613
+msgid "Pass arg to the linker."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:617
+msgid "Pass arg to the preprocessor."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:621
+msgid "Write output to file."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:625
+msgid "Print the full library path of file."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:629
+msgid ""
+"Print the library path for the currently used compiler runtime library "
+"(\"libgcc.a\" or \"libclang_rt.builtins.*.a\")."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:634
+msgid "Print the full program path of name."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:638
+msgid "Print the paths used for finding libraries and programs."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:642
+msgid "Save intermediate compilation results."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:646
+msgid ""
+"Save internal code generation (LLVM) statistics to a file in the current "
+"directory (:option:`-save-stats`/\"-save-stats=cwd\") or the directory of "
+"the output file (\"-save-state=obj\")."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:650
+msgid ""
+"You can also use environment variables to control the statistics reporting. "
+"Setting ``CC_PRINT_INTERNAL_STAT`` to ``1`` enables the feature, the report "
+"goes to stdout in JSON format."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:654
+msgid ""
+"Setting ``CC_PRINT_INTERNAL_STAT_FILE`` to a file path makes it report "
+"statistics to the given file in the JSON format."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:657
+msgid ""
+"Note that ``-save-stats`` take precedence over ``CC_PRINT_INTERNAL_STAT`` "
+"and ``CC_PRINT_INTERNAL_STAT_FILE``."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:662
+msgid ""
+"Used to enable and disable, respectively, the use of the integrated "
+"assembler. Whether the integrated assembler is on by default is target "
+"dependent."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:668
+msgid "Time individual commands."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:672
+msgid "Print timing summary of each stage of compilation."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:676
+msgid "Show commands to run and use verbose output."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:680
+msgid "Diagnostics Options"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:684
+msgid ""
+"These options control how Clang prints out information about diagnostics "
+"(errors and warnings). Please see the Clang User's Manual for more "
+"information."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:688
+msgid "Preprocessor Options"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:692
+msgid ""
+"Adds an implicit #define into the predefines buffer which is read before the "
+"source file is preprocessed."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:697
+msgid ""
+"Adds an implicit #undef into the predefines buffer which is read before the "
+"source file is preprocessed."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:702
+msgid ""
+"Adds an implicit #include into the predefines buffer which is read before "
+"the source file is preprocessed."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:707
+msgid "Add the specified directory to the search path for include files."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:711
+msgid ""
+"Add the specified directory to the search path for framework include files."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:715
+msgid ""
+"Do not search the standard system directories or compiler builtin "
+"directories for include files."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:720
+msgid ""
+"Do not search the standard system directories for include files, but do "
+"search compiler builtin include directories."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:725
+msgid "Do not search clang's builtin directory for include files."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:729
+msgid ""
+"Do not search the system C++ standard library directory for include files."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:733
+msgid ""
+"Usable only with :option:`-E`. Do not copy the preprocessed content of "
+"\"system\" headers to the output; instead, preserve the #include directive. "
+"This can greatly reduce the volume of text produced by :option:`-E` which "
+"can be helpful when trying to produce a \"small\" reproduceable test case."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:738
+msgid ""
+"This option does not guarantee reproduceability, however. If the including "
+"source defines preprocessor symbols that influence the behavior of system "
+"headers (for example, ``_XOPEN_SOURCE``) the operation of :option:`-E` will "
+"remove that definition and thus can change the semantics of the included "
+"header. Also, using a different version of the system headers (especially a "
+"different version of the STL) may result in different behavior. Always "
+"verify the preprocessed file by compiling it separately."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:748
+msgid "ENVIRONMENT"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:752
+msgid ""
+"These environment variables are checked, in order, for the location to write "
+"temporary files used during the compilation process."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:757
+msgid ""
+"This environment variable specifies additional (non-system) header search "
+"paths to be used to find included header files. These paths are searched "
+"after paths specified with the :option:`-I\\<directory\\>` option, but "
+"before any system header search paths. Paths are delimited by the platform "
+"dependent delimiter as used in the ``PATH`` environment variable. Empty "
+"entries in the delimited path list, including those at the beginning or end "
+"of the list, are treated as specifying the compiler's current working "
+"directory."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:767
+msgid ""
+"These environment variables specify additional system header file search "
+"paths to be used when processing the corresponding language. Search paths "
+"are delimited as for the :envvar:`CPATH` environment variable."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:773
+msgid ""
+"If :option:`-mmacos-version-min` is unspecified, the default deployment "
+"target is read from this environment variable. This option only affects "
+"Darwin targets."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:778
+msgid "BUGS"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:780
+msgid ""
+"To report bugs, please visit <https://github.com/llvm/llvm-project/issues/"
+">.  Most bug reports should include preprocessed source files (use the :"
+"option:`-E` option) and the full output of the compiler, along with "
+"information to reproduce."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:785
+msgid "SEE ALSO"
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:787
+msgid ":manpage:`as(1)`, :manpage:`ld(1)`"
+msgstr ""
