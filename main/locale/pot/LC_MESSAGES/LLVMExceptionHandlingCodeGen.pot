@@ -1,0 +1,416 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2026, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-16 08:35+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:3
+msgid "LLVM IR Generation for EH and Cleanups"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:9
+msgid "Overview"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:11
+msgid ""
+"This document describes how Clang's LLVM IR generation represents exception "
+"handling (EH) and C++ cleanups. It focuses on the data structures and "
+"control flow patterns used to model normal and exceptional exits, and it "
+"outlines how the generated IR differs across common ABI models."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:16
+msgid ""
+"For details on the LLVM IR representation of exception handling, see `LLVM "
+"Exception Handling <https://llvm.org/docs/ExceptionHandling.html>`_."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:20
+msgid "Core Model"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:22
+msgid ""
+"EH and cleanup handling is centered around an ``EHScopeStack`` that records "
+"nested scopes for:"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:25
+msgid ""
+"**Cleanups**, which run on normal control flow, exceptional control flow, or "
+"both. These are used for destructors, full-expression cleanups, and other "
+"scope-exit actions."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:28
+msgid "**Catch scopes**, which represent ``try``/``catch`` handlers."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:29
+msgid ""
+"**Filter scopes**, used to model dynamic exception specifications and some "
+"platform-specific filters."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:31
+msgid ""
+"**Terminate scopes**, used for ``noexcept`` and similar termination paths."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:33
+msgid ""
+"Each cleanup is a small object with an ``Emit`` method. When a cleanup scope "
+"is popped, the IR generator decides whether it must materialize a normal "
+"cleanup block (for fallthrough, branch-through, or unresolved ``goto`` "
+"fixups) and/or an EH cleanup entry (when exceptional control flow can reach "
+"the cleanup). This results in a flattened CFG where cleanup lifetime is "
+"represented by the blocks and edges that flow into those blocks."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:41
+msgid "Key Components"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:43
+msgid ""
+"The LLVM IR generation for EH and cleanups is spread across several core "
+"components:"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:46
+msgid ""
+"``CodeGenModule`` owns module-wide state such as the LLVM module, target "
+"information, and the selected EH personality function. It provides access to "
+"ABI helpers via ``CGCXXABI`` and target-specific hooks."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:49
+msgid ""
+"``CodeGenFunction`` manages per-function state and IR building. It owns the "
+"``EHScopeStack``, tracks the current insertion point, and emits blocks, "
+"calls, and branches. Most cleanup and EH control flow is built here."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:52
+msgid ""
+"``EHScopeStack`` is the central stack of scopes used to model EH and cleanup "
+"semantics. It stores ``EHCleanupScope`` entries for cleanups, along with "
+"``EHCatchScope``, ``EHFilterScope``, and ``EHTerminateScope`` for handlers "
+"and termination logic."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:56
+msgid ""
+"``EHCleanupScope`` stores the cleanup object plus state data (active flags, "
+"fixup depth, and enclosing scope links). When a cleanup scope is popped, "
+"``CodeGenFunction`` decides whether to emit a normal cleanup block, an EH "
+"cleanup entry, or both."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:60
+msgid ""
+"Cleanup emission helpers implement the mechanics of branching through "
+"cleanups, threading fixups, and emitting cleanup blocks."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:62
+msgid ""
+"Exception emission helpers implement landing pads, dispatch blocks, "
+"personality selection, and helper routines for try/catch, filters, and "
+"terminate handling."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:65
+msgid ""
+"``CGCXXABI`` (and its ABI-specific implementations such as ``ItaniumCXXABI`` "
+"and ``MicrosoftCXXABI``) provide ABI-specific lowering for throws, catch "
+"handling, and destructor emission details."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:68
+msgid ""
+"The cleanup and exception handling code generation is driven by the flow of "
+"``CodeGenFunction`` and its helper classes traversing the AST to emit IR for "
+"C++ expressions, classes, and statements."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:72
+msgid ""
+"AST traversal in ``CodeGenFunction`` emits code and pushes cleanups or EH "
+"scopes, ``EHScopeStack`` records scope nesting, cleanup and exception "
+"helpers materialize the CFG as scopes are popped, and ``CGCXXABI`` supplies "
+"ABI-specific details for landing pads or funclets."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:78
+msgid "Cleanup Destination Routing"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:80
+msgid ""
+"When multiple control flow exits (``return``, ``break``, ``continue``, "
+"fallthrough) pass through the same cleanup, the generated IR shares a single "
+"cleanup block among them. Before entering the cleanup, each exit path stores "
+"a unique index into a \"cleanup destination\" slot. After the cleanup code "
+"runs, a ``switch`` instruction loads this index and dispatches to the "
+"appropriate final destination. This avoids duplicating cleanup code for each "
+"exit while preserving correct control flow."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:88
+msgid ""
+"For example, if a function has both a ``return`` and a ``break`` that exit "
+"through the same destructor cleanup, both paths branch to the shared cleanup "
+"block after storing their respective destination indices. The cleanup "
+"epilogue then switches on the stored index to reach either the return block "
+"or the loop-exit block."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:94
+msgid ""
+"When only a single exit passes through a cleanup (the common case), the "
+"switch is unnecessary and the cleanup block branches directly to its sole "
+"destination."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:98
+msgid "Branch Fixups for Forward Gotos"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:100
+msgid ""
+"A ``goto`` statement that jumps forward to a label not yet seen poses a "
+"special problem. The destination's enclosing cleanup scope is unknown at the "
+"point the ``goto`` is emitted. This is handled by emitting an optimistic "
+"branch and recording a \"fixup.\" When the cleanup scope is later popped, "
+"any recorded fixups are resolved by rewriting the branch to thread through "
+"the cleanup block and adding the destination to the cleanup's switch."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:108
+msgid "Exceptional Cleanups and EH Dispatch"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:110
+msgid ""
+"Exceptional exits (``throw``, ``invoke`` unwinds) are routed through EH "
+"cleanup entries, which are reached via a landing pad or a funclet dispatch "
+"block, depending on the target ABI."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:114
+msgid ""
+"For Itanium-style EH (such as is used on x86-64 Linux), the IR uses "
+"``invoke`` to call potentially-throwing operations and a ``landingpad`` "
+"instruction to capture the exception and selector values. The landing pad "
+"aggregates any catch and cleanup clauses for the current scope, and branches "
+"to a dispatch block that compares the selector to type IDs and jumps to the "
+"appropriate handler."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:121
+msgid ""
+"For Windows, LLVM IR uses funclet-style EH: ``catchswitch`` and ``catchpad`` "
+"for handlers, and ``cleanuppad`` for cleanups, with ``catchret`` and "
+"``cleanupret`` edges to resume normal flow. The personality function "
+"determines how these pads are interpreted by the backend."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:127
+msgid "Personality and ABI Selection"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:129
+msgid ""
+"Each function with exception handling constructs is associated with a "
+"personality function (e.g. __gxx_personality_v0 for C++ on Linux). The "
+"personality function determines the ABI-specifc EH behavior of the function. "
+"The IR generation selects a personality function based on language options "
+"and the target ABI (e.g., Itanium, MSVC SEH, SJLJ, Wasm EH). This decision "
+"affects:"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:136
+msgid "Whether the IR uses landing pads or funclet pads."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:137
+msgid "The shape of dispatch logic for catch and filter scopes."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:138
+msgid "How termination or rethrow paths are modeled."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:139
+msgid ""
+"Whether certain helper functions such as exception filters must be outlined."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:141
+msgid ""
+"Because the personality choice is made during IR generation, the CFG shape "
+"directly reflects ABI-specific details."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:145
+msgid "Example: Array of Objects with Throwing Constructor"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:147
+#: ../../../LLVMExceptionHandlingCodeGen.rst:209
+msgid "Consider:"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:163
+#: ../../../LLVMExceptionHandlingCodeGen.rst:224
+msgid "High-level behavior"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:165
+msgid ""
+"Construction of ``arr`` proceeds element-by-element. If an element "
+"constructor throws, destructors must run for any elements that were "
+"successfully constructed before the throw in reverse order of construction."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:168
+msgid ""
+"After full construction, the call to ``doSomething`` may throw, in which "
+"case the destructors for all constructed elements must run, in reverse order."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:170
+msgid "On normal exit, destructors for all elements run in reverse order."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:173
+msgid "Codegen flow and key components"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:175
+msgid ""
+"The surrounding compound statement enters a ``CodeGenFunction::"
+"LexicalScope``, which is a ``RunCleanupsScope`` and is responsible for "
+"popping local cleanups at the end of the block."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:178
+msgid ""
+"``CodeGenFunction::EmitDecl`` routes the local variable to "
+"``CodeGenFunction::EmitVarDecl`` and then ``CodeGenFunction::"
+"EmitAutoVarDecl``, which in turn calls ``EmitAutoVarAlloca``, "
+"``EmitAutoVarInit``, and ``EmitAutoVarCleanups``."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:182
+msgid ""
+"``CodeGenFunction::EmitCXXAggrConstructorCall`` emits the array constructor "
+"loop. While emitting the loop body, it enters a ``RunCleanupsScope`` and "
+"uses ``CodeGenFunction::pushRegularPartialArrayCleanup`` to register a "
+"cleanup before calling ``CodeGenFunction::EmitCXXConstructorCall`` for one "
+"element in the loop iteration. If this constructor were to throw an "
+"exception, the cleanup handler would destroy the previously constructed "
+"elements in reverse order."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:189
+msgid ""
+"``CodeGenFunction::EmitAutoVarCleanups`` calls ``emitAutoVarTypeCleanup``, "
+"which ultimately registers a ``DestroyObject`` cleanup via "
+"``CodeGenFunction::pushDestroy`` / ``pushFullExprCleanup`` for the full-"
+"array destructor path."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:193
+msgid ""
+"``DestroyObject`` uses ``CodeGenFunction::destroyCXXObject``, which emits "
+"the actual destructor call via ``CodeGenFunction::EmitCXXDestructorCall``."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:195
+msgid ""
+"Cleanup emission helpers (e.g., ``CodeGenFunction::PopCleanupBlock`` and "
+"``CodeGenFunction::EmitBranchThroughCleanup``) thread both normal and EH "
+"exits through the cleanup blocks as scopes are popped."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:198
+msgid ""
+"The cleanup is represented as an ``EHCleanupScope`` on ``EHScopeStack``, and "
+"its ``Emit`` method generates a loop that calls the destructor on the "
+"initialized range in reverse order."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:202
+#: ../../../LLVMExceptionHandlingCodeGen.rst:249
+msgid ""
+"The above function names and flow are accurate as of LLVM 22.0, but this is "
+"subject to change as the code evolves, and this document might not be "
+"updated to reflect the exact functions used."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:207
+msgid "Example: Temporary object materialization"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:226
+msgid "The temporary ``MyClass`` is materialized for the call argument."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:227
+msgid ""
+"The temporary must be destroyed at the end of the full-expression, both on "
+"the normal path and on the exceptional path if ``useMyClass`` throws."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:229
+msgid ""
+"If the constructor throws, the temporary is not considered constructed and "
+"no destructor runs."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:233
+msgid "Codegen flow and key functions"
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:235
+msgid ""
+"``CodeGenFunction::EmitExprWithCleanups`` wraps the full-expression in a "
+"``RunCleanupsScope`` so that full-expression cleanups are run after the call."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:237
+msgid ""
+"``CodeGenFunction::EmitMaterializeTemporaryExpr`` creates storage for the "
+"temporary via ``createReferenceTemporary`` and initializes it. For record "
+"temporaries this flows through ``EmitAnyExprToMem`` and ``CodeGenFunction::"
+"EmitCXXConstructExpr``, which calls ``CodeGenFunction::"
+"EmitCXXConstructorCall``."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:242
+msgid ""
+"``pushTemporaryCleanup`` registers the destructor as a full-expression "
+"cleanup by calling ``CodeGenFunction::pushDestroy`` for "
+"``SD_FullExpression`` temporaries."
+msgstr ""
+
+#: ../../../LLVMExceptionHandlingCodeGen.rst:245
+msgid ""
+"The cleanup ultimately uses ``DestroyObject`` and ``CodeGenFunction::"
+"destroyCXXObject``, which emits ``CodeGenFunction::EmitCXXDestructorCall``."
+msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-02-16 08:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -622,62 +622,89 @@ msgid ""
 msgstr ""
 
 #: ../../../UndefinedBehaviorSanitizer.rst:384
-msgid "Suppressing Errors in Recompiled Code (Ignorelist)"
+msgid "Interaction of Inlining with Disabling Sanitizer Instrumentation"
 msgstr ""
 
 #: ../../../UndefinedBehaviorSanitizer.rst:386
+msgid ""
+"Unlike many of the other sanitizers (e.g., ASan/MSan, TSan), UBSan is "
+"largely compatible with inlining, both the compiler's heuristic inlining as "
+"well as ``__attribute__((always_inline))``."
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:390
+msgid "There are (at least) two exceptions:"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:392
+msgid ""
+"inlining may change the layout of variables, which can affect whether the "
+"`alignment` check detects an under-aligned variable"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:394
+msgid ""
+"combining `__attribute((no_sanitize(\"local-bounds\")))` with "
+"`__attribute((always_inline))` is not supported"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:398
+msgid "Suppressing Errors in Recompiled Code (Ignorelist)"
+msgstr ""
+
+#: ../../../UndefinedBehaviorSanitizer.rst:400
 msgid ""
 "UndefinedBehaviorSanitizer supports ``src`` and ``fun`` entity types in :doc:"
 "`SanitizerSpecialCaseList`, that can be used to suppress error reports in "
 "the specified source files or functions."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:391
+#: ../../../UndefinedBehaviorSanitizer.rst:405
 msgid "Runtime suppressions"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:393
+#: ../../../UndefinedBehaviorSanitizer.rst:407
 msgid ""
 "Sometimes you can suppress UBSan error reports for specific files, "
 "functions, or libraries without recompiling the code. You need to pass a "
 "path to suppression file in a ``UBSAN_OPTIONS`` environment variable."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:401
+#: ../../../UndefinedBehaviorSanitizer.rst:415
 msgid ""
 "You need to specify a :ref:`check <ubsan-checks>` you are suppressing and "
 "the bug location. For example:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:410
+#: ../../../UndefinedBehaviorSanitizer.rst:424
 msgid "There are several limitations:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:412
+#: ../../../UndefinedBehaviorSanitizer.rst:426
 msgid ""
 "Sometimes your binary must have enough debug info and/or symbol table, so "
 "that the runtime could figure out source file or function name to match "
 "against the suppression."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:415
+#: ../../../UndefinedBehaviorSanitizer.rst:429
 msgid ""
 "It is only possible to suppress recoverable checks. For the example above, "
 "you can additionally pass ``-fsanitize-recover=signed-integer-overflow,"
 "alignment,vptr``, although most of UBSan checks are recoverable by default."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:419
+#: ../../../UndefinedBehaviorSanitizer.rst:433
 msgid ""
 "Check groups (like ``undefined``) can't be used in suppressions file, only "
 "fine-grained checks are supported."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:423
+#: ../../../UndefinedBehaviorSanitizer.rst:437
 msgid "Security Considerations"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:425
+#: ../../../UndefinedBehaviorSanitizer.rst:439
 msgid ""
 "UndefinedBehaviorSanitizer's runtime is meant for testing purposes and its "
 "usage in production environment should be carefully considered from security "
@@ -686,66 +713,66 @@ msgid ""
 "<minimal-runtime>` or trap mode for all checks."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:432
+#: ../../../UndefinedBehaviorSanitizer.rst:446
 msgid "Supported Platforms"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:434
+#: ../../../UndefinedBehaviorSanitizer.rst:448
 msgid ""
 "UndefinedBehaviorSanitizer is supported on the following operating systems:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:436
+#: ../../../UndefinedBehaviorSanitizer.rst:450
 msgid "Android"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:437
+#: ../../../UndefinedBehaviorSanitizer.rst:451
 msgid "Linux"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:438
+#: ../../../UndefinedBehaviorSanitizer.rst:452
 msgid "NetBSD"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:439
+#: ../../../UndefinedBehaviorSanitizer.rst:453
 msgid "FreeBSD"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:440
+#: ../../../UndefinedBehaviorSanitizer.rst:454
 msgid "OpenBSD"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:441
+#: ../../../UndefinedBehaviorSanitizer.rst:455
 msgid "macOS"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:442
+#: ../../../UndefinedBehaviorSanitizer.rst:456
 msgid "Windows"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:444
+#: ../../../UndefinedBehaviorSanitizer.rst:458
 msgid ""
 "The runtime library is relatively portable and platform independent. If the "
 "OS you need is not listed above, UndefinedBehaviorSanitizer may already work "
 "for it, or could be made to work with a minor porting effort."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:449
+#: ../../../UndefinedBehaviorSanitizer.rst:463
 msgid "Current Status"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:451
+#: ../../../UndefinedBehaviorSanitizer.rst:465
 msgid ""
 "UndefinedBehaviorSanitizer is available on selected platforms starting from "
 "LLVM 3.3. The test suite is integrated into the CMake build and can be run "
 "with ``check-ubsan`` command."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:456
+#: ../../../UndefinedBehaviorSanitizer.rst:470
 msgid "Additional Configuration"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:458
+#: ../../../UndefinedBehaviorSanitizer.rst:472
 msgid ""
 "UndefinedBehaviorSanitizer adds static check data for each check unless it "
 "is in trap mode. This check data includes the full file name. The option ``-"
@@ -755,43 +782,43 @@ msgid ""
 "file path. If ``N`` is negative, the last ``N`` components will be kept."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:466
+#: ../../../UndefinedBehaviorSanitizer.rst:480
 msgid "Example"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:468
+#: ../../../UndefinedBehaviorSanitizer.rst:482
 msgid ""
 "For a file called ``/code/library/file.cpp``, here is what would be emitted:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:470
+#: ../../../UndefinedBehaviorSanitizer.rst:484
 msgid ""
 "Default (No flag, or ``-fsanitize-undefined-strip-path-components=0``): ``/"
 "code/library/file.cpp``"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:471
+#: ../../../UndefinedBehaviorSanitizer.rst:485
 msgid ""
 "``-fsanitize-undefined-strip-path-components=1``: ``code/library/file.cpp``"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:472
+#: ../../../UndefinedBehaviorSanitizer.rst:486
 msgid "``-fsanitize-undefined-strip-path-components=2``: ``library/file.cpp``"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:473
+#: ../../../UndefinedBehaviorSanitizer.rst:487
 msgid "``-fsanitize-undefined-strip-path-components=-1``: ``file.cpp``"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:474
+#: ../../../UndefinedBehaviorSanitizer.rst:488
 msgid "``-fsanitize-undefined-strip-path-components=-2``: ``library/file.cpp``"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:477
+#: ../../../UndefinedBehaviorSanitizer.rst:491
 msgid "More Information"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:479
+#: ../../../UndefinedBehaviorSanitizer.rst:493
 msgid ""
 "From Oracle blog, including a discussion of error messages: `Improving "
 "Application Security with UndefinedBehaviorSanitizer (UBSan) and GCC "
@@ -799,14 +826,14 @@ msgid ""
 "undefinedbehaviorsanitizer-ubsan-and-gcc>`_"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:482
+#: ../../../UndefinedBehaviorSanitizer.rst:496
 msgid ""
 "From LLVM project blog: `What Every C Programmer Should Know About Undefined "
 "Behavior <http://blog.llvm.org/2011/05/what-every-c-programmer-should-know."
 "html>`_"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.rst:485
+#: ../../../UndefinedBehaviorSanitizer.rst:499
 msgid ""
 "From John Regehr's *Embedded in Academia* blog: `A Guide to Undefined "
 "Behavior in C and C++ <https://blog.regehr.org/archives/213>`_"

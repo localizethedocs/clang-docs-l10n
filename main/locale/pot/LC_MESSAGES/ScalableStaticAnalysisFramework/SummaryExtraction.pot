@@ -1,0 +1,205 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2026, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-16 08:35+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:3
+msgid "Summary Extraction"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:5
+msgid ""
+"The framework is rapidly evolving. The documentation might be out-of-sync of "
+"the implementation. The purpose of this documentation to give context for "
+"upcoming reviews."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:10
+msgid ""
+"The simplest way to think about the lifetime of a summary extraction is by "
+"following the handlers of the ``FrontendAction`` implementing it. There are "
+"3 APIs that are important for us, that are invoked in this order:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:13
+msgid ""
+"``BeginInvocation()``: Checks the command-line arguments related to summary "
+"extraction."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:14
+msgid ""
+"``CreateASTConsumer()``: Creates the ASTConsumers for the different summary "
+"extractors."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:15
+msgid "``EndSourceFile()``: Serializes and writes the extracted summaries."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:18
+msgid "Implementation details"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:21
+msgid "Global Registries"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:23
+msgid ""
+"The framework uses `llvm::Registry\\<\\> <https://llvm.org/doxygen/"
+"classllvm_1_1Registry.html>`_ as an extension point for adding new summary "
+"analyses or serialization formats. Each entry in the *registry* holds a "
+"name, a description and a pointer to a constructor."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:27
+msgid "**Pros**:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:29
+msgid ""
+"Decentralizes the registration. There is not a single place in the source "
+"code where we spell out all of the analyses/formats."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:30
+msgid ""
+"Plays nicely with downstream extensibility, as downstream users can add "
+"their own analyses/formats without touching the source code of the "
+"framework; while still benefiting from the upstream-provided analyses/"
+"formats."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:31
+msgid ""
+"Works with static and dynamic linking. In other words, plugins as shared "
+"objects compose naturally."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:33
+msgid "**Cons**:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:35
+msgid ""
+"Registration slows down all ``clang`` users by a tiny amount, even if they "
+"don't invoke the summary extraction framework."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:36
+msgid ""
+"As the registration is now decoupled, it's now a global program property; "
+"and potentially more difficult to reason about."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:37
+msgid "Complicates testing."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:40
+msgid "Example for adding a custom summary extraction"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:54
+msgid "Details of ``BeginInvocation()``"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:56
+msgid ""
+"Processes the different fields populated from the command line. Ensure that "
+"mandatory flags are set, etc."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:57
+msgid ""
+"For each requested analysis, check if we have a matching "
+"``TUSummaryExtractorInfo`` in the static registry, and diagnose if not."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:58
+msgid ""
+"Parse the format name, and check if we have a matching ``FormatInfo`` in the "
+"format registry."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:59
+msgid ""
+"Lastly, forward the ``BeginInvocation`` call to the wrapped FrontendAction."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:63
+msgid "Details of ``CreateASTConsumer()``"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:65
+msgid ""
+"Create the wrapped ``FrontendAction`` consumers by calling "
+"``CreateASTConsumer()`` on it."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:66
+msgid ""
+"Call ``ssaf::makeTUSummaryExtractor()`` on each requested analysis name."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:68
+msgid ""
+"Look up in the *summary registry* the relevant *Info* object and call the "
+"``Factory`` function pointer to create the relevant ``ASTConsumer``."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:69
+msgid ""
+"Remember, we pass a mutable ``TUSummaryBuilder`` reference to the "
+"constructor, so the analysis can create ``EntityID`` objects and map them to "
+"``TUSummaryData`` objects in their implementation. Their custom metadata "
+"needs to inherit from ``TUSummaryData`` to achieve this."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:71
+msgid ""
+"Lastly, add all of these ``ASTConsumers`` to the ``MultiplexConsumer`` and "
+"return that."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:75
+msgid "Details of ``EndSourceFile()``"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:77
+msgid ""
+"Call the virtual ``writeTUSummary()`` on the serialization format, leading "
+"to the desired format handler (such as JSON or binary or something custom - "
+"provided by a plugin)."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:79
+msgid "Create the directory structure for the enabled analyses."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:80
+msgid ""
+"Serialize ``entities``, ``entity_linkage``, etc. Achieve by calling the "
+"matching virtual functions, dispatching to the concrete implementation."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/SummaryExtraction.rst:81
+msgid ""
+"The same goes for each enabled analysis, serialize the ``EntityID`` to "
+"``TUSummaryData`` mapping using the analysis-provided ``Serialize`` function "
+"pointer."
+msgstr ""
