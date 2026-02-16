@@ -1,0 +1,155 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../DataFlowSanitizer.rst:3
+msgid "DataFlowSanitizer"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:14
+msgid "Introduction"
+msgstr "簡介"
+
+#: ../../../DataFlowSanitizer.rst:16
+msgid "DataFlowSanitizer is a generalised dynamic data flow analysis."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:18
+msgid ""
+"Unlike other Sanitizer tools, this tool is not designed to detect a specific "
+"class of bugs on its own.  Instead, it provides a generic dynamic data flow "
+"analysis framework to be used by clients to help detect application-specific "
+"issues within their own code."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:24
+msgid "Usage"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:26
+msgid ""
+"With no program changes, applying DataFlowSanitizer to a program will not "
+"alter its behavior.  To use DataFlowSanitizer, the program uses API "
+"functions to apply tags to data to cause it to be tracked, and to check the "
+"tag of a specific data item.  DataFlowSanitizer manages the propagation of "
+"tags through the program according to its data flow."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:32
+msgid ""
+"The APIs are defined in the header file ``sanitizer/dfsan_interface.h``. For "
+"further information about each function, please refer to the header file."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:37
+msgid "ABI List"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:39
+msgid ""
+"DataFlowSanitizer uses a list of functions known as an ABI list to decide "
+"whether a call to a specific function should use the operating system's "
+"native ABI or whether it should use a variant of this ABI that also "
+"propagates labels through function parameters and return values.  The ABI "
+"list file also controls how labels are propagated in the former case.  "
+"DataFlowSanitizer comes with a default ABI list which is intended to "
+"eventually cover the glibc library on Linux but it may become necessary for "
+"users to extend the ABI list in cases where a particular library or function "
+"cannot be instrumented (e.g. because it is implemented in assembly or "
+"another language which DataFlowSanitizer does not support) or a function is "
+"called from a library or function which cannot be instrumented."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:51
+msgid ""
+"DataFlowSanitizer's ABI list file is a :doc:`SanitizerSpecialCaseList`. The "
+"pass treats every function in the ``uninstrumented`` category in the ABI "
+"list file as conforming to the native ABI.  Unless the ABI list contains "
+"additional categories for those functions, a call to one of those functions "
+"will produce a warning message, as the labelling behavior of the function is "
+"unknown.  The other supported categories are ``discard``, ``functional`` and "
+"``custom``."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:59
+msgid ""
+"``discard`` -- To the extent that this function writes to (user-accessible) "
+"memory, it also updates labels in shadow memory (this condition is trivially "
+"satisfied for functions which do not write to user-accessible memory).  Its "
+"return value is unlabelled."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:63
+msgid ""
+"``functional`` -- Like ``discard``, except that the label of its return "
+"value is the union of the label of its arguments."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:65
+msgid ""
+"``custom`` -- Instead of calling the function, a custom wrapper ``__dfsw_F`` "
+"is called, where ``F`` is the name of the function.  This function may wrap "
+"the original function or provide its own implementation.  This category is "
+"generally used for uninstrumentable functions which write to user-accessible "
+"memory or which have more complex label propagation behavior.  The signature "
+"of ``__dfsw_F`` is based on that of ``F`` with each argument having a label "
+"of type ``dfsan_label`` appended to the argument list.  If ``F`` is of non-"
+"void return type a final argument of type ``dfsan_label *`` is appended to "
+"which the custom function can store the label for the return value.  For "
+"example:"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:86
+msgid ""
+"If a function defined in the translation unit being compiled belongs to the "
+"``uninstrumented`` category, it will be compiled so as to conform to the "
+"native ABI.  Its arguments will be assumed to be unlabelled, but it will "
+"propagate labels in shadow memory."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:91
+msgid "For example:"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:113
+msgid "Example"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:115
+msgid ""
+"The following program demonstrates label propagation by checking that the "
+"correct labels are propagated."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:150
+msgid "Current status"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:152
+msgid ""
+"DataFlowSanitizer is a work in progress, currently under development for "
+"x86\\_64 Linux."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:156
+msgid "Design"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:158
+msgid "Please refer to the :doc:`design document<DataFlowSanitizerDesign>`."
+msgstr ""
