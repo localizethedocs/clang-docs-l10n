@@ -1,0 +1,105 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 19\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../HLSL/EntryFunctions.rst:3
+msgid "HLSL Entry Functions"
+msgstr ""
+
+#: ../../../HLSL/EntryFunctions.rst:9
+msgid "Usage"
+msgstr ""
+
+#: ../../../HLSL/EntryFunctions.rst:11
+msgid ""
+"In HLSL, entry functions denote the starting point for shader execution. "
+"They must be known at compile time. For all non-library shaders, the "
+"compiler assumes the default entry function name ``main``, unless the DXC ``/"
+"E`` option is provided to specify an alternate entry point. For library "
+"shaders entry points are denoted using the ``[shader(...)]`` attribute."
+msgstr ""
+
+#: ../../../HLSL/EntryFunctions.rst:17
+msgid ""
+"All scalar parameters to entry functions must have semantic annotations, and "
+"all struct parameters must have semantic annotations on every field in the "
+"struct declaration. Additionally if the entry function has a return type, a "
+"semantic annotation must be provided for the return type as well."
+msgstr ""
+
+#: ../../../HLSL/EntryFunctions.rst:22
+msgid ""
+"HLSL entry functions can be called from other parts of the shader, which has "
+"implications on code generation."
+msgstr ""
+
+#: ../../../HLSL/EntryFunctions.rst:26
+msgid "Implementation Details"
+msgstr ""
+
+#: ../../../HLSL/EntryFunctions.rst:28
+msgid ""
+"In Clang, the DXC ``/E`` option is translated to the cc1 flag ``-hlsl-"
+"entry``, which in turn applies the ``HLSLShader`` attribute to the function "
+"with the specified name. This allows code generation for entry functions to "
+"always key off the presence of the ``HLSLShader`` attribute, regardless of "
+"what shader profile you are compiling."
+msgstr ""
+
+#: ../../../HLSL/EntryFunctions.rst:34
+msgid ""
+"In code generation, two functions are generated. One is the user defined "
+"function, which is code generated as a mangled C++ function with internal "
+"linkage following normal function code generation."
+msgstr ""
+
+#: ../../../HLSL/EntryFunctions.rst:38
+msgid ""
+"The actual exported entry function which can be called by the GPU driver is "
+"a ``void(void)`` function that isn't name mangled. In code generation we "
+"generate the unmangled entry function to serve as the actual shader entry. "
+"The shader entry function is annotated with the ``hlsl.shader`` function "
+"attribute identifying the entry's pipeline stage."
+msgstr ""
+
+#: ../../../HLSL/EntryFunctions.rst:44
+msgid ""
+"The body of the unmangled entry function contains first a call to execute "
+"global constructors, then instantiations of the user-defined entry "
+"parameters with their semantic values populated, and a call to the user-"
+"defined function. After the call instruction the return value (if any) is "
+"saved using a target-appropriate intrinsic for storing outputs (for DirectX, "
+"the ``llvm.dx.store.output``). Lastly, any present global destructors will "
+"be called immediately before the return. HLSL does not support C++ "
+"``atexit`` registrations, instead calls to global destructors are compile-"
+"time generated."
+msgstr ""
+
+#: ../../../HLSL/EntryFunctions.rst:55
+msgid ""
+"HLSL support in Clang is currently focused on compute shaders, which do not "
+"support output semantics. Support for output semantics will not be "
+"implemented until other shader profiles are supported."
+msgstr ""
+
+#: ../../../HLSL/EntryFunctions.rst:59
+msgid ""
+"Below is example IR that represents the planned implementation, subject to "
+"change as the ``llvm.dx.store.output`` and ``llvm.dx.load.input`` intrinsics "
+"are not yet implemented."
+msgstr ""
