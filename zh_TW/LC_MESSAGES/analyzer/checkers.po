@@ -1,0 +1,2172 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 15\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:43+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../analyzer/checkers.rst:3
+msgid "Available Checkers"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:5
+msgid ""
+"The analyzer performs checks that are categorized into families or "
+"\"checkers\"."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:7
+msgid ""
+"The default set of checkers covers a variety of checks targeted at finding "
+"security and API usage bugs, dead code, and other logic errors. See the :ref:"
+"`default-checkers` checkers list below."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:10
+msgid ""
+"In addition to these, the analyzer contains a number of :ref:`alpha-"
+"checkers` (aka *alpha* checkers). These checkers are under development and "
+"are switched off by default. They may crash or emit a higher number of false "
+"positives."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:13
+msgid ""
+"The :ref:`debug-checkers` package contains checkers for analyzer developers "
+"for debugging purposes."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:17
+msgid "Table of Contents"
+msgstr "目次表"
+
+#: ../../../analyzer/checkers.rst:22
+msgid "Default Checkers"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:27
+msgid "core"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:28
+msgid ""
+"Models core language features and contains general-purpose checkers such as "
+"division by zero, null pointer dereference, usage of uninitialized values, "
+"etc. *These checkers must be always switched on as other checker rely on "
+"them.*"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:35
+msgid "core.CallAndMessage (C, C++, ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:36
+msgid ""
+"Check for logical errors for function calls and Objective-C message "
+"expressions (e.g., uninitialized arguments, null function pointers)."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:44
+msgid "core.DivideZero (C, C++, ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:45
+msgid "Check for division by zero."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:53
+msgid "core.NonNullParamChecker (C, C++, ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:54
+msgid ""
+"Check for null pointers passed as arguments to a function whose arguments "
+"are references or marked with the 'nonnull' attribute."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:68
+msgid "core.NullDereference (C, C++, ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:69
+msgid "Check for dereferences of null pointers."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:71
+msgid ""
+"This checker specifically does not report null pointer dereferences for x86 "
+"and x86-64 targets when the address space is 256 (x86 GS Segment), 257 (x86 "
+"FS Segment), or 258 (x86 SS segment). See `X86/X86-64 Language Extensions "
+"<https://clang.llvm.org/docs/LanguageExtensions.html#memory-references-to-"
+"specified-segments>`__ for reference."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:78
+msgid ""
+"The ``SuppressAddressSpaces`` option suppresses warnings for null "
+"dereferences of all pointers with address spaces. You can disable this "
+"behavior with the option ``-analyzer-config core.NullDereference:"
+"SuppressAddressSpaces=false``. *Defaults to true*."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:126
+msgid "core.StackAddressEscape (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:127
+msgid "Check that addresses to stack memory do not escape the function."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:152
+msgid "core.UndefinedBinaryOperatorResult (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:153
+msgid "Check for undefined results of binary operators."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:165
+msgid "core.VLASize (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:166
+msgid ""
+"Check for declarations of Variable Length Arrays of undefined or zero size."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:168
+msgid "Check for declarations of VLA of undefined or zero size."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:185
+msgid "core.uninitialized.ArraySubscript (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:186
+msgid "Check for uninitialized values used as array subscripts."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:198
+msgid "core.uninitialized.Assign (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:199
+msgid "Check for assigning uninitialized values."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:211
+msgid "core.uninitialized.Branch (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:212
+msgid "Check for uninitialized values used as branch conditions."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:225
+msgid "core.uninitialized.CapturedBlockVariable (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:226
+msgid "Check for blocks that capture uninitialized values."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:238
+msgid "core.uninitialized.UndefReturn (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:239
+msgid "Check for uninitialized values being returned to the caller."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:252
+msgid "cplusplus"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:254
+msgid "C++ Checkers."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:259
+msgid "cplusplus.InnerPointer (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:260
+msgid "Check for inner pointers of C++ containers used after re/deallocation."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:262
+msgid ""
+"Many container methods in the C++ standard library are known to invalidate "
+"\"references\" (including actual references, iterators and raw pointers) to "
+"elements of the container. Using such references after they are invalidated "
+"causes undefined behavior, which is a common source of memory errors in C++ "
+"that this checker is capable of finding."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:268
+msgid ""
+"The checker is currently limited to ``std::string`` objects and doesn't "
+"recognize some of the more sophisticated approaches to passing unowned "
+"pointers around, such as ``std::string_view``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:290
+msgid "cplusplus.NewDelete (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:291
+msgid ""
+"Check for double-free and use-after-free problems. Traces memory managed by "
+"new/delete."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:299
+msgid "cplusplus.NewDeleteLeaks (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:300
+msgid "Check for memory leaks. Traces memory managed by new/delete."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:311
+msgid "cplusplus.PlacementNewChecker (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:312
+msgid ""
+"Check if default placement new is provided with pointers to sufficient "
+"storage capacity."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:326
+msgid "cplusplus.SelfAssignment (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:327
+msgid "Checks C++ copy and move assignment operators for self assignment."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:332
+msgid "cplusplus.StringChecker (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:333
+msgid "Checks std::string operations."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:335
+msgid ""
+"Checks if the cstring pointer from which the ``std::string`` object is "
+"constructed is ``NULL`` or not. If the checker cannot reason about the "
+"nullness of the pointer it will assume that it was non-null to satisfy the "
+"precondition of the constructor."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:340
+msgid ""
+"This checker is capable of checking the `SEI CERT C++ coding rule STR51-CPP. "
+"Do not attempt to create a std::string from a null pointer <https://wiki.sei."
+"cmu.edu/confluence/x/E3s-BQ>`__."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:357
+msgid "deadcode"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:359
+msgid "Dead Code Checkers."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:364
+msgid "deadcode.DeadStores (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:365
+msgid "Check for values stored to variables that are never read afterwards."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:374
+msgid ""
+"The ``WarnForDeadNestedAssignments`` option enables the checker to emit "
+"warnings for nested dead assignments. You can disable with the ``-analyzer-"
+"config deadcode.DeadStores:WarnForDeadNestedAssignments=false``. *Defaults "
+"to true*."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:379
+msgid "Would warn for this e.g.: if ((y = make_int())) { }"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:386
+msgid "nullability"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:388
+msgid ""
+"Objective C checkers that warn for null pointer passing and dereferencing "
+"errors."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:393
+msgid "nullability.NullPassedToNonnull (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:394
+msgid ""
+"Warns when a null pointer is passed to a pointer which has a _Nonnull type."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:406
+msgid "nullability.NullReturnedFromNonnull (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:407
+msgid ""
+"Warns when a null pointer is returned from a function that has _Nonnull "
+"return type."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:424
+msgid "nullability.NullableDereferenced (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:425
+msgid "Warns when a nullable pointer is dereferenced."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:445
+msgid "nullability.NullablePassedToNonnull (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:446
+msgid ""
+"Warns when a nullable pointer is passed to a pointer which has a _Nonnull "
+"type."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:462
+msgid "nullability.NullableReturnedFromNonnull (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:463
+msgid ""
+"Warns when a nullable pointer is returned from a function that has _Nonnull "
+"return type."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:468
+msgid "optin"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:470
+msgid "Checkers for portability, performance or coding style specific rules."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:475
+msgid "optin.cplusplus.UninitializedObject (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:477
+msgid ""
+"This checker reports uninitialized fields in objects created after a "
+"constructor call. It doesn't only find direct uninitialized fields, but "
+"rather makes a deep inspection of the object, analyzing all of its fields' "
+"subfields. The checker regards inherited fields as direct fields, so one "
+"will receive warnings for uninitialized inherited data members as well."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:557
+msgid "**Options**"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:559
+msgid ""
+"This checker has several options which can be set from command line (e.g. ``-"
+"analyzer-config optin.cplusplus.UninitializedObject:Pedantic=true``):"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:562
+msgid ""
+"``Pedantic`` (boolean). If to false, the checker won't emit warnings for "
+"objects that don't have at least one initialized field. Defaults to false."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:565
+msgid ""
+"``NotesAsWarnings``  (boolean). If set to true, the checker will emit a "
+"warning for each uninitialized field, as opposed to emitting one warning per "
+"constructor call, and listing the uninitialized fields that belongs to it in "
+"notes. *Defaults to false*."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:570
+msgid ""
+"``CheckPointeeInitialization`` (boolean). If set to false, the checker will "
+"not analyze the pointee of pointer/reference fields, and will only check "
+"whether the object itself is initialized. *Defaults to false*."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:574
+msgid ""
+"``IgnoreRecordsWithField`` (string). If supplied, the checker will not "
+"analyze structures that have a field with a name or type name that matches  "
+"the given pattern. *Defaults to \"\"*."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:581
+msgid "optin.cplusplus.VirtualCall (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:582
+msgid "Check virtual function calls during construction or destruction."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:605
+msgid "optin.mpi.MPI-Checker (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:606
+msgid "Checks MPI code."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:636
+msgid "optin.osx.cocoa.localizability.EmptyLocalizationContextChecker (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:637
+msgid "Check that NSLocalizedString macros include a comment for context."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:651
+msgid "optin.osx.cocoa.localizability.NonLocalizedStringChecker (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:652
+msgid ""
+"Warns about uses of non-localized NSStrings passed to UI methods expecting "
+"localized NSStrings."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:669
+msgid "optin.performance.GCDAntipattern"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:670
+msgid "Check for performance anti-patterns when using Grand Central Dispatch."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:675
+msgid "optin.performance.Padding"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:676
+msgid "Check for excessively padded structs."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:681
+msgid "optin.portability.UnixAPI"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:682
+msgid "Finds implementation-defined behavior in UNIX/Posix functions."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:688
+msgid "security"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:690
+msgid "Security related checkers."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:695
+msgid "security.FloatLoopCounter (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:696
+msgid ""
+"Warn on using a floating point value as a loop counter (CERT: FLP30-C, FLP30-"
+"CPP)."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:707
+msgid "security.insecureAPI.UncheckedReturn (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:708
+msgid "Warn on uses of functions whose return values must be always checked."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:719
+msgid "security.insecureAPI.bcmp (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:720
+msgid "Warn on uses of the 'bcmp' function."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:731
+msgid "security.insecureAPI.bcopy (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:732
+msgid "Warn on uses of the 'bcopy' function."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:743
+msgid "security.insecureAPI.bzero (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:744
+msgid "Warn on uses of the 'bzero' function."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:755
+msgid "security.insecureAPI.getpw (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:756
+msgid "Warn on uses of the 'getpw' function."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:768
+msgid "security.insecureAPI.gets (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:769
+msgid "Warn on uses of the 'gets' function."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:781
+msgid "security.insecureAPI.mkstemp (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:782
+msgid "Warn when 'mkstemp' is passed fewer than 6 X's in the format string."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:793
+msgid "security.insecureAPI.mktemp (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:794
+msgid "Warn on uses of the ``mktemp`` function."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:805
+msgid "security.insecureAPI.rand (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:806
+msgid ""
+"Warn on uses of inferior random number generating functions (only if "
+"arc4random function is available): ``drand48, erand48, jrand48, lcong48, "
+"lrand48, mrand48, nrand48, random, rand_r``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:818
+msgid "security.insecureAPI.strcpy (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:819
+msgid "Warn on uses of the ``strcpy`` and ``strcat`` functions."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:834
+msgid "security.insecureAPI.vfork (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:835
+msgid "Warn on uses of the 'vfork' function."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:846
+msgid "security.insecureAPI.DeprecatedOrUnsafeBufferHandling (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:847
+msgid ""
+"Warn on occurrences of unsafe or deprecated buffer handling functions, which "
+"now have a secure variant: ``sprintf, vsprintf, scanf, wscanf, fscanf, "
+"fwscanf, vscanf, vwscanf, vfscanf, vfwscanf, sscanf, swscanf, vsscanf, "
+"vswscanf, swprintf, snprintf, vswprintf, vsnprintf, memcpy, memmove, "
+"strncpy, strncat, memset``"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:859
+msgid "unix"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:860
+msgid "POSIX/Unix checkers."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:865
+msgid "unix.API (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:866
+msgid ""
+"Check calls to various UNIX/Posix functions: ``open, pthread_once, calloc, "
+"malloc, realloc, alloca``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:874
+msgid "unix.Malloc (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:875
+msgid ""
+"Check for memory leaks, double free, and use-after-free problems. Traces "
+"memory managed by malloc()/free()."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:883
+msgid "unix.MallocSizeof (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:884
+msgid "Check for dubious ``malloc`` arguments involving ``sizeof``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:898
+msgid "unix.MismatchedDeallocator (C, C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:899
+msgid "Check for mismatched deallocators."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:907
+msgid "unix.Vfork (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:908
+msgid "Check for proper usage of ``vfork``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:939
+msgid "unix.cstring.BadSizeArg (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:940
+msgid ""
+"Check the size argument passed into C string functions for common erroneous "
+"patterns. Use ``-Wno-strncat-size`` compiler option to mute other "
+"``strncat``-related compiler warnings."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:953
+msgid "unix.cstring.NullArg (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:954
+msgid ""
+"Check for null pointers being passed as arguments to C string functions: "
+"``strlen, strnlen, strcpy, strncpy, strcat, strncat, strcmp, strncmp, "
+"strcasecmp, strncasecmp, wcslen, wcsnlen``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:966
+msgid "osx"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:967
+msgid "macOS checkers."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:972
+msgid "osx.API (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:973
+msgid "Check for proper uses of various Apple APIs."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:985
+msgid "osx.NumberObjectConversion (C, C++, ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:986
+msgid ""
+"Check for erroneous conversions of objects representing numbers into numbers."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1000
+msgid "osx.ObjCProperty (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1001
+msgid "Check for proper uses of Objective-C properties."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1016
+msgid "osx.SecKeychainAPI (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1017
+msgid "Check for proper uses of Secure Keychain APIs."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1025
+msgid "osx.cocoa.AtSync (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1026
+msgid "Check for nil pointers used as mutexes for @synchronized."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1043
+msgid "osx.cocoa.AutoreleaseWrite"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1044
+msgid ""
+"Warn about potentially crashing writes to autoreleasing objects from "
+"different autoreleasing pools in Objective-C."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1049
+msgid "osx.cocoa.ClassRelease (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1050
+msgid ""
+"Check for sending 'retain', 'release', or 'autorelease' directly to a Class."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1064
+msgid "osx.cocoa.Dealloc (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1065
+msgid ""
+"Warn about Objective-C classes that lack a correct implementation of -dealloc"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1073
+msgid "osx.cocoa.IncompatibleMethodTypes (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1074
+msgid "Warn about Objective-C method signatures with type incompatibilities."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1097
+msgid "osx.cocoa.Loops"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1098
+msgid "Improved modeling of loops using Cocoa collection types."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1103
+msgid "osx.cocoa.MissingSuperCall (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1104
+msgid "Warn about Objective-C methods that lack a necessary call to super."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1118
+msgid "osx.cocoa.NSAutoreleasePool (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1119
+msgid "Warn for suboptimal uses of NSAutoreleasePool in Objective-C GC mode."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1131
+msgid "osx.cocoa.NSError (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1132
+msgid "Check usage of NSError parameters."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1161
+msgid "osx.cocoa.NilArg (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1162
+msgid "Check for prohibited nil arguments to ObjC method calls."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1164
+msgid "caseInsensitiveCompare:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1165
+msgid "compare:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1166
+msgid "compare:options:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1167
+msgid "compare:options:range:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1168
+msgid "compare:options:range:locale:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1169
+msgid "componentsSeparatedByCharactersInSet:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1170
+msgid "initWithFormat:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1185
+msgid "osx.cocoa.NonNilReturnValue"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1186
+msgid "Models the APIs that are guaranteed to return a non-nil value."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1191
+msgid "osx.cocoa.ObjCGenerics (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1192
+msgid "Check for type errors when using Objective-C generics."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1206
+msgid "osx.cocoa.RetainCount (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1207
+msgid "Check for leaks and improper reference count management"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1224
+msgid "osx.cocoa.RunLoopAutoreleaseLeak"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1225
+msgid ""
+"Check for leaked memory in autorelease pools that will never be drained."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1230
+msgid "osx.cocoa.SelfInit (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1231
+msgid "Check that 'self' is properly initialized inside an initializer method."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1264
+msgid "osx.cocoa.SuperDealloc (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1265
+msgid "Warn about improper use of '[super dealloc]' in Objective-C."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1284
+msgid "osx.cocoa.UnusedIvars (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1285
+msgid "Warn about private ivars that are never used."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1301
+msgid "osx.cocoa.VariadicMethodTypes (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1302
+msgid ""
+"Check for passing non-Objective-C types to variadic collection "
+"initialization methods that expect only Objective-C types."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1315
+msgid "osx.coreFoundation.CFError (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1316
+msgid "Check usage of CFErrorRef* parameters"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1333
+msgid "osx.coreFoundation.CFNumber (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1334
+msgid "Check for proper uses of CFNumber APIs."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1346
+msgid "osx.coreFoundation.CFRetainRelease (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1347
+msgid "Check for null arguments to CFRetain/CFRelease/CFMakeCollectable."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1366
+msgid "osx.coreFoundation.containers.OutOfBounds (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1367
+msgid "Checks for index out-of-bounds when using 'CFArray' API."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1379
+msgid "osx.coreFoundation.containers.PointerSizedValues (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1380
+msgid ""
+"Warns if 'CFArray', 'CFDictionary', 'CFSet' are created with non-pointer-"
+"size values."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1391
+msgid "Fuchsia"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1393
+msgid ""
+"Fuchsia is an open source capability-based operating system currently being "
+"developed by Google. This section describes checkers that can find various "
+"misuses of Fuchsia APIs."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1400
+msgid "fuchsia.HandleChecker"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1401
+msgid ""
+"Handles identify resources. Similar to pointers they can be leaked, double "
+"freed, or use after freed. This check attempts to find such problems."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1416
+msgid "WebKit"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1418
+msgid ""
+"WebKit is an open-source web browser engine available for macOS, iOS and "
+"Linux. This section describes checkers that can find issues in WebKit "
+"codebase."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1421
+msgid ""
+"Most of the checkers focus on memory management for which WebKit uses custom "
+"implementation of reference counted smartpointers."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1426
+msgid "Checkers are formulated in terms related to ref-counting:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1424
+msgid "*Ref-counted type* is either ``Ref<T>`` or ``RefPtr<T>``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1425
+msgid ""
+"*Ref-countable type* is any type that implements ``ref()`` and ``deref()`` "
+"methods as ``RefPtr<>`` is a template (i. e. relies on duck typing)."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1426
+msgid "*Uncounted type* is ref-countable but not ref-counted type."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1431
+msgid "webkit.RefCntblBaseVirtualDtor"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1432
+msgid ""
+"All uncounted types used as base classes must have a virtual destructor."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1434
+msgid ""
+"Ref-counted types hold their ref-countable data by a raw pointer and allow "
+"implicit upcasting from ref-counted pointer to derived type to ref-counted "
+"pointer to base type. This might lead to an object of (dynamic) derived type "
+"being deleted via pointer to the base class type which C++ standard defines "
+"as UB in case the base class doesn't have virtual destructor ``[expr."
+"delete]``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1448
+msgid "webkit.NoUncountedMemberChecker"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1449
+msgid ""
+"Raw pointers and references to uncounted types can't be used as class "
+"members. Only ref-counted types are allowed."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1467
+msgid "webkit.UncountedLambdaCapturesChecker"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1468
+msgid ""
+"Raw pointers and references to uncounted types can't be captured in lambdas. "
+"Only ref-counted types are allowed."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1486
+msgid "Experimental Checkers"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1488
+msgid ""
+"*These are checkers with known issues or limitations that keep them from "
+"being on by default. They are likely to have false positives. Bug reports "
+"and especially patches are welcome.*"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1491
+msgid "alpha.clone"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1496
+msgid "alpha.clone.CloneChecker (C, C++, ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1497
+msgid "Reports similar pieces of code."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1518
+msgid "alpha.core"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1523
+msgid "alpha.core.BoolAssignment (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1524
+msgid "Warn about assigning non-{0,1} values to boolean variables."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1535
+msgid "alpha.core.C11Lock"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1536
+msgid ""
+"Similarly to :ref:`alpha.unix.PthreadLock <alpha-unix-PthreadLock>`, checks "
+"for the locking/unlocking of ``mtx_t`` mutexes."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1552
+msgid "alpha.core.CallAndMessageUnInitRefArg (C,C++, ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1553
+msgid ""
+"Check for logical errors for function calls and Objective-C message "
+"expressions (e.g., uninitialized arguments, null function pointers, and "
+"pointer to undefined variables)."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1574
+msgid "alpha.core.CastSize (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1575
+msgid ""
+"Check when casting a malloc'ed type ``T``, whether the size is a multiple of "
+"the size of ``T``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1586
+msgid "alpha.core.CastToStruct (C, C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1587
+msgid "Check for cast from non-struct pointer to struct pointer."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1608
+msgid "alpha.core.Conversion (C, C++, ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1609
+msgid "Loss of sign/precision in implicit conversions."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1632
+msgid "alpha.core.DynamicTypeChecker (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1633
+msgid ""
+"Check for cases where the dynamic and the static type of an object are "
+"unrelated."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1648
+msgid "alpha.core.FixedAddr (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1649
+msgid "Check for assignment of a fixed address to a pointer."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1661
+msgid "alpha.core.IdenticalExpr (C, C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1662
+msgid "Warn about unintended use of identical expressions in operators."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1691
+msgid "alpha.core.PointerArithm (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1692
+msgid "Check for pointer arithmetic on locations other than array elements."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1705
+msgid "alpha.core.PointerSub (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1706
+msgid ""
+"Check for pointer subtractions on two pointers pointing to different memory "
+"chunks."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1718
+msgid "alpha.core.SizeofPtr (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1719
+msgid "Warn about unintended use of ``sizeof()`` on pointer expressions."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1733
+msgid "alpha.core.StackAddressAsyncEscape (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1734
+msgid ""
+"Check that addresses to stack memory do not escape the function that "
+"involves dispatch_after or dispatch_async. This checker is a part of ``core."
+"StackAddressEscape``, but is temporarily disabled until some false positives "
+"are fixed."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1757
+msgid "alpha.core.TestAfterDivZero (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1758
+msgid ""
+"Check for division by variable that is later compared against 0. Either the "
+"comparison is useless or there is division by zero."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1769
+msgid "alpha.cplusplus"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1774
+msgid "alpha.cplusplus.DeleteWithNonVirtualDtor (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1775
+msgid ""
+"Reports destructions of polymorphic objects with a non-virtual destructor in "
+"their base class."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1793
+msgid "alpha.cplusplus.EnumCastOutOfRange (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1794
+msgid ""
+"Check for integer to enumeration casts that could result in undefined values."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1810
+msgid "alpha.cplusplus.InvalidatedIterator (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1811
+msgid "Check for use of invalidated iterators."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1826
+msgid "alpha.cplusplus.IteratorRange (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1827
+msgid "Check for iterators used outside their valid ranges."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1839
+msgid "alpha.cplusplus.MismatchedIterator (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1840
+msgid ""
+"Check for use of iterators of different containers where iterators of the "
+"same container are expected."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1863
+msgid "alpha.cplusplus.MisusedMovedObject (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1864
+msgid ""
+"Method calls on a moved-from object and copying a moved-from object will be "
+"reported."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1882
+msgid "alpha.cplusplus.SmartPtr (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1883
+msgid "Check for dereference of null smart pointers."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1894
+msgid "alpha.deadcode"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1898
+msgid "alpha.deadcode.UnreachableCode (C, C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1899
+msgid "Check unreachable code."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1928
+msgid "alpha.fuchsia"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1933
+msgid "alpha.fuchsia.Lock"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1934
+msgid ""
+"Similarly to :ref:`alpha.unix.PthreadLock <alpha-unix-PthreadLock>`, checks "
+"for the locking/unlocking of fuchsia mutexes."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1948
+msgid "alpha.llvm"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1953
+msgid "alpha.llvm.Conventions"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1955
+msgid "Check code for LLVM codebase conventions:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1957
+msgid ""
+"A StringRef should not be bound to a temporary std::string whose lifetime is "
+"shorter than the StringRef's."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1958
+msgid "Clang AST nodes should not have fields that can allocate memory."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1962
+msgid "alpha.osx"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1967
+msgid "alpha.osx.cocoa.DirectIvarAssignment (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1968
+msgid "Check for direct assignments to instance variables."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1987
+msgid "alpha.osx.cocoa.DirectIvarAssignmentForAnnotatedFunctions (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:1988
+msgid ""
+"Check for direct assignments to instance variables in the methods annotated "
+"with ``objc_no_direct_instance_variable_assignment``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2013
+msgid "alpha.osx.cocoa.InstanceVariableInvalidation (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2014
+msgid ""
+"Check that the invalidatable instance variables are invalidated in the "
+"methods annotated with objc_instance_variable_invalidator."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2041
+msgid "alpha.osx.cocoa.MissingInvalidationMethod (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2042
+msgid ""
+"Check that the invalidation methods are present in classes that contain "
+"invalidatable instance variables."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2065
+msgid "alpha.osx.cocoa.localizability.PluralMisuseChecker (ObjC)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2066
+msgid ""
+"Warns against using one vs. many plural pattern in code when generating "
+"localized strings."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2087
+msgid "alpha.security"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2092
+msgid "alpha.security.ArrayBound (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2093
+msgid "Warn about buffer overflows (older checker)."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2130
+msgid "alpha.security.ArrayBoundV2 (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2131
+msgid "Warn about buffer overflows (newer checker)."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2164
+msgid "alpha.security.MallocOverflow (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2165
+msgid ""
+"Check for overflows in the arguments to ``malloc()``. It tries to catch "
+"``malloc(n * c)`` patterns, where:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2168
+msgid "``n``: a variable or member access of an object"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2169
+msgid "``c``: a constant foldable integral"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2171
+msgid ""
+"This checker was designed for code audits, so expect false-positive reports. "
+"One is supposed to silence this checker by ensuring proper bounds checking "
+"on the variable in question using e.g. an ``assert()`` or a branch."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2192 ../../../analyzer/checkers.rst:2271
+#: ../../../analyzer/checkers.rst:2762
+msgid "Limitations:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2194
+msgid ""
+"The checker won't warn for variables involved in explicit casts, since that "
+"might limit the variable's domain. E.g.: ``(unsigned char)int x`` would "
+"limit the domain to ``[0,255]``. The checker will miss the true-positive "
+"cases when the explicit cast would not tighten the domain to prevent the "
+"overflow in the subsequent multiplication operation."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2201
+msgid ""
+"It is an AST-based checker, thus it does not make use of the path-sensitive "
+"taint-analysis."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2207
+msgid "alpha.security.MmapWriteExec (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2208
+msgid "Warn on mmap() calls that are both writable and executable."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2223
+msgid "alpha.security.ReturnPtrRange (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2224
+msgid "Check for an out-of-bound pointer being returned to callers."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2242
+msgid "alpha.security.cert"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2244
+msgid ""
+"SEI CERT checkers which tries to find errors based on their `C coding rules "
+"<https://wiki.sei.cmu.edu/confluence/display/c/2+Rules>`_."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2249
+msgid "alpha.security.cert.pos"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2251
+msgid ""
+"SEI CERT checkers of `POSIX C coding rules <https://wiki.sei.cmu.edu/"
+"confluence/pages/viewpage.action?pageId=87152405>`_."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2256
+msgid "alpha.security.cert.pos.34c"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2257
+msgid ""
+"Finds calls to the ``putenv`` function which pass a pointer to an automatic "
+"variable as the argument."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2273
+msgid ""
+"Technically, one can pass automatic variables to ``putenv``, but one needs "
+"to ensure that the given environment key stays alive until it's removed or "
+"overwritten. Since the analyzer cannot keep track of which envvars get "
+"overwritten and when, it needs to be slightly more aggressive and warn for "
+"such cases too, leading in some cases to false-positive reports like this:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2291
+msgid "alpha.security.cert.env"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2293
+msgid ""
+"SEI CERT checkers of `Environment C coding rules <https://wiki.sei.cmu.edu/"
+"confluence/x/JdcxBQ>`_."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2298
+msgid "alpha.security.cert.env.InvalidPtr"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2300
+msgid "Corresponds to SEI CERT Rules ENV31-C and ENV34-C."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2302
+msgid ""
+"ENV31-C: Rule is about the possible problem with `main` function's third "
+"argument, environment pointer, \"envp\". When enviornment array is modified "
+"using some modification function such as putenv, setenv or others, It may "
+"happen that memory is reallocated, however \"envp\" is not updated to "
+"reflect the changes and points to old memory region."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2309
+msgid ""
+"ENV34-C: Some functions return a pointer to a statically allocated buffer. "
+"Consequently, subsequent call of these functions will invalidate previous "
+"pointer. These functions include: getenv, localeconv, asctime, setlocale, "
+"strerror"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2344
+msgid "alpha.security.taint"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2346
+msgid ""
+"Checkers implementing `taint analysis <https://en.wikipedia.org/wiki/"
+"Taint_checking>`_."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2351
+msgid "alpha.security.taint.TaintPropagation (C, C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2353
+msgid ""
+"Taint analysis identifies untrusted sources of information (taint sources), "
+"rules as to how the untrusted data flows along the execution path "
+"(propagation rules), and points of execution where the use of tainted data "
+"is risky (taints sinks). The most notable examples of taint sources are:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2356
+msgid "network originating data"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2357
+msgid "environment variables"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2358
+msgid "database originating data"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2360
+msgid ""
+"``GenericTaintChecker`` is the main implementation checker for this rule, "
+"and it generates taint information used by other checkers."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2386
+msgid ""
+"There are built-in sources, propagations and sinks defined in code inside "
+"``GenericTaintChecker``. These operations are handled even if no external "
+"taint configuration is provided."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2390
+msgid "Default sources defined by ``GenericTaintChecker``:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2390
+msgid ""
+"``_IO_getc``, ``fdopen``, ``fopen``, ``freopen``, ``get_current_dir_name``, "
+"``getch``, ``getchar``, ``getchar_unlocked``, ``getwd``, ``getcwd``, "
+"``getgroups``, ``gethostname``, ``getlogin``, ``getlogin_r``, "
+"``getnameinfo``, ``gets``, ``gets_s``, ``getseuserbyname``, ``readlink``, "
+"``readlinkat``, ``scanf``, ``scanf_s``, ``socket``, ``wgetch``"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2392
+msgid ""
+"Default propagations defined by ``GenericTaintChecker``: ``atoi``, ``atol``, "
+"``atoll``, ``basename``, ``dirname``, ``fgetc``, ``fgetln``, ``fgets``, "
+"``fnmatch``, ``fread``, ``fscanf``, ``fscanf_s``, ``index``, ``inflate``, "
+"``isalnum``, ``isalpha``, ``isascii``, ``isblank``, ``iscntrl``, "
+"``isdigit``, ``isgraph``, ``islower``, ``isprint``, ``ispunct``, "
+"``isspace``, ``isupper``, ``isxdigit``, ``memchr``, ``memrchr``, ``sscanf``, "
+"``getc``, ``getc_unlocked``, ``getdelim``, ``getline``, ``getw``, "
+"``memcmp``, ``memcpy``, ``memmem``, ``memmove``, ``mbtowc``, ``pread``, "
+"``qsort``, ``qsort_r``, ``rawmemchr``, ``read``, ``recv``, ``recvfrom``, "
+"``rindex``, ``strcasestr``, ``strchr``, ``strchrnul``, ``strcasecmp``, "
+"``strcmp``, ``strcspn``, ``strlen``, ``strncasecmp``, ``strncmp``, "
+"``strndup``, ``strndupa``, ``strnlen``, ``strpbrk``, ``strrchr``, "
+"``strsep``, ``strspn``, ``strstr``, ``strtol``, ``strtoll``, ``strtoul``, "
+"``strtoull``, ``tolower``, ``toupper``, ``ttyname``, ``ttyname_r``, "
+"``wctomb``, ``wcwidth``"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2395
+msgid ""
+"Default sinks defined in ``GenericTaintChecker``: ``printf``, "
+"``setproctitle``, ``system``, ``popen``, ``execl``, ``execle``, ``execlp``, "
+"``execv``, ``execvp``, ``execvP``, ``execve``, ``dlopen``, ``memcpy``, "
+"``memmove``, ``strncpy``, ``strndup``, ``malloc``, ``calloc``, ``alloca``, "
+"``memccpy``, ``realloc``, ``bcopy``"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2398
+msgid ""
+"The user can configure taint sources, sinks, and propagation rules by "
+"providing a configuration file via checker option ``alpha.security.taint."
+"TaintPropagation:Config``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2400
+msgid ""
+"External taint configuration is in `YAML <http://llvm.org/docs/YamlIO."
+"html#introduction-to-yaml>`_ format. The taint-related options defined in "
+"the config file extend but do not override the built-in sources, rules, "
+"sinks. The format of the external taint configuration file is not stable, "
+"and could change without any notice even in a non-backward compatible way."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2403
+msgid ""
+"For a more detailed description of configuration options, please see the :"
+"doc:`user-docs/TaintAnalysisConfiguration`. For an example see :ref:`clangsa-"
+"taint-configuration-example`."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2406
+msgid "alpha.unix"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2411
+msgid "alpha.unix.StdCLibraryFunctionArgs (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2412
+msgid ""
+"Check for calls of standard library functions that violate predefined "
+"argument constraints. For example, it is stated in the C standard that for "
+"the ``int isalnum(int ch)`` function the behavior is undefined if the value "
+"of ``ch`` is not representable as unsigned char and is not equal to ``EOF``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2425
+msgid ""
+"If the argument's value is unknown then the value is assumed to hold the "
+"proper value range."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2440
+msgid ""
+"If the user disables the checker then the argument violation warning is "
+"suppressed. However, the assumption about the argument is still modeled. "
+"This is because exploring an execution path that already contains undefined "
+"behavior is not valuable."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2445
+msgid ""
+"There are different kind of constraints modeled: range constraint, not null "
+"constraint, buffer size constraint. A **range constraint** requires the "
+"argument's value to be in a specific range, see ``isalnum`` as an example "
+"above. A **not null constraint** requires the pointer argument to be non-"
+"null."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2450
+msgid ""
+"A **buffer size** constraint specifies the minimum size of the buffer "
+"argument. The size might be a known constant. For example, ``asctime_r`` "
+"requires that the buffer argument's size must be greater than or equal to "
+"``26`` bytes. In other cases, the size is denoted by another argument or as "
+"a multiplication of two arguments. For instance, ``size_t fread(void *ptr, "
+"size_t size, size_t nmemb, FILE *stream)``. Here, ``ptr`` is the buffer, and "
+"its minimum size is ``size * nmemb``"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2473 ../../../analyzer/checkers.rst:2582
+msgid "**Limitations**"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2475
+msgid ""
+"The checker is in alpha because the reports cannot provide notes about the "
+"values of the arguments. Without this information it is hard to confirm if "
+"the constraint is indeed violated. For example, consider the above case for "
+"``fread``. We display in the warning message that the size of the 1st arg "
+"should be equal to or less than the value of the 2nd arg times the 3rd arg. "
+"However, we fail to display the concrete values (``4`` and ``4096``) for "
+"those arguments."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2483 ../../../analyzer/checkers.rst:2561
+msgid "**Parameters**"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2485
+msgid ""
+"The checker models functions (and emits diagnostics) from the C standard by "
+"default. The ``ModelPOSIX`` option enables the checker to model (and emit "
+"diagnostics) for functions that are defined in the POSIX standard. This "
+"option is disabled by default."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2493
+msgid "alpha.unix.BlockInCriticalSection (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2494
+msgid ""
+"Check for calls to blocking functions inside a critical section. Applies to: "
+"``lock, unlock, sleep, getc, fgets, read, recv, pthread_mutex_lock,`` `` "
+"pthread_mutex_unlock, mtx_lock, mtx_timedlock, mtx_trylock, mtx_unlock, "
+"lock_guard, unique_lock``"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2511
+msgid "alpha.unix.Chroot (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2512
+msgid "Check improper use of chroot."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2526
+msgid "alpha.unix.Errno (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2528
+msgid ""
+"Check for improper use of ``errno``. This checker implements partially CERT "
+"rule `ERR30-C. Set errno to zero before calling a library function known to "
+"set errno, and check errno only after the function returns a value "
+"indicating failure <https://wiki.sei.cmu.edu/confluence/pages/viewpage."
+"action?pageId=87152351>`_. The checker can find the first read of ``errno`` "
+"after successful standard function calls."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2536
+msgid ""
+"The C and POSIX standards often do not define if a standard library function "
+"may change value of ``errno`` if the call does not fail. Therefore, "
+"``errno`` should only be used if it is known from the return value of a "
+"function that the call has failed. There are exceptions to this rule (for "
+"example ``strtol``) but the affected functions are not yet supported by the "
+"checker. The return values for the failure cases are documented in the "
+"standard Linux man pages of the functions and in the `POSIX standard "
+"<https://pubs.opengroup.org/onlinepubs/9699919799/>`_."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2557
+msgid ""
+"The supported functions are the same that are modeled by checker :ref:`alpha-"
+"unix-StdCLibraryFunctionArgs`. The ``ModelPOSIX`` option of that checker "
+"affects the set of checked functions."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2563
+msgid ""
+"The ``AllowErrnoReadOutsideConditionExpressions`` option allows read of the "
+"errno value if the value is not used in a condition (in ``if`` statements, "
+"loops, conditional expressions, ``switch`` statements). For example "
+"``errno`` can be stored into a variable without getting a warning by the "
+"checker."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2579
+msgid ""
+"Default value of this option is ``true``. This allows save of the errno "
+"value for possible later error handling."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2584
+msgid ""
+"Only the very first usage of ``errno`` is checked after an affected function "
+"call. Value of ``errno`` is not followed when it is stored into a variable "
+"or returned from a function."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2587
+msgid ""
+"Documentation of function ``lseek`` is not clear about what happens if the "
+"function returns different value than the expected file position but not -1. "
+"To avoid possible false-positives ``errno`` is allowed to be used in this "
+"case."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2595
+msgid "alpha.unix.PthreadLock (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2596
+msgid ""
+"Simple lock -> unlock checker. Applies to: ``pthread_mutex_lock, "
+"pthread_rwlock_rdlock, pthread_rwlock_wrlock, lck_mtx_lock, "
+"lck_rw_lock_exclusive`` ``lck_rw_lock_shared, pthread_mutex_trylock, "
+"pthread_rwlock_tryrdlock, pthread_rwlock_tryrwlock, lck_mtx_try_lock, "
+"lck_rw_try_lock_exclusive, lck_rw_try_lock_shared, pthread_mutex_unlock, "
+"pthread_rwlock_unlock, lck_mtx_unlock, lck_rw_done``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2635
+msgid "alpha.unix.SimpleStream (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2636
+msgid ""
+"Check for misuses of stream APIs. Check for misuses of stream APIs: ``fopen, "
+"fclose`` (demo checker, the subject of the demo (`Slides <https://llvm.org/"
+"devmtg/2012-11/Zaks-Rose-Checker24Hours.pdf>`_ , `Video <https://youtu.be/"
+"kdxlsP5QVPw>`_) by Anna Zaks and Jordan Rose presented at the `2012 LLVM "
+"Developers' Meeting <https://llvm.org/devmtg/2012-11/>`_)."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2659
+msgid "alpha.unix.Stream (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2660
+msgid ""
+"Check stream handling functions: ``fopen, tmpfile, fclose, fread, fwrite, "
+"fseek, ftell, rewind, fgetpos,`` ``fsetpos, clearerr, feof, ferror, fileno``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2701
+msgid "alpha.unix.cstring.BufferOverlap (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2702
+msgid ""
+"Checks for overlap in two buffer arguments. Applies to:  ``memcpy, mempcpy, "
+"wmemcpy``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2714
+msgid "alpha.unix.cstring.NotNullTerminated (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2715
+msgid ""
+"Check for arguments which are not null-terminated strings; applies to: "
+"``strlen, strnlen, strcpy, strncpy, strcat, strncat, wcslen, wcsnlen``."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2726
+msgid "alpha.unix.cstring.OutOfBounds (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2727
+msgid ""
+"Check for out-of-bounds access in string functions, such as: ``memcpy, "
+"bcopy, strcpy, strncpy, strcat, strncat, memmove, memcmp, memset`` and more."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2730
+msgid ""
+"This check also works with string literals, except there is a known bug in "
+"that the analyzer cannot detect embedded NULL characters when determining "
+"the string length."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2750
+msgid "alpha.unix.cstring.UninitializedRead (C)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2752
+msgid ""
+"Check for uninitialized reads from common memory copy/manipulation functions "
+"such as:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2752
+msgid ""
+"``memcpy, mempcpy, memmove, memcmp, strcmp, strncmp, strcpy, strlen, "
+"strsep`` and many more."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2764
+msgid ""
+"Due to limitations of the memory modeling in the analyzer, one can likely "
+"observe a lot of false-positive reports like this:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2778
+msgid ""
+"More details at the corresponding `GitHub issue <https://github.com/llvm/"
+"llvm-project/issues/43459>`_."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2783
+msgid "alpha.nondeterminism.PointerIteration (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2784
+msgid ""
+"Check for non-determinism caused by iterating unordered containers of "
+"pointers."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2799
+msgid "alpha.nondeterminism.PointerSorting (C++)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2800
+msgid "Check for non-determinism caused by sorting of pointers."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2812
+msgid "alpha.WebKit"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2817
+msgid "alpha.webkit.UncountedCallArgsChecker"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2818
+msgid ""
+"The goal of this rule is to make sure that lifetime of any dynamically "
+"allocated ref-countable object passed as a call argument spans past the end "
+"of the call. This applies to call to any function, method, lambda, function "
+"pointer or functor. Ref-countable types aren't supposed to be allocated on "
+"stack so we check arguments for parameters of raw pointers and references to "
+"uncounted types."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2820 ../../../analyzer/checkers.rst:2927
+msgid ""
+"Here are some examples of situations that we warn about as they *might* be "
+"potentially unsafe. The logic is that either we're able to guarantee that an "
+"argument is safe or it's considered if not a bug then bug-prone."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2838
+msgid ""
+"Although we are enforcing member variables to be ref-counted by `webkit."
+"NoUncountedMemberChecker` any method of the same class still has "
+"unrestricted access to these. Since from a caller's perspective we can't "
+"guarantee a particular member won't get modified by callee (directly or "
+"indirectly) we don't consider values obtained from members safe."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2840
+msgid ""
+"Note: It's likely this heuristic could be made more precise with fewer false "
+"positives - for example calls to free functions that don't have any "
+"parameter other than the pointer should be safe as the callee won't be able "
+"to tamper with the member unless it's a global variable."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2852
+msgid ""
+"The implementation of this rule is a heuristic - we define a whitelist of "
+"kinds of values that are considered safe to be passed as arguments. If we "
+"can't prove an argument is safe it's considered an error."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2854
+msgid "Allowed kinds of arguments:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2856
+msgid ""
+"values obtained from ref-counted objects (including temporaries as those "
+"survive the call too)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2869
+msgid "forwarding uncounted arguments from caller to callee"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2877
+msgid "Caller of ``foo()`` is responsible for  ``a``'s lifetime."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2879
+msgid "``this`` pointer"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2887
+msgid ""
+"Caller of ``foo()`` is responsible for keeping the memory pointed to by "
+"``this`` pointer safe."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2889
+msgid "constants"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2895
+msgid ""
+"We also define a set of safe transformations which if passed a safe value as "
+"an input provide (usually it's the return value) a safe value (or an object "
+"that provides safe values). This is also a heuristic."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2897
+msgid "constructors of ref-counted types (including factory methods)"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2898
+msgid "getters of ref-counted types"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2899
+msgid "member overloaded operators"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2900
+msgid "casts"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2901
+msgid "unary operators like ``&`` or ``*``"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2904
+msgid "alpha.webkit.UncountedLocalVarsChecker"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2905
+msgid ""
+"The goal of this rule is to make sure that any uncounted local variable is "
+"backed by a ref-counted object with lifetime that is strictly larger than "
+"the scope of the uncounted local variable. To be on the safe side we require "
+"the scope of an uncounted variable to be embedded in the scope of ref-"
+"counted object that backs it."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2907
+msgid "These are examples of cases that we consider safe:"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2946
+msgid ""
+"We don't warn about these cases - we don't consider them necessarily safe "
+"but since they are very common and usually safe we'd introduce a lot of "
+"false positives otherwise: - variable defined in condition part of an "
+"```if``` statement - variable defined in init statement condition of a "
+"```for``` statement"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2950
+msgid ""
+"For the time being we also don't warn about uninitialized uncounted local "
+"variables."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2953
+msgid "Debug Checkers"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2959
+msgid "debug"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2961
+msgid ""
+"Checkers used for debugging the analyzer. :doc:`developer-docs/DebugChecks` "
+"page contains a detailed description."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2967
+msgid "debug.AnalysisOrder"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2968
+msgid "Print callbacks that are called during analysis in order."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2973
+msgid "debug.ConfigDumper"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2974
+msgid "Dump config table."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2979
+msgid "debug.DumpCFG Display"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2980
+msgid "Control-Flow Graphs."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2985
+msgid "debug.DumpCallGraph"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2986
+msgid "Display Call Graph."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2991
+msgid "debug.DumpCalls"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2992
+msgid "Print calls as they are traversed by the engine."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2997
+msgid "debug.DumpDominators"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:2998
+msgid "Print the dominance tree for a given CFG."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3003
+msgid "debug.DumpLiveVars"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3004
+msgid "Print results of live variable analysis."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3009
+msgid "debug.DumpTraversal"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3010
+msgid "Print branch conditions as they are traversed by the engine."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3015
+msgid "debug.ExprInspection"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3016
+msgid "Check the analyzer's understanding of expressions."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3021
+msgid "debug.Stats"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3022
+msgid "Emit warnings with analyzer statistics."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3027
+msgid "debug.TaintTest"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3028
+msgid "Mark tainted symbols as such."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3033
+msgid "debug.ViewCFG"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3034
+msgid "View Control-Flow Graphs using GraphViz."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3039
+msgid "debug.ViewCallGraph"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3040
+msgid "View Call Graph using GraphViz."
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3045
+msgid "debug.ViewExplodedGraph"
+msgstr ""
+
+#: ../../../analyzer/checkers.rst:3046
+msgid "View Exploded Graphs using GraphViz."
+msgstr ""
