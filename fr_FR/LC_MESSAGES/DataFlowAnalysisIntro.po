@@ -1,0 +1,910 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 14\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../DataFlowAnalysisIntro.md:1
+msgid "Data flow analysis: an informal introduction"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:3
+msgid "Abstract"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:5
+msgid ""
+"This document introduces data flow analysis in an informal way. The goal is "
+"to give the reader an intuitive understanding of how it works, and show how "
+"it applies to a range of refactoring and bug finding problems."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:9
+msgid ""
+"Data flow analysis is a well-established technique; it is described in many "
+"papers, books, and videos. If you would like a more formal, or a more "
+"thorough explanation of the concepts mentioned in this document, please "
+"refer to the following resources:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:14
+msgid "The Lattice article in Wikipedia."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:15
+msgid ""
+"Videos on the PacketPrep YouTube channel that introduce lattices and the "
+"necessary background information: #20, #21, #22, #23, #24, #25."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:23
+msgid "Introduction to Dataflow Analysis"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:24
+msgid "Introduction to abstract interpretation."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:25
+msgid "Introduction to symbolic execution."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:26
+msgid "Static Program Analysis by Anders Møller and Michael I. Schwartzbach."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:27
+msgid ""
+"EXE: automatically generating inputs of death (a paper that successfully "
+"applies symbolic execution to real-world software)."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:31
+msgid "Data flow analysis"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:33
+msgid "The purpose of data flow analysis"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:35
+msgid ""
+"Data flow analysis is a static analysis technique that proves facts about a "
+"program or its fragment. It can make conclusions about all paths through the "
+"program, while taking control flow into account and scaling to large "
+"programs. The basic idea is propagating facts about the program through the "
+"edges of the control flow graph (CFG) until a fixpoint is reached."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:41
+msgid "Sample problem and an ad-hoc solution"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:43
+msgid ""
+"We would like to explain data flow analysis while discussing an example. "
+"Let's imagine that we want to track possible values of an integer variable "
+"in our program. Here is how a human could annotate the code:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:63
+msgid ""
+"We use sets of integers to represent possible values of x. Local variables "
+"have unambiguous values between statements, so we annotate program points "
+"between statements with sets of possible values."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:67
+msgid ""
+"Here is how we arrived at these annotations. Assigning a constant to x "
+"allows us to make a conclusion that x can only have one value. When control "
+"flow from the \"then\" and \"else\" branches joins, x can have either value."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:71
+msgid ""
+"Abstract algebra provides a nice formalism that models this kind of "
+"structure, namely, a lattice. A join-semilattice is a partially ordered set, "
+"in which every two elements have a least upper bound (called a join)."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:79
+msgid ""
+"For this problem we will use the lattice of subsets of integers, with set "
+"inclusion relation as ordering and set union as a join."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:82
+msgid ""
+"Lattices are often represented visually as Hasse diagrams. Here is a Hasse "
+"diagram for our lattice that tracks subsets of integers:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:0 ../../../DataFlowAnalysisIntro.md:85
+#: ../../../DataFlowAnalysisIntro.md:179
+msgid "Hasse diagram for a lattice of integer sets"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:87
+msgid ""
+"Computing the join in the lattice corresponds to finding the lowest common "
+"ancestor (LCA) between two nodes in its Hasse diagram. There is a vast "
+"amount of literature on efficiently implementing LCA queries for a DAG, "
+"however Efficient Implementation of Lattice Operations (1989) (CiteSeerX, "
+"doi) describes a scheme that particularly well-suited for programmatic "
+"implementation."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:95
+msgid "Too much information and \"top\" values"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:97
+msgid ""
+"Let's try to find the possible sets of values of x in a function that "
+"modifies x in a loop:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:110
+msgid ""
+"We have an issue: x can have any value greater than zero; that's an infinite "
+"set of values, if the program operated on mathematical integers. In C++ int "
+"is limited by INT_MAX so technically we have a set {0; 1; …; INT_MAX} which "
+"is still really big."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:115
+msgid ""
+"To make our analysis practical to compute, we have to limit the amount of "
+"information that we track. In this case, we can, for example, arbitrarily "
+"limit the size of sets to 3 elements. If at a certain program point x has "
+"more than 3 possible values, we stop tracking specific values at that "
+"program point. Instead, we denote possible values of x with the symbol ⊤ "
+"(pronounced \"top\" according to a convention in abstract algebra)."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:132
+msgid ""
+"The statement \"at this program point, x's possible values are ⊤\" is "
+"understood as \"at this program point x can have any value because we have "
+"too much information, or the information is conflicting\"."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:136
+msgid "Note that we can get more than 3 possible values even without a loop:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:151
+msgid "Uninitialized variables and \"bottom\" values"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:153
+msgid ""
+"When x is declared but not initialized, it has no possible values. We "
+"represent this fact symbolically as ⊥ (pronounced \"bottom\")."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:164
+msgid ""
+"Note that using values read from uninitialized variables is undefined "
+"behaviour in C++. Generally, compilers and static analysis tools can assume "
+"undefined behavior does not happen. We must model uninitialized variables "
+"only when we are implementing a checker that specifically is trying to find "
+"uninitialized reads. In this example we show how to model uninitialized "
+"variables only to demonstrate the concept of \"bottom\", and how it applies "
+"to possible value analysis. We describe an analysis that finds uninitialized "
+"reads in a section below."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:172
+msgid "A practical lattice that tracks sets of concrete values"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:174
+msgid ""
+"Taking into account all corner cases covered above, we can put together a "
+"lattice that we can use in practice to track possible values of integer "
+"variables. This lattice represents sets of integers with 1, 2, or 3 "
+"elements, as well as top and bottom. Here is a Hasse diagram for it:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:181
+msgid "Formalization"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:183
+msgid ""
+"Let's consider a slightly more complex example, and think about how we can "
+"compute the sets of possible values algorithmically."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:203
+msgid ""
+"As humans, we understand the control flow from the program text. We used our "
+"understanding of control flow to find program points where two flows join. "
+"Formally, control flow is represented by a CFG (control flow graph):"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:0 ../../../DataFlowAnalysisIntro.md:207
+msgid "CFG for the code above"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:209
+msgid ""
+"We can compute sets of possible values by propagating them through the CFG "
+"of the function:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:212
+msgid ""
+"When x is declared but not initialized, its possible values are {}. The "
+"empty set plays the role of ⊥ in this lattice."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:215
+msgid ""
+"When x is assigned a concrete value, its possible set of values contains "
+"just that specific value."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:218
+msgid ""
+"When x is assigned some unknown value, it can have any value. We represent "
+"this fact as ⊤."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:221
+msgid ""
+"When two control flow paths join, we compute the set union of incoming "
+"values (limiting the number of elements to 3, representig larger sets as ⊤)."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:225
+msgid "The sets of possible values are influenced by:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:227
+msgid "Statements, for example, assignments."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:229
+msgid ""
+"Joins in control flow, for example, ones that appear at the end of \"if\" "
+"statements."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:232
+msgid ""
+"Effects of statements are modeled by what is formally known as a transfer "
+"function. A transfer function takes two arguments: the statement, and the "
+"state of x at the previous program point. It produces the state of x at the "
+"next program point. For example, the transfer function for assignment "
+"ignores the state at the previous program point:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:244
+msgid "The transfer function for + performs arithmetic on every set member:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:252
+msgid ""
+"Effects of control flow are modeled by joining the knowledge from all "
+"possible previous program points."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:275
+msgid ""
+"The predicate that we marked \"given\" is usually called a precondition, and "
+"the conclusion is called a postcondition."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:278
+msgid ""
+"In terms of the CFG, we join the information from all predecessor basic "
+"blocks."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:0 ../../../DataFlowAnalysisIntro.md:280
+msgid "Modeling the effects of a CFG basic block"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:282
+msgid ""
+"Putting it all together, to model the effects of a basic block we compute:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:288
+msgid ""
+"(Note that there are other ways to write this equation that produce higher "
+"precision analysis results. The trick is to keep exploring the execution "
+"paths separately and delay joining until later. Hoowever, we won't discuss "
+"those variations here.)"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:293
+msgid ""
+"To make a conclusion about all paths through the program, we repeat this "
+"computation on all basic blocks until we reach a fixpoint. In other words, "
+"we keep propagating information through the CFG until the computed sets of "
+"values stop changing."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:298
+msgid ""
+"If the lattice has a finite height and transfer functions are monotonic the "
+"algorithm is guaranteed to terminate.  Each iteration of the algorithm can "
+"change computed values only to larger values from the lattice. In the worst "
+"case, all computed values become ⊤, which is not very useful, but at least "
+"the analysis terminates at that point, because it can't change any of the "
+"values."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:304
+msgid ""
+"Fixpoint iteration can be optimised by only reprocessing basic blocks which "
+"had one of their inputs changed on the previous iteration. This is typically "
+"implemented using a worklist queue. With this optimisation the time "
+"complexity becomes O(m * |L|), where m is the number of basic blocks in the "
+"CFG and |L| is the size of lattice used by the analysis."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:310
+msgid "Symbolic execution: a very short informal introduction"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:312
+msgid "Symbolic values"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:314
+msgid ""
+"In the previous example where we tried to figure out what values a variable "
+"can have, the analysis had to be seeded with a concrete value. What if there "
+"are no assignments of concrete values in the program? We can still deduce "
+"some interesting information by representing unknown input values "
+"symbolically, and computing results as symbolic expressions:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:332
+msgid ""
+"We can't say what specific value gets printed, but we know that it is either "
+"x or -x."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:335
+msgid ""
+"Dataflow analysis is an istance of abstract interpretation, and does not "
+"dictate how exactly the lattice and transfer functions should be designed, "
+"beyond the necessary conditions for the analysis to converge. Nevertheless, "
+"we can use symbolic execution ideas to guide our design of the lattice and "
+"transfer functions: lattice values can be symbolic expressions, and transfer "
+"functions can construct more complex symbolic expressions from symbolic "
+"expressions that represent arguments. See this StackOverflow discussion for "
+"a further comparison of abstract interpretation and symbolic execution."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:345
+msgid "Flow condition"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:347
+msgid ""
+"A human can say about the previous example that the function returns x when "
+"x >= 0, and -x when x < 0. We can make this conclusion programmatically by "
+"tracking a flow condition. A flow condition is a predicate written in terms "
+"of the program state that is true at a specific program point regardless of "
+"the execution path that led to this statement. For example, the flow "
+"condition for the program point right before evaluating result = x is x >= 0."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:354
+msgid ""
+"If we enhance the lattice to be a set of pairs of values and predicates, the "
+"dataflow analysis computes the following values:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:371
+msgid ""
+"Of course, in a program with loops, symbolic expressions for flow conditions "
+"can grow unbounded. A practical static analysis system must control this "
+"growth to keep the symbolic representations manageable and ensure that the "
+"data flow analysis terminates. For example, it can use a constraint solver "
+"to prune impossible flow conditions, and/or it can abstract them, losing "
+"precision, after their symbolic representations grow beyond some threshold. "
+"This is similar to how we had to limit the sizes of computed sets of "
+"possible values to 3 elements."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:379
+msgid "Symbolic pointers"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:381
+msgid ""
+"This approach proves to be particularly useful for modeling pointer values, "
+"since we don't care about specific addresses but just want to give a unique "
+"identifier to a memory location."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:396
+msgid "Example: finding output parameters"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:398
+msgid ""
+"Let's explore how data flow analysis can help with a problem that is hard to "
+"solve with other tools in Clang."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:401
+msgid "Problem description"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:403
+msgid ""
+"Output parameters are function parameters of pointer or reference type whose "
+"pointee is completely overwritten by the function, and not read before it is "
+"overwritten. They are common in pre-C++11 code due to the absence of move "
+"semantics. In modern C++ output parameters are non-idiomatic, and return "
+"values are used instead."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:409
+msgid ""
+"Imagine that we would like to refactor output parameters to return values to "
+"modernize old code. The first step is to identify refactoring candidates "
+"through static analysis."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:413
+msgid ""
+"For example, in the following code snippet the pointer c is an output "
+"parameter:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:432
+msgid "We would like to refactor this code into:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:447
+msgid ""
+"However, in the function below the parameter c is not an output parameter "
+"because its field name is not overwritten on every path through the function."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:459
+msgid ""
+"The code also cannot read the value of the parameter before overwriting it:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:469
+msgid "Functions that escape the pointer also block the refactoring:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:481
+msgid ""
+"To identify a candidate function for refactoring, we need to do the "
+"following:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:483
+msgid "Find a function with a non-const pointer or reference parameter."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:485
+msgid "Find the definition of that function."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:487
+msgid ""
+"Prove that the function completely overwrites the pointee on all paths "
+"before returning."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:490
+msgid "Prove that the function reads the pointee only after overwriting it."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:492
+msgid ""
+"Prove that the function does not persist the pointer in a data structure "
+"that is live after the function returns."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:495
+msgid ""
+"There are also requirements that all usage sites of the candidate function "
+"must satisfy, for example, that function arguments do not alias, that users "
+"are not taking the address of the function, and so on. Let's consider "
+"verifying usage site conditions to be a separate static analysis problem."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:500
+msgid "Lattice design"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:502
+msgid ""
+"To analyze the function body we can use a lattice which consists of normal "
+"states and failure states. A normal state describes program points where we "
+"are sure that no behaviors that block the refactoring have occurred. Normal "
+"states keep track of all parameter's member fields that are known to be "
+"overwritten on every path from function entry to the corresponding program "
+"point. Failure states accumulate observed violations (unsafe reads and "
+"pointer escapes) that block the refactoring."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:510
+msgid ""
+"In the partial order of the lattice failure states compare greater than "
+"normal states, which guarantees that they \"win\" when joined with normal "
+"states. Order between failure states is determined by inclusion relation on "
+"the set of accumulated violations (lattice's ⩽ is ⊆ on the set of "
+"violations). Order between normal states is determined by reversed inclusion "
+"relation on the set of overwritten parameter's member fields (lattice's ⩽ is "
+"⊇ on the set of overwritten fields)."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:0 ../../../DataFlowAnalysisIntro.md:518
+msgid "Lattice for data flow analysis that identifies output parameters"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:520
+msgid ""
+"To determine whether a statement reads or writes a field we can implement "
+"symbolic evaluation of DeclRefExprs, LValueToRValue casts, pointer "
+"dereference operator and MemberExprs."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:524
+msgid "Using data flow results to identify output parameters"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:526
+msgid ""
+"Let's take a look at how we use data flow analysis to identify an output "
+"parameter. The refactoring can be safely done when the data flow algorithm "
+"computes a normal state with all of the fields proven to be overwritten in "
+"the exit basic block of the function."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:549
+msgid ""
+"When the data flow algorithm computes a normal state, but not all fields are "
+"proven to be overwritten we can't perform the refactoring."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:564
+msgid ""
+"Similarly, when the data flow algorithm computes a failure state, we also "
+"can't perform the refactoring."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:582
+msgid "Example: finding dead stores"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:584
+msgid ""
+"Let's say we want to find redundant stores, because they indicate potential "
+"bugs."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:592
+msgid "The first store to x is never read, probably there is a bug."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:594
+msgid ""
+"The implementation of dead store analysis is very similar to output "
+"parameter analysis: we need to track stores and loads, and find stores that "
+"were never read."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:598
+msgid ""
+"Liveness analysis is a generalization of this idea, which is often used to "
+"answer many related questions, for example:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:602
+msgid "finding dead stores,"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:603
+msgid "finding uninitialized variables,"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:604
+msgid "finding a good point to deallocate memory,"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:605
+msgid "finding out if it would be safe to move an object."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:607
+msgid "Example: definitive initialization"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:609
+msgid ""
+"Definitive initialization proves that variables are known to be initialized "
+"when read. If we find a variable which is read when not initialized then we "
+"generate a warning."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:635
+msgid ""
+"For this purpose we can use lattice in a form of a mapping from variable "
+"declarations to initialization states; each initialization state is "
+"represented by the followingn lattice:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:0 ../../../DataFlowAnalysisIntro.md:639
+msgid "Lattice for definitive initialization analysis"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:641
+msgid ""
+"A lattice element could also capture the source locations of the branches "
+"that lead us to the corresponding program point. Diagnostics would use this "
+"information to show a sample buggy code path to the user."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:645
+msgid "Example: refactoring raw pointers to unique_ptr"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:647
+msgid ""
+"Modern idiomatic C++ uses smart pointers to express memory ownership, "
+"however in pre-C++11 code one can often find raw pointers that own heap "
+"memory blocks."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:650
+msgid ""
+"Imagine that we would like to refactor raw pointers that own memory to "
+"unique_ptr. There are multiple ways to design a data flow analysis for this "
+"problem; let's look at one way to do it."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:654
+msgid ""
+"For example, we would like to refactor the following code that uses raw "
+"pointers:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:669
+msgid "into code that uses unique_ptr:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:682
+msgid ""
+"This problem can be solved with a lattice in form of map from value "
+"declarations to pointer states:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:0 ../../../DataFlowAnalysisIntro.md:685
+msgid "Lattice that identifies candidates for unique_ptr refactoring"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:687
+msgid ""
+"We can perform the refactoring if at the exit of a function pi is Compatible."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:704
+msgid ""
+"Let's look at an example where the raw pointer owns two different memory "
+"blocks:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:720
+msgid "It can be refactored to use unique_ptr like this:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:733
+msgid ""
+"In the following example, the raw pointer is used to access the heap object "
+"after the ownership has been transferred."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:751
+msgid ""
+"We can refactor this code to use unique_ptr, however we would have to "
+"introduce a non-owning pointer variable, since we can't use the moved-from "
+"unique_ptr to access the object:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:769
+msgid ""
+"If the original code didn't call delete at the very end of the function, "
+"then our refactoring may change the point at which we run the destructor and "
+"release memory. Specifically, if there is some user code after delete, then "
+"extending the lifetime of the object until the end of the function may hold "
+"locks for longer than necessary, introduce memory overhead etc."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:775
+msgid ""
+"One solution is to always replace delete with a call to reset(), and then "
+"perform another analysis that removes unnecessary reset() calls."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:787
+msgid ""
+"This analysis will refuse to refactor code that mixes borrowed pointer "
+"values and unique ownership. In the following code, GetPtr() returns a "
+"borrowed pointer, which is assigned to pi. Then, pi is used to hold a "
+"uniquely-owned pointer. We don't distinguish between these two assignments, "
+"and we want each assignment to be paired with a corresponding sink; "
+"otherwise, we transition the pointer to a Conflicting state, like in this "
+"example."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:807
+msgid ""
+"We could still handle this case by finding a maximal range in the code where "
+"pi could be in the Compatible state, and only refactoring that part."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:821
+msgid "Example: finding redundant branch conditions"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:823
+msgid ""
+"In the code below b1 should not be checked in both the outer and inner "
+"\"if\" statements. It is likely there is a bug in this code."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:837
+msgid ""
+"A checker that finds this pattern syntactically is already implemented in "
+"ClangTidy using AST matchers (bugprone-redundant-branch-condition)."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:840
+msgid ""
+"To implement it using the data flow analysis framework, we can produce a "
+"warning if any part of the branch condition is implied by the flow condition."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:856
+msgid ""
+"One way to check this implication is to use a SAT solver. Without a SAT "
+"solver, we could keep the flow condition in the CNF form and then it would "
+"be easy to check the implication."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:860
+msgid "Example: finding unchecked std::optional unwraps"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:862
+msgid ""
+"Calling optional::value() is only valid if optional::has_value() is true. We "
+"want to show that when x.value() is executed, the flow condition implies x."
+"has_value()."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:866
+msgid ""
+"In the example below x.value() is accessed safely because it is guarded by "
+"the x.has_value() check."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:877
+msgid ""
+"While entering the if branch we deduce that x.has_value() is implied by the "
+"flow condition."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:891
+msgid ""
+"We also need to prove that x is not modified between check and value access. "
+"The modification of x may be very subtle:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:907
+msgid "Example: finding dead code behind A/B experiment flags"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:909
+msgid "Finding dead code is a classic application of data flow analysis."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:911
+msgid ""
+"Unused flags for A/B experiment hide dead code. However, this flavor of dead "
+"code is invisible to the compiler because the flag can be turned on at any "
+"moment."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:915
+msgid ""
+"We could make a tool that deletes experiment flags. The user tells us which "
+"flag they want to delete, and we assume that the it's value is a given "
+"constant."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:918
+msgid ""
+"For example, the user could use the tool to remove example_flag from this "
+"code:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:935
+msgid "The tool would simplify the code to:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:944
+msgid ""
+"We can solve this problem with a classic constant propagation lattice "
+"combined with symbolic evaluation."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:947
+msgid "Example: finding inefficient usages of associative containers"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:949
+msgid ""
+"Real-world code often accidentally performs repeated lookups in associative "
+"containers:"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:958
+msgid ""
+"To find the above inefficiency we can use the available expressions analysis "
+"to understand that m[42] is evaluated twice."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:968
+msgid ""
+"We can also track the m.contains() check in the flow condition to find "
+"redundant checks, like in the example below."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:978
+msgid "Example: refactoring types that implicitly convert to each other"
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:980
+msgid ""
+"Refactoring one strong type to another is difficult, but the compiler can "
+"help: once you refactor one reference to the type, the compiler will flag "
+"other places where this information flows with type mismatch errors. "
+"Unfortunately this strategy does not work when you are refactoring types "
+"that implicitly convert to each other, for example, replacing int32_t with "
+"int64_t."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:986
+msgid ""
+"Imagine that we want to change user IDs from 32 to 64-bit integers. In other "
+"words, we need to find all integers tainted with user IDs. We can use data "
+"flow analysis to implement taint analysis."
+msgstr ""
+
+#: ../../../DataFlowAnalysisIntro.md:998
+msgid ""
+"Taint analysis is very well suited to this problem because the program "
+"rarely branches on user IDs, and almost certainly does not perform any "
+"computation (like arithmetic)."
+msgstr ""

@@ -1,0 +1,456 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 14\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../BlockLanguageSpec.rst:6
+msgid "Language Specification for Blocks"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:12
+msgid "Revisions"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:14
+msgid "2008/2/25 --- created"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:15
+msgid "2008/7/28 --- revised, ``__block`` syntax"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:16
+msgid "2008/8/13 --- revised, Block globals"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:17
+msgid "2008/8/21 --- revised, C++ elaboration"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:18
+msgid "2008/11/1 --- revised, ``__weak`` support"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:19
+msgid "2009/1/12 --- revised, explicit return types"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:20
+msgid "2009/2/10 --- revised, ``__block`` objects need retain"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:23
+msgid "Overview"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:25
+msgid ""
+"A new derived type is introduced to C and, by extension, Objective-C, C++, "
+"and Objective-C++"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:29
+msgid "The Block Type"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:31
+msgid ""
+"Like function types, the :block-term:`Block type` is a pair consisting of a "
+"result value type and a list of parameter types very similar to a function "
+"type. Blocks are intended to be used much like functions with the key "
+"distinction being that in addition to executable code they also contain "
+"various variable bindings to automatic (stack) or managed (heap) memory."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:38
+msgid "The abstract declarator,"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:44
+msgid ""
+"describes a reference to a Block that, when invoked, takes two parameters, "
+"the first of type char and the second of type float, and returns a value of "
+"type int.  The Block referenced is of opaque data that may reside in "
+"automatic (stack) memory, global memory, or heap memory."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:51
+msgid "Block Variable Declarations"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:53
+msgid ""
+"A :block-term:`variable with Block type` is declared using function pointer "
+"style notation substituting ``^`` for ``*``. The following are valid Block "
+"variable declarations:"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:63
+msgid ""
+"Variadic ``...`` arguments are supported. [variadic.c] A Block that takes no "
+"arguments must specify void in the argument list [voidarg.c]. An empty "
+"parameter list does not represent, as K&R provide, an unspecified argument "
+"list.  Note: both gcc and clang support K&R style as a convenience."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:69
+msgid ""
+"A Block reference may be cast to a pointer of arbitrary type and vice versa. "
+"[cast.c] A Block reference may not be dereferenced via the pointer "
+"dereference operator ``*``, and thus a Block's size may not be computed at "
+"compile time. [sizeof.c]"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:75
+msgid "Block Literal Expressions"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:77
+msgid ""
+"A :block-term:`Block literal expression` produces a reference to a Block. It "
+"is introduced by the use of the ``^`` token as a unary operator."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:88
+msgid ""
+"where type expression is extended to allow ``^`` as a Block reference "
+"(pointer) where ``*`` is allowed as a function reference (pointer)."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:91
+msgid "The following Block literal:"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:97
+msgid "produces a reference to a Block with no arguments with no return value."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:99
+msgid ""
+"The return type is optional and is inferred from the return statements. If "
+"the return statements return a value, they all must return a value of the "
+"same type. If there is no value returned the inferred type of the Block is "
+"void; otherwise it is the type of the return statement value."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:105
+msgid ""
+"If the return type is omitted and the argument list is ``( void )``, the "
+"``( void )`` argument list may also be omitted."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:108
+msgid "So:"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:114 ../../../BlockLanguageSpec.rst:134
+msgid "and:"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:120
+msgid "are exactly equivalent constructs for the same expression."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:122
+msgid ""
+"The type_expression extends C expression parsing to accommodate Block "
+"reference declarations as it accommodates function pointer declarations."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:126
+msgid "Given:"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:140
+msgid "are equivalent expressions, as is:"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:146
+msgid "[returnfunctionptr.c]"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:148
+msgid ""
+"The compound statement body establishes a new lexical scope within that of "
+"its parent. Variables used within the scope of the compound statement are "
+"bound to the Block in the normal manner with the exception of those in "
+"automatic (stack) storage. Thus one may access functions and global "
+"variables as one would expect, as well as static local variables. [testme]"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:155
+msgid ""
+"Local automatic (stack) variables referenced within the compound statement "
+"of a Block are imported and captured by the Block as const copies. The "
+"capture (binding) is performed at the time of the Block literal expression "
+"evaluation."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:160
+msgid ""
+"The compiler is not required to capture a variable if it can prove that no "
+"references to the variable will actually be evaluated. Programmers can force "
+"a variable to be captured by referencing it in a statement at the beginning "
+"of the Block, like so:"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:169
+msgid ""
+"This matters when capturing the variable has side-effects, as it can in "
+"Objective-C or C++."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:172
+msgid ""
+"The lifetime of variables declared in a Block is that of a function; each "
+"activation frame contains a new copy of variables declared within the local "
+"scope of the Block. Such variable declarations should be allowed anywhere "
+"[testme] rather than only when C99 parsing is requested, including for "
+"statements. [testme]"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:178
+msgid ""
+"Block literal expressions may occur within Block literal expressions (nest) "
+"and all variables captured by any nested blocks are implicitly also captured "
+"in the scopes of their enclosing Blocks."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:182
+msgid ""
+"A Block literal expression may be used as the initialization value for Block "
+"variables at global or local static scope."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:186
+msgid "The Invoke Operator"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:188
+msgid ""
+"Blocks are :block-term:`invoked` using function call syntax with a list of "
+"expression parameters of types corresponding to the declaration and "
+"returning a result type also according to the declaration. Given:"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:199
+msgid "the following are all legal Block invocations:"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:208
+msgid "The Copy and Release Operations"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:210
+msgid ""
+"The compiler and runtime provide :block-term:`copy` and :block-term:"
+"`release` operations for Block references that create and, in matched use, "
+"release allocated storage for referenced Blocks."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:214
+msgid ""
+"The copy operation ``Block_copy()`` is styled as a function that takes an "
+"arbitrary Block reference and returns a Block reference of the same type. "
+"The release operation, ``Block_release()``, is styled as a function that "
+"takes an arbitrary Block reference and, if dynamically matched to a Block "
+"copy operation, allows recovery of the referenced allocated memory."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:223
+msgid "The ``__block`` Storage Qualifier"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:225
+msgid ""
+"In addition to the new Block type we also introduce a new storage "
+"qualifier, :block-term:`__block`, for local variables. [testme: a __block "
+"declaration within a block literal] The ``__block`` storage qualifier is "
+"mutually exclusive to the existing local storage qualifiers auto, register, "
+"and static. [testme] Variables qualified by ``__block`` act as if they were "
+"in allocated storage and this storage is automatically recovered after last "
+"use of said variable.  An implementation may choose an optimization where "
+"the storage is initially automatic and only \"moved\" to allocated (heap) "
+"storage upon a Block_copy of a referencing Block.  Such variables may be "
+"mutated as normal variables are."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:237
+msgid ""
+"In the case where a ``__block`` variable is a Block one must assume that the "
+"``__block`` variable resides in allocated storage and as such is assumed to "
+"reference a Block that is also in allocated storage (that it is the result "
+"of a ``Block_copy`` operation).  Despite this there is no provision to do a "
+"``Block_copy`` or a ``Block_release`` if an implementation provides initial "
+"automatic storage for Blocks.  This is due to the inherent race condition of "
+"potentially several threads trying to update the shared variable and the "
+"need for synchronization around disposing of older values and copying new "
+"ones.  Such synchronization is beyond the scope of this language "
+"specification."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:250
+msgid "Control Flow"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:252
+msgid ""
+"The compound statement of a Block is treated much like a function body with "
+"respect to control flow in that goto, break, and continue do not escape the "
+"Block.  Exceptions are treated *normally* in that when thrown they pop stack "
+"frames until a catch clause is found."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:259
+msgid "Objective-C Extensions"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:261
+msgid ""
+"Objective-C extends the definition of a Block reference type to be that also "
+"of id.  A variable or expression of Block type may be messaged or used as a "
+"parameter wherever an id may be. The converse is also true. Block references "
+"may thus appear as properties and are subject to the assign, retain, and "
+"copy attribute logic that is reserved for objects."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:268
+msgid ""
+"All Blocks are constructed to be Objective-C objects regardless of whether "
+"the Objective-C runtime is operational in the program or not. Blocks using "
+"automatic (stack) memory are objects and may be messaged, although they may "
+"not be assigned into ``__weak`` locations if garbage collection is enabled."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:274
+msgid ""
+"Within a Block literal expression within a method definition references to "
+"instance variables are also imported into the lexical scope of the compound "
+"statement. These variables are implicitly qualified as references from self, "
+"and so self is imported as a const copy. The net effect is that instance "
+"variables can be mutated."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:280
+msgid ""
+"The :block-term:`Block_copy` operator retains all objects held in variables "
+"of automatic storage referenced within the Block expression (or form strong "
+"references if running under garbage collection). Object variables of "
+"``__block`` storage type are assumed to hold normal pointers with no "
+"provision for retain and release messages."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:286
+msgid ""
+"Foundation defines (and supplies) ``-copy`` and ``-release`` methods for "
+"Blocks."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:289
+msgid ""
+"In the Objective-C and Objective-C++ languages, we allow the ``__weak`` "
+"specifier for ``__block`` variables of object type.  If garbage collection "
+"is not enabled, this qualifier causes these variables to be kept without "
+"retain messages being sent. This knowingly leads to dangling pointers if the "
+"Block (or a copy) outlives the lifetime of this object."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:296
+msgid ""
+"In garbage collected environments, the ``__weak`` variable is set to nil "
+"when the object it references is collected, as long as the ``__block`` "
+"variable resides in the heap (either by default or via ``Block_copy()``).  "
+"The initial Apple implementation does in fact start ``__block`` variables on "
+"the stack and migrate them to the heap only as a result of a "
+"``Block_copy()`` operation."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:303
+msgid ""
+"It is a runtime error to attempt to assign a reference to a stack-based "
+"Block into any storage marked ``__weak``, including ``__weak`` ``__block`` "
+"variables."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:309
+msgid "C++ Extensions"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:311
+msgid ""
+"Block literal expressions within functions are extended to allow const use "
+"of C++ objects, pointers, or references held in automatic storage."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:314
+msgid ""
+"As usual, within the block, references to captured variables become const-"
+"qualified, as if they were references to members of a const object.  Note "
+"that this does not change the type of a variable of reference type."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:319
+msgid "For example, given a class Foo:"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:327
+msgid ""
+"A Block that referenced these variables would import the variables as const "
+"variations:"
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:336
+msgid ""
+"Captured variables are copied into the Block at the instant of evaluating "
+"the Block literal expression.  They are also copied when calling "
+"``Block_copy()`` on a Block allocated on the stack.  In both cases, they are "
+"copied as if the variable were const-qualified, and it's an error if there's "
+"no such constructor."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:342
+msgid ""
+"Captured variables in Blocks on the stack are destroyed when control leaves "
+"the compound statement that contains the Block literal expression.  Captured "
+"variables in Blocks on the heap are destroyed when the reference count of "
+"the Block drops to zero."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:347
+msgid ""
+"Variables declared as residing in ``__block`` storage may be initially "
+"allocated in the heap or may first appear on the stack and be copied to the "
+"heap as a result of a ``Block_copy()`` operation. When copied from the "
+"stack, ``__block`` variables are copied using their normal qualification (i."
+"e. without adding const).  In C++11, ``__block`` variables are copied as x-"
+"values if that is possible, then as l-values if not; if both fail, it's an "
+"error.  The destructor for any initial stack-based version is called at the "
+"variable's normal end of scope."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:356
+msgid ""
+"References to ``this``, as well as references to non-static members of any "
+"enclosing class, are evaluated by capturing ``this`` just like a normal "
+"variable of C pointer type."
+msgstr ""
+
+#: ../../../BlockLanguageSpec.rst:360
+msgid ""
+"Member variables that are Blocks may not be overloaded by the types of their "
+"arguments."
+msgstr ""
