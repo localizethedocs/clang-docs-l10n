@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-02-16 08:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,12 +64,12 @@ msgid ""
 msgstr ""
 
 #: ../../../analyzer/user-docs/CrossTranslationUnit.rst:34
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:224
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:212
 msgid "Manual CTU Analysis"
 msgstr ""
 
 #: ../../../analyzer/user-docs/CrossTranslationUnit.rst:35
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:226
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:214
 msgid "Let's consider these source files in our minimal example:"
 msgstr ""
 
@@ -92,38 +92,26 @@ msgid ""
 msgstr ""
 
 #: ../../../analyzer/user-docs/CrossTranslationUnit.rst:92
-msgid ""
-"We have to modify `externalDefMap.txt` to contain the name of the `.ast` "
-"files instead of the source files:"
-msgstr ""
-
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:98
-msgid ""
-"We still have to further modify the `externalDefMap.txt` file to contain "
-"relative paths:"
-msgstr ""
-
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:104
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:289
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:277
 msgid ""
 "Now everything is available for the CTU analysis. We have to feed Clang with "
 "CTU specific extra arguments:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:125
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:311
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:113
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:299
 msgid ""
 "This manual procedure is error-prone and not scalable, therefore to analyze "
 "real projects it is recommended to use `CodeChecker` or `scan-build-py`."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:129
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:315
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:117
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:303
 msgid "Automated CTU Analysis with CodeChecker"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:130
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:316
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:118
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:304
 msgid ""
 "The `CodeChecker <https://github.com/Ericsson/codechecker>`_ project fully "
 "supports automated CTU analysis with Clang. Once we have set up the `PATH` "
@@ -131,27 +119,27 @@ msgid ""
 "takes:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:150
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:336
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:138
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:324
 msgid ""
 "The `plist` files contain the results of the analysis, which may be viewed "
 "with the regular analysis tools. E.g. one may use `CodeChecker parse` to "
 "view the results in command line:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:178
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:364
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:166
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:352
 msgid ""
 "Or we can use `CodeChecker parse -e html` to export the results into HTML "
 "format:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:186
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:372
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:174
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:360
 msgid "Automated CTU Analysis with scan-build-py (don't do it)"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:187
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:175
 msgid ""
 "We actively develop CTU with CodeChecker as the driver for this feature, "
 "`scan-build-py` is not actively developed for CTU. `scan-build-py` has "
@@ -159,15 +147,15 @@ msgid ""
 "projects only."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:190
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:178
 msgid "Example usage of scan-build-py:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:207
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:195
 msgid "On-demand analysis"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:208
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:196
 msgid ""
 "The analysis produces the necessary AST structure of external TUs during "
 "analysis. This requires the exact compiler invocations for each TU, which "
@@ -187,15 +175,15 @@ msgid ""
 "is used to determine compiler flags."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:244
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:232
 msgid "The compilation database:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:261
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:249
 msgid "The `invocation list`:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:279
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:267
 msgid ""
 "We'd like to analyze `main.cpp` and discover the division by zero bug. As we "
 "are using On-demand mode, we only need to create a CTU index file which "
@@ -203,13 +191,13 @@ msgid ""
 "files in format `<USR-Length>:<USR> <File-Path>`:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:373
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:361
 msgid ""
 "We actively develop CTU with CodeChecker as the driver for feature, `scan-"
 "build-py` is not actively developed for CTU. `scan-build-py` has various "
 "errors and issues, expect it to work only with the very basic projects only."
 msgstr ""
 
-#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:376
+#: ../../../analyzer/user-docs/CrossTranslationUnit.rst:364
 msgid "Currently On-demand analysis is not supported with `scan-build-py`."
 msgstr ""

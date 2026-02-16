@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 08:18+0000\n"
+"POT-Creation-Date: 2026-02-16 08:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -138,10 +138,64 @@ msgid ""
 msgstr ""
 
 #: ../../../MemorySanitizer.rst:105
-msgid "Ignorelist"
+msgid "Interaction of Inlining with Disabling Sanitizer Instrumentation"
 msgstr ""
 
 #: ../../../MemorySanitizer.rst:107
+msgid ""
+"A `no_sanitize` function will not be inlined heuristically by the compiler "
+"into a sanitized function."
+msgstr ""
+
+#: ../../../MemorySanitizer.rst:108
+msgid ""
+"An `always_inline` function will adopt the instrumentation status of the "
+"function it is inlined into."
+msgstr ""
+
+#: ../../../MemorySanitizer.rst:109
+msgid ""
+"Forcibly combining `no_sanitize` and ``__attribute__((always_inline))`` is "
+"not supported, and will often lead to unexpected results. To avoid mixing "
+"these attributes, use:"
+msgstr ""
+
+#: ../../../MemorySanitizer.rst:111
+msgid ". code-block:: c"
+msgstr ""
+
+#: ../../../MemorySanitizer.rst:113
+msgid ""
+"// Note, __has_feature test for sanitizers is deprecated, and Clang will "
+"support __SANITIZE_<sanitizer>__ similar to GCC. #if "
+"__has_feature(memory_sanitizer) || defined(__SANITIZE_MEMORY__) || ... "
+"<other sanitizers> #define ALWAYS_INLINE_IF_UNINSTRUMENTED #else #define "
+"ALWAYS_INLINE_IF_UNINSTRUMENTED __attribute__((always_inline)) #endif"
+msgstr ""
+
+#: ../../../MemorySanitizer.rst:121
+msgid "Explicit Sanitizer Checks with ``__builtin_allow_sanitize_check``"
+msgstr ""
+
+#: ../../../MemorySanitizer.rst:123
+msgid ""
+"The ``__builtin_allow_sanitize_check(\"memory\")`` builtin can be used to "
+"conditionally execute code depending on whether MemorySanitizer checks are "
+"enabled and permitted by the current policy (after inlining). This is "
+"particularly useful for inserting explicit, sanitizer-specific checks around "
+"operations like syscalls or inline assembly, which might otherwise be "
+"unchecked by the sanitizer."
+msgstr ""
+
+#: ../../../MemorySanitizer.rst:130
+msgid "Example:"
+msgstr ""
+
+#: ../../../MemorySanitizer.rst:158
+msgid "Ignorelist"
+msgstr ""
+
+#: ../../../MemorySanitizer.rst:160
 msgid ""
 "MemorySanitizer supports ``src`` and ``fun`` entity types in :doc:"
 "`SanitizerSpecialCaseList`, that can be used to relax MemorySanitizer checks "
@@ -150,22 +204,22 @@ msgid ""
 "considered fully initialized."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:114
+#: ../../../MemorySanitizer.rst:167
 msgid "Report symbolization"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:116
+#: ../../../MemorySanitizer.rst:169
 msgid ""
 "MemorySanitizer uses an external symbolizer to print files and line numbers "
 "in reports. Make sure that ``llvm-symbolizer`` binary is in ``PATH``, or set "
 "environment variable ``MSAN_SYMBOLIZER_PATH`` to point to it."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:123
+#: ../../../MemorySanitizer.rst:176
 msgid "Origin Tracking"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:125
+#: ../../../MemorySanitizer.rst:178
 msgid ""
 "MemorySanitizer can track origins of uninitialized values, similar to "
 "Valgrind's --track-origins option. This feature is enabled by ``-fsanitize-"
@@ -173,7 +227,7 @@ msgid ""
 "Clang option. With the code from the example above,"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:159
+#: ../../../MemorySanitizer.rst:212
 msgid ""
 "By default, MemorySanitizer collects both allocation points and all "
 "intermediate stores the uninitialized value went through.  Origin tracking "
@@ -182,18 +236,18 @@ msgid ""
 "MemorySanitizer slowdown and increases memory overhead."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:165
+#: ../../../MemorySanitizer.rst:218
 msgid ""
 "Clang option ``-fsanitize-memory-track-origins=1`` enables a slightly faster "
 "mode when MemorySanitizer collects only allocation points but not "
 "intermediate stores."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:170
+#: ../../../MemorySanitizer.rst:223
 msgid "Use-after-destruction detection"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:172
+#: ../../../MemorySanitizer.rst:225
 msgid ""
 "MemorySanitizer includes use-after-destruction detection. After invocation "
 "of the destructor, the object will be considered no longer readable, and "
@@ -201,27 +255,27 @@ msgid ""
 "standard for `lifetime <https://eel.is/c++draft/basic.life#1>`_ definition."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:177
+#: ../../../MemorySanitizer.rst:230
 msgid "This feature can be disabled with either:"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:179
+#: ../../../MemorySanitizer.rst:232
 msgid ""
 "Pass additional Clang option ``-fno-sanitize-memory-use-after-dtor`` during "
 "compilation."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:181
+#: ../../../MemorySanitizer.rst:234
 msgid ""
 "Set environment variable `MSAN_OPTIONS=poison_in_dtor=0` before running the "
 "program."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:185
+#: ../../../MemorySanitizer.rst:238
 msgid "Handling external code"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:187
+#: ../../../MemorySanitizer.rst:240
 msgid ""
 "MemorySanitizer requires that all program code is instrumented. This also "
 "includes any libraries that the program depends on, even libc. Failing to "
@@ -230,7 +284,7 @@ msgid ""
 "code."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:193
+#: ../../../MemorySanitizer.rst:246
 msgid ""
 "Full MemorySanitizer instrumentation is very difficult to achieve. To make "
 "it easier, MemorySanitizer runtime library includes 70+ interceptors for the "
@@ -241,11 +295,11 @@ msgid ""
 "libstdc++)."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:202
+#: ../../../MemorySanitizer.rst:255
 msgid "Security Considerations"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:204
+#: ../../../MemorySanitizer.rst:257
 msgid ""
 "MemorySanitizer is a bug detection tool and its runtime is not meant to be "
 "linked against production executables. While it may be useful for testing, "
@@ -254,76 +308,76 @@ msgid ""
 "executable."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:210
+#: ../../../MemorySanitizer.rst:263
 msgid "Supported Platforms"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:212
+#: ../../../MemorySanitizer.rst:265
 msgid "MemorySanitizer is supported on the following OS:"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:214
+#: ../../../MemorySanitizer.rst:267
 msgid "Linux"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:215
+#: ../../../MemorySanitizer.rst:268
 msgid "NetBSD"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:216
+#: ../../../MemorySanitizer.rst:269
 msgid "FreeBSD"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:219
+#: ../../../MemorySanitizer.rst:272
 msgid "Limitations"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:221
+#: ../../../MemorySanitizer.rst:274
 msgid ""
 "MemorySanitizer uses 2x more real memory than a native run, 3x with origin "
 "tracking."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:223
+#: ../../../MemorySanitizer.rst:276
 msgid ""
 "MemorySanitizer maps (but not reserves) 64 Terabytes of virtual address "
 "space. This means that tools like ``ulimit`` may not work as usually "
 "expected."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:226
+#: ../../../MemorySanitizer.rst:279
 msgid "Static linking is not supported."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:227
+#: ../../../MemorySanitizer.rst:280
 msgid ""
 "Older versions of MSan (LLVM 3.7 and older) didn't work with non-position-"
 "independent executables, and could fail on some Linux kernel versions with "
 "disabled ASLR. Refer to documentation for older versions for more details."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:231
+#: ../../../MemorySanitizer.rst:284
 msgid ""
 "MemorySanitizer might be incompatible with position-independent executables "
 "from FreeBSD 13 but there is a check done at runtime and throws a warning in "
 "this case."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:236
+#: ../../../MemorySanitizer.rst:289
 msgid "Current Status"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:238
+#: ../../../MemorySanitizer.rst:291
 msgid ""
 "MemorySanitizer is known to work on large real-world programs (like Clang/"
 "LLVM itself) that can be recompiled from source, including all dependent "
 "libraries."
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:243
+#: ../../../MemorySanitizer.rst:296
 msgid "More Information"
 msgstr ""
 
-#: ../../../MemorySanitizer.rst:245
+#: ../../../MemorySanitizer.rst:298
 msgid "`<https://github.com/google/sanitizers/wiki/MemorySanitizer>`_"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-02-16 08:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,7 +86,7 @@ msgid ""
 "and line numbers in the warning messages."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:38
+#: ../../../ThreadSanitizer.rst:38 ../../../ThreadSanitizer.rst:139
 msgid "Example:"
 msgstr ""
 
@@ -138,10 +138,60 @@ msgid ""
 msgstr ""
 
 #: ../../../ThreadSanitizer.rst:114
-msgid "Ignorelist"
+msgid "Interaction of Inlining with Disabling Sanitizer Instrumentation"
 msgstr ""
 
 #: ../../../ThreadSanitizer.rst:116
+msgid ""
+"A `no_sanitize` function will not be inlined heuristically by the compiler "
+"into a sanitized function."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:117
+msgid ""
+"An `always_inline` function will adopt the instrumentation status of the "
+"function it is inlined into."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:118
+msgid ""
+"Forcibly combining `no_sanitize` and ``__attribute__((always_inline))`` is "
+"not supported, and will often lead to unexpected results. To avoid mixing "
+"these attributes, use:"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:120
+msgid ". code-block:: c"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:122
+msgid ""
+"// Note, __has_feature test for sanitizers is deprecated, and Clang will "
+"support __SANITIZE_<sanitizer>__ similar to GCC. #if "
+"__has_feature(thread_sanitizer) || defined(__SANITIZE_THREAD__) || ... "
+"<other sanitizers> #define ALWAYS_INLINE_IF_UNINSTRUMENTED #else #define "
+"ALWAYS_INLINE_IF_UNINSTRUMENTED __attribute__((always_inline)) #endif"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:130
+msgid "Explicit Sanitizer Checks with ``__builtin_allow_sanitize_check``"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:132
+msgid ""
+"The ``__builtin_allow_sanitize_check(\"thread\")`` builtin can be used to "
+"conditionally execute code depending on whether ThreadSanitizer checks are "
+"enabled and permitted by the current policy (after inlining). This is "
+"particularly useful for inserting explicit, sanitizer-specific checks around "
+"operations like syscalls or inline assembly, which might otherwise be "
+"unchecked by the sanitizer."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:167
+msgid "Ignorelist"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:169
 msgid ""
 "ThreadSanitizer supports ``src`` and ``fun`` entity types in :doc:"
 "`SanitizerSpecialCaseList`, that can be used to suppress data race reports "
@@ -151,11 +201,11 @@ msgid ""
 "synchronization via atomic operations and missed stack frames in reports."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:124
+#: ../../../ThreadSanitizer.rst:177
 msgid "Limitations"
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:126
+#: ../../../ThreadSanitizer.rst:179
 msgid ""
 "ThreadSanitizer uses more real memory than a native run. At the default "
 "settings the memory overhead is 5x plus 1Mb per each thread. Settings with "
@@ -163,17 +213,17 @@ msgid ""
 "also available."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:130
+#: ../../../ThreadSanitizer.rst:183
 msgid ""
 "ThreadSanitizer maps (but does not reserve) a lot of virtual address space. "
 "This means that tools like ``ulimit`` may not work as usually expected."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:132
+#: ../../../ThreadSanitizer.rst:185
 msgid "Libc/libstdc++ static linking is not supported."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:133
+#: ../../../ThreadSanitizer.rst:186
 msgid ""
 "Non-position-independent executables are not supported.  Therefore, the "
 "``fsanitize=thread`` flag will cause Clang to act as though the ``-fPIE`` "
@@ -181,11 +231,11 @@ msgid ""
 "pie`` flag had been supplied if linking an executable."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:139
+#: ../../../ThreadSanitizer.rst:192
 msgid "Security Considerations"
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:141
+#: ../../../ThreadSanitizer.rst:194
 msgid ""
 "ThreadSanitizer is a bug detection tool and its runtime is not meant to be "
 "linked against production executables. While it may be useful for testing, "
@@ -194,11 +244,11 @@ msgid ""
 "executable."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:147
+#: ../../../ThreadSanitizer.rst:200
 msgid "Current Status"
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:149
+#: ../../../ThreadSanitizer.rst:202
 msgid ""
 "ThreadSanitizer is in beta stage.  It is known to work on large C++ programs "
 "using pthreads, but we do not promise anything (yet).  C++11 threading is "
@@ -206,16 +256,16 @@ msgid ""
 "and can be run with ``make check-tsan`` command."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:154
+#: ../../../ThreadSanitizer.rst:207
 msgid ""
 "We are actively working on enhancing the tool --- stay tuned.  Any help, "
 "especially in the form of minimized standalone tests is more than welcome."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:158
+#: ../../../ThreadSanitizer.rst:211
 msgid "More Information"
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:159
+#: ../../../ThreadSanitizer.rst:212
 msgid "`<https://github.com/google/sanitizers/wiki/ThreadSanitizerCppManual>`_"
 msgstr ""
