@@ -1,0 +1,617 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 9\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ReleaseNotes.rst:3
+msgid "Clang 9.0.0 Release Notes"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:9
+msgid "Written by the `LLVM Team <https://llvm.org/>`_"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:13
+msgid "Introduction"
+msgstr "簡介"
+
+#: ../../../ReleaseNotes.rst:15
+msgid ""
+"This document contains the release notes for the Clang C/C++/Objective-C "
+"frontend, part of the LLVM Compiler Infrastructure, release 9.0.0. Here we "
+"describe the status of Clang in some detail, including major improvements "
+"from the previous release and new feature work. For the general LLVM release "
+"notes, see `the LLVM documentation <https://llvm.org/docs/ReleaseNotes."
+"html>`_. All LLVM releases may be downloaded from the `LLVM releases web "
+"site <https://llvm.org/releases/>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:24
+msgid ""
+"For more information about Clang or LLVM, including information about the "
+"latest release, please see the `Clang Web Site <https://clang.llvm.org>`_ or "
+"the `LLVM Web Site <https://llvm.org>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:30
+msgid "What's New in Clang 9.0.0?"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:32
+msgid ""
+"Some of the major new features and improvements to Clang are listed here. "
+"Generic improvements to Clang as a whole or to its underlying infrastructure "
+"are described first, followed by language-specific sections with "
+"improvements to Clang's support for those languages."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:38
+msgid "Major New Features"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:40
+msgid ""
+"Experimental support for :ref:`C++ for OpenCL <openclcpp>` has been added."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:45
+msgid "Non-comprehensive list of changes in this release"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:47
+msgid ""
+"The ``__VERSION__`` macro has been updated. Previously this macro contained "
+"the string '4.2.1 Compatible' to achieve compatibility with GCC 4.2.1, but "
+"that should no longer be necessary. However, to retrieve Clang's version, "
+"please favor the one of the macro defined in :ref:`clang namespaced version "
+"macros <languageextensions-builtin-macros>`."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:55
+msgid "New Compiler Flags"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:57
+msgid ""
+"``-ftime-trace`` and ``ftime-trace-granularity=N`` Emits flame chart style "
+"compilation time report in chrome://tracing and speedscope.app compatible "
+"format. A trace .json file is written next to the compiled object file, "
+"containing hierarchical time information about frontend activities (file "
+"parsing, template instantiation) and backend activities (modules and "
+"functions being optimized, optimization passes)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:66
+msgid "Modified Compiler Flags"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:68
+msgid "``clang -dumpversion`` now returns the version of Clang itself."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:72
+msgid "Windows Support"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:74
+msgid ""
+"clang-cl now treats non-existent files as possible typos for flags, ``clang-"
+"cl /diagnostic:caret /c test.cc`` for example now produces ``clang: error: "
+"no such file or directory: '/diagnostic:caret'; did you mean '/diagnostics:"
+"caret'?``"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:78
+msgid ""
+"clang now parses the ``__declspec(allocator)`` specifier and generates debug "
+"information, so that memory usage can be tracked in Visual Studio."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:81
+msgid ""
+"The ``-print-search-dirs`` option now separates elements with semicolons, as "
+"is the norm for path lists on Windows"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:84
+msgid ""
+"Improved handling of dllexport in conjunction with explicit template "
+"instantiations for MinGW, to allow building a shared libc++ for MinGW "
+"without ``--export-all-symbols`` to override the dllexport attributes"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:90
+msgid "C Language Changes in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:92
+msgid ""
+"The ``__FILE_NAME__`` macro has been added as a Clang specific extension "
+"supported in all C-family languages. This macro is similar to ``__FILE__`` "
+"except it will always provide the last path component when possible."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:96
+msgid ""
+"Initial support for ``asm goto`` statements (a GNU C extension) has been "
+"added for control flow from inline assembly to labels. The main consumers of "
+"this construct are the Linux kernel (CONFIG_JUMP_LABEL=y) and glib. There "
+"are still a few unsupported corner cases in Clang's integrated assembler and "
+"IfConverter. Please file bugs for any issues you run into."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:104
+msgid "C++ Language Changes in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:106
+msgid ""
+"Support for the address space attribute in various C++ features was "
+"improved, refer to :ref:`C++ for OpenCL <openclcpp>` for more details. The "
+"following features deviated from OpenCL:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:110
+msgid "Address spaces as method qualifiers are not accepted yet;"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:112
+msgid "There is no address space deduction."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:116
+msgid "Objective-C Language Changes in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:118
+msgid "Fixed encoding of ObjC pointer types that are pointers to typedefs."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:128
+msgid "OpenCL Kernel Language Changes in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:131
+msgid "OpenCL C"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:133
+msgid "Enabled use of variadic macro as a Clang extension."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:135
+msgid ""
+"Added initial support for implicitly including OpenCL builtin fuctions using "
+"efficient trie lookup generated by TableGen. A corresponding frontend-only "
+"flag ``-fdeclare-opencl-builtins`` has been added to enable trie during "
+"parsing."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:140
+msgid ""
+"Refactored header file to be used for common parts between regular header "
+"added using ``-finclude-default-header`` and trie based declarations added "
+"using ``-fdeclare-opencl-builtins``."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:144
+msgid "Improved string formatting diagnostics in printf for vector types."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:146
+msgid ""
+"Simplified the internal representation of blocks, including their generation "
+"in IR. Furthermore, indirect calls to block function has been changed to "
+"direct function calls."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:150
+msgid ""
+"Added diagnostics for conversions of nested pointers with different address "
+"spaces."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:153
+msgid "Added ``cl_arm_integer_dot_product`` extension."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:155
+msgid "Fixed global samplers in OpenCL v2.0."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:157
+msgid ""
+"Improved math builtin functions with parameters of type ``long long`` for "
+"x86."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:163
+msgid "C++ for OpenCL"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:165
+msgid ""
+"Experimental support for C++17 features in OpenCL has been added and "
+"backwards compatibility with OpenCL C v2.0 was enabled. The documentation "
+"has been added for supported language features into :doc:"
+"`LanguageExtensions` and :doc:`UsersManual`."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:170
+msgid "Implemented features are:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:172
+msgid "Address space behavior is improved in majority of C++ features:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:174
+msgid "Templates parameters and arguments;"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:176
+msgid "Reference types;"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:178
+msgid "Type deduction;"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:180
+msgid "Objects and member functions, including special member functions;"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:183
+msgid "Builtin operators;"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:185
+msgid "Method qualifiers now include address space;"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:187
+msgid "Address space deduction has been extended for C++ use cases;"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:189
+msgid "Improved overload ranking rules;"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:191
+msgid ""
+"All standard cast operators now prevent converting address spaces (except "
+"for conversions allowed implicitly). They can still be cast using C-style "
+"cast."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:195
+msgid "Vector types as in OpenCL C, including compound vector initialization."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:198
+msgid ""
+"OpenCL-specific types: images, samplers, events, pipes, are accepted. Note "
+"that blocks are not supported yet."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:201
+msgid "OpenCL standard header in Clang can be compiled in C++ mode."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:203
+msgid ""
+"Global constructors can be invoked from the host side using a specific, "
+"compiler-generated kernel."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:206
+msgid ""
+"Overloads with generic address space are added to all atomic builtin "
+"functions, including the ones prior to OpenCL v2.0."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:211
+msgid "OpenMP Support in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:213
+msgid "Added emission of the debug information for NVPTX target devices."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:216
+msgid "CUDA Support in Clang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:218
+msgid "Added emission of the debug information for the device code."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:221
+msgid "Internal API Changes"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:223
+msgid ""
+"These are major API changes that have happened since the 8.0.0 release of "
+"Clang. If upgrading an external codebase that uses Clang as a library, this "
+"section should help get you past the largest hurdles of upgrading."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:228
+msgid "Build System Changes"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:230
+msgid ""
+"These are major changes to the build system that have happened since the "
+"8.0.0 release of Clang. Users of the build system should adjust accordingly."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:233
+msgid ""
+"In 8.0.0 and below, the install-clang-headers target would install clang's "
+"resource directory headers. This installation is now performed by the "
+"install-clang-resource-headers target. Users of the old install-clang-"
+"headers target should switch to the new install-clang-resource-headers "
+"target. The install-clang-headers target now installs clang's API headers "
+"(corresponding to its libraries), which is consistent with the install-llvm-"
+"headers target."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:240
+msgid ""
+"In 9.0.0 and later Clang added a new target on Linux/Unix systems, clang-"
+"cpp, which generates a shared library comprised of all the clang component "
+"libraries and exporting the clang C++ APIs. Additionally the build system "
+"gained the new \"CLANG_LINK_CLANG_DYLIB\" option, which defaults Off, and "
+"when set to On, will force clang (and clang-based tools) to link the clang-"
+"cpp library instead of statically linking clang's components. This option "
+"will reduce the size of binary distributions at the expense of compiler "
+"performance."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:250
+msgid "clang-format"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:252
+msgid "Add language support for clang-formatting C# files."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:253
+msgid "Add Microsoft coding style to encapsulate default C# formatting style."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:254
+msgid ""
+"Added new option ``PPDIS_BeforeHash`` (in configuration: ``BeforeHash``) to "
+"``IndentPPDirectives`` which indents preprocessor directives before the hash."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:256
+msgid ""
+"Added new option ``AlignConsecutiveMacros`` to align the C/C++ preprocessor "
+"macros of consecutive lines."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:260
+msgid "libclang"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:262
+msgid ""
+"When ``CINDEXTEST_INCLUDE_ATTRIBUTED_TYPES`` is not provided when making a "
+"CXType, the equivalent type of the AttributedType is returned instead of the "
+"modified type if the user does not want attribute sugar. The equivalent type "
+"represents the minimally-desugared type which the AttributedType is "
+"canonically equivalent to."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:270
+msgid "Static Analyzer"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:272
+msgid ""
+"Fixed a bug where an incorrect checker name would be displayed for a bug "
+"report."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:275
+msgid ""
+"New checker: ``security.insecureAPI.DeprecatedOrUnsafeBufferHandling`` to "
+"detect uses of unsafe/deprecated buffer handling functions for C code using "
+"the C11 standard or newer."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:279
+msgid ""
+"New checker: ``osx.MIGChecker`` to find violations of the Mach Interface "
+"Generator calling convention"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:282
+msgid ""
+"New checker: ``optin.osx.OSObjectCStyleCast`` to find C-style casts of of "
+"XNU libkern OSObjects"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:285
+msgid ""
+"New package: ``apiModeling.llvm`` contains modeling checkers to improve the "
+"accuracy of reports on LLVM's own codebase."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:288
+msgid ""
+"The Static Analyzer received :ref:`developer documentation <clang-static-"
+"analyzer-docs>`."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:291
+msgid ""
+"The UninitializedObject checker is now considered as stable. (moved from the "
+"``alpha.cplusplus`` to the ``optin.cplusplus`` package)"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:294
+msgid ""
+"New frontend flags: The list of available checkers are now split into 3 "
+"different frontend flags:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:297
+msgid "``-analyzer-checker-help``: The list of user-facing, stable checkers."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:299
+msgid ""
+"``-analyzer-checker-help-alpha``: The list of in-development checkers not "
+"yet advised to be turned on."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:302
+msgid ""
+"``-analyzer-checker-help-developer``: Checkers never meant to be enabled/"
+"disabled by hand + development checkers."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:305
+msgid ""
+"New frontend flags: While they have always been around, for the first time, "
+"checker and package options are listable:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:308
+msgid ""
+"``-analyzer-checker-option-help``: The list of user-facing, stable checker "
+"and package options."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:311
+msgid ""
+"``-analyzer-checker-option-help-alpha``: The list of in-development checker "
+"options not yet advised to be used."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:314
+msgid ""
+"``-analyzer-checker-option-help-developer``: Options never meant to be "
+"enabled/disabled by hand + development options."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:317
+msgid ""
+"New frontend flag: ``-analyzer-werror`` to turn analyzer warnings into "
+"errors."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:319
+msgid ""
+"Numerous fixes to increase the stability of the experimental cross "
+"translation unit analysis (CTU)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:322
+msgid "CTU now handles virtual functions as well."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:326
+msgid "Linux Kernel"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:328
+msgid ""
+"With support for asm goto, the mainline Linux kernel for x86_64 is now "
+"buildable (and bootable) with Clang 9.  Other architectures that don't "
+"require CONFIG_JUMP_LABEL=y such as arm, aarch64, ppc32, ppc64le, (and "
+"possibly mips) have been supported with older releases of Clang (Clang 4 was "
+"first used with aarch64)."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:334
+msgid ""
+"The Android and ChromeOS Linux distributions have moved to building their "
+"Linux kernels with Clang, and Google is currently testing Clang built "
+"kernels for their production Linux kernels."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:338
+msgid ""
+"Further, LLD, llvm-objcopy, llvm-ar, llvm-nm, llvm-objdump can all be used "
+"to build a working Linux kernel."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:341
+msgid "More information about building Linux kernels with Clang can be found:"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:343
+msgid "`ClangBuiltLinux web page <https://clangbuiltlinux.github.io/>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:344
+msgid "`Issue Tracker <https://github.com/ClangBuiltLinux/linux/issues>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:345
+msgid "`Wiki <https://github.com/ClangBuiltLinux/linux/wiki>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:346
+msgid "`Mailing List <clang-built-linux@googlegroups.com>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:347
+msgid ""
+"`Bi-weekly Meeting <https://calendar.google.com/calendar/embed?src=google."
+"com_bbf8m6m4n8nq5p2bfjpele0n5s%40group.calendar.google.com>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:348
+msgid "#clangbuiltlinux on Freenode."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:349
+msgid "`Clang Meta bug <https://bugs.llvm.org/show_bug.cgi?id=4068>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:350
+msgid ""
+"`Continuous Integration <https://travis-ci.com/ClangBuiltLinux/continuous-"
+"integration>`_."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:353
+msgid "Additional Information"
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:355
+msgid ""
+"A wide variety of additional information is available on the `Clang web page "
+"<https://clang.llvm.org/>`_. The web page contains versions of the API "
+"documentation which are up-to-date with the Subversion version of the source "
+"code. You can access versions of these documents specific to this release by "
+"going into the \"``clang/docs/``\" directory in the Clang tree."
+msgstr ""
+
+#: ../../../ReleaseNotes.rst:362
+msgid ""
+"If you have any questions or comments about Clang, please feel free to "
+"contact us via the `mailing list <https://lists.llvm.org/mailman/listinfo/"
+"cfe-dev>`_."
+msgstr ""
