@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-03-09 08:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,6 +192,34 @@ msgstr ""
 
 #: ../../../APINotes.rst:144
 msgid ""
+"Each entry under \"Tags\" can contain \"Methods\", \"Fields\", and nested "
+"\"Tags\" arrays. Methods under Tags are C++ methods identified by "
+"'Name' (rather than 'Selector' and 'MethodKind' as used for Objective-C "
+"methods)."
+msgstr ""
+
+#: ../../../APINotes.rst:0
+msgid "Methods (under Tags)"
+msgstr ""
+
+#: ../../../APINotes.rst:150 ../../../APINotes.rst:162
+msgid "Identified by 'Name'."
+msgstr ""
+
+#: ../../../APINotes.rst:0
+msgid "Fields"
+msgstr ""
+
+#: ../../../APINotes.rst:0
+msgid "Tags (nested)"
+msgstr ""
+
+#: ../../../APINotes.rst:175
+msgid "Nested tags follow the same schema as top-level Tags entries."
+msgstr ""
+
+#: ../../../APINotes.rst:185
+msgid ""
 "Each declaration supports the following annotations (if relevant to that "
 "declaration kind), all of which are optional:"
 msgstr ""
@@ -200,7 +228,7 @@ msgstr ""
 msgid "SwiftName"
 msgstr ""
 
-#: ../../../APINotes.rst:149
+#: ../../../APINotes.rst:190
 msgid ""
 "Equivalent to ``NS_SWIFT_NAME``. For a method, must include the full Swift "
 "name with all arguments. Use \"_\" to omit an argument label."
@@ -210,7 +238,7 @@ msgstr ""
 msgid "SwiftImportAs"
 msgstr ""
 
-#: ../../../APINotes.rst:163
+#: ../../../APINotes.rst:204
 msgid ""
 "For a class, possible values are ``owned`` (equivalent to "
 "``SWIFT_SELF_CONTAINED``) or ``reference`` (equivalent to "
@@ -218,7 +246,7 @@ msgid ""
 "``SwiftRetainOp``)."
 msgstr ""
 
-#: ../../../APINotes.rst:168
+#: ../../../APINotes.rst:209
 msgid ""
 "For a method, possible values are ``unsafe`` (equivalent to "
 "``SWIFT_RETURNS_INDEPENDENT_VALUE``) or ``computed_property`` (equivalent to "
@@ -229,7 +257,7 @@ msgstr ""
 msgid "SwiftRetainOp, SwiftReleaseOp"
 msgstr ""
 
-#: ../../../APINotes.rst:180
+#: ../../../APINotes.rst:221
 msgid ""
 "Controls the lifetime operations of a class which uses custom reference "
 "counting. The class must be annotated as a reference type using "
@@ -242,13 +270,13 @@ msgstr ""
 msgid "SwiftCopyable"
 msgstr ""
 
-#: ../../../APINotes.rst:200
+#: ../../../APINotes.rst:241
 msgid ""
 "Allows annotating a C++ class as non-copyable in Swift. Equivalent to "
 "``SWIFT_NONCOPYABLE``, or to an explicit conformance ``: ~Copyable``."
 msgstr ""
 
-#: ../../../APINotes.rst:209
+#: ../../../APINotes.rst:250
 msgid ""
 "A non-copyable type can have a \"destroy\" operation, specified with "
 "`SwiftDestroyOp`, which will be invoked on the instance when it is no longer "
@@ -259,7 +287,7 @@ msgstr ""
 msgid "SwiftConformsTo"
 msgstr ""
 
-#: ../../../APINotes.rst:222
+#: ../../../APINotes.rst:263
 msgid ""
 "Allows annotating a C++ class as conforming to a Swift protocol. Equivalent "
 "to ``SWIFT_CONFORMS_TO_PROTOCOL``. The value is a module-qualified name of a "
@@ -270,7 +298,7 @@ msgstr ""
 msgid "SwiftSafety"
 msgstr ""
 
-#: ../../../APINotes.rst:234
+#: ../../../APINotes.rst:275
 msgid "Import a declaration as ``@safe`` or ``@unsafe`` to Swift."
 msgstr ""
 
@@ -278,7 +306,7 @@ msgstr ""
 msgid "Availability, AvailabilityMsg"
 msgstr ""
 
-#: ../../../APINotes.rst:248
+#: ../../../APINotes.rst:289
 msgid ""
 "A value of \"nonswift\" is equivalent to ``NS_SWIFT_UNAVAILABLE``. A value "
 "of \"available\" can be used in the \"SwiftVersions\" section to undo the "
@@ -289,7 +317,7 @@ msgstr ""
 msgid "SwiftPrivate"
 msgstr ""
 
-#: ../../../APINotes.rst:261
+#: ../../../APINotes.rst:302
 msgid "Equivalent to NS_REFINED_FOR_SWIFT."
 msgstr ""
 
@@ -297,35 +325,35 @@ msgstr ""
 msgid "Nullability"
 msgstr ""
 
-#: ../../../APINotes.rst:270
+#: ../../../APINotes.rst:311
 msgid ""
 "Used for properties and globals. There are four options, identified by their "
 "initials:"
 msgstr ""
 
-#: ../../../APINotes.rst:273
+#: ../../../APINotes.rst:314
 msgid "``Nonnull`` or ``N`` (corresponding to ``_Nonnull``)"
 msgstr ""
 
-#: ../../../APINotes.rst:274
+#: ../../../APINotes.rst:315
 msgid "``Optional`` or ``O`` (corresponding to ``_Nullable``)"
 msgstr ""
 
-#: ../../../APINotes.rst:275
+#: ../../../APINotes.rst:316
 msgid "``Unspecified`` or ``U`` (corresponding to ``_Null_unspecified``)"
 msgstr ""
 
-#: ../../../APINotes.rst:276
+#: ../../../APINotes.rst:317
 msgid "``Scalar`` or ``S`` (deprecated)"
 msgstr ""
 
-#: ../../../APINotes.rst:278
+#: ../../../APINotes.rst:319
 msgid ""
 "Note that 'Nullability' is overridden by 'Type', even in a \"SwiftVersions\" "
 "section."
 msgstr ""
 
-#: ../../../APINotes.rst:283
+#: ../../../APINotes.rst:324
 msgid ""
 "'Nullability' can also be used to describe the argument types of methods and "
 "functions, but this usage is deprecated in favor of 'Parameters' (see below)."
@@ -335,18 +363,18 @@ msgstr ""
 msgid "NullabilityOfRet"
 msgstr ""
 
-#: ../../../APINotes.rst:294
+#: ../../../APINotes.rst:335
 msgid ""
 "Used for methods and functions. Describes the nullability of the return type."
 msgstr ""
 
-#: ../../../APINotes.rst:296
+#: ../../../APINotes.rst:337
 msgid ""
 "Note that 'NullabilityOfRet' is overridden by 'ResultType', even in a "
 "\"SwiftVersions\" section."
 msgstr ""
 
-#: ../../../APINotes.rst:301
+#: ../../../APINotes.rst:342
 msgid ""
 "Due to a compiler bug, 'NullabilityOfRet' may change nullability of the "
 "parameters as well (rdar://30544062). Avoid using it and instead use "
@@ -358,7 +386,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: ../../../APINotes.rst:314
+#: ../../../APINotes.rst:355
 msgid ""
 "Used for properties and globals. This completely overrides the type of the "
 "declaration; it should ideally only be used for Swift backwards "
@@ -366,7 +394,7 @@ msgid ""
 "a header. Prefer 'Nullability' and other annotations when possible."
 msgstr ""
 
-#: ../../../APINotes.rst:319 ../../../APINotes.rst:336
+#: ../../../APINotes.rst:360 ../../../APINotes.rst:377
 msgid ""
 "We parse the specified type as if it appeared at the location of the "
 "declaration whose type is being modified.  Macros are not available and "
@@ -378,7 +406,7 @@ msgstr ""
 msgid "ResultType"
 msgstr ""
 
-#: ../../../APINotes.rst:332
+#: ../../../APINotes.rst:373
 msgid ""
 "Used for methods and functions. This completely overrides the return type; "
 "it should ideally only be used for Swift backwards compatibility, when "
@@ -389,7 +417,7 @@ msgstr ""
 msgid "SwiftImportAsAccessors"
 msgstr ""
 
-#: ../../../APINotes.rst:349
+#: ../../../APINotes.rst:390
 msgid ""
 "Used for properties. If true, the property will be exposed in Swift as its "
 "accessor methods, rather than as a computed property using ``var``."
@@ -399,7 +427,7 @@ msgstr ""
 msgid "NSErrorDomain"
 msgstr ""
 
-#: ../../../APINotes.rst:360
+#: ../../../APINotes.rst:401
 msgid ""
 "Used for ``NSError`` code enums. The value is the name of the associated "
 "domain ``NSString`` constant; an empty string (``\"\"``) means the enum is a "
@@ -410,25 +438,25 @@ msgstr ""
 msgid "SwiftWrapper"
 msgstr ""
 
-#: ../../../APINotes.rst:371
+#: ../../../APINotes.rst:412
 msgid ""
 "Controls ``NS_STRING_ENUM`` and ``NS_EXTENSIBLE_STRING_ENUM``. There are "
 "three options:"
 msgstr ""
 
-#: ../../../APINotes.rst:374
+#: ../../../APINotes.rst:415
 msgid "\"struct\" (extensible)"
 msgstr ""
 
-#: ../../../APINotes.rst:375
+#: ../../../APINotes.rst:416
 msgid "\"enum\""
 msgstr ""
 
-#: ../../../APINotes.rst:376 ../../../APINotes.rst:393
+#: ../../../APINotes.rst:417 ../../../APINotes.rst:434
 msgid "\"none\""
 msgstr ""
 
-#: ../../../APINotes.rst:378
+#: ../../../APINotes.rst:419
 msgid ""
 "Note that even an \"enum\" wrapper is still presented as a struct in Swift; "
 "it's just a \"more enum-like\" struct."
@@ -438,21 +466,21 @@ msgstr ""
 msgid "EnumKind"
 msgstr ""
 
-#: ../../../APINotes.rst:388
+#: ../../../APINotes.rst:429
 msgid ""
 "Has the same effect as ``NS_ENUM`` and ``NS_OPTIONS``. There are four "
 "options:"
 msgstr ""
 
-#: ../../../APINotes.rst:390
+#: ../../../APINotes.rst:431
 msgid "\"NSEnum\" / \"CFEnum\""
 msgstr ""
 
-#: ../../../APINotes.rst:391
+#: ../../../APINotes.rst:432
 msgid "\"NSClosedEnum\" / \"CFClosedEnum\""
 msgstr ""
 
-#: ../../../APINotes.rst:392
+#: ../../../APINotes.rst:433
 msgid "\"NSOptions\" / \"CFOptions\""
 msgstr ""
 
@@ -460,13 +488,13 @@ msgstr ""
 msgid "Parameters"
 msgstr ""
 
-#: ../../../APINotes.rst:402
+#: ../../../APINotes.rst:443
 msgid ""
 "Used for methods and functions. Parameters are identified by a 0-based "
 "'Position' and support the 'Nullability', 'NoEscape', and 'Type' keys."
 msgstr ""
 
-#: ../../../APINotes.rst:407
+#: ../../../APINotes.rst:448
 msgid ""
 "Using 'Parameters' within a parameter entry to describe the parameters of a "
 "block is not implemented. Use 'Type' on the entire parameter instead."
@@ -476,7 +504,7 @@ msgstr ""
 msgid "NoEscape"
 msgstr ""
 
-#: ../../../APINotes.rst:420
+#: ../../../APINotes.rst:461
 msgid "Used only for block parameters. Equivalent to ``NS_NOESCAPE``."
 msgstr ""
 
@@ -484,7 +512,7 @@ msgstr ""
 msgid "SwiftBridge"
 msgstr ""
 
-#: ../../../APINotes.rst:431
+#: ../../../APINotes.rst:472
 msgid ""
 "Used for Objective-C class types bridged to Swift value types. An empty "
 "string (\"\") means a type is not bridged. Not supported outside of Apple "
@@ -493,9 +521,32 @@ msgid ""
 msgstr ""
 
 #: ../../../APINotes.rst:0
+msgid "SwiftReturnOwnership"
+msgstr ""
+
+#: ../../../APINotes.rst:484
+msgid ""
+"Used for methods and functions. Specifies the ownership convention for the "
+"return value when it is a foreign reference type (a type imported as "
+"``SwiftImportAs: reference``). Possible values are:"
+msgstr ""
+
+#: ../../../APINotes.rst:488
+msgid ""
+"``retained`` --- the caller receives an owned reference (equivalent to "
+"``__attribute__((swift_attr(\"returns_retained\")))``)."
+msgstr ""
+
+#: ../../../APINotes.rst:490
+msgid ""
+"``unretained`` --- the caller receives an unowned reference (equivalent to "
+"``__attribute__((swift_attr(\"returns_unretained\")))``)."
+msgstr ""
+
+#: ../../../APINotes.rst:0
 msgid "DesignatedInit"
 msgstr ""
 
-#: ../../../APINotes.rst:443
+#: ../../../APINotes.rst:509
 msgid "Used for init methods. Equivalent to ``NS_DESIGNATED_INITIALIZER``."
 msgstr ""
