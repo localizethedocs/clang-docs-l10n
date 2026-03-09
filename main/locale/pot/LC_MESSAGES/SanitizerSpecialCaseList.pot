@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-03-09 08:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -117,16 +117,41 @@ msgid ""
 msgstr ""
 
 #: ../../../SanitizerSpecialCaseList.rst:138
-msgid "Format"
+msgid "Interaction with Overflow Behavior Types"
 msgstr ""
 
 #: ../../../SanitizerSpecialCaseList.rst:140
+msgid ""
+"The ``overflow_behavior`` attribute provides a more granular, source-level "
+"control that takes precedence over the Sanitizer Special Case List. If a "
+"type is given an ``overflow_behavior`` attribute, it will override any "
+"matching ``type:`` entry in a special case list."
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:145
+msgid ""
+"This allows developers to enforce a specific overflow behavior for a "
+"critical type, even if a broader rule in the special case list would "
+"otherwise disable instrumentation for it."
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:169
+msgid ""
+"For more details on overflow behavior types, see :doc:"
+"`OverflowBehaviorTypes`."
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:172
+msgid "Format"
+msgstr ""
+
+#: ../../../SanitizerSpecialCaseList.rst:174
 msgid ""
 "Ignorelists consist of entries, optionally grouped into sections. Empty "
 "lines and lines starting with \"#\" are ignored."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:145
+#: ../../../SanitizerSpecialCaseList.rst:179
 msgid ""
 "Prior to Clang 18, section names and entries described below use a variant "
 "of regex where ``*`` is translated to ``.*``. Clang 18 (`D154014 <https://"
@@ -134,13 +159,13 @@ msgid ""
 "support in Clang 19."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:150
+#: ../../../SanitizerSpecialCaseList.rst:184
 msgid ""
 "For Clang 18, regex is supported if ``#!special-case-list-v1`` is the first "
 "line of the file."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:153
+#: ../../../SanitizerSpecialCaseList.rst:187
 msgid ""
 "Many special case lists use ``.`` to indicate the literal character and do "
 "not use regex metacharacters such as ``(``, ``)``. They are unaffected by "
@@ -149,7 +174,7 @@ msgid ""
 "specialcaselists/71666>`_."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:158
+#: ../../../SanitizerSpecialCaseList.rst:192
 msgid ""
 "Section names are globs written in square brackets that denote which "
 "sanitizer the following entries apply to. For example, ``[address]`` "
@@ -159,7 +184,7 @@ msgid ""
 "sanitizers."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:164
+#: ../../../SanitizerSpecialCaseList.rst:198
 msgid ""
 "Entries contain an entity type, followed by a colon and a glob, specifying "
 "the names of the entities, optionally followed by an equals sign and a tool-"
@@ -169,14 +194,14 @@ msgid ""
 "entity types and categories - refer to tool-specific docs."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:199
+#: ../../../SanitizerSpecialCaseList.rst:233
 msgid ""
 "``mainfile`` is similar to applying ``-fno-sanitize=`` to a set of files but "
 "does not need plumbing into the build system. This works well for internal "
 "linkage functions but has a caveat for C++ vague linkage functions."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:203
+#: ../../../SanitizerSpecialCaseList.rst:237
 msgid ""
 "C++ vague linkage functions (e.g. inline functions, template instantiations) "
 "are deduplicated at link time. A function (in an included file) ignored by a "
@@ -186,7 +211,7 @@ msgid ""
 "is ignored. (There is action-at-a-distance risk.)"
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:210
+#: ../../../SanitizerSpecialCaseList.rst:244
 msgid ""
 "``mainfile`` can be useful enabling a ubsan check for a large code base when "
 "finding the direct stack frame triggering the failure for every failure is "

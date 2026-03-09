@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-29 08:19+0000\n"
+"POT-Creation-Date: 2026-03-09 08:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1222,19 +1222,28 @@ msgid ""
 "it part of the module."
 msgstr ""
 
-#: ../../../Modules.rst:671
+#: ../../../Modules.rst:673
+msgid ""
+"Header paths that use ``..`` to refer to files outside of the module "
+"directory are deprecated in module maps that are found via implicit search "
+"(``-fimplicit-module-maps``). Use ``-Wmodule-map-path-outside-directory`` to "
+"warn on such paths. Future versions of Clang may reject these paths in "
+"implicitly discovered module maps."
+msgstr ""
+
+#: ../../../Modules.rst:679
 msgid ""
 "**Example:** A \"X macro\" header is an excellent candidate for a textual "
 "header, because it is can't be compiled standalone, and by itself does not "
 "contain any declarations."
 msgstr ""
 
-#: ../../../Modules.rst:679
+#: ../../../Modules.rst:687
 msgid ""
 "A given header shall not be referenced by more than one *header-declaration*."
 msgstr ""
 
-#: ../../../Modules.rst:681
+#: ../../../Modules.rst:689
 msgid ""
 "Two *header-declaration*\\s, or a *header-declaration* and a ``#include``, "
 "are considered to refer to the same file if the paths resolve to the same "
@@ -1243,7 +1252,7 @@ msgid ""
 "relative path or via symlinks)."
 msgstr ""
 
-#: ../../../Modules.rst:688
+#: ../../../Modules.rst:696
 msgid ""
 "The use of *header-attr*\\s avoids the need for Clang to speculatively "
 "``stat`` every header referenced by a module map. It is recommended that "
@@ -1251,47 +1260,54 @@ msgid ""
 "mismatches between attribute values and the corresponding files."
 msgstr ""
 
-#: ../../../Modules.rst:694
+#: ../../../Modules.rst:702
 msgid "Umbrella directory declaration"
 msgstr ""
 
-#: ../../../Modules.rst:695
+#: ../../../Modules.rst:703
 msgid ""
 "An umbrella directory declaration specifies that all of the headers in the "
 "specified directory should be included within the module."
 msgstr ""
 
-#: ../../../Modules.rst:702
+#: ../../../Modules.rst:710
 msgid ""
 "The *string-literal* refers to a directory. When the module is built, all of "
 "the header files in that directory (and its subdirectories) are included in "
 "the module."
 msgstr ""
 
-#: ../../../Modules.rst:704
+#: ../../../Modules.rst:714
+msgid ""
+"Umbrella directory paths that use ``..`` to refer to directories outside of "
+"the module directory are deprecated in implicitly discovered module maps. "
+"See the note in `Header declaration`_ for details."
+msgstr ""
+
+#: ../../../Modules.rst:718
 msgid ""
 "An *umbrella-dir-declaration* shall not refer to the same directory as the "
 "location of an umbrella *header-declaration*. In other words, only a single "
 "kind of umbrella can be specified for a given directory."
 msgstr ""
 
-#: ../../../Modules.rst:708
+#: ../../../Modules.rst:722
 msgid ""
 "Umbrella directories are useful for libraries that have a large number of "
 "headers but do not have an umbrella header."
 msgstr ""
 
-#: ../../../Modules.rst:712
+#: ../../../Modules.rst:726
 msgid "Submodule declaration"
 msgstr ""
 
-#: ../../../Modules.rst:713
+#: ../../../Modules.rst:727
 msgid ""
 "Submodule declarations describe modules that are nested within their "
 "enclosing module."
 msgstr ""
 
-#: ../../../Modules.rst:721
+#: ../../../Modules.rst:735
 msgid ""
 "A *submodule-declaration* that is a *module-declaration* is a nested module. "
 "If the *module-declaration* has a ``framework`` specifier, the enclosing "
@@ -1300,14 +1316,14 @@ msgid ""
 "``SubName`` is the name of the submodule."
 msgstr ""
 
-#: ../../../Modules.rst:723
+#: ../../../Modules.rst:737
 msgid ""
 "A *submodule-declaration* that is an *inferred-submodule-declaration* "
 "describes a set of submodules that correspond to any headers that are part "
 "of the module but are not explicitly described by a *header-declaration*."
 msgstr ""
 
-#: ../../../Modules.rst:733
+#: ../../../Modules.rst:747
 msgid ""
 "A module containing an *inferred-submodule-declaration* shall have either an "
 "umbrella header or an umbrella directory. The headers to which the *inferred-"
@@ -1316,7 +1332,7 @@ msgid ""
 "within the umbrella directory (or its subdirectories)."
 msgstr ""
 
-#: ../../../Modules.rst:735
+#: ../../../Modules.rst:749
 msgid ""
 "For each header included by the umbrella header or in the umbrella directory "
 "that is not named by a *header-declaration*, a module declaration is "
@@ -1324,59 +1340,59 @@ msgid ""
 "will:"
 msgstr ""
 
-#: ../../../Modules.rst:737
+#: ../../../Modules.rst:751
 msgid "Have the same name as the header (without the file extension)"
 msgstr ""
 
-#: ../../../Modules.rst:738
+#: ../../../Modules.rst:752
 msgid ""
 "Have the ``explicit`` specifier, if the *inferred-submodule-declaration* has "
 "the ``explicit`` specifier"
 msgstr ""
 
-#: ../../../Modules.rst:739
+#: ../../../Modules.rst:753
 msgid ""
 "Have the ``framework`` specifier, if the *inferred-submodule-declaration* "
 "has the ``framework`` specifier"
 msgstr ""
 
-#: ../../../Modules.rst:741
+#: ../../../Modules.rst:755
 msgid ""
 "Have the attributes specified by the \\ *inferred-submodule-declaration*"
 msgstr ""
 
-#: ../../../Modules.rst:742
+#: ../../../Modules.rst:756
 msgid "Contain a single *header-declaration* naming that header"
 msgstr ""
 
-#: ../../../Modules.rst:743
+#: ../../../Modules.rst:757
 msgid ""
 "Contain a single *export-declaration* ``export *``, if the \\ *inferred-"
 "submodule-declaration* contains the \\ *inferred-submodule-member* ``export "
 "*``"
 msgstr ""
 
-#: ../../../Modules.rst:745
+#: ../../../Modules.rst:759
 msgid ""
 "**Example:** If the subdirectory \"MyLib\" contains the headers ``A.h`` and "
 "``B.h``, then the following module map:"
 msgstr ""
 
-#: ../../../Modules.rst:756
+#: ../../../Modules.rst:770
 msgid "is equivalent to the (more verbose) module map:"
 msgstr ""
 
-#: ../../../Modules.rst:773
+#: ../../../Modules.rst:787
 msgid "Export declaration"
 msgstr ""
 
-#: ../../../Modules.rst:774
+#: ../../../Modules.rst:788
 msgid ""
 "An *export-declaration* specifies which imported modules will automatically "
 "be re-exported as part of a given module's API."
 msgstr ""
 
-#: ../../../Modules.rst:786
+#: ../../../Modules.rst:800
 msgid ""
 "The *export-declaration* names a module or a set of modules that will be re-"
 "exported to any translation unit that imports the enclosing module. Each "
@@ -1384,19 +1400,19 @@ msgid ""
 "including, the first ``*`` will be re-exported."
 msgstr ""
 
-#: ../../../Modules.rst:788
+#: ../../../Modules.rst:802
 msgid ""
 "**Example:** In the following example, importing ``MyLib.Derived`` also "
 "provides the API for ``MyLib.Base``:"
 msgstr ""
 
-#: ../../../Modules.rst:803
+#: ../../../Modules.rst:817
 msgid ""
 "Note that, if ``Derived.h`` includes ``Base.h``, one can simply use a "
 "wildcard export to re-export everything ``Derived.h`` includes:"
 msgstr ""
 
-#: ../../../Modules.rst:820
+#: ../../../Modules.rst:834
 msgid ""
 "The wildcard export syntax ``export *`` re-exports all of the modules that "
 "were imported in the actual header file. Because ``#include`` directives are "
@@ -1408,71 +1424,71 @@ msgid ""
 "them)."
 msgstr ""
 
-#: ../../../Modules.rst:831
+#: ../../../Modules.rst:845
 msgid "Re-export Declaration"
 msgstr ""
 
-#: ../../../Modules.rst:832
+#: ../../../Modules.rst:846
 msgid ""
 "An *export-as-declaration* specifies that the current module will have its "
 "interface re-exported by the named module."
 msgstr ""
 
-#: ../../../Modules.rst:840
+#: ../../../Modules.rst:854
 msgid ""
 "The *export-as-declaration* names the module that the current module will be "
 "re-exported through. Only top-level modules can be re-exported, and any "
 "given module may only be re-exported through a single module."
 msgstr ""
 
-#: ../../../Modules.rst:845
+#: ../../../Modules.rst:859
 msgid ""
 "**Example:** In the following example, the module ``MyFrameworkCore`` will "
 "be re-exported via the module ``MyFramework``:"
 msgstr ""
 
-#: ../../../Modules.rst:855
+#: ../../../Modules.rst:869
 msgid "Use declaration"
 msgstr ""
 
-#: ../../../Modules.rst:856
+#: ../../../Modules.rst:870
 msgid ""
 "A *use-declaration* specifies another module that the current top-level "
 "module intends to use. When the option *-fmodules-decluse* is specified, a "
 "module can only use other modules that are explicitly specified in this way."
 msgstr ""
 
-#: ../../../Modules.rst:865
+#: ../../../Modules.rst:879
 msgid ""
 "**Example:** In the following example, use of A from C is not declared, so "
 "will trigger a warning."
 msgstr ""
 
-#: ../../../Modules.rst:882
+#: ../../../Modules.rst:896
 msgid ""
 "When compiling a source file that implements a module, use the option ``-"
 "fmodule-name=module-id`` to indicate that the source file is logically part "
 "of that module."
 msgstr ""
 
-#: ../../../Modules.rst:886
+#: ../../../Modules.rst:900
 msgid ""
 "The compiler at present only applies restrictions to the module directly "
 "being built."
 msgstr ""
 
-#: ../../../Modules.rst:889
+#: ../../../Modules.rst:903
 msgid "Link declaration"
 msgstr ""
 
-#: ../../../Modules.rst:890
+#: ../../../Modules.rst:904
 msgid ""
 "A *link-declaration* specifies a library or framework against which a "
 "program should be linked if the enclosing module is imported in any "
 "translation unit in that program."
 msgstr ""
 
-#: ../../../Modules.rst:897
+#: ../../../Modules.rst:911
 msgid ""
 "The *string-literal* specifies the name of the library or framework against "
 "which the program should be linked. For example, specifying \"clangBasic\" "
@@ -1480,13 +1496,13 @@ msgid ""
 "linker."
 msgstr ""
 
-#: ../../../Modules.rst:899
+#: ../../../Modules.rst:913
 msgid ""
 "A *link-declaration* with the ``framework`` specifies that the linker should "
 "link against the named framework, e.g., with ``-framework MyFramework``."
 msgstr ""
 
-#: ../../../Modules.rst:903
+#: ../../../Modules.rst:917
 msgid ""
 "Automatic linking with the ``link`` directive is not yet widely implemented, "
 "because it requires support from both the object file format and the linker. "
@@ -1494,37 +1510,37 @@ msgid ""
 "comment(lib...)``."
 msgstr ""
 
-#: ../../../Modules.rst:909
+#: ../../../Modules.rst:923
 msgid "Configuration macros declaration"
 msgstr ""
 
-#: ../../../Modules.rst:910
+#: ../../../Modules.rst:924
 msgid ""
 "The *config-macros-declaration* specifies the set of configuration macros "
 "that have an effect on the API of the enclosing module."
 msgstr ""
 
-#: ../../../Modules.rst:920
+#: ../../../Modules.rst:934
 msgid ""
 "Each *identifier* in the *config-macro-list* specifies the name of a macro. "
 "The compiler is required to maintain different variants of the given module "
 "for differing definitions of any of the named macros."
 msgstr ""
 
-#: ../../../Modules.rst:922
+#: ../../../Modules.rst:936
 msgid ""
 "A *config-macros-declaration* shall only be present on a top-level module, i."
 "e., a module that is not nested within an enclosing module."
 msgstr ""
 
-#: ../../../Modules.rst:924
+#: ../../../Modules.rst:938
 msgid ""
 "The ``exhaustive`` attribute specifies that the list of macros in the "
 "*config-macros-declaration* is exhaustive, meaning that no other macro "
 "definition is intended to have an effect on the API of that module."
 msgstr ""
 
-#: ../../../Modules.rst:928
+#: ../../../Modules.rst:942
 msgid ""
 "The ``exhaustive`` attribute implies that any macro definitions for macros "
 "not listed as configuration macros should be ignored completely when "
@@ -1533,13 +1549,13 @@ msgid ""
 "macros. This optimization is not yet implemented in Clang."
 msgstr ""
 
-#: ../../../Modules.rst:935
+#: ../../../Modules.rst:949
 msgid ""
 "A translation unit shall not import the same module under different "
 "definitions of the configuration macros."
 msgstr ""
 
-#: ../../../Modules.rst:939
+#: ../../../Modules.rst:953
 msgid ""
 "Clang implements a weak form of this requirement: the definitions used for "
 "configuration macros are fixed based on the definitions provided by the "
@@ -1548,69 +1564,69 @@ msgid ""
 "``-Wconfig-macros``)."
 msgstr ""
 
-#: ../../../Modules.rst:945
+#: ../../../Modules.rst:959
 msgid ""
 "**Example:** A logging library might provide different API (e.g., in the "
 "form of different definitions for a logging macro) based on the ``NDEBUG`` "
 "macro setting:"
 msgstr ""
 
-#: ../../../Modules.rst:955
+#: ../../../Modules.rst:969
 msgid "Conflict declarations"
 msgstr ""
 
-#: ../../../Modules.rst:956
+#: ../../../Modules.rst:970
 msgid ""
 "A *conflict-declaration* describes a case where the presence of two "
 "different modules in the same translation unit is likely to cause a problem. "
 "For example, two modules may provide similar-but-incompatible functionality."
 msgstr ""
 
-#: ../../../Modules.rst:963
+#: ../../../Modules.rst:977
 msgid ""
 "The *module-id* of the *conflict-declaration* specifies the module with "
 "which the enclosing module conflicts. The specified module shall not have "
 "been imported in the translation unit when the enclosing module is imported."
 msgstr ""
 
-#: ../../../Modules.rst:965
+#: ../../../Modules.rst:979
 msgid ""
 "The *string-literal* provides a message to be provided as part of the "
 "compiler diagnostic when two modules conflict."
 msgstr ""
 
-#: ../../../Modules.rst:969
+#: ../../../Modules.rst:983
 msgid ""
 "Clang emits a warning (under the control of ``-Wmodule-conflict``) when a "
 "module conflict is discovered."
 msgstr ""
 
-#: ../../../Modules.rst:972
+#: ../../../Modules.rst:986
 msgid "**Example:**"
 msgstr ""
 
-#: ../../../Modules.rst:989
+#: ../../../Modules.rst:1003
 msgid "Attributes"
 msgstr ""
 
-#: ../../../Modules.rst:990
+#: ../../../Modules.rst:1004
 msgid ""
 "Attributes are used in a number of places in the grammar to describe "
 "specific behavior of other declarations. The format of attributes is fairly "
 "simple."
 msgstr ""
 
-#: ../../../Modules.rst:1000
+#: ../../../Modules.rst:1014
 msgid ""
 "Any *identifier* can be used as an attribute, and each declaration specifies "
 "what attributes can be applied to it."
 msgstr ""
 
-#: ../../../Modules.rst:1003
+#: ../../../Modules.rst:1017
 msgid "Private Module Map Files"
 msgstr ""
 
-#: ../../../Modules.rst:1004
+#: ../../../Modules.rst:1018
 msgid ""
 "Module map files are typically named ``module.modulemap`` and live either "
 "alongside the headers they describe or in a parent directory of the headers "
@@ -1618,7 +1634,7 @@ msgid ""
 "library."
 msgstr ""
 
-#: ../../../Modules.rst:1009
+#: ../../../Modules.rst:1023
 msgid ""
 "However, in some cases, the presence or absence of particular headers is "
 "used to distinguish between the \"public\" and \"private\" APIs of a "
@@ -1629,14 +1645,14 @@ msgid ""
 "module map file in the library:"
 msgstr ""
 
-#: ../../../Modules.rst:1030
+#: ../../../Modules.rst:1044
 msgid ""
 "because the header ``Foo_Private.h`` won't always be available. The module "
 "map file could be customized based on whether ``Foo_Private.h`` is available "
 "or not, but doing so requires custom build machinery."
 msgstr ""
 
-#: ../../../Modules.rst:1035
+#: ../../../Modules.rst:1049
 msgid ""
 "Private module map files, which are named ``module.private.modulemap`` (or, "
 "for backward compatibility, ``module_private.map``), allow one to augment "
@@ -1644,7 +1660,7 @@ msgid ""
 "would split the module map file above into two module map files:"
 msgstr ""
 
-#: ../../../Modules.rst:1054
+#: ../../../Modules.rst:1068
 msgid ""
 "When a ``module.private.modulemap`` file is found alongside a ``module."
 "modulemap`` file, it is loaded after the ``module.modulemap`` file. In our "
@@ -1653,19 +1669,19 @@ msgid ""
 "public and private APIs along header boundaries."
 msgstr ""
 
-#: ../../../Modules.rst:1061
+#: ../../../Modules.rst:1075
 msgid ""
 "When writing a private module as part of a *framework*, it's recommended "
 "that:"
 msgstr ""
 
-#: ../../../Modules.rst:1063
+#: ../../../Modules.rst:1077
 msgid ""
 "Headers for this module are present in the ``PrivateHeaders`` framework "
 "subdirectory."
 msgstr ""
 
-#: ../../../Modules.rst:1065
+#: ../../../Modules.rst:1079
 msgid ""
 "The private module is defined as a *top level module* with the name of the "
 "public framework prefixed, like ``Foo_Private`` above. Clang has extra logic "
@@ -1673,11 +1689,11 @@ msgid ""
 "(submodule) trigger warnings and might not work as expected."
 msgstr ""
 
-#: ../../../Modules.rst:1071
+#: ../../../Modules.rst:1085
 msgid "Modularizing a Platform"
 msgstr ""
 
-#: ../../../Modules.rst:1072
+#: ../../../Modules.rst:1086
 msgid ""
 "To get any benefit out of modules, one needs to introduce module maps for "
 "software libraries starting at the bottom of the stack. This typically means "
@@ -1685,7 +1701,7 @@ msgid ""
 "standard library headers (in ``/usr/include``, for a Unix system)."
 msgstr ""
 
-#: ../../../Modules.rst:1074
+#: ../../../Modules.rst:1088
 msgid ""
 "The module maps will be written using the `module map language`_, which "
 "provides the tools necessary to describe the mapping between headers and "
@@ -1696,11 +1712,11 @@ msgid ""
 "anti-patterns that break modules. Such common patterns are described below."
 msgstr ""
 
-#: ../../../Modules.rst:1086
+#: ../../../Modules.rst:1100
 msgid "**Macro-guarded copy-and-pasted definitions**"
 msgstr ""
 
-#: ../../../Modules.rst:1077
+#: ../../../Modules.rst:1091
 msgid ""
 "System headers vend core types such as ``size_t`` for users. These types are "
 "often needed in a number of system headers, and are almost trivial to write. "
@@ -1708,7 +1724,7 @@ msgid ""
 "and-pasted throughout the headers:"
 msgstr ""
 
-#: ../../../Modules.rst:1086
+#: ../../../Modules.rst:1100
 msgid ""
 "Unfortunately, when modules compiles all of the C library headers together "
 "into a single module, only the first actual type definition of ``size_t`` "
@@ -1724,11 +1740,11 @@ msgid ""
 "where redefinition of ``typedefs`` is not permitted."
 msgstr ""
 
-#: ../../../Modules.rst:1089
+#: ../../../Modules.rst:1103
 msgid "**Conflicting definitions**"
 msgstr ""
 
-#: ../../../Modules.rst:1089
+#: ../../../Modules.rst:1103
 msgid ""
 "Different system headers may provide conflicting definitions for various "
 "macros, functions, or types. These conflicting definitions don't tend to "
@@ -1739,11 +1755,11 @@ msgid ""
 "former is generally the better answer)."
 msgstr ""
 
-#: ../../../Modules.rst:1092
+#: ../../../Modules.rst:1106
 msgid "**Missing includes**"
 msgstr ""
 
-#: ../../../Modules.rst:1092
+#: ../../../Modules.rst:1106
 msgid ""
 "Headers are often missing ``#include`` directives for headers that they "
 "actually depend on. As with the problem of conflicting definitions, this "
@@ -1752,11 +1768,11 @@ msgid ""
 "isolation, so the module may fail to build if there are missing includes."
 msgstr ""
 
-#: ../../../Modules.rst:1095
+#: ../../../Modules.rst:1109
 msgid "**Headers that vend multiple APIs at different times**"
 msgstr ""
 
-#: ../../../Modules.rst:1095
+#: ../../../Modules.rst:1109
 msgid ""
 "Some systems have headers that contain a number of different kinds of API "
 "definitions, only some of which are made available with a given include. For "
@@ -1769,7 +1785,7 @@ msgid ""
 "headers, one per actual API) or simply ``exclude`` it in the module map."
 msgstr ""
 
-#: ../../../Modules.rst:1097
+#: ../../../Modules.rst:1111
 msgid ""
 "To detect and help address some of these problems, the ``clang-tools-extra`` "
 "repository contains a ``modularize`` tool that parses a set of given headers "
@@ -1778,21 +1794,21 @@ msgid ""
 "library headers."
 msgstr ""
 
-#: ../../../Modules.rst:1100
+#: ../../../Modules.rst:1114
 msgid "Future Directions"
 msgstr ""
 
-#: ../../../Modules.rst:1101
+#: ../../../Modules.rst:1115
 msgid ""
 "Modules support is under active development, and there are many "
 "opportunities remaining to improve it. Here are a few ideas:"
 msgstr ""
 
-#: ../../../Modules.rst:1104
+#: ../../../Modules.rst:1118
 msgid "**Detect unused module imports**"
 msgstr ""
 
-#: ../../../Modules.rst:1104
+#: ../../../Modules.rst:1118
 msgid ""
 "Unlike with ``#include`` directives, it should be fairly simple to track "
 "whether a directly-imported module has ever been used. By doing so, Clang "
@@ -1800,11 +1816,11 @@ msgid ""
 "Its to remove the useless imports/includes."
 msgstr ""
 
-#: ../../../Modules.rst:1107
+#: ../../../Modules.rst:1121
 msgid "**Fix-Its for missing imports**"
 msgstr ""
 
-#: ../../../Modules.rst:1107
+#: ../../../Modules.rst:1121
 msgid ""
 "It's fairly common for one to make use of some API while writing code, only "
 "to get a compiler error about \"unknown type\" or \"no function named\" "
@@ -1813,11 +1829,11 @@ msgid ""
 "to add the import."
 msgstr ""
 
-#: ../../../Modules.rst:1110
+#: ../../../Modules.rst:1124
 msgid "**Improve modularize**"
 msgstr ""
 
-#: ../../../Modules.rst:1110
+#: ../../../Modules.rst:1124
 msgid ""
 "The modularize tool is both extremely important (for deployment) and "
 "extremely crude. It needs better UI, better detection of problems "
@@ -1825,45 +1841,45 @@ msgid ""
 "maps for you."
 msgstr ""
 
-#: ../../../Modules.rst:1113
+#: ../../../Modules.rst:1127
 msgid "Where To Learn More About Modules"
 msgstr ""
 
-#: ../../../Modules.rst:1114
+#: ../../../Modules.rst:1128
 msgid "The Clang source code provides additional information about modules:"
 msgstr ""
 
-#: ../../../Modules.rst:1117
+#: ../../../Modules.rst:1131
 msgid "``clang/lib/Headers/module.modulemap``"
 msgstr ""
 
-#: ../../../Modules.rst:1117
+#: ../../../Modules.rst:1131
 msgid "Module map for Clang's compiler-specific header files."
 msgstr ""
 
-#: ../../../Modules.rst:1120
+#: ../../../Modules.rst:1134
 msgid "``clang/test/Modules/``"
 msgstr ""
 
-#: ../../../Modules.rst:1120
+#: ../../../Modules.rst:1134
 msgid "Tests specifically related to modules functionality."
 msgstr ""
 
-#: ../../../Modules.rst:1123
+#: ../../../Modules.rst:1137
 msgid "``clang/include/clang/Basic/Module.h``"
 msgstr ""
 
-#: ../../../Modules.rst:1123
+#: ../../../Modules.rst:1137
 msgid ""
 "The ``Module`` class in this header describes a module, and is used "
 "throughout the compiler to implement modules."
 msgstr ""
 
-#: ../../../Modules.rst:1126
+#: ../../../Modules.rst:1140
 msgid "``clang/include/clang/Lex/ModuleMap.h``"
 msgstr ""
 
-#: ../../../Modules.rst:1126
+#: ../../../Modules.rst:1140
 msgid ""
 "The ``ModuleMap`` class in this header describes the full module map, "
 "consisting of all of the module map files that have been parsed, and "
@@ -1871,37 +1887,37 @@ msgid ""
 "and headers (in both directions)."
 msgstr ""
 
-#: ../../../Modules.rst:1129
+#: ../../../Modules.rst:1143
 msgid "PCHInternals_"
 msgstr ""
 
-#: ../../../Modules.rst:1129
+#: ../../../Modules.rst:1143
 msgid ""
 "Information about the serialized AST format used for precompiled headers and "
 "modules. The actual implementation is in the ``clangSerialization`` library."
 msgstr ""
 
-#: ../../../Modules.rst:1131
+#: ../../../Modules.rst:1145
 msgid ""
 "Automatic linking against the libraries of modules requires specific linker "
 "support, which is not widely available."
 msgstr ""
 
-#: ../../../Modules.rst:1133
+#: ../../../Modules.rst:1147
 msgid ""
 "There are certain anti-patterns that occur in headers, particularly system "
 "headers, that cause problems for modules. The section `Modularizing a "
 "Platform`_ describes some of them."
 msgstr ""
 
-#: ../../../Modules.rst:1135
+#: ../../../Modules.rst:1149
 msgid ""
 "The second instance is actually a new thread within the current process, not "
 "a separate process. However, the original compiler instance is blocked on "
 "the execution of this thread."
 msgstr ""
 
-#: ../../../Modules.rst:1137
+#: ../../../Modules.rst:1151
 msgid ""
 "The preprocessing context in which the modules are parsed is actually "
 "dependent on the command-line options provided to the compiler, including "
