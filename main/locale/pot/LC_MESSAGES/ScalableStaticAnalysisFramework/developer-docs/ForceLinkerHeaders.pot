@@ -1,0 +1,195 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2026, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-27 10:04+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:3
+msgid "Force-Linker Headers"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:5
+msgid ""
+"The framework is rapidly evolving. The documentation might be out-of-sync "
+"with the implementation. The purpose of this documentation is to give "
+"context for upcoming reviews."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:10
+msgid "The problem"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:12
+msgid ""
+"SSAF uses `llvm::Registry\\<\\> <https://llvm.org/doxygen/"
+"classllvm_1_1Registry.html>`_ for decentralized registration of summary "
+"extractors and serialization formats. Each registration is a file-scope "
+"static object whose constructor adds an entry to the global registry:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:23
+msgid ""
+"When the translation unit containing this static object is compiled into a "
+"**static library** (``.a`` / ``.lib``), the static linker will only pull in "
+"object files that resolve an undefined symbol in the consuming binary. "
+"Because no code ever calls anything in ``MyExtractor.o`` directly, the "
+"linker discards the object file — and the registration never runs."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:29
+msgid ""
+"This is not a problem for **shared libraries** (``.so`` / ``.dylib``), "
+"because the dynamic linker loads the entire shared object and runs all "
+"global constructors unconditionally."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:34
+msgid "The solution: anchor symbols"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:36
+msgid ""
+"Each registration translation unit defines a ``volatile int`` **anchor "
+"symbol**:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:44
+msgid ""
+"A **force-linker header** declares the symbol as ``extern`` and reads it "
+"into a ``[[maybe_unused]] static int`` destination:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:54
+msgid ""
+"Any translation unit that ``#include``\\s this header now has a reference to "
+"``SSAFMyExtractorAnchorSource``, which forces the linker to pull in "
+"``MyExtractor.o`` — and with it, the static ``Add<>`` registration object."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:58
+msgid ""
+"The ``volatile`` qualifier is essential: without it the compiler could "
+"constant-fold the ``0`` and eliminate the reference entirely."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:62
+msgid "Header hierarchy"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:69
+msgid ""
+"``clang/include/clang/ScalableStaticAnalysisFramework/SSAFBuiltinForceLinker."
+"h`` — anchors for upstream-provided (built-in) extractors and formats (e.g. "
+"``JSONFormat``)."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:71
+msgid ""
+"``clang/include/clang/ScalableStaticAnalysisFramework/SSAFForceLinker.h`` — "
+"umbrella header that includes ``SSAFBuiltinForceLinker.h``.  This is the "
+"header that downstream projects should modify to add their own force-linker "
+"includes (see :doc:`HowToExtend`)."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:76
+msgid ""
+"Include the umbrella header with ``// IWYU pragma: keep`` in any translation "
+"unit that must guarantee all registrations are active — typically the entry "
+"point of a binary that uses ``clangScalableStaticAnalysisFrameworkCore``:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:86
+msgid "Naming convention"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:88
+msgid ""
+"Anchor symbols follow the pattern ``SSAF<Component>AnchorSource`` and "
+"``SSAF<Component>AnchorDestination``.  For example:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:91
+msgid "``SSAFJSONFormatAnchorSource`` / ``SSAFJSONFormatAnchorDestination``"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:92
+msgid "``SSAFMyExtractorAnchorSource`` / ``SSAFMyExtractorAnchorDestination``"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:95
+msgid "Considered alternatives"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:98
+msgid "``--whole-archive`` / ``-force_load``"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:100
+msgid ""
+"The linker can be instructed to include *every* object file from a static "
+"library, regardless of whether any symbols are referenced:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:111
+msgid ""
+"Since CMake 3.24, the ``$<LINK_LIBRARY:WHOLE_ARCHIVE,...>`` generator "
+"expression provides a portable way to do the same:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:119
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:143
+msgid "**Why we did not choose this approach**:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:121
+msgid ""
+"It is a blunt instrument — *all* object files in the library are pulled in, "
+"increasing binary size."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:123
+msgid ""
+"The anchor approach only targets specific object files: only registrations "
+"whose anchors are referenced in a force-linker header are pulled in."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:125
+msgid ""
+"``--whole-archive`` semantics vary across platforms and toolchains, "
+"requiring platform-specific CMake logic or the relatively new "
+"``WHOLE_ARCHIVE`` generator expression."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:130
+msgid "Explicit initialization functions"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:132
+msgid ""
+"An alternative is a central ``initializeSSAFRegistrations()`` function that "
+"explicitly calls into each registration module:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:145
+msgid ""
+"It reintroduces a centralized list that must be maintained manually, "
+"defeating the decoupled-registration benefit of ``llvm::Registry``."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/ForceLinkerHeaders.rst:147
+msgid ""
+"Adding a new extractor or format requires modifying a central file, which "
+"increases merge-conflict risk for downstream users."
+msgstr ""
