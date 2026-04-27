@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-24 08:19+0000\n"
+"POT-Creation-Date: 2026-04-27 10:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -259,28 +259,52 @@ msgid ""
 msgstr ""
 
 #: ../../../TypeSanitizer.rst:184
-msgid "Limitations"
+msgid "Runtime Options"
 msgstr ""
 
 #: ../../../TypeSanitizer.rst:186
+msgid ""
+"Similar to other sanitizers, you can modify TypeSanitizers runtime behaviour "
+"by using an environment variable. These flags should be provided as a colon "
+"separated list. For example, ``TYSAN_OPTIONS=print_stacktrace=1:"
+"halt_on_error=1``"
+msgstr ""
+
+#: ../../../TypeSanitizer.rst:190
+msgid ""
+"``print_stacktrace`` when true will tell the sanitizer to emit more lengthy "
+"and detailed stack traces on error."
+msgstr ""
+
+#: ../../../TypeSanitizer.rst:192
+msgid ""
+"``halt_on_error`` when true will make the instrumented program abort after "
+"the first type violation detected."
+msgstr ""
+
+#: ../../../TypeSanitizer.rst:196
+msgid "Limitations"
+msgstr ""
+
+#: ../../../TypeSanitizer.rst:198
 msgid ""
 "TypeSanitizer uses more real memory than a native run. It uses 8 bytes of "
 "shadow memory for each byte of user memory."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:188
+#: ../../../TypeSanitizer.rst:200
 msgid ""
 "There are transformation passes which run before TypeSanitizer. If these "
 "passes optimize out an aliasing violation, TypeSanitizer cannot catch it."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:190
+#: ../../../TypeSanitizer.rst:202
 msgid ""
 "Codebases that use unions and struct-initialized variables can see incorrect "
 "results, as TypeSanitizer doesn't yet instrument these reliably."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:192
+#: ../../../TypeSanitizer.rst:204
 msgid ""
 "Since Clang & LLVM's TBAA system is used to generate the checks used by the "
 "instrumentation, TypeSanitizer follows Clang & LLVM's rules for type "
@@ -289,24 +313,24 @@ msgid ""
 "violations that would cause bugs when compiling with Clang & LLVM."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:197
+#: ../../../TypeSanitizer.rst:209
 msgid ""
 "TypeSanitizer cannot currently be run alongside other sanitizers such as "
 "AddressSanitizer, ThreadSanitizer or UndefinedBehaviourSanitizer."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:201
+#: ../../../TypeSanitizer.rst:213
 msgid "Current Status"
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:203
+#: ../../../TypeSanitizer.rst:215
 msgid ""
 "TypeSanitizer is brand new, and still in development. There are some known "
 "issues, especially in areas where Clang's emitted TBAA data isn't extensive "
 "enough for TypeSanitizer's runtime."
 msgstr ""
 
-#: ../../../TypeSanitizer.rst:207
+#: ../../../TypeSanitizer.rst:219
 msgid ""
 "We are actively working on enhancing the tool --- stay tuned.  Any help, "
 "issues, pull requests, ideas, is more than welcome. You can find the `issue "

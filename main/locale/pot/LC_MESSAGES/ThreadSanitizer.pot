@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-04-27 10:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,7 +86,7 @@ msgid ""
 "and line numbers in the warning messages."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:38
+#: ../../../ThreadSanitizer.rst:38 ../../../ThreadSanitizer.rst:139
 msgid "Example:"
 msgstr ""
 
@@ -138,10 +138,47 @@ msgid ""
 msgstr ""
 
 #: ../../../ThreadSanitizer.rst:114
-msgid "Ignorelist"
+msgid "Interaction of Inlining with Disabling Sanitizer Instrumentation"
 msgstr ""
 
 #: ../../../ThreadSanitizer.rst:116
+msgid ""
+"A `no_sanitize` function will not be inlined heuristically by the compiler "
+"into a sanitized function."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:117
+msgid ""
+"An `always_inline` function will adopt the instrumentation status of the "
+"function it is inlined into."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:118
+msgid ""
+"Forcibly combining `no_sanitize` and ``__attribute__((always_inline))`` is "
+"not supported, and will often lead to unexpected results. To avoid mixing "
+"these attributes, use:"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:130
+msgid "Explicit Sanitizer Checks with ``__builtin_allow_sanitize_check``"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:132
+msgid ""
+"The ``__builtin_allow_sanitize_check(\"thread\")`` builtin can be used to "
+"conditionally execute code depending on whether ThreadSanitizer checks are "
+"enabled and permitted by the current policy (after inlining). This is "
+"particularly useful for inserting explicit, sanitizer-specific checks around "
+"operations like syscalls or inline assembly, which might otherwise be "
+"unchecked by the sanitizer."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:167
+msgid "Ignorelist"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:169
 msgid ""
 "ThreadSanitizer supports ``src`` and ``fun`` entity types in :doc:"
 "`SanitizerSpecialCaseList`, that can be used to suppress data race reports "
@@ -151,11 +188,11 @@ msgid ""
 "synchronization via atomic operations and missed stack frames in reports."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:124
+#: ../../../ThreadSanitizer.rst:177
 msgid "Limitations"
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:126
+#: ../../../ThreadSanitizer.rst:179
 msgid ""
 "ThreadSanitizer uses more real memory than a native run. At the default "
 "settings the memory overhead is 5x plus 1Mb per each thread. Settings with "
@@ -163,17 +200,17 @@ msgid ""
 "also available."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:130
+#: ../../../ThreadSanitizer.rst:183
 msgid ""
 "ThreadSanitizer maps (but does not reserve) a lot of virtual address space. "
 "This means that tools like ``ulimit`` may not work as usually expected."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:132
+#: ../../../ThreadSanitizer.rst:185
 msgid "Libc/libstdc++ static linking is not supported."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:133
+#: ../../../ThreadSanitizer.rst:186
 msgid ""
 "Non-position-independent executables are not supported.  Therefore, the "
 "``fsanitize=thread`` flag will cause Clang to act as though the ``-fPIE`` "
@@ -181,11 +218,11 @@ msgid ""
 "pie`` flag had been supplied if linking an executable."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:139
+#: ../../../ThreadSanitizer.rst:192
 msgid "Security Considerations"
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:141
+#: ../../../ThreadSanitizer.rst:194
 msgid ""
 "ThreadSanitizer is a bug detection tool and its runtime is not meant to be "
 "linked against production executables. While it may be useful for testing, "
@@ -194,11 +231,11 @@ msgid ""
 "executable."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:147
+#: ../../../ThreadSanitizer.rst:200
 msgid "Current Status"
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:149
+#: ../../../ThreadSanitizer.rst:202
 msgid ""
 "ThreadSanitizer is in beta stage.  It is known to work on large C++ programs "
 "using pthreads, but we do not promise anything (yet).  C++11 threading is "
@@ -206,16 +243,257 @@ msgid ""
 "and can be run with ``make check-tsan`` command."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:154
+#: ../../../ThreadSanitizer.rst:207
 msgid ""
 "We are actively working on enhancing the tool --- stay tuned.  Any help, "
 "especially in the form of minimized standalone tests is more than welcome."
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:158
+#: ../../../ThreadSanitizer.rst:211
+msgid "Adaptive Delay"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:214
+msgid "Overview"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:216
+msgid ""
+"Adaptive Delay is an optional ThreadSanitizer feature that injects delays at "
+"synchronization points to explore novel thread interleavings and increase "
+"the likelihood of exposing data races. By perturbing thread scheduling, "
+"adaptive delay creates more opportunities for concurrent accesses to shared "
+"data, improving race detection."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:222
+msgid "Adaptive delay is particularly useful for:"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:224
+msgid "Detecting races in rarely-executed thread interleavings or code paths"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:225
+msgid "Testing parallel data structures and algorithms"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:227
+msgid ""
+"When enabled, adaptive delay maintains a configurable time budget to balance "
+"race exposure against performance overhead. The delays can be"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:230
+msgid "random amount of spin cycles"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:231
+msgid "a single yield to the OS scheduler"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:232
+msgid "random usleep"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:234
+msgid "The strategy prioritizes high-value synchronization points:"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:236
+msgid ""
+"Relaxed atomic operations receive cheap delays (spin cycles) with low "
+"sampling"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:237
+msgid ""
+"Synchronizing atomic operations (acquire/release/seq_cst) receive moderate "
+"delays with higher sampling"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:239
+msgid ""
+"Mutex and thread lifecycle operations receive the longest delays with "
+"highest sampling"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:242
+msgid ""
+"The delays focus on synchronization points with clear happens-before "
+"relationships, as those are most likely to expose data races."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:246
+msgid "Enabling Adaptive Delay"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:248
+msgid ""
+"Adaptive delay is disabled by default. Enable it by setting the "
+"``enable_adaptive_delay`` flag:"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:256
+msgid "Configuration Options"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:258
+msgid "Adaptive Delay Options"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:263
+msgid "Flag"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:264
+msgid "Type"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:265
+msgid "Default"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:266
+msgid "Description"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:267
+msgid "``enable_adaptive_delay``"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:268
+msgid "bool"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:269
+msgid "false"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:270
+msgid "Enable adaptive delay injection to expose data races."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:271
+msgid "``adaptive_delay_aggressiveness``"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:272 ../../../ThreadSanitizer.rst:279
+#: ../../../ThreadSanitizer.rst:284 ../../../ThreadSanitizer.rst:290
+msgid "int"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:273
+msgid "25"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:274
+msgid ""
+"Controls delay injection intensity for race detection. Higher values inject "
+"more delays to expose races. Value must be greater than 0. Suggested values: "
+"10 (minimal), 50 (moderate), 200 (aggressive). This is a tuning parameter; "
+"actual overhead varies by workload and platform."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:278
+msgid "``adaptive_delay_relaxed_sample_rate``"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:280
+msgid "10000"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:281
+msgid ""
+"Sample 1 in N relaxed atomic operations for delay injection. Relaxed atomics "
+"have minimal synchronization, so sampling helps avoid excessive overhead."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:283
+msgid "``adaptive_delay_sync_atomic_sample_rate``"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:285
+msgid "100"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:286
+msgid ""
+"Sample 1 in N acquire/release/seq_cst atomic operations for delay injection. "
+"These synchronizing atomics are more likely to expose races, so are sampled "
+"more often."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:289
+msgid "``adaptive_delay_mutex_sample_rate``"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:291
+msgid "10"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:292
+msgid ""
+"Sample 1 in N mutex/condition variable operations for delay injection. Mutex "
+"ops are high-value synchronization points and are sampled frequently."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:294
+msgid "``adaptive_delay_max_atomic``"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:295 ../../../ThreadSanitizer.rst:302
+msgid "string"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:296
+msgid "``\"sleep_us=50\"``"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:297
+msgid ""
+"Maximum delay for atomic operations. Format: ``\"spin=N\"`` (N spin cycles, "
+"1 <= N <= 10,000), ``\"yield\"`` (one yield to the OS), or "
+"``\"sleep_us=N\"`` (up to N microseconds). The delay is randomly chosen up "
+"to the specified maximum N."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:301
+msgid "``adaptive_delay_max_sync``"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:303
+msgid "``\"sleep_us=500\"``"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:304
+msgid ""
+"Maximum delay for synchronization operations (mutex and thread lifecycle "
+"operations). Format: same as ``adaptive_delay_max_atomic``. Typically set "
+"longer than atomic delays since these operations involve waking blocked "
+"threads and may be more likely to expose races."
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:310
+msgid "Examples"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:312
+msgid "Enable adaptive delay with moderate aggressiveness:"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:318
+msgid "Enable aggressive delay injection:"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:324
+msgid "Increase sampling frequency for mutex operations:"
+msgstr ""
+
+#: ../../../ThreadSanitizer.rst:331
 msgid "More Information"
 msgstr ""
 
-#: ../../../ThreadSanitizer.rst:159
+#: ../../../ThreadSanitizer.rst:332
 msgid "`<https://github.com/google/sanitizers/wiki/ThreadSanitizerCppManual>`_"
 msgstr ""

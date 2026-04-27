@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-04-27 10:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -746,27 +746,35 @@ msgstr ""
 msgid ""
 ":option:`-Ofast` Enables all the optimizations from :option:`-O3` along with "
 "other aggressive optimizations that may violate strict compliance with "
-"language standards. This is deprecated in Clang 19 and a warning is emitted "
-"that :option:`-O3` in combination with :option:`-ffast-math` should be used "
-"instead if the request for non-standard math behavior is intended. There is "
-"no timeline yet for removal; the aim is to discourage use of :option:`-"
-"Ofast` due to the surprising behavior of an optimization flag changing the "
+"language standards. This has been deprecated since Clang 19. There is no "
+"timeline yet for removal; the aim is to discourage use of :option:`-Ofast` "
+"due to the surprising behavior of an optimization flag changing the "
 "observable behavior of correct code."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:457
+#: ../../../CommandGuide/clang.rst:455
+msgid ""
+"If :option:`-Ofast` has been specified and is the effective optimization "
+"level (i.e. there is no later `-O` option specified), then the option can be "
+"replaced in the option string with `-O3 -ffast-math -fstrict-aliasing`. (:"
+"option:`-fstrict-aliasing` is the default on non-Windows, non-UEFI "
+"platforms). If :option:`-Ofast` has been specified but is not the effective "
+"optimization level, then it can be removed or replaced with :option:`-O3`."
+msgstr ""
+
+#: ../../../CommandGuide/clang.rst:462
 msgid ""
 ":option:`-Os` Like :option:`-O2` with extra optimizations to reduce code "
 "size."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:460
+#: ../../../CommandGuide/clang.rst:465
 msgid ""
 ":option:`-Oz` Like :option:`-Os` (and thus :option:`-O2`), but reduces code "
 "size further."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:463
+#: ../../../CommandGuide/clang.rst:468
 msgid ""
 ":option:`-Og` Similar to :option:`-O1`, but with slightly reduced "
 "optimization and better variable visibility. The same optimizations are run "
@@ -775,37 +783,37 @@ msgid ""
 "variables, improving their availability when debugging."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:469
+#: ../../../CommandGuide/clang.rst:474
 msgid ":option:`-O` Equivalent to :option:`-O1`."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:471
+#: ../../../CommandGuide/clang.rst:476
 msgid ":option:`-O4` and higher"
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:473
+#: ../../../CommandGuide/clang.rst:478
 msgid "Currently equivalent to :option:`-O3`"
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:477
+#: ../../../CommandGuide/clang.rst:482
 msgid ""
 "Control debug information output.  Note that Clang debug information works "
 "best at :option:`-O0`.  When more than one option starting with `-g` is "
 "specified, the last one wins:"
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:481
+#: ../../../CommandGuide/clang.rst:486
 msgid ":option:`-g` Generate debug information."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:483
+#: ../../../CommandGuide/clang.rst:488
 msgid ""
 ":option:`-gline-tables-only` Generate only line table debug information. "
 "This allows for symbolicated backtraces with inlining information, but does "
 "not include any information about variables, their locations or types."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:487
+#: ../../../CommandGuide/clang.rst:492
 msgid ""
 ":option:`-gmodules` Generate debug information that contains external "
 "references to types defined in Clang modules or precompiled headers instead "
@@ -817,7 +825,7 @@ msgid ""
 "and much smaller object files."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:496
+#: ../../../CommandGuide/clang.rst:501
 msgid ""
 "This option should not be used when building static libraries for "
 "distribution to other machines because the debug info will contain "
@@ -825,7 +833,7 @@ msgid ""
 "library were built on."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:503
+#: ../../../CommandGuide/clang.rst:508
 msgid ""
 "Clang supports a number of optimizations to reduce the size of debug "
 "information in the binary. They work based on the assumption that the debug "
@@ -836,7 +844,7 @@ msgid ""
 "the vtable for the class."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:511
+#: ../../../CommandGuide/clang.rst:516
 msgid ""
 "The :option:`-fstandalone-debug` option turns off these optimizations. This "
 "is useful when working with 3rd-party libraries that don't come with debug "
@@ -845,14 +853,14 @@ msgid ""
 "program."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:519
+#: ../../../CommandGuide/clang.rst:524
 msgid ""
 "By default, Clang does not emit type information for types that are defined "
 "but not used in a program. To retain the debug info for these unused types, "
 "the negation **-fno-eliminate-unused-debug-types** can be used."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:525
+#: ../../../CommandGuide/clang.rst:530
 msgid ""
 "Allow exceptions to be thrown through Clang compiled stack frames (on many "
 "targets, this will enable unwind information for functions that might have "
@@ -860,24 +868,24 @@ msgid ""
 "default for C++."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:532
+#: ../../../CommandGuide/clang.rst:537
 msgid ""
 "Generate code to catch integer overflow errors.  Signed integer overflow is "
 "undefined in C. With this flag, extra code is generated to detect this and "
 "abort when it happens."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:538
+#: ../../../CommandGuide/clang.rst:543
 msgid "This flag sets the default visibility level."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:542
+#: ../../../CommandGuide/clang.rst:547
 msgid ""
 "This flag specifies that variables without initializers get common linkage. "
 "It can be disabled with :option:`-fno-common`."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:547
+#: ../../../CommandGuide/clang.rst:552
 msgid ""
 "Set the default thread-local storage (TLS) model to use for thread-local "
 "variables. Valid values are: \"global-dynamic\", \"local-dynamic\", "
@@ -886,7 +894,7 @@ msgid ""
 "will try to choose a more efficient model if possible."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:555
+#: ../../../CommandGuide/clang.rst:560
 msgid ""
 "Generate output files in LLVM formats, suitable for link time optimization. "
 "When used with :option:`-S` this generates LLVM intermediate language "
@@ -894,7 +902,7 @@ msgid ""
 "(which may be passed to the linker depending on the stage selection options)."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:560
+#: ../../../CommandGuide/clang.rst:565
 msgid ""
 "The default for :option:`-flto` is \"full\", in which the LLVM bitcode is "
 "suitable for monolithic Link Time Optimization (LTO), where the linker "
@@ -902,7 +910,7 @@ msgid ""
 "\"thin\", :doc:`ThinLTO <../ThinLTO>` compilation is invoked instead."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:568
+#: ../../../CommandGuide/clang.rst:573
 msgid ""
 "On Darwin, when using :option:`-flto` along with :option:`-g` and compiling "
 "and linking in separate steps, you also need to pass ``-Wl,-object_path_lto,"
@@ -913,185 +921,185 @@ msgid ""
 "well as generating the ``.dSYM`` bundle using :manpage:`dsymutil(1)`."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:577
+#: ../../../CommandGuide/clang.rst:582
 msgid "Driver Options"
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:581
+#: ../../../CommandGuide/clang.rst:586
 msgid "Print (but do not run) the commands to run for this compilation."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:585
+#: ../../../CommandGuide/clang.rst:590
 msgid "Display available options."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:589
+#: ../../../CommandGuide/clang.rst:594
 msgid "Do not emit any warnings for unused driver arguments."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:593
+#: ../../../CommandGuide/clang.rst:598
 msgid "Pass the comma separated arguments in args to the assembler."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:597
+#: ../../../CommandGuide/clang.rst:602
 msgid "Pass the comma separated arguments in args to the linker."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:601
+#: ../../../CommandGuide/clang.rst:606
 msgid "Pass the comma separated arguments in args to the preprocessor."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:605
+#: ../../../CommandGuide/clang.rst:610
 msgid "Pass arg to the static analyzer."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:609
+#: ../../../CommandGuide/clang.rst:614
 msgid "Pass arg to the assembler."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:613
+#: ../../../CommandGuide/clang.rst:618
 msgid "Pass arg to the linker."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:617
+#: ../../../CommandGuide/clang.rst:622
 msgid "Pass arg to the preprocessor."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:621
+#: ../../../CommandGuide/clang.rst:626
 msgid "Write output to file."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:625
+#: ../../../CommandGuide/clang.rst:630
 msgid "Print the full library path of file."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:629
+#: ../../../CommandGuide/clang.rst:634
 msgid ""
 "Print the library path for the currently used compiler runtime library "
 "(\"libgcc.a\" or \"libclang_rt.builtins.*.a\")."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:634
+#: ../../../CommandGuide/clang.rst:639
 msgid "Print the full program path of name."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:638
+#: ../../../CommandGuide/clang.rst:643
 msgid "Print the paths used for finding libraries and programs."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:642
+#: ../../../CommandGuide/clang.rst:647
 msgid "Save intermediate compilation results."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:646
+#: ../../../CommandGuide/clang.rst:651
 msgid ""
 "Save internal code generation (LLVM) statistics to a file in the current "
 "directory (:option:`-save-stats`/\"-save-stats=cwd\") or the directory of "
 "the output file (\"-save-stats=obj\")."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:650
+#: ../../../CommandGuide/clang.rst:655
 msgid ""
 "You can also use environment variables to control the statistics reporting. "
 "Setting ``CC_PRINT_INTERNAL_STAT`` to ``1`` enables the feature, the report "
 "goes to stdout in JSON format."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:654
+#: ../../../CommandGuide/clang.rst:659
 msgid ""
 "Setting ``CC_PRINT_INTERNAL_STAT_FILE`` to a file path makes it report "
 "statistics to the given file in the JSON format."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:657
+#: ../../../CommandGuide/clang.rst:662
 msgid ""
 "Note that ``-save-stats`` take precedence over ``CC_PRINT_INTERNAL_STAT`` "
 "and ``CC_PRINT_INTERNAL_STAT_FILE``."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:662
+#: ../../../CommandGuide/clang.rst:667
 msgid ""
 "Used to enable and disable, respectively, the use of the integrated "
 "assembler. Whether the integrated assembler is on by default is target "
 "dependent."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:668
+#: ../../../CommandGuide/clang.rst:673
 msgid "Time individual commands."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:672
+#: ../../../CommandGuide/clang.rst:677
 msgid "Print timing summary of each stage of compilation."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:676
+#: ../../../CommandGuide/clang.rst:681
 msgid "Show commands to run and use verbose output."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:680
+#: ../../../CommandGuide/clang.rst:685
 msgid "Diagnostics Options"
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:684
+#: ../../../CommandGuide/clang.rst:689
 msgid ""
 "These options control how Clang prints out information about diagnostics "
 "(errors and warnings). Please see the Clang User's Manual for more "
 "information."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:688
+#: ../../../CommandGuide/clang.rst:693
 msgid "Preprocessor Options"
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:692
+#: ../../../CommandGuide/clang.rst:697
 msgid ""
 "Adds an implicit #define into the predefines buffer which is read before the "
 "source file is preprocessed."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:697
+#: ../../../CommandGuide/clang.rst:702
 msgid ""
 "Adds an implicit #undef into the predefines buffer which is read before the "
 "source file is preprocessed."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:702
+#: ../../../CommandGuide/clang.rst:707
 msgid ""
 "Adds an implicit #include into the predefines buffer which is read before "
 "the source file is preprocessed."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:707
+#: ../../../CommandGuide/clang.rst:712
 msgid "Add the specified directory to the search path for include files."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:711
+#: ../../../CommandGuide/clang.rst:716
 msgid ""
 "Add the specified directory to the search path for framework include files."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:715
+#: ../../../CommandGuide/clang.rst:720
 msgid ""
 "Do not search the standard system directories or compiler builtin "
 "directories for include files."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:720
+#: ../../../CommandGuide/clang.rst:725
 msgid ""
 "Do not search the standard system directories for include files, but do "
 "search compiler builtin include directories."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:725
+#: ../../../CommandGuide/clang.rst:730
 msgid "Do not search clang's builtin directory for include files."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:729
+#: ../../../CommandGuide/clang.rst:734
 msgid ""
 "Do not search the system C++ standard library directory for include files."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:733
+#: ../../../CommandGuide/clang.rst:738
 msgid ""
 "Usable only with :option:`-E`. Do not copy the preprocessed content of "
 "\"system\" headers to the output; instead, preserve the #include directive. "
@@ -1099,7 +1107,7 @@ msgid ""
 "can be helpful when trying to produce a \"small\" reproduceable test case."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:738
+#: ../../../CommandGuide/clang.rst:743
 msgid ""
 "This option does not guarantee reproduceability, however. If the including "
 "source defines preprocessor symbols that influence the behavior of system "
@@ -1110,17 +1118,17 @@ msgid ""
 "verify the preprocessed file by compiling it separately."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:748
+#: ../../../CommandGuide/clang.rst:753
 msgid "ENVIRONMENT"
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:752
+#: ../../../CommandGuide/clang.rst:757
 msgid ""
 "These environment variables are checked, in order, for the location to write "
 "temporary files used during the compilation process."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:757
+#: ../../../CommandGuide/clang.rst:762
 msgid ""
 "This environment variable specifies additional (non-system) header search "
 "paths to be used to find included header files. These paths are searched "
@@ -1132,25 +1140,25 @@ msgid ""
 "directory."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:767
+#: ../../../CommandGuide/clang.rst:772
 msgid ""
 "These environment variables specify additional system header file search "
 "paths to be used when processing the corresponding language. Search paths "
 "are delimited as for the :envvar:`CPATH` environment variable."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:773
+#: ../../../CommandGuide/clang.rst:778
 msgid ""
 "If :option:`-mmacos-version-min` is unspecified, the default deployment "
 "target is read from this environment variable. This option only affects "
 "Darwin targets."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:778
+#: ../../../CommandGuide/clang.rst:783
 msgid "BUGS"
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:780
+#: ../../../CommandGuide/clang.rst:785
 msgid ""
 "To report bugs, please visit <https://github.com/llvm/llvm-project/issues/"
 ">.  Most bug reports should include preprocessed source files (use the :"
@@ -1158,10 +1166,10 @@ msgid ""
 "information to reproduce."
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:785
+#: ../../../CommandGuide/clang.rst:790
 msgid "SEE ALSO"
 msgstr ""
 
-#: ../../../CommandGuide/clang.rst:787
+#: ../../../CommandGuide/clang.rst:792
 msgid ":manpage:`as(1)`, :manpage:`ld(1)`"
 msgstr ""

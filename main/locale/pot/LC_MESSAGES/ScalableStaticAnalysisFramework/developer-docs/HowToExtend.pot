@@ -1,0 +1,260 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2026, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-27 10:04+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:3
+msgid "How to Extend the Framework"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:5
+msgid ""
+"The framework is rapidly evolving. The documentation might be out-of-sync "
+"with the implementation. The purpose of this documentation is to give "
+"context for upcoming reviews."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:9
+msgid ""
+"SSAF is designed to be extensible with new **summary extractors** and "
+"**serialization formats**. Extensions can be added in three ways:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:12
+msgid ""
+"**Statically, in-tree** — built as part of the upstream LLVM/Clang tree."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:13
+msgid ""
+"**Statically, out-of-tree (downstream)** — built in a downstream fork or "
+"project that links ``clangScalableStaticAnalysisFrameworkCore`` as a static "
+"library."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:14
+msgid "**Dynamically, via plugins** — loaded at runtime as shared objects."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:16
+msgid ""
+"All three approaches use the same ``llvm::Registry``-based registration "
+"mechanism. The key difference is how the linker sees the registration: "
+"static libraries need :doc:`force-linker anchors <ForceLinkerHeaders>` to "
+"prevent dead-stripping, while shared libraries do not."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:21
+msgid "Adding a summary extractor"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:23
+msgid ""
+"A summary extractor is an ``ASTConsumer`` that inspects the AST and "
+"populates a ``TUSummary`` via the ``TUSummaryBuilder`` interface."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:26
+msgid "Step 1: Implement the extractor"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:46
+msgid "Step 2: Register the extractor"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:62
+msgid ""
+"The ``\"MyExtractor\"`` string is the name users pass to ``--ssaf-extract-"
+"summaries=MyExtractor``."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:65
+msgid "Step 3: Add the force-linker anchor"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:67
+msgid ""
+"See :doc:`ForceLinkerHeaders` for a full explanation of why this is needed. "
+"Add the following to the appropriate force-linker header:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:76
+msgid ""
+"For **in-tree** additions, add this to ``clang/include/clang/"
+"ScalableStaticAnalysisFramework/SSAFBuiltinForceLinker.h``."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:79
+msgid ""
+"For **downstream** additions, see `Out-of-tree (downstream) extensions`_ "
+"below."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:83
+msgid "Adding a serialization format"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:85
+msgid ""
+"A serialization format controls how the ``TUSummary`` is written to (and "
+"read from) disk. This involves more boilerplate than an extractor because "
+"each format has a per-analysis ``FormatInfo`` sub-registry."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:89
+msgid "Step 1: Define the format class"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:91
+msgid ""
+"Your format class must inherit from ``SerializationFormat`` and define a "
+"``FormatInfo`` type alias:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:118
+msgid "Step 2: Register the format"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:136
+msgid ""
+"The format name (``\"myformat\"``) is matched against the file extension in "
+"``--ssaf-tu-summary-file=output.myformat``."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:139
+msgid "Step 3: Register per-analysis FormatInfo entries"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:141
+msgid ""
+"For each analysis that should be serializable in your format, register a "
+"``FormatInfo`` entry. ``FormatInfo`` must be implemented for any of the "
+"summaries that wants to support ``myformat``:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:162
+msgid "Step 4: Add the force-linker anchor"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:164
+msgid ""
+"Same pattern as for extractors — see `Adding a summary extractor`_ Step 3, "
+"and :doc:`ForceLinkerHeaders`."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:168
+msgid "Static extensibility"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:171
+msgid "In-tree extensions"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:173
+msgid "For extensions that are part of the upstream LLVM/Clang tree:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:175
+msgid ""
+"Add the anchor to ``clang/include/clang/ScalableStaticAnalysisFramework/"
+"SSAFBuiltinForceLinker.h``."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:176
+msgid ""
+"Add the source files to the ``clangScalableStaticAnalysisFrameworkCore`` "
+"CMake library target."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:177
+msgid ""
+"That's it — the ``SSAFForceLinker.h`` umbrella includes "
+"``SSAFBuiltinForceLinker.h`` transitively, so any binary that includes the "
+"umbrella will pull in the registration."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:181
+msgid "Out-of-tree (downstream) extensions"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:183
+msgid ""
+"Downstream projects that maintain a fork can add their own extensions "
+"without modifying upstream files — reducing the risk of merge-conflicts:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:186
+msgid ""
+"Create a downstream force-linker header, e.g. ``SSAFDownstreamForceLinker."
+"h``, containing the anchor references for downstream-only extractors and "
+"formats."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:188
+msgid "Include it from ``SSAFForceLinker.h`` (the umbrella):"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:196
+msgid ""
+"This is a single-line addition per downstream project, minimizing conflicts "
+"with upstream changes. Upstream will try to avoid modifying this umbrella "
+"header, making it a stable static extension point."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:199
+msgid "Add the downstream source files to the build system as usual."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:203
+msgid "Dynamic extensibility (plugins)"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:205
+msgid ""
+"Shared libraries loaded at runtime — via ``dlopen`` / ``LoadLibrary`` or the "
+"Clang plugin mechanism — do **not** need force-linker anchors, but having "
+"them also does not hurt."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:208
+msgid ""
+"When a shared object (``.so`` / ``.dylib``) is loaded, the dynamic linker "
+"runs all global constructors in that library unconditionally. This means the "
+"``llvm::Registry::Add<>`` objects execute their constructors and register "
+"themselves automatically."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:211
+msgid "To use a plugin:"
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:213
+msgid "Build your extractor or format as a shared library."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:214
+msgid "Load it with the Clang plugin mechanism (``-fplugin=`` or ``-load``)."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:215
+msgid "Pass the extractor name to ``--ssaf-extract-summaries=`` as usual."
+msgstr ""
+
+#: ../../../ScalableStaticAnalysisFramework/developer-docs/HowToExtend.rst:217
+msgid ""
+"No changes to any force-linker header are required. The ``llvm::Registry`` "
+"infrastructure handles everything once the shared object is loaded."
+msgstr ""

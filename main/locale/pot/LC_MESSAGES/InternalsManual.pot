@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 08:18+0000\n"
+"POT-Creation-Date: 2026-04-27 10:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3612,42 +3612,44 @@ msgstr ""
 #: ../../../InternalsManual.rst:2912
 msgid ""
 "Because this is expensive, it is cached in "
-"``UnsubstitutedConstraintSatisfactionCache``."
+"``UnsubstitutedConstraintSatisfactionCache``. Also we will cache the "
+"instantiation result of parameter mappings to avoid unnecessary semantic "
+"checking."
 msgstr ""
 
-#: ../../../InternalsManual.rst:2915
+#: ../../../InternalsManual.rst:2916
 msgid ""
 "Any error during satisfaction is recorded in ``ConstraintSatisfaction``. for "
 "nested requirements, ``ConstraintSatisfaction`` is stored (including "
 "diagnostics) in the AST, which is something we might want to improve."
 msgstr ""
 
-#: ../../../InternalsManual.rst:2919
+#: ../../../InternalsManual.rst:2920
 msgid ""
 "When an atomic constraint is not satisfied, we try to substitute into any "
 "enclosing concept-id using the same mechanism described above, for "
 "diagnostics purpose, and inject that in the ``ConstraintSatisfaction``."
 msgstr ""
 
-#: ../../../InternalsManual.rst:2926
+#: ../../../InternalsManual.rst:2927
 msgid "The CodeGen Library"
 msgstr ""
 
-#: ../../../InternalsManual.rst:2928
+#: ../../../InternalsManual.rst:2929
 msgid ""
 "CodeGen takes an :ref:`AST <AST>` as input and produces `LLVM IR code <//"
 "llvm.org/docs/LangRef.html>`_ from it."
 msgstr ""
 
-#: ../../../InternalsManual.rst:2932
+#: ../../../InternalsManual.rst:2933
 msgid "How to change Clang"
 msgstr ""
 
-#: ../../../InternalsManual.rst:2935
+#: ../../../InternalsManual.rst:2936
 msgid "How to add an attribute"
 msgstr ""
 
-#: ../../../InternalsManual.rst:2936
+#: ../../../InternalsManual.rst:2937
 msgid ""
 "Attributes are a form of metadata that can be attached to a program "
 "construct, allowing the programmer to pass semantic information along to the "
@@ -3658,18 +3660,18 @@ msgid ""
 "<//clang.llvm.org/docs/AttributeReference.html>`_."
 msgstr ""
 
-#: ../../../InternalsManual.rst:2945
+#: ../../../InternalsManual.rst:2946
 msgid "Attribute Basics"
 msgstr ""
 
-#: ../../../InternalsManual.rst:2946
+#: ../../../InternalsManual.rst:2947
 msgid ""
 "Attributes in Clang are handled in three stages: parsing into a parsed "
 "attribute representation, conversion from a parsed attribute into a semantic "
 "attribute, and then the semantic handling of the attribute."
 msgstr ""
 
-#: ../../../InternalsManual.rst:2950
+#: ../../../InternalsManual.rst:2951
 msgid ""
 "Parsing of the attribute is determined by the various syntactic forms "
 "attributes can take, such as GNU, C++11, and Microsoft style attributes, as "
@@ -3683,7 +3685,7 @@ msgid ""
 "``ParsedAttr`` object must be done manually."
 msgstr ""
 
-#: ../../../InternalsManual.rst:2960
+#: ../../../InternalsManual.rst:2961
 msgid ""
 "Eventually, ``Sema::ProcessDeclAttributeList()`` is called with a ``Decl`` "
 "and a ``ParsedAttr``, at which point the parsed attribute can be transformed "
@@ -3696,7 +3698,7 @@ msgid ""
 "list of ``ParsedAttr`` objects to be converted into a semantic attribute."
 msgstr ""
 
-#: ../../../InternalsManual.rst:2970
+#: ../../../InternalsManual.rst:2971
 msgid ""
 "The structure of the semantic attribute is also governed by the attribute "
 "definition given in Attr.td. This definition is used to automatically "
@@ -3705,11 +3707,11 @@ msgid ""
 "automated semantic checking for some attributes, etc."
 msgstr ""
 
-#: ../../../InternalsManual.rst:2978
+#: ../../../InternalsManual.rst:2979
 msgid "``include/clang/Basic/Attr.td``"
 msgstr ""
 
-#: ../../../InternalsManual.rst:2979
+#: ../../../InternalsManual.rst:2980
 msgid ""
 "The first step to adding a new attribute to Clang is to add its definition "
 "to `include/clang/Basic/Attr.td <https://github.com/llvm/llvm-project/blob/"
@@ -3729,7 +3731,7 @@ msgid ""
 "supported by another vendor but not supported by clang."
 msgstr ""
 
-#: ../../../InternalsManual.rst:2996
+#: ../../../InternalsManual.rst:2997
 msgid ""
 "The definition will specify several key pieces of information, such as the "
 "semantic name of the attribute, the spellings the attribute supports, the "
@@ -3739,11 +3741,11 @@ msgid ""
 "list, a subject list, and a documentation list."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3004
+#: ../../../InternalsManual.rst:3005
 msgid "Spellings"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3005
+#: ../../../InternalsManual.rst:3006
 msgid ""
 "All attributes are required to specify a spelling list that denotes the ways "
 "in which the attribute can be spelled. For instance, a single semantic "
@@ -3753,64 +3755,64 @@ msgid ""
 "accepted:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3012
+#: ../../../InternalsManual.rst:3013
 msgid "Spelling"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3012
+#: ../../../InternalsManual.rst:3013
 msgid "Description"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3014
+#: ../../../InternalsManual.rst:3015
 msgid "``GNU``"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3014
+#: ../../../InternalsManual.rst:3015
 msgid ""
 "Spelled with a GNU-style ``__attribute__((attr))`` syntax and placement."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3016
+#: ../../../InternalsManual.rst:3017
 msgid "``CXX11``"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3016
+#: ../../../InternalsManual.rst:3017
 msgid ""
 "Spelled with a C++-style ``[[attr]]`` syntax with an optional vendor-"
 "specific namespace."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3018
+#: ../../../InternalsManual.rst:3019
 msgid "``C23``"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3018
+#: ../../../InternalsManual.rst:3019
 msgid ""
 "Spelled with a C-style ``[[attr]]`` syntax with an optional vendor-specific "
 "namespace."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3020
+#: ../../../InternalsManual.rst:3021
 msgid "``Declspec``"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3020
+#: ../../../InternalsManual.rst:3021
 msgid "Spelled with a Microsoft-style ``__declspec(attr)`` syntax."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3022
+#: ../../../InternalsManual.rst:3023
 msgid "``CustomKeyword``"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3022
+#: ../../../InternalsManual.rst:3023
 msgid "The attribute is spelled as a keyword, and requires custom parsing."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3024
+#: ../../../InternalsManual.rst:3025
 msgid "``RegularKeyword``"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3024
+#: ../../../InternalsManual.rst:3025
 msgid ""
 "The attribute is spelled as a keyword. It can be used in exactly the places "
 "that the standard ``[[attr]]`` syntax can be used, and appertains to exactly "
@@ -3818,11 +3820,11 @@ msgid ""
 "parsing of the keyword are handled automatically."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3030
+#: ../../../InternalsManual.rst:3031
 msgid "``GCC``"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3030
+#: ../../../InternalsManual.rst:3031
 msgid ""
 "Specifies two or three spellings: the first is a GNU-style spelling, the "
 "second is a C++-style spelling with the ``gnu`` namespace, and the third is "
@@ -3830,11 +3832,11 @@ msgid ""
 "only specify this spelling for attributes supported by GCC."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3036
+#: ../../../InternalsManual.rst:3037
 msgid "``Clang``"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3036
+#: ../../../InternalsManual.rst:3037
 msgid ""
 "Specifies two or three spellings: the first is a GNU-style spelling, the "
 "second is a C++-style spelling with the ``clang`` namespace, and the third "
@@ -3842,11 +3844,11 @@ msgid ""
 "C-style spelling is provided."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3041
+#: ../../../InternalsManual.rst:3042
 msgid "``Pragma``"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3041
+#: ../../../InternalsManual.rst:3042
 msgid ""
 "The attribute is spelled as a ``#pragma``, and requires custom processing "
 "within the preprocessor. If the attribute is meant to be used by Clang, it "
@@ -3854,7 +3856,7 @@ msgid ""
 "used for declaration attributes."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3048
+#: ../../../InternalsManual.rst:3049
 msgid ""
 "The C++ standard specifies that “any [non-standard attribute] that is not "
 "recognized by the implementation is ignored” (``[dcl.attr.grammar]``). The "
@@ -3863,7 +3865,7 @@ msgid ""
 "of the code, or that have other similar semantic meaning."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3054
+#: ../../../InternalsManual.rst:3055
 msgid ""
 "``RegularKeyword`` provides an alternative way of spelling such attributes. "
 "It reuses the production rules for standard attributes, but it applies them "
@@ -3871,7 +3873,7 @@ msgid ""
 "recognize the keyword are likely to report an error of some kind."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3059
+#: ../../../InternalsManual.rst:3060
 msgid ""
 "For example, the ``ArmStreaming`` function type attribute affects both the "
 "type system and the binary interface of the function. It cannot therefore be "
@@ -3881,11 +3883,11 @@ msgid ""
 "hypothetical ``[[arm::streaming]]`` could appear."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3067
+#: ../../../InternalsManual.rst:3068
 msgid "Subjects"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3068
+#: ../../../InternalsManual.rst:3069
 msgid ""
 "Attributes appertain to one or more subjects. If the attribute attempts to "
 "attach to a subject that is not in the subject list, a diagnostic is issued "
@@ -3902,7 +3904,7 @@ msgid ""
 "to be updated."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3081
+#: ../../../InternalsManual.rst:3082
 msgid ""
 "By default, all subjects in the SubjectList must either be a Decl node "
 "defined in ``DeclNodes.td``, or a statement node defined in ``StmtNodes."
@@ -3916,18 +3918,18 @@ msgid ""
 "SubjectList, a custom diagnostic parameter must also be provided."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3091
+#: ../../../InternalsManual.rst:3092
 msgid ""
 "Diagnostic checking for attribute subject lists for declaration and "
 "statement attributes is automated except when ``HasCustomParsing`` is set to "
 "``1``."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3095
+#: ../../../InternalsManual.rst:3096
 msgid "Documentation"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3096
+#: ../../../InternalsManual.rst:3097
 msgid ""
 "All attributes must have some form of documentation associated with them. "
 "Documentation is table generated on the public web server by a server-side "
@@ -3937,7 +3939,7 @@ msgid ""
 "that is named after the attribute being documented."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3103
+#: ../../../InternalsManual.rst:3104
 msgid ""
 "If the attribute is not for public consumption, or is an implicitly-created "
 "attribute that has no visible spelling, the documentation list can specify "
@@ -3945,7 +3947,7 @@ msgid ""
 "documentation added to AttrDocs.td."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3108
+#: ../../../InternalsManual.rst:3109
 msgid ""
 "Documentation derives from the ``Documentation`` tablegen type. All derived "
 "types must specify a documentation category and the actual documentation "
@@ -3953,7 +3955,7 @@ msgid ""
 "though a default heading will be chosen when possible."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3113
+#: ../../../InternalsManual.rst:3114
 msgid ""
 "There are four predefined documentation categories: ``DocCatFunction`` for "
 "attributes that appertain to function-like subjects, ``DocCatVariable`` for "
@@ -3966,13 +3968,13 @@ msgid ""
 "consumed annotations are at a high level."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3123
+#: ../../../InternalsManual.rst:3124
 msgid ""
 "Documentation content (whether it is for an attribute or a category) is "
 "written using reStructuredText (RST) syntax."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3126
+#: ../../../InternalsManual.rst:3127
 msgid ""
 "After writing the documentation for the attribute, it should be locally "
 "tested to ensure that there are no issues generating the documentation on "
@@ -3980,18 +3982,18 @@ msgid ""
 "generate the attribute documentation, execute the following command::"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3133
+#: ../../../InternalsManual.rst:3134
 msgid ""
 "When testing locally, *do not* commit changes to ``AttributeReference.rst``. "
 "This file is generated by the server automatically, and any changes made to "
 "this file will be overwritten."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3138
+#: ../../../InternalsManual.rst:3139
 msgid "Arguments"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3139
+#: ../../../InternalsManual.rst:3140
 msgid ""
 "Attributes may optionally specify a list of arguments that can be passed to "
 "the attribute. Attribute arguments specify both the parsed form and the "
@@ -4002,7 +4004,7 @@ msgid ""
 "the semantic attribute will require a string and integer argument."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3147
+#: ../../../InternalsManual.rst:3148
 msgid ""
 "All arguments have a name and a flag that specifies whether the argument is "
 "optional. The associated C++ type of the argument is determined by the "
@@ -4012,18 +4014,18 @@ msgid ""
 "utils/TableGen/ClangAttrEmitter.cpp>`_ to properly support the type."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3155
+#: ../../../InternalsManual.rst:3156
 msgid "Other Properties"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3156
+#: ../../../InternalsManual.rst:3157
 msgid ""
 "The ``Attr`` definition has other members which control the behavior of the "
 "attribute. Many of them are special-purpose and beyond the scope of this "
 "document, however a few deserve mention."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3160
+#: ../../../InternalsManual.rst:3161
 msgid ""
 "If the parsed form of the attribute is more complex, or differs from the "
 "semantic form, the ``HasCustomParsing`` bit can be set to ``1`` for the "
@@ -4034,21 +4036,21 @@ msgid ""
 "ignore this flag and are handled by ``Parser::ParseMicrosoftDeclSpec``."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3168
+#: ../../../InternalsManual.rst:3169
 msgid ""
 "Note that setting this member to 1 will opt out of common attribute semantic "
 "handling, requiring extra implementation efforts to ensure the attribute "
 "appertains to the appropriate subject, etc."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3172
+#: ../../../InternalsManual.rst:3173
 msgid ""
 "If the attribute should not be propagated from a template declaration to an "
 "instantiation of the template, set the ``Clone`` member to 0. By default, "
 "all attributes will be cloned to template instantiations."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3176
+#: ../../../InternalsManual.rst:3177
 msgid ""
 "Attributes that do not require an AST node should set the ``ASTNode`` field "
 "to ``0`` to avoid polluting the AST. Note that anything inheriting from "
@@ -4057,7 +4059,7 @@ msgid ""
 "semantic representation of the attribute."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3182
+#: ../../../InternalsManual.rst:3183
 msgid ""
 "The ``LangOpts`` field specifies a list of language options required by the "
 "attribute.  For instance, all of the CUDA-specific attributes specify "
@@ -4068,7 +4070,7 @@ msgid ""
 "class."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3189
+#: ../../../InternalsManual.rst:3190
 msgid ""
 "Custom accessors can be generated for an attribute based on the spelling "
 "list for that attribute. For instance, if an attribute has two different "
@@ -4078,7 +4080,7 @@ msgid ""
 "and returning a ``bool``."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3196
+#: ../../../InternalsManual.rst:3197
 msgid ""
 "Attributes that do not require custom semantic handling should set the "
 "``SemaHandler`` field to ``0``. Note that anything inheriting from "
@@ -4088,14 +4090,14 @@ msgid ""
 "enumerator."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3202
+#: ../../../InternalsManual.rst:3203
 msgid ""
 "\"Simple\" attributes, that require no custom semantic processing aside from "
 "what is automatically provided, should set the ``SimpleHandler`` field to "
 "``1``."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3205
+#: ../../../InternalsManual.rst:3206
 msgid ""
 "Target-specific attributes may share a spelling with other attributes in "
 "different targets. For instance, the ARM and MSP430 targets both have an "
@@ -4110,7 +4112,7 @@ msgid ""
 "semantic attributes generated."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3217
+#: ../../../InternalsManual.rst:3218
 msgid ""
 "By default, attribute arguments are parsed in an evaluated context. If the "
 "arguments for an attribute should be parsed in an unevaluated context (akin "
@@ -4118,14 +4120,14 @@ msgid ""
 "``ParseArgumentsAsUnevaluated`` to ``1``."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3222
+#: ../../../InternalsManual.rst:3223
 msgid ""
 "If additional functionality is desired for the semantic form of the "
 "attribute, the ``AdditionalMembers`` field specifies code to be copied "
 "verbatim into the semantic attribute class object, with ``public`` access."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3226
+#: ../../../InternalsManual.rst:3227
 msgid ""
 "If two or more attributes cannot be used in combination on the same "
 "declaration or statement, a ``MutualExclusions`` definition can be supplied "
@@ -4135,11 +4137,11 @@ msgid ""
 "redeclarations, as appropriate."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3234
+#: ../../../InternalsManual.rst:3235
 msgid "Boilerplate"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3235
+#: ../../../InternalsManual.rst:3236
 msgid ""
 "All semantic processing of declaration attributes happens in `lib/Sema/"
 "SemaDeclAttr.cpp <https://github.com/llvm/llvm-project/blob/main/clang/lib/"
@@ -4152,7 +4154,7 @@ msgid ""
 "``case`` for the attribute."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3244
+#: ../../../InternalsManual.rst:3245
 msgid ""
 "Unless otherwise specified by the attribute definition, common semantic "
 "checking of the parsed attribute is handled automatically. This includes "
@@ -4160,7 +4162,7 @@ msgid ""
 "``Stmt``, ensuring the correct minimum number of arguments are passed, etc."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3249
+#: ../../../InternalsManual.rst:3250
 msgid ""
 "If the attribute adds additional warnings, define a ``DiagGroup`` in "
 "`include/clang/Basic/DiagnosticGroups.td <https://github.com/llvm/llvm-"
@@ -4172,18 +4174,18 @@ msgid ""
 "DiagnosticSemaKinds.td>`_"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3257
+#: ../../../InternalsManual.rst:3258
 msgid ""
 "All semantic diagnostics generated for your attribute, including "
 "automatically- generated ones (such as subjects and argument counts), should "
 "have a corresponding test case."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3262
+#: ../../../InternalsManual.rst:3263
 msgid "Semantic handling"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3263
+#: ../../../InternalsManual.rst:3264
 msgid ""
 "Most attributes are implemented to have some effect on the compiler. For "
 "instance, to modify the way code is generated, or to add extra semantic "
@@ -4192,25 +4194,25 @@ msgid ""
 "to implement the custom logic requiring use of the attribute."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3269
+#: ../../../InternalsManual.rst:3270
 msgid ""
 "The ``clang::Decl`` object can be queried for the presence or absence of an "
 "attribute using ``hasAttr<T>()``. To obtain a pointer to the semantic "
 "representation of the attribute, ``getAttr<T>`` may be used."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3273
+#: ../../../InternalsManual.rst:3274
 msgid ""
 "The ``clang::AttributedStmt`` object can  be queried for the presence or "
 "absence of an attribute by calling ``getAttrs()`` and looping over the list "
 "of attributes."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3278
+#: ../../../InternalsManual.rst:3279
 msgid "How to add an expression or statement"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3280
+#: ../../../InternalsManual.rst:3281
 msgid ""
 "Expressions and statements are one of the most fundamental constructs within "
 "a compiler, because they interact with many different parts of the AST, "
@@ -4222,21 +4224,21 @@ msgid ""
 "expressions, but statements are similar."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3289
+#: ../../../InternalsManual.rst:3290
 msgid ""
 "Introduce parsing actions into the parser.  Recursive-descent parsing is "
 "mostly self-explanatory, but there are a few things that are worth keeping "
 "in mind:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3293
+#: ../../../InternalsManual.rst:3294
 msgid ""
 "Keep as much source location information as possible! You'll want it later "
 "to produce great diagnostics and support Clang's various features that map "
 "between source code and the AST."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3296
+#: ../../../InternalsManual.rst:3297
 msgid ""
 "Write tests for all of the \"bad\" parsing cases, to make sure your recovery "
 "is good.  If you have matched delimiters (e.g., parentheses, square "
@@ -4244,7 +4246,7 @@ msgid ""
 "diagnostics when things go wrong."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3301
+#: ../../../InternalsManual.rst:3302
 msgid ""
 "Introduce semantic analysis actions into ``Sema``.  Semantic analysis should "
 "always involve two functions: an ``ActOnXXX`` function that will be called "
@@ -4258,7 +4260,7 @@ msgid ""
 "of the AST:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3312
+#: ../../../InternalsManual.rst:3313
 msgid ""
 "Your expression probably involves some types and some subexpressions. Make "
 "sure to fully check that those types, and the types of those subexpressions, "
@@ -4268,7 +4270,7 @@ msgid ""
 "and that you can use various forms of subexpressions with your expression."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3319
+#: ../../../InternalsManual.rst:3320
 msgid ""
 "When type-checking a type or subexpression, make sure to first check whether "
 "the type is \"dependent\" (``Type::isDependentType()``) or whether a "
@@ -4280,7 +4282,7 @@ msgid ""
 "templates."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3327
+#: ../../../InternalsManual.rst:3328
 msgid ""
 "For each subexpression, be sure to call ``Sema::CheckPlaceholderExpr()`` to "
 "deal with \"weird\" expressions that don't behave well as subexpressions. "
@@ -4290,14 +4292,14 @@ msgid ""
 "value you intend to use."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3333
+#: ../../../InternalsManual.rst:3334
 msgid ""
 "Your ``BuildXXX`` function will probably just return ``ExprError()`` at this "
 "point, since you don't have an AST.  That's perfectly fine, and shouldn't "
 "impact your testing."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3337
+#: ../../../InternalsManual.rst:3338
 msgid ""
 "Introduce an AST node for your new expression.  This starts with declaring "
 "the node in ``include/Basic/StmtNodes.td`` and creating a new class for your "
@@ -4306,20 +4308,20 @@ msgid ""
 "specific things to watch for:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3343
+#: ../../../InternalsManual.rst:3344
 msgid ""
 "If you need to allocate memory, use the ``ASTContext`` allocator to allocate "
 "memory.  Never use raw ``malloc`` or ``new``, and never hold any resources "
 "in an AST node, because the destructor of an AST node is never called."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3347
+#: ../../../InternalsManual.rst:3348
 msgid ""
 "Make sure that ``getSourceRange()`` covers the exact source range of your "
 "expression.  This is needed for diagnostics and for IDE support."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3349
+#: ../../../InternalsManual.rst:3350
 msgid ""
 "Make sure that ``children()`` visits all of the subexpressions.  This is "
 "important for a number of features (e.g., IDE support, C++ variadic "
@@ -4327,11 +4329,11 @@ msgid ""
 "types in ``RecursiveASTVisitor``."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3353
+#: ../../../InternalsManual.rst:3354
 msgid "Add printing support (``StmtPrinter.cpp``) for your expression."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3354
+#: ../../../InternalsManual.rst:3355
 msgid ""
 "Add profiling support (``StmtProfile.cpp``) for your AST node, noting the "
 "distinguishing (non-source location) characteristics of an instance of your "
@@ -4339,20 +4341,20 @@ msgid ""
 "regarding matching of template declarations."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3358
+#: ../../../InternalsManual.rst:3359
 msgid ""
 "Add serialization support (``ASTReaderStmt.cpp``, ``ASTWriterStmt.cpp``) for "
 "your AST node."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3361
+#: ../../../InternalsManual.rst:3362
 msgid ""
 "Teach semantic analysis to build your AST node.  At this point, you can wire "
 "up your ``Sema::BuildXXX`` function to actually create your AST.  A few "
 "things to check at this point:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3365
+#: ../../../InternalsManual.rst:3366
 msgid ""
 "If your expression can construct a new C++ class or return a new Objective-C "
 "object, be sure to update and then call ``Sema::MaybeBindToTemporary`` for "
@@ -4362,14 +4364,14 @@ msgid ""
 "attempt to call the destructor."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3371
+#: ../../../InternalsManual.rst:3372
 msgid ""
 "Inspect the generated AST by printing it using ``clang -cc1 -ast-print``, to "
 "make sure you're capturing all of the important information about how the "
 "AST was written."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3374
+#: ../../../InternalsManual.rst:3375
 msgid ""
 "Inspect the generated AST under ``clang -cc1 -ast-dump`` to verify that all "
 "of the types in the generated AST line up the way you want them. Remember "
@@ -4378,28 +4380,28 @@ msgid ""
 "in the AST."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3379
+#: ../../../InternalsManual.rst:3380
 msgid ""
 "Write tests that use your expression as a subexpression of other, well-known "
 "expressions.  Can you call a function using your expression as an argument?  "
 "Can you use the ternary operator?"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3383
+#: ../../../InternalsManual.rst:3384
 msgid ""
 "Teach code generation to create IR to your AST node.  This step is the first "
 "(and only) that requires knowledge of LLVM IR.  There are several things to "
 "keep in mind:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3387
+#: ../../../InternalsManual.rst:3388
 msgid ""
 "Code generation is separated into scalar/aggregate/complex and lvalue/rvalue "
 "paths, depending on what kind of result your expression produces.  On "
 "occasion, this requires some careful factoring of code to avoid duplication."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3391
+#: ../../../InternalsManual.rst:3392
 msgid ""
 "``CodeGenFunction`` contains functions ``ConvertType`` and "
 "``ConvertTypeForMem`` that convert Clang's types (``clang::Type*`` or "
@@ -4411,7 +4413,7 @@ msgid ""
 "these bitcasts."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3399
+#: ../../../InternalsManual.rst:3400
 msgid ""
 "The ``CodeGenFunction`` class has a number of helper functions to make "
 "certain operations easy, such as generating code to produce an lvalue or an "
@@ -4421,7 +4423,7 @@ msgid ""
 "exceptions)."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3405
+#: ../../../InternalsManual.rst:3406
 msgid ""
 "If your expression requires some special behavior in the event of an "
 "exception, look at the ``push*Cleanup`` functions in ``CodeGenFunction`` to "
@@ -4429,20 +4431,20 @@ msgid ""
 "directly."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3409
+#: ../../../InternalsManual.rst:3410
 msgid ""
 "Testing is extremely important in IR generation.  Use ``clang -cc1 -emit-"
 "llvm`` and `FileCheck <https://llvm.org/docs/CommandGuide/FileCheck.html>`_ "
 "to verify that you're generating the right IR."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3414
+#: ../../../InternalsManual.rst:3415
 msgid ""
 "Teach template instantiation how to cope with your AST node, which requires "
 "some fairly simple code:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3417
+#: ../../../InternalsManual.rst:3418
 msgid ""
 "Make sure that your expression's constructor properly computes the flags for "
 "type dependence (i.e., the type your expression produces can change from one "
@@ -4454,7 +4456,7 @@ msgid ""
 "results from the various types and subexpressions."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3426
+#: ../../../InternalsManual.rst:3427
 msgid ""
 "Add ``TransformXXX`` and ``RebuildXXX`` functions to the ``TreeTransform`` "
 "class template in ``Sema``.  ``TransformXXX`` should (recursively) transform "
@@ -4465,7 +4467,7 @@ msgid ""
 "and build your expression."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3433
+#: ../../../InternalsManual.rst:3434
 msgid ""
 "To test template instantiation, take those tests you wrote to make sure that "
 "you were type checking with type-dependent expressions and dependent types "
@@ -4474,19 +4476,19 @@ msgid ""
 "case."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3439
+#: ../../../InternalsManual.rst:3440
 msgid ""
 "There are some \"extras\" that make other features work better.  It's worth "
 "handling these extras to give your expression complete integration into "
 "Clang:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3443
+#: ../../../InternalsManual.rst:3444
 msgid ""
 "Add code completion support for your expression in ``SemaCodeComplete.cpp``."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3445
+#: ../../../InternalsManual.rst:3446
 msgid ""
 "If your expression has types in it, or has any \"interesting\" features "
 "other than subexpressions, extend libclang's ``CursorVisitor`` to provide "
@@ -4495,33 +4497,64 @@ msgid ""
 "helper program can be used to test these features."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3452
+#: ../../../InternalsManual.rst:3453
 msgid "Testing"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3453
+#: ../../../InternalsManual.rst:3454
 msgid ""
 "All functional changes to Clang should come with test coverage demonstrating "
-"the change in behavior."
+"the change in behavior. There are four kinds of tests:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3459
+#: ../../../InternalsManual.rst:3457
+msgid "Unit tests: such tests are placed in ``clang/test/unittest``."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3458
+msgid ""
+"Diagnostic tests: such tests ensures that only specific diagnostics are "
+"emitted at specific source lines. Those tests are using ``-verify`` mode of "
+"``-cc1``, which is described below in :ref:`\"Verifying Diagnostics\" "
+"<verifying-diagnostics>`. Additional provisions for tests for C++ defect "
+"reports are described in :ref:`\"C++ Defect Report Tests\" <cxx-defect-"
+"report-tests>` section."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3464
+msgid ""
+"AST dump tests: such tests pass printable AST output to the `FileCheck "
+"<https://llvm.org/docs/CommandGuide/FileCheck.html>`_ utility, which check "
+"presence of certain patterns (or lack of thereof)."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3467
+msgid ""
+"LLVM IR tests: in such tests, the LLVM IR output of Clang is checked, which "
+"is needed in cases when checking diagnostics is not sufficient (e.g. when "
+"testing exception handling or object lifetime). Such tests pass LLVM IR "
+"output to the `FileCheck <https://llvm.org/docs/CommandGuide/FileCheck."
+"html>`_ utility, which check the presence of certain IR patterns (or lack of "
+"thereof)."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3477
 msgid "Verifying Diagnostics"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3460
+#: ../../../InternalsManual.rst:3478
 msgid ""
 "Clang ``-cc1`` supports the ``-verify`` command line option as a way to "
-"validate diagnostic behavior. This option will use special comments within "
-"the test file to verify that expected diagnostics appear in the correct "
-"source locations. If all of the expected diagnostics match the actual output "
-"of Clang, then the invocation will return normally. If there are "
-"discrepancies between the expected and actual output, Clang will emit "
-"detailed information about which expected diagnostics were not seen or which "
-"unexpected diagnostics were seen, etc. A complete example is:"
+"validate diagnostic behavior. This option will use special comments, called "
+"directives, within the test file to verify that expected diagnostics appear "
+"in the correct source locations. If all of the expected diagnostics match "
+"the actual output of Clang, then the invocation will return normally. If "
+"there are discrepancies between the expected and actual output, Clang will "
+"emit detailed information about which expected diagnostics were not seen or "
+"which unexpected diagnostics were seen, etc. A complete example is:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3474
+#: ../../../InternalsManual.rst:3492
 msgid ""
 "If the test is run and the expected error is emitted on the expected line, "
 "the diagnostic verifier will pass. However, if the expected error does not "
@@ -4530,7 +4563,106 @@ msgid ""
 "as to why."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3479
+#: ../../../InternalsManual.rst:3498
+msgid "Directive Syntax"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3499
+msgid "Syntax description of the directives is the following:"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3545
+msgid "Where:"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3547
+msgid ""
+"``prefix`` is \"expected\" or a custom string (:ref:`Custom Prefixes <custom-"
+"prefixes>`)."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3549
+msgid ""
+"``delimiter-open`` and ``delimiter-close`` have to have the same length (:"
+"ref:`Diagnostic Text <diagnostic-text>`)."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3551
+msgid ""
+"``file-path`` is relative or absolte path to a file (:ref:`Diagnostic "
+"Location <diagnostic-location>`)."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3553
+msgid ""
+"``marker-name`` is name of the marker placed somewhere in the source file (:"
+"ref:`Diagnostic Location <diagnostic-location>`)."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3555
+msgid ""
+"``diagnostic-text`` is text of the expected diagnostic (:ref:`Diagnostic "
+"Text <diagnostic-text>`)."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3558
+msgid "Examples:"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3560
+msgid ""
+"``// expected-note {{declared here}}`` One note ``declared here`` has to be "
+"issued on the same line as the directive."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3563
+msgid ""
+"``// expected-note {{{declared here}}}`` Same as above, but uses additional "
+"delimiters for diagnostic text."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3565
+msgid ""
+"``// expected-error@+1 0-1 {{expected identifier or '{'}}`` Zero or one "
+"error ``expected identifier or '{'`` has to be issued on the next line after "
+"the directive zero or one time."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3568
+msgid ""
+"``// cxx98-17-warning@#func-decl + {{target exception specification is not "
+"superset of source}}`` One or more warnings ``target exception specification "
+"is not superset of source`` has to be issued on the line that has ``// #func-"
+"decl`` comment one or more times when CLI option ``-verify=cxx98-17`` is "
+"passed."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3573
+msgid ""
+"``// expected-note@* 1 {{file entered}}`` One note ``file entered`` has to "
+"be issued somewhere in the source file."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3575
+msgid ""
+"``// expected-note@decls.h:2 {{previous declaration is here}}`` One note "
+"``previous declaration is here`` has to be issued at ``decl.h`` line 2."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3578
+msgid ""
+"``// cxx11-17-error-re@-1 {{no matching constructor for initialization of "
+"'A' (aka '(lambda at {{.+}})')}}`` One error ``no matching constructor for "
+"initialization of 'A' (aka '(lambda at <source location>)')`` (ignoring the "
+"exact source location) has to be issued on the previous line before the "
+"directive when CLI option ``-verify=cxx11-17`` is passed."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3587
+msgid "Custom Prefixes"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3588
 msgid ""
 "The ``-verify`` command optionally accepts a comma-delimited list of one or "
 "more verification prefixes that can be used to craft those special comments. "
@@ -4542,7 +4674,7 @@ msgid ""
 "behavior. For example:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3496
+#: ../../../InternalsManual.rst:3605
 msgid ""
 "The verifier will recognize ``foo-error`` and ``bar-error`` as special "
 "comments but will not recognize ``expected-error`` as one because the ``-"
@@ -4551,18 +4683,18 @@ msgid ""
 "declaration of ``E``."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3501
+#: ../../../InternalsManual.rst:3610
 msgid ""
 "Multiple occurrences accumulate prefixes.  For example, ``-verify -"
 "verify=foo,bar -verify=baz`` is equivalent to ``-verify=expected,foo,bar,"
 "baz``."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3506
-msgid "Specifying Diagnostics"
+#: ../../../InternalsManual.rst:3617
+msgid "Diagnostic Location"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3507
+#: ../../../InternalsManual.rst:3618
 msgid ""
 "Indicating that a line expects an error or a warning is easy. Put a comment "
 "on the line that has the diagnostic, use ``expected-{error,warning,remark,"
@@ -4574,37 +4706,37 @@ msgid ""
 "instead.)"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3516
+#: ../../../InternalsManual.rst:3627
 msgid ""
 "For a full description of the matching behavior, including more complex "
-"matching scenarios, see :ref:`matching <DiagnosticMatching>` below."
+"matching scenarios, see :ref:`\"Diagnostic text\" <diagnostic-text>` below."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3519
+#: ../../../InternalsManual.rst:3630
 msgid ""
 "Here's an example of the most commonly used way to specify expected "
 "diagnostics:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3526
+#: ../../../InternalsManual.rst:3637
 msgid ""
 "You can place as many diagnostics on one line as you wish. To make the code "
 "more readable, you can use slash-newline to separate out the diagnostics."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3529
+#: ../../../InternalsManual.rst:3640
 msgid ""
 "Alternatively, it is possible to specify the line on which the diagnostic "
 "should appear by appending ``@<line>`` to ``expected-<type>``, for example:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3537
+#: ../../../InternalsManual.rst:3648
 msgid ""
 "The line number may be absolute (as above), or relative to the current line "
 "by prefixing the number with either ``+`` or ``-``."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3540
+#: ../../../InternalsManual.rst:3651
 msgid ""
 "If the diagnostic is generated in a separate file, for example in a shared "
 "header file, it may be beneficial to be able to declare the file in which "
@@ -4612,7 +4744,7 @@ msgid ""
 "in the actual file itself. This can be done using the following syntax:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3549
+#: ../../../InternalsManual.rst:3660
 msgid ""
 "The path can be absolute or relative and the same search paths will be used "
 "as for ``#include`` directives. The line number in an external file may be "
@@ -4621,7 +4753,7 @@ msgid ""
 "number may change and is not critical)."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3555
+#: ../../../InternalsManual.rst:3666
 msgid ""
 "As an alternative to specifying a fixed line number, the location of a "
 "diagnostic can instead be indicated by a marker of the form ``#<marker>``. "
@@ -4629,13 +4761,17 @@ msgid ""
 "appending the marker to the diagnostic with ``@#<marker>``, as with:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3566
+#: ../../../InternalsManual.rst:3677
 msgid ""
 "The name of a marker used in a directive must be unique within the "
 "compilation."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3568
+#: ../../../InternalsManual.rst:3680
+msgid "Quantifiers"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3681
 msgid ""
 "The simple syntax above allows each specification to match exactly one "
 "diagnostic. You can use the extended syntax to customize this. The extended "
@@ -4645,13 +4781,13 @@ msgid ""
 "For example:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3579
+#: ../../../InternalsManual.rst:3692
 msgid ""
 "Where the diagnostic is expected to occur a minimum number of times, this "
 "can be specified by appending a ``+`` to the number. For example:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3587
+#: ../../../InternalsManual.rst:3700
 msgid ""
 "In the first example, the diagnostic becomes optional, i.e., it will be "
 "swallowed if it occurs, but will not generate an error if it does not occur. "
@@ -4659,19 +4795,19 @@ msgid ""
 "hand, \"one or more\" can be specified simply by ``+``. For example:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3596
+#: ../../../InternalsManual.rst:3709
 msgid "A range can also be specified by ``<n>-<m>``. For example:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3602
+#: ../../../InternalsManual.rst:3715
 msgid "In this example, the diagnostic may appear only once, if at all."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3607
-msgid "Matching Modes"
+#: ../../../InternalsManual.rst:3720
+msgid "Diagnostic Text"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3609
+#: ../../../InternalsManual.rst:3721
 msgid ""
 "The default matching mode is simple string, which looks for the expected "
 "text that appears between the first `{{` and `}}` pair of the comment. The "
@@ -4681,7 +4817,7 @@ msgid ""
 "emitted message."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3615
+#: ../../../InternalsManual.rst:3727
 msgid ""
 "To enable matching against desired strings that contain `}}` or `{{`, the "
 "string-mode parser accepts opening delimiters of more than two curly braces, "
@@ -4689,29 +4825,241 @@ msgid ""
 "`}}}`). For example:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3624
+#: ../../../InternalsManual.rst:3736
 msgid ""
 "The intent is to allow the delimiter to be wider than the longest `{` or `}` "
 "brace sequence in the content, so that if your expected text contains `{{{` "
 "(three braces) it may be delimited with `{{{{` (four braces), and so on."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3628
+#: ../../../InternalsManual.rst:3740
 msgid ""
 "Regex matching mode may be selected by appending ``-re`` to the diagnostic "
 "type and including regexes wrapped in double curly braces (`{{` and `}}`) in "
 "the directive, such as:"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3636
+#: ../../../InternalsManual.rst:3748
 msgid "Examples matching error: \"variable has incomplete type 'struct s'\""
 msgstr ""
 
-#: ../../../InternalsManual.rst:3651
+#: ../../../InternalsManual.rst:3763
+msgid "Verifying the Directives"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3764
+msgid ""
+"Clang ``-cc1`` also has ``-verify-directives`` mode, which can be enabled "
+"alongside ``-verify`` to place additional restrictions on directives, and "
+"strives to improve readability of the expected compiler output for reviewers "
+"and future readers, but makes it a bit harder to write the test:"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3769
+msgid "Diagnostic text specified in a directive has to be a full match."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3770
+msgid ""
+"Lexical order of directives has to match the order in which diagnostics are "
+"emitted."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3772
+msgid "Each directive has to match exactly one diagnostic."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3773
+msgid "Wildcards (``*``) are not allowed in the diagnostic location."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3775
+msgid ""
+"Most of the tests can be adapted to use this mode, but for some tests it's "
+"not possible. Typical problems and their solutions are listed below."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3778
+msgid ""
+"**Diagnostic is issued only sometimes.** The cause of variance needs to be "
+"identified and captured. Typically it is either a compiler option like "
+"language mode, in which case an additional custom prefix should be "
+"sufficient, or platform, in which case a triple has to be explicitly passed "
+"in command-line arguments."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3783
+msgid ""
+"**Template instantiations at the end of translation unit.** Instantiations "
+"at the end of the TU cause associated diagnostics to appear too late. "
+"Instantiations need to happen before the next directive, and when it is "
+"possible, it still takes some creativity to achieve, especially in C++98 "
+"mode. Typical solutions include explicit template instantiations, manifestly "
+"constant-evaluated expressions, ``enable_if``, and removing template "
+"parameters altogether."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3790
+msgid ""
+"**Analysis-based warnings.** Some warnings, like ``-Wunused``, are based on "
+"CFG analysis and are emitted later than e.g. parser would emit them, because "
+"some lookahead is required to collect all the necessary information for such "
+"analysis. Not much can be done in this case."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3794
+msgid ""
+"**Lambdas.** When lambda is mentioned in diagnostic message, it is "
+"identified by its source location, which is typically not salient for the "
+"test, and would make it overspecified. In this case regex match can be used "
+"to skip over source location."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3802
+msgid "C++ Defect Report Tests"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3803
+msgid ""
+"C++ Defect Report tests are placed in ``clang/test/CXX/drs`` directory, "
+"which consists of two types of files:"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3806
+msgid ""
+"files where tests are grouped by 100 by issue number, e.g. ``cwg15xx.cpp`` "
+"(\"big files\");"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3808
+msgid ""
+"files with individual tests or smaller groups of tests, e.g. ``cwg177x.cpp`` "
+"or ``cwg787.cpp``."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3811
+msgid ""
+"C++ defect report tests are run in all language modes available via ``-"
+"std=``, except for modes with GNU extensions and ``c++03``, as it is "
+"synonymous to ``c++98``. Exceptions, pedantic errors, and ``-verify-"
+"directives`` are enabled."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3815
+msgid ""
+"Big files are where most of the tests end up being placed to save on process "
+"startup cost during test runs. Big files also serve as an index of tests: "
+"even if test is placed in its individual file, it's still mentioned in the "
+"big file where this test would be placed otherwise. Big files need all tests "
+"to work with the same set of compiler options specified in RUN lines, but "
+"sometimes tests need special provisions, in which case they should be placed "
+"in their own file. Typical reasons for that include:"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3823
+msgid ""
+"**Test is checking AST dump or LLVM IR.** We don't yet know how to "
+"concatenate FileCheck directives from multiple tests into a single file "
+"without avoiding test interference."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3826
+msgid ""
+"**Test is not compatible with ``-verify-directives``.** For instance, some "
+"tests can't be rewritten to prevent instantiations at the end of TU."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3828
+msgid ""
+"**Test needs C++20 modules.** Such tests require special RUN lines to "
+"compile modules in the right order."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3830
+msgid ""
+"**Test prevents compiler from checking subsequent tests.** In some cases "
+"that involve templates Clang refuses to recover from expected errors and "
+"will skip over expected errors in subsequent tests."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3834
+msgid ""
+"C++ defect report tests make heavy use of markers. Marker names need to be "
+"prefixed with ``cwgNNN-``, where NNN is number of the core issue being "
+"tested. This is especially needed in big files, because all markers share "
+"the same namespace."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3839
+msgid ""
+"Some diagnostics are expected only in certain language modes. This in "
+"handled in two parts. First, C++ defect report tests share a common pool of "
+"custom prefixes:"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3843
+msgid "``expected`` for diagnostics issued in all language modes;"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3844
+msgid ""
+"``cxxNN`` (e.g. ``cxx98``) for diagnostics issued only in one language mode;"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3845
+msgid ""
+"``since-cxxNN`` (e.g. ``since-cxx11``) for diagnostics that are issued in a "
+"certain language mode and all newer language modes;"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3847
+msgid ""
+"``cxxNN-MM`` (e.g. ``cxx98-14``) for diagnostics that appear in all language "
+"modes within a certain range."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3850
+msgid ""
+"Second, parts of tests that test features not universally available in all "
+"language modes are guarded with ``#if __cplusplus``. Prefixes of directives "
+"in such parts need to reflect the latest ``#if __cplusplus`` guard to make "
+"tests require less context to understand, even though this is not strictly "
+"necessary to make the test work:"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3864
+msgid ""
+"On top of `-verify-directives`, C++ defect report tests use the following "
+"conventions to make it easier to reconstruct compiler output while looking "
+"at directives:"
+msgstr ""
+
+#: ../../../InternalsManual.rst:3868
+msgid ""
+"Errors and warnings are placed on the next line after the line they are "
+"expecting a diagnostic at, and at the same indentation."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3880
+msgid ""
+"Directives that are placed right after the line they are expecting a "
+"diagnostic at use relative offsets (``@-1``, ``@-2``, and so on), as long as "
+"it's obvious that all relative offsets point to the same line. If there is a "
+"feeling readers would start counting lines to make sure they know where the "
+"diagnostic is expected, markers should be used instead."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3901
+msgid ""
+"Notes and remarks are indented by two spaces relative to the error or "
+"warning they are attached to."
+msgstr ""
+
+#: ../../../InternalsManual.rst:3912
 msgid "Feature Test Macros"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3652
+#: ../../../InternalsManual.rst:3913
 msgid ""
 "Clang implements several ways to test whether a feature is supported or not. "
 "Some of these feature tests are standardized, like ``__has_cpp_attribute`` "
@@ -4724,25 +5072,25 @@ msgid ""
 "macro (or particular result value for the feature test):"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3662
+#: ../../../InternalsManual.rst:3923
 msgid ""
 "Are there known issues where we reject valid code that should be accepted?"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3663
+#: ../../../InternalsManual.rst:3924
 msgid ""
 "Are there known issues where we accept invalid code that should be rejected?"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3664
+#: ../../../InternalsManual.rst:3925
 msgid "Are there known crashes, failed assertions, or miscompilations?"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3665
+#: ../../../InternalsManual.rst:3926
 msgid "Are there known issues on a particular relevant target?"
 msgstr ""
 
-#: ../../../InternalsManual.rst:3667
+#: ../../../InternalsManual.rst:3928
 msgid ""
 "If the answer to any of these is \"yes\", the feature test macro should "
 "either not be defined or there should be very strong rationale for why the "
@@ -4750,7 +5098,7 @@ msgid ""
 "feature test macro on a per-target basis if needed."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3672
+#: ../../../InternalsManual.rst:3933
 msgid ""
 "When in doubt, being conservative is better than being aggressive. If we "
 "don't claim support for the feature but it does useful things, users can "
@@ -4761,7 +5109,7 @@ msgid ""
 "accurate answer."
 msgstr ""
 
-#: ../../../InternalsManual.rst:3679
+#: ../../../InternalsManual.rst:3940
 msgid ""
 "The status reported by the feature test macro should always be reflected in "
 "the language support page for the corresponding feature (`C++ <https://clang."
