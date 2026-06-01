@@ -1,0 +1,148 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ClangPlugins.rst:3
+msgid "Clang Plugins"
+msgstr ""
+
+#: ../../../ClangPlugins.rst:5
+msgid ""
+"Clang Plugins make it possible to run extra user defined actions during a "
+"compilation. This document will provide a basic walkthrough of how to write "
+"and run a Clang Plugin."
+msgstr ""
+
+#: ../../../ClangPlugins.rst:10
+msgid "Introduction"
+msgstr "簡介"
+
+#: ../../../ClangPlugins.rst:12
+msgid ""
+"Clang Plugins run FrontendActions over code. See the :doc:`FrontendAction "
+"tutorial <RAVFrontendAction>` on how to write a ``FrontendAction`` using the "
+"``RecursiveASTVisitor``. In this tutorial, we'll demonstrate how to write a "
+"simple clang plugin."
+msgstr ""
+
+#: ../../../ClangPlugins.rst:18
+msgid "Writing a ``PluginASTAction``"
+msgstr ""
+
+#: ../../../ClangPlugins.rst:20
+msgid ""
+"The main difference from writing normal ``FrontendActions`` is that you can "
+"handle plugin command line options. The ``PluginASTAction`` base class "
+"declares a ``ParseArgs`` method which you have to implement in your plugin."
+msgstr ""
+
+#: ../../../ClangPlugins.rst:37
+msgid "Registering a plugin"
+msgstr ""
+
+#: ../../../ClangPlugins.rst:39
+msgid ""
+"A plugin is loaded from a dynamic library at runtime by the compiler. To "
+"register a plugin in a library, use ``FrontendPluginRegistry::Add<>``:"
+msgstr ""
+
+#: ../../../ClangPlugins.rst:47
+msgid "Defining pragmas"
+msgstr ""
+
+#: ../../../ClangPlugins.rst:49
+msgid ""
+"Plugins can also define pragmas by declaring a ``PragmaHandler`` and "
+"registering it using ``PragmaHandlerRegistry::Add<>``:"
+msgstr ""
+
+#: ../../../ClangPlugins.rst:67
+msgid "Putting it all together"
+msgstr ""
+
+#: ../../../ClangPlugins.rst:69
+msgid ""
+"Let's look at an example plugin that prints top-level function names.  This "
+"example is checked into the clang repository; please take a look at the "
+"`latest version of PrintFunctionNames.cpp <http://llvm.org/viewvc/llvm-"
+"project/cfe/trunk/examples/PrintFunctionNames/PrintFunctionNames.cpp?"
+"view=markup>`_."
+msgstr ""
+
+#: ../../../ClangPlugins.rst:75
+msgid "Running the plugin"
+msgstr ""
+
+#: ../../../ClangPlugins.rst:79
+msgid "Using the cc1 command line"
+msgstr ""
+
+#: ../../../ClangPlugins.rst:81
+msgid ""
+"To run a plugin, the dynamic library containing the plugin registry must be "
+"loaded via the `-load` command line option. This will load all plugins that "
+"are registered, and you can select the plugins to run by specifying the `-"
+"plugin` option. Additional parameters for the plugins can be passed with `-"
+"plugin-arg-<plugin-name>`."
+msgstr ""
+
+#: ../../../ClangPlugins.rst:87
+msgid ""
+"Note that those options must reach clang's cc1 process. There are two ways "
+"to do so:"
+msgstr ""
+
+#: ../../../ClangPlugins.rst:90
+msgid ""
+"Directly call the parsing process by using the `-cc1` option; this has the "
+"downside of not configuring the default header search paths, so you'll need "
+"to specify the full system path configuration on the command line."
+msgstr ""
+
+#: ../../../ClangPlugins.rst:94
+msgid ""
+"Use clang as usual, but prefix all arguments to the cc1 process with `-"
+"Xclang`."
+msgstr ""
+
+#: ../../../ClangPlugins.rst:97
+msgid ""
+"For example, to run the ``print-function-names`` plugin over a source file "
+"in clang, first build the plugin, and then call clang with the plugin from "
+"the source tree:"
+msgstr ""
+
+#: ../../../ClangPlugins.rst:112
+msgid ""
+"Also see the print-function-name plugin example's `README <http://llvm.org/"
+"viewvc/llvm-project/cfe/trunk/examples/PrintFunctionNames/README.txt?"
+"view=markup>`_"
+msgstr ""
+
+#: ../../../ClangPlugins.rst:117
+msgid "Using the clang command line"
+msgstr ""
+
+#: ../../../ClangPlugins.rst:119
+msgid ""
+"Using `-fplugin=plugin` on the clang command line passes the plugin through "
+"as an argument to `-load` on the cc1 command line. If the plugin class "
+"implements the ``getActionType`` method then the plugin is run "
+"automatically. For example, to run the plugin automatically after the main "
+"AST action (i.e. the same as using `-add-plugin`):"
+msgstr ""

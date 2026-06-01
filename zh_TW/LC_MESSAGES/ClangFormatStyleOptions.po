@@ -1,0 +1,1348 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ClangFormatStyleOptions.rst:3
+msgid "Clang-Format Style Options"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:5
+msgid ""
+":doc:`ClangFormatStyleOptions` describes configurable formatting style "
+"options supported by :doc:`LibFormat` and :doc:`ClangFormat`."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:8
+msgid ""
+"When using :program:`clang-format` command line utility or ``clang::format::"
+"reformat(...)`` functions from code, one can either use one of the "
+"predefined styles (LLVM, Google, Chromium, Mozilla, WebKit) or create a "
+"custom style by configuring specific style options."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:15
+msgid "Configuring Style with clang-format"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:17
+msgid ""
+":program:`clang-format` supports two ways to provide custom style options: "
+"directly specify style configuration in the ``-style=`` command line option "
+"or use ``-style=file`` and put style configuration in the ``.clang-format`` "
+"or ``_clang-format`` file in the project directory."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:22
+msgid ""
+"When using ``-style=file``, :program:`clang-format` for each input file will "
+"try to find the ``.clang-format`` file located in the closest parent "
+"directory of the input file. When the standard input is used, the search is "
+"started from the current directory."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:27
+msgid "The ``.clang-format`` file uses YAML format:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:36
+msgid ""
+"The configuration file can consist of several sections each having different "
+"``Language:`` parameter denoting the programming language this section of "
+"the configuration is targeted at. See the description of the **Language** "
+"option below for the list of supported languages. The first section may have "
+"no language set, it will set the default style options for all lanugages. "
+"Configuration sections for specific language will override options set in "
+"the default section."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:44
+msgid ""
+"When :program:`clang-format` formats a file, it auto-detects the language "
+"using the file name. When formatting standard input or a file that doesn't "
+"have the extension corresponding to its language, ``-assume-filename=`` "
+"option can be used to override the file name :program:`clang-format` uses to "
+"detect the language."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:50
+msgid "An example of a configuration file for multiple languages:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:73
+msgid ""
+"An easy way to get a valid ``.clang-format`` file containing all "
+"configuration options of a certain predefined style is:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:80
+msgid ""
+"When specifying configuration in the ``-style=`` option, the same "
+"configuration is applied for all input files. The format of the "
+"configuration is:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:89
+msgid "Disabling Formatting on a Piece of Code"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:91
+msgid ""
+"Clang-format understands also special comments that switch formatting in a "
+"delimited range. The code between a comment ``// clang-format off`` or ``/* "
+"clang-format off */`` up to a comment ``// clang-format on`` or ``/* clang-"
+"format on */`` will not be formatted. The comments themselves will be "
+"formatted (aligned) normally."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:107
+msgid "Configuring Style in Code"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:109
+msgid ""
+"When using ``clang::format::reformat(...)`` functions, the format is "
+"specified by supplying the `clang::format::FormatStyle <http://clang.llvm."
+"org/doxygen/structclang_1_1format_1_1FormatStyle.html>`_ structure."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:116
+msgid "Configurable Format Style Options"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:118
+msgid ""
+"This section lists the supported style options. Value type is specified for "
+"each option. For enumeration types possible values are specified both as a C+"
+"+ enumeration member (with a prefix, e.g. ``LS_Auto``), and as a value "
+"usable in the configuration (without a prefix: ``Auto``)."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:146
+msgid "**BasedOnStyle** (``string``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:125
+msgid ""
+"The style used for all options not specifically set in the configuration."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:127
+msgid ""
+"This option is supported only in the :program:`clang-format` configuration "
+"(both within ``-style='{...}'`` and the ``.clang-format`` file)."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:130
+#: ../../../ClangFormatStyleOptions.rst:159
+#: ../../../ClangFormatStyleOptions.rst:247
+#: ../../../ClangFormatStyleOptions.rst:274
+#: ../../../ClangFormatStyleOptions.rst:291
+#: ../../../ClangFormatStyleOptions.rst:358
+#: ../../../ClangFormatStyleOptions.rst:374
+#: ../../../ClangFormatStyleOptions.rst:551
+#: ../../../ClangFormatStyleOptions.rst:570
+#: ../../../ClangFormatStyleOptions.rst:605
+#: ../../../ClangFormatStyleOptions.rst:651
+#: ../../../ClangFormatStyleOptions.rst:679
+#: ../../../ClangFormatStyleOptions.rst:728
+#: ../../../ClangFormatStyleOptions.rst:747
+msgid "Possible values:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:132
+msgid ""
+"``LLVM`` A style complying with the `LLVM coding standards <http://llvm.org/"
+"docs/CodingStandards.html>`_"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:135
+msgid ""
+"``Google`` A style complying with `Google's C++ style guide <http://google-"
+"styleguide.googlecode.com/svn/trunk/cppguide.xml>`_"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:138
+msgid ""
+"``Chromium`` A style complying with `Chromium's style guide <http://www."
+"chromium.org/developers/coding-style>`_"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:141
+msgid ""
+"``Mozilla`` A style complying with `Mozilla's style guide <https://developer."
+"mozilla.org/en-US/docs/Developer_Guide/Coding_Style>`_"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:144
+msgid ""
+"``WebKit`` A style complying with `WebKit's style guide <http://www.webkit."
+"org/coding/coding-style.html>`_"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:151
+msgid "**AccessModifierOffset** (``int``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:151
+msgid "The extra indent or outdent of access modifiers, e.g. ``public:``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:186
+msgid "**AlignAfterOpenBracket** (``BracketAlignmentStyle``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:154
+msgid "If ``true``, horizontally aligns arguments after an open bracket."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:156
+msgid ""
+"This applies to round brackets (parentheses), angle brackets and square "
+"brackets."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:161
+msgid ""
+"``BAS_Align`` (in configuration: ``Align``) Align parameters on the open "
+"bracket, e.g.:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:169
+msgid ""
+"``BAS_DontAlign`` (in configuration: ``DontAlign``) Don't align, instead use "
+"``ContinuationIndentWidth``, e.g.:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:177
+msgid ""
+"``BAS_AlwaysBreak`` (in configuration: ``AlwaysBreak``) Always break after "
+"an open bracket, if the parameters don't fit on a single line, e.g.:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:198
+msgid "**AlignConsecutiveAssignments** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:189
+msgid "If ``true``, aligns consecutive assignments."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:191
+msgid ""
+"This will align the assignment operators of consecutive lines. This will "
+"result in formattings like"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:210
+msgid "**AlignConsecutiveDeclarations** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:201
+msgid "If ``true``, aligns consecutive declarations."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:203
+msgid ""
+"This will align the declaration names of consecutive lines. This will result "
+"in formattings like"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:214
+msgid "**AlignEscapedNewlinesLeft** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:213
+msgid ""
+"If ``true``, aligns escaped newlines as far left as possible. Otherwise puts "
+"them into the right-most column."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:226
+msgid "**AlignOperands** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:217
+msgid ""
+"If ``true``, horizontally align operands of binary and ternary expressions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:220
+msgid ""
+"Specifically, this aligns operands of a single expression that needs to be "
+"split over multiple lines, e.g.:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:229
+msgid "**AlignTrailingComments** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:229
+msgid "If ``true``, aligns trailing comments."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:233
+msgid "**AllowAllParametersOfDeclarationOnNextLine** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:232
+msgid ""
+"Allow putting all parameters of a function declaration onto the next line "
+"even if ``BinPackParameters`` is ``false``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:238
+msgid "**AllowShortBlocksOnASingleLine** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:236
+msgid "Allows contracting simple braced statements to a single line."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:238
+msgid "E.g., this allows ``if (a) { return; }`` to be put on a single line."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:241
+msgid "**AllowShortCaseLabelsOnASingleLine** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:241
+msgid "If ``true``, short case labels will be contracted to a single line."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:261
+msgid "**AllowShortFunctionsOnASingleLine** (``ShortFunctionStyle``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:244
+msgid ""
+"Dependent on the value, ``int f() { return 0; }`` can be put on a single "
+"line."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:249
+msgid ""
+"``SFS_None`` (in configuration: ``None``) Never merge functions into a "
+"single line."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:252
+msgid "``SFS_Empty`` (in configuration: ``Empty``) Only merge empty functions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:255
+msgid ""
+"``SFS_Inline`` (in configuration: ``Inline``) Only merge functions defined "
+"inside a class. Implies \"empty\"."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:258
+msgid ""
+"``SFS_All`` (in configuration: ``All``) Merge all functions fitting on a "
+"single line."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:264
+msgid "**AllowShortIfStatementsOnASingleLine** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:264
+msgid "If ``true``, ``if (a) return;`` can be put on a single line."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:268
+msgid "**AllowShortLoopsOnASingleLine** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:267
+msgid "If ``true``, ``while (true) continue;`` can be put on a single line."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:286
+msgid ""
+"**AlwaysBreakAfterDefinitionReturnType** "
+"(``DefinitionReturnTypeBreakingStyle``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:271
+msgid ""
+"The function definition return type breaking style to use.  This option is "
+"deprecated and is retained for backwards compatibility."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:276
+msgid ""
+"``DRTBS_None`` (in configuration: ``None``) Break after return type "
+"automatically. ``PenaltyReturnTypeOnItsOwnLine`` is taken into account."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:280
+msgid ""
+"``DRTBS_All`` (in configuration: ``All``) Always break after the return type."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:283
+msgid ""
+"``DRTBS_TopLevel`` (in configuration: ``TopLevel``) Always break after the "
+"return types of top-level functions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:309
+msgid "**AlwaysBreakAfterReturnType** (``ReturnTypeBreakingStyle``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:289
+msgid "The function declaration return type breaking style to use."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:293
+msgid ""
+"``RTBS_None`` (in configuration: ``None``) Break after return type "
+"automatically. ``PenaltyReturnTypeOnItsOwnLine`` is taken into account."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:297
+msgid ""
+"``RTBS_All`` (in configuration: ``All``) Always break after the return type."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:300
+msgid ""
+"``RTBS_TopLevel`` (in configuration: ``TopLevel``) Always break after the "
+"return types of top-level functions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:303
+msgid ""
+"``RTBS_AllDefinitions`` (in configuration: ``AllDefinitions``) Always break "
+"after the return type of function definitions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:306
+msgid ""
+"``RTBS_TopLevelDefinitions`` (in configuration: ``TopLevelDefinitions``) "
+"Always break after the return type of top-level definitions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:317
+msgid "**AlwaysBreakBeforeMultilineStrings** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:312
+msgid "If ``true``, always break before multiline string literals."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:314
+msgid ""
+"This flag is mean to make cases where there are multiple multiline strings "
+"in a file look more consistent. Thus, it will only take effect if wrapping "
+"the string at that point leads to it being indented "
+"``ContinuationIndentWidth`` spaces from the start of the line."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:321
+msgid "**AlwaysBreakTemplateDeclarations** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:320
+msgid ""
+"If ``true``, always break after the ``template<...>`` of a template "
+"declaration."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:325
+msgid "**BinPackArguments** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:324
+msgid ""
+"If ``false``, a function call's arguments will either be all on the same "
+"line or will have one line each."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:329
+msgid "**BinPackParameters** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:328
+msgid ""
+"If ``false``, a function declaration's or function definition's parameters "
+"will either all be on the same line or will have one line each."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:350
+msgid "**BraceWrapping** (``BraceWrappingFlags``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:332
+msgid "Control of individual brace wrapping cases."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:334
+msgid ""
+"If ``BreakBeforeBraces`` is set to ``BS_Custom``, use this to specify how "
+"each individual brace case should be handled. Otherwise, this is ignored."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:337
+msgid "Nested configuration flags:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:339
+msgid "``bool AfterClass`` Wrap class definitions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:340
+msgid ""
+"``bool AfterControlStatement`` Wrap control statements (``if``/``for``/"
+"``while``/``switch``/..)."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:341
+msgid "``bool AfterEnum`` Wrap enum definitions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:342
+msgid "``bool AfterFunction`` Wrap function definitions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:343
+msgid "``bool AfterNamespace`` Wrap namespace definitions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:344
+msgid ""
+"``bool AfterObjCDeclaration`` Wrap ObjC definitions (``@autoreleasepool``, "
+"interfaces, ..)."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:345
+msgid "``bool AfterStruct`` Wrap struct definitions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:346
+msgid "``bool AfterUnion`` Wrap union definitions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:347
+msgid "``bool BeforeCatch`` Wrap before ``catch``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:348
+msgid "``bool BeforeElse`` Wrap before ``else``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:349
+msgid "``bool IndentBraces`` Indent the wrapped braces themselves."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:353
+msgid "**BreakAfterJavaFieldAnnotations** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:353
+msgid "Break after each annotation on a field in Java files."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:369
+msgid "**BreakBeforeBinaryOperators** (``BinaryOperatorStyle``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:356
+msgid "The way to wrap binary operators."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:360
+msgid "``BOS_None`` (in configuration: ``None``) Break after operators."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:363
+msgid ""
+"``BOS_NonAssignment`` (in configuration: ``NonAssignment``) Break before "
+"operators that aren't assignments."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:366
+msgid "``BOS_All`` (in configuration: ``All``) Break before operators."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:405
+msgid "**BreakBeforeBraces** (``BraceBreakingStyle``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:372
+msgid "The brace breaking style to use."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:376
+msgid ""
+"``BS_Attach`` (in configuration: ``Attach``) Always attach braces to "
+"surrounding context."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:379
+msgid ""
+"``BS_Linux`` (in configuration: ``Linux``) Like ``Attach``, but break before "
+"braces on function, namespace and class definitions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:383
+msgid ""
+"``BS_Mozilla`` (in configuration: ``Mozilla``) Like ``Attach``, but break "
+"before braces on enum, function, and record definitions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:387
+msgid ""
+"``BS_Stroustrup`` (in configuration: ``Stroustrup``) Like ``Attach``, but "
+"break before function definitions, ``catch``, and ``else``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:391
+msgid ""
+"``BS_Allman`` (in configuration: ``Allman``) Always break before braces."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:394
+msgid ""
+"``BS_GNU`` (in configuration: ``GNU``) Always break before braces and add an "
+"extra level of indentation to braces of control statements, not to those of "
+"class, function or other definitions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:399
+msgid ""
+"``BS_WebKit`` (in configuration: ``WebKit``) Like ``Attach``, but break "
+"before functions."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:402
+msgid ""
+"``BS_Custom`` (in configuration: ``Custom``) Configure each individual brace "
+"in `BraceWrapping`."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:408
+msgid "**BreakBeforeTernaryOperators** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:408
+msgid "If ``true``, ternary operators will be placed after line breaks."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:412
+msgid "**BreakConstructorInitializersBeforeComma** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:411
+msgid ""
+"Always break constructor initializers before commas and align the commas "
+"with the colon."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:415
+msgid "**BreakStringLiterals** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:415
+msgid "Allow breaking string literals when formatting."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:422
+msgid "**ColumnLimit** (``unsigned``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:418
+msgid "The column limit."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:420
+msgid ""
+"A column limit of ``0`` means that there is no column limit. In this case, "
+"clang-format will respect the input's line breaking decisions within "
+"statements unless they contradict other rules."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:426
+msgid "**CommentPragmas** (``std::string``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:425
+msgid ""
+"A regular expression that describes comments with special meaning, which "
+"should not be split into lines or otherwise changed."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:430
+msgid "**ConstructorInitializerAllOnOneLineOrOnePerLine** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:429
+msgid ""
+"If the constructor initializers don't fit on a line, put each initializer on "
+"its own line."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:434
+msgid "**ConstructorInitializerIndentWidth** (``unsigned``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:433
+msgid ""
+"The number of characters to use for indentation of constructor initializer "
+"lists."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:437
+msgid "**ContinuationIndentWidth** (``unsigned``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:437
+msgid "Indent width for line continuations."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:452
+msgid "**Cpp11BracedListStyle** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:440
+msgid "If ``true``, format braced lists as best suited for C++11 braced lists."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:443
+msgid ""
+"Important differences: - No spaces inside the braced list. - No line break "
+"before the closing brace. - Indentation with the continuation indent, not "
+"with the block indent."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:448
+msgid ""
+"Fundamentally, C++11 braced lists are formatted exactly like function calls "
+"would be formatted in their place. If the braced list follows a name (e.g. a "
+"type or variable name), clang-format formats as if the ``{}`` were the "
+"parentheses of a function call with that name. If there is no name, a zero-"
+"length name is assumed."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:457
+msgid "**DerivePointerAlignment** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:455
+msgid ""
+"If ``true``, analyze the formatted file for the most common alignment of "
+"``&`` and ``\\*``. ``PointerAlignment`` is then used only as fallback."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:460
+msgid "**DisableFormat** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:460
+msgid "Disables formatting completely."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:472
+msgid "**ExperimentalAutoDetectBinPacking** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:463
+msgid ""
+"If ``true``, clang-format detects whether function calls and definitions are "
+"formatted with one parameter per line."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:466
+msgid ""
+"Each call can be bin-packed, one-per-line or inconclusive. If it is "
+"inconclusive, e.g. completely on one line, but a decision needs to be made, "
+"clang-format analyzes whether there are other bin-packed cases in the input "
+"file and act accordingly."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:471
+msgid ""
+"NOTE: This is an experimental flag, that might go away or be renamed. Do not "
+"use this in config files, etc. Use at your own risk."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:491
+msgid "**ForEachMacros** (``std::vector<std::string>``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:475
+msgid ""
+"A vector of macros that should be interpreted as foreach loops instead of as "
+"function calls."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:478
+msgid "These are expected to be macros of the form:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:485
+msgid "In the .clang-format configuration file, this can be configured like:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:491
+msgid "For example: BOOST_FOREACH."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:520
+msgid "**IncludeCategories** (``std::vector<IncludeCategory>``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:494
+msgid ""
+"Regular expressions denoting the different ``#include`` categories used for "
+"ordering ``#includes``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:497
+msgid ""
+"These regular expressions are matched against the filename of an include "
+"(including the <> or \"\") in order. The value belonging to the first "
+"matching regular expression is assigned and ``#includes`` are sorted first "
+"according to increasing category number and then alphabetically within each "
+"category."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:503
+msgid ""
+"If none of the regular expressions match, INT_MAX is assigned as category. "
+"The main header for a source file automatically gets category 0. so that it "
+"is generally kept at the beginning of the ``#includes`` (http://llvm.org/"
+"docs/CodingStandards.html#include-style). However, you can also assign "
+"negative priorities if you have certain headers that always need to be first."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:510
+msgid "To configure this in the .clang-format file, use:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:533
+msgid "**IncludeIsMainRegex** (``std::string``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:523
+msgid ""
+"Specify a regular expression of suffixes that are allowed in the file-to-"
+"main-include mapping."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:526
+msgid ""
+"When guessing whether a #include is the \"main\" include (to assign category "
+"0, see above), use this regex of allowed suffixes to the header stem. A "
+"partial match is done, so that: - \"\" means \"arbitrary suffix\" - \"$\" "
+"means \"no suffix\""
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:532
+msgid ""
+"For example, if configured to \"(_test)?$\", then a header a.h would be seen "
+"as the \"main\" include in both a.cc and a_test.cc."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:539
+msgid "**IndentCaseLabels** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:536
+msgid "Indent case labels one level from the switch statement."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:538
+msgid ""
+"When ``false``, use the same indentation level as for the switch statement. "
+"Switch statement body is always indented one level more than case labels."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:542
+msgid "**IndentWidth** (``unsigned``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:542
+msgid "The number of columns to use for indentation."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:546
+msgid "**IndentWrappedFunctionNames** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:545
+msgid ""
+"Indent if a function definition or declaration is wrapped after the type."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:562
+msgid "**JavaScriptQuotes** (``JavaScriptQuoteStyle``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:549
+msgid "The JavaScriptQuoteStyle to use for JavaScript strings."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:553
+msgid ""
+"``JSQS_Leave`` (in configuration: ``Leave``) Leave string quotes as they are."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:556
+msgid ""
+"``JSQS_Single`` (in configuration: ``Single``) Always use single quotes."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:559
+msgid ""
+"``JSQS_Double`` (in configuration: ``Double``) Always use double quotes."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:565
+msgid "**KeepEmptyLinesAtTheStartOfBlocks** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:565
+msgid "If true, empty lines at the start of blocks are kept."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:591
+msgid "**Language** (``LanguageKind``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:568
+msgid "Language, this format style is targeted at."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:572
+msgid "``LK_None`` (in configuration: ``None``) Do not use."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:575
+msgid ""
+"``LK_Cpp`` (in configuration: ``Cpp``) Should be used for C, C++, "
+"ObjectiveC, ObjectiveC++."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:578
+msgid "``LK_Java`` (in configuration: ``Java``) Should be used for Java."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:581
+msgid ""
+"``LK_JavaScript`` (in configuration: ``JavaScript``) Should be used for "
+"JavaScript."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:584
+msgid ""
+"``LK_Proto`` (in configuration: ``Proto``) Should be used for Protocol "
+"Buffers (https://developers.google.com/protocol-buffers/)."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:588
+msgid ""
+"``LK_TableGen`` (in configuration: ``TableGen``) Should be used for TableGen "
+"code."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:594
+msgid "**MacroBlockBegin** (``std::string``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:594
+msgid "A regular expression matching macros that start a block."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:597
+msgid "**MacroBlockEnd** (``std::string``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:597
+msgid "A regular expression matching macros that end a block."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:600
+msgid "**MaxEmptyLinesToKeep** (``unsigned``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:600
+msgid "The maximum number of consecutive empty lines to keep."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:616
+msgid "**NamespaceIndentation** (``NamespaceIndentationKind``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:603
+msgid "The indentation used for namespaces."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:607
+msgid "``NI_None`` (in configuration: ``None``) Don't indent in namespaces."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:610
+msgid ""
+"``NI_Inner`` (in configuration: ``Inner``) Indent only in inner namespaces "
+"(nested in other namespaces)."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:613
+msgid "``NI_All`` (in configuration: ``All``) Indent in all namespaces."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:619
+msgid "**ObjCBlockIndentWidth** (``unsigned``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:619
+msgid "The number of characters to use for indentation of ObjC blocks."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:623
+msgid "**ObjCSpaceAfterProperty** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:622
+msgid ""
+"Add a space after ``@property`` in Objective-C, i.e. use ``@property "
+"(readonly)`` instead of ``@property(readonly)``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:627
+msgid "**ObjCSpaceBeforeProtocolList** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:626
+msgid ""
+"Add a space in front of an Objective-C protocol list, i.e. use ``Foo "
+"<Protocol>`` instead of ``Foo<Protocol>``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:630
+msgid "**PenaltyBreakBeforeFirstCallParameter** (``unsigned``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:630
+msgid "The penalty for breaking a function call after ``call(``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:633
+msgid "**PenaltyBreakComment** (``unsigned``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:633
+msgid "The penalty for each line break introduced inside a comment."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:636
+msgid "**PenaltyBreakFirstLessLess** (``unsigned``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:636
+msgid "The penalty for breaking before the first ``<<``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:639
+msgid "**PenaltyBreakString** (``unsigned``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:639
+msgid "The penalty for each line break introduced inside a string literal."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:642
+msgid "**PenaltyExcessCharacter** (``unsigned``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:642
+msgid "The penalty for each character outside of the column limit."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:646
+msgid "**PenaltyReturnTypeOnItsOwnLine** (``unsigned``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:645
+msgid "Penalty for putting the return type of a function onto its own line."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:662
+msgid "**PointerAlignment** (``PointerAlignmentStyle``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:649
+msgid "Pointer and reference alignment style."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:653
+msgid "``PAS_Left`` (in configuration: ``Left``) Align pointer to the left."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:656
+msgid "``PAS_Right`` (in configuration: ``Right``) Align pointer to the right."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:659
+msgid ""
+"``PAS_Middle`` (in configuration: ``Middle``) Align pointer in the middle."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:665
+msgid "**ReflowComments** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:665
+msgid "If ``true``, clang-format will attempt to re-flow comments."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:668
+msgid "**SortIncludes** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:668
+msgid "If ``true``, clang-format will sort ``#includes``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:671
+msgid "**SpaceAfterCStyleCast** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:671
+msgid "If ``true``, a space may be inserted after C style casts."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:674
+msgid "**SpaceBeforeAssignmentOperators** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:674
+msgid "If ``false``, spaces will be removed before assignment operators."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:694
+msgid "**SpaceBeforeParens** (``SpaceBeforeParensOptions``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:677
+msgid "Defines in which cases to put a space before opening parentheses."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:681
+msgid ""
+"``SBPO_Never`` (in configuration: ``Never``) Never put a space before "
+"opening parentheses."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:684
+msgid ""
+"``SBPO_ControlStatements`` (in configuration: ``ControlStatements``) Put a "
+"space before opening parentheses only after control statement keywords "
+"(``for/if/while...``)."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:688
+msgid ""
+"``SBPO_Always`` (in configuration: ``Always``) Always put a space before "
+"opening parentheses, except when it's prohibited by the syntax rules (in "
+"function-like macro definitions) or when determined by other style rules "
+"(after unary operators, opening parentheses, etc.)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:697
+msgid "**SpaceInEmptyParentheses** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:697
+msgid "If ``true``, spaces may be inserted into ``()``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:705
+msgid "**SpacesBeforeTrailingComments** (``unsigned``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:700
+msgid "The number of spaces before trailing line comments (``//`` - comments)."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:703
+msgid ""
+"This does not affect trailing block comments (``/*`` - comments) as those "
+"commonly have different usage patterns and a number of special cases."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:709
+msgid "**SpacesInAngles** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:708
+msgid ""
+"If ``true``, spaces will be inserted after ``<`` and before ``>`` in "
+"template argument lists."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:712
+msgid "**SpacesInCStyleCastParentheses** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:712
+msgid "If ``true``, spaces may be inserted into C style casts."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:716
+msgid "**SpacesInContainerLiterals** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:715
+msgid ""
+"If ``true``, spaces are inserted inside container literals (e.g. ObjC and "
+"Javascript array and dict literals)."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:719
+msgid "**SpacesInParentheses** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:719
+msgid "If ``true``, spaces will be inserted after ``(`` and before ``)``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:722
+msgid "**SpacesInSquareBrackets** (``bool``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:722
+msgid "If ``true``, spaces will be inserted after ``[`` and before ``]``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:739
+msgid "**Standard** (``LanguageStandard``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:725
+msgid ""
+"Format compatible with this standard, e.g. use ``A<A<int> >`` instead of "
+"``A<A<int>>`` for ``LS_Cpp03``."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:730
+msgid "``LS_Cpp03`` (in configuration: ``Cpp03``) Use C++03-compatible syntax."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:733
+msgid ""
+"``LS_Cpp11`` (in configuration: ``Cpp11``) Use features of C++11 (e.g. "
+"``A<A<int>>`` instead of ``A<A<int> >``)."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:736
+msgid ""
+"``LS_Auto`` (in configuration: ``Auto``) Automatic detection based on the "
+"input."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:742
+msgid "**TabWidth** (``unsigned``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:742
+msgid "The number of columns used for tab stops."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:759
+msgid "**UseTab** (``UseTabStyle``)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:745
+msgid "The way to use tab characters in the resulting file."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:749
+msgid "``UT_Never`` (in configuration: ``Never``) Never use tab."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:752
+msgid ""
+"``UT_ForIndentation`` (in configuration: ``ForIndentation``) Use tabs only "
+"for indentation."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:755
+msgid ""
+"``UT_Always`` (in configuration: ``Always``) Use tabs whenever we need to "
+"fill whitespace that spans at least from one tab stop to the next one."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:764
+msgid "Adding additional style options"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:766
+msgid ""
+"Each additional style option adds costs to the clang-format project. Some of "
+"these costs affect the clang-format development itself, as we need to make "
+"sure that any given combination of options work and that new features don't "
+"break any of the existing options in any way. There are also costs for end "
+"users as options become less discoverable and people have to think about and "
+"make a decision on options they don't really care about."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:773
+msgid ""
+"The goal of the clang-format project is more on the side of supporting a "
+"limited set of styles really well as opposed to supporting every single "
+"style used by a codebase somewhere in the wild. Of course, we do want to "
+"support all major projects and thus have established the following bar for "
+"adding style options. Each new style option must .."
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:779
+msgid "be used in a project of significant size (have dozens of contributors)"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:780
+msgid "have a publicly accessible style guide"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:781
+msgid "have a person willing to contribute and maintain patches"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:784
+msgid "Examples"
+msgstr "範例"
+
+#: ../../../ClangFormatStyleOptions.rst:786
+msgid ""
+"A style similar to the `Linux Kernel style <https://www.kernel.org/doc/"
+"Documentation/CodingStyle>`_:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:798
+msgid "The result is (imagine that tabs are used for indentation here):"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:827
+msgid "A style similar to the default Visual Studio formatting style:"
+msgstr ""
+
+#: ../../../ClangFormatStyleOptions.rst:838
+msgid "The result is:"
+msgstr ""
