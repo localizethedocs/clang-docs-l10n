@@ -1,0 +1,358 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-17 08:18+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../LibClang.rst:5
+msgid "Libclang tutorial"
+msgstr ""
+
+#: ../../../LibClang.rst:6
+msgid ""
+"The C Interface to Clang provides a relatively small API that exposes "
+"facilities for parsing source code into an abstract syntax tree (AST), "
+"loading already-parsed ASTs, traversing the AST, associating physical source "
+"locations with elements within the AST, and other facilities that support "
+"Clang-based development tools. This C interface to Clang will never provide "
+"all of the information representation stored in Clang's C++ AST, nor should "
+"it: the intent is to maintain an API that is :ref:`relatively stable "
+"<Stability>` from one release to the next, providing only the basic "
+"functionality needed to support development tools. The entire C interface of "
+"libclang is available in the file `Index.h`_"
+msgstr ""
+
+#: ../../../LibClang.rst:11
+msgid "Essential types overview"
+msgstr ""
+
+#: ../../../LibClang.rst:13
+msgid "All types of libclang are prefixed with ``CX``"
+msgstr ""
+
+#: ../../../LibClang.rst:16
+msgid "CXIndex"
+msgstr ""
+
+#: ../../../LibClang.rst:17
+msgid ""
+"An Index that consists of a set of translation units that would typically be "
+"linked together into an executable or library."
+msgstr ""
+
+#: ../../../LibClang.rst:20
+msgid "CXTranslationUnit"
+msgstr ""
+
+#: ../../../LibClang.rst:21
+msgid "A single translation unit, which resides in an index."
+msgstr ""
+
+#: ../../../LibClang.rst:24
+msgid "CXCursor"
+msgstr ""
+
+#: ../../../LibClang.rst:25
+msgid ""
+"A cursor representing a pointer to some element in the abstract syntax tree "
+"of a translation unit."
+msgstr ""
+
+#: ../../../LibClang.rst:29 ../../../LibClang.rst:165 ../../../LibClang.rst:256
+msgid "Code example"
+msgstr ""
+
+#: ../../../LibClang.rst:78
+msgid "Visiting elements of an AST"
+msgstr ""
+
+#: ../../../LibClang.rst:79
+msgid ""
+"The elements of an AST can be recursively visited with pre-order traversal "
+"with ``clang_visitChildren``."
+msgstr ""
+
+#: ../../../LibClang.rst:104
+msgid ""
+"The return value of ``CXCursorVisitor``, the callable argument of "
+"``clang_visitChildren``, can return one of the three:"
+msgstr ""
+
+#: ../../../LibClang.rst:106
+msgid "``CXChildVisit_Break``: Terminates the cursor traversal"
+msgstr ""
+
+#: ../../../LibClang.rst:108
+msgid ""
+"``CXChildVisit_Continue``: Continues the cursor traversal with the next "
+"sibling of the cursor just visited, without visiting its children."
+msgstr ""
+
+#: ../../../LibClang.rst:110
+msgid ""
+"``CXChildVisit_Recurse``: Recursively traverse the children of this cursor, "
+"using the same visitor and client data"
+msgstr ""
+
+#: ../../../LibClang.rst:112
+msgid "The expected output of that program is"
+msgstr ""
+
+#: ../../../LibClang.rst:122
+msgid "Extracting information from a Cursor"
+msgstr ""
+
+#: ../../../LibClang.rst:128
+msgid "Extracting the Cursor kind"
+msgstr ""
+
+#: ../../../LibClang.rst:130
+msgid ""
+"``CXCursorKind clang_getCursorKind(CXCursor)`` Describes the kind of entity "
+"that a cursor refers to. Example values:"
+msgstr ""
+
+#: ../../../LibClang.rst:132
+msgid "``CXCursor_StructDecl``: A C or C++ struct."
+msgstr ""
+
+#: ../../../LibClang.rst:133
+msgid "``CXCursor_FieldDecl``: A field in a struct, union, or C++ class."
+msgstr ""
+
+#: ../../../LibClang.rst:134
+msgid "``CXCursor_CallExpr``: An expression that calls a function."
+msgstr ""
+
+#: ../../../LibClang.rst:138
+msgid "Extracting the Cursor type"
+msgstr ""
+
+#: ../../../LibClang.rst:139
+msgid ""
+"``CXType clang_getCursorType(CXCursor)``: Retrieve the type of a CXCursor "
+"(if any)."
+msgstr ""
+
+#: ../../../LibClang.rst:141
+msgid ""
+"A ``CXType`` represents a complete C++ type, including qualifiers and "
+"pointers. It has a member field ``CXTypeKind kind`` and additional opaque "
+"data."
+msgstr ""
+
+#: ../../../LibClang.rst:143
+msgid "Example values for ``CXTypeKind kind``"
+msgstr ""
+
+#: ../../../LibClang.rst:145
+msgid ""
+"``CXType_Invalid``: Represents an invalid type (e.g., where no type is "
+"available)"
+msgstr ""
+
+#: ../../../LibClang.rst:146
+msgid "``CXType_Pointer``: A pointer to another type"
+msgstr ""
+
+#: ../../../LibClang.rst:147
+msgid "``CXType_Int``: Regular ``int``"
+msgstr ""
+
+#: ../../../LibClang.rst:148
+msgid ""
+"``CXType_Elaborated``: Represents a type that was referred to using an "
+"elaborated type keyword e.g. struct S, or via a qualified name, e.g., N::M::"
+"type, or both."
+msgstr ""
+
+#: ../../../LibClang.rst:150
+msgid ""
+"Any ``CXTypeKind`` can be converted to a ``CXString`` using "
+"``clang_getTypeKindSpelling(CXTypeKind)``."
+msgstr ""
+
+#: ../../../LibClang.rst:152
+msgid "A ``CXType`` holds additional necessary opaque type info, such as:"
+msgstr ""
+
+#: ../../../LibClang.rst:154
+msgid "Which struct was referred to?"
+msgstr ""
+
+#: ../../../LibClang.rst:155
+msgid "What type is the pointer pointing to?"
+msgstr ""
+
+#: ../../../LibClang.rst:156
+msgid "Qualifiers (e.g. ``const``, ``volatile``)?"
+msgstr ""
+
+#: ../../../LibClang.rst:158
+msgid "Qualifiers of a ``CXType`` can be queried with:"
+msgstr ""
+
+#: ../../../LibClang.rst:160
+msgid "``clang_isConstQualifiedType(CXType)`` to check for ``const``"
+msgstr ""
+
+#: ../../../LibClang.rst:161
+msgid "``clang_isRestrictQualifiedType(CXType)`` to check for ``restrict``"
+msgstr ""
+
+#: ../../../LibClang.rst:162
+msgid "``clang_isVolatileQualifiedType(CXType)`` to check for ``volatile``"
+msgstr ""
+
+#: ../../../LibClang.rst:225
+msgid "The expected output of program is:"
+msgstr ""
+
+#: ../../../LibClang.rst:237
+msgid ""
+"Reiterating the difference between ``CXType`` and ``CXTypeKind``: For an "
+"example"
+msgstr ""
+
+#: ../../../LibClang.rst:243
+msgid "Type Kind will be: ``CXType_Pointer`` spelled ``\"Pointer\"``"
+msgstr ""
+
+#: ../../../LibClang.rst:244
+msgid ""
+"Type will be a complex ``CXType`` structure, spelled ``\"const char* "
+"__restrict__``"
+msgstr ""
+
+#: ../../../LibClang.rst:247
+msgid "Retrieving source locations"
+msgstr ""
+
+#: ../../../LibClang.rst:249
+msgid ""
+"``CXSourceRange clang_getCursorExtent(CXCursor)`` returns a "
+"``CXSourceRange``, representing a half-open range in the source code."
+msgstr ""
+
+#: ../../../LibClang.rst:251
+msgid ""
+"Use ``clang_getRangeStart(CXSourceRange)`` and "
+"``clang_getRangeEnd(CXSourceRange)`` to retrieve the starting and end "
+"``CXSourceLocation`` from a source range, respectively."
+msgstr ""
+
+#: ../../../LibClang.rst:253
+msgid ""
+"Given a ``CXSourceLocation``, use ``clang_getExpansionLocation`` to retrieve "
+"file, line and column of a source location."
+msgstr ""
+
+#: ../../../LibClang.rst:290
+msgid "The expected output of this program is:"
+msgstr ""
+
+#: ../../../LibClang.rst:299
+msgid "Complete example code"
+msgstr ""
+
+#: ../../../LibClang.rst:398
+msgid "ABI and API Stability"
+msgstr ""
+
+#: ../../../LibClang.rst:400
+msgid ""
+"The C interfaces in libclang are intended to be relatively stable. This "
+"allows a programmer to use libclang without having to worry as much about "
+"Clang upgrades breaking existing code. However, the library is not "
+"unchanging. For example, the library will gain new interfaces over time as "
+"needs arise, existing APIs may be deprecated for eventual removal, etc. "
+"Also, the underlying implementation of the facilities by Clang may change "
+"behavior as bugs are fixed, features get implemented, etc."
+msgstr ""
+
+#: ../../../LibClang.rst:408
+msgid ""
+"The library should be ABI and API stable over time, but ABI- and API-"
+"breaking changes can happen in the following (non-exhaustive) situations:"
+msgstr ""
+
+#: ../../../LibClang.rst:411
+msgid "Adding new enumerator to an enumeration (can be ABI-breaking in C++)."
+msgstr ""
+
+#: ../../../LibClang.rst:412
+msgid ""
+"Removing an explicitly deprecated API after a suitably long deprecation "
+"period."
+msgstr ""
+
+#: ../../../LibClang.rst:414
+msgid ""
+"Using implementation details, such as names or comments that say something "
+"is \"private\", \"reserved\", \"internal\", etc."
+msgstr ""
+
+#: ../../../LibClang.rst:416
+msgid ""
+"Bug fixes and changes to Clang's internal implementation happen routinely "
+"and will change the behavior of callers."
+msgstr ""
+
+#: ../../../LibClang.rst:418
+msgid "Rarely, bug fixes to libclang itself."
+msgstr ""
+
+#: ../../../LibClang.rst:420
+msgid ""
+"The library has version macros (``CINDEX_VERSION_MAJOR``, "
+"``CINDEX_VERSION_MINOR``, and ``CINDEX_VERSION``) which can be used to test "
+"for specific library versions at compile time. The ``CINDEX_VERSION_MAJOR`` "
+"macro is only incremented if there are major source- or ABI-breaking "
+"changes. Except for removing an explicitly deprecated API, the changes "
+"listed above are not considered major source- or ABI-breaking changes. "
+"Historically, the value this macro expands to has not changed, but may be "
+"incremented in the future should the need arise. The "
+"``CINDEX_VERSION_MINOR`` macro is incremented as new APIs are added. The "
+"``CINDEX_VERSION`` macro expands to a value based on the major and minor "
+"version macros."
+msgstr ""
+
+#: ../../../LibClang.rst:431
+msgid ""
+"In an effort to allow the library to be modified as new needs arise, the "
+"following situations are explicitly unsupported:"
+msgstr ""
+
+#: ../../../LibClang.rst:434
+msgid ""
+"Loading different library versions into the same executable and passing "
+"objects between the libraries; despite general ABI stability, different "
+"versions of the library may use different implementation details that are "
+"not compatible across library versions."
+msgstr ""
+
+#: ../../../LibClang.rst:438
+msgid ""
+"For the same reason as above, serializing objects from one version of the "
+"library and deserializing with a different version is also not supported."
+msgstr ""
+
+#: ../../../LibClang.rst:441
+msgid ""
+"Note: because libclang is a wrapper around the compiler frontend, it is not "
+"a `security-sensitive component`_ of the LLVM Project. Consider using a "
+"sandbox or some other mitigation approach if processing untrusted input."
+msgstr ""
