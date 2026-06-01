@@ -1,0 +1,436 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 14\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ClangOffloadWrapper.rst:3
+msgid "Clang Offload Wrapper"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:11
+msgid "Introduction"
+msgstr "簡介"
+
+#: ../../../ClangOffloadWrapper.rst:13
+msgid ""
+"This tool is used in OpenMP offloading toolchain to embed device code "
+"objects (usually ELF) into a wrapper host llvm IR (bitcode) file. The "
+"wrapper host IR is then assembled and linked with host code objects to "
+"generate the executable binary. See :ref:`image-binary-embedding-execution` "
+"for more details."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:19
+msgid "Usage"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:21
+msgid "This tool can be used as follows:"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:41
+msgid "Example"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:50
+msgid "OpenMP Device Binary Embedding"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:52
+msgid ""
+"Various structures and functions used in the wrapper host IR form the "
+"interface between the executable binary and the OpenMP runtime."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:56
+msgid "Enum Types"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:58
+msgid ""
+":ref:`table-offloading-declare-target-flags` lists different flag for "
+"offloading entries."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:61
+msgid "Offloading Declare Target Flags Enum"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:65
+msgid "Name"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:65
+msgid "Value"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:65 ../../../ClangOffloadWrapper.rst:84
+#: ../../../ClangOffloadWrapper.rst:101 ../../../ClangOffloadWrapper.rst:116
+#: ../../../ClangOffloadWrapper.rst:138
+msgid "Description"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:67
+msgid "OMP_DECLARE_TARGET_LINK"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:67
+msgid "0x01"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:67
+msgid "Mark the entry as having a 'link' attribute (w.r.t. link clause)"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:69
+msgid "OMP_DECLARE_TARGET_CTOR"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:69
+msgid "0x02"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:69
+msgid "Mark the entry as being a global constructor"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:71
+msgid "OMP_DECLARE_TARGET_DTOR"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:71
+msgid "0x04"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:71
+msgid "Mark the entry as being a global destructor"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:75
+msgid "Structure Types"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:77
+msgid ""
+":ref:`table-tgt_offload_entry`, :ref:`table-tgt_device_image`, and :ref:"
+"`table-tgt_bin_desc` are the structures used in the wrapper host IR."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:80
+msgid "__tgt_offload_entry structure"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:84 ../../../ClangOffloadWrapper.rst:101
+#: ../../../ClangOffloadWrapper.rst:116 ../../../ClangOffloadWrapper.rst:138
+msgid "Type"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:84 ../../../ClangOffloadWrapper.rst:101
+#: ../../../ClangOffloadWrapper.rst:116
+msgid "Identifier"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:86 ../../../ClangOffloadWrapper.rst:103
+#: ../../../ClangOffloadWrapper.rst:105
+msgid "void*"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:86
+msgid "addr"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:86
+msgid "Address of global symbol within device image (function or global)"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:88
+msgid "char*"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:88
+msgid "name"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:88
+msgid "Name of the symbol"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:90
+msgid "size_t"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:90
+msgid "size"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:90
+msgid "Size of the entry info (0 if it is a function)"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:92 ../../../ClangOffloadWrapper.rst:94
+#: ../../../ClangOffloadWrapper.rst:118
+msgid "int32_t"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:92
+msgid "flags"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:92
+msgid ""
+"Flags associated with the entry (see :ref:`table-offloading-declare-target-"
+"flags`)"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:94
+msgid "reserved"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:94
+msgid "Reserved, to be used by the runtime library."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:97
+msgid "__tgt_device_image structure"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:103
+msgid "ImageStart"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:103
+msgid "Pointer to the target code start"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:105
+msgid "ImageEnd"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:105
+msgid "Pointer to the target code end"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:107 ../../../ClangOffloadWrapper.rst:109
+#: ../../../ClangOffloadWrapper.rst:122 ../../../ClangOffloadWrapper.rst:124
+msgid "__tgt_offload_entry*"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:107
+msgid "EntriesBegin"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:107
+msgid "Begin of table with all target entries"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:109
+msgid "EntriesEnd"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:109 ../../../ClangOffloadWrapper.rst:124
+msgid "End of table (non inclusive)"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:112
+msgid "__tgt_bin_desc structure"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:118
+msgid "NumDeviceImages"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:118
+msgid "Number of device types supported"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:120
+msgid "__tgt_device_image*"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:120
+msgid "DeviceImages"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:120
+msgid "Array of device images (1 per dev. type)"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:122
+msgid "HostEntriesBegin"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:122
+msgid "Begin of table with all host entries"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:124
+msgid "HostEntriesEnd"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:128 ../../../ClangOffloadWrapper.rst:134
+msgid "Global Variables"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:130
+msgid ""
+":ref:`table-global-variables` lists various global variables, along with "
+"their type and their explicit ELF sections, which are used to store device "
+"images and related symbols."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:138
+msgid "Variable"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:138
+msgid "ELF Section"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:140
+msgid "__start_omp_offloading_entries"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:140 ../../../ClangOffloadWrapper.rst:142
+#: ../../../ClangOffloadWrapper.rst:144
+msgid "__tgt_offload_entry"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:140 ../../../ClangOffloadWrapper.rst:142
+#: ../../../ClangOffloadWrapper.rst:144 ../../../ClangOffloadWrapper.rst:148
+#: ../../../ClangOffloadWrapper.rst:150 ../../../ClangOffloadWrapper.rst:152
+#: ../../../ClangOffloadWrapper.rst:154
+msgid ".omp_offloading_entries"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:140
+msgid "Begin symbol for the offload entries table."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:142
+msgid "__stop_omp_offloading_entries"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:142
+msgid "End symbol for the offload entries table."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:144
+msgid "__dummy.omp_offloading.entry"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:144
+msgid ""
+"Dummy zero-sized object in the offload entries section to force linker to "
+"define begin/end symbols defined above."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:148
+msgid ".omp_offloading.device_image"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:148 ../../../ClangOffloadWrapper.rst:150
+#: ../../../ClangOffloadWrapper.rst:152
+msgid "__tgt_device_image"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:148
+msgid "ELF device code object of the first image."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:150
+msgid ".omp_offloading.device_image.N"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:150
+msgid "ELF device code object of the (N+1)th image."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:152
+msgid ".omp_offloading.device_images"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:152
+msgid "Array of images."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:154
+msgid ".omp_offloading.descriptor"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:154
+msgid "__tgt_bin_desc"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:154
+msgid "Binary descriptor object (see details below)."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:159
+msgid "Binary Descriptor for Device Images"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:161
+msgid ""
+"This object is passed to the offloading runtime at program startup and it "
+"describes all device images available in the executable or shared library. "
+"It is defined as follows:"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:197
+msgid "Global Constructor and Destructor"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:199
+msgid ""
+"Global constructor (``.omp_offloading.descriptor_reg()``) registers the "
+"library of images with the runtime by calling ``__tgt_register_lib()`` "
+"function. The cunstructor is explicitly defined in ``.text.startup`` "
+"section. Similarly, global destructor (``.omp_offloading."
+"descriptor_unreg()``) calls ``__tgt_unregister_lib()`` for the "
+"unregistration and is also defined in ``.text.startup`` section."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:209
+msgid "Image Binary Embedding and Execution for OpenMP"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:211
+msgid ""
+"For each offloading target, device ELF code objects are generated by "
+"``clang``, ``opt``, ``llc``, and ``lld`` pipeline. These code objects are "
+"passed to the ``clang-offload-wrapper``."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:215
+msgid ""
+"At compile time, the ``clang-offload-wrapper`` tool takes the following "
+"actions:"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:218
+msgid ""
+"It embeds the ELF code objects for the device into the host code (see :ref:"
+"`openmp-device-binary_embedding`)."
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:221
+msgid "At execution time:"
+msgstr ""
+
+#: ../../../ClangOffloadWrapper.rst:223
+msgid "The global constructor gets run and it registers the device image."
+msgstr ""
