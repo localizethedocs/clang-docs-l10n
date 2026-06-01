@@ -1,0 +1,60 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 15\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:43+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ClangLinkerWrapper.rst:3
+msgid "Clang Linker Wrapper"
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:11
+msgid "Introduction"
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:13
+msgid ""
+"This tool works as a wrapper of the normal host linking job. This tool is "
+"used to create linked device images for offloading and the necessary runtime "
+"calls to register them. It works by first scanning the linker's input for "
+"embedded device offloading data stored at the ``.llvm.offloading`` section. "
+"This section contains binary data created by the :doc:"
+"`ClangOffloadPackager`. The extracted device files will then be linked. The "
+"linked modules will then be wrapped into a new object file containing the "
+"code necessary to register it with the offloading runtime."
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:23
+msgid "Usage"
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:25
+msgid ""
+"This tool can be used with the following options. Any arguments not intended "
+"only for the linker wrapper will be forwarded to the wrapped linker job."
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:65
+msgid "Example"
+msgstr ""
+
+#: ../../../ClangLinkerWrapper.rst:67
+msgid ""
+"This tool links object files with offloading images embedded within it using "
+"the ``-fembed-offload-object`` flag in Clang. Given an input file containing "
+"the magic section we can pass it to this tool to extract the data contained "
+"at that section and run a device linking job on it."
+msgstr ""
