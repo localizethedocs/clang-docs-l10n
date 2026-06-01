@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-06-01 13:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,48 +29,45 @@ msgstr ""
 msgid ""
 "This tool works as a wrapper around the SYCL device code linking process. "
 "The purpose of this tool is to provide an interface to link SYCL device "
-"bitcode in LLVM IR format, SYCL device bitcode in SPIR-V IR format, and "
-"native binary objects, and then use the SPIR-V LLVM Translator tool on fully "
-"linked device objects to produce the final output. After the linking stage, "
-"the fully linked device code in LLVM IR format may undergo several SYCL-"
-"specific finalization steps before the SPIR-V code generation step. The tool "
-"will also support the Ahead-Of-Time (AOT) compilation flow. AOT compilation "
-"is the process of invoking the back-end at compile time to produce the final "
-"binary, as opposed to just-in-time (JIT) compilation when final code "
-"generation is deferred until application runtime."
+"bitcode in LLVM IR format together with LLVM bitcode libraries, and then run "
+"SPIR-V code generation on the fully linked device code to produce the final "
+"output. After the linking stage, the fully linked device code in LLVM IR "
+"format may undergo several SYCL-specific finalization steps before the SPIR-"
+"V code generation step. The tool will also support the Ahead-Of-Time (AOT) "
+"compilation flow. AOT compilation is the process of invoking the back-end at "
+"compile time to produce the final binary, as opposed to just-in-time (JIT) "
+"compilation when final code generation is deferred until application runtime."
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:26
+#: ../../../ClangSYCLLinker.rst:25
 msgid ""
-"Device code linking for SYCL offloading has several known quirks that make "
-"it difficult to use in a unified offloading setting. Two of the primary "
-"issues are: 1. Several finalization steps are required to be run on the "
-"fully linked LLVM IR bitcode to guarantee conformance to SYCL standards. "
-"This step is unique to the SYCL offloading compilation flow. 2. The SPIR-V "
-"LLVM Translator tool is an external tool and hence SPIR-V IR code generation "
-"cannot be done as part of LTO. This limitation can be lifted once the SPIR-V "
-"backend is available as a viable LLVM backend."
+"Device code linking for SYCL offloading has known quirks that make it "
+"difficult to use in a unified offloading setting. The primary issue is that "
+"several finalization steps are required to be run on the fully linked LLVM "
+"IR bitcode to guarantee conformance to SYCL standards. This step is unique "
+"to the SYCL offloading compilation flow."
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:36
-msgid "This tool has been proposed to work around these issues."
+#: ../../../ClangSYCLLinker.rst:31
+msgid "This tool has been proposed to work around this issue."
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:39
+#: ../../../ClangSYCLLinker.rst:34
 msgid "Usage"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:41
+#: ../../../ClangSYCLLinker.rst:36
 msgid ""
 "This tool can be used with the following options. Several of these options "
-"will be passed down to downstream tools like 'llvm-link', 'llvm-spirv', etc."
+"will be passed down to downstream AOT compilation tools like 'ocloc' and "
+"'opencl-aot'."
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:71
+#: ../../../ClangSYCLLinker.rst:65
 msgid "Example"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:73
+#: ../../../ClangSYCLLinker.rst:67
 msgid ""
 "This tool is intended to be invoked when targeting any of the target "
 "offloading toolchains. When the --sycl-link option is passed to the clang "

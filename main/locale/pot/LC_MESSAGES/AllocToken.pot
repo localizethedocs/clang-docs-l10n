@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-24 08:19+0000\n"
+"POT-Creation-Date: 2026-06-01 13:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -201,17 +201,29 @@ msgstr ""
 msgid "For example:"
 msgstr ""
 
-#: ../../../AllocToken.rst:178
+#: ../../../AllocToken.rst:177
+msgid ""
+"Note: Even in the default mode (without ``-fsanitize-alloc-token-"
+"extended``), an *inline* allocation wrapper marked with the `malloc <https://"
+"clang.llvm.org/docs/AttributeReference.html#malloc>`_ or `alloc_size "
+"<https://clang.llvm.org/docs/AttributeReference.html#alloc-size>`_ attribute "
+"is supported if it is inlined into its caller: the inferred token is "
+"propagated to the allocation call the wrapper returns, which is then "
+"instrumented normally. Wrappers that are not inlined still require ``-"
+"fsanitize-alloc-token-extended``."
+msgstr ""
+
+#: ../../../AllocToken.rst:187
 msgid "Disabling Instrumentation"
 msgstr ""
 
-#: ../../../AllocToken.rst:180
+#: ../../../AllocToken.rst:189
 msgid ""
 "To exclude specific functions from instrumentation, you can use the "
 "``no_sanitize(\"alloc-token\")`` attribute:"
 msgstr ""
 
-#: ../../../AllocToken.rst:190
+#: ../../../AllocToken.rst:199
 msgid ""
 "Note: Independent of any given allocator support, the instrumentation aims "
 "to remain performance neutral. As such, ``no_sanitize(\"alloc-token\")`` "
@@ -220,28 +232,28 @@ msgid ""
 "``noinline``."
 msgstr ""
 
-#: ../../../AllocToken.rst:196
+#: ../../../AllocToken.rst:205
 msgid ""
 "The ``__attribute__((disable_sanitizer_instrumentation))`` is also supported "
 "to disable this and other sanitizer instrumentations."
 msgstr ""
 
-#: ../../../AllocToken.rst:200
+#: ../../../AllocToken.rst:209
 msgid "Suppressions File (Ignorelist)"
 msgstr ""
 
-#: ../../../AllocToken.rst:202
+#: ../../../AllocToken.rst:211
 msgid ""
 "AllocToken respects the ``src`` and ``fun`` entity types in the :doc:"
 "`SanitizerSpecialCaseList`, which can be used to omit specified source files "
 "or functions from instrumentation."
 msgstr ""
 
-#: ../../../AllocToken.rst:220
+#: ../../../AllocToken.rst:229
 msgid "Conditional Compilation with ``__SANITIZE_ALLOC_TOKEN__``"
 msgstr ""
 
-#: ../../../AllocToken.rst:222
+#: ../../../AllocToken.rst:231
 msgid ""
 "In some cases, one may need to execute different code depending on whether "
 "AllocToken instrumentation is enabled. The ``__SANITIZE_ALLOC_TOKEN__`` "
