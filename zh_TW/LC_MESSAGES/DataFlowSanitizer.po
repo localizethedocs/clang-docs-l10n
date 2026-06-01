@@ -1,0 +1,378 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang 18\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-13 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../DataFlowSanitizer.rst:3
+msgid "DataFlowSanitizer"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:14
+msgid "Introduction"
+msgstr "簡介"
+
+#: ../../../DataFlowSanitizer.rst:16
+msgid "DataFlowSanitizer is a generalised dynamic data flow analysis."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:18
+msgid ""
+"Unlike other Sanitizer tools, this tool is not designed to detect a specific "
+"class of bugs on its own.  Instead, it provides a generic dynamic data flow "
+"analysis framework to be used by clients to help detect application-specific "
+"issues within their own code."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:24
+msgid "How to build libc++ with DFSan"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:26
+msgid ""
+"DFSan requires either all of your code to be instrumented or for "
+"uninstrumented functions to be listed as ``uninstrumented`` in the `ABI "
+"list`_."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:29
+msgid ""
+"If you'd like to have instrumented libc++ functions, then you need to build "
+"it with DFSan instrumentation from source. Here is an example of how to "
+"build libc++ and the libc++ ABI with data flow sanitizer instrumentation."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:47
+msgid "Note: Ensure you are building with a sufficiently new version of Clang."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:50
+msgid "Usage"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:52
+msgid ""
+"With no program changes, applying DataFlowSanitizer to a program will not "
+"alter its behavior.  To use DataFlowSanitizer, the program uses API "
+"functions to apply tags to data to cause it to be tracked, and to check the "
+"tag of a specific data item.  DataFlowSanitizer manages the propagation of "
+"tags through the program according to its data flow."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:58
+msgid ""
+"The APIs are defined in the header file ``sanitizer/dfsan_interface.h``. For "
+"further information about each function, please refer to the header file."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:65
+msgid "ABI List"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:67
+msgid ""
+"DataFlowSanitizer uses a list of functions known as an ABI list to decide "
+"whether a call to a specific function should use the operating system's "
+"native ABI or whether it should use a variant of this ABI that also "
+"propagates labels through function parameters and return values.  The ABI "
+"list file also controls how labels are propagated in the former case.  "
+"DataFlowSanitizer comes with a default ABI list which is intended to "
+"eventually cover the glibc library on Linux but it may become necessary for "
+"users to extend the ABI list in cases where a particular library or function "
+"cannot be instrumented (e.g. because it is implemented in assembly or "
+"another language which DataFlowSanitizer does not support) or a function is "
+"called from a library or function which cannot be instrumented."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:79
+msgid ""
+"DataFlowSanitizer's ABI list file is a :doc:`SanitizerSpecialCaseList`. The "
+"pass treats every function in the ``uninstrumented`` category in the ABI "
+"list file as conforming to the native ABI.  Unless the ABI list contains "
+"additional categories for those functions, a call to one of those functions "
+"will produce a warning message, as the labelling behavior of the function is "
+"unknown.  The other supported categories are ``discard``, ``functional`` and "
+"``custom``."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:87
+msgid ""
+"``discard`` -- To the extent that this function writes to (user-accessible) "
+"memory, it also updates labels in shadow memory (this condition is trivially "
+"satisfied for functions which do not write to user-accessible memory).  Its "
+"return value is unlabelled."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:91
+msgid ""
+"``functional`` -- Like ``discard``, except that the label of its return "
+"value is the union of the label of its arguments."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:93
+msgid ""
+"``custom`` -- Instead of calling the function, a custom wrapper ``__dfsw_F`` "
+"is called, where ``F`` is the name of the function.  This function may wrap "
+"the original function or provide its own implementation.  This category is "
+"generally used for uninstrumentable functions which write to user-accessible "
+"memory or which have more complex label propagation behavior.  The signature "
+"of ``__dfsw_F`` is based on that of ``F`` with each argument having a label "
+"of type ``dfsan_label`` appended to the argument list.  If ``F`` is of non-"
+"void return type a final argument of type ``dfsan_label *`` is appended to "
+"which the custom function can store the label for the return value.  For "
+"example:"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:114
+msgid ""
+"If a function defined in the translation unit being compiled belongs to the "
+"``uninstrumented`` category, it will be compiled so as to conform to the "
+"native ABI.  Its arguments will be assumed to be unlabelled, but it will "
+"propagate labels in shadow memory."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:119 ../../../DataFlowSanitizer.rst:145
+msgid "For example:"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:140
+msgid ""
+"For instrumented functions, the ABI list supports a ``force_zero_labels`` "
+"category, which will make all stores and return values set zero labels. "
+"Functions should never be labelled with both ``force_zero_labels`` and "
+"``uninstrumented`` or any of the uninstrumented wrapper kinds."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:155
+msgid "Compilation Flags"
+msgstr "編譯旗標"
+
+#: ../../../DataFlowSanitizer.rst:157
+msgid ""
+"``-dfsan-abilist`` -- The additional ABI list files that control how shadow "
+"parameters are passed. File names are separated by comma."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:159
+msgid ""
+"``-dfsan-combine-pointer-labels-on-load`` -- Controls whether to include or "
+"ignore the labels of pointers in load instructions. Its default value is "
+"true. For example:"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:167
+msgid ""
+"If the flag is true, the label of ``v`` is the union of the label of ``p`` "
+"and the label of ``*p``. If the flag is false, the label of ``v`` is the "
+"label of just ``*p``."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:171
+msgid ""
+"``-dfsan-combine-pointer-labels-on-store`` -- Controls whether to include or "
+"ignore the labels of pointers in store instructions. Its default value is "
+"false. For example:"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:179
+msgid ""
+"If the flag is true, the label of ``*p`` is the union of the label of ``p`` "
+"and the label of ``v``. If the flag is false, the label of ``*p`` is the "
+"label of just ``v``."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:183
+msgid ""
+"``-dfsan-combine-offset-labels-on-gep`` -- Controls whether to propagate "
+"labels of offsets in GEP instructions. Its default value is true. For "
+"example:"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:190
+msgid ""
+"If the flag is true, the label of ``p`` is the union of the label of ``p`` "
+"and the label of ``i``. If the flag is false, the label of ``p`` is "
+"unchanged."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:193
+msgid ""
+"``-dfsan-track-select-control-flow`` -- Controls whether to track the "
+"control flow of select instructions. Its default value is true. For example:"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:200
+msgid ""
+"If the flag is true, the label of ``v`` is the union of the labels of ``b``, "
+"``v1`` and ``v2``.  If the flag is false, the label of ``v`` is the union of "
+"the labels of just ``v1`` and ``v2``."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:204
+msgid ""
+"``-dfsan-event-callbacks`` -- An experimental feature that inserts callbacks "
+"for certain data events. Currently callbacks are only inserted for loads, "
+"stores, memory transfers (i.e. memcpy and memmove), and comparisons. Its "
+"default value is false. If this flag is set to true, a user must provide "
+"definitions for the following callback functions:"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:217
+msgid ""
+"``-dfsan-conditional-callbacks`` -- An experimental feature that inserts "
+"callbacks for control flow conditional expressions. This can be used to find "
+"where tainted values can control execution."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:221
+msgid ""
+"In addition to this compilation flag, a callback handler must be registered "
+"using ``dfsan_set_conditional_callback(my_callback);``, where my_callback is "
+"a function with a signature matching ``void my_callback(dfsan_label l, "
+"dfsan_origin o);``. This signature is the same when origin tracking is "
+"disabled - in this case the dfsan_origin passed in it will always be 0."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:228
+msgid ""
+"The callback will only be called when a tainted value reaches a conditional "
+"expression for control flow (such as an if's condition). The callback will "
+"be skipped for conditional expressions inside signal handlers, as this is "
+"prone to deadlock. Tainted values used in conditional expressions inside "
+"signal handlers will instead be aggregated via bitwise or, and can be "
+"accessed using ``dfsan_label dfsan_get_labels_in_signal_conditional();``."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:236
+msgid ""
+"``-dfsan-track-origins`` -- Controls how to track origins. When its value is "
+"0, the runtime does not track origins. When its value is 1, the runtime "
+"tracks origins at memory store operations. When its value is 2, the runtime "
+"tracks origins at memory load and store operations. Its default value is 0."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:241
+msgid ""
+"``-dfsan-instrument-with-call-threshold`` -- If a function being "
+"instrumented requires more than this number of origin stores, use callbacks "
+"instead of inline checks (-1 means never use callbacks). Its default value "
+"is 3500."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:246
+msgid "Environment Variables"
+msgstr "環境變數"
+
+#: ../../../DataFlowSanitizer.rst:248
+msgid ""
+"``warn_unimplemented`` -- Whether to warn on unimplemented functions. Its "
+"default value is false."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:250
+msgid ""
+"``strict_data_dependencies`` -- Whether to propagate labels only when there "
+"is explicit obvious data dependency (e.g., when comparing strings, ignore "
+"the fact that the output of the comparison might be implicit data-dependent "
+"on the content of the strings). This applies only to functions with "
+"``custom`` category in ABI list. Its default value is true."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:255
+msgid ""
+"``origin_history_size`` -- The limit of origin chain length. Non-positive "
+"values mean unlimited. Its default value is 16."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:257
+msgid ""
+"``origin_history_per_stack_limit`` -- The limit of origin node's references "
+"count. Non-positive values mean unlimited. Its default value is 20000."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:259
+msgid ""
+"``store_context_size`` -- The depth limit of origin tracking stack traces. "
+"Its default value is 20."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:261
+msgid ""
+"``zero_in_malloc`` -- Whether to zero shadow space of new allocated memory. "
+"Its default value is true."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:263
+msgid ""
+"``zero_in_free`` --- Whether to zero shadow space of deallocated memory. Its "
+"default value is true."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:267
+msgid "Example"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:269
+msgid ""
+"DataFlowSanitizer supports up to 8 labels, to achieve low CPU and code size "
+"overhead. Base labels are simply 8-bit unsigned integers that are powers of "
+"2 (i.e. 1, 2, 4, 8, ..., 128), and union labels are created by ORing base "
+"labels."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:274
+msgid ""
+"The following program demonstrates label propagation by checking that the "
+"correct labels are propagated."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:321
+msgid "Origin Tracking"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:323
+msgid ""
+"DataFlowSanitizer can track origins of labeled values. This feature is "
+"enabled by ``-mllvm -dfsan-track-origins=1``. For example,"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:351
+msgid ""
+"By ``-mllvm -dfsan-track-origins=1`` DataFlowSanitizer collects only "
+"intermediate stores a labeled value went through. Origin tracking slows down "
+"program execution by a factor of 2x on top of the usual DataFlowSanitizer "
+"slowdown and increases memory overhead by 1x. By ``-mllvm -dfsan-track-"
+"origins=2`` DataFlowSanitizer also collects intermediate loads a labeled "
+"value went through. This mode slows down program execution by a factor of 4x."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:359
+msgid "Current status"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:361
+msgid ""
+"DataFlowSanitizer is a work in progress, currently under development for "
+"x86\\_64 Linux."
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:365
+msgid "Design"
+msgstr ""
+
+#: ../../../DataFlowSanitizer.rst:367
+msgid "Please refer to the :doc:`design document<DataFlowSanitizerDesign>`."
+msgstr ""
