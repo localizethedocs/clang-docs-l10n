@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 08:18+0000\n"
+"POT-Creation-Date: 2026-07-09 14:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -242,61 +242,99 @@ msgid ""
 msgstr ""
 
 #: ../../../SafeStack.rst:163
-msgid "``__builtin___get_unsafe_stack_ptr()``"
+msgid "``sanitizer/safestack_interface.h``"
 msgstr ""
 
 #: ../../../SafeStack.rst:165
 msgid ""
-"This builtin function returns current unsafe stack pointer of the current "
-"thread."
+"To use the low-level API, include the header ``<sanitizer/"
+"safestack_interface.h>``."
 msgstr ""
 
-#: ../../../SafeStack.rst:169
-msgid "``__builtin___get_unsafe_stack_bottom()``"
+#: ../../../SafeStack.rst:168
+msgid "``__safestack_get_unsafe_stack_ptr()``"
 msgstr ""
 
-#: ../../../SafeStack.rst:171
+#: ../../../SafeStack.rst:170
 msgid ""
-"This builtin function returns a pointer to the bottom of the unsafe stack of "
-"the current thread."
+"This function returns current unsafe stack pointer of the current thread."
+msgstr ""
+
+#: ../../../SafeStack.rst:173
+msgid "``__safestack_get_unsafe_stack_bottom()``"
 msgstr ""
 
 #: ../../../SafeStack.rst:175
-msgid "``__builtin___get_unsafe_stack_top()``"
+msgid ""
+"This function returns a pointer to the bottom of the unsafe stack of the "
+"current thread."
 msgstr ""
 
-#: ../../../SafeStack.rst:177
-msgid ""
-"This builtin function returns a pointer to the top of the unsafe stack of "
-"the current thread."
+#: ../../../SafeStack.rst:179
+msgid "``__safestack_get_unsafe_stack_top()``"
 msgstr ""
 
 #: ../../../SafeStack.rst:181
-msgid "``__builtin___get_unsafe_stack_start()``"
-msgstr ""
-
-#: ../../../SafeStack.rst:183
 msgid ""
-"Deprecated: This builtin function is an alias for "
-"``__builtin___get_unsafe_stack_bottom()``."
+"This function returns a pointer to the top of the unsafe stack of the "
+"current thread."
 msgstr ""
 
 #: ../../../SafeStack.rst:187
-msgid "Design"
+msgid "Deprecated Builtins"
 msgstr ""
 
 #: ../../../SafeStack.rst:189
+msgid ""
+"The following builtins are still supported but are deprecated and will emit "
+"a warning. Use the corresponding functions from ``<sanitizer/"
+"safestack_interface.h>`` instead."
+msgstr ""
+
+#: ../../../SafeStack.rst:194
+msgid "``__builtin___get_unsafe_stack_ptr()``"
+msgstr ""
+
+#: ../../../SafeStack.rst:196
+msgid "Deprecated alias for ``__safestack_get_unsafe_stack_ptr()``."
+msgstr ""
+
+#: ../../../SafeStack.rst:199
+msgid "``__builtin___get_unsafe_stack_bottom()``"
+msgstr ""
+
+#: ../../../SafeStack.rst:201 ../../../SafeStack.rst:211
+msgid "Deprecated alias for ``__safestack_get_unsafe_stack_bottom()``."
+msgstr ""
+
+#: ../../../SafeStack.rst:204
+msgid "``__builtin___get_unsafe_stack_top()``"
+msgstr ""
+
+#: ../../../SafeStack.rst:206
+msgid "Deprecated alias for ``__safestack_get_unsafe_stack_top()``."
+msgstr ""
+
+#: ../../../SafeStack.rst:209
+msgid "``__builtin___get_unsafe_stack_start()``"
+msgstr ""
+
+#: ../../../SafeStack.rst:214
+msgid "Design"
+msgstr ""
+
+#: ../../../SafeStack.rst:216
 msgid ""
 "Please refer to the `Code-Pointer Integrity <https://dslab.epfl.ch/research/"
 "cpi/>`__ project page for more information about the design of the SafeStack "
 "and its related technologies."
 msgstr ""
 
-#: ../../../SafeStack.rst:194
+#: ../../../SafeStack.rst:221
 msgid "setjmp and exception handling"
 msgstr ""
 
-#: ../../../SafeStack.rst:196
+#: ../../../SafeStack.rst:223
 msgid ""
 "The `OSDI'14 paper <https://dslab.epfl.ch/pubs/cpi.pdf>`_ mentions that on "
 "Linux the instrumentation pass finds calls to setjmp or functions that may "
@@ -307,11 +345,11 @@ msgid ""
 "the function ``SafeStack::createStackRestorePoints``."
 msgstr ""
 
-#: ../../../SafeStack.rst:205
+#: ../../../SafeStack.rst:232
 msgid "Publications"
 msgstr ""
 
-#: ../../../SafeStack.rst:207
+#: ../../../SafeStack.rst:234
 msgid ""
 "`Code-Pointer Integrity <https://dslab.epfl.ch/pubs/cpi.pdf>`__. Volodymyr "
 "Kuznetsov, Laszlo Szekeres, Mathias Payer, George Candea, R. Sekar, Dawn "

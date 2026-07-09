@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 08:18+0000\n"
+"POT-Creation-Date: 2026-07-09 14:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -539,7 +539,7 @@ msgid ""
 msgstr ""
 
 #: ../../../PointerAuthentication.rst:329
-#: ../../../PointerAuthentication.rst:1451
+#: ../../../PointerAuthentication.rst:1471
 msgid "C function pointers"
 msgstr ""
 
@@ -597,7 +597,7 @@ msgid ""
 msgstr ""
 
 #: ../../../PointerAuthentication.rst:371
-#: ../../../PointerAuthentication.rst:1364
+#: ../../../PointerAuthentication.rst:1384
 msgid "Return addresses"
 msgstr ""
 
@@ -1043,25 +1043,25 @@ msgid ""
 "oracles`_. Programs should use it seldom and carefully."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:670
+#: ../../../PointerAuthentication.rst:672
 msgid "``ptrauth_auth_and_resign``"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:676
+#: ../../../PointerAuthentication.rst:678
 msgid ""
 "Authenticate that ``pointer`` is signed with ``oldKey`` and "
 "``oldDiscriminator`` and then resign the raw-pointer result of that "
 "authentication with ``newKey`` and ``newDiscriminator``."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:680
+#: ../../../PointerAuthentication.rst:682
 msgid ""
 "``pointer`` must have pointer type.  The result will have the same type as "
 "``pointer``.  This operation is not required to have the same behavior on a "
 "null pointer that the language implementation would."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:684
+#: ../../../PointerAuthentication.rst:686
 msgid ""
 "The code sequence produced for this operation must not be directly "
 "attackable. However, if the discriminator values are not constant integers, "
@@ -1070,70 +1070,91 @@ msgid ""
 "`safely-derived<Safe derivation>`."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:691
+#: ../../../PointerAuthentication.rst:693
+msgid "``ptrauth_auth_with_pc_and_resign``"
+msgstr ""
+
+#: ../../../PointerAuthentication.rst:699
+msgid ""
+"Similar to :ref:`ptrauth_auth_and_resign`, but additionally requires that "
+"the original signing schema includes the address of the signing instruction "
+"(i.e. uses `paciasppc` / `pacibsppc` instead of `paciasp` / `pacibsp`). This "
+"authenticates ``pointer`` signed with ``oldKey`` and ``oldDiscriminator`` at "
+"``oldPC``, then resigns the raw-pointer result with ``newKey`` and "
+"``newDiscriminator``."
+msgstr ""
+
+#: ../../../PointerAuthentication.rst:706
+msgid ""
+"Note: ``oldKey`` must be ``ptrauth_key_asia`` (IA) or ``ptrauth_key_asib`` "
+"(IB), as only these keys support PC-based authentication instructions. Data "
+"keys (``ptrauth_key_asda`` / ``ptrauth_key_asdb``) are not supported."
+msgstr ""
+
+#: ../../../PointerAuthentication.rst:711
 msgid "``ptrauth_auth_function``"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:697
+#: ../../../PointerAuthentication.rst:717
 msgid ""
 "Authenticate that ``pointer`` is signed with ``key`` and ``discriminator`` "
 "and re-sign it to the standard schema for a function pointer of its type."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:700
+#: ../../../PointerAuthentication.rst:720
 msgid ""
 "``pointer`` must have function pointer type.  The result will have the same "
 "type as ``pointer``.  This operation is not required to have the same "
 "behavior on a null pointer that the language implementation would."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:704
+#: ../../../PointerAuthentication.rst:724
 msgid ""
 "This operation makes the same attackability guarantees as "
 "``ptrauth_auth_and_resign``."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:707
+#: ../../../PointerAuthentication.rst:727
 msgid ""
 "If this operation appears syntactically as the function operand of a call, "
 "Clang guarantees that the call will directly authenticate the function value "
 "using the given schema rather than re-signing to the standard schema."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:712
+#: ../../../PointerAuthentication.rst:732
 msgid "``ptrauth_auth_data``"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:718
+#: ../../../PointerAuthentication.rst:738
 msgid ""
 "Authenticate that ``pointer`` is signed with ``key`` and ``discriminator`` "
 "and remove the signature."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:721
+#: ../../../PointerAuthentication.rst:741
 msgid ""
 "``pointer`` must have object pointer type.  The result will have the same "
 "type as ``pointer``.  This operation is not required to have the same "
 "behavior on a null pointer that the language implementation would."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:725
+#: ../../../PointerAuthentication.rst:745
 msgid ""
 "In the future when Clang makes safe derivation guarantees, the result of "
 "this operation should be considered safely-derived."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:729
+#: ../../../PointerAuthentication.rst:749
 msgid "``ptrauth_sign_generic_data``"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:735
+#: ../../../PointerAuthentication.rst:755
 msgid ""
 "Computes a signature for the given pair of values, incorporating a secret "
 "signing key."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:738
+#: ../../../PointerAuthentication.rst:758
 msgid ""
 "This operation can be used to verify that arbitrary data has not been "
 "tampered with by computing a signature for the data, storing that signature, "
@@ -1145,14 +1166,14 @@ msgid ""
 "data and the checksum)."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:746
+#: ../../../PointerAuthentication.rst:766
 msgid ""
 "``value1`` and ``value2`` must be either pointers or integers.  If the "
 "integers are larger than ``uintptr_t`` then data not representable in "
 "``uintptr_t`` may be discarded."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:750
+#: ../../../PointerAuthentication.rst:770
 msgid ""
 "The result will have type ``ptrauth_generic_signature_t``, which is an "
 "integer type.  Implementations are not required to make all bits of the "
@@ -1160,37 +1181,37 @@ msgid ""
 "not leave meaningful data in the low bits."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:756
+#: ../../../PointerAuthentication.rst:776
 msgid "Standard ``__ptrauth`` qualifiers"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:758
+#: ../../../PointerAuthentication.rst:778
 msgid ""
 "``<ptrauth.h>`` additionally provides several macros which expand to "
 "``__ptrauth`` qualifiers for common ABI situations."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:761
+#: ../../../PointerAuthentication.rst:781
 msgid ""
 "For convenience, these macros expand to nothing when pointer authentication "
 "is disabled."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:764
+#: ../../../PointerAuthentication.rst:784
 msgid ""
 "These macros can be found in the header; some details of these macros may be "
 "unstable or implementation-specific."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:769
+#: ../../../PointerAuthentication.rst:789
 msgid "Theory of operation"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:771
+#: ../../../PointerAuthentication.rst:791
 msgid "The threat model of pointer authentication is as follows:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:773
+#: ../../../PointerAuthentication.rst:793
 msgid ""
 "The attacker has the ability to read and write to a certain range of "
 "addresses, possibly the entire address space.  However, they are constrained "
@@ -1199,7 +1220,7 @@ msgid ""
 "a trap."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:779
+#: ../../../PointerAuthentication.rst:799
 msgid ""
 "The attacker has no ability to add arbitrary executable code to the program. "
 "For example, the program does not include malicious code to begin with, and "
@@ -1209,7 +1230,7 @@ msgid ""
 "subvert the normal control flow of the process."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:786
+#: ../../../PointerAuthentication.rst:806
 msgid ""
 "In both of the above paragraphs, it is merely assumed that the attacker's "
 "*current* capabilities are restricted; that is, their current exploit does "
@@ -1219,7 +1240,7 @@ msgid ""
 "even though the process does not directly contain code to do so."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:793
+#: ../../../PointerAuthentication.rst:813
 msgid ""
 "Note that any bug that fits the above threat model can be immediately "
 "exploited as a denial-of-service attack by simply performing an illegal "
@@ -1231,7 +1252,7 @@ msgid ""
 "possibly-compromised state."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:801
+#: ../../../PointerAuthentication.rst:821
 msgid ""
 "Pointer authentication is a form of control-flow integrity (CFI) "
 "enforcement. The basic security hypothesis behind CFI enforcement is that "
@@ -1242,7 +1263,7 @@ msgid ""
 "impractical (or, ideally, impossible) to exploit."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:809
+#: ../../../PointerAuthentication.rst:829
 msgid ""
 "Every indirect branch in a program has a purpose.  Using human intelligence, "
 "a programmer can describe where a particular branch *should* go according to "
@@ -1266,11 +1287,11 @@ msgid ""
 "infeasible with these techniques, and the attempt would have far higher cost."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:831
+#: ../../../PointerAuthentication.rst:851
 msgid "Attacks on pointer authentication"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:833
+#: ../../../PointerAuthentication.rst:853
 msgid ""
 "Pointer authentication works as follows.  Every indirect branch in a program "
 "has a purpose.  For every purpose, the implementation chooses a :ref:"
@@ -1281,33 +1302,33 @@ msgid ""
 "fails, the program is halted."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:841
+#: ../../../PointerAuthentication.rst:861
 msgid "There are a variety of ways to attack this."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:844
+#: ../../../PointerAuthentication.rst:864
 msgid "Attacks of interest to programmers"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:846
+#: ../../../PointerAuthentication.rst:866
 msgid ""
 "These attacks arise from weaknesses in the default protections offered by "
 "pointer authentication.  They can be addressed by using attributes or "
 "intrinsics to opt in to stronger protection."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:851
+#: ../../../PointerAuthentication.rst:871
 msgid "Substitution attacks"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:853
+#: ../../../PointerAuthentication.rst:873
 msgid ""
 "An attacker can simply overwrite a pointer intended for one purpose with a "
 "pointer intended for another purpose if both purposes use the same signing "
 "schema and that schema does not use address diversity."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:857
+#: ../../../PointerAuthentication.rst:877
 msgid ""
 "The most common source of this weakness is when code relies on using the "
 "default language rules for C function pointers.  The current implementation "
@@ -1322,7 +1343,7 @@ msgid ""
 "table\":"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:877
+#: ../../../PointerAuthentication.rst:897
 msgid ""
 "The weakness in this design is that by lacking any context specific "
 "discriminator, this means an attacker can substitute any of these fields "
@@ -1337,18 +1358,18 @@ msgid ""
 "address diversity:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:904
+#: ../../../PointerAuthentication.rst:924
 msgid ""
 "This weakness can also sometimes be mitigated by simply keeping the signed "
 "pointer in constant memory, but this is less effective than using better "
 "signing diversity."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:911
+#: ../../../PointerAuthentication.rst:931
 msgid "Access path attacks"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:913
+#: ../../../PointerAuthentication.rst:933
 msgid ""
 "If a signed pointer is often accessed indirectly (that is, by first loading "
 "the address of the object where the signed pointer is stored), an attacker "
@@ -1356,7 +1377,7 @@ msgid ""
 "path."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:917
+#: ../../../PointerAuthentication.rst:937
 msgid ""
 "The most common scenario exhibiting this weakness is an object with a "
 "pointer to a \"v-table\" (a structure holding many function pointers). An "
@@ -1368,7 +1389,7 @@ msgid ""
 "schema."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:925
+#: ../../../PointerAuthentication.rst:945
 msgid ""
 "This attack arises because data pointers are not signed by default. It works "
 "even if the signed pointer uses address diversity: address diversity merely "
@@ -1376,7 +1397,7 @@ msgid ""
 "design) is invariant to changes in the accessing pointer."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:930
+#: ../../../PointerAuthentication.rst:950
 msgid ""
 "Using sufficiently diverse signing schemas within the v-table can provide "
 "reasonably strong mitigation against this weakness.  Always use address and "
@@ -1387,7 +1408,7 @@ msgid ""
 "containing a different type."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:938
+#: ../../../PointerAuthentication.rst:958
 msgid ""
 "Further mitigation can be attained by signing pointers to v-tables. Any "
 "signature at all should prevent attackers from forging v-table pointers; "
@@ -1400,11 +1421,11 @@ msgid ""
 "`safely derived<Safe derivation>`."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:951
+#: ../../../PointerAuthentication.rst:971
 msgid "Signing oracles"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:953
+#: ../../../PointerAuthentication.rst:973
 msgid ""
 "A signing oracle is a bit of code which can be exploited by an attacker to "
 "sign an arbitrary pointer in a way that can later be recovered.  Such "
@@ -1413,21 +1434,21 @@ msgid ""
 "authentication's effectiveness."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:959
+#: ../../../PointerAuthentication.rst:979
 msgid ""
 "This attack only affects ordinary programmers if they are using certain "
 "treacherous patterns of code.  Currently this includes:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:962
+#: ../../../PointerAuthentication.rst:982
 msgid "all uses of the ``__ptrauth_sign_unauthenticated`` intrinsic and"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:963
+#: ../../../PointerAuthentication.rst:983
 msgid "assigning values to ``__ptrauth``-qualified l-values."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:965
+#: ../../../PointerAuthentication.rst:985
 msgid ""
 "Care must be taken in these situations to ensure that the pointer being "
 "signed has been :ref:`safely derived<Safe derivation>` or is otherwise not "
@@ -1435,18 +1456,18 @@ msgid ""
 "compiler support.)"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:969
+#: ../../../PointerAuthentication.rst:989
 msgid ""
 "A diagnostic will be added in the future for implicitly dangerous patterns "
 "of code, such as assigning a non-safely-derived values to a ``__ptrauth``-"
 "qualified l-value."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:976
+#: ../../../PointerAuthentication.rst:996
 msgid "Authentication oracles"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:978
+#: ../../../PointerAuthentication.rst:998
 msgid ""
 "An authentication oracle is a bit of code which can be exploited by an "
 "attacker to leak whether a signed pointer is validly signed without halting "
@@ -1456,7 +1477,7 @@ msgid ""
 "a total compromise of pointer authentication's effectiveness."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:985
+#: ../../../PointerAuthentication.rst:1005
 msgid ""
 "There should be no way for an ordinary programmer to create an "
 "authentication oracle using the current set of operations. However, "
@@ -1465,46 +1486,46 @@ msgid ""
 "authentication failure."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:990
+#: ../../../PointerAuthentication.rst:1010
 msgid ""
 "The likelihood of creating an authentication oracle is why there is "
 "currently no intrinsic which queries whether a signed pointer is validly "
 "signed."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:995
+#: ../../../PointerAuthentication.rst:1015
 msgid "Attacks of interest to implementors"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:997
+#: ../../../PointerAuthentication.rst:1017
 msgid ""
 "These attacks are not inherent to the model; they arise from mistakes in "
 "either implementing or using the `sign` and `auth` operations. Avoiding "
 "these mistakes requires careful work throughout the system."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1002
+#: ../../../PointerAuthentication.rst:1022
 msgid "Failure to trap on authentication failure"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1004
+#: ../../../PointerAuthentication.rst:1024
 msgid ""
 "Any failure to halt the program on an authentication failure is likely to be "
 "exploitable by attackers to create an :ref:`authentication "
 "oracle<Authentication oracles>`."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1008
+#: ../../../PointerAuthentication.rst:1028
 msgid "There are several different ways to introduce this problem:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1010
+#: ../../../PointerAuthentication.rst:1030
 msgid ""
 "The implementation might try to halt the program in some way that can be "
 "intercepted."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1013
+#: ../../../PointerAuthentication.rst:1033
 msgid ""
 "For example, the Armv8.3 ``aut`` instructions do not directly trap on "
 "authentication failure on processors that lack the ``FPAC`` extension. "
@@ -1520,13 +1541,13 @@ msgid ""
 "``FPAC``, but if necessary by emitting extra instructions."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1026
+#: ../../../PointerAuthentication.rst:1046
 msgid ""
 "A compiler might use an intermediate representation (IR) for ``sign`` and "
 "``auth`` operations that cannot make adequate correctness guarantees."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1029
+#: ../../../PointerAuthentication.rst:1049
 msgid ""
 "For example, suppose that an IR uses ARMv8.3-like semantics for ``auth``: "
 "the operation merely corrupts its result on failure instead of promising to "
@@ -1540,11 +1561,11 @@ msgid ""
 "of an ``auth`` followed immediately by an access."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1041
+#: ../../../PointerAuthentication.rst:1061
 msgid "Attackable code sequences"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1043
+#: ../../../PointerAuthentication.rst:1063
 msgid ""
 "If code that is part of a pointer authentication operation is interleaved "
 "with code that may itself be vulnerable to attacks, an attacker may be able "
@@ -1552,14 +1573,14 @@ msgid ""
 "`authentication<Authentication oracles>` oracle."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1048
+#: ../../../PointerAuthentication.rst:1068
 msgid ""
 "For example, suppose that the compiler is generating a call to a function "
 "and passing two arguments: a signed constant pointer and a value derived "
 "from a call.  In ARMv8.3, this code might look like so:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1061
+#: ../../../PointerAuthentication.rst:1081
 msgid ""
 "This code is correct, as would be a sequencing that does *both* the ``adr`` "
 "and the ``paciza`` after the call to ``_argGenerator``.  But a sequence that "
@@ -1567,7 +1588,7 @@ msgid ""
 "register during the call to ``_argGenerator`` would be vulnerable:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1075
+#: ../../../PointerAuthentication.rst:1095
 msgid ""
 "If ``_argGenerator`` spills ``x19`` (a callee-save register), and if the "
 "attacker can perform a write during this call, then the attacker can "
@@ -1576,25 +1597,25 @@ msgid ""
 "oracle."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1080
+#: ../../../PointerAuthentication.rst:1100
 msgid "The implementation can avoid this by obeying two basic rules:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1082
+#: ../../../PointerAuthentication.rst:1102
 msgid ""
 "The compiler's intermediate representations (IR) should not provide "
 "operations that expose intermediate raw pointers.  This may require "
 "providing extra operations that perform useful combinations of operations."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1086
+#: ../../../PointerAuthentication.rst:1106
 msgid ""
 "For example, there should be an \"atomic\" auth-and-resign operation that "
 "should be used instead of emitting an ``auth`` operation whose result is fed "
 "into a ``sign``."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1090
+#: ../../../PointerAuthentication.rst:1110
 msgid ""
 "Similarly, if a pointer should be authenticated as part of doing a memory "
 "access or a call, then the access or call should be decorated with enough "
@@ -1603,7 +1624,7 @@ msgid ""
 "(In LLVM IR, we do this for calls, but not yet for loads or stores.)"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1096
+#: ../../../PointerAuthentication.rst:1116
 msgid ""
 "\"Operations\" includes things like materializing a signed value to a known "
 "function or global variable.  The compiler must be able to recognize and "
@@ -1611,36 +1632,36 @@ msgid ""
 "in the example above."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1101
+#: ../../../PointerAuthentication.rst:1121
 msgid ""
 "The compiler backend should not be too aggressive about scheduling "
 "instructions that are part of a pointer authentication operation. This may "
 "require custom code-generation of these operations in some cases."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1106
+#: ../../../PointerAuthentication.rst:1126
 msgid "Register clobbering"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1108
+#: ../../../PointerAuthentication.rst:1128
 msgid ""
 "As a refinement of the section on `Attackable code sequences`_, if the "
 "attacker has the ability to modify arbitrary *register* state at arbitrary "
 "points in the program, then special care must be taken."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1112
+#: ../../../PointerAuthentication.rst:1132
 msgid ""
 "For example, ARMv8.3 might materialize a signed function pointer like so:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1119
+#: ../../../PointerAuthentication.rst:1139
 msgid ""
 "If an attacker has the ability to overwrite ``x0`` between these two "
 "instructions, this code sequence is vulnerable to becoming a signing oracle."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1122
+#: ../../../PointerAuthentication.rst:1142
 msgid ""
 "For the most part, this sort of attack is not possible: it is a basic "
 "element of the design of modern computation that register state is private "
@@ -1653,7 +1674,7 @@ msgid ""
 "multitasking."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1131
+#: ../../../PointerAuthentication.rst:1151
 msgid ""
 "(Readers might object that an attacker cannot rely on asynchronous "
 "interrupts triggering at an exact instruction boundary.  In fact, "
@@ -1662,7 +1683,7 @@ msgid ""
 "as good ones.)"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1136
+#: ../../../PointerAuthentication.rst:1156
 msgid ""
 "To protect against this, saved register state must be at least partially "
 "signed (using something like `ptrauth_sign_generic_data`_).  This is "
@@ -1675,7 +1696,7 @@ msgid ""
 "only store critical values like intermediate raw pointers in those registers."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1146
+#: ../../../PointerAuthentication.rst:1166
 msgid ""
 "``setjmp`` and ``longjmp`` should sign and authenticate the core registers "
 "(SP, FP, PC, and LR), but they do not need to worry about intermediate "
@@ -1684,11 +1705,11 @@ msgid ""
 "arbitrary calls."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1154
+#: ../../../PointerAuthentication.rst:1174
 msgid "Attacks on relative addressing"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1156
+#: ../../../PointerAuthentication.rst:1176
 msgid ""
 "Relative addressing is a technique used to compress and reduce the load-time "
 "cost of infrequently-used global data.  The pointer authentication system is "
@@ -1697,13 +1718,13 @@ msgid ""
 "storage space, and applying the signature would take extra work at load time."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1162
+#: ../../../PointerAuthentication.rst:1182
 msgid ""
 "Relative addressing is not precluded by the use of pointer authentication, "
 "but it does take extra considerations to make it secure:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1165
+#: ../../../PointerAuthentication.rst:1185
 msgid ""
 "Relative addresses must only be stored in read-only memory.  A writable "
 "relative address can be overwritten to point nearly anywhere, making it "
@@ -1711,7 +1732,7 @@ msgid ""
 "for protecting arbitrary data like `ptrauth_sign_generic_data`_."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1170
+#: ../../../PointerAuthentication.rst:1190
 msgid ""
 "Relative addresses must only be accessed through signed pointers with "
 "adequate diversity.  If an attacker can perform an `access path attack` to "
@@ -1719,35 +1740,35 @@ msgid ""
 "easily cause the relative address to point wherever they want."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1176
+#: ../../../PointerAuthentication.rst:1196
 msgid "Signature forging"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1178
+#: ../../../PointerAuthentication.rst:1198
 msgid ""
 "If an attacker can exactly reproduce the behavior of the signing algorithm, "
 "and they know all the correct inputs to it, then they can perfectly forge a "
 "signature on an arbitrary pointer."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1182
+#: ../../../PointerAuthentication.rst:1202
 msgid "There are three components to avoiding this mistake:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1184
+#: ../../../PointerAuthentication.rst:1204
 msgid ""
 "The abstract signing algorithm should be good: it should not have glaring "
 "flaws which would allow attackers to predict its result with better than "
 "random accuracy without knowing all the inputs (like the key values)."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1188
+#: ../../../PointerAuthentication.rst:1208
 msgid ""
 "The key values should be kept secret.  If at all possible, they should never "
 "be stored in accessible memory, or perhaps only stored encrypted."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1191
+#: ../../../PointerAuthentication.rst:1211
 msgid ""
 "Contexts that are meant to be independently protected should use different "
 "key values.  For example, the kernel should not use the same keys as user "
@@ -1756,38 +1777,38 @@ msgid ""
 "challenges."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1198
+#: ../../../PointerAuthentication.rst:1218
 msgid "Remapping"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1200
+#: ../../../PointerAuthentication.rst:1220
 msgid ""
 "If an attacker can change the memory protections on certain pages of the "
 "program's memory, that can substantially weaken the protections afforded by "
 "pointer authentication."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1204
+#: ../../../PointerAuthentication.rst:1224
 msgid ""
 "If an attacker can inject their own executable code, they can also certainly "
 "inject code that can be used as a :ref:`signing oracle<Signing Oracles>`. "
 "The same is true if they can write to the instruction stream."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1208
+#: ../../../PointerAuthentication.rst:1228
 msgid ""
 "If an attacker can remap read-only program data sections to be writable, "
 "then any use of :ref:`relative addresses` in global data becomes insecure."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1211
+#: ../../../PointerAuthentication.rst:1231
 msgid ""
 "On platforms that use them, if an attacker can remap the memory containing "
 "the `global offset tables`_ as writable, then any unsigned pointers in those "
 "tables are insecure."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1215
+#: ../../../PointerAuthentication.rst:1235
 msgid ""
 "Remapping memory in this way often requires the attacker to have already "
 "substantively subverted the control flow of the process.  Nonetheless, if "
@@ -1795,11 +1816,11 @@ msgid ""
 "be remapped, this should be used wherever possible."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1223
+#: ../../../PointerAuthentication.rst:1243
 msgid "Safe derivation"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1225
+#: ../../../PointerAuthentication.rst:1245
 msgid ""
 "Whether a data pointer is stored, even briefly, as a raw pointer can affect "
 "the security-correctness of a program.  (Function pointers are never "
@@ -1808,25 +1829,25 @@ msgid ""
 "impact performance. Clang makes a modest set of guarantees in this area:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1231
+#: ../../../PointerAuthentication.rst:1251
 msgid "An expression of pointer type is said to be **safely derived** if:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1233
+#: ../../../PointerAuthentication.rst:1253
 msgid "it takes the address of a global variable or function, or"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1235
+#: ../../../PointerAuthentication.rst:1255
 msgid "it is a load from a gl-value of ``__ptrauth``-qualified type, or"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1237
+#: ../../../PointerAuthentication.rst:1257
 msgid ""
 "it is a load from read-only memory that has been initialized from a safely "
 "derived source, such as the `data const` section of a binary or library."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1240
+#: ../../../PointerAuthentication.rst:1260
 msgid ""
 "If a value that is safely derived is assigned to a ``__ptrauth``-qualified "
 "object, including by initialization, then the value will be directly signed "
@@ -1834,7 +1855,7 @@ msgid ""
 "pointer."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1244
+#: ../../../PointerAuthentication.rst:1264
 msgid ""
 "If the function expression of a call is a gl-value of ``__ptrauth``-"
 "qualified type, then the call will be authenticated directly according to "
@@ -1842,85 +1863,85 @@ msgid ""
 "function pointer of its type."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1249
+#: ../../../PointerAuthentication.rst:1269
 msgid ""
 "These guarantees are known to be inadequate for data pointer security. In "
 "particular, Clang should be enhanced to make the following guarantees:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1252
+#: ../../../PointerAuthentication.rst:1272
 msgid "A pointer should additionally be considered safely derived if it is:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1254
+#: ../../../PointerAuthentication.rst:1274
 msgid "the address of a gl-value that is safely derived,"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1256
+#: ../../../PointerAuthentication.rst:1276
 msgid ""
 "the result of pointer arithmetic on a pointer that is safely derived (with "
 "some restrictions on the integer operand),"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1259
+#: ../../../PointerAuthentication.rst:1279
 msgid ""
 "the result of a comma operator where the second operand is safely derived,"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1261
+#: ../../../PointerAuthentication.rst:1281
 msgid ""
 "the result of a conditional operator where the selected operand is safely "
 "derived, or"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1264
+#: ../../../PointerAuthentication.rst:1284
 msgid "the result of loading from a safely derived gl-value."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1266
+#: ../../../PointerAuthentication.rst:1286
 msgid "A gl-value should be considered safely derived if it is:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1268
+#: ../../../PointerAuthentication.rst:1288
 msgid "a dereference of a safely derived pointer,"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1270
+#: ../../../PointerAuthentication.rst:1290
 msgid "a member access into a safely derived gl-value, or"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1272
+#: ../../../PointerAuthentication.rst:1292
 msgid "a reference to a variable."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1274
+#: ../../../PointerAuthentication.rst:1294
 msgid ""
 "An access to a safely derived gl-value should be guaranteed to not allow "
 "replacement of any of the safely-derived component values at any point in "
 "the access.  \"Access\" should include loading a function pointer."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1278
+#: ../../../PointerAuthentication.rst:1298
 msgid "Assignments should include pointer-arithmetic operators like ``+=``."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1280
+#: ../../../PointerAuthentication.rst:1300
 msgid ""
 "Making these guarantees will require further work, including significant new "
 "support in LLVM IR."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1283
+#: ../../../PointerAuthentication.rst:1303
 msgid ""
 "Furthermore, Clang should implement a warning when assigning a data pointer "
 "that is not safely derived to a ``__ptrauth``-qualified gl-value."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1288
+#: ../../../PointerAuthentication.rst:1308
 msgid "Language ABI"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1290
+#: ../../../PointerAuthentication.rst:1310
 msgid ""
 "This section describes the pointer-authentication ABI currently implemented "
 "in Clang for the Apple arm64e target.  As other targets adopt pointer "
@@ -1928,11 +1949,11 @@ msgid ""
 "well."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1296
+#: ../../../PointerAuthentication.rst:1316
 msgid "Key assignments"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1298
+#: ../../../PointerAuthentication.rst:1318
 msgid ""
 "ARMv8.3 provides four abstract signing keys: ``IA``, ``IB``, ``DA``, and "
 "``DB``. The architecture designates ``IA`` and ``IB`` for signing code "
@@ -1940,14 +1961,14 @@ msgid ""
 "by two properties:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1303
+#: ../../../PointerAuthentication.rst:1323
 msgid ""
 "The ISA provides instructions that perform combined auth+call and auth+load "
 "operations; these instructions can only use the ``I`` keys and ``D`` keys, "
 "respectively."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1307
+#: ../../../PointerAuthentication.rst:1327
 msgid ""
 "AArch64's TBI feature can be separately enabled for code pointers "
 "(controlling whether indirect-branch instructions ignore those bits) and "
@@ -1957,11 +1978,11 @@ msgid ""
 "shrinking the number of available signing bits by 8)."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1314
+#: ../../../PointerAuthentication.rst:1334
 msgid "arm64e then further subdivides the keys as follows:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1316
+#: ../../../PointerAuthentication.rst:1336
 msgid ""
 "The ``A`` keys are used for primarily \"global\" purposes like signing v-"
 "tables and function pointers.  These keys are sometimes called *process-"
@@ -1969,7 +1990,7 @@ msgid ""
 "changed when changing processes, although this is not a platform guarantee."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1321
+#: ../../../PointerAuthentication.rst:1341
 msgid ""
 "The ``B`` keys are used for primarily \"local\" purposes like signing return "
 "addresses.  These keys are sometimes called *process-specific* because they "
@@ -1979,17 +2000,17 @@ msgid ""
 "``exec``."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1329
+#: ../../../PointerAuthentication.rst:1349
 msgid "Implementation-defined algorithms and quantities"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1331
+#: ../../../PointerAuthentication.rst:1351
 msgid ""
 "The cryptographic hash algorithm used to compute signatures in ARMv8.3 is a "
 "private detail of the hardware implementation."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1334
+#: ../../../PointerAuthentication.rst:1354
 msgid ""
 "arm64e restricts constant discriminators (used in ``__ptrauth`` and "
 "``ptrauth_blend_discriminator``) to the range from 0 to 65535, inclusive.  A "
@@ -1998,13 +2019,13 @@ msgid ""
 "narrow but has two advantages:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1340
+#: ../../../PointerAuthentication.rst:1360
 msgid ""
 "The AArch64 ISA allows an arbitrary 16-bit immediate to be written over the "
 "top 16 bits of a register in a single instruction:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1347
+#: ../../../PointerAuthentication.rst:1367
 msgid ""
 "This is ideal for the discriminator blending operation because it adds "
 "minimal code-size overhead and avoids overwriting any interesting bits from "
@@ -2014,14 +2035,14 @@ msgid ""
 "loaded with a ``mov+bfi`` sequence)."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1354
+#: ../../../PointerAuthentication.rst:1374
 msgid ""
 "It is possible to pack a 16-bit discriminator into loader metadata with "
 "minimal compromises, whereas a wider discriminator would require extra "
 "metadata storage and therefore significantly impact load times."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1358
+#: ../../../PointerAuthentication.rst:1378
 msgid ""
 "The string hash used by ``ptrauth_string_discriminator`` is a 64-bit "
 "SipHash-2-4 using the constant seed ``b5d4c9eb79104a796fec8b1b428781d4`` "
@@ -2029,7 +2050,7 @@ msgid ""
 "discriminators (i.e. ``(rawHash % 65535) + 1``)."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1366
+#: ../../../PointerAuthentication.rst:1386
 msgid ""
 "The kernel must ensure that attackers cannot replace LR due to an "
 "asynchronous exception; see `Register clobbering`_.  If this is done by "
@@ -2039,24 +2060,24 @@ msgid ""
 "on entry as the discriminator."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1372
+#: ../../../PointerAuthentication.rst:1392
 msgid ""
 "Protecting return addresses is of such particular importance that the ``IB`` "
 "key is almost entirely reserved for this purpose."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1376
+#: ../../../PointerAuthentication.rst:1396
 msgid "Global offset tables"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1378
+#: ../../../PointerAuthentication.rst:1398
 msgid ""
 "The global offset table (GOT) is not part of the language ABI, but it is a "
 "common implementation technique for dynamic linking which deserves special "
 "discussion here."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1382
+#: ../../../PointerAuthentication.rst:1402
 msgid ""
 "Whenever possible, signed pointers should be materialized directly in code "
 "rather than via the GOT, e.g. using an ``adrp+add+pac`` sequence on ARMv8.3. "
@@ -2064,7 +2085,7 @@ msgid ""
 "GOT, but more importantly, it defines away the potential for several attacks:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1387
+#: ../../../PointerAuthentication.rst:1407
 msgid ""
 "Attackers cannot change instructions, so there is no way to cause this code "
 "sequence to materialize a different pointer, whereas an access via the GOT "
@@ -2072,7 +2093,7 @@ msgid ""
 "successful `substitution attacks`_."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1392
+#: ../../../PointerAuthentication.rst:1412
 msgid ""
 "The GOT is a dense pool of fixed pointers at a fixed offset relative to "
 "code; attackers can search this pool for useful pointers that can be used in "
@@ -2080,7 +2101,7 @@ msgid ""
 "directly are not so easily available."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1397
+#: ../../../PointerAuthentication.rst:1417
 msgid ""
 "Similarly, attackers can use `access path attacks`_ to replace a pointer to "
 "a signed pointer with a pointer to the GOT if the signing schema used within "
@@ -2089,21 +2110,21 @@ msgid ""
 "the GOT in the first place."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1403
+#: ../../../PointerAuthentication.rst:1423
 msgid ""
 "If this can be done for a symbol, then the compiler need only ensure that it "
 "materializes the signed pointer using registers that are safe against "
 "`register clobbering`_."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1407
+#: ../../../PointerAuthentication.rst:1427
 msgid ""
 "However, many symbols can only be accessed via the GOT, e.g. because they "
 "resolve to definitions outside of the current image.  In this case, care "
 "must be taken to ensure that using the GOT does not introduce weaknesses."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1411
+#: ../../../PointerAuthentication.rst:1431
 msgid ""
 "If the entire GOT can be mapped read-only after loading, then no signing is "
 "required within the GOT.  In fact, not signing pointers in the GOT is "
@@ -2114,7 +2135,7 @@ msgid ""
 "materialized in code and thus provably unattackable.  (But see `Remapping`_.)"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1419
+#: ../../../PointerAuthentication.rst:1439
 msgid ""
 "Otherwise, GOT entries which are used for producing a signed pointer "
 "constant must be signed.  The signing schema used in the GOT need not match "
@@ -2126,7 +2147,7 @@ msgid ""
 "attacks>`."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1427
+#: ../../../PointerAuthentication.rst:1447
 msgid ""
 "In either case, the compiler must ensure that materializing the address of a "
 "GOT entry as part of producing a signed pointer constant is not vulnerable "
@@ -2134,11 +2155,11 @@ msgid ""
 "for call stubs, this generated code must take the same precautions."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1433
+#: ../../../PointerAuthentication.rst:1453
 msgid "Dynamic symbol lookup"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1435
+#: ../../../PointerAuthentication.rst:1455
 msgid ""
 "On platforms that support dynamically loading or resolving symbols it is "
 "necessary for them to define the pointer authentication semantics of the "
@@ -2148,7 +2169,7 @@ msgid ""
 "that create :ref:`signing oracles<Signing Oracles>`."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1442
+#: ../../../PointerAuthentication.rst:1462
 msgid ""
 "On arm64e the `dlsym` function is used to resolve a symbol at runtime. If "
 "the resolved symbol is a function or other code pointer the returned pointer "
@@ -2157,13 +2178,13 @@ msgid ""
 "pointer it is returned as an unsigned pointer."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1453
+#: ../../../PointerAuthentication.rst:1473
 msgid ""
 "On arm64e, C function pointers are currently signed with the ``IA`` key "
 "without address diversity and with a constant discriminator of 0."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1456
+#: ../../../PointerAuthentication.rst:1476
 msgid ""
 "The C and C++ standards do not permit C function pointers to be signed with "
 "address diversity by default: in C++ terms, function pointer types are "
@@ -2171,7 +2192,7 @@ msgid ""
 "``memcpy``."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1460
+#: ../../../PointerAuthentication.rst:1480
 msgid ""
 "The use of a uniform constant discriminator greatly simplifies the adoption "
 "of arm64e, but it is a significant weakness in the mitigation because it "
@@ -2188,11 +2209,11 @@ msgid ""
 "qualified l-values)."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1475
+#: ../../../PointerAuthentication.rst:1495
 msgid "C++ virtual tables"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1477
+#: ../../../PointerAuthentication.rst:1497
 msgid ""
 "By default the pointer to a C++ virtual table is currently signed with the "
 "``DA`` key, address diversity, and a constant discriminator equal to the "
@@ -2205,7 +2226,7 @@ msgid ""
 "discriminator to be used."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1486
+#: ../../../PointerAuthentication.rst:1506
 msgid ""
 "Virtual functions in a C++ virtual table are signed with the ``IA`` key, "
 "address diversity, and a constant discriminator equal to the string hash "
@@ -2213,11 +2234,11 @@ msgid ""
 "which originally gave rise to the v-table slot."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1492
+#: ../../../PointerAuthentication.rst:1512
 msgid "C++ dynamic_cast"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1494
+#: ../../../PointerAuthentication.rst:1514
 msgid ""
 "C++'s ``dynamic_cast`` presents a difficulty relative to other polymorphic "
 "languages that have a `top type <https://en.wikipedia.org/wiki/Any_type>` as "
@@ -2227,7 +2248,7 @@ msgid ""
 "directly authenticate the v-table pointer of the provided object."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1502
+#: ../../../PointerAuthentication.rst:1522
 msgid ""
 "The current implementation uses a forced authentication of the subject "
 "object's v-table prior to invoking ``__dynamic_cast`` to partially verify "
@@ -2238,27 +2259,27 @@ msgid ""
 "protected ``type_info`` objects."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1509
+#: ../../../PointerAuthentication.rst:1529
 msgid ""
 "In future a richer solution may be developed to support vending the correct "
 "authentication schema directly to the ``dynamic_cast`` implementation."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1513
+#: ../../../PointerAuthentication.rst:1533
 msgid "C++ std::type_info v-table pointers"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1515
+#: ../../../PointerAuthentication.rst:1535
 msgid ""
 "The v-table pointer of the ``std::type_info`` type is signed with the ``DA`` "
 "key and no additional diversity."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1519
+#: ../../../PointerAuthentication.rst:1539
 msgid "C++ member function pointers"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1521
+#: ../../../PointerAuthentication.rst:1541
 msgid ""
 "A member function pointer is signed with the ``IA`` key, no address "
 "diversity, and a constant discriminator equal to the string hash (see "
@@ -2267,7 +2288,7 @@ msgid ""
 "must be trivially-copyable types."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1527
+#: ../../../PointerAuthentication.rst:1547
 msgid ""
 "The Itanium C++ ABI specifies that member function pointers to virtual "
 "functions simply store an offset to the correct v-table slot.  This ABI "
@@ -2279,7 +2300,7 @@ msgid ""
 "member function pointer dereferences insecure."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1536
+#: ../../../PointerAuthentication.rst:1556
 msgid ""
 "arm64e changes this ABI so that virtual function pointers are stored using "
 "dispatch thunks with vague linkage.  Because arm64e supports interoperation "
@@ -2289,37 +2310,37 @@ msgid ""
 "always trap if pointer authentication is enabled dynamically."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1543
+#: ../../../PointerAuthentication.rst:1563
 msgid ""
 "The use of dispatch thunks means that ``==`` on member function pointers is "
 "no longer reliable for virtual functions, but this is acceptable because the "
 "standard makes no guarantees about it in the first place."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1547
+#: ../../../PointerAuthentication.rst:1567
 msgid ""
 "The use of dispatch thunks also is required to support declaration specific "
 "authentication schemas for v-table pointers."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1551
+#: ../../../PointerAuthentication.rst:1571
 msgid "C++ mangling"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1553
+#: ../../../PointerAuthentication.rst:1573
 msgid ""
 "When the ``__ptrauth`` qualifier appears in a C++ mangled name, it is "
 "mangled as a vendor qualifier with the signature "
 "``U9__ptrauthILj<key>ELb<addressDiscriminated>ELj<extraDiscriminator>EE``."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1557
+#: ../../../PointerAuthentication.rst:1577
 msgid ""
 "e.g. ``int * __ptrauth(1, 0, 1234)`` will be mangled as "
 "``U9__ptrauthILj1ELb0ELj1234EE``."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1560
+#: ../../../PointerAuthentication.rst:1580
 msgid ""
 "If the vtable pointer authentication scheme of a polymorphic class is "
 "overridden we mangle the override information with the vendor qualifier "
@@ -2328,11 +2349,11 @@ msgid ""
 "the specified discrimination mode evalutes to."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1567
+#: ../../../PointerAuthentication.rst:1587
 msgid "Blocks"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1569
+#: ../../../PointerAuthentication.rst:1589
 msgid ""
 "Block pointers are data pointers which must interoperate with the ObjC `id` "
 "type and therefore cannot be signed themselves. As blocks conform to the "
@@ -2340,7 +2361,7 @@ msgid ""
 "`below<Objc isa and super>`."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1574
+#: ../../../PointerAuthentication.rst:1594
 msgid ""
 "The invocation pointer in a block is signed with the ``IA`` key using "
 "address diversity and a constant discriminator of 0.  Using a uniform "
@@ -2348,7 +2369,7 @@ msgid ""
 "tricky due to the subtype polymorphism directly permitted for blocks."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1579
+#: ../../../PointerAuthentication.rst:1599
 msgid ""
 "Block descriptors and ``__block`` variables can contain pointers to "
 "functions that can be used to copy or destroy the object.  These functions "
@@ -2357,22 +2378,22 @@ msgid ""
 "consideration for improvement."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1585
+#: ../../../PointerAuthentication.rst:1605
 msgid "Objective-C runtime"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1587
+#: ../../../PointerAuthentication.rst:1607
 msgid ""
 "In addition to the compile time ABI design, the Objective-C runtime provides "
 "additional protection to methods and other metadata that have been loaded "
 "into the Objective-C method cache; this protection is private to the runtime."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1592
+#: ../../../PointerAuthentication.rst:1612
 msgid "Objective-C methods"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1594
+#: ../../../PointerAuthentication.rst:1614
 msgid ""
 "Objective-C method lists sign methods with the ``IA`` key using address "
 "diversity and a constant discriminator of 0.  Using a uniform constant "
@@ -2380,49 +2401,49 @@ msgid ""
 "accessed internally to the Objective-C runtime."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1600
+#: ../../../PointerAuthentication.rst:1620
 msgid "Objective-C class method list pointer"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1602
+#: ../../../PointerAuthentication.rst:1622
 msgid ""
 "The method list pointer in Objective-C classes are signed with the ``DA`` "
 "key using address diversity, and a constant discriminator of 0xC310."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1606
+#: ../../../PointerAuthentication.rst:1626
 msgid "Objective-C class read-only data pointer"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1608
+#: ../../../PointerAuthentication.rst:1628
 msgid ""
 "The read-only data pointer in Objective-C classes are signed with the ``DA`` "
 "key using address diversity, and a constant discriminator of 0x61F8."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1614
+#: ../../../PointerAuthentication.rst:1634
 msgid "Objective-C ``isa`` and ``super`` pointers"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1616
+#: ../../../PointerAuthentication.rst:1636
 msgid ""
 "An Objective-C object's ``isa`` and ``super`` pointers are both signed with "
 "the ``DA`` key using address diversity and constant discriminators of 0x6AE1 "
 "and 0x25DA respectively."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1621
+#: ../../../PointerAuthentication.rst:1641
 msgid "Objective-C ``SEL`` pointers"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1623
+#: ../../../PointerAuthentication.rst:1643
 msgid ""
 "By default, the type of an Objective-C instance variable of type ``SEL``, "
 "when the qualifiers do not include an explicit ``__ptrauth`` qualifier, is "
 "adjusted to be qualified with ``__ptrauth(ptrauth_key_asdb, 1, 0x57C2)``."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1627
+#: ../../../PointerAuthentication.rst:1647
 msgid ""
 "This provides a measure of implicit at-rest protection to  Objective-C "
 "classes that store selectors, as in the common target-action design pattern. "
@@ -2433,32 +2454,32 @@ msgid ""
 "of the ivar, but the use of address and constant diversity limit the risks."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1635
+#: ../../../PointerAuthentication.rst:1655
 msgid ""
 "The implicit qualifier means that the type of the ivar does not match its "
 "declaration, which can cause type errors if the address of the ivar is taken:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1654
+#: ../../../PointerAuthentication.rst:1674
 msgid "To fix such a mismatch the schema macro from `<ptrauth.h>`:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1662
+#: ../../../PointerAuthentication.rst:1682
 msgid ""
 "or less safely, and introducing the possibility of an :ref:`signing or "
 "authentication oracle<Signing oracles>`, an unauthenticated temporary may be "
 "used as intermediate storage."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1667
+#: ../../../PointerAuthentication.rst:1687
 msgid "Alternative implementations"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1670
+#: ../../../PointerAuthentication.rst:1690
 msgid "Signature storage"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1672
+#: ../../../PointerAuthentication.rst:1692
 msgid ""
 "It is not critical for the security of pointer authentication that the "
 "signature be stored \"together\" with the pointer, as it is in Armv8.3. An "
@@ -2467,26 +2488,26 @@ msgid ""
 "raw pointer."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1678
+#: ../../../PointerAuthentication.rst:1698
 msgid ""
 "Storing the signature in the high bits, as Armv8.3 does, has several trade-"
 "offs:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1680
+#: ../../../PointerAuthentication.rst:1700
 msgid ""
 "Disadvantage: there are substantially fewer bits available for the "
 "signature, weakening the mitigation by making it much easier for an attacker "
 "to simply guess the correct signature."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1684
+#: ../../../PointerAuthentication.rst:1704
 msgid ""
 "Disadvantage: future growth of the address space will necessarily further "
 "weaken the mitigation."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1687
+#: ../../../PointerAuthentication.rst:1707
 msgid ""
 "Advantage: memory layouts don't change, so it's possible for pointer-"
 "authentication-enabled code (for example, in a system library) to "
@@ -2494,13 +2515,13 @@ msgid ""
 "authentication can be disabled dynamically."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1692
+#: ../../../PointerAuthentication.rst:1712
 msgid ""
 "Advantage: the size of a signed pointer doesn't grow, which might "
 "significantly increase memory requirements, code size, and register pressure."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1695
+#: ../../../PointerAuthentication.rst:1715
 msgid ""
 "Advantage: the size of a signed pointer is the same as a raw pointer, so "
 "generic APIs which work in types like `void *` (such as `dlsym`) can still "
@@ -2508,11 +2529,11 @@ msgid ""
 "require insecure code in order to correctly receive a function pointer."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1701
+#: ../../../PointerAuthentication.rst:1721
 msgid "Hashing vs. encrypting pointers"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1703
+#: ../../../PointerAuthentication.rst:1723
 msgid ""
 "Armv8.3 implements ``sign`` by computing a cryptographic hash and storing "
 "that in the spare bits of the pointer.  This means that there are relatively "
@@ -2524,7 +2545,7 @@ msgid ""
 "can be devious.)"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1711
+#: ../../../PointerAuthentication.rst:1731
 msgid ""
 "If the implementation can instead *encrypt* the pointer during ``sign`` and "
 "*decrypt* it during ``auth``, this brute-force attack becomes far less "
@@ -2532,7 +2553,7 @@ msgid ""
 "with this idea:"
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1716
+#: ../../../PointerAuthentication.rst:1736
 msgid ""
 "It's unclear whether this kind of encryption is even possible without "
 "increasing the storage size of a signed pointer.  If the storage size can be "
@@ -2540,14 +2561,14 @@ msgid ""
 "storing a larger signature."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1721
+#: ../../../PointerAuthentication.rst:1741
 msgid ""
 "It would likely be impossible to implement a ``strip`` operation, which "
 "might make debuggers and other out-of-process tools far more difficult to "
 "write, as well as generally making primitive debugging more challenging."
 msgstr ""
 
-#: ../../../PointerAuthentication.rst:1725
+#: ../../../PointerAuthentication.rst:1745
 msgid ""
 "Implementations can benefit from being able to extract the raw pointer "
 "immediately from a signed pointer.  An Armv8.3 processor executing an "

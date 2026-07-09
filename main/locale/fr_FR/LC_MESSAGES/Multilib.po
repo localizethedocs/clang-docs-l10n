@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-07-09 14:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Multilib"
 msgstr ""
 
-#: ../../../Multilib.rst:6 ../../../Multilib.rst:129
+#: ../../../Multilib.rst:6 ../../../Multilib.rst:130
 msgid "Introduction"
 msgstr ""
 
@@ -85,27 +85,28 @@ msgstr ""
 #: ../../../Multilib.rst:50
 msgid ""
 "Some Clang toolchains support loading multilib configuration from a "
-"``multilib.yaml`` configuration file."
+"``multilib.yaml`` configuration file. This is currently supported on Linux, "
+"Windows, and Baremetal toolchains."
 msgstr ""
 
-#: ../../../Multilib.rst:53
+#: ../../../Multilib.rst:54
 msgid ""
 "A ``multilib.yaml`` configuration file specifies which multilib variants are "
 "available, their relative location, what compilation options were used to "
 "build them, and the criteria by which they are selected."
 msgstr ""
 
-#: ../../../Multilib.rst:58
+#: ../../../Multilib.rst:59
 msgid "Multilib processing"
 msgstr ""
 
-#: ../../../Multilib.rst:60
+#: ../../../Multilib.rst:61
 msgid ""
 "Clang goes through the following steps to use multilib from a configuration "
 "file:"
 msgstr ""
 
-#: ../../../Multilib.rst:63
+#: ../../../Multilib.rst:64
 msgid ""
 "Normalize command line options. Clang can accept the same information via "
 "different options - for example, ``--target=arm-none-eabi -march=armv7-m`` "
@@ -116,11 +117,11 @@ msgid ""
 "you want to use."
 msgstr ""
 
-#: ../../../Multilib.rst:71
+#: ../../../Multilib.rst:72
 msgid "Load ``multilib.yaml`` from sysroot."
 msgstr ""
 
-#: ../../../Multilib.rst:72
+#: ../../../Multilib.rst:73
 msgid ""
 "Generate additional flags. ``multilib.yaml`` contains a ``Mappings`` "
 "section, which specifies how to generate additional flags based on the flags "
@@ -129,7 +130,7 @@ msgid ""
 "expression syntax."
 msgstr ""
 
-#: ../../../Multilib.rst:77
+#: ../../../Multilib.rst:78
 msgid ""
 "Match flags against multilib variants. If the generated flags are a superset "
 "of the flags specified for a multilib variant then the variant is considered "
@@ -138,53 +139,53 @@ msgid ""
 "variants, thereby :ref:`layering<multilib-layering>` them."
 msgstr ""
 
-#: ../../../Multilib.rst:83
+#: ../../../Multilib.rst:84
 msgid ""
 "Generate ``-isystem`` and ``-L`` options. Iterate in reverse order over the "
 "matching multilib variants, and generate ``-isystem`` and ``-L`` options "
 "based on the multilib variant's directory."
 msgstr ""
 
-#: ../../../Multilib.rst:90
+#: ../../../Multilib.rst:91
 msgid "Multilib layering"
 msgstr ""
 
-#: ../../../Multilib.rst:92
+#: ../../../Multilib.rst:93
 msgid ""
 "When Clang selects multilib variants, it may find that more than one variant "
 "matches."
 msgstr ""
 
-#: ../../../Multilib.rst:95
+#: ../../../Multilib.rst:96
 msgid ""
 "It is up to the ToolChain subclass to decide what to do in this case. There "
 "are two options permitted:"
 msgstr ""
 
-#: ../../../Multilib.rst:98
+#: ../../../Multilib.rst:99
 msgid ""
 "Use only the *last* matching multilib variant. This option exists primarily "
 "for compatibility with the previous multilib design."
 msgstr ""
 
-#: ../../../Multilib.rst:100
+#: ../../../Multilib.rst:101
 msgid "Use all matching variants, thereby layering them."
 msgstr ""
 
-#: ../../../Multilib.rst:102
+#: ../../../Multilib.rst:103
 msgid ""
 "This decision is hard-coded per ToolChain subclass. The latter option is "
 "preferred for ToolChain subclasses without backwards compatibility "
 "requirements."
 msgstr ""
 
-#: ../../../Multilib.rst:106
+#: ../../../Multilib.rst:107
 msgid ""
 "If the latter option is chosen then ``-isystem`` and ``-L`` options will be "
 "generated for each matching multilib variant, in reverse order."
 msgstr ""
 
-#: ../../../Multilib.rst:109
+#: ../../../Multilib.rst:110
 msgid ""
 "This means that the compiler or linker will find files in the last matching "
 "multilib variant that has the given file. This behaviour permits multilib "
@@ -194,7 +195,7 @@ msgid ""
 "are different to those in the base variant."
 msgstr ""
 
-#: ../../../Multilib.rst:116
+#: ../../../Multilib.rst:117
 msgid ""
 "For example, a multilib variant could be compiled with ``-fno-exceptions``. "
 "This option doesn't affect the content of header files, nor does it affect "
@@ -203,18 +204,18 @@ msgid ""
 "``-fno-exceptions`` multilib variant need only contain C++ libraries."
 msgstr ""
 
-#: ../../../Multilib.rst:122
+#: ../../../Multilib.rst:123
 msgid ""
 "It is the responsibility of layered multilib authors to ensure that headers "
 "and libraries in each layer are complete enough to mask any "
 "incompatibilities."
 msgstr ""
 
-#: ../../../Multilib.rst:126
+#: ../../../Multilib.rst:127
 msgid "Multilib custom flags"
 msgstr ""
 
-#: ../../../Multilib.rst:131
+#: ../../../Multilib.rst:132
 msgid ""
 "The multilib mechanism supports library variants that correspond to target, "
 "code generation or language command-line flags. Examples include ``--"
@@ -224,7 +225,7 @@ msgid ""
 "instance, have no associated compiler option."
 msgstr ""
 
-#: ../../../Multilib.rst:138
+#: ../../../Multilib.rst:139
 msgid ""
 "In order to support the selection of variants for which no compiler option "
 "exists, the multilib specification includes the concept of *custom flags*. "
@@ -232,82 +233,82 @@ msgid ""
 "multilib processing."
 msgstr ""
 
-#: ../../../Multilib.rst:143
+#: ../../../Multilib.rst:144
 msgid "Multilib custom flags follow this format in the driver invocation:"
 msgstr ""
 
-#: ../../../Multilib.rst:149
+#: ../../../Multilib.rst:150
 msgid "They are fed into the multilib system alongside the remaining flags."
 msgstr ""
 
-#: ../../../Multilib.rst:152
+#: ../../../Multilib.rst:153
 msgid "Custom flag declarations"
 msgstr ""
 
-#: ../../../Multilib.rst:154
+#: ../../../Multilib.rst:155
 msgid ""
 "Custom flags can be declared in the YAML file under the *Flags* section."
 msgstr ""
 
-#: ../../../Multilib.rst:166
+#: ../../../Multilib.rst:167
 msgid "Name: the name to categorize a flag."
 msgstr ""
 
-#: ../../../Multilib.rst:167
+#: ../../../Multilib.rst:168
 msgid "Values: a list of flag Values (defined below)."
 msgstr ""
 
-#: ../../../Multilib.rst:168
+#: ../../../Multilib.rst:169
 msgid ""
 "Default: it specifies the name of the value this flag should take if not "
 "specified in the command-line invocation. It must be one value from the "
 "Values field."
 msgstr ""
 
-#: ../../../Multilib.rst:172
+#: ../../../Multilib.rst:173
 msgid "Each flag *Value* is defined as:"
 msgstr ""
 
-#: ../../../Multilib.rst:174
+#: ../../../Multilib.rst:175
 msgid ""
 "Name: name of the value. This is the string to be used in ``-fmultilib-"
 "flag=<string>``."
 msgstr ""
 
-#: ../../../Multilib.rst:176
+#: ../../../Multilib.rst:177
 msgid ""
 "MacroDefines: a list of strings to be used as macro definitions. Each string "
 "is fed into the driver as ``-D<string>``."
 msgstr ""
 
-#: ../../../Multilib.rst:179
+#: ../../../Multilib.rst:180
 msgid ""
 "The namespace of flag values is common across all flags. This means that "
 "flag value names must be unique."
 msgstr ""
 
-#: ../../../Multilib.rst:183
+#: ../../../Multilib.rst:184
 msgid "Usage of custom flags in the *Variants* specifications"
 msgstr ""
 
-#: ../../../Multilib.rst:185
+#: ../../../Multilib.rst:186
 msgid ""
 "Library variants should list their requirement on one or more custom flags "
 "like they do for any other flag. Each requirement must be listed as ``-"
 "fmultilib-flag=<value>``."
 msgstr ""
 
-#: ../../../Multilib.rst:189
+#: ../../../Multilib.rst:190
 msgid ""
 "A variant that does not specify a requirement on one particular flag can be "
 "matched against any value of that flag."
 msgstr ""
 
-#: ../../../Multilib.rst:193
+#: ../../../Multilib.rst:194
 msgid "Stability"
 msgstr ""
 
-#: ../../../Multilib.rst:195
+#: ../../../Multilib.rst:196
 msgid ""
 "Multilib via configuration file shall be considered an experimental feature "
 "until LLVM 18, at which point ``-print-multi-flags-experimental`` should be "
@@ -318,11 +319,11 @@ msgid ""
 "changed, although new flags may be added."
 msgstr ""
 
-#: ../../../Multilib.rst:205
+#: ../../../Multilib.rst:206
 msgid "Restrictions"
 msgstr ""
 
-#: ../../../Multilib.rst:207
+#: ../../../Multilib.rst:208
 msgid ""
 "Despite the name, multilib is used to locate both ``include`` and ``lib`` "
 "directories. Therefore it is important that consistent options are passed to "
@@ -331,31 +332,31 @@ msgid ""
 "undefined."
 msgstr ""
 
-#: ../../../Multilib.rst:214
+#: ../../../Multilib.rst:215
 msgid "EXPERIMENTAL multilib.yaml"
 msgstr ""
 
-#: ../../../Multilib.rst:216
+#: ../../../Multilib.rst:217
 msgid ""
 "The below example serves as a small of a possible multilib, and documents "
 "the available options."
 msgstr ""
 
-#: ../../../Multilib.rst:219
+#: ../../../Multilib.rst:220
 msgid ""
 "For a more comprehensive example see ``clang/test/Driver/baremetal-multilib."
 "yaml`` in the ``llvm-project`` sources."
 msgstr ""
 
-#: ../../../Multilib.rst:310
+#: ../../../Multilib.rst:311
 msgid "Design principles"
 msgstr ""
 
-#: ../../../Multilib.rst:313
+#: ../../../Multilib.rst:314
 msgid "Stable interface"
 msgstr ""
 
-#: ../../../Multilib.rst:315
+#: ../../../Multilib.rst:316
 msgid ""
 "``multilib.yaml`` and ``-print-multi-flags-experimental`` are new interfaces "
 "to Clang. In order for them to be usable over time and across LLVM versions "
@@ -368,18 +369,18 @@ msgid ""
 "the flag would be a breaking change and should be avoided."
 msgstr ""
 
-#: ../../../Multilib.rst:326
+#: ../../../Multilib.rst:327
 msgid ""
 "However, an exception is the normalization of ``-march``. ``-march`` for Arm "
 "architectures contains a list of enabled and disabled extensions and this "
 "list is likely to grow. Therefore ``-march`` flags are unstable."
 msgstr ""
 
-#: ../../../Multilib.rst:332
+#: ../../../Multilib.rst:333
 msgid "Incomplete interface"
 msgstr ""
 
-#: ../../../Multilib.rst:334
+#: ../../../Multilib.rst:335
 msgid ""
 "The new multilib system does multilib selection based on only a limited set "
 "of command line options, and limits which flags can be used for multilib "
@@ -388,22 +389,22 @@ msgid ""
 "line options as needed."
 msgstr ""
 
-#: ../../../Multilib.rst:341
+#: ../../../Multilib.rst:342
 msgid "Extensible"
 msgstr ""
 
-#: ../../../Multilib.rst:343
+#: ../../../Multilib.rst:344
 msgid ""
 "It is likely that the configuration format will need to evolve in future to "
 "adapt to new requirements. Using a format like YAML that supports key-value "
 "pairs helps here as it's trivial to add new keys alongside existing ones."
 msgstr ""
 
-#: ../../../Multilib.rst:349
+#: ../../../Multilib.rst:350
 msgid "Backwards compatibility"
 msgstr ""
 
-#: ../../../Multilib.rst:351
+#: ../../../Multilib.rst:352
 msgid ""
 "New versions of Clang should be able to use configuration written for "
 "earlier Clang versions. To avoid behaving in a way that may be subtly "
@@ -411,11 +412,11 @@ msgid ""
 "and emit an error."
 msgstr ""
 
-#: ../../../Multilib.rst:357
+#: ../../../Multilib.rst:358
 msgid "Forwards compatibility"
 msgstr ""
 
-#: ../../../Multilib.rst:359
+#: ../../../Multilib.rst:360
 msgid ""
 "As an author of a multilib configuration, it should be possible to design "
 "the configuration in such a way that it is likely to work well with future "
@@ -426,11 +427,11 @@ msgid ""
 "configuration."
 msgstr ""
 
-#: ../../../Multilib.rst:367
+#: ../../../Multilib.rst:368
 msgid "Not GNU spec files"
 msgstr ""
 
-#: ../../../Multilib.rst:369
+#: ../../../Multilib.rst:370
 msgid ""
 "The GNU spec files standard is large and complex and there's little desire "
 "to import that complexity to LLVM. It's also heavily oriented towards "
@@ -440,11 +441,11 @@ msgid ""
 "deemed too high."
 msgstr ""
 
-#: ../../../Multilib.rst:376
+#: ../../../Multilib.rst:377
 msgid "Avoid re-inventing feature detection in the configuration"
 msgstr ""
 
-#: ../../../Multilib.rst:378
+#: ../../../Multilib.rst:379
 msgid ""
 "A large amount of logic in the Clang driver is dedicated to inferring which "
 "architectural features are available based on the given command line "
@@ -453,11 +454,11 @@ msgid ""
 "from the heavy lifting Clang already does to detect features."
 msgstr ""
 
-#: ../../../Multilib.rst:385
+#: ../../../Multilib.rst:386
 msgid "Low maintenance"
 msgstr ""
 
-#: ../../../Multilib.rst:387
+#: ../../../Multilib.rst:388
 msgid ""
 "Multilib is a relatively small feature in the scheme of things so supporting "
 "it should accordingly take little time. Where possible this should be "
@@ -465,11 +466,11 @@ msgid ""
 "codebase."
 msgstr ""
 
-#: ../../../Multilib.rst:392
+#: ../../../Multilib.rst:393
 msgid "Minimal additional API surface"
 msgstr ""
 
-#: ../../../Multilib.rst:394
+#: ../../../Multilib.rst:395
 msgid ""
 "The greater the API surface, the greater the difficulty of keeping it "
 "stable. Where possible the additional API surface should be kept small by "
@@ -479,11 +480,11 @@ msgid ""
 "unlikely to change, and therefore the flag names get the same stability."
 msgstr ""
 
-#: ../../../Multilib.rst:402
+#: ../../../Multilib.rst:403
 msgid "Low compile-time overhead"
 msgstr ""
 
-#: ../../../Multilib.rst:404
+#: ../../../Multilib.rst:405
 msgid ""
 "If the process of selecting multilib directories must be done on every "
 "invocation of the Clang driver then it must have a negligible impact on "
