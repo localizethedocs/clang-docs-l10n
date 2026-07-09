@@ -110,9 +110,7 @@ foreach(_LANGUAGE ${LANGUAGE_LIST})
                 -D templates_path=${TMPLS_TO_CONFIG_DIR}            # Relative to <configdir>.
                 -D gettext_compact=${SPHINX_GETTEXT_COMPACT}
                 -D gettext_additional_targets=${SPHINX_GETTEXT_TARGETS}
-                -D html_baseurl=${HTML_BASEURL}                     # Passed to 'custom.py'.
-                -D current_language=${CURRENT_LANGUAGE}             # Passed to 'custom.py'.
-                -D current_version=${CURRENT_VERSION}               # Passed to 'custom.py'.
+                -D html_baseurl=${HTML_BASEURL}
                 -w ${WARNING_FILE_PATH}
                 -j ${SPHINX_JOB_NUMBER}
                 ${SPHINX_VERBOSE_ARGS}
