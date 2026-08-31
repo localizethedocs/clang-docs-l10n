@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,18 +17,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:3
+#: ../../../analyzer/developer-docs/DebugChecks.md:1
 msgid "Debug Checks"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:8
+#: ../../../analyzer/developer-docs/DebugChecks.md:7
 msgid ""
 "The analyzer contains a number of checkers which can aid in debugging. "
 "Enable them by using the \"-analyzer-checker=\" flag, followed by the name "
 "of the checker."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:12
+#: ../../../analyzer/developer-docs/DebugChecks.md:11
 msgid ""
 "These checkers are especially useful when analyzing a specific function, "
 "using the `-analyze-function` flag. The flag accepts the function name for C "
@@ -37,14 +37,14 @@ msgid ""
 "function=\"myfunction(int, _Bool)\"`."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:18
+#: ../../../analyzer/developer-docs/DebugChecks.md:17
 msgid ""
 "Note that `bool` must be spelled as `_Bool` in the parameter list. Refer to "
 "the output of `-analyzer-display-progress` to find the fully qualified "
 "function name."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:22
+#: ../../../analyzer/developer-docs/DebugChecks.md:21
 msgid ""
 "There are cases when this name can still collide. For example with template "
 "function instances with non-deducible (aka. explicit) template parameters. "
@@ -53,16 +53,16 @@ msgid ""
 "@S@Window@F@overloaded#I#\"`."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:27
+#: ../../../analyzer/developer-docs/DebugChecks.md:26
 msgid ""
 "Use the `clang-extdef-mapping` tool to find the USR for different functions."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:30
+#: ../../../analyzer/developer-docs/DebugChecks.md:28
 msgid "General Analysis Dumpers"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:32
+#: ../../../analyzer/developer-docs/DebugChecks.md:30
 msgid ""
 "These checkers are used to dump the results of various infrastructural "
 "analyses to stderr. Some checkers also have \"view\" variants, which will "
@@ -70,38 +70,38 @@ msgid ""
 "instead."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:36
+#: ../../../analyzer/developer-docs/DebugChecks.md:34
 msgid ""
 "debug.DumpCallGraph, debug.ViewCallGraph: Show the call graph generated for "
 "the current translation unit. This is used to determine the order in which "
 "to analyze functions when inlining is enabled."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:40
+#: ../../../analyzer/developer-docs/DebugChecks.md:37
 msgid ""
 "debug.DumpCFG, debug.ViewCFG: Show the CFG generated for each top-level "
 "function being analyzed."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:43
+#: ../../../analyzer/developer-docs/DebugChecks.md:39
 msgid ""
 "debug.DumpDominators: Shows the dominance tree for the CFG of each top-level "
 "function."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:46
+#: ../../../analyzer/developer-docs/DebugChecks.md:41
 msgid ""
 "debug.DumpLiveVars: Show the results of live variable analysis for each top-"
 "level function being analyzed."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:49
+#: ../../../analyzer/developer-docs/DebugChecks.md:43
 msgid ""
 "debug.DumpLiveExprs: Show the results of live expression analysis for each "
 "top-level function being analyzed."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:52
+#: ../../../analyzer/developer-docs/DebugChecks.md:45
 msgid ""
 "debug.ViewExplodedGraph: Show the Exploded Graphs generated for the analysis "
 "of different functions in the input translation unit. When there are several "
@@ -109,16 +109,16 @@ msgid ""
 "may grow very large, even for small functions."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:58
+#: ../../../analyzer/developer-docs/DebugChecks.md:50
 msgid "Path Tracking"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:60
+#: ../../../analyzer/developer-docs/DebugChecks.md:52
 msgid ""
 "These checkers print information about the path taken by the analyzer engine."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:62
+#: ../../../analyzer/developer-docs/DebugChecks.md:54
 msgid ""
 "debug.DumpCalls: Prints out every function or method call encountered during "
 "a path traversal. This is indented to show the call stack, but does NOT do "
@@ -126,25 +126,25 @@ msgid ""
 "interleaved."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:67
+#: ../../../analyzer/developer-docs/DebugChecks.md:58
 msgid ""
 "debug.DumpTraversal: Prints the name of each branch statement encountered "
 "during a path traversal (\"IfStmt\", \"WhileStmt\", etc). Currently used to "
 "check whether the analysis engine is doing BFS or DFS."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:73
+#: ../../../analyzer/developer-docs/DebugChecks.md:62
 msgid "State Checking"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:75
+#: ../../../analyzer/developer-docs/DebugChecks.md:64
 msgid ""
 "These checkers will print out information about the analyzer state in the "
 "form of analysis warnings. They are intended for use with the -verify "
 "functionality in regression tests."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:79
+#: ../../../analyzer/developer-docs/DebugChecks.md:68
 msgid ""
 "debug.TaintTest: Prints out the word \"tainted\" for every expression that "
 "carries taint. At the time of this writing, taint was only introduced by the "
@@ -152,7 +152,7 @@ msgid ""
 "eventually move to the security.taint package."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:84
+#: ../../../analyzer/developer-docs/DebugChecks.md:72
 msgid ""
 "debug.ExprInspection: Responds to certain function calls, which are modeled "
 "after builtins. These function calls should affect the program state other "
@@ -161,65 +161,65 @@ msgid ""
 "below."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:89
+#: ../../../analyzer/developer-docs/DebugChecks.md:77
 msgid ""
 "(FIXME: debug.ExprInspection should probably be renamed, since it no longer "
 "only inspects expressions.)"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:94
+#: ../../../analyzer/developer-docs/DebugChecks.md:80
 msgid "ExprInspection checks"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:96
-msgid "``void clang_analyzer_eval(bool);``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:82
+msgid "`void clang_analyzer_eval(bool);`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:98
+#: ../../../analyzer/developer-docs/DebugChecks.md:84
 msgid ""
 "Prints TRUE if the argument is known to have a non-zero value, FALSE if the "
 "argument is known to have a zero or null value, and UNKNOWN if the argument "
-"isn't sufficiently constrained on this path.  You can use this to test other "
-"values by using expressions like \"x == 5\".  Note that this functionality "
-"is currently DISABLED in inlined functions, since different calls to the "
-"same inlined function could provide different information, making it "
-"difficult to write proper -verify directives."
+"isn't sufficiently constrained on this path. You can use this to test other "
+"values by using expressions like \"x == 5\". Note that this functionality is "
+"currently DISABLED in inlined functions, since different calls to the same "
+"inlined function could provide different information, making it difficult to "
+"write proper -verify directives."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:106
-#: ../../../analyzer/developer-docs/DebugChecks.rst:131
-msgid "In C, the argument can be typed as 'int' or as '_Bool'."
+#: ../../../analyzer/developer-docs/DebugChecks.md:92
+#: ../../../analyzer/developer-docs/DebugChecks.md:118
+msgid "In C, the argument can be typed as 'int' or as `_Bool`."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:108
-#: ../../../analyzer/developer-docs/DebugChecks.rst:133
-#: ../../../analyzer/developer-docs/DebugChecks.rst:151
-#: ../../../analyzer/developer-docs/DebugChecks.rst:165
-#: ../../../analyzer/developer-docs/DebugChecks.rst:187
-#: ../../../analyzer/developer-docs/DebugChecks.rst:204
-#: ../../../analyzer/developer-docs/DebugChecks.rst:224
-#: ../../../analyzer/developer-docs/DebugChecks.rst:238
-#: ../../../analyzer/developer-docs/DebugChecks.rst:257
-#: ../../../analyzer/developer-docs/DebugChecks.rst:270
-#: ../../../analyzer/developer-docs/DebugChecks.rst:283
-#: ../../../analyzer/developer-docs/DebugChecks.rst:303
-#: ../../../analyzer/developer-docs/DebugChecks.rst:321
-#: ../../../analyzer/developer-docs/DebugChecks.rst:341
-msgid "Example usage::"
+#: ../../../analyzer/developer-docs/DebugChecks.md:94
+#: ../../../analyzer/developer-docs/DebugChecks.md:120
+#: ../../../analyzer/developer-docs/DebugChecks.md:140
+#: ../../../analyzer/developer-docs/DebugChecks.md:156
+#: ../../../analyzer/developer-docs/DebugChecks.md:180
+#: ../../../analyzer/developer-docs/DebugChecks.md:198
+#: ../../../analyzer/developer-docs/DebugChecks.md:220
+#: ../../../analyzer/developer-docs/DebugChecks.md:236
+#: ../../../analyzer/developer-docs/DebugChecks.md:257
+#: ../../../analyzer/developer-docs/DebugChecks.md:272
+#: ../../../analyzer/developer-docs/DebugChecks.md:287
+#: ../../../analyzer/developer-docs/DebugChecks.md:309
+#: ../../../analyzer/developer-docs/DebugChecks.md:330
+#: ../../../analyzer/developer-docs/DebugChecks.md:352
+msgid "Example usage:"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:115
-msgid "``void clang_analyzer_checkInlined(bool);``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:102
+msgid "`void clang_analyzer_checkInlined(bool);`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:117
+#: ../../../analyzer/developer-docs/DebugChecks.md:104
 msgid ""
 "If a call occurs within an inlined function, prints TRUE or FALSE according "
 "to the value of its argument. If a call occurs outside an inlined function, "
 "nothing is printed."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:121
+#: ../../../analyzer/developer-docs/DebugChecks.md:108
 msgid ""
 "The intended use of this checker is to assert that a function is inlined at "
 "least once (by passing 'true' and expecting a warning), or to assert that a "
@@ -227,7 +227,7 @@ msgid ""
 "argument is technically unnecessary but is intended to clarify intent."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:126
+#: ../../../analyzer/developer-docs/DebugChecks.md:113
 msgid ""
 "You might wonder why we can't print TRUE if a function is ever inlined and "
 "FALSE if it is not. The problem is that any inlined function could "
@@ -236,35 +236,35 @@ msgid ""
 "inlining option."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:147
-msgid "``void clang_analyzer_warnIfReached();``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:136
+msgid "`void clang_analyzer_warnIfReached();`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:149
+#: ../../../analyzer/developer-docs/DebugChecks.md:138
 msgid "Generate a warning if this line of code gets reached by the analyzer."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:160
-msgid "``void clang_analyzer_numTimesReached();``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:151
+msgid "`void clang_analyzer_numTimesReached();`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:162
+#: ../../../analyzer/developer-docs/DebugChecks.md:153
 msgid ""
 "Same as above, but include the number of times this call expression gets "
 "reached by the analyzer during the current analysis."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:171
-msgid "``void clang_analyzer_warnOnDeadSymbol(int);``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:164
+msgid "`void clang_analyzer_warnOnDeadSymbol(int);`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:173
+#: ../../../analyzer/developer-docs/DebugChecks.md:166
 msgid ""
 "Subscribe for a delayed warning when the symbol that represents the value of "
 "the argument is garbage-collected by the analyzer."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:176
+#: ../../../analyzer/developer-docs/DebugChecks.md:169
 msgid ""
 "When calling 'clang_analyzer_warnOnDeadSymbol(x)', if value of 'x' is a "
 "symbol, then this symbol is marked by the ExprInspection checker. Then, "
@@ -273,7 +273,7 @@ msgid ""
 "you know where exactly, up to the line of code, the symbol dies."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:182
+#: ../../../analyzer/developer-docs/DebugChecks.md:175
 msgid ""
 "It is unlikely that you call this function after the symbol is already dead, "
 "because the very reference to it as the function argument prevents it from "
@@ -281,11 +281,11 @@ msgid ""
 "warning would be issued."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:195
-msgid "``void clang_analyzer_explain(a single argument of any type);``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:189
+msgid "`void clang_analyzer_explain(a single argument of any type);`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:197
+#: ../../../analyzer/developer-docs/DebugChecks.md:191
 msgid ""
 "This function explains the value of its argument in a human-readable manner "
 "in the warning message. You can make as many overrides of its prototype in "
@@ -295,21 +295,21 @@ msgid ""
 "the function name, without affecting functionality."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:219
-msgid "``void clang_analyzer_dump( /* a single argument of any type */);``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:215
+msgid "`void clang_analyzer_dump( /* a single argument of any type */);`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:221
+#: ../../../analyzer/developer-docs/DebugChecks.md:217
 msgid ""
 "Similar to clang_analyzer_explain, but produces a raw dump of the value, "
 "same as SVal::dump()."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:231
-msgid "``size_t clang_analyzer_getExtent(void *);``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:229
+msgid "`size_t clang_analyzer_getExtent(void *);`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:233
+#: ../../../analyzer/developer-docs/DebugChecks.md:231
 msgid ""
 "This function returns the value that represents the extent of a memory "
 "region pointed to by the argument. This value is often difficult to obtain "
@@ -318,11 +318,11 @@ msgid ""
 "region extents."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:248
-msgid "``void clang_analyzer_printState();``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:248
+msgid "`void clang_analyzer_printState();`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:250
+#: ../../../analyzer/developer-docs/DebugChecks.md:250
 msgid ""
 "Dumps the current ProgramState to the stderr. Quickly lookup the program "
 "state at any execution point without ViewExplodedGraph or re-compiling the "
@@ -332,41 +332,41 @@ msgid ""
 "all other ExprInspection warnings."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:264
-msgid "``void clang_analyzer_hashDump(int);``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:266
+msgid "`void clang_analyzer_hashDump(int);`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:266
+#: ../../../analyzer/developer-docs/DebugChecks.md:268
 msgid ""
 "The analyzer can generate a hash to identify reports. To debug what "
 "information is used to calculate this hash it is possible to dump the hashed "
 "string as a warning of an arbitrary expression using the function above."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:277
-msgid "``void clang_analyzer_denote(int, const char *);``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:281
+msgid "`void clang_analyzer_denote(int, const char *);`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:279
+#: ../../../analyzer/developer-docs/DebugChecks.md:283
 msgid ""
 "Denotes symbols with strings. A subsequent call to clang_analyzer_express() "
 "will expresses another symbol in terms of these string. Useful for testing "
 "relationships between different symbols."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:290
-msgid "``void clang_analyzer_express(int);``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:296
+msgid "`void clang_analyzer_express(int);`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:292
+#: ../../../analyzer/developer-docs/DebugChecks.md:298
 msgid "See clang_analyzer_denote()."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:294
-msgid "``void clang_analyzer_isTainted(a single argument of any type);``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:300
+msgid "`void clang_analyzer_isTainted(a single argument of any type);`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:296
+#: ../../../analyzer/developer-docs/DebugChecks.md:302
 msgid ""
 "Queries the analyzer whether the expression used as argument is tainted or "
 "not. This is useful in tests, where we don't want to issue warning for all "
@@ -375,31 +375,31 @@ msgid ""
 "let you focus on the `expected-warning`'s that you really care about."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:316
-msgid "``clang_analyzer_dumpExtent(a single argument of any type)``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:324
+msgid "`clang_analyzer_dumpExtent(a single argument of any type)`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:317
-msgid "``clang_analyzer_dumpElementCount(a single argument of any type)``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:326
+msgid "`clang_analyzer_dumpElementCount(a single argument of any type)`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:319
+#: ../../../analyzer/developer-docs/DebugChecks.md:328
 msgid "Dumps out the extent and the element count of the argument."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:329
-msgid "``clang_analyzer_value(a single argument of integer or pointer type)``"
+#: ../../../analyzer/developer-docs/DebugChecks.md:340
+msgid "`clang_analyzer_value(a single argument of integer or pointer type)`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:331
+#: ../../../analyzer/developer-docs/DebugChecks.md:342
 msgid ""
 "Prints an associated value for the given argument. Supported argument types "
 "are integers, enums and pointers. The value can be represented either as a "
 "range set or as a concrete integer. For the rest of the types function "
-"prints ``n/a`` (aka not available)."
+"prints `n/a` (aka not available)."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:336
+#: ../../../analyzer/developer-docs/DebugChecks.md:347
 msgid ""
 "**Note:** This function will print nothing when clang uses Z3 as the "
 "constraint manager (which is an unsupported and badly broken analysis mode "
@@ -407,18 +407,18 @@ msgid ""
 "crosscheck\" mode)."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:352
+#: ../../../analyzer/developer-docs/DebugChecks.md:364
 msgid "Statistics"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:354
+#: ../../../analyzer/developer-docs/DebugChecks.md:366
 msgid ""
 "The debug.Stats checker collects various information about the analysis of "
 "each function, such as how many blocks were reached and if the analyzer "
 "timed out."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:357
+#: ../../../analyzer/developer-docs/DebugChecks.md:369
 msgid ""
 "There is also an additional -analyzer-stats flag, which enables various "
 "statistics within the analyzer engine. Note the Stats checker (which "
@@ -426,11 +426,11 @@ msgid ""
 "values reported by -analyzer-stats."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:363
+#: ../../../analyzer/developer-docs/DebugChecks.md:374
 msgid "Output testing checkers"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/DebugChecks.rst:365
+#: ../../../analyzer/developer-docs/DebugChecks.md:376
 msgid ""
 "debug.ReportStmts reports a warning at **every** statement, making it a very "
 "useful tool for testing thoroughly bug report construction and output "

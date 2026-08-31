@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,33 +17,33 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../IntroductionToTheClangAST.rst:3
+#: ../../../IntroductionToTheClangAST.md:1
 msgid "Introduction to the Clang AST"
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:5
+#: ../../../IntroductionToTheClangAST.md:3
 msgid ""
 "This document gives a gentle introduction to the mysteries of the Clang AST. "
 "It is targeted at developers who either want to contribute to Clang, or use "
 "tools that work based on Clang's AST, like the AST matchers."
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:10
+#: ../../../IntroductionToTheClangAST.md:8
 msgid ""
 "<center><iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/"
 "embed/VqCkCDFLSsc?vq=hd720\" frameborder=\"0\" allowfullscreen></iframe></"
 "center>"
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:14
-msgid "`Slides <https://llvm.org/devmtg/2013-04/klimek-slides.pdf>`_"
+#: ../../../IntroductionToTheClangAST.md:12
+msgid "[Slides](https://llvm.org/devmtg/2013-04/klimek-slides.pdf)"
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:17
+#: ../../../IntroductionToTheClangAST.md:14
 msgid "Introduction"
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:19
+#: ../../../IntroductionToTheClangAST.md:16
 msgid ""
 "Clang's AST is different from ASTs produced by some other compilers in that "
 "it closely resembles both the written C++ code and the C++ standard. For "
@@ -52,104 +52,103 @@ msgid ""
 "refactoring tools."
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:25
+#: ../../../IntroductionToTheClangAST.md:22
 msgid ""
 "Documentation for all Clang AST nodes is available via the generated "
-"`Doxygen <https://clang.llvm.org/doxygen>`_. The doxygen online "
-"documentation is also indexed by your favorite search engine, which will "
-"make a search for clang and the AST node's class name usually turn up the "
-"doxygen of the class you're looking for (for example, search for: clang "
-"ParenExpr)."
+"[Doxygen](https://clang.llvm.org/doxygen). The doxygen online documentation "
+"is also indexed by your favorite search engine, which will make a search for "
+"clang and the AST node's class name usually turn up the doxygen of the class "
+"you're looking for (for example, search for: clang ParenExpr)."
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:33
+#: ../../../IntroductionToTheClangAST.md:29
 msgid "Examining the AST"
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:35
+#: ../../../IntroductionToTheClangAST.md:31
 msgid ""
 "A good way to familiarize yourself with the Clang AST is to actually look at "
 "it on some simple example code. Clang has a builtin AST-dump mode, which can "
-"be enabled with the flag ``-ast-dump``."
+"be enabled with the flag `-ast-dump`."
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:39
+#: ../../../IntroductionToTheClangAST.md:35
 msgid "Let's look at a simple example AST:"
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:68
+#: ../../../IntroductionToTheClangAST.md:64
 msgid ""
-"The toplevel declaration in a translation unit is always the `translation "
-"unit declaration <https://clang.llvm.org/doxygen/"
-"classclang_1_1TranslationUnitDecl.html>`_. In this example, our first user "
-"written declaration is the `function declaration <https://clang.llvm.org/"
-"doxygen/classclang_1_1FunctionDecl.html>`_ of \"``f``\". The body of "
-"\"``f``\" is a `compound statement <https://clang.llvm.org/doxygen/"
-"classclang_1_1CompoundStmt.html>`_, whose child nodes are a `declaration "
-"statement <https://clang.llvm.org/doxygen/classclang_1_1DeclStmt.html>`_ "
-"that declares our result variable, and the `return statement <https://clang."
-"llvm.org/doxygen/classclang_1_1ReturnStmt.html>`_."
+"The toplevel declaration in a translation unit is always the [translation "
+"unit declaration](https://clang.llvm.org/doxygen/"
+"classclang_1_1TranslationUnitDecl.html). In this example, our first user "
+"written declaration is the [function declaration](https://clang.llvm.org/"
+"doxygen/classclang_1_1FunctionDecl.html) of \"`f`\". The body of \"`f`\" is "
+"a [compound statement](https://clang.llvm.org/doxygen/"
+"classclang_1_1CompoundStmt.html), whose child nodes are a [declaration "
+"statement](https://clang.llvm.org/doxygen/classclang_1_1DeclStmt.html) that "
+"declares our result variable, and the [return statement](https://clang.llvm."
+"org/doxygen/classclang_1_1ReturnStmt.html)."
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:81
+#: ../../../IntroductionToTheClangAST.md:76
 msgid "AST Context"
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:83
+#: ../../../IntroductionToTheClangAST.md:78
 msgid ""
 "All information about the AST for a translation unit is bundled up in the "
-"class `ASTContext <https://clang.llvm.org/doxygen/classclang_1_1ASTContext."
-"html>`_. It allows traversal of the whole translation unit starting from "
-"`getTranslationUnitDecl <https://clang.llvm.org/doxygen/"
-"classclang_1_1ASTContext.html#abd909fb01ef10cfd0244832a67b1dd64>`_, or to "
-"access Clang's `table of identifiers <https://clang.llvm.org/doxygen/"
-"classclang_1_1ASTContext.html#a4f95adb9958e22fbe55212ae6482feb4>`_ for the "
+"class [ASTContext](https://clang.llvm.org/doxygen/classclang_1_1ASTContext."
+"html). It allows traversal of the whole translation unit starting from "
+"[getTranslationUnitDecl](https://clang.llvm.org/doxygen/"
+"classclang_1_1ASTContext.html#abd909fb01ef10cfd0244832a67b1dd64), or to "
+"access Clang's [table of identifiers](https://clang.llvm.org/doxygen/"
+"classclang_1_1ASTContext.html#a4f95adb9958e22fbe55212ae6482feb4) for the "
 "parsed translation unit."
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:93
+#: ../../../IntroductionToTheClangAST.md:87
 msgid "AST Nodes"
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:95
+#: ../../../IntroductionToTheClangAST.md:89
 msgid ""
 "Clang's AST nodes are modeled on a class hierarchy that does not have a "
 "common ancestor. Instead, there are multiple larger hierarchies for basic "
-"node types like `Decl <https://clang.llvm.org/doxygen/classclang_1_1Decl."
-"html>`_ and `Stmt <https://clang.llvm.org/doxygen/classclang_1_1Stmt."
-"html>`_. Many important AST nodes derive from `Type <https://clang.llvm.org/"
-"doxygen/classclang_1_1Type.html>`_, `Decl <https://clang.llvm.org/doxygen/"
-"classclang_1_1Decl.html>`_, `DeclContext <https://clang.llvm.org/doxygen/"
-"classclang_1_1DeclContext.html>`_ or `Stmt <https://clang.llvm.org/doxygen/"
-"classclang_1_1Stmt.html>`_, with some classes deriving from both Decl and "
+"node types like [Decl](https://clang.llvm.org/doxygen/classclang_1_1Decl."
+"html) and [Stmt](https://clang.llvm.org/doxygen/classclang_1_1Stmt.html). "
+"Many important AST nodes derive from [Type](https://clang.llvm.org/doxygen/"
+"classclang_1_1Type.html), [Decl](https://clang.llvm.org/doxygen/"
+"classclang_1_1Decl.html), [DeclContext](https://clang.llvm.org/doxygen/"
+"classclang_1_1DeclContext.html) or [Stmt](https://clang.llvm.org/doxygen/"
+"classclang_1_1Stmt.html), with some classes deriving from both Decl and "
 "DeclContext."
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:107
+#: ../../../IntroductionToTheClangAST.md:101
 msgid ""
 "There are also a multitude of nodes in the AST that are not part of a larger "
 "hierarchy, and are only reachable from specific other nodes, like "
-"`CXXBaseSpecifier <https://clang.llvm.org/doxygen/"
-"classclang_1_1CXXBaseSpecifier.html>`_."
+"[CXXBaseSpecifier](https://clang.llvm.org/doxygen/"
+"classclang_1_1CXXBaseSpecifier.html)."
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:111
+#: ../../../IntroductionToTheClangAST.md:105
 msgid ""
-"Thus, to traverse the full AST, one starts from the `TranslationUnitDecl "
-"<https://clang.llvm.org/doxygen/classclang_1_1TranslationUnitDecl.html>`_ "
-"and then recursively traverses everything that can be reached from that node "
-"- this information has to be encoded for each specific node type. This "
-"algorithm is encoded in the `RecursiveASTVisitor <https://clang.llvm.org/"
-"doxygen/classclang_1_1RecursiveASTVisitor.html>`_. See the "
-"`RecursiveASTVisitor tutorial <https://clang.llvm.org/docs/RAVFrontendAction."
-"html>`_."
+"Thus, to traverse the full AST, one starts from the [TranslationUnitDecl]"
+"(https://clang.llvm.org/doxygen/classclang_1_1TranslationUnitDecl.html) and "
+"then recursively traverses everything that can be reached from that node - "
+"this information has to be encoded for each specific node type. This "
+"algorithm is encoded in the [RecursiveASTVisitor](https://clang.llvm.org/"
+"doxygen/classclang_1_1RecursiveASTVisitor.html). See the "
+"[RecursiveASTVisitor tutorial](https://clang.llvm.org/docs/RAVFrontendAction."
+"html)."
 msgstr ""
 
-#: ../../../IntroductionToTheClangAST.rst:120
+#: ../../../IntroductionToTheClangAST.md:114
 msgid ""
-"The two most basic nodes in the Clang AST are statements (`Stmt <https://"
-"clang.llvm.org/doxygen/classclang_1_1Stmt.html>`_) and declarations (`Decl "
-"<https://clang.llvm.org/doxygen/classclang_1_1Decl.html>`_). Note that "
-"expressions (`Expr <https://clang.llvm.org/doxygen/classclang_1_1Expr."
-"html>`_) are also statements in Clang's AST."
+"The two most basic nodes in the Clang AST are statements ([Stmt](https://"
+"clang.llvm.org/doxygen/classclang_1_1Stmt.html)) and declarations ([Decl]"
+"(https://clang.llvm.org/doxygen/classclang_1_1Decl.html)). Note that "
+"expressions ([Expr](https://clang.llvm.org/doxygen/classclang_1_1Expr.html)) "
+"are also statements in Clang's AST."
 msgstr ""

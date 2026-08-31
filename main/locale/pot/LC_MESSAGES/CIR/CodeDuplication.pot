@@ -8,23 +8,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../CIR/CodeDuplication.rst:3
+#: ../../../CIR/CodeDuplication.md:1
 msgid "ClangIR Code Duplication Roadmap"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:9
+#: ../../../CIR/CodeDuplication.md:7
 msgid "Introduction"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:11
+#: ../../../CIR/CodeDuplication.md:9
 msgid ""
 "This document describes the general approach to code duplication in the "
 "ClangIR code generation implementation. It acknowledges specific problems "
@@ -33,11 +34,11 @@ msgid ""
 "plan for addressing the issue."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:18
+#: ../../../CIR/CodeDuplication.md:15
 msgid "Background"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:20
+#: ../../../CIR/CodeDuplication.md:17
 msgid ""
 "The ClangIR code generation is very closely modeled after Clang's LLVM IR "
 "code generation, and we intend for the CIR produced to eventually be "
@@ -49,7 +50,7 @@ msgid ""
 "the necessary semantics."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:28
+#: ../../../CIR/CodeDuplication.md:25
 msgid ""
 "We have chosen to model the ClangIR code generation directly after the "
 "classic codegen, to the point of following identical code structure, using "
@@ -60,7 +61,7 @@ msgid ""
 "implementation."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:35
+#: ../../../CIR/CodeDuplication.md:32
 msgid ""
 "However, we recognize that this is not a sustainable permanent solution. As "
 "bugs are fixed and new features are added to the classic codegen, the "
@@ -68,22 +69,22 @@ msgid ""
 "process."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:39
+#: ../../../CIR/CodeDuplication.md:36
 msgid "Long term, we need a more sustainable approach."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:42
+#: ../../../CIR/CodeDuplication.md:38
 msgid "Current Strategy"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:44
+#: ../../../CIR/CodeDuplication.md:40
 msgid ""
 "Practical considerations require that we make steady progress towards a "
 "working implementation of ClangIR. This necessity is directly opposed to the "
 "goal of minimizing code duplication."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:48
+#: ../../../CIR/CodeDuplication.md:44
 msgid ""
 "For this reason, we have decided to accept a large amount of code "
 "duplication in the short term, even with the explicit understanding that "
@@ -91,7 +92,7 @@ msgid ""
 "progresses."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:52
+#: ../../../CIR/CodeDuplication.md:48
 msgid ""
 "As the CIR implementation is developed, we often note small pieces of code "
 "that could be shared with the classic codegen if they were moved to a "
@@ -106,7 +107,7 @@ msgid ""
 "that make sense independent of the code sharing problem."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:64
+#: ../../../CIR/CodeDuplication.md:60
 msgid ""
 "We have discussed various ways that major classes such as CGCXXABI/"
 "CIRGenCXXABI could be refactored to allow parts of there implementation to "
@@ -120,11 +121,11 @@ msgid ""
 "clear what the permanent solution will be."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:75
+#: ../../../CIR/CodeDuplication.md:70
 msgid "Mitigation Through Testing"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:77
+#: ../../../CIR/CodeDuplication.md:72
 msgid ""
 "The most important tactic that we are using to mitigate the risk of CIR "
 "diverging from classic codegen is to incorporate two sets of LLVM IR checks "
@@ -133,7 +134,7 @@ msgid ""
 "the LLVM IR that is produced directly by the classic codegen."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:83
+#: ../../../CIR/CodeDuplication.md:78
 msgid ""
 "At the time that tests are created, we compare the LLVM IR output from these "
 "two paths to verify (manually) that any meaningful differences between them "
@@ -142,7 +143,7 @@ msgid ""
 "being added, updating the CIR implementation as it is being developed."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:89
+#: ../../../CIR/CodeDuplication.md:84
 msgid ""
 "However, these tests serve a second purpose. They also serve as sentinels to "
 "alert us to changes in the classic codegen behavior that will need to be "
@@ -152,7 +153,7 @@ msgid ""
 "implementation when these tests fail."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:96
+#: ../../../CIR/CodeDuplication.md:91
 msgid ""
 "As the CIR implementation gets closer to the goal of IR that is semantically "
 "equivalent to the LLVM IR produced by the classic codegen, we would like to "
@@ -161,24 +162,24 @@ msgid ""
 "such as `opt -pass-normalize` and Alive2."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:102
+#: ../../../CIR/CodeDuplication.md:97
 msgid ""
 "Eventually, we would like to be able to run all existing classic codegen "
 "tests using the CIR path as well."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:106
+#: ../../../CIR/CodeDuplication.md:100
 msgid "Other Considerations"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:108
+#: ../../../CIR/CodeDuplication.md:102
 msgid ""
 "The close modeling of CIR after classic codegen has also meant that the CIR "
 "dialect often represents language details at a much lower level than it "
 "ideally should."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:112
+#: ../../../CIR/CodeDuplication.md:106
 msgid ""
 "In the interest of having a complete working implementation of ClangIR as "
 "soon as is practical, we have chosen to take the approach of following the "
@@ -187,20 +188,20 @@ msgid ""
 "there is a clear and immediate benefit to doing so."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:118
+#: ../../../CIR/CodeDuplication.md:112
 msgid ""
 "Over time, we expect to progressively raise the CIR representation to a "
 "higher level and remove low level details, including ABI-specific handling "
-"from the dialect. (See the \"Long Term Vision\" section below for more  "
+"from the dialect. (See the \"Long Term Vision\" section below for more "
 "details.) Having a working implementation in place makes it easier to verify "
 "that the high-level representation and subsequent lowering are correct."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:125
+#: ../../../CIR/CodeDuplication.md:118
 msgid "Mixing With Other Dialects"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:127
+#: ../../../CIR/CodeDuplication.md:120
 msgid ""
 "Mixing of dialects is a central design feature of MLIR. The CIR dialect is "
 "currently more self-contained than most dialects, but even now we generate "
@@ -208,25 +209,25 @@ msgid ""
 "OpenMP and CUDA are added, similar mixing will occur."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:132
+#: ../../../CIR/CodeDuplication.md:125
 msgid ""
 "We also expect CIR to be at least partially lowered to other dialects during "
 "the optimization phase to enable features such as data dependence analysis, "
 "even if we will eventually be lowering it to LLVM IR."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:136
+#: ../../../CIR/CodeDuplication.md:129
 msgid ""
 "Therefore, any plan for generating LLVM IR from CIR must be integrated with "
 "the general MLIR lowering design, which typically involves lowering to the "
 "LLVM dialect, which is then transformed to LLVM IR."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:141
+#: ../../../CIR/CodeDuplication.md:133
 msgid "Other Consumers of CIR and MLIR"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:143
+#: ../../../CIR/CodeDuplication.md:135
 msgid ""
 "We must also consider that we will not always be lowering CIR to LLVM IR. "
 "CIR, usually mixed with other dialects, will also be directed to offload "
@@ -235,11 +236,11 @@ msgid ""
 "semantically correct CIR for these consumers."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:150
+#: ../../../CIR/CodeDuplication.md:141
 msgid "Long Term Vision"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:152
+#: ../../../CIR/CodeDuplication.md:143
 msgid ""
 "As the CIR implementation matures, we will eliminate target-specific "
 "handling from the high-level CIR generated by Clang. The high-level CIR will "
@@ -251,14 +252,14 @@ msgid ""
 "be controlled by specific compiler flags."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:161
+#: ../../../CIR/CodeDuplication.md:152
 msgid ""
 "As we raise CIR to this higher level implementation, there will naturally be "
 "less code duplication, and less need to have the same logic repeated in the "
 "CIR generation."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:165
+#: ../../../CIR/CodeDuplication.md:156
 msgid ""
 "We will continue to use that same basic design and structure for CIR code "
 "generation, with classes like CIRGenModule and CIRGenFunction that serve the "
@@ -267,7 +268,7 @@ msgid ""
 "to require frequent changes to stay in sync with classic codegen."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:171
+#: ../../../CIR/CodeDuplication.md:162
 msgid ""
 "As the handling of low-level details is moved to later lowering phases, we "
 "will need to move away from the current tight coupling of the CIR and "
@@ -280,11 +281,11 @@ msgid ""
 "with a more general design."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:181
+#: ../../../CIR/CodeDuplication.md:171
 msgid "Example: C Calling Convention Handling"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:183
+#: ../../../CIR/CodeDuplication.md:173
 msgid ""
 "C calling convention handling is an example of a general purpose redesign "
 "that is already underway. This was started independently of CIR, but it will "
@@ -293,7 +294,7 @@ msgid ""
 "specific details of function signatures, parameter type coercion, and so on."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:189
+#: ../../../CIR/CodeDuplication.md:179
 msgid ""
 "The current CIR implementation duplicates most of the classic codegen "
 "handling for function call handling, but it omits several pieces that handle "
@@ -306,7 +307,7 @@ msgid ""
 "later phase of compilation."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:198
+#: ../../../CIR/CodeDuplication.md:188
 msgid ""
 "This provides a clear example where trying to refactor the classic codegen "
 "in some way to be reused by CIR would have been counterproductive. The "
@@ -315,7 +316,7 @@ msgid ""
 "general reuse, not just by CIR, but also by other front ends."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:204
+#: ../../../CIR/CodeDuplication.md:194
 msgid ""
 "The CIR calling convention lowering will make use of the general purpose C "
 "calling convention library that is being created, but it should create an "
@@ -324,11 +325,11 @@ msgid ""
 "handling."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:210
+#: ../../../CIR/CodeDuplication.md:199
 msgid "Significant Areas For Improvement"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:212
+#: ../../../CIR/CodeDuplication.md:201
 msgid ""
 "The following list enumerates some of the areas where significant "
 "restructuring of the code is needed to enable better code sharing between "
@@ -337,63 +338,63 @@ msgid ""
 "relatively clear."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:217
+#: ../../../CIR/CodeDuplication.md:206
 msgid "Constant expression evaluation"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:218
+#: ../../../CIR/CodeDuplication.md:208
 msgid "Complex multiplication and division expansion"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:219
+#: ../../../CIR/CodeDuplication.md:210
 msgid "Builtin function handling"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:220
+#: ../../../CIR/CodeDuplication.md:212
 msgid "Exception Handling and C++ Cleanups"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:221
+#: ../../../CIR/CodeDuplication.md:214
 msgid "Inline assembly handling"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:222
+#: ../../../CIR/CodeDuplication.md:216
 msgid "C++ ABI Handling"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:224
+#: ../../../CIR/CodeDuplication.md:218
 msgid "VTable generation"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:225
+#: ../../../CIR/CodeDuplication.md:219
 msgid "Virtual function calls"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:226
+#: ../../../CIR/CodeDuplication.md:220
 msgid "Constructor and destructor arguments"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:227
+#: ../../../CIR/CodeDuplication.md:221
 msgid "Dynamic casts"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:228
+#: ../../../CIR/CodeDuplication.md:222
 msgid "Base class address calculation"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:229
+#: ../../../CIR/CodeDuplication.md:223
 msgid "Type descriptors"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:230
+#: ../../../CIR/CodeDuplication.md:224
 msgid "Array new and delete"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:233
+#: ../../../CIR/CodeDuplication.md:226
 msgid "Pervasive Low-Level Issues"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:235
+#: ../../../CIR/CodeDuplication.md:228
 msgid ""
 "This section lists some of the features where a non-trivial amount of code "
 "is shared between CIR and classic codegen, but the handling of the feature "
@@ -401,26 +402,26 @@ msgid ""
 "to design an abstraction that can easily be shared."
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:240
+#: ../../../CIR/CodeDuplication.md:233
 msgid "Global variable and function linkage"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:241
+#: ../../../CIR/CodeDuplication.md:234
 msgid "Alignment management"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:242
+#: ../../../CIR/CodeDuplication.md:235
 msgid "Debug information"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:243
+#: ../../../CIR/CodeDuplication.md:236
 msgid "TBAA handling"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:244
+#: ../../../CIR/CodeDuplication.md:237
 msgid "Sanitizer integration"
 msgstr ""
 
-#: ../../../CIR/CodeDuplication.rst:245
+#: ../../../CIR/CodeDuplication.md:238
 msgid "Lifetime markers"
 msgstr ""

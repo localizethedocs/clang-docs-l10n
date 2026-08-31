@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 08:18+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,100 +17,112 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../BoundsSafetyImplPlans.rst:3
-msgid "Implementation plans for ``-fbounds-safety``"
+#: ../../../BoundsSafetyImplPlans.md:1
+msgid "Implementation plans for `-fbounds-safety`"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:9
+#: ../../../BoundsSafetyImplPlans.md:8
+msgid "Current status of `-fbounds-safety` support in upstream Clang"
+msgstr ""
+
+#: ../../../BoundsSafetyImplPlans.md:10
+msgid "<!-- FIXME: This is just a placeholder -->\n"
+msgstr ""
+
+#: ../../../BoundsSafetyImplPlans.md:11
+msgid "Not fully implemented upstream."
+msgstr ""
+
+#: ../../../BoundsSafetyImplPlans.md:13
 msgid "Gradual updates with experimental flag"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:11
+#: ../../../BoundsSafetyImplPlans.md:15
 msgid ""
 "The feature will be implemented as a series of smaller PRs and we will guard "
-"our implementation with an experimental flag ``-fexperimental-bounds-"
-"safety`` until the usable model is fully available. Once the model is ready "
-"for use, we will expose the flag ``-fbounds-safety``."
+"our implementation with an experimental flag `-fexperimental-bounds-safety` "
+"until the usable model is fully available. Once the model is ready for use, "
+"we will expose the flag `-fbounds-safety`."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:17
+#: ../../../BoundsSafetyImplPlans.md:20
 msgid "Possible patch sets"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:19
+#: ../../../BoundsSafetyImplPlans.md:22
 msgid "External bounds annotations and the (late) parsing logic."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:20
+#: ../../../BoundsSafetyImplPlans.md:23
 msgid "Internal bounds annotations (wide pointers) and their parsing logic."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:21
+#: ../../../BoundsSafetyImplPlans.md:24
 msgid "Clang code generation for wide pointers with debug information."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:22
+#: ../../../BoundsSafetyImplPlans.md:25
 msgid ""
 "Pointer cast semantics involving bounds annotations (this could be divided "
 "into multiple sub-PRs)."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:24
+#: ../../../BoundsSafetyImplPlans.md:27
 msgid ""
 "CFG analysis for pairs of related pointer and count assignments and the "
 "likes."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:25
+#: ../../../BoundsSafetyImplPlans.md:28
 msgid ""
 "Bounds check expressions in AST and the Clang code generation (this could "
 "also be divided into multiple sub-PRs)."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:29
+#: ../../../BoundsSafetyImplPlans.md:31
 msgid "Proposed implementation"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:32 ../../../BoundsSafetyImplPlans.rst:212
+#: ../../../BoundsSafetyImplPlans.md:33 ../../../BoundsSafetyImplPlans.md:202
 msgid "External bounds annotations"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:34
+#: ../../../BoundsSafetyImplPlans.md:35
 msgid ""
 "The bounds annotations are C type attributes appertaining to pointer types. "
 "If an attribute is added to the position of a declaration attribute, e.g., "
-"``int *ptr __counted_by(size)``, the attribute appertains to the outermost "
-"pointer type of the declaration (``int *``)."
+"`int *ptr __counted_by(size)`, the attribute appertains to the outermost "
+"pointer type of the declaration (`int *`)."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:40
+#: ../../../BoundsSafetyImplPlans.md:40
 msgid "New sugar types"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:42
+#: ../../../BoundsSafetyImplPlans.md:42
 msgid ""
 "An external bounds annotation creates a type sugar of the underlying pointer "
-"types. We will introduce a new sugar type, ``DynamicBoundsPointerType`` to "
-"represent ``__counted_by`` or ``__sized_by``. Using ``AttributedType`` would "
-"not be sufficient because the type needs to hold the count or size "
-"expression as well as some metadata necessary for analysis, while this type "
-"may be implemented through inheritance from ``AttributedType``. Treating the "
+"types. We will introduce a new sugar type, `DynamicBoundsPointerType` to "
+"represent `__counted_by` or `__sized_by`. Using `AttributedType` would not "
+"be sufficient because the type needs to hold the count or size expression as "
+"well as some metadata necessary for analysis, while this type may be "
+"implemented through inheritance from `AttributedType`. Treating the "
 "annotations as type sugars means two types with incompatible external bounds "
 "annotations may be considered canonically the same types. This is sometimes "
-"necessary, for example, to make the ``__counted_by`` and friends not "
+"necessary, for example, to make the `__counted_by` and friends not "
 "participate in function overloading. However, this design requires a "
 "separate logic to walk through the entire type hierarchy to check type "
 "compatibility of bounds annotations."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:55
+#: ../../../BoundsSafetyImplPlans.md:54
 msgid "Late parsing for C"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:57
+#: ../../../BoundsSafetyImplPlans.md:56
 msgid ""
-"A bounds annotation such as ``__counted_by(count)`` can be added to type of "
-"a struct field declaration where count is another field of the same struct "
+"A bounds annotation such as `__counted_by(count)` can be added to type of a "
+"struct field declaration where count is another field of the same struct "
 "declared later. Similarly, the annotation may apply to type of a function "
 "parameter declaration which precedes the parameter count in the same "
 "function. This means parsing the argument of bounds annotations must be done "
@@ -121,181 +133,180 @@ msgid ""
 "parsing logic for C/C++ type attributes."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:69 ../../../BoundsSafetyImplPlans.rst:198
+#: ../../../BoundsSafetyImplPlans.md:67 ../../../BoundsSafetyImplPlans.md:189
 msgid "Internal bounds annotations"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:71
+#: ../../../BoundsSafetyImplPlans.md:69
 msgid ""
-"``__indexable`` and ``__bidi_indexable`` alter pointer representations to be "
+"`__indexable` and `__bidi_indexable` alter pointer representations to be "
 "equivalent to a struct with the pointer and the corresponding bounds fields. "
 "Despite this difference in their representations, they are still pointers in "
 "terms of types of operations that are allowed and their semantics. For "
-"instance, a pointer dereference on a ``__bidi_indexable`` pointer will "
-"return the dereferenced value same as plain C pointers, modulo the extra "
-"bounds checks being performed before dereferencing the wide pointer. This "
-"means mapping the wide pointers to struct types with equivalent layout won’t "
-"be sufficient. To represent the wide pointers in Clang AST, we add an extra "
+"instance, a pointer dereference on a `__bidi_indexable` pointer will return "
+"the dereferenced value same as plain C pointers, modulo the extra bounds "
+"checks being performed before dereferencing the wide pointer. This means "
+"mapping the wide pointers to struct types with equivalent layout won’t be "
+"sufficient. To represent the wide pointers in Clang AST, we add an extra "
 "field in the PointerType class to indicate the internal bounds of the "
 "pointer. This ensures pointers of different representations are mapped to "
 "different canonical types while they are still treated as pointers."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:84
+#: ../../../BoundsSafetyImplPlans.md:82
 msgid ""
 "In LLVM IR, wide pointers will be emitted as structs of equivalent "
 "representations. Clang CodeGen will handle them as Aggregate in "
-"``TypeEvaluationKind (TEK)``. ``AggExprEmitter`` was extended to handle "
-"pointer operations returning wide pointers. Alternatively, a new ``TEK`` and "
-"an expression emitter dedicated to wide pointers could be introduced."
+"`TypeEvaluationKind (TEK)`. `AggExprEmitter` was extended to handle pointer "
+"operations returning wide pointers. Alternatively, a new `TEK` and an "
+"expression emitter dedicated to wide pointers could be introduced."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:91
+#: ../../../BoundsSafetyImplPlans.md:88
 msgid "Default bounds annotations"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:93
+#: ../../../BoundsSafetyImplPlans.md:90
 msgid ""
-"The model may implicitly add ``__bidi_indexable`` or ``__single`` depending "
-"on the context of the declaration that has the pointer type. "
-"``__bidi_indexable`` implicitly adds to local variables, while ``__single`` "
-"implicitly adds to pointer types specifying struct fields, function "
-"parameters, or global variables. This means the parser may first create the "
-"pointer type without any default pointer attribute and then recreate the "
-"type once the parser has the declaration context and determined the default "
-"attribute accordingly."
+"The model may implicitly add `__bidi_indexable` or `__single` depending on "
+"the context of the declaration that has the pointer type. `__bidi_indexable` "
+"implicitly adds to local variables, while `__single` implicitly adds to "
+"pointer types specifying struct fields, function parameters, or global "
+"variables. This means the parser may first create the pointer type without "
+"any default pointer attribute and then recreate the type once the parser has "
+"the declaration context and determined the default attribute accordingly."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:101
+#: ../../../BoundsSafetyImplPlans.md:98
 msgid ""
 "This also requires the parser to reset the type of the declaration with the "
 "newly created type with the right default attribute."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:105
+#: ../../../BoundsSafetyImplPlans.md:101
 msgid "Promotion expression"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:107
+#: ../../../BoundsSafetyImplPlans.md:103
 msgid ""
 "A new expression will be introduced to represent the conversion from a "
-"pointer with an external bounds annotation, such as ``__counted_by``, to "
-"``__bidi_indexable``. This type of conversion cannot be handled by normal "
+"pointer with an external bounds annotation, such as `__counted_by`, to "
+"`__bidi_indexable`. This type of conversion cannot be handled by normal "
 "CastExprs because it requires an extra subexpression(s) to provide the "
 "bounds information necessary to create a wide pointer."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:114
+#: ../../../BoundsSafetyImplPlans.md:109
 msgid "Bounds check expression"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:116
+#: ../../../BoundsSafetyImplPlans.md:111
 msgid ""
-"Bounds checks are part of semantics defined in the ``-fbounds-safety`` "
+"Bounds checks are part of semantics defined in the `-fbounds-safety` "
 "language model. Hence, exposing the bounds checks and other semantic actions "
 "in the AST is desirable. A new expression for bounds checks has been added "
-"to the AST. The bounds check expression has a ``BoundsCheckKind`` to "
-"indicate the kind of checks and has the additional sub-expressions that are "
-"necessary to perform the check according to the kind."
+"to the AST. The bounds check expression has a `BoundsCheckKind` to indicate "
+"the kind of checks and has the additional sub-expressions that are necessary "
+"to perform the check according to the kind."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:124
+#: ../../../BoundsSafetyImplPlans.md:118
 msgid "Paired assignment check"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:126
+#: ../../../BoundsSafetyImplPlans.md:120
 msgid ""
-"``-fbounds-safety`` enforces that variables or fields related with the same "
-"external bounds annotation (e.g., ``buf`` and ``count`` related with "
-"``__counted_by`` in the example below) must be updated side by side within "
-"the same basic block and without side effect in between."
+"`-fbounds-safety` enforces that variables or fields related with the same "
+"external bounds annotation (e.g., `buf` and `count` related with "
+"`__counted_by` in the example below) must be updated side by side within the "
+"same basic block and without side effect in between."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:142
+#: ../../../BoundsSafetyImplPlans.md:136
 msgid ""
 "To implement this rule, the compiler requires a linear representation of "
 "statements to understand the ordering and the adjacency between the two or "
 "more assignments. The Clang CFG is used to implement this analysis as Clang "
-"CFG provides a linear view of statements within each ``CFGBlock`` (Clang "
-"``CFGBlock`` represents a single basic block in a source-level CFG)."
+"CFG provides a linear view of statements within each `CFGBlock` (Clang "
+"`CFGBlock` represents a single basic block in a source-level CFG)."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:149
+#: ../../../BoundsSafetyImplPlans.md:142
 msgid "Bounds check optimizations"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:151
+#: ../../../BoundsSafetyImplPlans.md:144
 msgid ""
-"In ``-fbounds-safety``, the Clang frontend emits run-time checks for every "
+"In `-fbounds-safety`, the Clang frontend emits run-time checks for every "
 "memory dereference if the type system or analyses in the frontend couldn’t "
 "verify its bounds safety. The implementation relies on LLVM optimizations to "
 "remove redundant run-time checks. Using this optimization strategy, if the "
 "original source code already has bounds checks, the fewer additional checks "
-"``-fbounds-safety`` will introduce. The LLVM ``ConstraintElimination`` pass "
-"is designed to remove provable redundant checks (please check Florian Hahn’s "
+"`-fbounds-safety` will introduce. The LLVM `ConstraintElimination` pass is "
+"designed to remove provable redundant checks (please check Florian Hahn’s "
 "presentation in 2021 LLVM Dev Meeting and the implementation to learn more). "
-"In the following example, ``-fbounds-safety`` implicitly adds the redundant "
+"In the following example, `-fbounds-safety` implicitly adds the redundant "
 "bounds checks that the optimizer can remove:"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:172
+#: ../../../BoundsSafetyImplPlans.md:165
 msgid ""
-"``ConstraintElimination`` collects the following facts and determines if the "
+"`ConstraintElimination` collects the following facts and determines if the "
 "bounds checks can be safely removed:"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:175
-msgid "Inside the for-loop, ``0 <= i < count``, hence ``1 <= i + 1 <= count``."
+#: ../../../BoundsSafetyImplPlans.md:168
+msgid "Inside the for-loop, `0 <= i < count`, hence `1 <= i + 1 <= count`."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:176
-msgid "Pointer arithmetic ``p + count`` in the if-condition doesn’t wrap."
+#: ../../../BoundsSafetyImplPlans.md:169
+msgid "Pointer arithmetic `p + count` in the if-condition doesn’t wrap."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:177
+#: ../../../BoundsSafetyImplPlans.md:170
 msgid ""
-"``-fbounds-safety`` treats pointer arithmetic overflow as deterministically "
+"`-fbounds-safety` treats pointer arithmetic overflow as deterministically "
 "two’s complement computation, not an undefined behavior. Therefore, "
 "getelementptr does not typically have inbounds keyword. However, the "
-"compiler does emit inbounds for ``p + count`` in this case because "
-"``__counted_by(count)`` has the invariant that p has at least as many as "
-"elements as count. Using this information, ``ConstraintElimination`` is able "
-"to determine ``p + count`` doesn’t wrap."
+"compiler does emit inbounds for `p + count` in this case because "
+"`__counted_by(count)` has the invariant that p has at least as many as "
+"elements as count. Using this information, `ConstraintElimination` is able "
+"to determine `p + count` doesn’t wrap."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:184
-msgid "Accordingly, ``p + i`` and ``p + i + 1`` also don’t wrap."
+#: ../../../BoundsSafetyImplPlans.md:177
+msgid "Accordingly, `p + i` and `p + i + 1` also don’t wrap."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:185
-msgid "Therefore, ``p <= p + i`` and ``p + i + 1 <= p + count``."
+#: ../../../BoundsSafetyImplPlans.md:178
+msgid "Therefore, `p <= p + i` and `p + i + 1 <= p + count`."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:186
+#: ../../../BoundsSafetyImplPlans.md:179
 msgid ""
 "The if-condition simplifies to false and becomes dead code that the "
 "subsequent optimization passes can remove."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:189
+#: ../../../BoundsSafetyImplPlans.md:182
 msgid ""
-"``OptRemarks`` can be utilized to provide insights into performance tuning. "
-"It has the capability to report on checks that it cannot eliminate, possibly "
+"`OptRemarks` can be utilized to provide insights into performance tuning. It "
+"has the capability to report on checks that it cannot eliminate, possibly "
 "with reasons, allowing programmers to adjust their code to unlock further "
 "optimizations."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:195
+#: ../../../BoundsSafetyImplPlans.md:187
 msgid "Debugging"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:200
+#: ../../../BoundsSafetyImplPlans.md:191
 msgid ""
 "Internal bounds annotations change a pointer into a wide pointer. The "
 "debugger needs to understand that wide pointers are essentially pointers "
 "with a struct layout. To handle this, a wide pointer is described as a "
 "record type in the debug info. The type name has a special name prefix (e."
-"g., ``__bounds_safety$bidi_indexable``) which can be recognized by a debug "
+"g., `__bounds_safety$bidi_indexable`) which can be recognized by a debug "
 "info consumer to provide support that goes beyond showing the internal "
 "structure of the wide pointer. There are no DWARF extensions needed to "
 "support wide pointers. In our implementation, LLDB recognizes wide pointer "
@@ -303,61 +314,61 @@ msgid ""
 "in the expression evaluator."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:214
+#: ../../../BoundsSafetyImplPlans.md:204
 msgid ""
 "Similar to internal bounds annotations, external bound annotations are "
 "described as a typedef to their underlying pointer type in the debug info, "
 "and the bounds are encoded as strings in the typedef’s name (e.g., "
-"``__bounds_safety$counted_by:N``)."
+"`__bounds_safety$counted_by:N`)."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:220
-msgid "Recognizing ``-fbounds-safety`` traps"
+#: ../../../BoundsSafetyImplPlans.md:209
+msgid "Recognizing `-fbounds-safety` traps"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:222
+#: ../../../BoundsSafetyImplPlans.md:211
 msgid ""
-"Clang emits debug info for ``-fbounds-safety`` traps as inlined functions, "
+"Clang emits debug info for `-fbounds-safety` traps as inlined functions, "
 "where the function name encodes the error message. LLDB implements a frame "
 "recognizer to surface a human-readable error cause to the end user. A debug "
 "info consumer that is unaware of this sees an inlined function whose name "
-"encodes an error message (e.g., : ``__bounds_safety$Bounds check failed``)."
+"encodes an error message (e.g., : `__bounds_safety$Bounds check failed`)."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:229
+#: ../../../BoundsSafetyImplPlans.md:217
 msgid "Expression Parsing"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:231
+#: ../../../BoundsSafetyImplPlans.md:219
 msgid ""
-"In our implementation, LLDB’s expression evaluator does not enable the ``-"
-"fbounds-safety`` language option because it’s currently unable to fully "
+"In our implementation, LLDB’s expression evaluator does not enable the `-"
+"fbounds-safety` language option because it’s currently unable to fully "
 "reconstruct the pointers with external bounds annotations, and also because "
-"the evaluator operates in C++ mode, utilizing C++ reference types, while ``-"
-"fbounds-safety`` does not currently support C++. This means LLDB’s "
-"expression evaluator can only evaluate a subset of the ``-fbounds-safety`` "
-"language model. Specifically, it’s capable of evaluating the wide pointers "
-"that already exist in the source code. All other expressions are evaluated "
+"the evaluator operates in C++ mode, utilizing C++ reference types, while `-"
+"fbounds-safety` does not currently support C++. This means LLDB’s expression "
+"evaluator can only evaluate a subset of the `-fbounds-safety` language "
+"model. Specifically, it’s capable of evaluating the wide pointers that "
+"already exist in the source code. All other expressions are evaluated "
 "according to C/C++ semantics."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:242
+#: ../../../BoundsSafetyImplPlans.md:229
 msgid "C++ support"
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:244
+#: ../../../BoundsSafetyImplPlans.md:231
 msgid ""
 "C++ has multiple options to write code in a bounds-safe manner, such as "
 "following the bounds-safety core guidelines and/or using hardened libc++ "
-"along with the `C++ Safe Buffer model <https://discourse.llvm.org/t/rfc-c-"
-"buffer-hardening/65734>`_. However, these techniques may require ABI changes "
+"along with the [C++ Safe Buffer model](https://discourse.llvm.org/t/rfc-c-"
+"buffer-hardening/65734). However, these techniques may require ABI changes "
 "and may not be applicable to code interoperating with C. When the ABI of an "
 "existing program needs to be preserved and for headers shared between C and "
-"C++, ``-fbounds-safety`` offers a potential solution."
+"C++, `-fbounds-safety` offers a potential solution."
 msgstr ""
 
-#: ../../../BoundsSafetyImplPlans.rst:253
+#: ../../../BoundsSafetyImplPlans.md:239
 msgid ""
-"``-fbounds-safety`` is not currently supported in C++, but we believe the "
+"`-fbounds-safety` is not currently supported in C++, but we believe the "
 "general approach would be applicable for future efforts."
 msgstr ""

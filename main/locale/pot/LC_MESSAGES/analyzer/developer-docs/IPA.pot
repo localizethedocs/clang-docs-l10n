@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,41 +17,40 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../analyzer/developer-docs/IPA.rst:2
+#: ../../../analyzer/developer-docs/IPA.md:1
 msgid "Inlining"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:4
+#: ../../../analyzer/developer-docs/IPA.md:3
 msgid ""
 "There are several options that control which calls the analyzer will "
-"consider for inlining. The major one is ``-analyzer-config ipa``:"
+"consider for inlining. The major one is `-analyzer-config ipa`:"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:7
+#: ../../../analyzer/developer-docs/IPA.md:6
 msgid ""
-"``analyzer-config ipa=none`` - All inlining is disabled. This is the only "
-"mode available in LLVM 3.1 and earlier and in Xcode 4.3 and earlier."
+"`analyzer-config ipa=none` - All inlining is disabled. This is the only mode "
+"available in LLVM 3.1 and earlier and in Xcode 4.3 and earlier."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:13
+#: ../../../analyzer/developer-docs/IPA.md:8
 msgid ""
-"``analyzer-config ipa=basic-inlining`` - Turns on inlining for C functions, "
-"C++"
+"`analyzer-config ipa=basic-inlining` - Turns on inlining for C functions, C++"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:11
+#: ../../../analyzer/developer-docs/IPA.md:9
 msgid ""
 "static member functions, and blocks -- essentially, the calls that behave "
 "like simple C function calls. This is essentially the mode used in Xcode 4.4."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:19
+#: ../../../analyzer/developer-docs/IPA.md:12
 msgid ""
-"``analyzer-config ipa=inlining`` - Turns on inlining when we can confidently "
+"`analyzer-config ipa=inlining` - Turns on inlining when we can confidently "
 "find"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:16
+#: ../../../analyzer/developer-docs/IPA.md:13
 msgid ""
 "the function/method body corresponding to the call. (C functions, static "
 "functions, devirtualized C++ methods, Objective-C class methods, Objective-C "
@@ -59,78 +58,76 @@ msgid ""
 "instance)."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:23
+#: ../../../analyzer/developer-docs/IPA.md:17
 msgid ""
-"``analyzer-config ipa=dynamic`` - Inline instance methods for which the type "
-"is"
+"`analyzer-config ipa=dynamic` - Inline instance methods for which the type is"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:22
+#: ../../../analyzer/developer-docs/IPA.md:18
 msgid ""
 "determined at runtime and we are not 100% sure that our type info is "
 "correct. For virtual calls, inline the most plausible definition."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:28
+#: ../../../analyzer/developer-docs/IPA.md:20
 msgid ""
-"``analyzer-config ipa=dynamic-bifurcate`` - Same as -analyzer-config "
+"`analyzer-config ipa=dynamic-bifurcate` - Same as -analyzer-config "
 "ipa=dynamic,"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:26
+#: ../../../analyzer/developer-docs/IPA.md:21
 msgid ""
 "but the path is split. We inline on one branch and do not inline on the "
 "other. This mode does not drop the coverage in cases when the parent class "
 "has code that is only exercised when some of its methods are overridden."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:30
+#: ../../../analyzer/developer-docs/IPA.md:25
 msgid ""
-"Currently, ``-analyzer-config ipa=dynamic-bifurcate`` is the default mode."
+"Currently, `-analyzer-config ipa=dynamic-bifurcate` is the default mode."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:32
+#: ../../../analyzer/developer-docs/IPA.md:27
 msgid ""
-"While ``-analyzer-config ipa`` determines in general how aggressively the "
+"While `-analyzer-config ipa` determines in general how aggressively the "
 "analyzer will try to inline functions, several additional options control "
 "which types of functions can inlined, in an all-or-nothing way. These "
 "options use the analyzer's configuration table, so they are all specified as "
 "follows:"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:37
-msgid "``-analyzer-config OPTION=VALUE``"
+#: ../../../analyzer/developer-docs/IPA.md:32
+msgid "`-analyzer-config OPTION=VALUE`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:40
+#: ../../../analyzer/developer-docs/IPA.md:34
 msgid "c++-inlining"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:42
+#: ../../../analyzer/developer-docs/IPA.md:36
 msgid "This option controls which C++ member functions may be inlined."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:44
+#: ../../../analyzer/developer-docs/IPA.md:38
 msgid ""
-"``-analyzer-config c++-inlining=[none | methods | constructors | "
-"destructors]``"
+"`-analyzer-config c++-inlining=[none | methods | constructors | destructors]`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:46
+#: ../../../analyzer/developer-docs/IPA.md:40
 msgid ""
 "Each of these modes implies that all the previous member function kinds will "
 "be inlined as well; it doesn't make sense to inline destructors without "
 "inlining constructors, for example."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:50
+#: ../../../analyzer/developer-docs/IPA.md:44
 msgid ""
 "The default c++-inlining mode is 'destructors', meaning that all member "
 "functions with visible definitions will be considered for inlining. In some "
 "cases the analyzer may still choose not to inline the function."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:54
+#: ../../../analyzer/developer-docs/IPA.md:48
 msgid ""
 "Note that under 'constructors', constructors for types with non-trivial "
 "destructors will not be inlined. Additionally, no C++ member functions will "
@@ -138,23 +135,23 @@ msgid ""
 "inlining, regardless of the setting of the c++-inlining mode."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:60
+#: ../../../analyzer/developer-docs/IPA.md:53
 msgid "c++-template-inlining"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:62
+#: ../../../analyzer/developer-docs/IPA.md:55
 msgid "This option controls whether C++ templated functions may be inlined."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:64
-msgid "``-analyzer-config c++-template-inlining=[true | false]``"
+#: ../../../analyzer/developer-docs/IPA.md:57
+msgid "`-analyzer-config c++-template-inlining=[true | false]`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:66
+#: ../../../analyzer/developer-docs/IPA.md:59
 msgid "Currently, template functions are considered for inlining by default."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:68
+#: ../../../analyzer/developer-docs/IPA.md:61
 msgid ""
 "The motivation behind this option is that very generic code can be a source "
 "of false positives, either by considering paths that the caller considers "
@@ -162,28 +159,28 @@ msgid ""
 "of a deep implementation of a function."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:74
+#: ../../../analyzer/developer-docs/IPA.md:66
 msgid "c++-stdlib-inlining"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:76
+#: ../../../analyzer/developer-docs/IPA.md:68
 msgid ""
 "This option controls whether functions from the C++ standard library, "
 "including methods of the container classes in the Standard Template Library, "
 "should be considered for inlining."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:80
-msgid "``-analyzer-config c++-stdlib-inlining=[true | false]``"
+#: ../../../analyzer/developer-docs/IPA.md:72
+msgid "`-analyzer-config c++-stdlib-inlining=[true | false]`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:82
+#: ../../../analyzer/developer-docs/IPA.md:74
 msgid ""
 "Currently, C++ standard library functions are considered for inlining by "
 "default."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:85
+#: ../../../analyzer/developer-docs/IPA.md:77
 msgid ""
 "The standard library functions and the STL in particular are used "
 "ubiquitously enough that our tolerance for false positives is even lower "
@@ -192,27 +189,27 @@ msgid ""
 "system headers in order to silence analyzer warnings."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:92
+#: ../../../analyzer/developer-docs/IPA.md:83
 msgid "c++-container-inlining"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:94
+#: ../../../analyzer/developer-docs/IPA.md:85
 msgid ""
 "This option controls whether constructors and destructors of \"container\" "
 "types should be considered for inlining."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:97
-msgid "``-analyzer-config c++-container-inlining=[true | false]``"
+#: ../../../analyzer/developer-docs/IPA.md:88
+msgid "`-analyzer-config c++-container-inlining=[true | false]`"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:99
+#: ../../../analyzer/developer-docs/IPA.md:90
 msgid ""
 "Currently, these constructors and destructors are NOT considered for "
 "inlining by default."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:102
+#: ../../../analyzer/developer-docs/IPA.md:93
 msgid ""
 "The current implementation of this setting checks whether a type has a "
 "member named 'iterator' or a member named 'begin'; these names are idiomatic "
@@ -222,7 +219,7 @@ msgid ""
 "should be equivalent:"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:115
+#: ../../../analyzer/developer-docs/IPA.md:105
 msgid ""
 "Many of these issues are avoided if containers always have unknown, symbolic "
 "state, which is what happens when their constructors are treated as opaque. "
@@ -230,17 +227,17 @@ msgid ""
 "through inlining, or choose to model them directly using checkers instead."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:122
+#: ../../../analyzer/developer-docs/IPA.md:110
 msgid "Basics of Implementation"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:124
+#: ../../../analyzer/developer-docs/IPA.md:112
 msgid ""
 "The low-level mechanism of inlining a function is handled in ExprEngine::"
 "inlineCall and ExprEngine::processCallExit."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:127
+#: ../../../analyzer/developer-docs/IPA.md:115
 msgid ""
 "If the conditions are right for inlining, a CallEnter node is created and "
 "added to the analysis work list. The CallEnter node marks the change to a "
@@ -250,19 +247,19 @@ msgid ""
 "the function."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:133
+#: ../../../analyzer/developer-docs/IPA.md:121
 msgid ""
 "Exiting an inlined function is a bit more work, fortunately broken up into "
 "reasonable steps:"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:136
+#: ../../../analyzer/developer-docs/IPA.md:124
 msgid ""
 "The CoreEngine realizes we're at the end of an inlined call and generates a "
 "CallExitBegin node."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:139
+#: ../../../analyzer/developer-docs/IPA.md:126
 msgid ""
 "ExprEngine takes over (in processCallExit) and finds the return value of the "
 "function, if it has one. This is bound to the expression that triggered the "
@@ -270,93 +267,94 @@ msgid ""
 "this step is skipped.)"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:144
+#: ../../../analyzer/developer-docs/IPA.md:130
 msgid ""
 "Dead symbols and bindings are cleaned out from the state, including any "
 "local bindings."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:147
+#: ../../../analyzer/developer-docs/IPA.md:132
 msgid ""
 "A CallExitEnd node is generated, which marks the transition back to the "
 "caller's StackFrame."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:150
+#: ../../../analyzer/developer-docs/IPA.md:134
 msgid ""
 "Custom post-call checks are processed and the final nodes are pushed back "
 "onto the work list, so that evaluation of the caller can continue."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:154
+#: ../../../analyzer/developer-docs/IPA.md:137
 msgid "Retry Without Inlining"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:156
+#: ../../../analyzer/developer-docs/IPA.md:139
 msgid ""
 "In some cases, we would like to retry analysis without inlining a particular "
 "call."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:159
+#: ../../../analyzer/developer-docs/IPA.md:142
 msgid ""
 "Currently, we use this technique to recover coverage in case we stop "
 "analyzing a path due to exceeding the maximum block count inside an inlined "
 "function."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:163
+#: ../../../analyzer/developer-docs/IPA.md:146
 msgid ""
 "When this situation is detected, we walk up the path to find the first node "
 "before inlining was started and enqueue it on the WorkList with a special "
-"ReplayWithoutInlining bit added to it (ExprEngine::replayWithoutInlining).  "
+"ReplayWithoutInlining bit added to it (ExprEngine::replayWithoutInlining). "
 "The path is then re-analyzed from that point without inlining that "
 "particular call."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:169
+#: ../../../analyzer/developer-docs/IPA.md:151
 msgid "Deciding When to Inline"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:171
+#: ../../../analyzer/developer-docs/IPA.md:153
 msgid ""
 "In general, the analyzer attempts to inline as much as possible, since it "
-"provides a better summary of what actually happens in the program.  There "
-"are some cases, however, where the analyzer chooses not to inline:"
+"provides a better summary of what actually happens in the program. There are "
+"some cases, however, where the analyzer chooses not to inline:"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:175
+#: ../../../analyzer/developer-docs/IPA.md:157
 msgid ""
-"If there is no definition available for the called function or method.  In "
+"If there is no definition available for the called function or method. In "
 "this case, there is no opportunity to inline."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:178
+#: ../../../analyzer/developer-docs/IPA.md:160
 msgid ""
 "If the CFG cannot be constructed for a called function, or the liveness "
-"cannot be computed.  These are prerequisites for analyzing a function body, "
+"cannot be computed. These are prerequisites for analyzing a function body, "
 "with or without inlining."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:182
+#: ../../../analyzer/developer-docs/IPA.md:164
 msgid ""
 "If the StackFrame chain for a given ExplodedNode reaches a maximum cutoff "
-"depth.  This prevents unbounded analysis due to infinite recursion, but also "
+"depth. This prevents unbounded analysis due to infinite recursion, but also "
 "serves as a useful cutoff for performance reasons."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:186
+#: ../../../analyzer/developer-docs/IPA.md:168
 msgid ""
-"If the function is variadic.  This is not a hard limitation, but an "
+"If the function is variadic. This is not a hard limitation, but an "
 "engineering limitation."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:189
+#: ../../../analyzer/developer-docs/IPA.md:171
 msgid ""
-"Tracked by: <rdar://problem/12147064> Support inlining of variadic functions"
+"Tracked by: `<rdar://problem/12147064>` Support inlining of variadic "
+"functions"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:191
+#: ../../../analyzer/developer-docs/IPA.md:173
 msgid ""
 "In C++, constructors are not inlined unless the destructor call will be "
 "processed by the ExprEngine. Thus, if the CFG was built without nodes for "
@@ -366,20 +364,20 @@ msgid ""
 "inlined.) See \"C++ Caveats\" below."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:198
+#: ../../../analyzer/developer-docs/IPA.md:180
 msgid ""
 "In C++, ExprEngine does not inline custom implementations of operator 'new' "
 "or operator 'delete', nor does it inline the constructors and destructors "
 "associated with these. See \"C++ Caveats\" below."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:202
+#: ../../../analyzer/developer-docs/IPA.md:184
 msgid ""
-"Calls resulting in \"dynamic dispatch\" are specially handled.  See more "
+"Calls resulting in \"dynamic dispatch\" are specially handled. See more "
 "below."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:204
+#: ../../../analyzer/developer-docs/IPA.md:186
 msgid ""
 "The FunctionSummaries map stores additional information about declarations, "
 "some of which is collected at runtime based on previous analyses. We do not "
@@ -388,11 +386,11 @@ msgid ""
 "Inlining\")."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:212
+#: ../../../analyzer/developer-docs/IPA.md:192
 msgid "Dynamic Calls and Devirtualization"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:214
+#: ../../../analyzer/developer-docs/IPA.md:194
 msgid ""
 "\"Dynamic\" calls are those that are resolved at runtime, such as C++ "
 "virtual method calls and Objective-C message sends. Due to the path-"
@@ -401,85 +399,85 @@ msgid ""
 "\"devirtualize\" the call."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:219
+#: ../../../analyzer/developer-docs/IPA.md:199
 msgid ""
 "This path-sensitive devirtualization occurs when the analyzer can determine "
-"what method would actually be called at runtime.  This is possible when the "
+"what method would actually be called at runtime. This is possible when the "
 "type information is constrained enough for a simulated C++/Objective-C "
 "object that the analyzer can make such a decision."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:225
+#: ../../../analyzer/developer-docs/IPA.md:204
 msgid "DynamicTypeInfo"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:227
+#: ../../../analyzer/developer-docs/IPA.md:206
 msgid ""
 "As the analyzer analyzes a path, it may accrue information to refine the "
-"knowledge about the type of an object.  This can then be used to make better "
+"knowledge about the type of an object. This can then be used to make better "
 "decisions about the target method of a call."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:231
+#: ../../../analyzer/developer-docs/IPA.md:210
 msgid ""
-"Such type information is tracked as DynamicTypeInfo.  This is path-sensitive "
+"Such type information is tracked as DynamicTypeInfo. This is path-sensitive "
 "data that is stored in ProgramState, which defines a mapping from MemRegions "
 "to an (optional) DynamicTypeInfo."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:235
+#: ../../../analyzer/developer-docs/IPA.md:214
 msgid ""
 "If no DynamicTypeInfo has been explicitly set for a MemRegion, it will be "
 "lazily inferred from the region's type or associated symbol. Information "
 "from symbolic regions is weaker than from true typed regions."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:240
+#: ../../../analyzer/developer-docs/IPA.md:218
 msgid ""
 "EXAMPLE: A C++ object declared \"A obj\" is known to have the class 'A', but "
 "a"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:240
+#: ../../../analyzer/developer-docs/IPA.md:220
 msgid "reference \"A &ref\" may dynamically be a subclass of 'A'."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:242
+#: ../../../analyzer/developer-docs/IPA.md:222
 msgid ""
 "The DynamicTypePropagation checker gathers and propagates DynamicTypeInfo, "
 "updating it as information is observed along a path that can refine that "
 "type information for a region."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:250
+#: ../../../analyzer/developer-docs/IPA.md:226
 msgid ""
 "WARNING: Not all of the existing analyzer code has been retrofitted to use"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:247
+#: ../../../analyzer/developer-docs/IPA.md:228
 msgid ""
 "DynamicTypeInfo, nor is it universally appropriate. In particular, "
 "DynamicTypeInfo always applies to a region with all casts stripped off, but "
 "sometimes the information provided by casts can be useful."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:253
+#: ../../../analyzer/developer-docs/IPA.md:232
 msgid "RuntimeDefinition"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:255
+#: ../../../analyzer/developer-docs/IPA.md:234
 msgid ""
 "The basis of devirtualization is CallEvent's getRuntimeDefinition() method, "
-"which returns a RuntimeDefinition object.  When asked to provide a "
+"which returns a RuntimeDefinition object. When asked to provide a "
 "definition, the CallEvents for dynamic calls will use the DynamicTypeInfo in "
-"their ProgramState to attempt to devirtualize the call.  In the case of no "
+"their ProgramState to attempt to devirtualize the call. In the case of no "
 "dynamic dispatch, or perfectly constrained devirtualization, the resulting "
 "RuntimeDefinition contains a Decl corresponding to the definition of the "
 "called function, and RuntimeDefinition::mayHaveOtherDefinitions will return "
 "FALSE."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:263
+#: ../../../analyzer/developer-docs/IPA.md:242
 msgid ""
 "In the case of dynamic dispatch where our information is not perfect, "
 "CallEvent can make a guess, but RuntimeDefinition::mayHaveOtherDefinitions "
@@ -489,11 +487,11 @@ msgid ""
 "call should be inlined."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:271
+#: ../../../analyzer/developer-docs/IPA.md:249
 msgid "Inlining Dynamic Calls"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:273
+#: ../../../analyzer/developer-docs/IPA.md:251
 msgid ""
 "The -analyzer-config ipa option has five different modes: none, basic-"
 "inlining, inlining, dynamic, and dynamic-bifurcate. Under -analyzer-config "
@@ -504,7 +502,7 @@ msgid ""
 "were available)."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:280
+#: ../../../analyzer/developer-docs/IPA.md:258
 msgid ""
 "Currently, no Objective-C messages are not inlined under -analyzer-config "
 "ipa=inlining, even if we are reasonably confident of the type of the "
@@ -512,7 +510,7 @@ msgid ""
 "thoroughly."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:285
+#: ../../../analyzer/developer-docs/IPA.md:263
 msgid ""
 "The last option, -analyzer-config ipa=dynamic-bifurcate, behaves similarly "
 "to \"dynamic\", but performs a conservative invalidation in the general "
@@ -520,24 +518,24 @@ msgid ""
 "below."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:289
+#: ../../../analyzer/developer-docs/IPA.md:267
 msgid ""
 "As stated above, -analyzer-config ipa=basic-inlining does not inline any C++ "
 "member functions or Objective-C method calls, even if they are non-virtual "
 "or can be safely devirtualized."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:295
+#: ../../../analyzer/developer-docs/IPA.md:271
 msgid "Bifurcation"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:297
+#: ../../../analyzer/developer-docs/IPA.md:273
 msgid ""
-"ExprEngine::BifurcateCall implements the ``-analyzer-config ipa=dynamic-"
-"bifurcate`` mode."
+"ExprEngine::BifurcateCall implements the `-analyzer-config ipa=dynamic-"
+"bifurcate` mode."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:300
+#: ../../../analyzer/developer-docs/IPA.md:276
 msgid ""
 "When a call is made on an object with imprecise dynamic type information "
 "(RuntimeDefinition::mayHaveOtherDefinitions() evaluates to TRUE), ExprEngine "
@@ -545,17 +543,17 @@ msgid ""
 "RuntimeDefinition object) with a path-sensitive \"mode\" in the ProgramState."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:305
+#: ../../../analyzer/developer-docs/IPA.md:281
 msgid "Currently, there are 2 modes:"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:312
+#: ../../../analyzer/developer-docs/IPA.md:283
 msgid ""
-"``DynamicDispatchModeInlined`` - Models the case where the dynamic type "
+"`DynamicDispatchModeInlined` - Models the case where the dynamic type "
 "information"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:308
+#: ../../../analyzer/developer-docs/IPA.md:284
 msgid ""
 "of the receiver (MemoryRegion) is assumed to be perfectly constrained so "
 "that a given definition of a method is expected to be the code actually "
@@ -564,12 +562,12 @@ msgid ""
 "receiver because the function definition is considered to be fully resolved."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:319
+#: ../../../analyzer/developer-docs/IPA.md:289
 msgid ""
-"``DynamicDispatchModeConservative`` - Models the case where the dynamic type"
+"`DynamicDispatchModeConservative` - Models the case where the dynamic type"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:315
+#: ../../../analyzer/developer-docs/IPA.md:290
 msgid ""
 "information is assumed to be incorrect, for example, implies that the method "
 "definition is overridden in a subclass. In such cases, ExprEngine does not "
@@ -578,7 +576,7 @@ msgid ""
 "effects of a call."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:321
+#: ../../../analyzer/developer-docs/IPA.md:296
 msgid ""
 "Going forward along the symbolic execution path, ExprEngine consults the "
 "mode of the receiver's MemRegion to make decisions on whether the calls "
@@ -586,7 +584,7 @@ msgid ""
 "region."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:325
+#: ../../../analyzer/developer-docs/IPA.md:300
 msgid ""
 "At a high level, \"bifurcation mode\" allows for increased semantic coverage "
 "in cases where the parent method contains code which is only executed when "
@@ -595,11 +593,11 @@ msgid ""
 "the path where the conservative mode is used."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:332
+#: ../../../analyzer/developer-docs/IPA.md:306
 msgid "Objective-C Message Heuristics"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:334
+#: ../../../analyzer/developer-docs/IPA.md:308
 msgid ""
 "ExprEngine relies on a set of heuristics to partition the set of Objective-C "
 "method calls into those that require bifurcation and those that do not. "
@@ -607,36 +605,36 @@ msgid ""
 "precise (cannot be a subclass):"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:339
+#: ../../../analyzer/developer-docs/IPA.md:313
 msgid ""
 "If the object was created with +alloc or +new and initialized with an -init "
 "method."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:342
+#: ../../../analyzer/developer-docs/IPA.md:315
 msgid ""
 "If the calls are property accesses using dot syntax. This is based on the "
 "assumption that children rarely override properties, or do so in an "
 "essentially compatible way."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:346
+#: ../../../analyzer/developer-docs/IPA.md:318
 msgid ""
 "If the class interface is declared inside the main source file. In this case "
 "it is unlikely that it will be subclassed."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:349
+#: ../../../analyzer/developer-docs/IPA.md:320
 msgid ""
 "If the method is not declared outside of main source file, either by the "
 "receiver's class or by any superclasses."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:353
+#: ../../../analyzer/developer-docs/IPA.md:323
 msgid "C++ Caveats"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:355
+#: ../../../analyzer/developer-docs/IPA.md:325
 msgid ""
 "C++11 [class.cdtor]p4 describes how the vtable of an object is modified as "
 "it is being constructed or destructed; that is, the type of the object "
@@ -644,11 +642,11 @@ msgid ""
 "using DynamicTypeInfo in the DynamicTypePropagation checker."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:360
+#: ../../../analyzer/developer-docs/IPA.md:330
 msgid "There are several limitations in the current implementation:"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:362
+#: ../../../analyzer/developer-docs/IPA.md:332
 msgid ""
 "Temporaries are poorly modeled right now because we're not confident in the "
 "placement of their destructors in the CFG. We currently won't inline their "
@@ -656,24 +654,24 @@ msgid ""
 "destructors at all, not even to invalidate the region."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:367
+#: ../../../analyzer/developer-docs/IPA.md:336
 msgid ""
-"'new' is poorly modeled due to some nasty CFG/design issues.  This is "
-"tracked in PR12014.  'delete' is not modeled at all."
+"'new' is poorly modeled due to some nasty CFG/design issues. This is tracked "
+"in PR12014. 'delete' is not modeled at all."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:370
+#: ../../../analyzer/developer-docs/IPA.md:338
 msgid ""
-"Arrays of objects are modeled very poorly right now.  ExprEngine currently "
+"Arrays of objects are modeled very poorly right now. ExprEngine currently "
 "only simulates the first constructor and first destructor. Because of this, "
 "ExprEngine does not inline any constructors or destructors for arrays."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:376
+#: ../../../analyzer/developer-docs/IPA.md:342
 msgid "CallEvent"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:378
+#: ../../../analyzer/developer-docs/IPA.md:344
 msgid ""
 "A CallEvent represents a specific call to a function, method, or other body "
 "of code. It is path-sensitive, containing both the current state "
@@ -682,27 +680,27 @@ msgid ""
 "written in the source or what sort of code body is being invoked."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:385
+#: ../../../analyzer/developer-docs/IPA.md:350
 msgid "NOTE: For those familiar with Cocoa, CallEvent is roughly equivalent to"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:385
+#: ../../../analyzer/developer-docs/IPA.md:352
 msgid "NSInvocation."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:387
+#: ../../../analyzer/developer-docs/IPA.md:354
 msgid ""
 "CallEvent should be used whenever there is logic dealing with function calls "
 "that does not care how the call occurred."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:390
+#: ../../../analyzer/developer-docs/IPA.md:357
 msgid ""
 "Examples include checking that arguments satisfy preconditions (such as "
-"__attribute__((nonnull))), and attempting to inline a call."
+"`__attribute__((nonnull))`), and attempting to inline a call."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/IPA.rst:393
+#: ../../../analyzer/developer-docs/IPA.md:360
 msgid ""
 "CallEvents are reference-counted objects managed by a CallEventManager. "
 "While there is no inherent issue with persisting them (say, in a "

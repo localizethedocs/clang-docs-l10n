@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,249 +17,244 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../SanitizerSpecialCaseList.rst:3
+#: ../../../SanitizerSpecialCaseList.md:1
 msgid "Sanitizer special case list"
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:9
+#: ../../../SanitizerSpecialCaseList.md:7
 msgid "Introduction"
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:11
+#: ../../../SanitizerSpecialCaseList.md:9
 msgid ""
 "This document describes the way to disable or alter the behavior of "
 "sanitizer tools for certain source-level entities by providing a special "
 "file at compile-time."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:16
+#: ../../../SanitizerSpecialCaseList.md:13
 msgid "Goal and usage"
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:18
+#: ../../../SanitizerSpecialCaseList.md:15
 msgid ""
-"Users of sanitizer tools, such as :doc:`AddressSanitizer`, :doc:"
-"`HardwareAssistedAddressSanitizerDesign`, :doc:`ThreadSanitizer`, :doc:"
-"`MemorySanitizer` or :doc:`UndefinedBehaviorSanitizer` may want to disable "
+"Users of sanitizer tools, such as {doc}`AddressSanitizer`, {doc}"
+"`HardwareAssistedAddressSanitizerDesign`, {doc}`ThreadSanitizer`, {doc}"
+"`MemorySanitizer` or {doc}`UndefinedBehaviorSanitizer` may want to disable "
 "or alter some checks for certain source-level entities to:"
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:23
+#: ../../../SanitizerSpecialCaseList.md:20
 msgid "speedup hot function, which is known to be correct;"
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:24
+#: ../../../SanitizerSpecialCaseList.md:21
 msgid ""
 "ignore a function that does some low-level magic (e.g. walks through the "
 "thread stack, bypassing the frame boundaries);"
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:26
+#: ../../../SanitizerSpecialCaseList.md:23
 msgid "ignore a known problem."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:28
+#: ../../../SanitizerSpecialCaseList.md:25
 msgid ""
 "To achieve this, user may create a file listing the entities they want to "
-"ignore, and pass it to clang at compile-time using ``-fsanitize-ignorelist`` "
-"flag. See :doc:`UsersManual` for details."
+"ignore, and pass it to clang at compile-time using `-fsanitize-ignorelist` "
+"flag. See {doc}`UsersManual` for details."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:33
+#: ../../../SanitizerSpecialCaseList.md:29
 msgid "Example"
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:54
+#: ../../../SanitizerSpecialCaseList.md:49
 msgid "Usage with UndefinedBehaviorSanitizer"
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:56
+#: ../../../SanitizerSpecialCaseList.md:51
 msgid ""
-"``unsigned-integer-overflow``, ``signed-integer-overflow``, ``implicit-"
-"signed-integer-truncation``, ``implicit-unsigned-integer-truncation``, and "
-"``enum`` sanitizers support the ability to adjust instrumentation based on "
-"type."
+"`unsigned-integer-overflow`, `signed-integer-overflow`, `implicit-signed-"
+"integer-truncation`, `implicit-unsigned-integer-truncation`, and `enum` "
+"sanitizers support the ability to adjust instrumentation based on type."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:61
+#: ../../../SanitizerSpecialCaseList.md:56
 msgid ""
 "By default, supported sanitizers will have their instrumentation disabled "
 "for entries specified within an ignorelist."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:77
+#: ../../../SanitizerSpecialCaseList.md:72
 msgid ""
-"For example, supplying the above ``ignorelist.txt`` to ``-fsanitize-"
-"ignorelist=ignorelist.txt`` disables overflow sanitizer instrumentation for "
-"arithmetic operations containing values of type ``int``."
+"For example, supplying the above `ignorelist.txt` to `-fsanitize-"
+"ignorelist=ignorelist.txt` disables overflow sanitizer instrumentation for "
+"arithmetic operations containing values of type `int`."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:81
+#: ../../../SanitizerSpecialCaseList.md:76
 msgid ""
-"The ``=sanitize`` category is also supported. Any ``=sanitize`` category "
-"entries enable sanitizer instrumentation, even if it was ignored by entries "
-"before. Entries can be ``src``, ``type``, ``global``, ``fun``, and "
-"``mainfile``."
+"The `=sanitize` category is also supported. Any `=sanitize` category entries "
+"enable sanitizer instrumentation, even if it was ignored by entries before. "
+"Entries can be `src`, `type`, `global`, `fun`, and `mainfile`."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:86
+#: ../../../SanitizerSpecialCaseList.md:81
 msgid ""
 "With this, one may disable instrumentation for some or all types and "
 "specifically allow instrumentation for one or many types -- including types "
-"created via ``typedef``. This is a way to achieve a sort of \"allowlist\" "
-"for supported sanitizers."
+"created via `typedef`. This is a way to achieve a sort of \"allowlist\" for "
+"supported sanitizers."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:107
+#: ../../../SanitizerSpecialCaseList.md:102
 msgid ""
 "If multiple entries match the source, then the latest entry takes the "
 "precedence. Here are a few examples."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:138
+#: ../../../SanitizerSpecialCaseList.md:132
 msgid "Interaction with Overflow Behavior Types"
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:140
+#: ../../../SanitizerSpecialCaseList.md:134
 msgid ""
-"The ``overflow_behavior`` attribute provides a more granular, source-level "
+"The `overflow_behavior` attribute provides a more granular, source-level "
 "control that takes precedence over the Sanitizer Special Case List. If a "
-"type is given an ``overflow_behavior`` attribute, it will override any "
-"matching ``type:`` entry in a special case list."
+"type is given an `overflow_behavior` attribute, it will override any "
+"matching `type:` entry in a special case list."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:145
+#: ../../../SanitizerSpecialCaseList.md:139
 msgid ""
 "This allows developers to enforce a specific overflow behavior for a "
 "critical type, even if a broader rule in the special case list would "
 "otherwise disable instrumentation for it."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:169
+#: ../../../SanitizerSpecialCaseList.md:163
 msgid ""
-"For more details on overflow behavior types, see :doc:"
+"For more details on overflow behavior types, see {doc}"
 "`OverflowBehaviorTypes`."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:172
+#: ../../../SanitizerSpecialCaseList.md:165
 msgid "Format"
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:174
+#: ../../../SanitizerSpecialCaseList.md:167
 msgid ""
 "Ignorelists consist of entries, optionally grouped into sections. Empty "
 "lines and lines starting with \"#\" are ignored."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:179
+#: ../../../SanitizerSpecialCaseList.md:171
 msgid ""
 "Prior to Clang 18, section names and entries described below use a variant "
-"of regex where ``*`` is translated to ``.*``. Clang 18 (`D154014 <https://"
-"reviews.llvm.org/D154014>`) switches to glob and plans to remove regex "
+"of regex where `*` is translated to `.*`. Clang 18 ([D154014](https://"
+"reviews.llvm.org/D154014)) switches to glob and plans to remove regex "
 "support in Clang 19."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:184
+#: ../../../SanitizerSpecialCaseList.md:176
 msgid ""
-"For Clang 18, regex is supported if ``#!special-case-list-v1`` is the first "
+"For Clang 18, regex is supported if `#!special-case-list-v1` is the first "
 "line of the file."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:187
+#: ../../../SanitizerSpecialCaseList.md:179
 msgid ""
-"Many special case lists use ``.`` to indicate the literal character and do "
-"not use regex metacharacters such as ``(``, ``)``. They are unaffected by "
-"the regex to glob transition. For more details, see `this discourse post "
-"<https://discourse.llvm.org/t/use-glob-instead-of-regex-for-"
-"specialcaselists/71666>`_."
+"Many special case lists use `.` to indicate the literal character and do not "
+"use regex metacharacters such as `(`, `)`. They are unaffected by the regex "
+"to glob transition. For more details, see [this discourse post](https://"
+"discourse.llvm.org/t/use-glob-instead-of-regex-for-specialcaselists/71666)."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:192
+#: ../../../SanitizerSpecialCaseList.md:184
 msgid ""
 "Section names are globs written in square brackets that denote which "
-"sanitizer the following entries apply to. For example, ``[address]`` "
-"specifies AddressSanitizer while ``[{cfi-vcall,cfi-icall}]`` specifies "
-"Control Flow Integrity virtual and indirect call checking. Entries without a "
-"section will be placed under the ``[*]`` section applying to all enabled "
-"sanitizers."
+"sanitizer the following entries apply to. For example, `[address]` specifies "
+"AddressSanitizer while `[{cfi-vcall,cfi-icall}]` specifies Control Flow "
+"Integrity virtual and indirect call checking. Entries without a section will "
+"be placed under the `[*]` section applying to all enabled sanitizers."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:198
+#: ../../../SanitizerSpecialCaseList.md:190
 msgid ""
 "Entries contain an entity type, followed by a colon and a glob, specifying "
 "the names of the entities, optionally followed by an equals sign and a tool-"
-"specific category, e.g. ``fun:*ExampleFunc=example_category``. Two generic "
-"entity types are ``src`` and ``fun``, which allow users to specify source "
-"files and functions, respectively. Some sanitizer tools may introduce custom "
+"specific category, e.g. `fun:*ExampleFunc=example_category`. Two generic "
+"entity types are `src` and `fun`, which allow users to specify source files "
+"and functions, respectively. Some sanitizer tools may introduce custom "
 "entity types and categories - refer to tool-specific docs."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:236
+#: ../../../SanitizerSpecialCaseList.md:226
 msgid ""
-"By default, ``src`` and ``mainfile`` are matched against the filename as "
-"seen by LLVM. On Windows, this might involve a mix of forward and "
-"backslashes as file separators, and writing patterns to match both variants "
-"can be inconvenient."
+"By default, `src` and `mainfile` are matched against the filename as seen by "
+"LLVM. On Windows, this might involve a mix of forward and backslashes as "
+"file separators, and writing patterns to match both variants can be "
+"inconvenient."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:241
+#: ../../../SanitizerSpecialCaseList.md:231
 msgid ""
-"Starting with version 4 (indicated by ``#!special-case-list-v4``), path "
-"matching on Windows hosts is slash-agnostic: both forward slashes (``/``) "
-"and backslashes (``\\``) match either path separator in both patterns and "
-"paths."
+"Starting with version 4 (indicated by `#!special-case-list-v4`), path "
+"matching on Windows hosts is slash-agnostic: both forward slashes (`/`) and "
+"backslashes (`\\`) match either path separator in both patterns and paths."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:247
+#: ../../../SanitizerSpecialCaseList.md:237
 msgid ""
-"By default, path matching (for ``src`` and ``mainfile``) matches the query "
-"path as-is. For example, a query with ``./foo.c`` will not match a rule "
-"defined as ``src:foo.c``."
+"By default, path matching (for `src` and `mainfile`) matches the query path "
+"as-is. For example, a query with `./foo.c` will not match a rule defined as "
+"`src:foo.c`."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:251
+#: ../../../SanitizerSpecialCaseList.md:241
 msgid ""
-"Starting with version 3 (indicated by ``#!special-case-list-v3``), leading "
-"``./`` is canonicalized (removed) from paths before matching. This means a "
-"rule like ``src:foo.c`` will match both ``foo.c`` and ``./foo.c``, while a "
-"rule like ``src:./foo.c`` will no longer match."
+"Starting with version 3 (indicated by `#!special-case-list-v3`), leading `./"
+"` is canonicalized (removed) from paths before matching. This means a rule "
+"like `src:foo.c` will match both `foo.c` and `./foo.c`, while a rule like "
+"`src:./foo.c` will no longer match."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:256
+#: ../../../SanitizerSpecialCaseList.md:246
 msgid ""
-"Version 4 (indicated by ``#!special-case-list-v4``) is a transition version "
+"Version 4 (indicated by `#!special-case-list-v4`) is a transition version "
 "that maintains backward compatibility by matching both canonicalized and non-"
 "canonicalized paths, but emits a warning if a match would be lost in Version "
-"5 (i.e., if it only matches because of the deprecated leading ``./`` in the "
+"5 (i.e., if it only matches because of the deprecated leading `./` in the "
 "rule)."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:262
+#: ../../../SanitizerSpecialCaseList.md:252
 msgid ""
-"Version 5 (indicated by ``#!special-case-list-v5``) drops backward "
+"Version 5 (indicated by `#!special-case-list-v5`) drops backward "
 "compatibility and behaves like Version 3."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:266
+#: ../../../SanitizerSpecialCaseList.md:256
 msgid ""
-"``mainfile`` is similar to applying ``-fno-sanitize=`` to a set of files but "
+"`mainfile` is similar to applying `-fno-sanitize=` to a set of files but "
 "does not need plumbing into the build system. This works well for internal "
 "linkage functions but has a caveat for C++ vague linkage functions."
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:270
+#: ../../../SanitizerSpecialCaseList.md:260
 msgid ""
 "C++ vague linkage functions (e.g. inline functions, template instantiations) "
 "are deduplicated at link time. A function (in an included file) ignored by a "
-"specific ``mainfile`` pattern may not be the prevailing copy picked by the "
-"linker. Therefore, using ``mainfile`` requires caution. It may still be "
+"specific `mainfile` pattern may not be the prevailing copy picked by the "
+"linker. Therefore, using `mainfile` requires caution. It may still be "
 "useful, e.g. when patterns are picked in a way to ensure the prevailing one "
 "is ignored. (There is action-at-a-distance risk.)"
 msgstr ""
 
-#: ../../../SanitizerSpecialCaseList.rst:277
+#: ../../../SanitizerSpecialCaseList.md:267
 msgid ""
-"``mainfile`` can be useful enabling a ubsan check for a large code base when "
+"`mainfile` can be useful enabling a ubsan check for a large code base when "
 "finding the direct stack frame triggering the failure for every failure is "
 "difficult."
 msgstr ""

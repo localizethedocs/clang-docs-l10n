@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../OpenMPSupport.rst:1
+#: ../../../OpenMPSupport.md:1
 msgid ""
 "<style type=\"text/css\">\n"
 "  .none { background-color: #FFCCCC }\n"
@@ -26,35 +26,36 @@ msgid ""
 "</style>"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:18
+#: ../../../OpenMPSupport.md:22
 msgid "OpenMP Support"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:20
+#: ../../../OpenMPSupport.md:24
 msgid ""
 "Clang fully supports OpenMP 4.5, almost all of 5.0 and most of 5.1/2. Clang "
 "supports offloading to X86_64, AArch64, PPC64[LE], NVIDIA GPUs (all models) "
 "and AMD GPUs (all models)."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:23
+#: ../../../OpenMPSupport.md:27
 msgid ""
 "In addition, the LLVM OpenMP runtime `libomp` supports the OpenMP Tools "
 "Interface (OMPT) on x86, x86_64, AArch64, and PPC64 on Linux, Windows, and "
 "macOS. OMPT is also supported for NVIDIA and AMD GPUs."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:27
+#: ../../../OpenMPSupport.md:31
 msgid ""
-"For the list of supported features from OpenMP 5.0 and 5.1 see `OpenMP "
-"implementation details`_ and `OpenMP 51 implementation details`_."
+"For the list of supported features from OpenMP 5.0 and 5.1 see {ref}`OpenMP "
+"implementation details <openmp-implementation-details>` and {ref}`OpenMP 51 "
+"implementation details <openmp-51-implementation-details>`."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:31
+#: ../../../OpenMPSupport.md:35
 msgid "General improvements"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:32
+#: ../../../OpenMPSupport.md:37
 msgid ""
 "New collapse clause scheme to avoid expensive remainder operations. Compute "
 "loop index variables after collapsing a loop nest via the collapse clause by "
@@ -62,7 +63,7 @@ msgid ""
 "additions."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:37
+#: ../../../OpenMPSupport.md:41
 msgid ""
 "When using the collapse clause on a loop nest the default behavior is to "
 "automatically extend the representation of the loop counter to 64 bits for "
@@ -71,15 +72,15 @@ msgid ""
 "your program with the `-fopenmp-optimistic-collapse`."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:46
+#: ../../../OpenMPSupport.md:48
 msgid "GPU devices support"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:49
+#: ../../../OpenMPSupport.md:50
 msgid "Data-sharing modes"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:51
+#: ../../../OpenMPSupport.md:52
 msgid ""
 "Clang supports two data-sharing models for Cuda devices: `Generic` and "
 "`Cuda` modes. The default mode is `Generic`. `Cuda` mode can give an "
@@ -93,27 +94,27 @@ msgid ""
 "be used for tuning."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:62
+#: ../../../OpenMPSupport.md:62
 msgid "Features not supported or with limited support for Cuda devices"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:64
+#: ../../../OpenMPSupport.md:64
 msgid "Cancellation constructs are not supported."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:66
+#: ../../../OpenMPSupport.md:65
 msgid "Doacross loop nest is not supported."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:68
+#: ../../../OpenMPSupport.md:66
 msgid "User-defined reductions are supported only for trivial types."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:70
+#: ../../../OpenMPSupport.md:67
 msgid "Nested parallelism: inner parallel regions are executed sequentially."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:72
+#: ../../../OpenMPSupport.md:68
 msgid ""
 "Debug information for OpenMP target regions is supported, but sometimes it "
 "may be required to manually specify the address class of the inspected "
@@ -121,1894 +122,1676 @@ msgid ""
 "global memory, but the debug info may be not aware of it."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:81
+#: ../../../OpenMPSupport.md:75
 msgid "OpenMP 5.0 Implementation Details"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:83
+#: ../../../OpenMPSupport.md:77
 msgid ""
 "The following table provides a quick overview over various OpenMP 5.0 "
-"features and their implementation status. Please post on the `Discourse "
-"forums (Runtimes - OpenMP category)`_ for more information or if you want to "
+"features and their implementation status. Please post on the [Discourse "
+"forums (Runtimes - OpenMP category)] for more information or if you want to "
 "help with the implementation."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:90 ../../../OpenMPSupport.rst:241
-#: ../../../OpenMPSupport.rst:699
+#: ../../../OpenMPSupport.md:18
 msgid "Category"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:90 ../../../OpenMPSupport.rst:241
-#: ../../../OpenMPSupport.rst:367 ../../../OpenMPSupport.rst:464
-#: ../../../OpenMPSupport.rst:665 ../../../OpenMPSupport.rst:699
+#: ../../../OpenMPSupport.md:18
 msgid "Feature"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:90 ../../../OpenMPSupport.rst:241
-#: ../../../OpenMPSupport.rst:699
+#: ../../../OpenMPSupport.md:18
 msgid "Status"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:90 ../../../OpenMPSupport.rst:241
-#: ../../../OpenMPSupport.rst:367 ../../../OpenMPSupport.rst:424
-#: ../../../OpenMPSupport.rst:464 ../../../OpenMPSupport.rst:645
-#: ../../../OpenMPSupport.rst:665 ../../../OpenMPSupport.rst:699
+#: ../../../OpenMPSupport.md:18
 msgid "Reviews"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:92 ../../../OpenMPSupport.rst:94
-#: ../../../OpenMPSupport.rst:96 ../../../OpenMPSupport.rst:98
-#: ../../../OpenMPSupport.rst:100 ../../../OpenMPSupport.rst:102
-#: ../../../OpenMPSupport.rst:104 ../../../OpenMPSupport.rst:106
-#: ../../../OpenMPSupport.rst:281 ../../../OpenMPSupport.rst:283
-#: ../../../OpenMPSupport.rst:285
+#: ../../../OpenMPSupport.md:18
 msgid "loop"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:92
+#: ../../../OpenMPSupport.md:18
 msgid "support != in the canonical loop form"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:92 ../../../OpenMPSupport.rst:98
-#: ../../../OpenMPSupport.rst:100 ../../../OpenMPSupport.rst:102
-#: ../../../OpenMPSupport.rst:104 ../../../OpenMPSupport.rst:106
-#: ../../../OpenMPSupport.rst:108 ../../../OpenMPSupport.rst:110
-#: ../../../OpenMPSupport.rst:112 ../../../OpenMPSupport.rst:114
-#: ../../../OpenMPSupport.rst:116 ../../../OpenMPSupport.rst:118
-#: ../../../OpenMPSupport.rst:122 ../../../OpenMPSupport.rst:124
-#: ../../../OpenMPSupport.rst:126 ../../../OpenMPSupport.rst:128
-#: ../../../OpenMPSupport.rst:130 ../../../OpenMPSupport.rst:132
-#: ../../../OpenMPSupport.rst:134 ../../../OpenMPSupport.rst:136
-#: ../../../OpenMPSupport.rst:138 ../../../OpenMPSupport.rst:140
-#: ../../../OpenMPSupport.rst:144 ../../../OpenMPSupport.rst:146
-#: ../../../OpenMPSupport.rst:148 ../../../OpenMPSupport.rst:150
-#: ../../../OpenMPSupport.rst:152 ../../../OpenMPSupport.rst:154
-#: ../../../OpenMPSupport.rst:156 ../../../OpenMPSupport.rst:160
-#: ../../../OpenMPSupport.rst:164 ../../../OpenMPSupport.rst:166
-#: ../../../OpenMPSupport.rst:168 ../../../OpenMPSupport.rst:170
-#: ../../../OpenMPSupport.rst:172 ../../../OpenMPSupport.rst:178
-#: ../../../OpenMPSupport.rst:182 ../../../OpenMPSupport.rst:184
-#: ../../../OpenMPSupport.rst:186 ../../../OpenMPSupport.rst:188
-#: ../../../OpenMPSupport.rst:190 ../../../OpenMPSupport.rst:192
-#: ../../../OpenMPSupport.rst:194 ../../../OpenMPSupport.rst:198
-#: ../../../OpenMPSupport.rst:200 ../../../OpenMPSupport.rst:202
-#: ../../../OpenMPSupport.rst:204 ../../../OpenMPSupport.rst:206
-#: ../../../OpenMPSupport.rst:208 ../../../OpenMPSupport.rst:212
-#: ../../../OpenMPSupport.rst:214 ../../../OpenMPSupport.rst:216
-#: ../../../OpenMPSupport.rst:220 ../../../OpenMPSupport.rst:222
-#: ../../../OpenMPSupport.rst:224 ../../../OpenMPSupport.rst:243
-#: ../../../OpenMPSupport.rst:247 ../../../OpenMPSupport.rst:249
-#: ../../../OpenMPSupport.rst:251 ../../../OpenMPSupport.rst:253
-#: ../../../OpenMPSupport.rst:259 ../../../OpenMPSupport.rst:261
-#: ../../../OpenMPSupport.rst:263 ../../../OpenMPSupport.rst:269
-#: ../../../OpenMPSupport.rst:271 ../../../OpenMPSupport.rst:281
-#: ../../../OpenMPSupport.rst:283 ../../../OpenMPSupport.rst:287
-#: ../../../OpenMPSupport.rst:289 ../../../OpenMPSupport.rst:291
-#: ../../../OpenMPSupport.rst:297 ../../../OpenMPSupport.rst:299
-#: ../../../OpenMPSupport.rst:301 ../../../OpenMPSupport.rst:303
-#: ../../../OpenMPSupport.rst:307 ../../../OpenMPSupport.rst:311
-#: ../../../OpenMPSupport.rst:315 ../../../OpenMPSupport.rst:321
-#: ../../../OpenMPSupport.rst:323 ../../../OpenMPSupport.rst:325
-#: ../../../OpenMPSupport.rst:329 ../../../OpenMPSupport.rst:333
-#: ../../../OpenMPSupport.rst:335 ../../../OpenMPSupport.rst:337
-#: ../../../OpenMPSupport.rst:339 ../../../OpenMPSupport.rst:341
-#: ../../../OpenMPSupport.rst:347 ../../../OpenMPSupport.rst:395
-#: ../../../OpenMPSupport.rst:397 ../../../OpenMPSupport.rst:476
-#: ../../../OpenMPSupport.rst:479 ../../../OpenMPSupport.rst:481
-#: ../../../OpenMPSupport.rst:483 ../../../OpenMPSupport.rst:491
-#: ../../../OpenMPSupport.rst:533 ../../../OpenMPSupport.rst:537
-#: ../../../OpenMPSupport.rst:539 ../../../OpenMPSupport.rst:561
-#: ../../../OpenMPSupport.rst:568 ../../../OpenMPSupport.rst:576
-#: ../../../OpenMPSupport.rst:578 ../../../OpenMPSupport.rst:591
-#: ../../../OpenMPSupport.rst:596 ../../../OpenMPSupport.rst:598
-#: ../../../OpenMPSupport.rst:607 ../../../OpenMPSupport.rst:611
-#: ../../../OpenMPSupport.rst:613 ../../../OpenMPSupport.rst:617
-#: ../../../OpenMPSupport.rst:680
-msgid ":good:`done`"
+#: ../../../OpenMPSupport.md:18
+msgid "{good}`done`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:92
-msgid "D54441"
+#: ../../../OpenMPSupport.md:18
+msgid "[D54441][D54441]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:94
+#: ../../../OpenMPSupport.md:18
 msgid "#pragma omp loop (directive)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:94 ../../../OpenMPSupport.rst:174
-#: ../../../OpenMPSupport.rst:176 ../../../OpenMPSupport.rst:265
-#: ../../../OpenMPSupport.rst:275 ../../../OpenMPSupport.rst:277
-#: ../../../OpenMPSupport.rst:279 ../../../OpenMPSupport.rst:285
-#: ../../../OpenMPSupport.rst:305 ../../../OpenMPSupport.rst:349
-#: ../../../OpenMPSupport.rst:468 ../../../OpenMPSupport.rst:499
-#: ../../../OpenMPSupport.rst:514 ../../../OpenMPSupport.rst:527
-#: ../../../OpenMPSupport.rst:586 ../../../OpenMPSupport.rst:601
-#: ../../../OpenMPSupport.rst:615 ../../../OpenMPSupport.rst:619
-#: ../../../OpenMPSupport.rst:621 ../../../OpenMPSupport.rst:623
-#: ../../../OpenMPSupport.rst:626 ../../../OpenMPSupport.rst:628
-#: ../../../OpenMPSupport.rst:630 ../../../OpenMPSupport.rst:667
-#: ../../../OpenMPSupport.rst:677 ../../../OpenMPSupport.rst:710
-msgid ":part:`partial`"
+#: ../../../OpenMPSupport.md:18
+msgid "{part}`partial`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:94
-msgid "D145823 (combined forms)"
+#: ../../../OpenMPSupport.md:18
+msgid "[D145823][D145823] (combined forms)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:96
+#: ../../../OpenMPSupport.md:18
 msgid "#pragma omp loop bind"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:96 ../../../OpenMPSupport.rst:142
-#: ../../../OpenMPSupport.rst:158 ../../../OpenMPSupport.rst:245
-#: ../../../OpenMPSupport.rst:313 ../../../OpenMPSupport.rst:317
-#: ../../../OpenMPSupport.rst:319
-msgid ":part:`worked on`"
+#: ../../../OpenMPSupport.md:18
+msgid "{part}`worked on`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:96
-msgid "D144634 (needs review)"
+#: ../../../OpenMPSupport.md:18
+msgid "[D144634][D144634] (needs review)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:98
+#: ../../../OpenMPSupport.md:18
 msgid "collapse imperfectly nested loop"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:100
+#: ../../../OpenMPSupport.md:18
 msgid "collapse non-rectangular nested loop"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:102
+#: ../../../OpenMPSupport.md:18
 msgid "C++ range-base for loop"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:104
+#: ../../../OpenMPSupport.md:18
 msgid "clause: if for SIMD directives"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:106
+#: ../../../OpenMPSupport.md:18
 msgid "inclusive scan (matching C++17 PSTL)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:108 ../../../OpenMPSupport.rst:110
-#: ../../../OpenMPSupport.rst:287 ../../../OpenMPSupport.rst:289
-#: ../../../OpenMPSupport.rst:291 ../../../OpenMPSupport.rst:293
-#: ../../../OpenMPSupport.rst:295
+#: ../../../OpenMPSupport.md:18
 msgid "memory management"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:108
+#: ../../../OpenMPSupport.md:18
 msgid "memory allocators"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:108
+#: ../../../OpenMPSupport.md:18
 msgid "r341687,r357929"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:110
+#: ../../../OpenMPSupport.md:18
 msgid "allocate directive and allocate clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:110
+#: ../../../OpenMPSupport.md:18
 msgid "r355614,r335952"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:112
+#: ../../../OpenMPSupport.md:18
 msgid "OMPD"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:112
+#: ../../../OpenMPSupport.md:18
 msgid "OMPD interfaces"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:112
-msgid "https://reviews.llvm.org/D99914   (Supports only HOST(CPU) and Linux"
+#: ../../../OpenMPSupport.md:18
+msgid "[D99914][D99914] (Supports only HOST(CPU) and Linux"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:114 ../../../OpenMPSupport.rst:333
-#: ../../../OpenMPSupport.rst:335 ../../../OpenMPSupport.rst:337
-#: ../../../OpenMPSupport.rst:339 ../../../OpenMPSupport.rst:341
-#: ../../../OpenMPSupport.rst:343
+#: ../../../OpenMPSupport.md:18
 msgid "OMPT"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:114
+#: ../../../OpenMPSupport.md:18
 msgid "OMPT interfaces (callback support)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:116
+#: ../../../OpenMPSupport.md:18
 msgid "thread affinity"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:118 ../../../OpenMPSupport.rst:120
-#: ../../../OpenMPSupport.rst:122 ../../../OpenMPSupport.rst:124
-#: ../../../OpenMPSupport.rst:126 ../../../OpenMPSupport.rst:128
-#: ../../../OpenMPSupport.rst:130 ../../../OpenMPSupport.rst:132
-#: ../../../OpenMPSupport.rst:134 ../../../OpenMPSupport.rst:136
-#: ../../../OpenMPSupport.rst:345 ../../../OpenMPSupport.rst:347
-#: ../../../OpenMPSupport.rst:349
+#: ../../../OpenMPSupport.md:18
 msgid "task"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:118
+#: ../../../OpenMPSupport.md:18
 msgid "taskloop reduction"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:120
+#: ../../../OpenMPSupport.md:18
 msgid "task affinity"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:120
-msgid ":part:`not upstream`"
+#: ../../../OpenMPSupport.md:18
+msgid "{part}`not upstream`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:120
-msgid "https://github.com/jklinkenberg/openmp/tree/task-affinity"
+#: ../../../OpenMPSupport.md:18
+msgid "<https://github.com/jklinkenberg/openmp/tree/task-affinity>"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:122
+#: ../../../OpenMPSupport.md:18
 msgid "clause: depend on the taskwait construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:122
-msgid "D113540 (regular codegen only)"
+#: ../../../OpenMPSupport.md:18
+msgid "[D113540][D113540] (regular codegen only)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:124
+#: ../../../OpenMPSupport.md:18
 msgid "depend objects and detachable tasks"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:126
+#: ../../../OpenMPSupport.md:18
 msgid "mutexinoutset dependence-type for tasks"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:126
-msgid "D53380,D57576"
+#: ../../../OpenMPSupport.md:18
+msgid "[D53380][D53380],[D57576][D57576]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:128
+#: ../../../OpenMPSupport.md:18
 msgid "combined taskloop constructs"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:130
+#: ../../../OpenMPSupport.md:18
 msgid "master taskloop"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:132
+#: ../../../OpenMPSupport.md:18
 msgid "parallel master taskloop"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:134
+#: ../../../OpenMPSupport.md:18
 msgid "master taskloop simd"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:136
+#: ../../../OpenMPSupport.md:18
 msgid "parallel master taskloop simd"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:138 ../../../OpenMPSupport.rst:140
+#: ../../../OpenMPSupport.md:18
 msgid "SIMD"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:138
+#: ../../../OpenMPSupport.md:18
 msgid "atomic and simd constructs inside SIMD code"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:140
+#: ../../../OpenMPSupport.md:18
 msgid "SIMD nontemporal"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:142 ../../../OpenMPSupport.rst:144
-#: ../../../OpenMPSupport.rst:146 ../../../OpenMPSupport.rst:148
-#: ../../../OpenMPSupport.rst:150 ../../../OpenMPSupport.rst:152
-#: ../../../OpenMPSupport.rst:154 ../../../OpenMPSupport.rst:156
-#: ../../../OpenMPSupport.rst:158 ../../../OpenMPSupport.rst:160
-#: ../../../OpenMPSupport.rst:162 ../../../OpenMPSupport.rst:164
-#: ../../../OpenMPSupport.rst:166 ../../../OpenMPSupport.rst:168
-#: ../../../OpenMPSupport.rst:170 ../../../OpenMPSupport.rst:172
-#: ../../../OpenMPSupport.rst:174 ../../../OpenMPSupport.rst:176
-#: ../../../OpenMPSupport.rst:178 ../../../OpenMPSupport.rst:180
-#: ../../../OpenMPSupport.rst:182 ../../../OpenMPSupport.rst:184
-#: ../../../OpenMPSupport.rst:186 ../../../OpenMPSupport.rst:188
-#: ../../../OpenMPSupport.rst:190 ../../../OpenMPSupport.rst:192
-#: ../../../OpenMPSupport.rst:194 ../../../OpenMPSupport.rst:196
-#: ../../../OpenMPSupport.rst:249 ../../../OpenMPSupport.rst:251
-#: ../../../OpenMPSupport.rst:253 ../../../OpenMPSupport.rst:255
-#: ../../../OpenMPSupport.rst:257 ../../../OpenMPSupport.rst:259
-#: ../../../OpenMPSupport.rst:261 ../../../OpenMPSupport.rst:263
-#: ../../../OpenMPSupport.rst:265 ../../../OpenMPSupport.rst:267
-#: ../../../OpenMPSupport.rst:269 ../../../OpenMPSupport.rst:271
-#: ../../../OpenMPSupport.rst:273 ../../../OpenMPSupport.rst:275
-#: ../../../OpenMPSupport.rst:277 ../../../OpenMPSupport.rst:279
+#: ../../../OpenMPSupport.md:18
 msgid "device"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:142
+#: ../../../OpenMPSupport.md:18
 msgid "infer target functions from initializers"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:144
+#: ../../../OpenMPSupport.md:18
 msgid "infer target variables from initializers"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:144
-msgid "D146418"
+#: ../../../OpenMPSupport.md:18
+msgid "[D146418][D146418]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:146
+#: ../../../OpenMPSupport.md:18
 msgid "OMP_TARGET_OFFLOAD environment variable"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:146
-msgid "D50522"
+#: ../../../OpenMPSupport.md:18
+msgid "[D50522][D50522]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:148
+#: ../../../OpenMPSupport.md:18
 msgid "support full 'defaultmap' functionality"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:148
-msgid "D69204"
+#: ../../../OpenMPSupport.md:18
+msgid "[D69204][D69204]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:150
+#: ../../../OpenMPSupport.md:18
 msgid "device specific functions"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:152
+#: ../../../OpenMPSupport.md:18
 msgid "clause: device_type"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:154
+#: ../../../OpenMPSupport.md:18
 msgid "clause: extended device"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:156
+#: ../../../OpenMPSupport.md:18
 msgid "clause: uses_allocators clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:156
-msgid "https://github.com/llvm/llvm-project/pull/157025"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR157025][PR157025]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:158
+#: ../../../OpenMPSupport.md:18
 msgid "clause: in_reduction"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:158
+#: ../../../OpenMPSupport.md:18
 msgid "r308768"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:160
+#: ../../../OpenMPSupport.md:18
 msgid "omp_get_device_num()"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:160
-msgid "D54342,D128347"
+#: ../../../OpenMPSupport.md:18
+msgid "[D54342][D54342],[D128347][D128347]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:162
+#: ../../../OpenMPSupport.md:18
 msgid "structure mapping of references"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:162 ../../../OpenMPSupport.rst:255
-#: ../../../OpenMPSupport.rst:257 ../../../OpenMPSupport.rst:267
-#: ../../../OpenMPSupport.rst:293 ../../../OpenMPSupport.rst:295
-#: ../../../OpenMPSupport.rst:309 ../../../OpenMPSupport.rst:331
-#: ../../../OpenMPSupport.rst:345 ../../../OpenMPSupport.rst:369
-#: ../../../OpenMPSupport.rst:371 ../../../OpenMPSupport.rst:373
-#: ../../../OpenMPSupport.rst:375 ../../../OpenMPSupport.rst:377
-#: ../../../OpenMPSupport.rst:379 ../../../OpenMPSupport.rst:381
-#: ../../../OpenMPSupport.rst:383 ../../../OpenMPSupport.rst:385
-#: ../../../OpenMPSupport.rst:387 ../../../OpenMPSupport.rst:389
-#: ../../../OpenMPSupport.rst:391 ../../../OpenMPSupport.rst:393
-#: ../../../OpenMPSupport.rst:399 ../../../OpenMPSupport.rst:401
-#: ../../../OpenMPSupport.rst:403 ../../../OpenMPSupport.rst:405
-#: ../../../OpenMPSupport.rst:407 ../../../OpenMPSupport.rst:409
-#: ../../../OpenMPSupport.rst:411 ../../../OpenMPSupport.rst:426
-#: ../../../OpenMPSupport.rst:428 ../../../OpenMPSupport.rst:430
-#: ../../../OpenMPSupport.rst:432 ../../../OpenMPSupport.rst:434
-#: ../../../OpenMPSupport.rst:436 ../../../OpenMPSupport.rst:438
-#: ../../../OpenMPSupport.rst:440 ../../../OpenMPSupport.rst:442
-#: ../../../OpenMPSupport.rst:444 ../../../OpenMPSupport.rst:446
-#: ../../../OpenMPSupport.rst:448 ../../../OpenMPSupport.rst:466
-#: ../../../OpenMPSupport.rst:468 ../../../OpenMPSupport.rst:472
-#: ../../../OpenMPSupport.rst:474 ../../../OpenMPSupport.rst:476
-#: ../../../OpenMPSupport.rst:479 ../../../OpenMPSupport.rst:481
-#: ../../../OpenMPSupport.rst:487 ../../../OpenMPSupport.rst:489
-#: ../../../OpenMPSupport.rst:491 ../../../OpenMPSupport.rst:495
-#: ../../../OpenMPSupport.rst:497 ../../../OpenMPSupport.rst:499
-#: ../../../OpenMPSupport.rst:504 ../../../OpenMPSupport.rst:506
-#: ../../../OpenMPSupport.rst:508 ../../../OpenMPSupport.rst:510
-#: ../../../OpenMPSupport.rst:512 ../../../OpenMPSupport.rst:516
-#: ../../../OpenMPSupport.rst:518 ../../../OpenMPSupport.rst:520
-#: ../../../OpenMPSupport.rst:522 ../../../OpenMPSupport.rst:524
-#: ../../../OpenMPSupport.rst:527 ../../../OpenMPSupport.rst:529
-#: ../../../OpenMPSupport.rst:531 ../../../OpenMPSupport.rst:533
-#: ../../../OpenMPSupport.rst:535 ../../../OpenMPSupport.rst:537
-#: ../../../OpenMPSupport.rst:539 ../../../OpenMPSupport.rst:543
-#: ../../../OpenMPSupport.rst:545 ../../../OpenMPSupport.rst:547
-#: ../../../OpenMPSupport.rst:549 ../../../OpenMPSupport.rst:551
-#: ../../../OpenMPSupport.rst:553 ../../../OpenMPSupport.rst:555
-#: ../../../OpenMPSupport.rst:557 ../../../OpenMPSupport.rst:559
-#: ../../../OpenMPSupport.rst:561 ../../../OpenMPSupport.rst:566
-#: ../../../OpenMPSupport.rst:568 ../../../OpenMPSupport.rst:570
-#: ../../../OpenMPSupport.rst:572 ../../../OpenMPSupport.rst:574
-#: ../../../OpenMPSupport.rst:576 ../../../OpenMPSupport.rst:578
-#: ../../../OpenMPSupport.rst:580 ../../../OpenMPSupport.rst:582
-#: ../../../OpenMPSupport.rst:584 ../../../OpenMPSupport.rst:586
-#: ../../../OpenMPSupport.rst:589 ../../../OpenMPSupport.rst:591
-#: ../../../OpenMPSupport.rst:596 ../../../OpenMPSupport.rst:598
-#: ../../../OpenMPSupport.rst:607 ../../../OpenMPSupport.rst:611
-#: ../../../OpenMPSupport.rst:613 ../../../OpenMPSupport.rst:632
-#: ../../../OpenMPSupport.rst:634 ../../../OpenMPSupport.rst:647
-#: ../../../OpenMPSupport.rst:649 ../../../OpenMPSupport.rst:669
-#: ../../../OpenMPSupport.rst:671 ../../../OpenMPSupport.rst:673
-#: ../../../OpenMPSupport.rst:677 ../../../OpenMPSupport.rst:680
-msgid ":none:`unclaimed`"
+#: ../../../OpenMPSupport.md:18
+msgid "{none}`unclaimed`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:164
+#: ../../../OpenMPSupport.md:18
 msgid "nested target declare"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:164
-msgid "D51378"
+#: ../../../OpenMPSupport.md:18
+msgid "[D51378][D51378]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:166
+#: ../../../OpenMPSupport.md:18
 msgid "implicitly map 'this' (this[:1])"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:166
-msgid "D55982"
+#: ../../../OpenMPSupport.md:18
+msgid "[D55982][D55982]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:168
+#: ../../../OpenMPSupport.md:18
 msgid "allow access to the reference count (omp_target_is_present)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:170
+#: ../../../OpenMPSupport.md:18
 msgid "requires directive"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:172
+#: ../../../OpenMPSupport.md:18
 msgid "clause: unified_shared_memory"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:172
-msgid "D52625,D52359"
+#: ../../../OpenMPSupport.md:18
+msgid "[D52625][D52625],[D52359][D52359]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:174
+#: ../../../OpenMPSupport.md:18
 msgid "clause: unified_address"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:176
+#: ../../../OpenMPSupport.md:18
 msgid "clause: reverse_offload"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:176
-msgid "D52780,D155003"
+#: ../../../OpenMPSupport.md:18
+msgid "[D52780][D52780],[D155003][D155003]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:178
+#: ../../../OpenMPSupport.md:18
 msgid "clause: atomic_default_mem_order"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:178
-msgid "D53513"
+#: ../../../OpenMPSupport.md:18
+msgid "[D53513][D53513]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:180
+#: ../../../OpenMPSupport.md:18
 msgid "clause: dynamic_allocators"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:180
-msgid ":part:`unclaimed parts`"
+#: ../../../OpenMPSupport.md:18
+msgid "{part}`unclaimed parts`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:180
-msgid "D53079"
+#: ../../../OpenMPSupport.md:18
+msgid "[D53079][D53079]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:182
+#: ../../../OpenMPSupport.md:18
 msgid "user-defined mappers"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:182
-msgid "D56326,D58638,D58523,D58074,D60972,D59474"
+#: ../../../OpenMPSupport.md:18
+msgid ""
+"[D56326][D56326],[D58638][D58638],[D58523][D58523],[D58074][D58074],[D60972]"
+"[D60972],[D59474][D59474]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:184
+#: ../../../OpenMPSupport.md:18
 msgid "map array-section with implicit mapper"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:184
-msgid "https://github.com/llvm/llvm-project/pull/101101"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR101101][PR101101]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:186
+#: ../../../OpenMPSupport.md:18
 msgid "mapping lambda expression"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:186
-msgid "D51107"
+#: ../../../OpenMPSupport.md:18
+msgid "[D51107][D51107]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:188
+#: ../../../OpenMPSupport.md:18
 msgid "clause: use_device_addr for target data"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:190
+#: ../../../OpenMPSupport.md:18
 msgid "support close modifier on map clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:190
-msgid "D55719,D55892"
+#: ../../../OpenMPSupport.md:18
+msgid "[D55719][D55719],[D55892][D55892]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:192
+#: ../../../OpenMPSupport.md:18
 msgid "teams construct on the host device"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:192
+#: ../../../OpenMPSupport.md:18
 msgid "r371553"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:194
+#: ../../../OpenMPSupport.md:18
 msgid "support non-contiguous array sections for target update"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:194
-msgid "https://github.com/llvm/llvm-project/pull/144635"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR144635][PR144635]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:196
+#: ../../../OpenMPSupport.md:18
 msgid "pointer attachment"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:196
-msgid ":part:`being repaired`"
+#: ../../../OpenMPSupport.md:18
+msgid "{part}`being repaired`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:196
-msgid "@abhinavgaba (https://github.com/llvm/llvm-project/pull/153683)"
+#: ../../../OpenMPSupport.md:18
+msgid "@abhinavgaba ([PR153683][PR153683], [PR210213][PR210213])"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:198 ../../../OpenMPSupport.rst:243
-#: ../../../OpenMPSupport.rst:245
+#: ../../../OpenMPSupport.md:18
 msgid "atomic"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:198
+#: ../../../OpenMPSupport.md:18
 msgid "hints for the atomic construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:198
-msgid "D51233"
+#: ../../../OpenMPSupport.md:18
+msgid "[D51233][D51233]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:200 ../../../OpenMPSupport.rst:202
-#: ../../../OpenMPSupport.rst:204 ../../../OpenMPSupport.rst:247
+#: ../../../OpenMPSupport.md:18
 msgid "base language"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:200
+#: ../../../OpenMPSupport.md:18
 msgid "C11 support"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:202
+#: ../../../OpenMPSupport.md:18
 msgid "C++11/14/17 support"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:204
+#: ../../../OpenMPSupport.md:18
 msgid "lambda support"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:206 ../../../OpenMPSupport.rst:208
-#: ../../../OpenMPSupport.rst:210 ../../../OpenMPSupport.rst:212
-#: ../../../OpenMPSupport.rst:214 ../../../OpenMPSupport.rst:216
-#: ../../../OpenMPSupport.rst:218 ../../../OpenMPSupport.rst:220
-#: ../../../OpenMPSupport.rst:222 ../../../OpenMPSupport.rst:299
-#: ../../../OpenMPSupport.rst:301 ../../../OpenMPSupport.rst:303
-#: ../../../OpenMPSupport.rst:305 ../../../OpenMPSupport.rst:307
-#: ../../../OpenMPSupport.rst:309 ../../../OpenMPSupport.rst:311
-#: ../../../OpenMPSupport.rst:313 ../../../OpenMPSupport.rst:315
-#: ../../../OpenMPSupport.rst:317 ../../../OpenMPSupport.rst:319
-#: ../../../OpenMPSupport.rst:321 ../../../OpenMPSupport.rst:323
-#: ../../../OpenMPSupport.rst:325 ../../../OpenMPSupport.rst:329
+#: ../../../OpenMPSupport.md:18
 msgid "misc"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:206
+#: ../../../OpenMPSupport.md:18
 msgid "array shaping"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:206
-msgid "D74144"
+#: ../../../OpenMPSupport.md:18
+msgid "[D74144][D74144]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:208
-msgid "library shutdown (omp_pause_resource[_all])"
+#: ../../../OpenMPSupport.md:18
+msgid "library shutdown (omp_pause_resource[\\_all])"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:208
-msgid "D55078"
+#: ../../../OpenMPSupport.md:18
+msgid "[D55078][D55078]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:210
+#: ../../../OpenMPSupport.md:18
 msgid "metadirectives"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:210
-msgid ":part:`mostly done`"
+#: ../../../OpenMPSupport.md:18
+msgid "{part}`mostly done`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:210
-msgid "D91944, https://github.com/llvm/llvm-project/pull/128640"
+#: ../../../OpenMPSupport.md:18
+msgid "[D91944][D91944], [PR128640][PR128640]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:212
+#: ../../../OpenMPSupport.md:18
 msgid "conditional modifier for lastprivate clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:214
+#: ../../../OpenMPSupport.md:18
 msgid "iterator and multidependences"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:216
+#: ../../../OpenMPSupport.md:18
 msgid "depobj directive and depobj dependency kind"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:218
+#: ../../../OpenMPSupport.md:18
 msgid "user-defined function variants"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:218
-msgid ":good:`done`."
+#: ../../../OpenMPSupport.md:18
+msgid "{good}`done`."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:218
-msgid "D67294, D64095, D71847, D71830, D109635"
+#: ../../../OpenMPSupport.md:18
+msgid ""
+"[D67294][D67294], [D64095][D64095], [D71847][D71847], [D71830][D71830], "
+"[D109635][D109635]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:220
+#: ../../../OpenMPSupport.md:18
 msgid "pointer/reference to pointer based array reductions"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:222
+#: ../../../OpenMPSupport.md:18
 msgid "prevent new type definitions in clauses"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:224 ../../../OpenMPSupport.rst:297
+#: ../../../OpenMPSupport.md:18
 msgid "memory model"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:224
+#: ../../../OpenMPSupport.md:18
 msgid "memory model update (seq_cst, acq_rel, release, acquire,...)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:231
+#: ../../../OpenMPSupport.md:155
 msgid "OpenMP 5.1 Implementation Details"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:233
+#: ../../../OpenMPSupport.md:157
 msgid ""
 "The following table provides a quick overview over various OpenMP 5.1 "
-"features and their implementation status. Please post on the `Discourse "
-"forums (Runtimes - OpenMP category)`_ for more information or if you want to "
+"features and their implementation status. Please post on the [Discourse "
+"forums (Runtimes - OpenMP category)] for more information or if you want to "
 "help with the implementation."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:243
+#: ../../../OpenMPSupport.md:18
 msgid "'compare' clause on atomic construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:243
-msgid "D120290, D120007, D118632, D120200, D116261, D118547, D116637"
+#: ../../../OpenMPSupport.md:18
+msgid ""
+"[D120290][D120290], [D120007][D120007], [D118632][D118632], [D120200]"
+"[D120200], [D116261][D116261], [D118547][D118547], [D116637][D116637]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:245
+#: ../../../OpenMPSupport.md:18
 msgid "'fail' clause on atomic construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:245
-msgid "D123235 (in progress)"
+#: ../../../OpenMPSupport.md:18
+msgid "[D123235][D123235] (in progress)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:247
+#: ../../../OpenMPSupport.md:18
 msgid "C++ attribute specifier syntax"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:247
-msgid "D105648"
+#: ../../../OpenMPSupport.md:18
+msgid "[D105648][D105648]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:249
+#: ../../../OpenMPSupport.md:18
 msgid "'present' map type modifier"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:249
-msgid "D83061, D83062, D84422"
+#: ../../../OpenMPSupport.md:18
+msgid "[D83061][D83061], [D83062][D83062], [D84422][D84422]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:251
+#: ../../../OpenMPSupport.md:18
 msgid "'present' motion modifier"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:251
-msgid "D84711, D84712"
+#: ../../../OpenMPSupport.md:18
+msgid "[D84711][D84711], [D84712][D84712]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:253
+#: ../../../OpenMPSupport.md:18
 msgid "'present' in defaultmap clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:253
-msgid "D92427"
+#: ../../../OpenMPSupport.md:18
+msgid "[D92427][D92427]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:255
+#: ../../../OpenMPSupport.md:18
 msgid "map clause reordering based on 'present' modifier"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:257
+#: ../../../OpenMPSupport.md:18
 msgid "device-specific environment variables"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:259
+#: ../../../OpenMPSupport.md:18
 msgid "omp_target_is_accessible routine"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:259
-msgid "https://github.com/llvm/llvm-project/pull/138294"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR138294][PR138294]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:261
+#: ../../../OpenMPSupport.md:18
 msgid "omp_get_mapped_ptr routine"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:261
-msgid "D141545"
+#: ../../../OpenMPSupport.md:18
+msgid "[D141545][D141545]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:263
+#: ../../../OpenMPSupport.md:18
 msgid "new async target memory copy routines"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:263
-msgid "D136103"
+#: ../../../OpenMPSupport.md:18
+msgid "[D136103][D136103]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:265
+#: ../../../OpenMPSupport.md:18
 msgid "thread_limit clause on target construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:265
-msgid "D141540 (offload), D152054 (host, in progress)"
+#: ../../../OpenMPSupport.md:18
+msgid "[D141540][D141540] (offload), [D152054][D152054] (host, in progress)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:267
+#: ../../../OpenMPSupport.md:18
 msgid "has_device_addr clause on target construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:269
+#: ../../../OpenMPSupport.md:18
 msgid "use_device_ptr/addr preserve host address when lookup fails"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:269
-msgid "https://github.com/llvm/llvm-project/pull/174659"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR174659][PR174659]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:271
+#: ../../../OpenMPSupport.md:18
 msgid "iterators in map clause or motion clauses"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:271
-msgid "https://github.com/llvm/llvm-project/pull/159112"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR159112][PR159112]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:273
+#: ../../../OpenMPSupport.md:18
 msgid "indirect clause on declare target directive"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:273 ../../../OpenMPSupport.rst:501
-#: ../../../OpenMPSupport.rst:514 ../../../OpenMPSupport.rst:541
-#: ../../../OpenMPSupport.rst:574 ../../../OpenMPSupport.rst:601
-#: ../../../OpenMPSupport.rst:609 ../../../OpenMPSupport.rst:667
-#: ../../../OpenMPSupport.rst:673 ../../../OpenMPSupport.rst:684
-msgid ":part:`In Progress`"
+#: ../../../OpenMPSupport.md:18
+msgid "{part}`In Progress`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:275
+#: ../../../OpenMPSupport.md:18
 msgid "allow virtual functions calls for mapped object on device"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:277
+#: ../../../OpenMPSupport.md:18
 msgid "interop construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:277
-msgid "parsing/sema done: D98558, D98834, D98815"
+#: ../../../OpenMPSupport.md:18
+msgid "parsing/sema done: [D98558][D98558], [D98834][D98834], [D98815][D98815]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:279
+#: ../../../OpenMPSupport.md:18
 msgid "assorted routines for querying interoperable properties"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:279
-msgid "D106674"
+#: ../../../OpenMPSupport.md:18
+msgid "[D106674][D106674]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:281
+#: ../../../OpenMPSupport.md:18
 msgid "Loop tiling transformation"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:281
-msgid "D76342"
+#: ../../../OpenMPSupport.md:18
+msgid "[D76342][D76342]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:283
+#: ../../../OpenMPSupport.md:18
 msgid "Loop unrolling transformation"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:283
-msgid "D99459"
+#: ../../../OpenMPSupport.md:18
+msgid "[D99459][D99459]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:285
+#: ../../../OpenMPSupport.md:18
 msgid "'reproducible'/'unconstrained' modifiers in 'order' clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:285
-msgid "D127855"
+#: ../../../OpenMPSupport.md:18
+msgid "[D127855][D127855]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:287
+#: ../../../OpenMPSupport.md:18
 msgid "alignment for allocate directive and clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:287
-msgid "D115683"
+#: ../../../OpenMPSupport.md:18
+msgid "[D115683][D115683]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:289
+#: ../../../OpenMPSupport.md:18
 msgid "'allocator' modifier for allocate clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:289
-msgid "https://github.com/llvm/llvm-project/pull/114883"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR114883][PR114883]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:291
+#: ../../../OpenMPSupport.md:18
 msgid "'align' modifier for allocate clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:291
-msgid "https://github.com/llvm/llvm-project/pull/121814"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR121814][PR121814]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:293
+#: ../../../OpenMPSupport.md:18
 msgid "new memory management routines"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:295
+#: ../../../OpenMPSupport.md:18
 msgid "changes to omp_alloctrait_key enum"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:297
+#: ../../../OpenMPSupport.md:18
 msgid "seq_cst clause on flush construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:297
-msgid "https://github.com/llvm/llvm-project/pull/114072"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR114072][PR114072]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:299
+#: ../../../OpenMPSupport.md:18
 msgid "'omp_all_memory' keyword and use in 'depend' clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:299
-msgid "D125828, D126321"
+#: ../../../OpenMPSupport.md:18
+msgid "[D125828][D125828], [D126321][D126321]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:301
+#: ../../../OpenMPSupport.md:18
 msgid "error directive"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:301
-msgid "D139166"
+#: ../../../OpenMPSupport.md:18
+msgid "[D139166][D139166]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:303
+#: ../../../OpenMPSupport.md:18
 msgid "scope construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:303
-msgid "D157933, https://github.com/llvm/llvm-project/pull/109197"
+#: ../../../OpenMPSupport.md:18
+msgid "[D157933][D157933], [PR109197][PR109197]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:305
+#: ../../../OpenMPSupport.md:18
 msgid "routines for controlling and querying team regions"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:305
-msgid "D95003 (libomp only)"
+#: ../../../OpenMPSupport.md:18
+msgid "[D95003][D95003] (libomp only)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:307
+#: ../../../OpenMPSupport.md:18
 msgid "omp_display_env routine"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:307
-msgid "D74956"
+#: ../../../OpenMPSupport.md:18
+msgid "[D74956][D74956]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:309
+#: ../../../OpenMPSupport.md:18
 msgid "extended OMP_PLACES syntax"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:311
+#: ../../../OpenMPSupport.md:18
 msgid "OMP_NUM_TEAMS and OMP_TEAMS_THREAD_LIMIT env vars"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:311
-msgid "D138769"
+#: ../../../OpenMPSupport.md:18
+msgid "[D138769][D138769]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:313
+#: ../../../OpenMPSupport.md:18
 msgid "'target_device' selector in context specifier"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:315
+#: ../../../OpenMPSupport.md:18
 msgid "begin/end declare variant"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:315
-msgid "D71179"
+#: ../../../OpenMPSupport.md:18
+msgid "[D71179][D71179]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:317
+#: ../../../OpenMPSupport.md:18
 msgid "dispatch construct and function variant argument adjustment"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:317
-msgid "D99537, D99679"
+#: ../../../OpenMPSupport.md:18
+msgid "[D99537][D99537], [D99679][D99679]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:319
+#: ../../../OpenMPSupport.md:18
 msgid "assumes directives"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:321
+#: ../../../OpenMPSupport.md:18
 msgid "assume directive"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:323
+#: ../../../OpenMPSupport.md:18
 msgid "nothing directive"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:323
-msgid "D123286"
+#: ../../../OpenMPSupport.md:18
+msgid "[D123286][D123286]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:325
+#: ../../../OpenMPSupport.md:18
 msgid "masked construct and related combined constructs"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:325
+#: ../../../OpenMPSupport.md:18
 msgid ""
-"D99995, D100514, PR-121741(parallel_masked_taskloop) "
-"PR-121746(parallel_masked_task_loop_simd),PR-121914(masked_taskloop) "
-"PR-121916(masked_taskloop_simd)"
+"[D99995][D99995], [D100514][D100514], [PR121741][PR121741] "
+"(parallel_masked_taskloop) [PR121746][PR121746] "
+"(parallel_masked_task_loop_simd), [PR121914][PR121914] (masked_taskloop) "
+"[PR121916][PR121916] (masked_taskloop_simd)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:329
+#: ../../../OpenMPSupport.md:18
 msgid "default(firstprivate) & default(private)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:329
-msgid "D75591 (firstprivate), D125912 (private)"
+#: ../../../OpenMPSupport.md:18
+msgid "[D75591][D75591] (firstprivate), [D125912][D125912] (private)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:331
+#: ../../../OpenMPSupport.md:18
 msgid "other"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:331
+#: ../../../OpenMPSupport.md:18
 msgid "deprecating master construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:333
+#: ../../../OpenMPSupport.md:18
 msgid "changes to ompt_scope_endpoint_t enum"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:333 ../../../OpenMPSupport.rst:335
-#: ../../../OpenMPSupport.rst:337 ../../../OpenMPSupport.rst:339
-msgid "D90752"
+#: ../../../OpenMPSupport.md:18
+msgid "[D90752][D90752]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:335
+#: ../../../OpenMPSupport.md:18
 msgid "new barrier types added to ompt_sync_region_t enum"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:337
+#: ../../../OpenMPSupport.md:18
 msgid "async data transfers added to ompt_target_data_op_t enum"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:339
+#: ../../../OpenMPSupport.md:18
 msgid "new barrier state values added to ompt_state_t enum"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:341
+#: ../../../OpenMPSupport.md:18
 msgid "new 'emi' callbacks for external monitoring interfaces"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:343
+#: ../../../OpenMPSupport.md:18
 msgid "device tracing interface"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:343 ../../../OpenMPSupport.rst:470
-#: ../../../OpenMPSupport.rst:483 ../../../OpenMPSupport.rst:487
-#: ../../../OpenMPSupport.rst:549 ../../../OpenMPSupport.rst:559
-#: ../../../OpenMPSupport.rst:564
-msgid ":part:`in progress`"
+#: ../../../OpenMPSupport.md:18
+msgid "{part}`in progress`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:343
+#: ../../../OpenMPSupport.md:18
 msgid "jplehr"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:345
+#: ../../../OpenMPSupport.md:18
 msgid "'strict' modifier for taskloop construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:347
+#: ../../../OpenMPSupport.md:18
 msgid "inoutset in depend clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:347
-msgid "D97085, D118383"
+#: ../../../OpenMPSupport.md:18
+msgid "[D97085][D97085], [D118383][D118383]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:349
+#: ../../../OpenMPSupport.md:18
 msgid "nowait clause on taskwait"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:349
-msgid "parsing/sema done: D131830, D141531"
+#: ../../../OpenMPSupport.md:18
+msgid "parsing/sema done: [D131830][D131830], [D141531][D141531]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:356
+#: ../../../OpenMPSupport.md:222
 msgid "OpenMP 5.2 Implementation Details"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:358
+#: ../../../OpenMPSupport.md:224
 msgid ""
 "The following table provides a quick overview of various OpenMP 5.2 features "
-"and their implementation status. Please post on the `Discourse forums "
-"(Runtimes - OpenMP category)`_ for more information or if you want to help "
+"and their implementation status. Please post on the [Discourse forums "
+"(Runtimes - OpenMP category)] for more information or if you want to help "
 "with the implementation."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:367 ../../../OpenMPSupport.rst:424
-#: ../../../OpenMPSupport.rst:464 ../../../OpenMPSupport.rst:645
-#: ../../../OpenMPSupport.rst:665
+#: ../../../OpenMPSupport.md:18
 msgid "C/C++ Status"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:367 ../../../OpenMPSupport.rst:424
-#: ../../../OpenMPSupport.rst:464 ../../../OpenMPSupport.rst:645
-#: ../../../OpenMPSupport.rst:665
+#: ../../../OpenMPSupport.md:18
 msgid "Fortran Status"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:369
+#: ../../../OpenMPSupport.md:18
 msgid "omp_in_explicit_task()"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:371
+#: ../../../OpenMPSupport.md:18
 msgid "semantics of explicit_task_var and implicit_task_var"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:373
+#: ../../../OpenMPSupport.md:18
 msgid "ompx sentinel for C/C++ directive extensions"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:375
+#: ../../../OpenMPSupport.md:18
 msgid "ompx prefix for clause extensions"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:377
+#: ../../../OpenMPSupport.md:18
 msgid "if clause on teams construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:379
+#: ../../../OpenMPSupport.md:18
 msgid "step modifier added"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:381 ../../../OpenMPSupport.rst:383
+#: ../../../OpenMPSupport.md:18
 msgid "declare mapper: Add iterator modifier on map clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:385
-msgid "memspace and traits modifiers to uses allocator         i"
+#: ../../../OpenMPSupport.md:18
+msgid "memspace and traits modifiers to uses allocator i"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:387
+#: ../../../OpenMPSupport.md:18
 msgid "Add otherwise clause to metadirectives"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:389
+#: ../../../OpenMPSupport.md:18
 msgid "doacross clause with support for omp_cur_iteration"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:391
+#: ../../../OpenMPSupport.md:18
 msgid "position of interop_type in init clause on iterop"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:393
+#: ../../../OpenMPSupport.md:18
 msgid "implicit map type for target enter/exit data"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:395
+#: ../../../OpenMPSupport.md:18
 msgid "work OMPT type for work-sharing loop constructs"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:395
-msgid "PR-189347, PR-97429"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR189347][PR189347], [PR97429][PR97429]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:397
+#: ../../../OpenMPSupport.md:18
 msgid "extend ompt_dispatch_t for new enum values"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:397
-msgid "D122107"
+#: ../../../OpenMPSupport.md:18
+msgid "[D122107][D122107]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:399
+#: ../../../OpenMPSupport.md:18
 msgid "allocate and firstprivate on scope directive"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:401
+#: ../../../OpenMPSupport.md:18
 msgid "Change loop consistency for order clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:403
+#: ../../../OpenMPSupport.md:18
 msgid "Add memspace and traits modifiers to uses_allocators"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:405
+#: ../../../OpenMPSupport.md:18
 msgid "Keep original base pointer on map w/o matched candidate"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:407
+#: ../../../OpenMPSupport.md:18
 msgid "Pure procedure support for certain directives"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:407 ../../../OpenMPSupport.rst:409
-#: ../../../OpenMPSupport.rst:411
-msgid ":none:`N/A`"
+#: ../../../OpenMPSupport.md:18
+msgid "{none}`N/A`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:409
+#: ../../../OpenMPSupport.md:18
 msgid "ALLOCATE statement support for allocators"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:411
+#: ../../../OpenMPSupport.md:18
 msgid "dispatch construct extension to support end directive"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:419
+#: ../../../OpenMPSupport.md:257
 msgid "OpenMP 5.2 Deprecations"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:426
+#: ../../../OpenMPSupport.md:18
 msgid "Linear clause syntax"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:428
+#: ../../../OpenMPSupport.md:18
 msgid "The minus operator"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:430
+#: ../../../OpenMPSupport.md:18
 msgid "Map clause modifiers without commas"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:432
+#: ../../../OpenMPSupport.md:18
 msgid "The use of allocate directives with ALLOCATE statement"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:432 ../../../OpenMPSupport.rst:438
-#: ../../../OpenMPSupport.rst:615 ../../../OpenMPSupport.rst:617
-#: ../../../OpenMPSupport.rst:619 ../../../OpenMPSupport.rst:621
-#: ../../../OpenMPSupport.rst:623 ../../../OpenMPSupport.rst:626
-#: ../../../OpenMPSupport.rst:628 ../../../OpenMPSupport.rst:630
-#: ../../../OpenMPSupport.rst:632 ../../../OpenMPSupport.rst:634
-#: ../../../OpenMPSupport.rst:647 ../../../OpenMPSupport.rst:649
-msgid ":good:`N/A`"
+#: ../../../OpenMPSupport.md:18
+msgid "{good}`N/A`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:434
+#: ../../../OpenMPSupport.md:18
 msgid "uses_allocators list syntax"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:436
+#: ../../../OpenMPSupport.md:18
 msgid "The default clause on metadirectives"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:438
+#: ../../../OpenMPSupport.md:18
 msgid "The delimited form of the declare target directive"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:440
+#: ../../../OpenMPSupport.md:18
 msgid "The use of the to clause on the declare target directive"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:442
+#: ../../../OpenMPSupport.md:18
 msgid "The syntax of the destroy clause on the depobj construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:444
+#: ../../../OpenMPSupport.md:18
 msgid "keyword source and sink as task-dependence modifiers"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:446
+#: ../../../OpenMPSupport.md:18
 msgid "interop types in any position on init clause of interop"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:448
+#: ../../../OpenMPSupport.md:18
 msgid "ompd prefix usage for some ICVs"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:454
+#: ../../../OpenMPSupport.md:276
 msgid "OpenMP 6.0 Implementation Details"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:456
+#: ../../../OpenMPSupport.md:278
 msgid ""
 "The following table provides a quick overview of various OpenMP 6.0 features "
-"and their implementation status. Please post on the `Discourse forums "
-"(Runtimes - OpenMP category)`_ for more information or if you want to help "
+"and their implementation status. Please post on the [Discourse forums "
+"(Runtimes - OpenMP category)] for more information or if you want to help "
 "with the implementation."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:466
+#: ../../../OpenMPSupport.md:18
 msgid "free-agent threads"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:468
+#: ../../../OpenMPSupport.md:18
 msgid "threadset clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:468
-msgid "Parse/Sema/Codegen : https://github.com/llvm/llvm-project/pull/13580"
+#: ../../../OpenMPSupport.md:18
+msgid "Parse/Sema/Codegen: [PR13580][PR13580]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:470
+#: ../../../OpenMPSupport.md:18
 msgid "Recording of task graphs"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:470
+#: ../../../OpenMPSupport.md:18
 msgid "clang: jtb20, flang: kparzysz"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:472
+#: ../../../OpenMPSupport.md:18
 msgid "Parallel inductions"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:474
+#: ../../../OpenMPSupport.md:18
 msgid "init_complete for scan directive"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:476
+#: ../../../OpenMPSupport.md:18
 msgid "loop interchange transformation"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:476
+#: ../../../OpenMPSupport.md:18
 msgid ""
-"Clang (interchange): https://github.com/llvm/llvm-project/pull/93022 Clang "
-"(permutation): https://github.com/llvm/llvm-project/pull/92030"
+"Clang (interchange): [PR93022][PR93022] Clang (permutation): [PR92030]"
+"[PR92030]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:479
+#: ../../../OpenMPSupport.md:18
 msgid "loop reverse transformation"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:479
-msgid "https://github.com/llvm/llvm-project/pull/92916"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR92916][PR92916]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:481
+#: ../../../OpenMPSupport.md:18
 msgid "loop stripe transformation"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:481
-msgid "https://github.com/llvm/llvm-project/pull/119891"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR119891][PR119891]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:483
+#: ../../../OpenMPSupport.md:18
 msgid "loop fusion transformation"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:483
-msgid ""
-"https://github.com/llvm/llvm-project/pull/139293 https://github.com/llvm/"
-"llvm-project/pull/161213 https://github.com/llvm/llvm-project/pull/168898"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR139293][PR139293] [PR161213][PR161213] [PR168898][PR168898]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:487
+#: ../../../OpenMPSupport.md:18
 msgid "loop index set splitting transformation with count clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:487 ../../../OpenMPSupport.rst:549
+#: ../../../OpenMPSupport.md:18
 msgid "@amitamd7"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:489
+#: ../../../OpenMPSupport.md:18
 msgid "loop transformation apply clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:491
+#: ../../../OpenMPSupport.md:18
 msgid "loop fuse transformation"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:493
+#: ../../../OpenMPSupport.md:18
 msgid "workdistribute construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:493
-msgid ":none:`in progress`"
+#: ../../../OpenMPSupport.md:18
+msgid "{none}`in progress`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:493
+#: ../../../OpenMPSupport.md:18
 msgid "@skc7, @mjklemm"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:495
+#: ../../../OpenMPSupport.md:18
 msgid "task_iteration"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:497
+#: ../../../OpenMPSupport.md:18
 msgid "memscope clause for atomic and flush"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:499
+#: ../../../OpenMPSupport.md:18
 msgid "transparent clause (hull tasks)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:499
-msgid "Clang parsing/sema  https://github.com/llvm/llvm-project/pull/174646"
+#: ../../../OpenMPSupport.md:18
+msgid "Clang parsing/sema [PR174646][PR174646]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:501
+#: ../../../OpenMPSupport.md:18
 msgid "rule-based compound directives"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:501
+#: ../../../OpenMPSupport.md:18
 msgid "kparzysz Testing for Fortran missing"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:504
+#: ../../../OpenMPSupport.md:18
 msgid "C23, C++23"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:506
+#: ../../../OpenMPSupport.md:18
 msgid "Fortran 2023"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:508
+#: ../../../OpenMPSupport.md:18
 msgid "decl attribute for declarative directives"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:510
+#: ../../../OpenMPSupport.md:18
 msgid "C attribute syntax"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:512
+#: ../../../OpenMPSupport.md:18
 msgid "pure directives in DO CONCURRENT"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:514
+#: ../../../OpenMPSupport.md:18
 msgid "Optional argument for all clauses"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:514
-msgid "Parse/Sema (nowait): https://github.com/llvm/llvm-project/pull/159628"
+#: ../../../OpenMPSupport.md:18
+msgid "Parse/Sema (nowait): [PR159628][PR159628]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:516
+#: ../../../OpenMPSupport.md:18
 msgid "Function references for locator list items"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:518
+#: ../../../OpenMPSupport.md:18
 msgid "All clauses accept directive name modifier"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:520
+#: ../../../OpenMPSupport.md:18
 msgid "Extensions to depobj construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:522
+#: ../../../OpenMPSupport.md:18
 msgid "Extensions to atomic construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:524
+#: ../../../OpenMPSupport.md:18
 msgid "Private reductions"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:524
-msgid ":part:`mostly`"
+#: ../../../OpenMPSupport.md:18
+msgid "{part}`mostly`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:524
-msgid ""
-"Parse/Sema:https://github.com/llvm/llvm-project/pull/129938 Codegen: https://"
-"github.com/llvm/llvm-project/pull/134709"
+#: ../../../OpenMPSupport.md:18
+msgid "Parse/Sema: [PR129938][PR129938] Codegen: [PR134709][PR134709]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:527
+#: ../../../OpenMPSupport.md:18
 msgid "Self maps"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:527
-msgid "parsing/sema done: https://github.com/llvm/llvm-project/pull/129888"
+#: ../../../OpenMPSupport.md:18
+msgid "parsing/sema done: [PR129888][PR129888]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:529
+#: ../../../OpenMPSupport.md:18
 msgid "Release map type for declare mapper"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:531
+#: ../../../OpenMPSupport.md:18
 msgid "Extensions to interop construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:533
+#: ../../../OpenMPSupport.md:18
 msgid "no_openmp_constructs"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:533
-msgid "https://github.com/llvm/llvm-project/pull/125933"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR125933][PR125933]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:535
+#: ../../../OpenMPSupport.md:18
 msgid "safe_sync and progress with identifier and API"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:537
+#: ../../../OpenMPSupport.md:18
 msgid "OpenMP directives in concurrent loop regions"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:537 ../../../OpenMPSupport.rst:539
-#: ../../../OpenMPSupport.rst:578
-msgid "https://github.com/llvm/llvm-project/pull/125621"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR125621][PR125621]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:539
+#: ../../../OpenMPSupport.md:18
 msgid "atomics constructs on concurrent loop regions"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:541
+#: ../../../OpenMPSupport.md:18
 msgid "Loop construct with DO CONCURRENT"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:543
+#: ../../../OpenMPSupport.md:18
 msgid "device_type clause for target construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:545
+#: ../../../OpenMPSupport.md:18
 msgid "nowait for ancestor target directives"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:547
+#: ../../../OpenMPSupport.md:18
 msgid "New API for devices' num_teams/thread_limit"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:549
+#: ../../../OpenMPSupport.md:18
 msgid "Host and device environment variables"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:551
+#: ../../../OpenMPSupport.md:18
 msgid "num_threads ICV and clause accepts list"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:553
+#: ../../../OpenMPSupport.md:18
 msgid "Numeric names for environment variables"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:555
+#: ../../../OpenMPSupport.md:18
 msgid "Increment between places for OMP_PLACES"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:557
+#: ../../../OpenMPSupport.md:18
 msgid "OMP_AVAILABLE_DEVICES envirable"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:557
+#: ../../../OpenMPSupport.md:18
 msgid "(should wait for \"Traits for default device envirable\" being done)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:559
+#: ../../../OpenMPSupport.md:18
 msgid "Traits for default device envirable"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:559
+#: ../../../OpenMPSupport.md:18
 msgid "ro-i"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:561
+#: ../../../OpenMPSupport.md:18
 msgid "Optionally omit array length expression"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:561
-msgid ""
-"(Parse) https://github.com/llvm/llvm-project/pull/148048, (Sema) https://"
-"github.com/llvm/llvm-project/pull/152786"
+#: ../../../OpenMPSupport.md:18
+msgid "(Parse) [PR148048][PR148048], (Sema) [PR152786][PR152786]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:564
+#: ../../../OpenMPSupport.md:18
 msgid "Canonical loop sequences"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:564
-msgid "Clang: https://github.com/llvm/llvm-project/pull/139293"
+#: ../../../OpenMPSupport.md:18
+msgid "Clang: [PR139293][PR139293]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:566
+#: ../../../OpenMPSupport.md:18
 msgid "Clarifications to Fortran map semantics"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:568
+#: ../../../OpenMPSupport.md:18
 msgid "default clause at target construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:568
-msgid "https://github.com/llvm/llvm-project/pull/162910"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR162910][PR162910]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:570
+#: ../../../OpenMPSupport.md:18
 msgid "ref count update use_device_{ptr, addr}"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:572
+#: ../../../OpenMPSupport.md:18
 msgid "Clarifications to implicit reductions"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:574
+#: ../../../OpenMPSupport.md:18
 msgid "ref modifier for map clauses"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:576
+#: ../../../OpenMPSupport.md:18
 msgid "map-type modifiers in arbitrary position"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:576
-msgid "https://github.com/llvm/llvm-project/pull/90499"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR90499][PR90499]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:578
+#: ../../../OpenMPSupport.md:18
 msgid "Lift nesting restriction on concurrent loop"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:580
+#: ../../../OpenMPSupport.md:18
 msgid "priority clause for target constructs"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:582
+#: ../../../OpenMPSupport.md:18
 msgid "changes to target_data construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:584
+#: ../../../OpenMPSupport.md:18
 msgid "Non-const do_not_sync for nowait/nogroup"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:586
+#: ../../../OpenMPSupport.md:18
 msgid "need_device_addr modifier for adjust_args clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:586
-msgid "Parsing/Sema: https://github.com/llvm/llvm-project/pull/143442"
+#: ../../../OpenMPSupport.md:18
+msgid "Parsing/Sema: [PR143442][PR143442] [PR149586][PR149586]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:587
-msgid "https://github.com/llvm/llvm-project/pull/149586"
-msgstr ""
-
-#: ../../../OpenMPSupport.rst:589 ../../../OpenMPSupport.rst:677
+#: ../../../OpenMPSupport.md:18
 msgid "need_device_ptr modifier for adjust_args clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:591
+#: ../../../OpenMPSupport.md:18
 msgid "Prescriptive num_threads"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:591
+#: ../../../OpenMPSupport.md:18
 msgid ""
-"https://github.com/llvm/llvm-project/pull/160659 https://github.com/llvm/"
-"llvm-project/pull/146403 https://github.com/llvm/llvm-project/pull/146404 "
-"https://github.com/llvm/llvm-project/pull/146405"
+"[PR160659][PR160659] [PR146403][PR146403] [PR146404][PR146404] [PR146405]"
+"[PR146405]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:596
+#: ../../../OpenMPSupport.md:18
 msgid "Message and severity clauses"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:596
-msgid "https://github.com/llvm/llvm-project/pull/146093"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR146093][PR146093]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:598
+#: ../../../OpenMPSupport.md:18
 msgid "Local clause on declare target"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:598
+#: ../../../OpenMPSupport.md:18
 msgid ""
-"clang Parse/Sema: https://github.com/llvm/llvm-project/pull/186281 clang "
-"Codegen   : https://github.com/llvm/llvm-project/pull/196431"
+"clang Parse/Sema: [PR186281][PR186281] clang Codegen: [PR196431][PR196431]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:601
+#: ../../../OpenMPSupport.md:18
 msgid "groupprivate directive"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:601
-msgid "Flang: kparzysz, mjklemm"
-msgstr ""
-
-#: ../../../OpenMPSupport.rst:603
+#: ../../../OpenMPSupport.md:18
 msgid ""
-"Flang parser: https://github.com/llvm/llvm-project/pull/153807 Flang sema: "
-"https://github.com/llvm/llvm-project/pull/154779 Clang parse/sema: https://"
-"github.com/llvm/llvm-project/pull/158134"
+"Flang: kparzysz, mjklemm Flang parser: [PR153807][PR153807] Flang sema: "
+"[PR154779][PR154779] Clang parse/sema: [PR158134][PR158134]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:607
+#: ../../../OpenMPSupport.md:18
 msgid "variable-category on default clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:609
+#: ../../../OpenMPSupport.md:18
 msgid "Changes to omp_target_is_accessible"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:611
+#: ../../../OpenMPSupport.md:18
 msgid "defaultmap implicit-behavior 'storage'"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:611
-msgid "https://github.com/llvm/llvm-project/pull/158336"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR158336][PR158336]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:613
+#: ../../../OpenMPSupport.md:18
 msgid "defaultmap implicit-behavior 'private'"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:613
-msgid "https://github.com/llvm/llvm-project/pull/158712"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR158712][PR158712]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:615
+#: ../../../OpenMPSupport.md:18
 msgid "OMPT: ompt_get_buffer_limits entry point"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:615
-msgid "Definition: https://github.com/llvm/llvm-project/pull/195829"
+#: ../../../OpenMPSupport.md:18
+msgid "Definition: [PR195829][PR195829]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:617
+#: ../../../OpenMPSupport.md:18
 msgid "OMPT: ompt_any_record_ompt_t for device tracing"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:617
-msgid "https://github.com/llvm/llvm-project/pull/195829"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR195829][PR195829]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:619
+#: ../../../OpenMPSupport.md:18
 msgid "OMPT: ompt_target_data_transfer_rect(_async) & subvolume"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:619 ../../../OpenMPSupport.rst:621
-#: ../../../OpenMPSupport.rst:626 ../../../OpenMPSupport.rst:628
-#: ../../../OpenMPSupport.rst:630
-msgid "Enum: https://github.com/llvm/llvm-project/pull/195829"
+#: ../../../OpenMPSupport.md:18
+msgid "Enum: [PR195829][PR195829]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:621
+#: ../../../OpenMPSupport.md:18
 msgid "OMPT: ompt_target_data_transfer(_async)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:623
+#: ../../../OpenMPSupport.md:18
 msgid "OMPT: ompt_target_data_memset(_async)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:623
-msgid ""
-"Enum: https://github.com/llvm/llvm-project/pull/195829 Callbacks: https://"
-"github.com/llvm/llvm-project/pull/194168"
+#: ../../../OpenMPSupport.md:18
+msgid "Enum: [PR195829][PR195829] Callbacks: [PR194168][PR194168]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:626
+#: ../../../OpenMPSupport.md:18
 msgid "OMPT: workdistribute work callback enum"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:628
+#: ../../../OpenMPSupport.md:18
 msgid "OMPT: transparent task flag enum (importing/exporting)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:630
+#: ../../../OpenMPSupport.md:18
 msgid "OMPT: dependence type {out, inout}_all_memory"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:632
+#: ../../../OpenMPSupport.md:18
 msgid "OMPT: removed master callback"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:634
+#: ../../../OpenMPSupport.md:18
 msgid "OMPT: removed sync_region_barrier(_implicit) enum value"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:640
+#: ../../../OpenMPSupport.md:366
 msgid "OpenMP 6.0 Deprecations"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:647
+#: ../../../OpenMPSupport.md:18
 msgid "OMPT: non-emi target callbacks"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:649
+#: ../../../OpenMPSupport.md:18
 msgid "OMPT: transfer_to_device / transfer_from_device enums"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:655
+#: ../../../OpenMPSupport.md:375
 msgid "OpenMP 6.1 Implementation Details (Experimental)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:657
+#: ../../../OpenMPSupport.md:377
 msgid ""
 "The following table provides a quick overview over various OpenMP 6.1 "
 "features and their implementation status. Since OpenMP 6.1 has not yet been "
 "released, the following features are experimental and are subject to change "
-"at any time. Please post on the `Discourse forums (Runtimes - OpenMP "
-"category)`_ for more information or if you want to help with the "
+"at any time. Please post on the [Discourse forums (Runtimes - OpenMP "
+"category)] for more information or if you want to help with the "
 "implementation."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:667
+#: ../../../OpenMPSupport.md:18
 msgid "dyn_groupprivate clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:667
+#: ../../../OpenMPSupport.md:18
 msgid "C/C++: Host device support missing"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:669
+#: ../../../OpenMPSupport.md:18
 msgid "loop flatten transformation"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:671
+#: ../../../OpenMPSupport.md:18
 msgid "loop grid/tile modifiers for sizes clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:673
+#: ../../../OpenMPSupport.md:18
 msgid "attach map-type modifier"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:673
+#: ../../../OpenMPSupport.md:18
 msgid ""
-"C/C++: @abhinavgaba; RT: @abhinavgaba (https://github.com/llvm/llvm-project/"
-"pull/149036, https://github.com/llvm/llvm-project/pull/158370)"
+"C/C++: @abhinavgaba; RT: @abhinavgaba ([PR149036][PR149036], [PR158370]"
+"[PR158370], [PR210213][PR210213])"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:677
-msgid ""
-"Clang Parsing/Sema: https://github.com/llvm/llvm-project/pull/168905 https://"
-"github.com/llvm/llvm-project/pull/169558"
+#: ../../../OpenMPSupport.md:18
+msgid "Clang Parsing/Sema: [PR168905][PR168905] [PR169558][PR169558]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:680
+#: ../../../OpenMPSupport.md:18
 msgid "fallback modifier for use_device_ptr clause"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:680
+#: ../../../OpenMPSupport.md:18
 msgid ""
-"Clang: @abhinavgaba (https://github.com/llvm/llvm-project/pull/170578, "
-"https://github.com/llvm/llvm-project/pull/173931) RT: @abhinavgaba (https://"
-"github.com/llvm/llvm-project/pull/169603)"
+"Clang: @abhinavgaba ([PR170578][PR170578], [PR173931][PR173931]) RT: "
+"@abhinavgaba ([PR169603][PR169603])"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:684
-msgid "dims clause with strict behavior (multidimensional teams and leagues)"
+#: ../../../OpenMPSupport.md:18
+msgid "dims modifier for num_teams, thread_limit, and num_threads clauses"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:684
-msgid "C/C++: kevinsala Fortran: skc7, kparzysz, mjklemm"
+#: ../../../OpenMPSupport.md:18
+msgid ""
+"C/C++: @kevinsala ([PR206412][PR208353]); Fortran: @skc7, @kparzysz, @mjklemm"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:689
+#: ../../../OpenMPSupport.md:394
 msgid "OpenMP Extensions"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:691
+#: ../../../OpenMPSupport.md:396
 msgid ""
 "The following table provides a quick overview over various OpenMP extensions "
-"and their implementation status.  These extensions are not currently defined "
-"by any standard, so links to associated LLVM documentation are provided.  As "
+"and their implementation status. These extensions are not currently defined "
+"by any standard, so links to associated LLVM documentation are provided. As "
 "these extensions mature, they will be considered for standardization. Please "
-"post on the `Discourse forums (Runtimes - OpenMP category)`_ to provide "
+"post on the [Discourse forums (Runtimes - OpenMP category)] to provide "
 "feedback."
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:701
+#: ../../../OpenMPSupport.md:18
 msgid "atomic extension"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:701
+#: ../../../OpenMPSupport.md:18
 msgid ""
-"`'atomic' strictly nested within 'teams' <https://openmp.llvm.org/docs/"
-"openacc/OpenMPExtensions.html#atomicWithinTeams>`_"
+"['atomic' strictly nested within 'teams'](https://openmp.llvm.org/docs/"
+"openacc/OpenMPExtensions.html#atomicWithinTeams)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:701 ../../../OpenMPSupport.rst:704
-#: ../../../OpenMPSupport.rst:707
-msgid ":part:`prototyped`"
+#: ../../../OpenMPSupport.md:18
+msgid "{part}`prototyped`"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:701
-msgid "D126323"
+#: ../../../OpenMPSupport.md:18
+msgid "[D126323][D126323]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:704 ../../../OpenMPSupport.rst:707
-#: ../../../OpenMPSupport.rst:710
+#: ../../../OpenMPSupport.md:18
 msgid "device extension"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:704
+#: ../../../OpenMPSupport.md:18
 msgid ""
-"`'ompx_hold' map type modifier <https://openmp.llvm.org/docs/openacc/"
-"OpenMPExtensions.html#ompx-hold>`_"
+"['ompx_hold' map type modifier](https://openmp.llvm.org/docs/openacc/"
+"OpenMPExtensions.html#ompx-hold)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:704
-msgid "D106509, D106510"
+#: ../../../OpenMPSupport.md:18
+msgid "[D106509][D106509], [D106510][D106510]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:707
+#: ../../../OpenMPSupport.md:18
 msgid ""
-"`'ompx_bare' clause on 'target teams' construct <https://www.osti.gov/"
-"servlets/purl/2205717>`_"
+"['ompx_bare' clause on 'target teams' construct](https://www.osti.gov/"
+"servlets/purl/2205717)"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:707
-msgid "#66844, #70612"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR66844][PR66844], [PR70612][PR70612]"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:710
+#: ../../../OpenMPSupport.md:18
 msgid ""
 "Multi-dim 'num_teams' and 'thread_limit' clause on 'target teams ompx_bare' "
 "construct"
 msgstr ""
 
-#: ../../../OpenMPSupport.rst:710
-msgid "#99732, #101407, #102715"
+#: ../../../OpenMPSupport.md:18
+msgid "[PR99732][PR99732], [PR101407][PR101407], [PR102715][PR102715]"
 msgstr ""

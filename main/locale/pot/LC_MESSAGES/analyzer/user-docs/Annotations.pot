@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,60 +17,59 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../analyzer/user-docs/Annotations.rst:3
+#: ../../../analyzer/user-docs/Annotations.md:1
 msgid "Source Annotations"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:5
+#: ../../../analyzer/user-docs/Annotations.md:3
 msgid ""
 "The Clang frontend supports several source-level annotations in the form of "
-"`GCC-style attributes <https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax."
-"html>`_ and pragmas that can help make using the Clang Static Analyzer more "
+"[GCC-style attributes](https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax."
+"html) and pragmas that can help make using the Clang Static Analyzer more "
 "useful. These annotations can both help suppress false positives as well as "
 "enhance the analyzer's ability to find bugs."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:11
+#: ../../../analyzer/user-docs/Annotations.md:9
 msgid ""
 "This page gives a practical overview of such annotations. For more technical "
 "specifics regarding Clang-specific annotations please see the Clang's list "
-"of `language extensions <https://clang.llvm.org/docs/LanguageExtensions."
-"html>`_. Details of \"standard\" GCC attributes (that Clang also supports) "
-"can be found in the `GCC manual <https://gcc.gnu.org/onlinedocs/gcc/>`_, "
-"with the majority of the relevant attributes being in the section on "
-"`function attributes <https://gcc.gnu.org/onlinedocs/gcc/Function-Attributes."
-"html>`_."
+"of [language extensions](https://clang.llvm.org/docs/LanguageExtensions."
+"html). Details of \"standard\" GCC attributes (that Clang also supports) can "
+"be found in the [GCC manual](https://gcc.gnu.org/onlinedocs/gcc/), with the "
+"majority of the relevant attributes being in the section on [function "
+"attributes](https://gcc.gnu.org/onlinedocs/gcc/Function-Attributes.html)."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:19
+#: ../../../analyzer/user-docs/Annotations.md:17
 msgid ""
 "Note that attributes that are labeled **Clang-specific** are not recognized "
 "by GCC. Their use can be conditioned using preprocessor macros (examples "
 "included on this page)."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:27
+#: ../../../analyzer/user-docs/Annotations.md:25
 msgid "General Purpose Annotations"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:30
+#: ../../../analyzer/user-docs/Annotations.md:27
 msgid "Null Pointer Checking"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:33
+#: ../../../analyzer/user-docs/Annotations.md:29
 msgid "Attribute 'nonnull'"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:35
+#: ../../../analyzer/user-docs/Annotations.md:31
 msgid ""
 "The analyzer recognizes the GCC attribute 'nonnull', which indicates that a "
 "function expects that a given function parameter is not a null pointer. "
 "Specific details of the syntax of using the 'nonnull' attribute can be found "
-"in `GCC's documentation <https://gcc.gnu.org/onlinedocs/gcc/Common-Function-"
-"Attributes.html#index-nonnull-function-attribute>`_."
+"in [GCC's documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-"
+"Attributes.html#index-nonnull-function-attribute)."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:40
+#: ../../../analyzer/user-docs/Annotations.md:36
 msgid ""
 "Both the Clang compiler and GCC will flag warnings for simple cases where a "
 "null pointer is directly being passed to a function with a 'nonnull' "
@@ -80,27 +79,27 @@ msgid ""
 "'nonnull' parameter."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:47
-#: ../../../analyzer/user-docs/Annotations.rst:129
-#: ../../../analyzer/user-docs/Annotations.rst:152
-#: ../../../analyzer/user-docs/Annotations.rst:255
-#: ../../../analyzer/user-docs/Annotations.rst:355
-#: ../../../analyzer/user-docs/Annotations.rst:444
-#: ../../../analyzer/user-docs/Annotations.rst:496
-#: ../../../analyzer/user-docs/Annotations.rst:548
-#: ../../../analyzer/user-docs/Annotations.rst:638
+#: ../../../analyzer/user-docs/Annotations.md:43
+#: ../../../analyzer/user-docs/Annotations.md:124
+#: ../../../analyzer/user-docs/Annotations.md:146
+#: ../../../analyzer/user-docs/Annotations.md:242
+#: ../../../analyzer/user-docs/Annotations.md:342
+#: ../../../analyzer/user-docs/Annotations.md:432
+#: ../../../analyzer/user-docs/Annotations.md:484
+#: ../../../analyzer/user-docs/Annotations.md:536
+#: ../../../analyzer/user-docs/Annotations.md:621
 msgid "**Example**"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:58
-msgid "Running ``scan-build`` over this source produces the following output:"
+#: ../../../analyzer/user-docs/Annotations.md:54
+msgid "Running `scan-build` over this source produces the following output:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:65
+#: ../../../analyzer/user-docs/Annotations.md:61
 msgid "Custom Assertion Handlers"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:67
+#: ../../../analyzer/user-docs/Annotations.md:63
 msgid ""
 "The analyzer exploits code assertions by pruning off paths where the "
 "assertion condition is false. The idea is capture any program invariants "
@@ -112,28 +111,28 @@ msgid ""
 "analyzer false positives by pruning off false paths."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:76
+#: ../../../analyzer/user-docs/Annotations.md:72
 msgid ""
 "In order to exploit assertions, however, the analyzer must understand when "
 "it encounters an \"assertion handler\". Typically assertions are implemented "
 "with a macro, with the macro performing a check for the assertion condition "
-"and, when the check fails, calling an assertion handler.  For example, "
+"and, when the check fails, calling an assertion handler. For example, "
 "consider the following code fragment:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:88
+#: ../../../analyzer/user-docs/Annotations.md:84
 msgid "When this code is preprocessed on Mac OS X it expands to the following:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:96
+#: ../../../analyzer/user-docs/Annotations.md:92
 msgid ""
-"In this example, the assertion handler is ``__assert_rtn``. When called, "
-"most assertion handlers typically print an error and terminate the program. "
-"The analyzer can exploit such semantics by ending the analysis of a path "
-"once it hits a call to an assertion handler."
+"In this example, the assertion handler is `__assert_rtn`. When called, most "
+"assertion handlers typically print an error and terminate the program. The "
+"analyzer can exploit such semantics by ending the analysis of a path once it "
+"hits a call to an assertion handler."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:101
+#: ../../../analyzer/user-docs/Annotations.md:97
 msgid ""
 "The trick, however, is that the analyzer needs to know that a called "
 "function is an assertion handler; otherwise the analyzer might assume the "
@@ -144,7 +143,7 @@ msgid ""
 "g., dereferencing a pointer)."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:108
+#: ../../../analyzer/user-docs/Annotations.md:104
 msgid ""
 "The analyzer knows about several well-known assertion handlers, but can "
 "automatically infer if a function should be treated as an assertion handler "
@@ -153,25 +152,25 @@ msgid ""
 "these attributes on Objective-C methods and C++ methods."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:115
+#: ../../../analyzer/user-docs/Annotations.md:110
 msgid "Attribute 'noreturn'"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:117
+#: ../../../analyzer/user-docs/Annotations.md:112
 msgid ""
 "The 'noreturn' attribute is a GCC attribute that can be placed on the "
 "declarations of functions. It means exactly what its name implies: a "
 "function with a 'noreturn' attribute should never return."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:121
+#: ../../../analyzer/user-docs/Annotations.md:116
 msgid ""
 "Specific details of the syntax of using the 'noreturn' attribute can be "
-"found in `GCC's documentation <https://gcc.gnu.org/onlinedocs/gcc/Common-"
-"Function-Attributes.html#index-noreturn-function-attribute>`__."
+"found in [GCC's documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-"
+"Function-Attributes.html#index-noreturn-function-attribute)."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:124
+#: ../../../analyzer/user-docs/Annotations.md:119
 msgid ""
 "Not only does the analyzer exploit this information when pruning false "
 "paths, but the compiler also takes it seriously and will generate different "
@@ -179,117 +178,117 @@ msgid ""
 "does not return."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:131
+#: ../../../analyzer/user-docs/Annotations.md:126
 msgid ""
-"On Mac OS X, the function prototype for ``__assert_rtn`` (declared in "
-"``assert.h``) is specifically annotated with the 'noreturn' attribute:"
+"On Mac OS X, the function prototype for `__assert_rtn` (declared in `assert."
+"h`) is specifically annotated with the 'noreturn' attribute:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:139
+#: ../../../analyzer/user-docs/Annotations.md:133
 msgid "Attribute 'analyzer_noreturn' (Clang-specific)"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:141
+#: ../../../analyzer/user-docs/Annotations.md:135
 msgid ""
 "The Clang-specific 'analyzer_noreturn' attribute is almost identical to "
 "'noreturn' except that it is ignored by the compiler for the purposes of "
 "code generation."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:145
+#: ../../../analyzer/user-docs/Annotations.md:139
 msgid ""
 "This attribute is useful for annotating assertion handlers that actually "
 "*can* return, but for the purpose of using the analyzer we want to pretend "
 "that such functions do not return."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:149
+#: ../../../analyzer/user-docs/Annotations.md:143
 msgid ""
 "Because this attribute is Clang-specific, its use should be conditioned with "
 "the use of preprocessor macros."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:167
+#: ../../../analyzer/user-docs/Annotations.md:160
 msgid "Dynamic Memory Modeling Annotations"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:169
+#: ../../../analyzer/user-docs/Annotations.md:162
 msgid ""
 "If a project uses custom functions for dynamic memory management (that e.g. "
-"act as wrappers around ``malloc``/``free`` or ``new``/``delete`` in C++) and "
-"the analyzer cannot \"see\" the _definitions_ of these functions, it's "
+"act as wrappers around `malloc`/`free` or `new`/`delete` in C++) and the "
+"analyzer cannot \"see\" the `_definitions_` of these functions, it's "
 "possible to annotate their declarations to let the analyzer model their "
-"behavior. (Otherwise the analyzer cannot know that the opaque ``my_free()`` "
-"is basically equivalent to a standard ``free()`` call.)"
+"behavior. (Otherwise the analyzer cannot know that the opaque `my_free()` is "
+"basically equivalent to a standard `free()` call.)"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:172
+#: ../../../analyzer/user-docs/Annotations.md:165
 msgid ""
 "**This page only provides a brief list of these annotations.** For a full "
-"documentation, see the main `Attributes in Clang <../../AttributeReference."
-"html#ownership-holds-ownership-returns-ownership-takes-clang-static-"
-"analyzer>`_ page."
+"documentation, see the main [Attributes in Clang](../../AttributeReference."
+"md#ownership-holds-ownership-returns-ownership-takes-clang-static-analyzer) "
+"page."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:175
+#: ../../../analyzer/user-docs/Annotations.md:168
 msgid "Attribute 'ownership_returns' (Clang-specific)"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:177
+#: ../../../analyzer/user-docs/Annotations.md:170
 msgid ""
 "Use this attribute to mark functions that return dynamically allocated "
-"memory. The first argument is the type of the allocation (e.g. ``malloc``, "
-"``new``, or any other identifier). An optional second argument is the 1-"
-"based index of the function parameter that specifies the allocation size in "
-"bytes. The referenced parameter must have an integral type."
+"memory. The first argument is the type of the allocation (e.g. `malloc`, "
+"`new`, or any other identifier). An optional second argument is the 1-based "
+"index of the function parameter that specifies the allocation size in bytes. "
+"The referenced parameter must have an integral type."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:182
+#: ../../../analyzer/user-docs/Annotations.md:175
 msgid "This attribute may appear at most once per function declaration."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:193
+#: ../../../analyzer/user-docs/Annotations.md:185
 msgid "Attribute 'ownership_takes' (Clang-specific)"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:195
+#: ../../../analyzer/user-docs/Annotations.md:187
 msgid ""
 "Use this attribute to mark functions that deallocate memory. Takes two "
-"arguments: the type of the allocation (e.g. ``malloc`` or ``new``) and the "
-"index of the parameter that is being deallocated (counting from 1)."
+"arguments: the type of the allocation (e.g. `malloc` or `new`) and the index "
+"of the parameter that is being deallocated (counting from 1)."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:202
+#: ../../../analyzer/user-docs/Annotations.md:193
 msgid "Attribute 'ownership_holds' (Clang-specific)"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:204
+#: ../../../analyzer/user-docs/Annotations.md:195
 msgid ""
 "Use this attribute to mark functions that take ownership of memory and will "
 "deallocate it at some unspecified point in the future. Takes two arguments: "
-"the type of the allocation (e.g. ``malloc`` or ``new``) and the index of the "
+"the type of the allocation (e.g. `malloc` or `new`) and the index of the "
 "parameter that is being held (counting from 1)."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:210
+#: ../../../analyzer/user-docs/Annotations.md:201
 msgid ""
-"The annotations ``ownership_takes`` and ``ownership_holds`` both prevent "
-"memory leak reports (concerning the specified parameter); the difference "
-"between them is that using taken memory is a use-after-free error, while "
-"using held memory is assumed to be legitimate. However, releasing the held "
-"memory or passing it to another holding call is reported by the analyzer as "
-"an \"attempt to release non-owned memory\"."
+"The annotations `ownership_takes` and `ownership_holds` both prevent memory "
+"leak reports (concerning the specified parameter); the difference between "
+"them is that using taken memory is a use-after-free error, while using held "
+"memory is assumed to be legitimate. However, releasing the held memory or "
+"passing it to another holding call is reported by the analyzer as an "
+"\"attempt to release non-owned memory\"."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:214
+#: ../../../analyzer/user-docs/Annotations.md:203
 msgid "Mac OS X API Annotations"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:219
+#: ../../../analyzer/user-docs/Annotations.md:207
 msgid "Cocoa & Core Foundation Memory Management Annotations"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:221
+#: ../../../analyzer/user-docs/Annotations.md:209
 msgid ""
 "The analyzer supports the proper management of retain counts for both Cocoa "
 "and Core Foundation objects. This checking is largely based on enforcing "
@@ -298,38 +297,37 @@ msgid ""
 "can cause the analyzer to miss bugs or flag false positives."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:227
+#: ../../../analyzer/user-docs/Annotations.md:215
 msgid ""
 "One can educate the analyzer (and others who read your code) about methods "
 "or functions that deviate from the Cocoa and Core Foundation conventions "
 "using the attributes described here. However, you should consider using "
-"proper naming conventions or the `objc_method_family <https://clang.llvm.org/"
-"docs/LanguageExtensions.html#the-objc-method-family-attribute>`_ attribute, "
-"if applicable."
+"proper naming conventions or the [objc_method_family](https://clang.llvm.org/"
+"docs/LanguageExtensions.html#the-objc-method-family-attribute) attribute, if "
+"applicable."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:236
+#: ../../../analyzer/user-docs/Annotations.md:223
 msgid "Attribute 'ns_returns_retained' (Clang-specific)"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:238
+#: ../../../analyzer/user-docs/Annotations.md:225
 msgid ""
 "The GCC-style (Clang-specific) attribute 'ns_returns_retained' allows one to "
 "annotate an Objective-C method or C function as returning a retained Cocoa "
-"object that the caller is responsible for releasing (via sending a "
-"``release`` message to the object). The Foundation framework defines a macro "
-"``NS_RETURNS_RETAINED`` that is functionally equivalent to the one shown "
-"below."
+"object that the caller is responsible for releasing (via sending a `release` "
+"message to the object). The Foundation framework defines a macro "
+"`NS_RETURNS_RETAINED` that is functionally equivalent to the one shown below."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:245
+#: ../../../analyzer/user-docs/Annotations.md:232
 msgid ""
 "**Placing on Objective-C methods**: For Objective-C methods, this annotation "
 "essentially tells the analyzer to treat the method as if its name begins "
 "with \"alloc\" or \"new\" or contains the word \"copy\"."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:250
+#: ../../../analyzer/user-docs/Annotations.md:237
 msgid ""
 "**Placing on C functions**: For C functions returning Cocoa objects, the "
 "analyzer typically does not make any assumptions about whether or not the "
@@ -337,47 +335,48 @@ msgid ""
 "attribute to C functions allows the analyzer to perform extra checking."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:287
-msgid ""
-"Running ``scan-build`` on this source file produces the following output:"
+#: ../../../analyzer/user-docs/Annotations.md:274
+msgid "Running `scan-build` on this source file produces the following output:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:294
+#: ../../../analyzer/user-docs/Annotations.md:281
 msgid "Attribute 'ns_returns_not_retained' (Clang-specific)"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:296
+#: ../../../analyzer/user-docs/Annotations.md:283
 msgid ""
 "The 'ns_returns_not_retained' attribute is the complement of "
-"'`ns_returns_retained`_'. Where a function or method may appear to obey the "
-"Cocoa conventions and return a retained Cocoa object, this attribute can be "
-"used to indicate that the object reference returned should not be considered "
-"as an \"owning\" reference being returned to the caller. The Foundation "
-"framework defines a macro ``NS_RETURNS_NOT_RETAINED`` that is functionally "
-"equivalent to the one shown below."
+"'[ns_returns_retained](#attribute-ns-returns-retained-clang-specific)'. "
+"Where a function or method may appear to obey the Cocoa conventions and "
+"return a retained Cocoa object, this attribute can be used to indicate that "
+"the object reference returned should not be considered as an \"owning\" "
+"reference being returned to the caller. The Foundation framework defines a "
+"macro `NS_RETURNS_NOT_RETAINED` that is functionally equivalent to the one "
+"shown below."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:304
+#: ../../../analyzer/user-docs/Annotations.md:291
 msgid ""
-"Usage is identical to `ns_returns_retained`_.  When using the attribute, be "
-"sure to declare it within the proper macro that checks for its availability, "
-"as it is not available in earlier versions of the analyzer:"
+"Usage is identical to [ns_returns_retained](#attribute-ns-returns-retained-"
+"clang-specific). When using the attribute, be sure to declare it within the "
+"proper macro that checks for its availability, as it is not available in "
+"earlier versions of the analyzer:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:325
+#: ../../../analyzer/user-docs/Annotations.md:312
 msgid "Attribute 'cf_returns_retained' (Clang-specific)"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:327
+#: ../../../analyzer/user-docs/Annotations.md:314
 msgid ""
 "The GCC-style (Clang-specific) attribute 'cf_returns_retained' allows one to "
 "annotate an Objective-C method or C function as returning a retained Core "
 "Foundation object that the caller is responsible for releasing. The "
-"CoreFoundation framework defines a macro ``CF_RETURNS_RETAINED`` that is "
+"CoreFoundation framework defines a macro `CF_RETURNS_RETAINED` that is "
 "functionally equivalent to the one shown below."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:333
+#: ../../../analyzer/user-docs/Annotations.md:320
 msgid ""
 "**Placing on Objective-C methods**: With respect to Objective-C methods., "
 "this attribute is identical in its behavior and usage to "
@@ -385,7 +384,7 @@ msgid ""
 "Foundation object instead of a Cocoa object."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:338
+#: ../../../analyzer/user-docs/Annotations.md:325
 msgid ""
 "This distinction is important for the following reason: as Core Foundation "
 "is a C API, the analyzer cannot always tell that a pointer return value "
@@ -394,90 +393,92 @@ msgid ""
 "Objective-C type system)."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:344
+#: ../../../analyzer/user-docs/Annotations.md:331
 msgid ""
 "**Placing on C functions**: When placing the attribute 'cf_returns_retained' "
 "on the declarations of C functions, the analyzer interprets the function as:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:348
+#: ../../../analyzer/user-docs/Annotations.md:335
 msgid "Returning a Core Foundation Object"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:349
+#: ../../../analyzer/user-docs/Annotations.md:336
 msgid ""
 "Treating the function as if it its name contained the keywords \"create\" or "
 "\"copy\". This means the returned object as a +1 retain count that must be "
-"released by the caller, either by sending a ``release`` message (via toll-"
-"free bridging to an Objective-C object pointer), or calling ``CFRelease`` or "
-"a similar function."
+"released by the caller, either by sending a `release` message (via toll-free "
+"bridging to an Objective-C object pointer), or calling `CFRelease` or a "
+"similar function."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:398
-msgid "Running ``scan-build`` on this example produces the following output:"
+#: ../../../analyzer/user-docs/Annotations.md:386
+msgid "Running `scan-build` on this example produces the following output:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:403
+#: ../../../analyzer/user-docs/Annotations.md:391
 msgid "Attribute 'cf_returns_not_retained' (Clang-specific)"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:405
+#: ../../../analyzer/user-docs/Annotations.md:393
 msgid ""
 "The 'cf_returns_not_retained' attribute is the complement of "
-"'`cf_returns_retained`_'. Where a function or method may appear to obey the "
-"Core Foundation or Cocoa conventions and return a retained Core Foundation "
-"object, this attribute can be used to indicate that the object reference "
-"returned should not be considered as an \"owning\" reference being returned "
-"to the caller. The CoreFoundation framework defines a macro "
-"**``CF_RETURNS_NOT_RETAINED``** that is functionally equivalent to the one "
-"shown below."
+"'[cf_returns_retained](#attribute-cf-returns-retained-clang-specific)'. "
+"Where a function or method may appear to obey the Core Foundation or Cocoa "
+"conventions and return a retained Core Foundation object, this attribute can "
+"be used to indicate that the object reference returned should not be "
+"considered as an \"owning\" reference being returned to the caller. The "
+"CoreFoundation framework defines a macro **`CF_RETURNS_NOT_RETAINED`** that "
+"is functionally equivalent to the one shown below."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:414
+#: ../../../analyzer/user-docs/Annotations.md:402
 msgid ""
-"Usage is identical to cf_returns_retained_. When using the attribute, be "
-"sure to declare it within the proper macro that checks for its availability, "
-"as it is not available in earlier versions of the analyzer:"
+"Usage is identical to [cf_returns_retained](#attribute-cf-returns-retained-"
+"clang-specific). When using the attribute, be sure to declare it within the "
+"proper macro that checks for its availability, as it is not available in "
+"earlier versions of the analyzer:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:435
+#: ../../../analyzer/user-docs/Annotations.md:423
 msgid "Attribute 'ns_consumed' (Clang-specific)"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:437
+#: ../../../analyzer/user-docs/Annotations.md:425
 msgid ""
 "The 'ns_consumed' attribute can be placed on a specific parameter in either "
 "the declaration of a function or an Objective-C method. It indicates to the "
-"static analyzer that a ``release`` message is implicitly sent to the "
-"parameter upon completion of the call to the given function or method. The "
-"Foundation framework defines a macro ``NS_RELEASES_ARGUMENT`` that is "
-"functionally equivalent to the ``NS_CONSUMED`` macro shown below."
+"static analyzer that a `release` message is implicitly sent to the parameter "
+"upon completion of the call to the given function or method. The Foundation "
+"framework defines a macro `NS_RELEASES_ARGUMENT` that is functionally "
+"equivalent to the `NS_CONSUMED` macro shown below."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:484
+#: ../../../analyzer/user-docs/Annotations.md:472
 msgid "Attribute 'cf_consumed' (Clang-specific)"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:486
+#: ../../../analyzer/user-docs/Annotations.md:474
 msgid ""
-"The 'cf_consumed' attribute is practically identical to ns_consumed_. The "
-"attribute can be placed on a specific parameter in either the declaration of "
-"a function or an Objective-C method. It indicates to the static analyzer "
-"that the object reference is implicitly passed to a call to ``CFRelease`` "
-"upon completion of the call to the given function or method. The "
-"CoreFoundation framework defines a macro ``CF_RELEASES_ARGUMENT`` that is "
-"functionally equivalent to the ``CF_CONSUMED`` macro shown below."
+"The 'cf_consumed' attribute is practically identical to [ns_consumed]"
+"(#attribute-ns-consumed-clang-specific). The attribute can be placed on a "
+"specific parameter in either the declaration of a function or an Objective-C "
+"method. It indicates to the static analyzer that the object reference is "
+"implicitly passed to a call to `CFRelease` upon completion of the call to "
+"the given function or method. The CoreFoundation framework defines a macro "
+"`CF_RELEASES_ARGUMENT` that is functionally equivalent to the `CF_CONSUMED` "
+"macro shown below."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:494
+#: ../../../analyzer/user-docs/Annotations.md:482
 msgid "Operationally this attribute is nearly identical to 'ns_consumed'."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:538
+#: ../../../analyzer/user-docs/Annotations.md:526
 msgid "Attribute 'ns_consumes_self' (Clang-specific)"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:540
+#: ../../../analyzer/user-docs/Annotations.md:528
 msgid ""
 "The 'ns_consumes_self' attribute can be placed only on an Objective-C method "
 "declaration. It indicates that the receiver of the message is "
@@ -485,46 +486,45 @@ msgid ""
 "sent. This matches the semantics of all \"init\" methods."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:545
+#: ../../../analyzer/user-docs/Annotations.md:533
 msgid ""
 "One use of this attribute is declare your own init-like methods that do not "
 "follow the standard Cocoa naming conventions."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:568
+#: ../../../analyzer/user-docs/Annotations.md:557
 msgid ""
-"In this example, ``-nonstandardInitWith:`` has the same ownership semantics "
-"as the init method ``-initWith:``. The static analyzer will observe that the "
+"In this example, `-nonstandardInitWith:` has the same ownership semantics as "
+"the init method `-initWith:`. The static analyzer will observe that the "
 "method consumes the receiver, and then returns an object with a +1 retain "
 "count."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:573
+#: ../../../analyzer/user-docs/Annotations.md:562
 msgid ""
-"The Foundation framework defines a macro ``NS_REPLACES_RECEIVER`` which is "
-"functionally equivalent to the combination of ``NS_CONSUMES_SELF`` and "
-"``NS_RETURNS_RETAINED`` shown above."
+"The Foundation framework defines a macro `NS_REPLACES_RECEIVER` which is "
+"functionally equivalent to the combination of `NS_CONSUMES_SELF` and "
+"`NS_RETURNS_RETAINED` shown above."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:578
+#: ../../../analyzer/user-docs/Annotations.md:566
 msgid "Libkern Memory Management Annotations"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:580
+#: ../../../analyzer/user-docs/Annotations.md:568
 msgid ""
-"`Libkern <https://developer.apple.com/documentation/kernel/osobject?"
-"language=objc>`_ requires developers to inherit all heap allocated objects "
-"from ``OSObject`` and to perform manual reference counting. The reference "
+"[Libkern](https://developer.apple.com/documentation/kernel/osobject?"
+"language=objc) requires developers to inherit all heap allocated objects "
+"from `OSObject` and to perform manual reference counting. The reference "
 "counting model is very similar to MRR (manual retain-release) mode in "
-"`Objective-C <https://developer.apple.com/library/archive/documentation/"
-"Cocoa/Conceptual/MemoryMgmt/Articles/mmRules.html>`_ or to CoreFoundation "
+"[Objective-C](https://developer.apple.com/library/archive/documentation/"
+"Cocoa/Conceptual/MemoryMgmt/Articles/mmRules.html) or to CoreFoundation "
 "reference counting. Freshly-allocated objects start with a reference count "
-"of 1, and calls to ``retain`` increment it, while calls to ``release`` "
-"decrement it. The object is deallocated whenever its reference count reaches "
-"zero."
+"of 1, and calls to `retain` increment it, while calls to `release` decrement "
+"it. The object is deallocated whenever its reference count reaches zero."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:590
+#: ../../../analyzer/user-docs/Annotations.md:578
 msgid ""
 "Manually incrementing and decrementing reference counts is error-prone: over-"
 "retains lead to leaks, and over-releases lead to uses-after-free. The "
@@ -532,7 +532,7 @@ msgid ""
 "calls."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:595
+#: ../../../analyzer/user-docs/Annotations.md:583
 msgid ""
 "The reference count checking is based on the principle of *locality*: it "
 "should be possible to establish correctness (lack of leaks/uses after free) "
@@ -540,100 +540,102 @@ msgid ""
 "of all the functions it interacts with."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:600
+#: ../../../analyzer/user-docs/Annotations.md:588
 msgid ""
 "In order to support such reasoning, it should be possible to *summarize* the "
 "behavior of each function, with respect to reference count of its returned "
 "values and attributes."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:604
+#: ../../../analyzer/user-docs/Annotations.md:592
 msgid "By default, the following summaries are assumed:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:606
+#: ../../../analyzer/user-docs/Annotations.md:594
 msgid ""
-"All functions starting with ``get`` or ``Get``, unless they are returning "
-"subclasses of ``OSIterator``, are assumed to be returning at +0. That is, "
-"the caller has no reference count *obligations* with respect to the "
-"reference count of the returned object and should leave it untouched."
+"All functions starting with `get` or `Get`, unless they are returning "
+"subclasses of `OSIterator`, are assumed to be returning at +0. That is, the "
+"caller has no reference count *obligations* with respect to the reference "
+"count of the returned object and should leave it untouched."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:611
+#: ../../../analyzer/user-docs/Annotations.md:598
 msgid ""
 "All other functions are assumed to return at +1. That is, the caller has an "
 "*obligation* to release such objects."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:614
+#: ../../../analyzer/user-docs/Annotations.md:600
 msgid ""
 "Functions are assumed not to change the reference count of their parameters, "
-"including the implicit ``this`` parameter."
+"including the implicit `this` parameter."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:617
+#: ../../../analyzer/user-docs/Annotations.md:603
 msgid ""
-"These summaries can be overriden with the following `attributes <https://"
-"clang.llvm.org/docs/AttributeReference.html#os-returns-not-retained>`_:"
+"These summaries can be overriden with the following [attributes](https://"
+"clang.llvm.org/docs/AttributeReference.html#os-returns-not-retained):"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:621
+#: ../../../analyzer/user-docs/Annotations.md:606
 msgid "Attribute 'os_returns_retained'"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:623
+#: ../../../analyzer/user-docs/Annotations.md:608
 msgid ""
-"The ``os_returns_retained`` attribute (accessed through the macro "
-"``LIBKERN_RETURNS_RETAINED``) plays a role identical to "
-"`ns_returns_retained`_ for functions returning ``OSObject`` subclasses. The "
-"attribute indicates that it is a callers responsibility to release the "
-"returned object."
+"The `os_returns_retained` attribute (accessed through the macro "
+"`LIBKERN_RETURNS_RETAINED`) plays a role identical to [ns_returns_retained]"
+"(#attribute-ns-returns-retained-clang-specific) for functions returning "
+"`OSObject` subclasses. The attribute indicates that it is a callers "
+"responsibility to release the returned object."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:629
+#: ../../../analyzer/user-docs/Annotations.md:613
 msgid "Attribute 'os_returns_not_retained'"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:631
+#: ../../../analyzer/user-docs/Annotations.md:615
 msgid ""
-"The ``os_returns_not_retained`` attribute (accessed through the macro "
-"``LIBKERN_RETURNS_NOT_RETAINED``) plays a role identical to "
-"`ns_returns_not_retained`_ for functions returning ``OSObject`` subclasses. "
-"The attribute indicates that the caller should not change the retain count "
-"of the returned object."
+"The `os_returns_not_retained` attribute (accessed through the macro "
+"`LIBKERN_RETURNS_NOT_RETAINED`) plays a role identical to "
+"[ns_returns_not_retained](#attribute-ns-returns-not-retained-clang-specific) "
+"for functions returning `OSObject` subclasses. The attribute indicates that "
+"the caller should not change the retain count of the returned object."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:653
+#: ../../../analyzer/user-docs/Annotations.md:636
 msgid "Attribute 'os_consumed'"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:655
+#: ../../../analyzer/user-docs/Annotations.md:638
 msgid ""
-"Similarly to `ns_consumed`_ attribute, ``os_consumed`` (accessed through "
-"``LIBKERN_CONSUMED``) attribute, applied to a parameter, indicates that the "
-"call to the function *consumes* the parameter: the callee should either "
-"release it or store it and release it in the destructor, while the caller "
-"should assume one is subtracted from the reference count after the call."
+"Similarly to [ns_consumed](#attribute-ns-consumed-clang-specific) attribute, "
+"`os_consumed` (accessed through `LIBKERN_CONSUMED`) attribute, applied to a "
+"parameter, indicates that the call to the function *consumes* the parameter: "
+"the callee should either release it or store it and release it in the "
+"destructor, while the caller should assume one is subtracted from the "
+"reference count after the call."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:665
+#: ../../../analyzer/user-docs/Annotations.md:648
 msgid "Attribute 'os_consumes_this'"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:667
+#: ../../../analyzer/user-docs/Annotations.md:650
 msgid ""
-"Similarly to `ns_consumes_self`_, the ``os_consumes_self`` attribute "
-"indicates that the method call *consumes* the implicit ``this`` argument: "
-"the caller should assume one was subtracted from the reference count of the "
-"object after the call, and the callee has on obligation to either release "
-"the argument, or store it and eventually release it in the destructor."
+"Similarly to [ns_consumes_self](#attribute-ns-consumes-self-clang-specific), "
+"the `os_consumes_self` attribute indicates that the method call *consumes* "
+"the implicit `this` argument: the caller should assume one was subtracted "
+"from the reference count of the object after the call, and the callee has on "
+"obligation to either release the argument, or store it and eventually "
+"release it in the destructor."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:678
+#: ../../../analyzer/user-docs/Annotations.md:660
 msgid "Out Parameters"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:680
+#: ../../../analyzer/user-docs/Annotations.md:662
 msgid ""
 "A function can also return an object to a caller by a means of an out "
 "parameter (a pointer-to-OSObject-pointer is passed, and a callee writes a "
@@ -642,81 +644,79 @@ msgid ""
 "distinguish four separate cases:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:685
+#: ../../../analyzer/user-docs/Annotations.md:667
 msgid ""
 "**1. Non-retained out parameters**, identified using "
-"``LIBKERN_RETURNS_NOT_RETAINED`` applied to parameters, e.g.:"
+"`LIBKERN_RETURNS_NOT_RETAINED` applied to parameters, e.g.:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:691
+#: ../../../analyzer/user-docs/Annotations.md:674
 msgid ""
 "Such functions write a non-retained object into an out parameter, and the "
 "caller has no further obligations."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:694
+#: ../../../analyzer/user-docs/Annotations.md:677
 msgid ""
-"**2. Retained out parameters**, identified using "
-"``LIBKERN_RETURNS_RETAINED``:"
+"**2. Retained out parameters**, identified using `LIBKERN_RETURNS_RETAINED`:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:699
+#: ../../../analyzer/user-docs/Annotations.md:683
 msgid ""
 "In such cases a retained object is written into an out parameter, which the "
 "caller has then to release in order to avoid a leak."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:701
+#: ../../../analyzer/user-docs/Annotations.md:685
 msgid ""
 "These two cases are simple - but in practice a functions returning an out-"
 "parameter usually also return a return code, and then an out parameter may "
 "or may not be written, which conditionally depends on the exit code, e.g.:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:708
+#: ../../../analyzer/user-docs/Annotations.md:693
 msgid ""
 "For such functions, the usual semantics is that an object is written into on "
 "\"success\", and not written into on \"failure\"."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:710
+#: ../../../analyzer/user-docs/Annotations.md:695
 msgid ""
-"For ``LIBKERN_RETURNS_RETAINED`` we assume the following definition of "
-"success:"
+"For `LIBKERN_RETURNS_RETAINED` we assume the following definition of success:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:713
+#: ../../../analyzer/user-docs/Annotations.md:698
 msgid ""
-"For functions returning ``OSReturn`` or ``IOReturn`` (any typedef to "
-"``kern_return_t``) success is defined as having an output of zero "
-"(``kIOReturnSuccess`` is zero)."
+"For functions returning `OSReturn` or `IOReturn` (any typedef to "
+"`kern_return_t`) success is defined as having an output of zero "
+"(`kIOReturnSuccess` is zero)."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:717
+#: ../../../analyzer/user-docs/Annotations.md:701
 msgid "For all others, success is non-zero (e.g. non-nullptr for pointers)"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:719
+#: ../../../analyzer/user-docs/Annotations.md:703
 msgid ""
 "**3. Retained out parameters on zero return** The annotation "
-"``LIBKERN_RETURNS_RETAINED_ON_ZERO`` states that a retained object is "
-"written into if and only if the function returns a zero value:"
+"`LIBKERN_RETURNS_RETAINED_ON_ZERO` states that a retained object is written "
+"into if and only if the function returns a zero value:"
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:726
+#: ../../../analyzer/user-docs/Annotations.md:711
 msgid ""
 "Then the caller has to release an object if the function has returned zero."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:728
+#: ../../../analyzer/user-docs/Annotations.md:713
 msgid ""
 "**4. Retained out parameters on non-zero return** Similarly, "
-"``LIBKERN_RETURNS_RETAINED_ON_NONZERO`` specifies that a retained object is "
+"`LIBKERN_RETURNS_RETAINED_ON_NONZERO` specifies that a retained object is "
 "written into the parameter if and only if the function has returned a non-"
 "zero value."
 msgstr ""
 
-#: ../../../analyzer/user-docs/Annotations.rst:733
+#: ../../../analyzer/user-docs/Annotations.md:718
 msgid ""
 "Note that for non-retained out parameters conditionals do not matter, as the "
 "caller has no obligations regardless of whether an object is written into or "

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -482,75 +482,75 @@ msgstr ""
 
 #: ../../../ThreadSafetyAnalysis.md:513
 msgid ""
-"Thread safety attributes may also be applied to function pointer variables "
-"and fields. The attributes describe the locking behavior of calling through "
-"that pointer, and the analysis will check calls through the pointer "
-"accordingly."
+"Thread safety attributes may also be applied to variables, fields, and "
+"parameters of function pointer (or, in C++, function reference) type. The "
+"attributes describe the locking behavior of calling through that pointer, "
+"and the analysis will check calls through the pointer accordingly."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:536
+#: ../../../ThreadSafetyAnalysis.md:543
 msgid ""
-"Note that the attributes are on the *variable* (or field), not on the "
-"function pointer type. Assigning a function with different (or no) "
+"Note that the attributes are on the *variable* (or field, or parameter), not "
+"on the function pointer type. Assigning a function with different (or no) "
 "attributes to an annotated function pointer variable is not diagnosed. The "
 "analysis trusts the annotations on the variable at the call site."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:541
+#: ../../../ThreadSafetyAnalysis.md:548
 msgid ""
-"This support is limited to plain function pointers. Pointers-to-member "
-"functions, blocks, and wrapper types such as `std::function` are not "
-"supported yet."
+"This support is limited to plain function pointers and function references. "
+"Pointers-to-member functions, blocks, and wrapper types such as `std::"
+"function` are not supported yet."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:545
+#: ../../../ThreadSafetyAnalysis.md:552
 msgid "Warning flags"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:547
+#: ../../../ThreadSafetyAnalysis.md:554
 msgid "`-Wthread-safety`:  Umbrella flag which turns on the following:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:549
+#: ../../../ThreadSafetyAnalysis.md:556
 msgid ""
 "`-Wthread-safety-attributes`: Semantic checks for thread safety attributes."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:550
+#: ../../../ThreadSafetyAnalysis.md:557
 msgid "`-Wthread-safety-analysis`: The core analysis."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:552
+#: ../../../ThreadSafetyAnalysis.md:559
 msgid ""
 "`-Wthread-safety-precise`: Requires that mutex expressions match precisely."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:553
+#: ../../../ThreadSafetyAnalysis.md:560
 msgid "This warning can be disabled for code which has a lot of aliases."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:555
+#: ../../../ThreadSafetyAnalysis.md:562
 msgid ""
 "`-Wthread-safety-reference`: Checks when guarded members are passed or "
 "returned by reference."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:558
+#: ../../../ThreadSafetyAnalysis.md:565
 msgid ""
 "`-Wthread-safety-pointer`: Checks when passing or returning pointers to "
 "guarded variables, or pointers to guarded data, as function argument or "
 "return value respectively."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:562
+#: ../../../ThreadSafetyAnalysis.md:569
 msgid "{ref}`negative` are an experimental feature, which are enabled with:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:564
+#: ../../../ThreadSafetyAnalysis.md:571
 msgid "`-Wthread-safety-negative`: Negative capabilities. Off by default."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:566
+#: ../../../ThreadSafetyAnalysis.md:573
 msgid ""
 "When new features and checks are added to the analysis, they can often "
 "introduce additional warnings. Those warnings are initially released as "
@@ -558,15 +558,15 @@ msgid ""
 "standard analysis."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:570
+#: ../../../ThreadSafetyAnalysis.md:577
 msgid "`-Wthread-safety-beta`: New features. Off by default."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:574
+#: ../../../ThreadSafetyAnalysis.md:581
 msgid "Negative Capabilities"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:576
+#: ../../../ThreadSafetyAnalysis.md:583
 msgid ""
 "Thread Safety Analysis is designed to prevent both race conditions and "
 "deadlock. The `GUARDED_BY` and `REQUIRES` attributes prevent race "
@@ -575,27 +575,27 @@ msgid ""
 "sure that a mutex is *not* held."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:582
+#: ../../../ThreadSafetyAnalysis.md:589
 msgid ""
 "However, `EXCLUDES` is an optional attribute, and does not provide the same "
 "safety guarantee as `REQUIRES`. In particular:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:585
+#: ../../../ThreadSafetyAnalysis.md:592
 msgid "A function which acquires a capability does not have to exclude it."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:586
+#: ../../../ThreadSafetyAnalysis.md:593
 msgid ""
 "A function which calls a function that excludes a capability does not have "
 "to transitively exclude that capability."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:589
+#: ../../../ThreadSafetyAnalysis.md:596
 msgid "As a result, `EXCLUDES` can easily produce false negatives:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:616
+#: ../../../ThreadSafetyAnalysis.md:623
 msgid ""
 "Negative requirements are an alternative to `EXCLUDES` that provide a "
 "stronger safety guarantee. A negative requirement uses the `REQUIRES` "
@@ -603,29 +603,29 @@ msgid ""
 "capability should *not* be held."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:621
+#: ../../../ThreadSafetyAnalysis.md:628
 msgid ""
 "For example, using `REQUIRES(!mu)` instead of `EXCLUDES(mu)` will produce "
 "the appropriate warnings:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:649
+#: ../../../ThreadSafetyAnalysis.md:656
 msgid ""
 "Negative requirements are an experimental feature which is off by default, "
 "because it will produce many warnings in existing code. It can be enabled by "
 "passing `-Wthread-safety-negative`."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:655
+#: ../../../ThreadSafetyAnalysis.md:662
 msgid "Frequently Asked Questions"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:657
+#: ../../../ThreadSafetyAnalysis.md:664
 msgid ""
 "(Q) Should I put attributes in the header file, or in the .cc/.cpp/.cxx file?"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:659
+#: ../../../ThreadSafetyAnalysis.md:666
 msgid ""
 "(A) Attributes are part of the formal interface of a function, and should "
 "always go in the header, where they are visible to anything that includes "
@@ -634,25 +634,25 @@ msgid ""
 "positives."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:664
+#: ../../../ThreadSafetyAnalysis.md:671
 msgid ""
 "(Q) \"*Mutex is not locked on every path through here?*\" What does that "
 "mean?"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:666
+#: ../../../ThreadSafetyAnalysis.md:673
 msgid "(A) See {ref}`conditional_locks`, below."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:670
+#: ../../../ThreadSafetyAnalysis.md:677
 msgid "Known Limitations"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:672
+#: ../../../ThreadSafetyAnalysis.md:679
 msgid "Lexical scope"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:674
+#: ../../../ThreadSafetyAnalysis.md:681
 msgid ""
 "Thread safety attributes contain ordinary C++ expressions, and thus follow "
 "ordinary C++ scoping rules. In particular, this means that mutexes and other "
@@ -663,11 +663,11 @@ msgid ""
 "allowed between classes, as illustrated below."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:694
+#: ../../../ThreadSafetyAnalysis.md:701
 msgid "Private Mutexes"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:696
+#: ../../../ThreadSafetyAnalysis.md:703
 msgid ""
 "Good software engineering practice dictates that mutexes should be private "
 "members because the locking mechanism used by a thread-safe class is part of "
@@ -677,14 +677,14 @@ msgid ""
 "an error to write `c.mu` in an attribute."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:704
+#: ../../../ThreadSafetyAnalysis.md:711
 msgid ""
 "One workaround is to (ab)use the `RETURN_CAPABILITY` attribute to provide a "
 "public *name* for a private mutex, without actually exposing the underlying "
 "mutex. For example:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:727
+#: ../../../ThreadSafetyAnalysis.md:734
 msgid ""
 "In the above example, `doSomethingTwice()` is an external routine that "
 "requires `c.mu` to be locked, which cannot be declared directly because `mu` "
@@ -694,22 +694,22 @@ msgid ""
 "method, which is provided only for the benefit of thread safety analysis."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:737
+#: ../../../ThreadSafetyAnalysis.md:744
 msgid "No conditionally held locks."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:739
+#: ../../../ThreadSafetyAnalysis.md:746
 msgid ""
 "The analysis must be able to determine whether a lock is held, or not held, "
 "at every program point. Thus, sections of code where a lock *might be held* "
 "will generate spurious warnings (false positives). For example:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:752
+#: ../../../ThreadSafetyAnalysis.md:759
 msgid "No checking inside constructors and destructors."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:754
+#: ../../../ThreadSafetyAnalysis.md:761
 msgid ""
 "The analysis currently does not do any checking inside constructors or "
 "destructors. In other words, every constructor and destructor is treated as "
@@ -720,7 +720,7 @@ msgid ""
 "of destructors."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:762
+#: ../../../ThreadSafetyAnalysis.md:769
 msgid ""
 "Ideally, the analysis would allow initialization of guarded members inside "
 "the object being initialized or destroyed, while still enforcing the usual "
@@ -729,11 +729,11 @@ msgid ""
 "hard to determine what data is owned by the enclosing object."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:768
+#: ../../../ThreadSafetyAnalysis.md:775
 msgid "No inlining."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:770
+#: ../../../ThreadSafetyAnalysis.md:777
 msgid ""
 "Thread safety analysis is strictly intra-procedural, just like ordinary type "
 "checking. It relies only on the declared attributes of a function, and will "
@@ -741,7 +741,7 @@ msgid ""
 "following will not work:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:794
+#: ../../../ThreadSafetyAnalysis.md:801
 msgid ""
 "In this case, the destructor of `Autocleanup` calls `mu.Unlock()`, so the "
 "warning is bogus. However, thread safety analysis cannot see the unlock, "
@@ -750,17 +750,17 @@ msgid ""
 "that is not statically known. This pattern is simply not supported."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:801
+#: ../../../ThreadSafetyAnalysis.md:808
 msgid "No alias analysis."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:803
+#: ../../../ThreadSafetyAnalysis.md:810
 msgid ""
 "The analysis currently does not track pointer aliases. Thus, there can be "
 "false positives if two pointers both point to the same mutex."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:824
+#: ../../../ThreadSafetyAnalysis.md:831
 msgid ""
 "The MutexUnlocker class is intended to be the dual of the MutexLocker class, "
 "defined in {ref}`mutexheader`. However, it doesn't work because the analysis "
@@ -768,11 +768,11 @@ msgid ""
 "aliasing for MutexLocker, but does so only for that particular pattern."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:831
+#: ../../../ThreadSafetyAnalysis.md:838
 msgid "mutex.h"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:833
+#: ../../../ThreadSafetyAnalysis.md:840
 msgid ""
 "Thread safety analysis can be used with any threading library, but it does "
 "require that the threading API be wrapped in classes and methods which have "

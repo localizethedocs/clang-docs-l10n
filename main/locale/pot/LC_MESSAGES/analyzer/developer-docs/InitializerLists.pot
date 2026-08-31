@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:3
+#: ../../../analyzer/developer-docs/InitializerLists.md:1
 msgid "Initializer List"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:4
+#: ../../../analyzer/developer-docs/InitializerLists.md:3
 msgid ""
-"This discussion took place in https://reviews.llvm.org/D35216 \"Escape "
+"This discussion took place in <https://reviews.llvm.org/D35216> \"Escape "
 "symbols when creating std::initializer_list\"."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:7
+#: ../../../analyzer/developer-docs/InitializerLists.md:6
 msgid ""
 "It touches problems of modelling C++ standard library constructs in general, "
 "including modelling implementation-defined fields within C++ standard "
@@ -36,14 +36,14 @@ msgid ""
 "checkers."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:12
-#: ../../../analyzer/developer-docs/InitializerLists.rst:137
-#: ../../../analyzer/developer-docs/InitializerLists.rst:189
-#: ../../../analyzer/developer-docs/InitializerLists.rst:307
+#: ../../../analyzer/developer-docs/InitializerLists.md:11
+#: ../../../analyzer/developer-docs/InitializerLists.md:132
+#: ../../../analyzer/developer-docs/InitializerLists.md:184
+#: ../../../analyzer/developer-docs/InitializerLists.md:302
 msgid "**Artem:**"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:14
+#: ../../../analyzer/developer-docs/InitializerLists.md:13
 msgid ""
 "I've seen a few false positives that appear because we construct C++11 std::"
 "initializer_list objects with brace initializers, and such construction is "
@@ -52,30 +52,30 @@ msgid ""
 "reported to be leaked."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:20
+#: ../../../analyzer/developer-docs/InitializerLists.md:19
 msgid ""
 "Approach (0): This can be trivially fixed by this patch, which causes "
 "pointers passed into initializer list expressions to immediately escape."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:23
+#: ../../../analyzer/developer-docs/InitializerLists.md:22
 msgid ""
 "This fix is overly conservative though. So i did a bit of investigation as "
 "to how model std::initializer_list better."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:26
+#: ../../../analyzer/developer-docs/InitializerLists.md:25
 msgid ""
-"According to the standard, ``std::initializer_list<T>`` is an object that "
-"has methods ``begin(), end(), and size()``, where ``begin()`` returns a "
-"pointer to continuous array of ``size()`` objects of type T, and end() is "
-"equal to begin() plus size(). The standard does hint that it should be "
-"possible to implement ``std::initializer_list<T>`` as a pair of pointers, or "
-"as a pointer and a size integer, however specific fields that the object "
-"would contain are an implementation detail."
+"According to the standard, `std::initializer_list<T>` is an object that has "
+"methods `begin(), end(), and size()`, where `begin()` returns a pointer to "
+"continuous array of `size()` objects of type T, and end() is equal to "
+"begin() plus size(). The standard does hint that it should be possible to "
+"implement `std::initializer_list<T>` as a pair of pointers, or as a pointer "
+"and a size integer, however specific fields that the object would contain "
+"are an implementation detail."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:34
+#: ../../../analyzer/developer-docs/InitializerLists.md:33
 msgid ""
 "Ideally, we should be able to model the initializer list's methods "
 "precisely. Or, at least, it should be possible to explain to the analyzer "
@@ -84,31 +84,31 @@ msgid ""
 "address here."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:39
+#: ../../../analyzer/developer-docs/InitializerLists.md:38
 msgid ""
-"The obvious approach to modeling ``std::initializer_list`` in a checker "
-"would be to construct a SymbolMetadata for the memory region of the "
-"initializer list object, which would be of type ``T*`` and represent "
-"``begin()``, so we'd trivially model ``begin()`` as a function that returns "
-"this symbol. The array pointed to by that symbol would be ``bindLoc()``ed to "
-"contain the list's contents (probably as a ``CompoundVal`` to produce less "
-"bindings in the store). Extent of this array would represent ``size()`` and "
-"would be equal to the length of the list as written."
+"The obvious approach to modeling `std::initializer_list` in a checker would "
+"be to construct a SymbolMetadata for the memory region of the initializer "
+"list object, which would be of type `T*` and represent `begin()`, so we'd "
+"trivially model `begin()` as a function that returns this symbol. The array "
+"pointed to by that symbol would be `bindLoc()`ed to contain the list's "
+"contents (probably as a `CompoundVal` to produce less bindings in the "
+"store). Extent of this array would represent `size()` and would be equal to "
+"the length of the list as written."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:47
+#: ../../../analyzer/developer-docs/InitializerLists.md:46
 msgid ""
 "So this sounds good, however apparently it does nothing to address our false "
-"positives: when the list escapes, our ``RegionStoreManager`` is not "
-"magically guessing that the metadata symbol attached to it, together with "
-"its contents, should also escape. In fact, it's impossible to trigger a "
-"pointer escape from within the checker."
+"positives: when the list escapes, our `RegionStoreManager` is not magically "
+"guessing that the metadata symbol attached to it, together with its "
+"contents, should also escape. In fact, it's impossible to trigger a pointer "
+"escape from within the checker."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:53
+#: ../../../analyzer/developer-docs/InitializerLists.md:52
 msgid ""
-"Approach (1): If only we enabled ``ProgramState::bindLoc(..., "
-"notifyChanges=true)`` to cause pointer escapes (not only region changes) "
+"Approach (1): If only we enabled `ProgramState::bindLoc(..., "
+"notifyChanges=true)` to cause pointer escapes (not only region changes) "
 "(which sounds like the right thing to do anyway) such checker would be able "
 "to solve the false positives by triggering escapes when binding list "
 "elements to the list. However, it'd be as conservative as the current "
@@ -116,14 +116,15 @@ msgid ""
 "Instead, we'd prefer them to be delayed until the list itself escapes."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:61
+#: ../../../analyzer/developer-docs/InitializerLists.md:60
 msgid ""
 "So i believe that escaping metadata symbols whenever their base regions "
 "escape would be the right thing to do. Currently we didn't think about that "
 "because we had neither pointer-type metadatas nor non-pointer escapes."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:65
+#: ../../../analyzer/developer-docs/InitializerLists.md:64
+#: ../../../analyzer/developer-docs/InitializerLists.md:134
 msgid ""
 "Approach (2): We could teach the Store to scan itself for bindings to "
 "metadata-symbolic-based regions during scanReachableSymbols() whenever a "
@@ -131,7 +132,7 @@ msgid ""
 "it sounds performance-heavy."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:70
+#: ../../../analyzer/developer-docs/InitializerLists.md:69
 msgid ""
 "Approach (3): We could let checkers maintain the set of active metadata "
 "symbols in the program state (ideally somewhere in the Store, which sounds "
@@ -140,44 +141,44 @@ msgid ""
 "smart data map it wouldn't be a problem."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:76
+#: ../../../analyzer/developer-docs/InitializerLists.md:75
 msgid ""
 "Approach (4): We could allow checkers to trigger pointer escapes in "
-"arbitrary moments. If we allow doing this within ``checkPointerEscape`` "
+"arbitrary moments. If we allow doing this within `checkPointerEscape` "
 "callback itself, we would be able to express facts like \"when this region "
 "escapes, that metadata symbol attached to it should also escape\". This "
 "sounds like an ultimate freedom, with maximum stress on the checkers - still "
 "not too much stress when we have smart data maps."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:83
+#: ../../../analyzer/developer-docs/InitializerLists.md:82
 msgid ""
 "I'm personally liking the approach (2) - it should be possible to avoid "
 "performance overhead, and clarity seems nice."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:86
+#: ../../../analyzer/developer-docs/InitializerLists.md:85
 msgid "**Gabor:**"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:88
+#: ../../../analyzer/developer-docs/InitializerLists.md:87
 msgid "At this point, I am a bit wondering about two questions."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:90
+#: ../../../analyzer/developer-docs/InitializerLists.md:89
 msgid ""
 "When should something belong to a checker and when should something belong "
 "to the engine? Sometimes we model library aspects in the engine and model "
 "language constructs in checkers."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:93
+#: ../../../analyzer/developer-docs/InitializerLists.md:91
 msgid ""
 "What is the checker programming model that we are aiming for? Maximum "
 "freedom or more easy checker development?"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:95
+#: ../../../analyzer/developer-docs/InitializerLists.md:93
 msgid ""
 "I think if we aim for maximum freedom, we do not need to worry about the "
 "potential stress on checkers, and we can introduce abstractions to mitigate "
@@ -186,19 +187,19 @@ msgid ""
 "is not sufficient instead of complicating the API."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:102
+#: ../../../analyzer/developer-docs/InitializerLists.md:100
 msgid ""
 "Right now I have no preference or objections between the alternatives but "
 "there are some random thoughts:"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:105
+#: ../../../analyzer/developer-docs/InitializerLists.md:103
 msgid ""
 "Maybe it would be great to have a guideline how to evolve the analyzer and "
 "follow it, so it can help us to decide in similar situations"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:108
+#: ../../../analyzer/developer-docs/InitializerLists.md:105
 msgid ""
 "I do care about performance in this case. The reason is that we have a "
 "limited performance budget. And I think we should not expect most of the "
@@ -208,13 +209,13 @@ msgid ""
 "is done by the framework developers."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:115
+#: ../../../analyzer/developer-docs/InitializerLists.md:112
 msgid ""
 "**Artem:** These are some great questions, i guess it'd be better to discuss "
 "them more openly. As a quick dump of my current mood:"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:118
+#: ../../../analyzer/developer-docs/InitializerLists.md:115
 msgid ""
 "To me it seems obvious that we need to aim for a checker API that is both "
 "simple and powerful. This can probably by keeping the API as powerful as "
@@ -227,7 +228,7 @@ msgid ""
 "nice."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:127
+#: ../../../analyzer/developer-docs/InitializerLists.md:123
 msgid ""
 "Separation between core and checkers is usually quite strange. Once we have "
 "shared state traits, i generally wouldn't mind having region store or range "
@@ -238,21 +239,13 @@ msgid ""
 "good default behavior."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:134
+#: ../../../analyzer/developer-docs/InitializerLists.md:129
 msgid ""
 "Yeah, i totally care about performance as well, and if i try to implement "
 "approach, i'd make sure it's good."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:139
-msgid ""
-"> Approach (2): We could teach the Store to scan itself for bindings to > "
-"metadata-symbolic-based regions during scanReachableSymbols() whenever > a "
-"region turns out to be reachable. This requires no work on checker side, > "
-"but it sounds performance-heavy."
-msgstr ""
-
-#: ../../../analyzer/developer-docs/InitializerLists.rst:144
+#: ../../../analyzer/developer-docs/InitializerLists.md:139
 msgid ""
 "Nope, this approach is wrong. Metadata symbols may become out-of-date: when "
 "the object changes, metadata symbols attached to it aren't changing (because "
@@ -262,20 +255,20 @@ msgid ""
 "necessary."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:150
+#: ../../../analyzer/developer-docs/InitializerLists.md:145
 msgid ""
-"If only we had \"ghost fields\" (https://lists.llvm.org/pipermail/cfe-"
-"dev/2016-May/049000.html), it would have been much easier, because the ghost "
-"field would only contain the actual metadata, and the Store would always "
-"know about it. This example adds to my belief that ghost fields are exactly "
-"what we need for most C++ checkers."
+"If only we had \"ghost fields\" (<https://lists.llvm.org/pipermail/cfe-"
+"dev/2016-May/049000.html>), it would have been much easier, because the "
+"ghost field would only contain the actual metadata, and the Store would "
+"always know about it. This example adds to my belief that ghost fields are "
+"exactly what we need for most C++ checkers."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:156
+#: ../../../analyzer/developer-docs/InitializerLists.md:151
 msgid "**Devin:**"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:158
+#: ../../../analyzer/developer-docs/InitializerLists.md:153
 msgid ""
 "In this case, I would be fine with some sort of AbstractStorageMemoryRegion "
 "that meant \"here is a memory region and somewhere reachable from here "
@@ -285,14 +278,15 @@ msgid ""
 "invalidation."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:165
+#: ../../../analyzer/developer-docs/InitializerLists.md:160
 msgid ""
-"For ``std::initializer_list`` this reachable region would the region for the "
+"For `std::initializer_list` this reachable region would the region for the "
 "backing array and the transfer functions for begin() and end() yield the "
 "beginning and end element regions for it."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:169
+#: ../../../analyzer/developer-docs/InitializerLists.md:164
+#: ../../../analyzer/developer-docs/InitializerLists.md:257
 msgid ""
 "In my view this differs from ghost variables in that (1) this storage does "
 "actually exist (it is just a library implementation detail where that "
@@ -302,7 +296,7 @@ msgid ""
 "only memory)."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:175
+#: ../../../analyzer/developer-docs/InitializerLists.md:170
 msgid ""
 "What I'm not OK with is modeling abstract analysis state (for example, the "
 "count of a NSMutableArray or the typestate of a file handle) as a value "
@@ -311,7 +305,8 @@ msgid ""
 "one that the analyzer is bad at (reasoning about the contents of the heap)."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:181
+#: ../../../analyzer/developer-docs/InitializerLists.md:176
+#: ../../../analyzer/developer-docs/InitializerLists.md:281
 msgid ""
 "I think the key criterion here is: \"is the region accessible from outside "
 "the library\". That is, does the library expose the region as a pointer that "
@@ -322,39 +317,38 @@ msgid ""
 "for them just to get invalidation for free."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:191
+#: ../../../analyzer/developer-docs/InitializerLists.md:186
 msgid ""
-"> In this case, I would be fine with some sort of "
-"``AbstractStorageMemoryRegion`` > that meant \"here is a memory region and "
-"somewhere reachable from here exists > another region of type T\". Or even "
-"multiple regions with different > identifiers. This wouldn't specify how the "
-"memory is reachable, but it would > allow for transfer functions to get at "
-"those regions and it would allow for > invalidation."
+"In this case, I would be fine with some sort of "
+"`AbstractStorageMemoryRegion` that meant \"here is a memory region and "
+"somewhere reachable from here exists another region of type T\". Or even "
+"multiple regions with different identifiers. This wouldn't specify how the "
+"memory is reachable, but it would allow for transfer functions to get at "
+"those regions and it would allow for invalidation."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:198
+#: ../../../analyzer/developer-docs/InitializerLists.md:193
 msgid ""
 "Yeah, this is what we can easily implement now as a symbolic-region-based-on-"
 "a-metadata-symbol (though we can make a new region class for that if we eg. "
 "want it typed). The problem is that the relation between such storage region "
 "and its parent object region is essentially immaterial, similarly to the "
-"relation between ``SymbolRegionValue`` and its parent region. Region "
-"contents are mutable: today the abstract storage is reachable from its "
-"parent object, tomorrow it's not, and maybe something else becomes "
-"reachable, something that isn't even abstract. So the parent region for the "
-"abstract storage is most of the time at best a \"nice to know\" thing - we "
-"cannot rely on it to do any actual work. We'd anyway need to rely on the "
-"checker to do the job."
+"relation between `SymbolRegionValue` and its parent region. Region contents "
+"are mutable: today the abstract storage is reachable from its parent object, "
+"tomorrow it's not, and maybe something else becomes reachable, something "
+"that isn't even abstract. So the parent region for the abstract storage is "
+"most of the time at best a \"nice to know\" thing - we cannot rely on it to "
+"do any actual work. We'd anyway need to rely on the checker to do the job."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:210
+#: ../../../analyzer/developer-docs/InitializerLists.md:205
 msgid ""
-"> For std::initializer_list this reachable region would the region for the > "
-"backing array and the transfer functions for begin() and end() yield the > "
+"For std::initializer_list this reachable region would the region for the "
+"backing array and the transfer functions for begin() and end() yield the "
 "beginning and end element regions for it."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:214
+#: ../../../analyzer/developer-docs/InitializerLists.md:209
 msgid ""
 "So maybe in fact for std::initializer_list it may work fine because you "
 "cannot change the data after the object is constructed - so this region's "
@@ -362,34 +356,34 @@ msgid ""
 "dead end."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:218
+#: ../../../analyzer/developer-docs/InitializerLists.md:213
 msgid ""
 "I'd like to consider another funny example. Suppose we're trying to model"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:237
+#: ../../../analyzer/developer-docs/InitializerLists.md:232
 msgid ""
-"The checker doesn't totally need to ensure that ``*a == 1`` passes - even "
-"though the pointer was unique, it could theoretically have ``.get()``-ed "
-"above and the code could of course break the uniqueness invariant (though "
-"we'd probably want it). The checker can say that \"even if ``*a`` did "
-"escape, it was not because it was stuffed directly into bar()\"."
+"The checker doesn't totally need to ensure that `*a == 1` passes - even "
+"though the pointer was unique, it could theoretically have `.get()`-ed above "
+"and the code could of course break the uniqueness invariant (though we'd "
+"probably want it). The checker can say that \"even if `*a` did escape, it "
+"was not because it was stuffed directly into bar()\"."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:243
+#: ../../../analyzer/developer-docs/InitializerLists.md:238
 msgid ""
-"The checker's direct responsibility, however, is to solve the ``*b == 2`` "
+"The checker's direct responsibility, however, is to solve the `*b == 2` "
 "thing (which is in fact the problem we're dealing with in this patch - "
 "escaping the storage region of the object)."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:247
+#: ../../../analyzer/developer-docs/InitializerLists.md:242
 msgid ""
 "So we're talking about one more operation over the program state (scanning "
 "reachable symbols and regions) that cannot work without checker support."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:250
+#: ../../../analyzer/developer-docs/InitializerLists.md:245
 msgid ""
 "We can probably add a new callback \"checkReachableSymbols\" to solve this. "
 "This is in fact also related to the dead symbols problem (we're scanning for "
@@ -398,7 +392,7 @@ msgid ""
 "good idea; we can replace checkLiveSymbols with checkReachableSymbols."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:256
+#: ../../../analyzer/developer-docs/InitializerLists.md:251
 msgid ""
 "Or we could just have ghost member variables, and no checker support "
 "required at all. For ghost member variables, the relation with their parent "
@@ -407,34 +401,23 @@ msgid ""
 "reachable symbols, live symbols, escapes, invalidations, whatever."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:262
+#: ../../../analyzer/developer-docs/InitializerLists.md:264
 msgid ""
-"> In my view this differs from ghost variables in that (1) this storage does "
-"> actually exist (it is just a library implementation detail where that "
-"storage > lives) and (2) it is perfectly valid for a pointer into that "
-"storage to be > returned and for another part of the program to read or "
-"write from that > storage. (Well, in this case just read since it is allowed "
-"to be read-only > memory)."
+"What I'm not OK with is modeling abstract analysis state (for example, the "
+"count of a NSMutableArray or the typestate of a file handle) as a value "
+"stored in some ginned up region in the store.This takes an easy problem that "
+"the analyzer does well at (modeling typestate) and turns it into a hard one "
+"that the analyzer is bad at (reasoning about the contents of the heap)."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:269
-msgid ""
-"> What I'm not OK with is modeling abstract analysis state (for example, the "
-"> count of a NSMutableArray or the typestate of a file handle) as a value "
-"stored > in some ginned up region in the store.This takes an easy problem "
-"that the > analyzer does well at (modeling typestate) and turns it into a "
-"hard one that > the analyzer is bad at (reasoning about the contents of the "
-"heap)."
-msgstr ""
-
-#: ../../../analyzer/developer-docs/InitializerLists.rst:275
+#: ../../../analyzer/developer-docs/InitializerLists.md:270
 msgid ""
 "Yeah, i tend to agree on that. For simple typestates, this is probably an "
 "overkill, so let's definitely put aside the idea of \"ghost symbolic "
 "regions\" that i had earlier."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:279
+#: ../../../analyzer/developer-docs/InitializerLists.md:274
 msgid ""
 "But, to summarize a bit, in our current case, however, the typestate we're "
 "looking for is the contents of the heap. And when we try to model such "
@@ -445,18 +428,7 @@ msgid ""
 "do."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:286
-msgid ""
-"> I think the key criterion here is: \"is the region accessible from outside "
-"> the library\". That is, does the library expose the region as a pointer "
-"that > can be read to or written from in the client program? If so, then it "
-"makes > sense for this to be in the store: we are modeling reachable storage "
-"as > storage. But if we're just modeling arbitrary analysis facts that need "
-"to be > invalidated when a pointer escapes then we shouldn't try to gin up "
-"storage > for them just to get invalidation for free."
-msgstr ""
-
-#: ../../../analyzer/developer-docs/InitializerLists.rst:294
+#: ../../../analyzer/developer-docs/InitializerLists.md:289
 msgid ""
 "As a metaphor, i'd probably compare it to body farms - the difference "
 "between ghost member variables and metadata symbols seems to me like the "
@@ -467,18 +439,18 @@ msgid ""
 "outside the function call. I'm not seeing immediate practical difference "
 "between \"it does actually exist\" and \"it doesn't actually exist, just a "
 "handy abstraction\". Similarly, i think it's fine if we have a "
-"``CXXRecordDecl`` with implementation-defined contents, and try to farm up a "
+"`CXXRecordDecl` with implementation-defined contents, and try to farm up a "
 "member variable as a handy abstraction (we don't even need to know its name "
 "or offset, only that it's there somewhere)."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:309
+#: ../../../analyzer/developer-docs/InitializerLists.md:304
 msgid ""
 "We've discussed it in person with Devin, and he provided more points to "
 "think about:"
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:312
+#: ../../../analyzer/developer-docs/InitializerLists.md:307
 msgid ""
 "If the initializer list consists of non-POD data, constructors of list's "
 "objects need to take the sub-region of the list's region as this-region In "
@@ -491,13 +463,13 @@ msgid ""
 "harder, though it might be mitigated by sharing the checker state traits."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:322
+#: ../../../analyzer/developer-docs/InitializerLists.md:316
 msgid ""
 "Because \"ghost variables\" are not material to the user, we need to somehow "
 "make super sure that they don't make it into the diagnostic messages."
 msgstr ""
 
-#: ../../../analyzer/developer-docs/InitializerLists.rst:325
+#: ../../../analyzer/developer-docs/InitializerLists.md:319
 msgid ""
 "So, because this needs further digging into overall C++ support and rises "
 "too many questions, i'm delaying a better approach to this problem and will "

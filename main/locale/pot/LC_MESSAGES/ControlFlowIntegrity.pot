@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 08:18+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../ControlFlowIntegrity.rst:3
+#: ../../../ControlFlowIntegrity.md:1
 msgid "Control Flow Integrity"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:14
+#: ../../../ControlFlowIntegrity.md:13
 msgid "Introduction"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:16
+#: ../../../ControlFlowIntegrity.md:15
 msgid ""
 "Clang includes an implementation of a number of control flow integrity (CFI) "
 "schemes, which are designed to abort the program upon detecting certain "
@@ -34,17 +34,16 @@ msgid ""
 "performance, allowing developers to enable them in release builds."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:22
+#: ../../../ControlFlowIntegrity.md:21
 msgid ""
-"To enable Clang's available CFI schemes, use the flag ``-fsanitize=cfi``. "
-"You can also enable a subset of available :ref:`schemes <cfi-schemes>`. As "
-"currently implemented, all schemes except for ``kcfi`` rely on link-time "
-"optimization (LTO); so it is required to specify ``-flto`` or ``-"
-"flto=thin``, and the linker used must support LTO, for example via the `gold "
-"plugin`_."
+"To enable Clang's available CFI schemes, use the flag `-fsanitize=cfi`. You "
+"can also enable a subset of available {ref}`schemes <cfi-schemes>`. As "
+"currently implemented, all schemes except for `kcfi` rely on link-time "
+"optimization (LTO); so it is required to specify `-flto` or `-flto=thin`, "
+"and the linker used must support LTO, for example via the [gold plugin]."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:29
+#: ../../../ControlFlowIntegrity.md:28
 msgid ""
 "To allow the checks to be implemented efficiently, the program must be "
 "structured such that certain object files are compiled with CFI enabled, and "
@@ -52,150 +51,148 @@ msgid ""
 "libraries in some cases."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:34
+#: ../../../ControlFlowIntegrity.md:33
 msgid ""
 "The compiler will only produce CFI checks for a class if it can infer hidden "
 "LTO visibility for that class. LTO visibility is a property of a class that "
 "is inferred from flags and attributes. For more details, see the "
-"documentation for :doc:`LTO visibility <LTOVisibility>`."
+"documentation for {doc}`LTO visibility <LTOVisibility>`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:39
+#: ../../../ControlFlowIntegrity.md:38
 msgid ""
-"The ``-fsanitize=cfi-{vcall,nvcall,derived-cast,unrelated-cast}`` flags "
-"require that a ``-fvisibility=`` flag also be specified. This is because the "
-"default visibility setting is ``-fvisibility=default``, which would disable "
+"The `-fsanitize=cfi-{vcall,nvcall,derived-cast,unrelated-cast}` flags "
+"require that a `-fvisibility=` flag also be specified. This is because the "
+"default visibility setting is `-fvisibility=default`, which would disable "
 "CFI checks for classes without visibility attributes. Most users will want "
-"to specify ``-fvisibility=hidden``, which enables CFI checks for such "
-"classes."
+"to specify `-fvisibility=hidden`, which enables CFI checks for such classes."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:45
+#: ../../../ControlFlowIntegrity.md:44
 msgid ""
-"When using ``-fsanitize=cfi*`` with ``-flto=thin``, it is recommended to "
-"reduce link times by passing `-funique-source-file-names <UsersManual."
-"html#cmdoption-f-no-unique-source-file-names>`_, provided that your program "
-"is compatible with it."
+"When using `-fsanitize=cfi*` with `-flto=thin`, it is recommended to reduce "
+"link times by passing [-funique-source-file-names](https://clang.llvm.org/"
+"docs/UsersManual.html#cmdoption-f-no-unique-source-file-names), provided "
+"that your program is compatible with it."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:50
+#: ../../../ControlFlowIntegrity.md:48
 msgid ""
-"Experimental support for :ref:`cross-DSO control flow integrity <cfi-cross-"
+"Experimental support for {ref}`cross-DSO control flow integrity <cfi-cross-"
 "dso>` exists that does not require classes to have hidden LTO visibility. "
 "This cross-DSO support has unstable ABI at this time."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:59
+#: ../../../ControlFlowIntegrity.md:54
 msgid "Available schemes"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:61
+#: ../../../ControlFlowIntegrity.md:56
 msgid "Available schemes are:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:63
+#: ../../../ControlFlowIntegrity.md:58
 msgid ""
-"``-fsanitize=cfi-cast-strict``: Enables :ref:`strict cast checks <cfi-"
+"`-fsanitize=cfi-cast-strict`: Enables {ref}`strict cast checks <cfi-"
 "strictness>`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:65
+#: ../../../ControlFlowIntegrity.md:60
 msgid ""
-"``-fsanitize=cfi-derived-cast``: Base-to-derived cast to the wrong dynamic "
+"`-fsanitize=cfi-derived-cast`: Base-to-derived cast to the wrong dynamic "
 "type."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:67
+#: ../../../ControlFlowIntegrity.md:62
 msgid ""
-"``-fsanitize=cfi-unrelated-cast``: Cast from ``void*`` or another unrelated "
-"type to the wrong dynamic type."
+"`-fsanitize=cfi-unrelated-cast`: Cast from `void*` or another unrelated type "
+"to the wrong dynamic type."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:69
+#: ../../../ControlFlowIntegrity.md:64
 msgid ""
-"``-fsanitize=cfi-nvcall``: Non-virtual call via an object whose vptr is of "
-"the wrong dynamic type."
-msgstr ""
-
-#: ../../../ControlFlowIntegrity.rst:71
-msgid ""
-"``-fsanitize=cfi-vcall``: Virtual call via an object whose vptr is of the "
+"`-fsanitize=cfi-nvcall`: Non-virtual call via an object whose vptr is of the "
 "wrong dynamic type."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:73
+#: ../../../ControlFlowIntegrity.md:66
 msgid ""
-"``-fsanitize=cfi-icall``: Indirect call of a function with wrong dynamic "
-"type."
-msgstr ""
-
-#: ../../../ControlFlowIntegrity.rst:75
-msgid ""
-"``-fsanitize=cfi-mfcall``: Indirect call via a member function pointer with "
+"`-fsanitize=cfi-vcall`: Virtual call via an object whose vptr is of the "
 "wrong dynamic type."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:78
+#: ../../../ControlFlowIntegrity.md:68
 msgid ""
-"You can use ``-fsanitize=cfi`` to enable all the schemes and use ``-fno-"
-"sanitize`` flag to narrow down the set of schemes as desired. For example, "
-"you can build your program with ``-fsanitize=cfi -fno-sanitize=cfi-nvcall,"
-"cfi-icall`` to use all schemes except for non-virtual member function call "
-"and indirect call checking."
+"`-fsanitize=cfi-icall`: Indirect call of a function with wrong dynamic type."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:85
+#: ../../../ControlFlowIntegrity.md:70
 msgid ""
-"Remember that you have to provide ``-flto`` or ``-flto=thin`` if at least "
-"one CFI scheme is enabled."
+"`-fsanitize=cfi-mfcall`: Indirect call via a member function pointer with "
+"wrong dynamic type."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:89
+#: ../../../ControlFlowIntegrity.md:73
+msgid ""
+"You can use `-fsanitize=cfi` to enable all the schemes and use `-fno-"
+"sanitize` flag to narrow down the set of schemes as desired. For example, "
+"you can build your program with `-fsanitize=cfi -fno-sanitize=cfi-nvcall,cfi-"
+"icall` to use all schemes except for non-virtual member function call and "
+"indirect call checking."
+msgstr ""
+
+#: ../../../ControlFlowIntegrity.md:80
+msgid ""
+"Remember that you have to provide `-flto` or `-flto=thin` if at least one "
+"CFI scheme is enabled."
+msgstr ""
+
+#: ../../../ControlFlowIntegrity.md:83
 msgid "Trapping and Diagnostics"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:91
+#: ../../../ControlFlowIntegrity.md:85
 msgid ""
 "By default, CFI will abort the program immediately upon detecting a control "
-"flow integrity violation. You can use the :ref:`-fno-sanitize-trap= "
+"flow integrity violation. You can use the {ref}`-fno-sanitize-trap= "
 "<controlling-code-generation>` flag to cause CFI to print a diagnostic "
 "similar to the one below before the program aborts."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:103
+#: ../../../ControlFlowIntegrity.md:97
 msgid ""
 "If diagnostics are enabled, you can also configure CFI to continue program "
-"execution instead of aborting by using the :ref:`-fsanitize-recover= "
+"execution instead of aborting by using the {ref}`-fsanitize-recover= "
 "<controlling-code-generation>` flag."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:108
+#: ../../../ControlFlowIntegrity.md:101
 msgid "Forward-Edge CFI for Virtual Calls"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:110
+#: ../../../ControlFlowIntegrity.md:103
 msgid ""
 "This scheme checks that virtual calls take place using a vptr of the correct "
 "dynamic type; that is, the dynamic type of the called object must be a "
 "derived class of the static type of the object used to make the call. This "
-"CFI scheme can be enabled on its own using ``-fsanitize=cfi-vcall``."
+"CFI scheme can be enabled on its own using `-fsanitize=cfi-vcall`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:115 ../../../ControlFlowIntegrity.rst:162
-#: ../../../ControlFlowIntegrity.rst:178 ../../../ControlFlowIntegrity.rst:373
+#: ../../../ControlFlowIntegrity.md:108 ../../../ControlFlowIntegrity.md:153
+#: ../../../ControlFlowIntegrity.md:168 ../../../ControlFlowIntegrity.md:353
 msgid ""
 "For this scheme to work, all translation units containing the definition of "
-"a virtual member function (whether inline or not), other than members of :"
-"ref:`ignored <cfi-ignorelist>` types or types with public :doc:`LTO "
-"visibility <LTOVisibility>`, must be compiled with ``-flto`` or ``-"
-"flto=thin`` enabled and be statically linked into the program."
+"a virtual member function (whether inline or not), other than members of "
+"{ref}`ignored <cfi-ignorelist>` types or types with public {doc}`LTO "
+"visibility <LTOVisibility>`, must be compiled with `-flto` or `-flto=thin` "
+"enabled and be statically linked into the program."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:122
+#: ../../../ControlFlowIntegrity.md:114
 msgid "Performance"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:124
+#: ../../../ControlFlowIntegrity.md:116
 msgid ""
 "A performance overhead of less than 1% has been measured by running the "
 "Dromaeo benchmark suite against an instrumented version of the Chromium web "
@@ -203,17 +200,17 @@ msgid ""
 "virtual-call-heavy SPEC 2006 xalancbmk."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:129
+#: ../../../ControlFlowIntegrity.md:121
 msgid ""
 "Note that this scheme has not yet been optimized for binary size; an "
 "increase of up to 15% has been observed for Chromium."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:133
+#: ../../../ControlFlowIntegrity.md:124
 msgid "Bad Cast Checking"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:135
+#: ../../../ControlFlowIntegrity.md:126
 msgid ""
 "This scheme checks that pointer casts are made to an object of the correct "
 "dynamic type; that is, the dynamic type of the object must be a derived "
@@ -221,58 +218,58 @@ msgid ""
 "introduced where the class being cast to is a polymorphic class."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:140
+#: ../../../ControlFlowIntegrity.md:131
 msgid ""
 "Bad casts are not in themselves control flow integrity violations, but they "
 "can also create security vulnerabilities, and the implementation uses many "
 "of the same mechanisms."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:144
+#: ../../../ControlFlowIntegrity.md:135
 msgid ""
 "There are two types of bad cast that may be forbidden: bad casts from a base "
-"class to a derived class (which can be checked with ``-fsanitize=cfi-derived-"
-"cast``), and bad casts from a pointer of type ``void*`` or another unrelated "
-"type (which can be checked with ``-fsanitize=cfi-unrelated-cast``)."
+"class to a derived class (which can be checked with `-fsanitize=cfi-derived-"
+"cast`), and bad casts from a pointer of type `void*` or another unrelated "
+"type (which can be checked with `-fsanitize=cfi-unrelated-cast`)."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:150
+#: ../../../ControlFlowIntegrity.md:141
 msgid ""
 "The difference between these two types of casts is that the first is defined "
 "by the C++ standard to produce an undefined value, while the second is not "
 "in itself undefined behavior (it is well defined to cast the pointer back to "
 "its original type) unless the object is uninitialized and the cast is a "
-"``static_cast`` (see C++14 [basic.life]p5)."
+"`static_cast` (see C++14 [basic.life]p5)."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:156
+#: ../../../ControlFlowIntegrity.md:147
 msgid ""
 "If a program as a matter of policy forbids the second type of cast, that "
 "restriction can normally be enforced. However it may in some cases be "
 "necessary for a function to perform a forbidden cast to conform with an "
-"external API (e.g. the ``allocate`` member function of a standard library "
-"allocator). Such functions may be :ref:`ignored <cfi-ignorelist>`."
+"external API (e.g. the `allocate` member function of a standard library "
+"allocator). Such functions may be {ref}`ignored <cfi-ignorelist>`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:169
+#: ../../../ControlFlowIntegrity.md:159
 msgid "Non-Virtual Member Function Call Checking"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:171
+#: ../../../ControlFlowIntegrity.md:161
 msgid ""
 "This scheme checks that non-virtual calls take place using an object of the "
 "correct dynamic type; that is, the dynamic type of the called object must be "
 "a derived class of the static type of the object used to make the call. The "
 "checks are currently only introduced where the object is of a polymorphic "
-"class type.  This CFI scheme can be enabled on its own using ``-"
-"fsanitize=cfi-nvcall``."
+"class type. This CFI scheme can be enabled on its own using `-fsanitize=cfi-"
+"nvcall`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:187
+#: ../../../ControlFlowIntegrity.md:176
 msgid "Strictness"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:189
+#: ../../../ControlFlowIntegrity.md:178
 msgid ""
 "If a class has a single non-virtual base and does not introduce or override "
 "virtual member functions or fields other than an implicitly defined virtual "
@@ -281,99 +278,99 @@ msgid ""
 "to the least derived such class."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:195
+#: ../../../ControlFlowIntegrity.md:184
 msgid ""
 "Casting an instance of a base class to such a derived class is technically "
 "undefined behavior, but it is a relatively common hack for introducing "
 "member functions on class instances with specific properties that works "
 "under most compilers and should not have security implications, so we allow "
-"it by default. It can be disabled with ``-fsanitize=cfi-cast-strict``."
+"it by default. It can be disabled with `-fsanitize=cfi-cast-strict`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:202
+#: ../../../ControlFlowIntegrity.md:190
 msgid "Indirect Function Call Checking"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:204
+#: ../../../ControlFlowIntegrity.md:192
 msgid ""
 "This scheme checks that function calls take place using a function of the "
 "correct dynamic type; that is, the dynamic type of the function must match "
 "the static type used at the call. This CFI scheme can be enabled on its own "
-"using ``-fsanitize=cfi-icall``."
+"using `-fsanitize=cfi-icall`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:209
+#: ../../../ControlFlowIntegrity.md:197
 msgid ""
 "For this scheme to work, each indirect function call in the program, other "
-"than calls in :ref:`ignored <cfi-ignorelist>` functions, must call a "
-"function which was either compiled with ``-fsanitize=cfi-icall`` enabled, or "
-"whose address was taken by a function in a translation unit compiled with ``-"
-"fsanitize=cfi-icall``."
+"than calls in {ref}`ignored <cfi-ignorelist>` functions, must call a "
+"function which was either compiled with `-fsanitize=cfi-icall` enabled, or "
+"whose address was taken by a function in a translation unit compiled with `-"
+"fsanitize=cfi-icall`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:215
+#: ../../../ControlFlowIntegrity.md:203
 msgid ""
-"If a function in a translation unit compiled with ``-fsanitize=cfi-icall`` "
-"takes the address of a function not compiled with ``-fsanitize=cfi-icall``, "
+"If a function in a translation unit compiled with `-fsanitize=cfi-icall` "
+"takes the address of a function not compiled with `-fsanitize=cfi-icall`, "
 "that address may differ from the address taken by a function in a "
-"translation unit not compiled with ``-fsanitize=cfi-icall``. This is "
+"translation unit not compiled with `-fsanitize=cfi-icall`. This is "
 "technically a violation of the C and C++ standards, but it should not affect "
 "most programs."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:221
+#: ../../../ControlFlowIntegrity.md:209
 msgid ""
-"Each translation unit compiled with ``-fsanitize=cfi-icall`` must be "
+"Each translation unit compiled with `-fsanitize=cfi-icall` must be "
 "statically linked into the program or shared library, and calls across "
 "shared library boundaries are handled as if the callee was not compiled with "
-"``-fsanitize=cfi-icall``."
+"`-fsanitize=cfi-icall`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:226
+#: ../../../ControlFlowIntegrity.md:214
 msgid ""
 "This scheme is currently supported on a limited set of targets: x86, x86_64, "
 "arm, arch64 and wasm."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:230
-msgid "``-fsanitize-cfi-icall-generalize-pointers``"
+#: ../../../ControlFlowIntegrity.md:217
+msgid "`-fsanitize-cfi-icall-generalize-pointers`"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:232
+#: ../../../ControlFlowIntegrity.md:219
 msgid ""
 "Mismatched pointer types are a common cause of cfi-icall check failures. "
-"Translation units compiled with the ``-fsanitize-cfi-icall-generalize-"
-"pointers`` flag relax pointer type checking for call sites in that "
-"translation unit, applied across all functions compiled with ``-"
-"fsanitize=cfi-icall``."
+"Translation units compiled with the `-fsanitize-cfi-icall-generalize-"
+"pointers` flag relax pointer type checking for call sites in that "
+"translation unit, applied across all functions compiled with `-fsanitize=cfi-"
+"icall`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:237
+#: ../../../ControlFlowIntegrity.md:224
 msgid ""
 "Specifically, pointers in return and argument types are treated as "
 "equivalent as long as the qualifiers for the type they point to match. For "
-"example, ``char*``, ``char**``, and ``int*`` are considered equivalent "
-"types. However, ``char*`` and ``const char*`` are considered separate types."
+"example, `char*`, `char**`, and `int*` are considered equivalent types. "
+"However, `char*` and `const char*` are considered separate types."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:242
+#: ../../../ControlFlowIntegrity.md:229
 msgid ""
-"``-fsanitize-cfi-icall-generalize-pointers`` is not compatible with ``-"
-"fsanitize-cfi-cross-dso``."
+"`-fsanitize-cfi-icall-generalize-pointers` is not compatible with `-"
+"fsanitize-cfi-cross-dso`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:248
-msgid "``-fsanitize-cfi-icall-experimental-normalize-integers``"
+#: ../../../ControlFlowIntegrity.md:234
+msgid "`-fsanitize-cfi-icall-experimental-normalize-integers`"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:250
+#: ../../../ControlFlowIntegrity.md:236
 msgid ""
 "This option enables normalizing integer types as vendor extended types for "
 "cross-language LLVM CFI/KCFI support with other languages that can't "
 "represent and encode C/C++ integer types."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:254
+#: ../../../ControlFlowIntegrity.md:240
 msgid ""
 "Specifically, integer types are encoded as their defined representations (e."
 "g., 8-bit signed integer, 16-bit signed integer, 32-bit signed integer, ...) "
@@ -381,32 +378,32 @@ msgid ""
 "(e.g., i8, i16, i32, ..., in Rust)."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:259
+#: ../../../ControlFlowIntegrity.md:245
 msgid ""
-"``-fsanitize-cfi-icall-experimental-normalize-integers`` is compatible with "
-"``-fsanitize-cfi-icall-generalize-pointers``."
+"`-fsanitize-cfi-icall-experimental-normalize-integers` is compatible with `-"
+"fsanitize-cfi-icall-generalize-pointers`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:262
+#: ../../../ControlFlowIntegrity.md:248
 msgid "This option is currently experimental."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:267
-msgid "``-fsanitize-cfi-canonical-jump-tables``"
+#: ../../../ControlFlowIntegrity.md:252
+msgid "`-fsanitize-cfi-canonical-jump-tables`"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:269
+#: ../../../ControlFlowIntegrity.md:254
 msgid ""
 "The default behavior of Clang's indirect function call checker will replace "
 "the address of each CFI-checked function in the output file's symbol table "
 "with the address of a jump table entry which will pass CFI checks. We refer "
-"to this as making the jump table `canonical`. This property allows code that "
-"was not compiled with ``-fsanitize=cfi-icall`` to take a CFI-valid address "
-"of a function, but it comes with a couple of caveats that are especially "
+"to this as making the jump table *canonical*. This property allows code that "
+"was not compiled with `-fsanitize=cfi-icall` to take a CFI-valid address of "
+"a function, but it comes with a couple of caveats that are especially "
 "relevant for users of cross-DSO CFI:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:277
+#: ../../../ControlFlowIntegrity.md:262
 msgid ""
 "There is a performance and code size overhead associated with each exported "
 "function, because each such function must have an associated jump table "
@@ -415,7 +412,7 @@ msgid ""
 "direct calls between DSOs, in addition to the PLT overhead."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:283
+#: ../../../ControlFlowIntegrity.md:267
 msgid ""
 "There is no good way to take a CFI-valid address of a function written in "
 "assembly or a language not supported by Clang. The reason is that the code "
@@ -429,16 +426,16 @@ msgid ""
 "addition to adding runtime overhead."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:294
+#: ../../../ControlFlowIntegrity.md:278
 msgid ""
 "For these reasons, we provide the option of making the jump table non-"
-"canonical with the flag ``-fno-sanitize-cfi-canonical-jump-tables``. When "
-"the jump table is made non-canonical, symbol table entries point directly to "
-"the function body. Any instances of a function's address being taken in C "
-"will be replaced with a jump table address."
+"canonical with the flag `-fno-sanitize-cfi-canonical-jump-tables`. When the "
+"jump table is made non-canonical, symbol table entries point directly to the "
+"function body. Any instances of a function's address being taken in C will "
+"be replaced with a jump table address."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:300
+#: ../../../ControlFlowIntegrity.md:284
 msgid ""
 "This scheme does have its own caveats, however. It does end up breaking "
 "function address equality more aggressively than the default behavior, "
@@ -446,67 +443,67 @@ msgid ""
 "equality entirely."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:305
+#: ../../../ControlFlowIntegrity.md:289
 msgid ""
-"Furthermore, it is occasionally necessary for code not compiled with ``-"
-"fsanitize=cfi-icall`` to take a function address that is valid for CFI. For "
+"Furthermore, it is occasionally necessary for code not compiled with `-"
+"fsanitize=cfi-icall` to take a function address that is valid for CFI. For "
 "example, this is necessary when a function's address is taken by assembly "
 "code and then called by CFI-checking C code. The "
-"``__attribute__((cfi_canonical_jump_table))`` attribute may be used to make "
+"`__attribute__((cfi_canonical_jump_table))` attribute may be used to make "
 "the jump table entry of a specific function canonical so that the external "
 "code will end up taking an address for the function that will pass CFI "
 "checks."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:314
-msgid "``-fsanitize=cfi-icall`` and ``-fsanitize=function``"
+#: ../../../ControlFlowIntegrity.md:297
+msgid "`-fsanitize=cfi-icall` and `-fsanitize=function`"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:316
+#: ../../../ControlFlowIntegrity.md:299
 msgid ""
-"This tool is similar to ``-fsanitize=function`` in that both tools check the "
+"This tool is similar to `-fsanitize=function` in that both tools check the "
 "types of function calls. However, the two tools occupy different points on "
-"the design space; ``-fsanitize=function`` is a developer tool designed to "
-"find bugs in local development builds, whereas ``-fsanitize=cfi-icall`` is a "
+"the design space; `-fsanitize=function` is a developer tool designed to find "
+"bugs in local development builds, whereas `-fsanitize=cfi-icall` is a "
 "security hardening mechanism designed to be deployed in release builds."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:322
+#: ../../../ControlFlowIntegrity.md:305
 msgid ""
-"``-fsanitize=function`` has a higher space and time overhead due to a more "
+"`-fsanitize=function` has a higher space and time overhead due to a more "
 "complex type check at indirect call sites, which may make it unsuitable for "
 "deployment."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:326
+#: ../../../ControlFlowIntegrity.md:309
 msgid ""
-"On the other hand, ``-fsanitize=function`` conforms more closely with the C+"
-"+ standard and user expectations around interaction with shared libraries; "
-"the identity of function pointers is maintained, and calls across shared "
-"library boundaries are no different from calls within a single program or "
-"shared library."
+"On the other hand, `-fsanitize=function` conforms more closely with the C++ "
+"standard and user expectations around interaction with shared libraries; the "
+"identity of function pointers is maintained, and calls across shared library "
+"boundaries are no different from calls within a single program or shared "
+"library."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:335
-msgid "``-fsanitize=kcfi``"
+#: ../../../ControlFlowIntegrity.md:317
+msgid "`-fsanitize=kcfi`"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:337
+#: ../../../ControlFlowIntegrity.md:319
 msgid ""
 "This is an alternative indirect call control-flow integrity scheme designed "
-"for low-level system software, such as operating system kernels. Unlike ``-"
-"fsanitize=cfi-icall``, it doesn't require ``-flto``, won't result in "
-"function pointers being replaced with jump table references, and never "
-"breaks cross-DSO function address equality. These properties make KCFI "
-"easier to adopt in low-level software. KCFI is limited to checking only "
-"function pointers, and isn't compatible with executable-only memory."
+"for low-level system software, such as operating system kernels. Unlike `-"
+"fsanitize=cfi-icall`, it doesn't require `-flto`, won't result in function "
+"pointers being replaced with jump table references, and never breaks cross-"
+"DSO function address equality. These properties make KCFI easier to adopt in "
+"low-level software. KCFI is limited to checking only function pointers, and "
+"isn't compatible with executable-only memory."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:346
-msgid "``-fsanitize-kcfi-arity``"
+#: ../../../ControlFlowIntegrity.md:327
+msgid "`-fsanitize-kcfi-arity`"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:348
+#: ../../../ControlFlowIntegrity.md:329
 msgid ""
 "For supported targets, this feature extends kCFI by telling the compiler to "
 "record information about each indirect-callable function's arity (i.e., the "
@@ -515,11 +512,11 @@ msgid ""
 "enhanced security."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:355
+#: ../../../ControlFlowIntegrity.md:335
 msgid "Member Function Pointer Call Checking"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:357
+#: ../../../ControlFlowIntegrity.md:337
 msgid ""
 "This scheme checks that indirect calls via a member function pointer take "
 "place using an object of the correct dynamic type. Specifically, we check "
@@ -527,81 +524,81 @@ msgid ""
 "function pointer matches the \"function pointer\" part of the member "
 "function pointer, and that the member function's class type is related to "
 "the base type of the member function. This CFI scheme can be enabled on its "
-"own using ``-fsanitize=cfi-mfcall``."
+"own using `-fsanitize=cfi-mfcall`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:365
+#: ../../../ControlFlowIntegrity.md:345
 msgid ""
 "The compiler will only emit a full CFI check if the member function "
 "pointer's base type is complete. This is because the complete definition of "
 "the base type contains information that is necessary to correctly compile "
 "the CFI check. To ensure that the compiler always emits a full CFI check, it "
-"is recommended to also pass the flag ``-fcomplete-member-pointers``, which "
+"is recommended to also pass the flag `-fcomplete-member-pointers`, which "
 "enables a non-conforming language extension that requires member pointer "
 "base types to be complete if they may be used for a call."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:379
+#: ../../../ControlFlowIntegrity.md:359
 msgid ""
 "This scheme is currently not compatible with cross-DSO CFI or the Microsoft "
 "ABI."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:385
+#: ../../../ControlFlowIntegrity.md:364
 msgid "Ignorelist"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:387
+#: ../../../ControlFlowIntegrity.md:366
 msgid ""
-"A :doc:`SanitizerSpecialCaseList` can be used to relax CFI checks for "
-"certain source files, functions and types using the ``src``, ``fun`` and "
-"``type`` entity types. Specific CFI modes can be be specified using "
-"``[section]`` headers."
+"A {doc}`SanitizerSpecialCaseList` can be used to relax CFI checks for "
+"certain source files, functions and types using the `src`, `fun` and `type` "
+"entity types. Specific CFI modes can be be specified using `[section]` "
+"headers."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:412
+#: ../../../ControlFlowIntegrity.md:389
 msgid "Shared library support"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:414
+#: ../../../ControlFlowIntegrity.md:391
 msgid ""
 "Use **-f[no-]sanitize-cfi-cross-dso** to enable the cross-DSO control flow "
 "integrity mode, which allows all CFI schemes listed above to apply across "
-"DSO boundaries. As in the regular CFI, each DSO must be built with ``-flto`` "
-"or ``-flto=thin``."
+"DSO boundaries. As in the regular CFI, each DSO must be built with `-flto` "
+"or `-flto=thin`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:419
+#: ../../../ControlFlowIntegrity.md:396
 msgid ""
 "Normally, CFI checks will only be performed for classes that have hidden LTO "
 "visibility. With this flag enabled, the compiler will emit cross-DSO CFI "
 "checks for all classes, except for those which appear in the CFI ignorelist "
-"or which use a ``no_sanitize`` attribute."
+"or which use a `no_sanitize` attribute."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:425
+#: ../../../ControlFlowIntegrity.md:401
 msgid "Design"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:427
-msgid "Please refer to the :doc:`design document<ControlFlowIntegrityDesign>`."
+#: ../../../ControlFlowIntegrity.md:403
+msgid "Please refer to the {doc}`design document<ControlFlowIntegrityDesign>`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:430
+#: ../../../ControlFlowIntegrity.md:405
 msgid "Publications"
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:432
+#: ../../../ControlFlowIntegrity.md:407
 msgid ""
-"`Control-Flow Integrity: Principles, Implementations, and Applications "
-"<https://research.microsoft.com/pubs/64250/ccs05.pdf>`_. Martin Abadi, Mihai "
+"[Control-Flow Integrity: Principles, Implementations, and Applications]"
+"(https://research.microsoft.com/pubs/64250/ccs05.pdf). Martin Abadi, Mihai "
 "Budiu, Úlfar Erlingsson, Jay Ligatti."
 msgstr ""
 
-#: ../../../ControlFlowIntegrity.rst:435
+#: ../../../ControlFlowIntegrity.md:410
 msgid ""
-"`Enforcing Forward-Edge Control-Flow Integrity in GCC & LLVM <https://www."
-"usenix.org/system/files/conference/usenixsecurity14/sec14-paper-tice.pdf>`_. "
+"[Enforcing Forward-Edge Control-Flow Integrity in GCC & LLVM](https://www."
+"usenix.org/system/files/conference/usenixsecurity14/sec14-paper-tice.pdf). "
 "Caroline Tice, Tom Roeder, Peter Collingbourne, Stephen Checkoway, Úlfar "
 "Erlingsson, Luis Lozano, Geoff Pike."
 msgstr ""

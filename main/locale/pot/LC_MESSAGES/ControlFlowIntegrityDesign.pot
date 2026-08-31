@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,235 +17,99 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../ControlFlowIntegrityDesign.rst:3
+#: ../../../ControlFlowIntegrityDesign.md:1
 msgid "Control Flow Integrity Design Documentation"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:5
+#: ../../../ControlFlowIntegrityDesign.md:3
 msgid ""
-"This page documents the design of the :doc:`ControlFlowIntegrity` schemes "
+"This page documents the design of the {doc}`ControlFlowIntegrity` schemes "
 "supported by Clang."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:9
+#: ../../../ControlFlowIntegrityDesign.md:6
 msgid "Forward-Edge CFI for Virtual Calls"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:11
+#: ../../../ControlFlowIntegrityDesign.md:8
 msgid ""
 "This scheme works by allocating, for each static type used to make a virtual "
 "call, a region of read-only storage in the object file holding a bit vector "
 "that maps onto to the region of storage used for those virtual tables. Each "
-"set bit in the bit vector corresponds to the `address point`_ for a virtual "
-"table compatible with the static type for which the bit vector is being "
-"built."
+"set bit in the bit vector corresponds to the [address point][address point] "
+"for a virtual table compatible with the static type for which the bit vector "
+"is being built."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:17
+#: ../../../ControlFlowIntegrityDesign.md:14
 msgid "For example, consider the following three C++ classes:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:39
+#: ../../../ControlFlowIntegrityDesign.md:36
 msgid ""
 "The scheme will cause the virtual tables for A, B and C to be laid out "
 "consecutively:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:42
-#: ../../../ControlFlowIntegrityDesign.rst:232
+#: ../../../ControlFlowIntegrityDesign.md:39
+#: ../../../ControlFlowIntegrityDesign.md:221
 msgid "Virtual Table Layout for A, B, C"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "0"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "1"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "2"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "3"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "4"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "5"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "6"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "7"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "8"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "9"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "10"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "11"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "12"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "13"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "14"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "A::offset-to-top"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&A::rtti"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&A::f1"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&A::f2"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&A::f3"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "B::offset-to-top"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&B::rtti"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&B::f1"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&B::f2"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&B::f3"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "C::offset-to-top"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&C::rtti"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&C::f1"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&C::f2"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&C::f3"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:47
+#: ../../../ControlFlowIntegrityDesign.md:45
 msgid "The bit vector for static types A, B and C will look like this:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:49
-#: ../../../ControlFlowIntegrityDesign.rst:121
+#: ../../../ControlFlowIntegrityDesign.md:47
+#: ../../../ControlFlowIntegrityDesign.md:114
 msgid "Bit Vectors for A, B, C"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "Class"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "A"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "B"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "C"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:56
+#: ../../../ControlFlowIntegrityDesign.md:55
 msgid ""
 "Bit vectors are represented in the object file as byte arrays. By loading "
 "from indexed offsets into the byte array and applying a mask, a program can "
 "test bits from the bit set with a relatively short instruction sequence. Bit "
 "vectors may overlap so long as they use different bits. For the full "
-"details, see the `ByteArrayBuilder`_ class."
+"details, see the [ByteArrayBuilder][bytearraybuilder] class."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:62
+#: ../../../ControlFlowIntegrityDesign.md:61
 msgid ""
 "In this case, assuming A is laid out at offset 0 in bit 0, B at offset 0 in "
 "bit 1 and C at offset 0 in bit 2, the byte array would look like this:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:69
+#: ../../../ControlFlowIntegrityDesign.md:68
 msgid ""
 "To emit a virtual call, the compiler will assemble code that checks that the "
 "object's virtual table pointer is in-bounds and aligned and that the "
 "relevant bit is set in the bit vector."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:73
+#: ../../../ControlFlowIntegrityDesign.md:72
 msgid "For example on x86 a typical virtual call may look like this:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:91
+#: ../../../ControlFlowIntegrityDesign.md:90
 msgid ""
 "The compiler relies on co-operation from the linker in order to assemble the "
-"bit vectors for the whole program. It currently does this using LLVM's `type "
-"metadata`_ mechanism together with link-time optimization."
+"bit vectors for the whole program. It currently does this using LLVM's [type "
+"metadata][type metadata] mechanism together with link-time optimization."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:100
+#: ../../../ControlFlowIntegrityDesign.md:94
 msgid "Optimizations"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:102
+#: ../../../ControlFlowIntegrityDesign.md:96
 msgid ""
 "The scheme as described above is the fully general variant of the scheme. "
 "Most of the time we are able to apply one or more of the following "
 "optimizations to improve binary size or performance."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:106
+#: ../../../ControlFlowIntegrityDesign.md:100
 msgid ""
 "In fact, if you try the above example with the current version of the "
 "compiler, you will probably find that it will not use the described virtual "
@@ -254,11 +118,11 @@ msgid ""
 "sequence of machine instructions."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:113
+#: ../../../ControlFlowIntegrityDesign.md:106
 msgid "Stripping Leading/Trailing Zeros in Bit Vectors"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:115
+#: ../../../ControlFlowIntegrityDesign.md:108
 msgid ""
 "If a bit vector contains leading or trailing zeros, we can strip them from "
 "the vector. The compiler will emit code to check if the pointer is in range "
@@ -267,52 +131,52 @@ msgid ""
 "example class hierarchy will be emitted like this:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:129
+#: ../../../ControlFlowIntegrityDesign.md:122
 msgid "Short Inline Bit Vectors"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:131
+#: ../../../ControlFlowIntegrityDesign.md:124
 msgid ""
 "If the vector is sufficiently short, we can represent it as an inline "
 "constant on x86. This saves us a few instructions when reading the correct "
 "element of the bit vector."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:135
+#: ../../../ControlFlowIntegrityDesign.md:128
 msgid "If the bit vector fits in 32 bits, the code looks like this:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:154
+#: ../../../ControlFlowIntegrityDesign.md:147
 msgid "Or if the bit vector fits in 64 bits:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:174
+#: ../../../ControlFlowIntegrityDesign.md:167
 msgid ""
 "If the bit vector consists of a single bit, there is only one possible "
 "virtual table, and the check can consist of a single equality comparison:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:189
+#: ../../../ControlFlowIntegrityDesign.md:181
 msgid "Virtual Table Layout"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:191
+#: ../../../ControlFlowIntegrityDesign.md:183
 msgid ""
 "The compiler lays out classes of disjoint hierarchies in separate regions of "
 "the object file. At worst, bit vectors in disjoint hierarchies only need to "
 "cover their disjoint hierarchy. But the closer that classes in sub-"
 "hierarchies are laid out to each other, the smaller the bit vectors for "
 "those sub-hierarchies need to be (see \"Stripping Leading/Trailing Zeros in "
-"Bit Vectors\" above). The `GlobalLayoutBuilder`_ class is responsible for "
-"laying out the globals efficiently to minimize the sizes of the underlying "
-"bitsets."
+"Bit Vectors\" above). The [GlobalLayoutBuilder][globallayoutbuilder] class "
+"is responsible for laying out the globals efficiently to minimize the sizes "
+"of the underlying bitsets."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:202
+#: ../../../ControlFlowIntegrityDesign.md:191
 msgid "Alignment"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:204
+#: ../../../ControlFlowIntegrityDesign.md:193
 msgid ""
 "If all gaps between address points in a particular bit vector are multiples "
 "of powers of 2, the compiler can compress the bit vector by strengthening "
@@ -320,45 +184,53 @@ msgid ""
 "this class hierarchy:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:230
+#: ../../../ControlFlowIntegrityDesign.md:219
 msgid "The virtual tables will be laid out like this:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "15"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&B::f4"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&B::f5"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&B::f6"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:237
+#: ../../../ControlFlowIntegrityDesign.md:227
 msgid ""
 "Notice that each address point for A is separated by 4 words. This lets us "
 "emit a compressed bit vector for A that looks like this:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:245
+#: ../../../ControlFlowIntegrityDesign.md:221
+msgid "2"
+msgstr ""
+
+#: ../../../ControlFlowIntegrityDesign.md:221
+msgid "6"
+msgstr ""
+
+#: ../../../ControlFlowIntegrityDesign.md:221
+msgid "10"
+msgstr ""
+
+#: ../../../ControlFlowIntegrityDesign.md:221
+msgid "14"
+msgstr ""
+
+#: ../../../ControlFlowIntegrityDesign.md:221
+msgid "1"
+msgstr ""
+
+#: ../../../ControlFlowIntegrityDesign.md:221
+msgid "0"
+msgstr ""
+
+#: ../../../ControlFlowIntegrityDesign.md:234
 msgid ""
 "At call sites, the compiler will strengthen the alignment requirements by "
 "using a different rotate count. For example, on a 64-bit machine where the "
-"address points are 4-word aligned (as in A from our example), the ``rol`` "
+"address points are 4-word aligned (as in A from our example), the `rol` "
 "instruction may look like this:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:255
+#: ../../../ControlFlowIntegrityDesign.md:243
 msgid "Padding to Powers of 2"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:257
+#: ../../../ControlFlowIntegrityDesign.md:245
 msgid ""
 "Of course, this alignment scheme works best if the address points are in "
 "fact aligned correctly. To make this more likely to happen, we insert "
@@ -369,7 +241,7 @@ msgid ""
 "the effect of aligning the address points as well."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:265
+#: ../../../ControlFlowIntegrityDesign.md:253
 msgid ""
 "This scheme introduces tradeoffs between decreased space overhead for "
 "instructions and bit vectors and increased overhead in the form of padding. "
@@ -377,32 +249,32 @@ msgid ""
 "128 bytes. This number was found experimentally to provide a good tradeoff."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:271
+#: ../../../ControlFlowIntegrityDesign.md:258
 msgid "Eliminating Bit Vector Checks for All-Ones Bit Vectors"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:273
+#: ../../../ControlFlowIntegrityDesign.md:260
 msgid ""
 "If the bit vector is all ones, the bit vector check is redundant; we simply "
 "need to check that the address is in range and well aligned. This is more "
 "likely to occur if the virtual tables are padded."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:278
+#: ../../../ControlFlowIntegrityDesign.md:264
 msgid "Forward-Edge CFI for Virtual Calls by Interleaving Virtual Tables"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:280
+#: ../../../ControlFlowIntegrityDesign.md:266
 msgid ""
 "Dimitar et. al. proposed a novel approach that interleaves virtual tables in "
-"[1]_. This approach is more efficient in terms of space because padding and "
-"bit vectors are no longer needed. At the same time, it is also more "
+"[^ivtbl]. This approach is more efficient in terms of space because padding "
+"and bit vectors are no longer needed. At the same time, it is also more "
 "efficient in terms of performance because in the interleaved layout address "
 "points of the virtual tables are consecutive, thus the validity check of a "
 "virtual vtable pointer is always a range check."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:286
+#: ../../../ControlFlowIntegrityDesign.md:273
 msgid ""
 "At a high level, the interleaving scheme consists of three steps: 1) split "
 "virtual table groups into separate virtual tables, 2) order virtual tables "
@@ -410,39 +282,35 @@ msgid ""
 "tables."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:290
+#: ../../../ControlFlowIntegrityDesign.md:277
 msgid ""
-"The interleaving scheme implemented in LLVM is inspired by [1]_ but has its "
-"own enhancements (more in `Interleave virtual tables`_)."
+"The interleaving scheme implemented in LLVM is inspired by [Protecting C++ "
+"Dynamic Dispatch Through VTable Interleaving](https://cseweb.ucsd.edu/"
+"~lerner/papers/ivtbl-ndss16.pdf) by Dimitar Bounov, Rami Gökhan Kıcı, and "
+"Sorin Lerner, but has its own enhancements (more in [Interleave virtual "
+"tables])."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:293
-msgid ""
-"`Protecting C++ Dynamic Dispatch Through VTable Interleaving <https://cseweb."
-"ucsd.edu/~lerner/papers/ivtbl-ndss16.pdf>`_. Dimitar Bounov, Rami Gökhan "
-"Kıcı, Sorin Lerner."
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:296
+#: ../../../ControlFlowIntegrityDesign.md:282
 msgid "Split virtual table groups into separate virtual tables"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:298
+#: ../../../ControlFlowIntegrityDesign.md:284
 msgid ""
 "The Itanium C++ ABI glues multiple individual virtual tables for a class "
 "into a combined virtual table (virtual table group). The interleaving "
 "scheme, however, can only work with individual virtual tables so it must "
 "split the combined virtual tables first. In comparison, the old scheme does "
 "not require the splitting but it is more efficient when the combined virtual "
-"tables have been split. The `GlobalSplit`_ pass is responsible for splitting "
-"combined virtual tables into individual ones."
+"tables have been split. The [GlobalSplit][globalsplit] pass is responsible "
+"for splitting combined virtual tables into individual ones."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:306
+#: ../../../ControlFlowIntegrityDesign.md:289
 msgid "Order virtual tables by a pre-order traversal of the class hierarchy"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:308
+#: ../../../ControlFlowIntegrityDesign.md:291
 msgid ""
 "This step is common to both the old scheme described above and the "
 "interleaving scheme. For the interleaving scheme, since the combined virtual "
@@ -452,21 +320,21 @@ msgid ""
 "virtual tables."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:313
+#: ../../../ControlFlowIntegrityDesign.md:296
 msgid "For example, consider the following four C++ classes:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:336
+#: ../../../ControlFlowIntegrityDesign.md:319
 msgid ""
 "This step will arrange the virtual tables for A, B, C, and D in the order of "
 "*vtable-of-A, vtable-of-B, vtable-of-D, vtable-of-C*."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:339
+#: ../../../ControlFlowIntegrityDesign.md:321
 msgid "Interleave virtual tables"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:341
+#: ../../../ControlFlowIntegrityDesign.md:323
 msgid ""
 "This step is where the interleaving scheme deviates from the old scheme. "
 "Instead of laying out whole virtual tables in the previously computed order, "
@@ -474,22 +342,22 @@ msgid ""
 "strategically to ensure the following properties:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:345
+#: ../../../ControlFlowIntegrityDesign.md:327
 msgid "offset-to-top and RTTI fields layout property"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:347
+#: ../../../ControlFlowIntegrityDesign.md:329
 msgid ""
 "The Itanium C++ ABI specifies that offset-to-top and RTTI fields appear at "
 "the offsets behind the address point. Note that libraries like libcxxabi do "
 "assume this property."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:350
+#: ../../../ControlFlowIntegrityDesign.md:332
 msgid "virtual function entry layout property"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:352
+#: ../../../ControlFlowIntegrityDesign.md:334
 msgid ""
 "For each virtual function the distance between a virtual table entry for "
 "this function and the corresponding address point is always the same. This "
@@ -497,14 +365,14 @@ msgid ""
 "layout."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:355
+#: ../../../ControlFlowIntegrityDesign.md:337
 msgid ""
 "Note that the interleaving scheme in the CFI implementation guarantees both "
-"properties above whereas the original scheme proposed in [1]_ only "
+"properties above whereas the original scheme proposed in [^ivtbl] only "
 "guarantees the second property."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:358
+#: ../../../ControlFlowIntegrityDesign.md:340
 msgid ""
 "To illustrate how the interleaving algorithm works, let us continue with the "
 "running example. The algorithm first separates all the virtual table entries "
@@ -514,25 +382,17 @@ msgid ""
 "in the same order."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:363
-#: ../../../ControlFlowIntegrityDesign.rst:401
+#: ../../../ControlFlowIntegrityDesign.md:345
+#: ../../../ControlFlowIntegrityDesign.md:385
 msgid "Work list 1 Layout"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "D::offset-to-top"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:369
-#: ../../../ControlFlowIntegrityDesign.rst:407
+#: ../../../ControlFlowIntegrityDesign.md:351
+#: ../../../ControlFlowIntegrityDesign.md:391
 msgid "Work list 2 layout"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&D::rtti"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:374
+#: ../../../ControlFlowIntegrityDesign.md:357
 msgid ""
 "Then for each virtual function the algorithm goes through all the virtual "
 "tables in the previously computed order to collect all the related entries "
@@ -540,27 +400,19 @@ msgid ""
 "virtual function lists:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:378
+#: ../../../ControlFlowIntegrityDesign.md:361
 msgid "f1 list"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&D::f1"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:384
+#: ../../../ControlFlowIntegrityDesign.md:367
 msgid "f2 list"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "&D::f2"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:390
+#: ../../../ControlFlowIntegrityDesign.md:373
 msgid "f3 list"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:395
+#: ../../../ControlFlowIntegrityDesign.md:379
 msgid ""
 "Next, the algorithm picks the longest remaining virtual function list and "
 "appends the whole list to the shortest work list until no function lists are "
@@ -571,22 +423,18 @@ msgid ""
 "entry is added to the latter. After this step, the two work lists look like:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:1
-msgid "padding"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:412
+#: ../../../ControlFlowIntegrityDesign.md:397
 msgid ""
 "Finally, the algorithm merges the two work lists into the interleaved layout "
 "by alternatingly moving the head of each list to the final layout. After "
 "this step, the final interleaved layout looks like:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:415
+#: ../../../ControlFlowIntegrityDesign.md:400
 msgid "Interleaved layout"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:420
+#: ../../../ControlFlowIntegrityDesign.md:406
 msgid ""
 "In the above interleaved layout, each virtual table's offset-to-top and RTTI "
 "are always adjacent, which shows that the layout has the first property. For "
@@ -597,11 +445,11 @@ msgid ""
 "to-top (the entry immediately after &D::rtti)."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:426
+#: ../../../ControlFlowIntegrityDesign.md:411
 msgid "Forward-Edge CFI for Indirect Function Calls"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:428
+#: ../../../ControlFlowIntegrityDesign.md:413
 msgid ""
 "Under forward-edge CFI for indirect function calls, each unique function "
 "type has its own bit vector, and at each call site we need to check that the "
@@ -611,7 +459,7 @@ msgid ""
 "rather than of virtual tables."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:435
+#: ../../../ControlFlowIntegrityDesign.md:420
 msgid ""
 "Unlike when re-arranging global variables, we cannot re-arrange functions in "
 "a particular order and base our calculations on the layout of the functions' "
@@ -627,35 +475,35 @@ msgid ""
 "verification done inside the module."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:448
+#: ../../../ControlFlowIntegrityDesign.md:433
 msgid ""
-"In more concrete terms, suppose we have three functions ``f``, ``g``, ``h`` "
-"which are all of the same type, and a function foo that returns their "
-"addresses:"
+"In more concrete terms, suppose we have three functions `f`, `g`, `h` which "
+"are all of the same type, and a function foo that returns their addresses:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:472
+#: ../../../ControlFlowIntegrityDesign.md:457
 msgid "Our jump table will (conceptually) look like this:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:512
+#: ../../../ControlFlowIntegrityDesign.md:497
 msgid ""
-"Because the addresses of ``f``, ``g``, ``h`` are evenly spaced at a power of "
-"2, and function types do not overlap (unlike class types with base classes), "
-"we can normally apply the `Alignment`_ and `Eliminating Bit Vector Checks "
-"for All-Ones Bit Vectors`_ optimizations thus simplifying the check at each "
-"call site to a range and alignment check."
+"Because the addresses of `f`, `g`, `h` are evenly spaced at a power of 2, "
+"and function types do not overlap (unlike class types with base classes), we "
+"can normally apply the [Alignment] and [Eliminating Bit Vector Checks for "
+"All-Ones Bit Vectors][eliminating bit vector checks for all-ones bit "
+"vectors] optimizations thus simplifying the check at each call site to a "
+"range and alignment check."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:519
+#: ../../../ControlFlowIntegrityDesign.md:503
 msgid "Shared library support"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:521
+#: ../../../ControlFlowIntegrityDesign.md:505
 msgid "**EXPERIMENTAL**"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:523
+#: ../../../ControlFlowIntegrityDesign.md:507
 msgid ""
 "The basic CFI mode described above assumes that the application is a "
 "monolithic binary; at least that all possible virtual/indirect call targets "
@@ -664,178 +512,172 @@ msgid ""
 "allowing virtual and indirect calls to cross the DSO boundary."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:530
+#: ../../../ControlFlowIntegrityDesign.md:514
 msgid ""
 "Assuming the following setup: the binary consists of several instrumented "
 "and several uninstrumented DSOs. Some of them may be dlopen-ed/dlclose-d "
 "periodically, even frequently."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:534
+#: ../../../ControlFlowIntegrityDesign.md:518
 msgid "Calls made from uninstrumented DSOs are not checked and just work."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:535
+#: ../../../ControlFlowIntegrityDesign.md:519
 msgid "Calls inside any instrumented DSO are fully protected."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:537
-msgid "Calls between different instrumented DSOs are also protected, with"
+#: ../../../ControlFlowIntegrityDesign.md:520
+msgid ""
+"Calls between different instrumented DSOs are also protected, with a "
+"performance penalty (in addition to the monolithic CFI overhead)."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:537
-msgid "a performance penalty (in addition to the monolithic CFI overhead)."
+#: ../../../ControlFlowIntegrityDesign.md:522
+msgid ""
+"Calls from an instrumented DSO to an uninstrumented one are unchecked and "
+"just work, with performance penalty."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:539
-msgid "Calls from an instrumented DSO to an uninstrumented one are"
+#: ../../../ControlFlowIntegrityDesign.md:524
+msgid ""
+"Calls from an instrumented DSO outside of any known DSO are detected as CFI "
+"violations."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:540
-msgid "unchecked and just work, with performance penalty."
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:542
-msgid "Calls from an instrumented DSO outside of any known DSO are"
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:542
-msgid "detected as CFI violations."
-msgstr ""
-
-#: ../../../ControlFlowIntegrityDesign.rst:544
+#: ../../../ControlFlowIntegrityDesign.md:527
 msgid "In the monolithic scheme a call site is instrumented as"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:552
+#: ../../../ControlFlowIntegrityDesign.md:535
 msgid "In the cross-DSO scheme it becomes"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:561
+#: ../../../ControlFlowIntegrityDesign.md:543
 msgid "CallSiteTypeId"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:563
+#: ../../../ControlFlowIntegrityDesign.md:545
 msgid ""
-"``CallSiteTypeId`` is a stable process-wide identifier of the call-site "
-"type. For a virtual call site, the type in question is the class type; for "
-"an indirect function call it is the function signature. The mapping from a "
-"type to an identifier is an ABI detail. In the current, experimental, "
+"`CallSiteTypeId` is a stable process-wide identifier of the call-site type. "
+"For a virtual call site, the type in question is the class type; for an "
+"indirect function call it is the function signature. The mapping from a type "
+"to an identifier is an ABI detail. In the current, experimental, "
 "implementation the identifier of type T is calculated as follows:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:570
+#: ../../../ControlFlowIntegrityDesign.md:552
 msgid "Obtain the mangled name for \"typeinfo name for T\"."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:571
+#: ../../../ControlFlowIntegrityDesign.md:553
 msgid "Calculate MD5 hash of the name as a string."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:572
+#: ../../../ControlFlowIntegrityDesign.md:554
 msgid ""
 "Reinterpret the first 8 bytes of the hash as a little-endian 64-bit integer."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:575
+#: ../../../ControlFlowIntegrityDesign.md:557
 msgid ""
-"It is possible, but unlikely, that collisions in the ``CallSiteTypeId`` "
+"It is possible, but unlikely, that collisions in the `CallSiteTypeId` "
 "hashing will result in weaker CFI checks that would still be conservatively "
 "correct."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:580
+#: ../../../ControlFlowIntegrityDesign.md:561
 msgid "CFI_Check"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:582
+#: ../../../ControlFlowIntegrityDesign.md:563
 msgid ""
 "In the general case, only the target DSO knows whether the call to function "
-"``f`` with type ``CallSiteTypeId`` is valid or not.  To export this "
-"information, every DSO implements"
+"`f` with type `CallSiteTypeId` is valid or not. To export this information, "
+"every DSO implements"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:590
+#: ../../../ControlFlowIntegrityDesign.md:571
 msgid ""
 "This function provides external modules with access to CFI checks for the "
-"targets inside this DSO.  For each known ``CallSiteTypeId``, this function "
-"performs an ``llvm.type.test`` with the corresponding type identifier. It "
+"targets inside this DSO. For each known `CallSiteTypeId`, this function "
+"performs an `llvm.type.test` with the corresponding type identifier. It "
 "reports an error if the type is unknown, or if the check fails. Depending on "
-"the values of compiler flags ``-fsanitize-trap`` and ``-fsanitize-recover``, "
+"the values of compiler flags `-fsanitize-trap` and `-fsanitize-recover`, "
 "this function may print an error, abort and/or return to the caller. "
-"``DiagData`` is an opaque pointer to the diagnostic information about the "
-"error, or ``null`` if the caller does not provide this information."
+"`DiagData` is an opaque pointer to the diagnostic information about the "
+"error, or `null` if the caller does not provide this information."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:600
+#: ../../../ControlFlowIntegrityDesign.md:581
 msgid ""
 "The basic implementation is a large switch statement over all values of "
 "CallSiteTypeId supported by this DSO, and each case is similar to the "
 "InlinedFastCheck() in the basic CFI mode."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:605
+#: ../../../ControlFlowIntegrityDesign.md:585
 msgid "CFI Shadow"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:607
+#: ../../../ControlFlowIntegrityDesign.md:587
 msgid ""
-"To route CFI checks to the target DSO's __cfi_check function, a mapping from "
-"possible virtual / indirect call targets to the corresponding __cfi_check "
-"functions is maintained. This mapping is implemented as a sparse array of 2 "
-"bytes for every possible page (4096 bytes) of memory. The table is kept "
-"readonly most of the time."
+"To route CFI checks to the target DSO's \\_\\_cfi_check function, a mapping "
+"from possible virtual / indirect call targets to the corresponding "
+"\\_\\_cfi_check functions is maintained. This mapping is implemented as a "
+"sparse array of 2 bytes for every possible page (4096 bytes) of memory. The "
+"table is kept readonly most of the time."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:613
+#: ../../../ControlFlowIntegrityDesign.md:593
 msgid "There are 3 types of shadow values:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:615
+#: ../../../ControlFlowIntegrityDesign.md:595
 msgid "Address in a CFI-instrumented DSO."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:616
+#: ../../../ControlFlowIntegrityDesign.md:596
 msgid ""
 "Unchecked address (a “trusted” non-instrumented DSO). Encoded as value "
 "0xFFFF."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:618
+#: ../../../ControlFlowIntegrityDesign.md:598
 msgid "Invalid address (everything else). Encoded as value 0."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:620
+#: ../../../ControlFlowIntegrityDesign.md:600
 msgid ""
 "For a CFI-instrumented DSO, a shadow value encodes the address of the "
-"__cfi_check function for all call targets in the corresponding memory page. "
-"If Addr is the target address, and V is the shadow value, then the address "
-"of __cfi_check is calculated as"
+"\\_\\_cfi_check function for all call targets in the corresponding memory "
+"page. If Addr is the target address, and V is the shadow value, then the "
+"address of \\_\\_cfi_check is calculated as"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:629
+#: ../../../ControlFlowIntegrityDesign.md:609
 msgid ""
-"This works as long as __cfi_check is aligned by 4096 bytes and located below "
-"any call targets in its DSO, but not more than 256MB apart from them."
+"This works as long as \\_\\_cfi_check is aligned by 4096 bytes and located "
+"below any call targets in its DSO, but not more than 256MB apart from them."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:634
+#: ../../../ControlFlowIntegrityDesign.md:613
 msgid "CFI_SlowPath"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:636
+#: ../../../ControlFlowIntegrityDesign.md:615
 msgid "The slow path check is implemented in a runtime support library as"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:643
+#: ../../../ControlFlowIntegrityDesign.md:622
 msgid ""
-"These functions loads a shadow value for ``TargetAddr``, finds the address "
-"of ``__cfi_check`` as described above and calls that. ``DiagData`` is an "
-"opaque pointer to diagnostic data which is passed verbatim to "
-"``__cfi_check``, and ``__cfi_slowpath`` passes ``nullptr`` instead."
+"These functions loads a shadow value for `TargetAddr`, finds the address of "
+"`__cfi_check` as described above and calls that. `DiagData` is an opaque "
+"pointer to diagnostic data which is passed verbatim to `__cfi_check`, and "
+"`__cfi_slowpath` passes `nullptr` instead."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:649
+#: ../../../ControlFlowIntegrityDesign.md:628
 msgid ""
 "Compiler-RT library contains reference implementations of slowpath "
 "functions, but they have unresolvable issues with correctness and "
@@ -843,11 +685,11 @@ msgid ""
 "provide their own implementations, usually as part of libc or libdl."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:656
+#: ../../../ControlFlowIntegrityDesign.md:634
 msgid "Position-independent executable requirement"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:658
+#: ../../../ControlFlowIntegrityDesign.md:636
 msgid ""
 "Cross-DSO CFI mode requires that the main executable is built as PIE. In non-"
 "PIE executables the address of an external function (taken from the main "
@@ -855,33 +697,33 @@ msgid ""
 "executable. This would break the CFI checks."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:664
+#: ../../../ControlFlowIntegrityDesign.md:641
 msgid "Backward-edge CFI for return statements (RCFI)"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:666
+#: ../../../ControlFlowIntegrityDesign.md:643
 msgid "This section is a proposal. As of March 2017 it is not implemented."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:668
+#: ../../../ControlFlowIntegrityDesign.md:645
 msgid ""
 "Backward-edge control flow (`RET` instructions) can be hijacked via "
 "overwriting the return address (`RA`) on stack. Various mitigation "
-"techniques (e.g. `SafeStack`_, `RFG`_, `Intel CET`_) try to detect or "
-"prevent `RA` corruption on stack."
+"techniques (e.g. [SafeStack][safestack], [RFG][rfg], [Intel CET][intel cet]) "
+"try to detect or prevent `RA` corruption on stack."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:673
+#: ../../../ControlFlowIntegrityDesign.md:650
 msgid ""
 "RCFI enforces the expected control flow in several different ways described "
 "below. RCFI heavily relies on LTO."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:677
+#: ../../../ControlFlowIntegrityDesign.md:653
 msgid "Leaf Functions"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:678
+#: ../../../ControlFlowIntegrityDesign.md:655
 msgid ""
 "If `f()` is a leaf function (i.e. it has no calls except maybe no-return "
 "calls) it can be called using a special calling convention that stores `RA` "
@@ -890,13 +732,13 @@ msgid ""
 "in `R` to `JMP` to `RA`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:684
+#: ../../../ControlFlowIntegrityDesign.md:661
 msgid ""
 "This flavour of CFI is *precise*, i.e. the function is guaranteed to return "
 "to the point exactly following the call."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:687
+#: ../../../ControlFlowIntegrityDesign.md:664
 msgid ""
 "An alternative approach is to copy `RA` from stack to `R` in the first "
 "instruction of `f()`, then `JMP` to `R`. This approach is simpler to "
@@ -904,11 +746,11 @@ msgid ""
 "small window when `RA` is actually stored on stack)."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:695
+#: ../../../ControlFlowIntegrityDesign.md:670
 msgid "Functions called once"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:696
+#: ../../../ControlFlowIntegrityDesign.md:672
 msgid ""
 "Suppose `f()` is called in just one place in the program (assuming we can "
 "verify this in LTO mode). In this case we can replace the `RET` instruction "
@@ -917,17 +759,17 @@ msgid ""
 "stack."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:702
+#: ../../../ControlFlowIntegrityDesign.md:678
 msgid ""
 "Another variant is to compare `RA` on stack with the known constant and "
 "abort if they don't match; then `JMP` to the known constant address."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:706
+#: ../../../ControlFlowIntegrityDesign.md:681
 msgid "Functions called in a small number of call sites"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:707
+#: ../../../ControlFlowIntegrityDesign.md:683
 msgid ""
 "We may extend the above approach to cases where `f()` is called more than "
 "once (but still a small number of times). With LTO we know all possible "
@@ -936,18 +778,18 @@ msgid ""
 "address, otherwise abort."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:713
+#: ../../../ControlFlowIntegrityDesign.md:689
 msgid ""
 "This protection is *near-precise*, i.e. it guarantees that the control flow "
 "will be transferred to one of the valid return addresses for this function, "
 "but not necessary to the point of the most recent `CALL`."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:718
+#: ../../../ControlFlowIntegrityDesign.md:693
 msgid "General case"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:719
+#: ../../../ControlFlowIntegrityDesign.md:695
 msgid ""
 "For functions called multiple times a *return jump table* is constructed in "
 "the same manner as jump tables for indirect function calls (see above). The "
@@ -957,63 +799,63 @@ msgid ""
 "the jump table entry."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:726
+#: ../../../ControlFlowIntegrityDesign.md:702
 msgid "This protection is also *near-precise*."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:729
+#: ../../../ControlFlowIntegrityDesign.md:704
 msgid "Returns from functions called indirectly"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:731
+#: ../../../ControlFlowIntegrityDesign.md:706
 msgid ""
 "If a function is called indirectly, the return jump table is constructed for "
 "the equivalence class of functions instead of a single function."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:735
+#: ../../../ControlFlowIntegrityDesign.md:709
 msgid "Cross-DSO calls"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:736
+#: ../../../ControlFlowIntegrityDesign.md:711
 msgid ""
 "Consider two instrumented DSOs, `A` and `B`. `A` defines `f()` and `B` calls "
 "it."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:738
+#: ../../../ControlFlowIntegrityDesign.md:713
 msgid ""
 "This case will be handled similarly to the cross-DSO scheme using the slow "
 "path callback."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:741
+#: ../../../ControlFlowIntegrityDesign.md:715
 msgid "Non-goals"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:746
+#: ../../../ControlFlowIntegrityDesign.md:717
 msgid "RCFI does not protect `RET` instructions:"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:744
+#: ../../../ControlFlowIntegrityDesign.md:719
 msgid "in non-instrumented DSOs,"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:745
+#: ../../../ControlFlowIntegrityDesign.md:720
 msgid ""
 "in instrumented DSOs for functions that are called from non-instrumented "
 "DSOs,"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:746
+#: ../../../ControlFlowIntegrityDesign.md:721
 msgid "embedded into other instructions (e.g. `0f4fc3 cmovg %ebx,%eax`)."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:753
+#: ../../../ControlFlowIntegrityDesign.md:723
 msgid "Hardware support"
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:755
+#: ../../../ControlFlowIntegrityDesign.md:725
 msgid ""
 "We believe that the above design can be efficiently implemented in hardware. "
 "A single new instruction added to an ISA would allow to perform the forward-"
@@ -1027,7 +869,7 @@ msgid ""
 "for a hardware implementation."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:793
+#: ../../../ControlFlowIntegrityDesign.md:763
 msgid ""
 "An alternative and more compact encoding would not use `kFailedCheckTarget`, "
 "and will trap on check failure instead. This will allow us to fit the "
@@ -1036,7 +878,7 @@ msgid ""
 "checked using the software-only scheme."
 msgstr ""
 
-#: ../../../ControlFlowIntegrityDesign.rst:800
+#: ../../../ControlFlowIntegrityDesign.md:770
 msgid ""
 "Note that such hardware extension would be complementary to checks at the "
 "callee side, such as e.g. **Intel ENDBRANCH**. Moreover, CFI would have two "

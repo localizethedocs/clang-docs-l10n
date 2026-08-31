@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,141 +17,141 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../ItaniumMangleAbiTags.rst:3
+#: ../../../ItaniumMangleAbiTags.md:1
 msgid "ABI tags"
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:6
+#: ../../../ItaniumMangleAbiTags.md:3
 msgid "Introduction"
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:8
+#: ../../../ItaniumMangleAbiTags.md:5
 msgid ""
 "This text tries to describe gcc semantic for mangling \"abi_tag\" attributes "
-"described in https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Attributes.html"
+"described in <https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Attributes.html>"
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:11
+#: ../../../ItaniumMangleAbiTags.md:8
 msgid ""
 "There is no guarantee the following rules are correct, complete or make "
 "sense in any way as they were determined empirically by experiments with "
 "gcc5."
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:15
+#: ../../../ItaniumMangleAbiTags.md:11
 msgid "Declaration"
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:17
+#: ../../../ItaniumMangleAbiTags.md:13
 msgid ""
 "ABI tags are declared in an abi_tag attribute and can be applied to a "
 "function, variable, class or inline namespace declaration. The attribute "
 "takes one or more strings (called tags); the order does not matter."
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:21
+#: ../../../ItaniumMangleAbiTags.md:17
 msgid ""
-"See https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Attributes.html for "
+"See <https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Attributes.html> for "
 "details."
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:24
+#: ../../../ItaniumMangleAbiTags.md:20
 msgid ""
 "Tags on an inline namespace are called \"implicit tags\", all other tags are "
 "\"explicit tags\"."
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:28
+#: ../../../ItaniumMangleAbiTags.md:23
 msgid "Mangling"
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:30
+#: ../../../ItaniumMangleAbiTags.md:25
 msgid ""
-"All tags that are \"active\" on an <unqualified-name> are emitted after the "
-"<unqualified-name>, before <template-args> or <discriminator>, and are part "
-"of the same <substitution> the <unqualified-name> is."
+"All tags that are \"active\" on an `<unqualified-name>` are emitted after "
+"the `<unqualified-name>`, before `<template-args>` or `<discriminator>`, and "
+"are part of the same `<substitution>` the `<unqualified-name>` is."
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:34
+#: ../../../ItaniumMangleAbiTags.md:29
 msgid "They are mangled as:"
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:41 ../../../ItaniumMangleAbiTags.rst:75
+#: ../../../ItaniumMangleAbiTags.md:36 ../../../ItaniumMangleAbiTags.md:68
 msgid "Example:"
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:50
+#: ../../../ItaniumMangleAbiTags.md:44
 msgid "Active tags"
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:52
+#: ../../../ItaniumMangleAbiTags.md:46
 msgid ""
 "A namespace does not have any active tags. For types (class / struct / "
 "union / enum), the explicit tags are the active tags."
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:55
+#: ../../../ItaniumMangleAbiTags.md:49
 msgid ""
 "For variables and functions, the active tags are the explicit tags plus any "
 "\"required tags\" which are not in the \"available tags\" set:"
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:64
+#: ../../../ItaniumMangleAbiTags.md:57
 msgid "Required tags for a function"
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:66
+#: ../../../ItaniumMangleAbiTags.md:59
 msgid ""
 "If a function is used as a local scope for another name, and is part of "
 "another function as local scope, it doesn't have any required tags."
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:69
+#: ../../../ItaniumMangleAbiTags.md:62
 msgid ""
 "If a function is used as a local scope for a guard variable name, it doesn't "
 "have any required tags."
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:72
+#: ../../../ItaniumMangleAbiTags.md:65
 msgid ""
 "Otherwise the function requires any implicit or explicit tag used in the "
 "name for the return type."
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:88
+#: ../../../ItaniumMangleAbiTags.md:80
 msgid "Required tags for a variable"
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:90
+#: ../../../ItaniumMangleAbiTags.md:82
 msgid "A variable requires any implicit or explicit tag used in its type."
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:93
+#: ../../../ItaniumMangleAbiTags.md:84
 msgid "Available tags"
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:95
+#: ../../../ItaniumMangleAbiTags.md:86
 msgid ""
 "All tags used in the prefix and in the template arguments for a name are "
-"available. Also, for functions, all tags from the <bare-function-type> "
+"available. Also, for functions, all tags from the `<bare-function-type>` "
 "(which might include the return type for template functions) are available."
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:99
+#: ../../../ItaniumMangleAbiTags.md:90
 msgid ""
-"For <local-name>s all active tags used in the local part (<function- "
-"encoding>) are available, but not implicit tags which were not active."
+"For `<local-name>`s all active tags used in the local part (`<function-"
+"encoding>`) are available, but not implicit tags which were not active."
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:102
+#: ../../../ItaniumMangleAbiTags.md:94
 msgid ""
-"Implicit and explicit tags used in the <unqualified-name> for a function (as "
-"in the type of a cast operator) are NOT available."
+"Implicit and explicit tags used in the `<unqualified-name>` for a function "
+"(as in the type of a cast operator) are NOT available."
 msgstr ""
 
-#: ../../../ItaniumMangleAbiTags.rst:105
+#: ../../../ItaniumMangleAbiTags.md:97
 msgid ""
-"Example: a cast operator to std::string (which is std::__cxx11::"
-"basic_string<...>) will use 'cxx11' as an active tag, as it is required from "
-"the return type `std::string` but not available."
+"Example: a cast operator to std::string (which is `std::__cxx11::"
+"basic_string<...>`) will use 'cxx11' as an active tag, as it is required "
+"from the return type `std::string` but not available."
 msgstr ""

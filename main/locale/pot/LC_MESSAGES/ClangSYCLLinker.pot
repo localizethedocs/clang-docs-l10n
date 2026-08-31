@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../ClangSYCLLinker.rst:3
+#: ../../../ClangSYCLLinker.md:1
 msgid "Clang SYCL Linker"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:11
+#: ../../../ClangSYCLLinker.md:7
 msgid "Introduction"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:13
+#: ../../../ClangSYCLLinker.md:9
 msgid ""
 "This tool works as a wrapper around the SYCL device code linking process. "
 "The purpose of this tool is to provide an interface to link SYCL device "
@@ -39,7 +39,7 @@ msgid ""
 "compilation when final code generation is deferred until application runtime."
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:25
+#: ../../../ClangSYCLLinker.md:21
 msgid ""
 "Device code linking for SYCL offloading has known quirks that make it "
 "difficult to use in a unified offloading setting. The primary issue is that "
@@ -48,83 +48,81 @@ msgid ""
 "to the SYCL offloading compilation flow."
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:31
+#: ../../../ClangSYCLLinker.md:27
 msgid "This tool has been proposed to work around this issue."
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:34
+#: ../../../ClangSYCLLinker.md:29
 msgid "Usage"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:36
+#: ../../../ClangSYCLLinker.md:31
 msgid ""
 "This tool can be used with the following options. Several of these options "
 "will be passed down to downstream AOT compilation tools like 'ocloc' and "
 "'opencl-aot'."
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:68
+#: ../../../ClangSYCLLinker.md:62
 msgid "Library Linking"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:70
+#: ../../../ClangSYCLLinker.md:64
 msgid ""
-"Device bitcode libraries can be packaged into archive libraries (``.a`` "
-"files) using ``llvm-ar`` and linked using the ``-l`` option:"
+"Device bitcode libraries can be packaged into archive libraries (`.a` files) "
+"using `llvm-ar` and linked using the `-l` option:"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:78
+#: ../../../ClangSYCLLinker.md:72
 msgid "The linker supports standard archive library search semantics:"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:80
+#: ../../../ClangSYCLLinker.md:74
 msgid ""
-"``-l <name>`` searches for ``lib<name>.a`` in the directories specified by "
-"``-L``"
+"`-l <name>` searches for `lib<name>.a` in the directories specified by `-L`"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:81
-msgid ""
-"``-l :<exact-name>`` searches for the exact filename in the ``-L`` paths"
+#: ../../../ClangSYCLLinker.md:75
+msgid "`-l :<exact-name>` searches for the exact filename in the `-L` paths"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:82
+#: ../../../ClangSYCLLinker.md:76
 msgid ""
-"Absolute paths can be passed as positional arguments: ``clang-sycl-linker "
-"input.bc /path/to/libdevice.a``"
+"Absolute paths can be passed as positional arguments: `clang-sycl-linker "
+"input.bc /path/to/libdevice.a`"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:84
+#: ../../../ClangSYCLLinker.md:78
 msgid ""
-"By default, archive linking is **lazy** - only archive members (individual "
-"``.bc`` files) that resolve undefined symbols are extracted and linked. This "
-"happens at file granularity: if any symbol in a ``.bc`` file is needed, all "
+"By default, archive linking is **lazy** - only archive members (individual `."
+"bc` files) that resolve undefined symbols are extracted and linked. This "
+"happens at file granularity: if any symbol in a `.bc` file is needed, all "
 "symbols in that file are included. The linker uses a symbol-driven fixed-"
 "point algorithm: it repeatedly scans archives to extract members that "
 "resolve currently undefined symbols until no more extractions occur."
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:91
+#: ../../../ClangSYCLLinker.md:85
 msgid ""
 "To force extraction of all archive members regardless of symbol resolution, "
-"use ``--whole-archive``:"
+"use `--whole-archive`:"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:98
+#: ../../../ClangSYCLLinker.md:92
 msgid ""
-"The ``-u <symbol>`` option can be used to force a symbol to be undefined, "
+"The `-u <symbol>` option can be used to force a symbol to be undefined, "
 "which can trigger extraction of archive members that define that symbol:"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:106
+#: ../../../ClangSYCLLinker.md:99
 msgid "Examples"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:109
+#: ../../../ClangSYCLLinker.md:101
 msgid "Basic Usage"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:111
+#: ../../../ClangSYCLLinker.md:103
 msgid ""
 "This tool is intended to be invoked when targeting any of the target "
 "offloading toolchains. When the --sycl-link option is passed to the clang "
@@ -134,11 +132,11 @@ msgid ""
 "and linked with host code to generate the final executable."
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:123
+#: ../../../ClangSYCLLinker.md:114
 msgid "Linking with Device Libraries"
 msgstr ""
 
-#: ../../../ClangSYCLLinker.rst:125
+#: ../../../ClangSYCLLinker.md:116
 msgid ""
 "To link device bitcode libraries, first package them into archive files:"
 msgstr ""
