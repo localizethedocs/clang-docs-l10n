@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../SafeStack.rst:3
+#: ../../../SafeStack.md:1
 msgid "SafeStack"
 msgstr ""
 
-#: ../../../SafeStack.rst:9
+#: ../../../SafeStack.md:7
 msgid "Introduction"
 msgstr ""
 
-#: ../../../SafeStack.rst:11
+#: ../../../SafeStack.md:9
 msgid ""
 "SafeStack is an instrumentation pass that protects programs against attacks "
 "based on stack buffer overflows, without introducing any measurable "
@@ -37,28 +37,28 @@ msgid ""
 "to overwrite anything on the safe stack."
 msgstr ""
 
-#: ../../../SafeStack.rst:20
+#: ../../../SafeStack.md:18
 msgid ""
-"SafeStack is a part of the `Code-Pointer Integrity (CPI) Project <https://"
-"dslab.epfl.ch/research/cpi/>`_."
+"SafeStack is a part of the [Code-Pointer Integrity (CPI) Project](https://"
+"dslab.epfl.ch/research/cpi/)."
 msgstr ""
 
-#: ../../../SafeStack.rst:24
+#: ../../../SafeStack.md:20
 msgid "Performance"
 msgstr ""
 
-#: ../../../SafeStack.rst:26
+#: ../../../SafeStack.md:22
 msgid ""
 "The performance overhead of the SafeStack instrumentation is less than 0.1% "
-"on average across a variety of benchmarks (see the `Code-Pointer Integrity "
-"<https://dslab.epfl.ch/pubs/cpi.pdf>`__ paper for details). This is mainly "
+"on average across a variety of benchmarks (see the [Code-Pointer Integrity]"
+"(https://dslab.epfl.ch/pubs/cpi.pdf) paper for details). This is mainly "
 "because most small functions do not have any variables that require the "
 "unsafe stack and, hence, do not need unsafe stack frames to be created. The "
 "cost of creating unsafe stack frames for large functions is amortized by the "
 "cost of executing the function."
 msgstr ""
 
-#: ../../../SafeStack.rst:34
+#: ../../../SafeStack.md:29
 msgid ""
 "In some cases, SafeStack actually improves the performance. Objects that end "
 "up being moved to the unsafe stack are usually large arrays or variables "
@@ -67,11 +67,11 @@ msgid ""
 "stack, such as register spills, return addresses, and small local variables."
 msgstr ""
 
-#: ../../../SafeStack.rst:41
+#: ../../../SafeStack.md:35
 msgid "Compatibility"
 msgstr ""
 
-#: ../../../SafeStack.rst:43
+#: ../../../SafeStack.md:37
 msgid ""
 "Most programs, static libraries, or individual files can be compiled with "
 "SafeStack as is. SafeStack requires basic runtime support, which, on most "
@@ -79,15 +79,15 @@ msgid ""
 "linked in when the program is compiled with SafeStack."
 msgstr ""
 
-#: ../../../SafeStack.rst:48
+#: ../../../SafeStack.md:42
 msgid "Linking a DSO with SafeStack is not currently supported."
 msgstr ""
 
-#: ../../../SafeStack.rst:51
+#: ../../../SafeStack.md:44
 msgid "Known compatibility limitations"
 msgstr ""
 
-#: ../../../SafeStack.rst:53
+#: ../../../SafeStack.md:46
 msgid ""
 "Certain code that relies on low-level stack manipulations requires adaption "
 "to work with SafeStack. One example is mark-and-sweep garbage collection "
@@ -95,7 +95,7 @@ msgid ""
 "changed to look for the live pointers on both safe and unsafe stacks."
 msgstr ""
 
-#: ../../../SafeStack.rst:58
+#: ../../../SafeStack.md:51
 msgid ""
 "SafeStack supports linking statically modules that are compiled with and "
 "without SafeStack. An executable compiled with SafeStack can load dynamic "
@@ -103,21 +103,21 @@ msgid ""
 "dynamic libraries with SafeStack is not supported."
 msgstr ""
 
-#: ../../../SafeStack.rst:63
+#: ../../../SafeStack.md:56
 msgid ""
-"Signal handlers that use ``sigaltstack()`` must not use the unsafe stack "
-"(see ``__attribute__((no_sanitize(\"safe-stack\")))`` below)."
+"Signal handlers that use `sigaltstack()` must not use the unsafe stack (see "
+"`__attribute__((no_sanitize(\"safe-stack\")))` below)."
 msgstr ""
 
-#: ../../../SafeStack.rst:66
-msgid "Programs that use APIs from ``ucontext.h`` are not supported yet."
+#: ../../../SafeStack.md:59
+msgid "Programs that use APIs from `ucontext.h` are not supported yet."
 msgstr ""
 
-#: ../../../SafeStack.rst:69
+#: ../../../SafeStack.md:61
 msgid "Security"
 msgstr ""
 
-#: ../../../SafeStack.rst:71
+#: ../../../SafeStack.md:63
 msgid ""
 "SafeStack protects return addresses, spilled registers and local variables "
 "that are always accessed in a safe way by separating them in a dedicated "
@@ -131,52 +131,51 @@ msgid ""
 "(see limitations below)."
 msgstr ""
 
-#: ../../../SafeStack.rst:82
+#: ../../../SafeStack.md:73
 msgid "Known security limitations"
 msgstr ""
 
-#: ../../../SafeStack.rst:84
+#: ../../../SafeStack.md:75
 msgid ""
 "A complete protection against control-flow hijack attacks requires combining "
 "SafeStack with another mechanism that enforces the integrity of code "
-"pointers that are stored on the heap or the unsafe stack, such as `CPI "
-"<https://dslab.epfl.ch/research/cpi/>`_, or a forward-edge control flow "
+"pointers that are stored on the heap or the unsafe stack, such as [CPI]"
+"(https://dslab.epfl.ch/research/cpi/), or a forward-edge control flow "
 "integrity mechanism that enforces correct calling conventions at indirect "
-"call sites, such as `IFCC <https://research.google.com/pubs/archive/42808."
-"pdf>`_ with arity checks. Clang has control-flow integrity protection scheme "
-"for :doc:`C++ virtual calls <ControlFlowIntegrity>`, but not non-virtual "
+"call sites, such as [IFCC](https://research.google.com/pubs/archive/42808."
+"pdf) with arity checks. Clang has control-flow integrity protection scheme "
+"for {doc}`C++ virtual calls <ControlFlowIntegrity>`, but not non-virtual "
 "indirect calls. With SafeStack alone, an attacker can overwrite a function "
 "pointer on the heap or the unsafe stack and cause a program to call "
 "arbitrary location, which in turn might enable stack pivoting and return-"
 "oriented programming."
 msgstr ""
 
-#: ../../../SafeStack.rst:96
+#: ../../../SafeStack.md:86
 msgid ""
 "In its current implementation, SafeStack provides precise protection against "
 "stack-based buffer overflows, but protection against arbitrary memory write "
 "vulnerabilities is probabilistic and relies on randomization and information "
 "hiding. The randomization is currently based on system-enforced ASLR and "
 "shares its known security limitations. The safe stack pointer hiding is not "
-"perfect yet either: system library functions such as ``swapcontext``, "
-"exception handling mechanisms, intrinsics such as "
-"``__builtin_frame_address``, or low-level bugs in runtime support could leak "
-"the safe stack pointer. In the future, such leaks could be detected by "
-"static or dynamic analysis tools and prevented by adjusting such functions "
-"to either encrypt the stack pointer when storing it in the heap (as already "
-"done e.g., by ``setjmp``/``longjmp`` implementation in glibc), or store it "
-"in a safe region instead."
+"perfect yet either: system library functions such as `swapcontext`, "
+"exception handling mechanisms, intrinsics such as `__builtin_frame_address`, "
+"or low-level bugs in runtime support could leak the safe stack pointer. In "
+"the future, such leaks could be detected by static or dynamic analysis tools "
+"and prevented by adjusting such functions to either encrypt the stack "
+"pointer when storing it in the heap (as already done e.g., by `setjmp`/"
+"`longjmp` implementation in glibc), or store it in a safe region instead."
 msgstr ""
 
-#: ../../../SafeStack.rst:109
+#: ../../../SafeStack.md:99
 msgid ""
-"The `CPI paper <https://dslab.epfl.ch/pubs/cpi.pdf>`_ describes two "
+"The [CPI paper](https://dslab.epfl.ch/pubs/cpi.pdf) describes two "
 "alternative, stronger safe stack protection mechanisms, that rely on "
 "software fault isolation, or hardware segmentation (as available on x86-32 "
 "and some x86-64 CPUs)."
 msgstr ""
 
-#: ../../../SafeStack.rst:114
+#: ../../../SafeStack.md:104
 msgid ""
 "At the moment, SafeStack assumes that the compiler's implementation is "
 "correct. This has not been verified except through manual code inspection, "
@@ -185,53 +184,53 @@ msgid ""
 "correctness of the SafeStack instrumentation in final binaries."
 msgstr ""
 
-#: ../../../SafeStack.rst:121
+#: ../../../SafeStack.md:110
 msgid "Usage"
 msgstr ""
 
-#: ../../../SafeStack.rst:123
+#: ../../../SafeStack.md:112
 msgid ""
-"To enable SafeStack, just pass ``-fsanitize=safe-stack`` flag to both "
-"compile and link command lines."
+"To enable SafeStack, just pass `-fsanitize=safe-stack` flag to both compile "
+"and link command lines."
 msgstr ""
 
-#: ../../../SafeStack.rst:127
+#: ../../../SafeStack.md:115
 msgid "Supported Platforms"
 msgstr ""
 
-#: ../../../SafeStack.rst:129
+#: ../../../SafeStack.md:117
 msgid "SafeStack was tested on Linux, NetBSD, FreeBSD and macOS."
 msgstr ""
 
-#: ../../../SafeStack.rst:132
+#: ../../../SafeStack.md:119
 msgid "Low-level API"
 msgstr ""
 
-#: ../../../SafeStack.rst:135
-msgid "``__has_feature(safe_stack)``"
+#: ../../../SafeStack.md:121
+msgid "`__has_feature(safe_stack)`"
 msgstr ""
 
-#: ../../../SafeStack.rst:137
+#: ../../../SafeStack.md:123
 msgid ""
 "In some rare cases one may need to execute different code depending on "
-"whether SafeStack is enabled. The macro ``__has_feature(safe_stack)`` can be "
+"whether SafeStack is enabled. The macro `__has_feature(safe_stack)` can be "
 "used for this purpose."
 msgstr ""
 
-#: ../../../SafeStack.rst:148
-msgid "``__attribute__((no_sanitize(\"safe-stack\")))``"
+#: ../../../SafeStack.md:133
+msgid "`__attribute__((no_sanitize(\"safe-stack\")))`"
 msgstr ""
 
-#: ../../../SafeStack.rst:150
+#: ../../../SafeStack.md:135
 msgid ""
-"Use ``__attribute__((no_sanitize(\"safe-stack\")))`` on a function "
-"declaration to specify that the safe stack instrumentation should not be "
-"applied to that function, even if enabled globally (see ``-fsanitize=safe-"
-"stack`` flag). This attribute may be required for functions that make "
-"assumptions about the exact layout of their stack frames."
+"Use `__attribute__((no_sanitize(\"safe-stack\")))` on a function declaration "
+"to specify that the safe stack instrumentation should not be applied to that "
+"function, even if enabled globally (see `-fsanitize=safe-stack` flag). This "
+"attribute may be required for functions that make assumptions about the "
+"exact layout of their stack frames."
 msgstr ""
 
-#: ../../../SafeStack.rst:156
+#: ../../../SafeStack.md:141
 msgid ""
 "All local variables in functions with this attribute will be stored on the "
 "safe stack. The safe stack remains unprotected against memory errors when "
@@ -241,118 +240,118 @@ msgid ""
 "of the SafeStack."
 msgstr ""
 
-#: ../../../SafeStack.rst:163
-msgid "``sanitizer/safestack_interface.h``"
+#: ../../../SafeStack.md:147
+msgid "`sanitizer/safestack_interface.h`"
 msgstr ""
 
-#: ../../../SafeStack.rst:165
+#: ../../../SafeStack.md:149
 msgid ""
-"To use the low-level API, include the header ``<sanitizer/"
-"safestack_interface.h>``."
+"To use the low-level API, include the header `<sanitizer/safestack_interface."
+"h>`."
 msgstr ""
 
-#: ../../../SafeStack.rst:168
-msgid "``__safestack_get_unsafe_stack_ptr()``"
+#: ../../../SafeStack.md:151
+msgid "`__safestack_get_unsafe_stack_ptr()`"
 msgstr ""
 
-#: ../../../SafeStack.rst:170
+#: ../../../SafeStack.md:153
 msgid ""
 "This function returns current unsafe stack pointer of the current thread."
 msgstr ""
 
-#: ../../../SafeStack.rst:173
-msgid "``__safestack_get_unsafe_stack_bottom()``"
+#: ../../../SafeStack.md:155
+msgid "`__safestack_get_unsafe_stack_bottom()`"
 msgstr ""
 
-#: ../../../SafeStack.rst:175
+#: ../../../SafeStack.md:157
 msgid ""
 "This function returns a pointer to the bottom of the unsafe stack of the "
 "current thread."
 msgstr ""
 
-#: ../../../SafeStack.rst:179
-msgid "``__safestack_get_unsafe_stack_top()``"
+#: ../../../SafeStack.md:160
+msgid "`__safestack_get_unsafe_stack_top()`"
 msgstr ""
 
-#: ../../../SafeStack.rst:181
+#: ../../../SafeStack.md:162
 msgid ""
 "This function returns a pointer to the top of the unsafe stack of the "
 "current thread."
 msgstr ""
 
-#: ../../../SafeStack.rst:187
+#: ../../../SafeStack.md:165
 msgid "Deprecated Builtins"
 msgstr ""
 
-#: ../../../SafeStack.rst:189
+#: ../../../SafeStack.md:167
 msgid ""
 "The following builtins are still supported but are deprecated and will emit "
-"a warning. Use the corresponding functions from ``<sanitizer/"
-"safestack_interface.h>`` instead."
+"a warning. Use the corresponding functions from `<sanitizer/"
+"safestack_interface.h>` instead."
 msgstr ""
 
-#: ../../../SafeStack.rst:194
-msgid "``__builtin___get_unsafe_stack_ptr()``"
+#: ../../../SafeStack.md:171
+msgid "`__builtin___get_unsafe_stack_ptr()`"
 msgstr ""
 
-#: ../../../SafeStack.rst:196
-msgid "Deprecated alias for ``__safestack_get_unsafe_stack_ptr()``."
+#: ../../../SafeStack.md:173
+msgid "Deprecated alias for `__safestack_get_unsafe_stack_ptr()`."
 msgstr ""
 
-#: ../../../SafeStack.rst:199
-msgid "``__builtin___get_unsafe_stack_bottom()``"
+#: ../../../SafeStack.md:175
+msgid "`__builtin___get_unsafe_stack_bottom()`"
 msgstr ""
 
-#: ../../../SafeStack.rst:201 ../../../SafeStack.rst:211
-msgid "Deprecated alias for ``__safestack_get_unsafe_stack_bottom()``."
+#: ../../../SafeStack.md:177 ../../../SafeStack.md:185
+msgid "Deprecated alias for `__safestack_get_unsafe_stack_bottom()`."
 msgstr ""
 
-#: ../../../SafeStack.rst:204
-msgid "``__builtin___get_unsafe_stack_top()``"
+#: ../../../SafeStack.md:179
+msgid "`__builtin___get_unsafe_stack_top()`"
 msgstr ""
 
-#: ../../../SafeStack.rst:206
-msgid "Deprecated alias for ``__safestack_get_unsafe_stack_top()``."
+#: ../../../SafeStack.md:181
+msgid "Deprecated alias for `__safestack_get_unsafe_stack_top()`."
 msgstr ""
 
-#: ../../../SafeStack.rst:209
-msgid "``__builtin___get_unsafe_stack_start()``"
+#: ../../../SafeStack.md:183
+msgid "`__builtin___get_unsafe_stack_start()`"
 msgstr ""
 
-#: ../../../SafeStack.rst:214
+#: ../../../SafeStack.md:187
 msgid "Design"
 msgstr ""
 
-#: ../../../SafeStack.rst:216
+#: ../../../SafeStack.md:189
 msgid ""
-"Please refer to the `Code-Pointer Integrity <https://dslab.epfl.ch/research/"
-"cpi/>`__ project page for more information about the design of the SafeStack "
+"Please refer to the [Code-Pointer Integrity](https://dslab.epfl.ch/research/"
+"cpi/) project page for more information about the design of the SafeStack "
 "and its related technologies."
 msgstr ""
 
-#: ../../../SafeStack.rst:221
+#: ../../../SafeStack.md:193
 msgid "setjmp and exception handling"
 msgstr ""
 
-#: ../../../SafeStack.rst:223
+#: ../../../SafeStack.md:195
 msgid ""
-"The `OSDI'14 paper <https://dslab.epfl.ch/pubs/cpi.pdf>`_ mentions that on "
+"The [OSDI'14 paper](https://dslab.epfl.ch/pubs/cpi.pdf) mentions that on "
 "Linux the instrumentation pass finds calls to setjmp or functions that may "
 "throw an exception, and inserts required instrumentation at their call "
 "sites. Specifically, the instrumentation pass saves the shadow stack pointer "
 "on the safe stack before the call site, and restores it either after the "
 "call to setjmp or after an exception has been caught. This is implemented in "
-"the function ``SafeStack::createStackRestorePoints``."
+"the function `SafeStack::createStackRestorePoints`."
 msgstr ""
 
-#: ../../../SafeStack.rst:232
+#: ../../../SafeStack.md:203
 msgid "Publications"
 msgstr ""
 
-#: ../../../SafeStack.rst:234
+#: ../../../SafeStack.md:205
 msgid ""
-"`Code-Pointer Integrity <https://dslab.epfl.ch/pubs/cpi.pdf>`__. Volodymyr "
+"[Code-Pointer Integrity](https://dslab.epfl.ch/pubs/cpi.pdf). Volodymyr "
 "Kuznetsov, Laszlo Szekeres, Mathias Payer, George Candea, R. Sekar, Dawn "
-"Song. USENIX Symposium on Operating Systems Design and Implementation (`OSDI "
-"<https://www.usenix.org/conference/osdi14>`_), Broomfield, CO, October 2014"
+"Song. USENIX Symposium on Operating Systems Design and Implementation ([OSDI]"
+"(https://www.usenix.org/conference/osdi14)), Broomfield, CO, October 2014"
 msgstr ""

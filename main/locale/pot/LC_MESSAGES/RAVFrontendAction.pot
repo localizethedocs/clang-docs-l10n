@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 08:18+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,25 +17,25 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../RAVFrontendAction.rst:3
+#: ../../../RAVFrontendAction.md:1
 msgid "How to write RecursiveASTVisitor based ASTFrontendActions."
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:6
+#: ../../../RAVFrontendAction.md:3
 msgid "Introduction"
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:8
+#: ../../../RAVFrontendAction.md:5
 msgid ""
 "In this tutorial you will learn how to create a FrontendAction that uses a "
 "RecursiveASTVisitor to find CXXRecordDecl AST nodes with a specified name."
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:13
+#: ../../../RAVFrontendAction.md:9
 msgid "Creating a FrontendAction"
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:15
+#: ../../../RAVFrontendAction.md:11
 msgid ""
 "When writing a clang based tool like a Clang Plugin or a standalone tool "
 "based on LibTooling, the common entry point is the FrontendAction. "
@@ -46,11 +46,11 @@ msgid ""
 "that returns an ASTConsumer per translation unit."
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:35
+#: ../../../RAVFrontendAction.md:30
 msgid "Creating an ASTConsumer"
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:37
+#: ../../../RAVFrontendAction.md:32
 msgid ""
 "ASTConsumer is an interface used to write generic actions on an AST, "
 "regardless of how the AST was produced. ASTConsumer provides many different "
@@ -59,30 +59,30 @@ msgid ""
 "translation unit."
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:58
+#: ../../../RAVFrontendAction.md:52
 msgid "Using the RecursiveASTVisitor"
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:60
+#: ../../../RAVFrontendAction.md:54
 msgid ""
 "Now that everything is hooked up, the next step is to implement a "
 "RecursiveASTVisitor to extract the relevant information from the AST."
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:63
+#: ../../../RAVFrontendAction.md:57
 msgid ""
-"The RecursiveASTVisitor provides hooks of the form bool "
-"VisitNodeType(NodeType \\*) for most AST nodes; the exception are TypeLoc "
+"The RecursiveASTVisitor provides hooks of the form `bool "
+"VisitNodeType(NodeType *)` for most AST nodes; the exception are TypeLoc "
 "nodes, which are passed by-value. We only need to implement the methods for "
 "the relevant node types."
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:68
+#: ../../../RAVFrontendAction.md:62
 msgid ""
 "Let's start by writing a RecursiveASTVisitor that visits all CXXRecordDecl's."
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:87
+#: ../../../RAVFrontendAction.md:81
 msgid ""
 "In the methods of our RecursiveASTVisitor we can now use the full power of "
 "the Clang AST to drill through to the parts that are interesting for us. For "
@@ -90,11 +90,11 @@ msgid ""
 "a specific qualified name:"
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:101
+#: ../../../RAVFrontendAction.md:94
 msgid "Accessing the SourceManager and ASTContext"
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:103
+#: ../../../RAVFrontendAction.md:96
 msgid ""
 "Some of the information about the AST, like source locations and global "
 "identifier information, is not stored in the AST nodes themselves, but in "
@@ -102,35 +102,35 @@ msgid ""
 "to hand the ASTContext into our RecursiveASTVisitor implementation."
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:108
+#: ../../../RAVFrontendAction.md:101
 msgid ""
 "The ASTContext is available from the CompilerInstance during the call to "
 "CreateASTConsumer. We can thus extract it there and hand it into our freshly "
 "created FindNamedClassConsumer:"
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:119
+#: ../../../RAVFrontendAction.md:112
 msgid ""
 "Now that the ASTContext is available in the RecursiveASTVisitor, we can do "
 "more interesting things with AST nodes, like looking up their source "
 "locations:"
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:139
+#: ../../../RAVFrontendAction.md:131
 msgid "Putting it all together"
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:141
+#: ../../../RAVFrontendAction.md:133
 msgid "Now we can combine all of the above into a small example program:"
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:200
+#: ../../../RAVFrontendAction.md:192
 msgid ""
 "We store this into a file called FindClassDecls.cpp and create the following "
 "CMakeLists.txt to link it:"
 msgstr ""
 
-#: ../../../RAVFrontendAction.rst:220
+#: ../../../RAVFrontendAction.md:212
 msgid ""
 "When running this tool over a small code snippet it will output all "
 "declarations of a class n::m::C it found:"

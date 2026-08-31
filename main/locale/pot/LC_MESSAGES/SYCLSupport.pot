@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,167 +17,191 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../SYCLSupport.rst:3
+#: ../../../SYCLSupport.md:1
 msgid "SYCL Compiler and Runtime architecture design"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:9
+#: ../../../SYCLSupport.md:7
 msgid "Introduction"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:11
+#: ../../../SYCLSupport.md:9
 msgid ""
 "This document describes the architecture of the SYCL compiler and runtime "
-"library. More details are provided in `external document <https://github.com/"
-"intel/llvm/blob/sycl/sycl/doc/design/CompilerAndRuntimeDesign.md>`_\\ , "
-"which are going to be added to clang documentation in the future."
+"library. More details are provided in [external document](https://github.com/"
+"intel/llvm/blob/sycl/sycl/doc/design/CompilerAndRuntimeDesign.md), which are "
+"going to be added to clang documentation in the future."
 msgstr ""
 
-#: ../../../SYCLSupport.rst:17
+#: ../../../SYCLSupport.md:14
+msgid "Predefined Macros"
+msgstr ""
+
+#: ../../../SYCLSupport.md:3
+msgid "Macro"
+msgstr ""
+
+#: ../../../SYCLSupport.md:3
+msgid "Description"
+msgstr ""
+
+#: ../../../SYCLSupport.md:3
+msgid "`__CLANG_RDC__`"
+msgstr ""
+
+#: ../../../SYCLSupport.md:3
+msgid ""
+"Defined when Clang is compiling code in Relocatable Device Code (RDC) mode. "
+"RDC is necessary for linking device code across translation units. It is "
+"enabled by default for SYCL and can be disabled with the `-fno-gpu-rdc` "
+"compiler option."
+msgstr ""
+
+#: ../../../SYCLSupport.md:20
 msgid "Address space handling"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:19
+#: ../../../SYCLSupport.md:22
 msgid ""
 "The SYCL specification represents pointers to disjoint memory regions using "
 "C++ wrapper classes on an accelerator to enable compilation with a standard "
 "C++ toolchain and a SYCL compiler toolchain. Section 3.8.2 of SYCL 2020 "
-"specification defines `memory model <https://www.khronos.org/registry/SYCL/"
-"specs/sycl-2020/html/sycl-2020.html#_sycl_device_memory_model>`_\\ , section "
-"4.7.7 - `address space classes <https://www.khronos.org/registry/SYCL/specs/"
-"sycl-2020/html/sycl-2020.html#_address_space_classes>`_ and section 5.9 "
-"covers `address space deduction <https://www.khronos.org/registry/SYCL/specs/"
-"sycl-2020/html/sycl-2020.html#_address_space_deduction>`_. The SYCL "
+"specification defines [memory model](https://www.khronos.org/registry/SYCL/"
+"specs/sycl-2020/html/sycl-2020.html#_sycl_device_memory_model), section "
+"4.7.7 - [address space classes](https://www.khronos.org/registry/SYCL/specs/"
+"sycl-2020/html/sycl-2020.html#_address_space_classes) and section 5.9 covers "
+"[address space deduction](https://www.khronos.org/registry/SYCL/specs/"
+"sycl-2020/html/sycl-2020.html#_address_space_deduction). The SYCL "
 "specification allows two modes of address space deduction: \"generic as "
 "default address space\" (see section 5.9.3) and \"inferred address "
 "space\" (see section 5.9.4). Current implementation supports only \"generic "
 "as default address space\" mode."
 msgstr ""
 
-#: ../../../SYCLSupport.rst:31
+#: ../../../SYCLSupport.md:34
 msgid ""
 "SYCL borrows its memory model from OpenCL however SYCL doesn't perform the "
-"address space qualifier inference as detailed in `OpenCL C v3.0 6.7.8 "
-"<https://www.khronos.org/registry/OpenCL/specs/3.0-unified/html/OpenCL_C."
-"html#addr-spaces-inference>`_."
+"address space qualifier inference as detailed in [OpenCL C v3.0 6.7.8]"
+"(https://www.khronos.org/registry/OpenCL/specs/3.0-unified/html/OpenCL_C."
+"html#addr-spaces-inference)."
 msgstr ""
 
-#: ../../../SYCLSupport.rst:35
+#: ../../../SYCLSupport.md:38
 msgid ""
 "The default address space is \"generic-memory\", which is a virtual address "
 "space that overlaps the global, local, and private address spaces. SYCL mode "
 "enables following conversions:"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:39
+#: ../../../SYCLSupport.md:42
 msgid ""
 "explicit conversions to/from the default address space from/to the address "
 "space-attributed type"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:41
+#: ../../../SYCLSupport.md:44
 msgid ""
 "implicit conversions from the address space-attributed type to the default "
 "address space"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:43
+#: ../../../SYCLSupport.md:46
 msgid ""
 "explicit conversions to/from the global address space from/to the "
-"``__attribute__((opencl_global_device))`` or "
-"``__attribute__((opencl_global_host))`` address space-attributed type"
+"`__attribute__((opencl_global_device))` or "
+"`__attribute__((opencl_global_host))` address space-attributed type"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:46
+#: ../../../SYCLSupport.md:49
 msgid ""
-"implicit conversions from the ``__attribute__((opencl_global_device))`` or "
-"``__attribute__((opencl_global_host))`` address space-attributed type to the "
+"implicit conversions from the `__attribute__((opencl_global_device))` or "
+"`__attribute__((opencl_global_host))` address space-attributed type to the "
 "global address space"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:50
+#: ../../../SYCLSupport.md:53
 msgid ""
 "All named address spaces are disjoint and sub-sets of default address space."
 msgstr ""
 
-#: ../../../SYCLSupport.rst:52
+#: ../../../SYCLSupport.md:55
 msgid ""
 "The SPIR target allocates SYCL namespace scope variables in the global "
 "address space."
 msgstr ""
 
-#: ../../../SYCLSupport.rst:55
+#: ../../../SYCLSupport.md:58
 msgid ""
 "Pointers to default address space should get lowered into a pointer to a "
 "generic address space (or flat to reuse more general terminology). But "
 "depending on the allocation context, the default address space of a non-"
 "pointer type is assigned to a specific address space. This is described in "
-"`common address space deduction rules <https://www.khronos.org/registry/SYCL/"
-"specs/sycl-2020/html/sycl-2020.html#subsec:commonAddressSpace>`_ section."
+"[common address space deduction rules](https://www.khronos.org/registry/SYCL/"
+"specs/sycl-2020/html/sycl-2020.html#subsec:commonAddressSpace) section."
 msgstr ""
 
-#: ../../../SYCLSupport.rst:62
+#: ../../../SYCLSupport.md:65
 msgid ""
-"This is also in line with the behaviour of CUDA (`small example <https://"
-"godbolt.org/z/veqTfo9PK>`_)."
+"This is also in line with the behaviour of CUDA ([small example](https://"
+"godbolt.org/z/veqTfo9PK))."
 msgstr ""
 
-#: ../../../SYCLSupport.rst:65
-msgid "``multi_ptr`` class implementation example:"
+#: ../../../SYCLSupport.md:67
+msgid "`multi_ptr` class implementation example:"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:93
+#: ../../../SYCLSupport.md:95
 msgid ""
-"Depending on the compiler mode, ``multi_ptr`` will either decorate its "
+"Depending on the compiler mode, `multi_ptr` will either decorate its "
 "internal data with the address space attribute or not."
 msgstr ""
 
-#: ../../../SYCLSupport.rst:96
+#: ../../../SYCLSupport.md:98
 msgid ""
 "To utilize clang's existing functionality, we reuse the following OpenCL "
 "address space attributes for pointers:"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:102
+#: ../../../SYCLSupport.md:3
 msgid "Address space attribute"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:103
+#: ../../../SYCLSupport.md:3
 msgid "SYCL address_space enumeration"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:104
-msgid "``__attribute__((opencl_global))``"
+#: ../../../SYCLSupport.md:3
+msgid "`__attribute__((opencl_global))`"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:105
+#: ../../../SYCLSupport.md:3
 msgid "global_space, constant_space"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:106
-msgid "``__attribute__((opencl_global_device))``"
+#: ../../../SYCLSupport.md:3
+msgid "`__attribute__((opencl_global_device))`"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:107 ../../../SYCLSupport.rst:109
+#: ../../../SYCLSupport.md:3
 msgid "global_space"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:108
-msgid "``__attribute__((opencl_global_host))``"
+#: ../../../SYCLSupport.md:3
+msgid "`__attribute__((opencl_global_host))`"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:110
-msgid "``__attribute__((opencl_local))``"
+#: ../../../SYCLSupport.md:3
+msgid "`__attribute__((opencl_local))`"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:111
+#: ../../../SYCLSupport.md:3
 msgid "local_space"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:112
-msgid "``__attribute__((opencl_private))``"
+#: ../../../SYCLSupport.md:3
+msgid "`__attribute__((opencl_private))`"
 msgstr ""
 
-#: ../../../SYCLSupport.rst:113
+#: ../../../SYCLSupport.md:3
 msgid "private_space"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 08:18+0000\n"
+"POT-Creation-Date: 2026-08-31 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,21 +17,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../ClangTransformerTutorial.rst:3
+#: ../../../ClangTransformerTutorial.md:1
 msgid "Clang Transformer Tutorial"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:5
+#: ../../../ClangTransformerTutorial.md:3
 msgid ""
 "A tutorial on how to write a source-to-source translation tool using Clang "
 "Transformer."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:11
+#: ../../../ClangTransformerTutorial.md:9
 msgid "What is Clang Transformer?"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:13
+#: ../../../ClangTransformerTutorial.md:11
 msgid ""
 "Clang Transformer is a framework for writing C++ diagnostics and program "
 "transformations. It is built on the clang toolchain and the LibTooling "
@@ -39,46 +39,45 @@ msgid ""
 "level libraries."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:17
+#: ../../../ClangTransformerTutorial.md:15
 msgid ""
 "The core abstraction of Transformer is the *rewrite rule*, which specifies "
 "how to change a given program pattern into a new form. Here are some "
 "examples of tasks you can achieve with Transformer:"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:21
-msgid "warn against using the name ``MkX`` for a declared function,"
+#: ../../../ClangTransformerTutorial.md:19
+msgid "warn against using the name `MkX` for a declared function,"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:22
+#: ../../../ClangTransformerTutorial.md:20
 msgid ""
-"change ``MkX`` to ``MakeX``, where ``MkX`` is the name of a declared "
-"function,"
+"change `MkX` to `MakeX`, where `MkX` is the name of a declared function,"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:23
-msgid "change ``s.size()`` to ``Size(s)``, where ``s`` is a ``string``,"
+#: ../../../ClangTransformerTutorial.md:21
+msgid "change `s.size()` to `Size(s)`, where `s` is a `string`,"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:24
+#: ../../../ClangTransformerTutorial.md:22
 msgid ""
-"collapse ``e.child().m()`` to ``e.m()``, for any expression ``e`` and method "
-"named ``m``."
+"collapse `e.child().m()` to `e.m()`, for any expression `e` and method named "
+"`m`."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:27
+#: ../../../ClangTransformerTutorial.md:25
 msgid ""
 "All of the examples have a common form: they identify a pattern that is the "
 "target of the transformation, they specify an *edit* to the code identified "
 "by the pattern, and their pattern and edit refer to common variables, like "
-"``s``, ``e``, and ``m``, that range over code fragments. Our first and "
-"second examples also specify constraints on the pattern that aren't apparent "
-"from the syntax alone, like \"``s`` is a ``string``.\" Even the first "
-"example (\"warn ...\") shares this form, even though it doesn't change any "
-"of the code -- it's \"edit\" is simply a no-op."
+"`s`, `e`, and `m`, that range over code fragments. Our first and second "
+"examples also specify constraints on the pattern that aren't apparent from "
+"the syntax alone, like \"`s` is a `string`.\" Even the first example "
+"(\"warn ...\") shares this form, even though it doesn't change any of the "
+"code -- it's \"edit\" is simply a no-op."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:35
+#: ../../../ClangTransformerTutorial.md:33
 msgid ""
 "Transformer helps users succinctly specify rules of this sort and easily "
 "execute them locally over a collection of files, apply them to selected "
@@ -86,11 +85,11 @@ msgid ""
 "ongoing application."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:40
+#: ../../../ClangTransformerTutorial.md:37
 msgid "Who is Clang Transformer for?"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:42
+#: ../../../ClangTransformerTutorial.md:39
 msgid ""
 "Clang Transformer is for developers who want to write clang-tidy checks or "
 "write tools to modify a large number of C++ files in (roughly) the same way. "
@@ -99,189 +98,189 @@ msgid ""
 "become worthwhile somewhere between 100 and 500 files."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:49
+#: ../../../ClangTransformerTutorial.md:45
 msgid "Getting Started"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:51
+#: ../../../ClangTransformerTutorial.md:47
 msgid ""
-"Patterns in Transformer are expressed with :doc:`clang's AST matchers "
+"Patterns in Transformer are expressed with {doc}`clang's AST matchers "
 "<LibASTMatchers>`. Matchers are a language of combinators for describing "
 "portions of a clang Abstract Syntax Tree (AST). Since clang's AST includes "
-"complete type information (within the limits of single `Translation Unit "
-"(TU)`_, these patterns can even encode rich constraints on the type "
+"complete type information (within the limits of single [Translation Unit "
+"(TU)]), these patterns can even encode rich constraints on the type "
 "properties of AST nodes."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:60
+#: ../../../ClangTransformerTutorial.md:56
 msgid ""
 "We assume a familiarity with the clang AST and the corresponding AST "
 "matchers for the purpose of this tutorial. Users who are unfamiliar with "
-"either are encouraged to start with the recommended references in `Related "
-"Reading`_."
+"either are encouraged to start with the recommended references in [Related "
+"Reading](#related-reading)."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:65
+#: ../../../ClangTransformerTutorial.md:60
 msgid "Example: style-checking names"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:67
+#: ../../../ClangTransformerTutorial.md:62
 msgid ""
 "Assume you have a style-guide rule which forbids functions from being named "
 "\"MkX\" and you want to write a check that catches any violations of this "
 "rule. We can express this a Transformer rewrite rule:"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:77
+#: ../../../ClangTransformerTutorial.md:72
 msgid ""
-"``makeRule`` is our go-to function for generating rewrite rules. It takes "
+"`makeRule` is our go-to function for generating rewrite rules. It takes "
 "three arguments: the pattern, the edit, and (optionally) an explanatory "
-"note. In our example, the pattern (``functionDecl(...)``) identifies the "
-"declaration of the function ``MkX``. Since we're just diagnosing the "
-"problem, but not suggesting a fix, our edit is a no-op. But, it contains an "
-"*anchor* for the diagnostic message: ``node(\"fun\")`` says to associate the "
-"message with the source range of the AST node bound to \"fun\"; in this "
-"case, the ill-named function declaration. Finally, we use ``cat`` to build a "
-"message that explains the change. Regarding the name ``cat`` -- we'll "
-"discuss it in more detail below, but suffice it to say that it can also take "
-"multiple arguments and concatenate their results."
+"note. In our example, the pattern (`functionDecl(...)`) identifies the "
+"declaration of the function `MkX`. Since we're just diagnosing the problem, "
+"but not suggesting a fix, our edit is a no-op. But, it contains an *anchor* "
+"for the diagnostic message: `node(\"fun\")` says to associate the message "
+"with the source range of the AST node bound to \"fun\"; in this case, the "
+"ill-named function declaration. Finally, we use `cat` to build a message "
+"that explains the change. Regarding the name `cat` -- we'll discuss it in "
+"more detail below, but suffice it to say that it can also take multiple "
+"arguments and concatenate their results."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:88
+#: ../../../ClangTransformerTutorial.md:83
 msgid ""
-"Note that the result of ``makeRule`` is a value of type ``clang::"
-"transformer::RewriteRule``, but most users don't need to care about the "
-"details of this type."
+"Note that the result of `makeRule` is a value of type `clang::transformer::"
+"RewriteRule`, but most users don't need to care about the details of this "
+"type."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:93
+#: ../../../ClangTransformerTutorial.md:87
 msgid "Example: renaming a function"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:95
+#: ../../../ClangTransformerTutorial.md:89
 msgid ""
 "Now, let's extend this example to a *transformation*; specifically, the "
 "second example above:"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:104
+#: ../../../ClangTransformerTutorial.md:98
 msgid ""
-"In this example, the pattern (``declRefExpr(...)``) identifies any "
-"*reference* to the function ``MkX``, rather than the declaration itself, as "
-"in our previous example. Our edit (``changeTo(...)``) says to *change* the "
-"code matched by the pattern *to* the text \"MakeX\". Finally, we use ``cat`` "
-"again to build a message that explains the change."
+"In this example, the pattern (`declRefExpr(...)`) identifies any *reference* "
+"to the function `MkX`, rather than the declaration itself, as in our "
+"previous example. Our edit (`changeTo(...)`) says to *change* the code "
+"matched by the pattern *to* the text \"MakeX\". Finally, we use `cat` again "
+"to build a message that explains the change."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:110
+#: ../../../ClangTransformerTutorial.md:104
 msgid "Here are some example changes that this rule would make:"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:113
+#: ../../../ClangTransformerTutorial.md:5
 msgid "Original"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:113
+#: ../../../ClangTransformerTutorial.md:5
 msgid "Result"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:115
-msgid "``X x = MkX(3);``"
+#: ../../../ClangTransformerTutorial.md:5
+msgid "`X x = MkX(3);`"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:115
-msgid "``X x = MakeX(3);``"
+#: ../../../ClangTransformerTutorial.md:5
+msgid "`X x = MakeX(3);`"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:117
-msgid "``CallFactory(MkX, 3);``"
+#: ../../../ClangTransformerTutorial.md:5
+msgid "`CallFactory(MkX, 3);`"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:117
-msgid "``CallFactory(MakeX, 3);``"
+#: ../../../ClangTransformerTutorial.md:5
+msgid "`CallFactory(MakeX, 3);`"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:119
-msgid "``auto f = MkX;``"
+#: ../../../ClangTransformerTutorial.md:5
+msgid "`auto f = MkX;`"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:119
-msgid "``auto f = MakeX;``"
+#: ../../../ClangTransformerTutorial.md:5
+msgid "`auto f = MakeX;`"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:123
+#: ../../../ClangTransformerTutorial.md:112
 msgid "Example: method to function"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:125
+#: ../../../ClangTransformerTutorial.md:114
 msgid ""
 "Next, let's write a rule to replace a method call with a (free) function "
 "call, applied to the original method call's target object. Specifically, "
-"\"change ``s.size()`` to ``Size(s)``, where ``s`` is a ``string``.\" We "
-"start with a simpler change that ignores the type of ``s``. That is, it will "
-"modify *any* method call where the method is named \"size\":"
+"\"change `s.size()` to `Size(s)`, where `s` is a `string`.\" We start with a "
+"simpler change that ignores the type of `s`. That is, it will modify *any* "
+"method call where the method is named \"size\":"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:141
+#: ../../../ClangTransformerTutorial.md:130
 msgid ""
 "We express the pattern with the given AST matcher, which binds the method "
-"call's target to ``s`` [#f1]_. For the edit, we again use ``changeTo``, but "
-"this time we construct the term from multiple parts, which we compose with "
-"``cat``. The second part of our term is ``node(s)``, which selects the "
-"source code corresponding to the AST node ``s`` that was bound when a match "
-"was found in the AST for our rule's pattern. ``node(s)`` constructs a "
-"``RangeSelector``, which, when used in ``cat``, indicates that the selected "
-"source should be inserted in the output at that point."
+"call's target to `s` [^f1]. For the edit, we again use `changeTo`, but this "
+"time we construct the term from multiple parts, which we compose with `cat`. "
+"The second part of our term is `node(s)`, which selects the source code "
+"corresponding to the AST node `s` that was bound when a match was found in "
+"the AST for our rule's pattern. `node(s)` constructs a `RangeSelector`, "
+"which, when used in `cat`, indicates that the selected source should be "
+"inserted in the output at that point."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:150
+#: ../../../ClangTransformerTutorial.md:139
 msgid ""
 "Now, we probably don't want to rewrite *all* invocations of \"size\" "
-"methods, just those on ``std::string``\\ s. We can achieve this change "
-"simply by refining our matcher. The rest of the rule remains unchanged:"
+"methods, just those on `std::string`s. We can achieve this change simply by "
+"refining our matcher. The rest of the rule remains unchanged:"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:166
+#: ../../../ClangTransformerTutorial.md:154
 msgid "Example: rewriting method calls"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:168
+#: ../../../ClangTransformerTutorial.md:156
 msgid ""
 "In this example, we delete an \"intermediary\" method call in a string of "
 "invocations. This scenario can arise, for example, if you want to collapse a "
 "substructure into its parent."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:182
+#: ../../../ClangTransformerTutorial.md:170
 msgid ""
-"This rule isn't quite what we want: it will rewrite ``my_object.child()."
-"foo()`` to ``my_object.foo()``, but it will also rewrite ``my_ptr->child()."
-"foo()`` to ``my_ptr.foo()``, which is not what we intend. We could fix this "
-"by restricting the pattern with ``not(isArrow())`` in the definition of "
-"``child_call``. Yet, we *want* to rewrite calls through pointers."
+"This rule isn't quite what we want: it will rewrite `my_object.child()."
+"foo()` to `my_object.foo()`, but it will also rewrite `my_ptr->child()."
+"foo()` to `my_ptr.foo()`, which is not what we intend. We could fix this by "
+"restricting the pattern with `not(isArrow())` in the definition of "
+"`child_call`. Yet, we *want* to rewrite calls through pointers."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:188
+#: ../../../ClangTransformerTutorial.md:176
 msgid ""
-"To capture this idiom, we provide the ``access`` combinator to intelligently "
+"To capture this idiom, we provide the `access` combinator to intelligently "
 "construct a field/method access. In our example, the member access is "
 "expressed as:"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:196
+#: ../../../ClangTransformerTutorial.md:184
 msgid ""
 "The first argument specifies the object being accessed and the second, a "
 "description of the field/method name. In this case, we specify that the "
 "method name should be copied from the source -- specifically, the source "
-"range of ``m``'s member. To construct the method call, we would use this "
-"expression in ``cat``:"
+"range of `m`'s member. To construct the method call, we would use this "
+"expression in `cat`:"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:206
+#: ../../../ClangTransformerTutorial.md:193
 msgid "Reference: ranges, stencils, edits, rules"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:208
+#: ../../../ClangTransformerTutorial.md:195
 msgid ""
 "The above examples demonstrate just the basics of rewrite rules. Every "
 "element we touched on has more available constructors: range selectors, "
@@ -290,11 +289,11 @@ msgid ""
 "First, though, we clarify what rewrite rules are actually rewriting."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:215
+#: ../../../ClangTransformerTutorial.md:201
 msgid "Rewriting ASTs to... Text?"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:217
+#: ../../../ClangTransformerTutorial.md:203
 msgid ""
 "The astute reader may have noticed that we've been somewhat vague in our "
 "explanation of what the rewrite rules are actually rewriting. We've referred "
@@ -302,7 +301,7 @@ msgid ""
 "abstract syntax tree. So, which one is it?"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:222
+#: ../../../ClangTransformerTutorial.md:208
 msgid ""
 "Ideally, we'd be rewriting the input AST to a new AST, but clang's AST is "
 "not terribly amenable to this kind of transformation. So, we compromise: we "
@@ -313,252 +312,249 @@ msgid ""
 "low-level syntactic details."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:231
+#: ../../../ClangTransformerTutorial.md:216
 msgid "Range Selectors"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:233
+#: ../../../ClangTransformerTutorial.md:218
 msgid ""
 "Transformer provides a small API for describing source ranges: the "
-"``RangeSelector`` combinators. These ranges are most commonly used to "
-"specify the source code affected by an edit and to extract source code in "
+"`RangeSelector` combinators. These ranges are most commonly used to specify "
+"the source code affected by an edit and to extract source code in "
 "constructing new text."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:238
+#: ../../../ClangTransformerTutorial.md:223
 msgid ""
 "Roughly, there are two kinds of range combinators: ones that select a source "
 "range based on the AST, and others that combine existing ranges into new "
-"ranges. For example, ``node`` selects the range of source spanned by a "
-"particular AST node, as we've seen, while ``after`` selects the (empty) "
-"range located immediately after its argument range. So, "
-"``after(node(\"id\"))`` is the empty range immediately following the AST "
-"node bound to ``id``."
+"ranges. For example, `node` selects the range of source spanned by a "
+"particular AST node, as we've seen, while `after` selects the (empty) range "
+"located immediately after its argument range. So, `after(node(\"id\"))` is "
+"the empty range immediately following the AST node bound to `id`."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:245
+#: ../../../ClangTransformerTutorial.md:230
 msgid ""
-"For the full collection of ``RangeSelector``\\ s, see the header, `clang/"
-"Tooling/Transformer/RangeSelector.h <https://github.com/llvm/llvm-project/"
-"blob/main/clang/include/clang/Tooling/Transformer/RangeSelector.h>`_"
+"For the full collection of `RangeSelector`s, see the header, [clang/Tooling/"
+"Transformer/RangeSelector.h](https://github.com/llvm/llvm-project/blob/main/"
+"clang/include/clang/Tooling/Transformer/RangeSelector.h)"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:249
+#: ../../../ClangTransformerTutorial.md:233
 msgid "Stencils"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:251
+#: ../../../ClangTransformerTutorial.md:235
 msgid ""
 "Transformer offers a large and growing collection of combinators for "
-"constructing output. Above, we demonstrated ``cat``, the core function for "
+"constructing output. Above, we demonstrated `cat`, the core function for "
 "constructing stencils. It takes a series of arguments, of three possible "
 "kinds:"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:255
+#: ../../../ClangTransformerTutorial.md:239
 msgid "Raw text, to be copied directly to the output."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:256
+#: ../../../ClangTransformerTutorial.md:240
 msgid ""
-"Selector: specified with a ``RangeSelector``, indicates a range of source "
-"text to copy to the output."
+"Selector: specified with a `RangeSelector`, indicates a range of source text "
+"to copy to the output."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:258
+#: ../../../ClangTransformerTutorial.md:242
 msgid ""
 "Builder: an operation that constructs a code snippet from its arguments. For "
-"example, the ``access`` function we saw above."
+"example, the `access` function we saw above."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:261
+#: ../../../ClangTransformerTutorial.md:245
 msgid ""
 "Data of these different types are all represented (generically) by a "
-"``Stencil``. ``cat`` takes text and ``RangeSelector``\\ s directly as "
-"arguments, rather than requiring that they be constructed with a builder; "
-"other builders are constructed explicitly."
+"`Stencil`. `cat` takes text and `RangeSelector`s directly as arguments, "
+"rather than requiring that they be constructed with a builder; other "
+"builders are constructed explicitly."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:266
+#: ../../../ClangTransformerTutorial.md:250
 msgid ""
-"In general, ``Stencil``\\ s produce text from a match result. So, they are "
-"not limited to generating source code, but can also be used to generate "
+"In general, `Stencil`s produce text from a match result. So, they are not "
+"limited to generating source code, but can also be used to generate "
 "diagnostic messages that reference (named) elements of the matched code, "
 "like we saw in the example of rewriting method calls."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:271
+#: ../../../ClangTransformerTutorial.md:255
 msgid ""
-"Further details of the ``Stencil`` type are documented in the header file "
-"`clang/Tooling/Transformer/Stencil.h <https://github.com/llvm/llvm-project/"
-"blob/main/clang/include/clang/Tooling/Transformer/Stencil.h>`_."
+"Further details of the `Stencil` type are documented in the header file "
+"[clang/Tooling/Transformer/Stencil.h](https://github.com/llvm/llvm-project/"
+"blob/main/clang/include/clang/Tooling/Transformer/Stencil.h)."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:275
+#: ../../../ClangTransformerTutorial.md:258
 msgid "Edits"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:277
+#: ../../../ClangTransformerTutorial.md:260
 msgid ""
-"Transformer supports additional forms of edits. First, in a ``changeTo``, we "
+"Transformer supports additional forms of edits. First, in a `changeTo`, we "
 "can specify the particular portion of code to be replaced, using the same "
-"``RangeSelector`` we saw earlier. For example, we could change the function "
+"`RangeSelector` we saw earlier. For example, we could change the function "
 "name in a function declaration with:"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:288
+#: ../../../ClangTransformerTutorial.md:271
 msgid ""
 "We also provide simpler editing primitives for insertion and deletion: "
-"``insertBefore``, ``insertAfter`` and ``remove``. These can all be found in "
-"the header file `clang/Tooling/Transformer/RewriteRule.h <https://github.com/"
+"`insertBefore`, `insertAfter` and `remove`. These can all be found in the "
+"header file [clang/Tooling/Transformer/RewriteRule.h](https://github.com/"
 "llvm/llvm-project/blob/main/clang/include/clang/Tooling/Transformer/"
-"RewriteRule.h>`_."
+"RewriteRule.h)."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:293
+#: ../../../ClangTransformerTutorial.md:276
 msgid ""
 "We are not limited one edit per match found. Some situations require making "
 "multiple edits for each match. For example, suppose we wanted to swap two "
 "arguments of a function call."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:297
+#: ../../../ClangTransformerTutorial.md:280
 msgid ""
-"For this, we provide an overload of ``makeRule`` that takes a list of edits, "
+"For this, we provide an overload of `makeRule` that takes a list of edits, "
 "rather than just a single one. Our example might look like:"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:308
-msgid "``EditGenerator``\\ s (Advanced)"
+#: ../../../ClangTransformerTutorial.md:290
+msgid "`EditGenerator`s (Advanced)"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:310
+#: ../../../ClangTransformerTutorial.md:292
 msgid ""
-"The particular edits we've seen so far are all instances of the ``ASTEdit`` "
-"class, or a list of such. But, not all edits can be expressed as "
-"``ASTEdit``\\ s. So, we also support a very general signature for edit "
-"generators:"
+"The particular edits we've seen so far are all instances of the `ASTEdit` "
+"class, or a list of such. But, not all edits can be expressed as `ASTEdit`s. "
+"So, we also support a very general signature for edit generators:"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:318
+#: ../../../ClangTransformerTutorial.md:300
 msgid ""
-"That is, an ``EditGenerator`` is function that maps a ``MatchResult`` to a "
-"set of edits, or fails. This signature supports a very general form of "
+"That is, an `EditGenerator` is function that maps a `MatchResult` to a set "
+"of edits, or fails. This signature supports a very general form of "
 "computation over match results. Transformer provides a number of functions "
-"for working with ``EditGenerator``\\ s, most notably `flatten <https://"
-"github.com/llvm/llvm-project/blob/1fabe6e51917bcd7a1242294069c682fe6dffa45/"
-"clang/include/clang/Tooling/Transformer/RewriteRule.h#L165-L167>`_ "
-"``EditGenerator``\\ s, like list flattening. For the full list, see the "
-"header file `clang/Tooling/Transformer/RewriteRule.h <https://github.com/"
-"llvm/llvm-project/blob/main/clang/include/clang/Tooling/Transformer/"
-"RewriteRule.h>`_."
+"for working with `EditGenerator`s, most notably [flatten](https://github.com/"
+"llvm/llvm-project/blob/1fabe6e51917bcd7a1242294069c682fe6dffa45/clang/"
+"include/clang/Tooling/Transformer/RewriteRule.h#L165-L167) `EditGenerator`s, "
+"like list flattening. For the full list, see the header file [clang/Tooling/"
+"Transformer/RewriteRule.h](https://github.com/llvm/llvm-project/blob/main/"
+"clang/include/clang/Tooling/Transformer/RewriteRule.h)."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:327
+#: ../../../ClangTransformerTutorial.md:308
 msgid "Rules"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:329
+#: ../../../ClangTransformerTutorial.md:310
 msgid ""
 "We can also compose multiple *rules*, rather than just edits within a rule, "
-"using ``applyFirst``: it composes a list of rules as an ordered choice, "
-"where Transformer applies the first rule whose pattern matches, ignoring "
-"others in the list that follow. If the matchers are independent then order "
-"doesn't matter. In that case, ``applyFirst`` is simply joining the set of "
-"rules into one."
+"using `applyFirst`: it composes a list of rules as an ordered choice, where "
+"Transformer applies the first rule whose pattern matches, ignoring others in "
+"the list that follow. If the matchers are independent then order doesn't "
+"matter. In that case, `applyFirst` is simply joining the set of rules into "
+"one."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:335
+#: ../../../ClangTransformerTutorial.md:316
 msgid ""
-"The benefit of ``applyFirst`` is that, for some problems, it allows the user "
+"The benefit of `applyFirst` is that, for some problems, it allows the user "
 "to more concisely formulate later rules in the list, since their patterns "
 "need not explicitly exclude the earlier patterns of the list. For example, "
 "consider a set of rules that rewrite compound statements, where one rule "
 "handles the case of an empty compound statement and the other handles non-"
-"empty compound statements. With ``applyFirst``, these rules can be expressed "
+"empty compound statements. With `applyFirst`, these rules can be expressed "
 "compactly as:"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:349
+#: ../../../ClangTransformerTutorial.md:330
 msgid ""
 "The second rule does not need to explicitly specify that the compound "
 "statement is non-empty -- it follows from the rules position in "
-"``applyFirst``. For more complicated examples, this can lead to "
-"substantially more readable code."
+"`applyFirst`. For more complicated examples, this can lead to substantially "
+"more readable code."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:353
+#: ../../../ClangTransformerTutorial.md:334
 msgid ""
 "Sometimes, a modification to the code might require the inclusion of a "
 "particular header file. To this end, users can modify rules to specify "
-"include directives with ``addInclude``."
+"include directives with `addInclude`."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:357
+#: ../../../ClangTransformerTutorial.md:338
 msgid ""
-"For additional documentation on these functions, see the header file `clang/"
-"Tooling/Transformer/RewriteRule.h <https://github.com/llvm/llvm-project/blob/"
-"main/clang/include/clang/Tooling/Transformer/RewriteRule.h>`_."
+"For additional documentation on these functions, see the header file [clang/"
+"Tooling/Transformer/RewriteRule.h](https://github.com/llvm/llvm-project/blob/"
+"main/clang/include/clang/Tooling/Transformer/RewriteRule.h)."
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:361
+#: ../../../ClangTransformerTutorial.md:341
 msgid "Using a RewriteRule as a clang-tidy check"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:363
+#: ../../../ClangTransformerTutorial.md:343
 msgid ""
-"Transformer supports executing a rewrite rule as a `clang-tidy <https://"
-"clang.llvm.org/extra/clang-tidy/>`_ check, with the class ``clang::tidy::"
-"utils::TransformerClangTidyCheck``. It is designed to require minimal code "
-"in the definition. For example, given a rule ``MyCheckAsRewriteRule``, one "
-"can define a tidy check as follows:"
+"Transformer supports executing a rewrite rule as a [clang-tidy](https://"
+"clang.llvm.org/extra/clang-tidy/) check, with the class `clang::tidy::utils::"
+"TransformerClangTidyCheck`. It is designed to require minimal code in the "
+"definition. For example, given a rule `MyCheckAsRewriteRule`, one can define "
+"a tidy check as follows:"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:377
+#: ../../../ClangTransformerTutorial.md:357
 msgid ""
-"``TransformerClangTidyCheck`` implements the virtual ``registerMatchers`` "
-"and ``check`` methods based on your rule specification, so you don't need to "
+"`TransformerClangTidyCheck` implements the virtual `registerMatchers` and "
+"`check` methods based on your rule specification, so you don't need to "
 "implement them yourself. If the rule needs to be configured based on the "
 "language options and/or the clang-tidy configuration, it can be expressed as "
 "a function taking these as parameters and (optionally) returning a "
-"``RewriteRule``. This would be useful, for example, for our method-renaming "
+"`RewriteRule`. This would be useful, for example, for our method-renaming "
 "rule, which is parameterized by the original name and the target. For "
-"details, see `clang-tools-extra/clang-tidy/utils/TransformerClangTidyCheck.h "
-"<https://github.com/llvm/llvm-project/blob/main/clang-tools-extra/clang-tidy/"
-"utils/TransformerClangTidyCheck.h>`_"
+"details, see [clang-tools-extra/clang-tidy/utils/TransformerClangTidyCheck.h]"
+"(https://github.com/llvm/llvm-project/blob/main/clang-tools-extra/clang-tidy/"
+"utils/TransformerClangTidyCheck.h)"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:387
+#: ../../../ClangTransformerTutorial.md:366
 msgid "Related Reading"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:389
+#: ../../../ClangTransformerTutorial.md:368
 msgid ""
 "A good place to start understanding the clang AST and its matchers is with "
 "the introductions on clang's site:"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:392
-msgid ":doc:`Introduction to the Clang AST <IntroductionToTheClangAST>`"
+#: ../../../ClangTransformerTutorial.md:371
+msgid "{doc}`Introduction to the Clang AST <IntroductionToTheClangAST>`"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:393
-msgid ":doc:`Matching the Clang AST <LibASTMatchers>`"
+#: ../../../ClangTransformerTutorial.md:372
+msgid "{doc}`Matching the Clang AST <LibASTMatchers>`"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:394
+#: ../../../ClangTransformerTutorial.md:373
 msgid ""
-"`AST Matcher Reference <https://clang.llvm.org/docs/LibASTMatchersReference."
-"html>`_"
+"[AST Matcher Reference](https://clang.llvm.org/docs/LibASTMatchersReference."
+"html)"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:397
+#: ../../../ClangTransformerTutorial.md:375
 msgid "Footnotes"
 msgstr ""
 
-#: ../../../ClangTransformerTutorial.rst:398
+#: ../../../ClangTransformerTutorial.md:378
 msgid ""
-"Technically, it binds it to the string \"str\", to which our variable ``s`` "
-"is bound. But, the choice of that id string is irrelevant, so elide the "
+"Technically, it binds it to the string \"str\", to which our variable `s` is "
+"bound. But, the choice of that id string is irrelevant, so elide the "
 "difference."
 msgstr ""
