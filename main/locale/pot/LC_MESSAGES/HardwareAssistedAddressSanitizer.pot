@@ -1,0 +1,165 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2026, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-07 13:47+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../HardwareAssistedAddressSanitizer.md:1
+msgid "Hardware-assisted AddressSanitizer"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:7
+msgid "Introduction"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:9
+msgid ""
+"Hardware-assisted AddressSanitizer (HWASan) is a memory error detector "
+"similar to {doc}`AddressSanitizer`, but based on memory tagging and address "
+"tagging (such as Top-Byte Ignore on AArch64). It provides similar bug "
+"detection with significantly lower memory overhead (~10–20%)."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:14
+msgid "HWASan can detect:"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:16
+msgid ""
+"Out-of-bounds accesses (heap, stack; globals tagging is not supported on all "
+"platforms)"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:17
+msgid "Use-after-free"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:18
+msgid "Use-after-return and use-after-scope"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:19
+msgid "Double-free and invalid free"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:21
+msgid "Supported Platforms"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:23
+msgid ""
+"**Linux AArch64** (kernel 5.4+ with tagged address ABI; globals tagging is "
+"not implemented)"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:24
+msgid "**Android AArch64**"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:25
+msgid "**Linux RISC-V 64**"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:26
+msgid ""
+"**Linux x86_64** (experimental; requires CPU with Intel LAM and kernel "
+"support)"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:28
+msgid "Usage"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:30
+msgid "Compile and link your program with `-fsanitize=hwaddress`:"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:72
+msgid "Flags and Options"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:74
+msgid ""
+"Runtime flags can be passed using the `HWASAN_OPTIONS` environment variable:"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:80
+msgid ""
+"To see the full list of available flags, run an instrumented binary with "
+"`HWASAN_OPTIONS=\"help=1\"`."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:83
+msgid ""
+"Flags passed via the `HWASAN_OPTIONS` environment variable take precedence "
+"over compile-time default options."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:86
+msgid "Compile-time Default Options"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:88
+msgid ""
+"Default options can be specified at compile/link time by defining the "
+"`__hwasan_default_options` function in your source code:"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:99
+msgid "Options Evaluation with Integrated Sanitizers"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:101
+msgid ""
+"HWASan works together with {doc}`LeakSanitizer` and {doc}"
+"`UndefinedBehaviorSanitizer`:"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:103
+msgid ""
+"`__hwasan_default_options()`, `__lsan_default_options()`, and "
+"`__ubsan_default_options()` are all evaluated independently by their "
+"respective runtimes."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:105
+msgid ""
+"Similarly, `HWASAN_OPTIONS`, `LSAN_OPTIONS`, and `UBSAN_OPTIONS` environment "
+"variables are parsed separately by their respective runtimes."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:108
+msgid "Disabling Instrumentation"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:110
+msgid "Functions can be excluded from instrumentation using:"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:116
+msgid ""
+"Conditional compilation is supported via "
+"`__has_feature(hwaddress_sanitizer)`."
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:118
+msgid "More Information"
+msgstr ""
+
+#: ../../../HardwareAssistedAddressSanitizer.md:120
+msgid ""
+"For details on the design, algorithm, and implementation of HWASan, see {doc}"
+"`HardwareAssistedAddressSanitizerDesign`."
+msgstr ""

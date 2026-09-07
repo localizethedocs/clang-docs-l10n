@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"POT-Creation-Date: 2026-09-07 13:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -368,52 +368,92 @@ msgid ""
 msgstr ""
 
 #: ../../../ThreadSanitizer.md:276
+msgid ""
+"Flags passed via the `TSAN_OPTIONS` environment variable take precedence "
+"over compile-time default options."
+msgstr ""
+
+#: ../../../ThreadSanitizer.md:279
+msgid ""
+"Default options can also be specified at compile/link time by defining "
+"`__tsan_default_options`:"
+msgstr ""
+
+#: ../../../ThreadSanitizer.md:290
 msgid "Suppressions"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:278
+#: ../../../ThreadSanitizer.md:292
 msgid ""
 "If you have a data race or thread leak that you are already aware of but "
 "cannot fix right away (e.g., in a third-party library), you can suppress the "
 "reports at run-time using a suppressions file."
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:282
+#: ../../../ThreadSanitizer.md:296
 msgid ""
 "Specify the suppressions file path via the `suppressions` flag in the "
 "`TSAN_OPTIONS` environment variable:"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:289
+#: ../../../ThreadSanitizer.md:303
+msgid ""
+"Alternatively, you can provide default suppressions at compile time by "
+"defining the `__tsan_default_suppressions` function in your source code:"
+msgstr ""
+
+#: ../../../ThreadSanitizer.md:315
 msgid ""
 "Each non-empty line of the suppressions file represents one suppression of "
 "the form:"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:296
+#: ../../../ThreadSanitizer.md:322
 msgid "The supported `suppression_type` values are:"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:298
+#: ../../../ThreadSanitizer.md:324
 msgid ""
 "`race`: Suppresses data race reports. The pattern is matched against "
 "function names, source file names, or global variable names in the stacks of "
 "the report."
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:300
+#: ../../../ThreadSanitizer.md:326
+msgid ""
+"`race_top`: Suppresses data race reports only when matching the top frame of "
+"the stack trace."
+msgstr ""
+
+#: ../../../ThreadSanitizer.md:327
+msgid ""
+"`mutex`: Suppresses mutex-related invalid operations (double lock, invalid "
+"unlock, unlock from wrong thread, etc.)."
+msgstr ""
+
+#: ../../../ThreadSanitizer.md:328
 msgid ""
 "`thread`: Suppresses thread leak reports. The pattern is matched against the "
 "name of the leaked thread."
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:302
+#: ../../../ThreadSanitizer.md:330
+msgid ""
+"`signal`: Suppresses signal-unsafe handler warnings and errno usage in "
+"signal handlers."
+msgstr ""
+
+#: ../../../ThreadSanitizer.md:331
+msgid "`deadlock`: Suppresses lock inversion / deadlock reports."
+msgstr ""
+
+#: ../../../ThreadSanitizer.md:332
 msgid ""
 "`called_from_lib`: Suppresses reports if the call originated from a specific "
 "non-instrumented library."
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:305
+#: ../../../ThreadSanitizer.md:335
 msgid ""
 "The pattern can contain the `*` wildcard, which matches any substring. By "
 "default, `*` is automatically prepended and appended to each pattern. You "
@@ -421,19 +461,19 @@ msgid ""
 "string. Lines starting with `#` are treated as comments."
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:310
+#: ../../../ThreadSanitizer.md:340
 msgid "Example of a suppressions file:"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:327
+#: ../../../ThreadSanitizer.md:365
 msgid "Adaptive Delay"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:329
+#: ../../../ThreadSanitizer.md:367
 msgid "Overview"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:331
+#: ../../../ThreadSanitizer.md:369
 msgid ""
 "Adaptive Delay is an optional ThreadSanitizer feature that injects delays at "
 "synchronization points to explore novel thread interleavings and increase "
@@ -442,128 +482,128 @@ msgid ""
 "data, improving race detection."
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:337
+#: ../../../ThreadSanitizer.md:375
 msgid "Adaptive delay is particularly useful for:"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:339
+#: ../../../ThreadSanitizer.md:377
 msgid "Detecting races in rarely-executed thread interleavings or code paths"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:340
+#: ../../../ThreadSanitizer.md:378
 msgid "Testing parallel data structures and algorithms"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:342
+#: ../../../ThreadSanitizer.md:380
 msgid ""
 "When enabled, adaptive delay maintains a configurable time budget to balance "
 "race exposure against performance overhead. The delays can be"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:345
+#: ../../../ThreadSanitizer.md:383
 msgid "random amount of spin cycles"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:346
+#: ../../../ThreadSanitizer.md:384
 msgid "a single yield to the OS scheduler"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:347
+#: ../../../ThreadSanitizer.md:385
 msgid "random usleep"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:349
+#: ../../../ThreadSanitizer.md:387
 msgid "The strategy prioritizes high-value synchronization points:"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:351
+#: ../../../ThreadSanitizer.md:389
 msgid ""
 "Relaxed atomic operations receive cheap delays (spin cycles) with low "
 "sampling"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:352
+#: ../../../ThreadSanitizer.md:390
 msgid ""
 "Synchronizing atomic operations (acquire/release/seq_cst) receive moderate "
 "delays with higher sampling"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:354
+#: ../../../ThreadSanitizer.md:392
 msgid ""
 "Mutex and thread lifecycle operations receive the longest delays with "
 "highest sampling"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:357
+#: ../../../ThreadSanitizer.md:395
 msgid ""
 "The delays focus on synchronization points with clear happens-before "
 "relationships, as those are most likely to expose data races."
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:360
+#: ../../../ThreadSanitizer.md:398
 msgid "Enabling Adaptive Delay"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:362
+#: ../../../ThreadSanitizer.md:400
 msgid ""
 "Adaptive delay is disabled by default. Enable it by setting the "
 "`enable_adaptive_delay` flag:"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:369
+#: ../../../ThreadSanitizer.md:407
 msgid "Configuration Options"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:371
+#: ../../../ThreadSanitizer.md:409
 msgid "Adaptive Delay Options"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:376
+#: ../../../ThreadSanitizer.md:414
 msgid "Flag"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:377
+#: ../../../ThreadSanitizer.md:415
 msgid "Type"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:378
+#: ../../../ThreadSanitizer.md:416
 msgid "Default"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:379
+#: ../../../ThreadSanitizer.md:417
 msgid "Description"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:380
+#: ../../../ThreadSanitizer.md:418
 msgid "`enable_adaptive_delay`"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:381
+#: ../../../ThreadSanitizer.md:419
 msgid "bool"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:382
+#: ../../../ThreadSanitizer.md:420
 msgid "false"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:383
+#: ../../../ThreadSanitizer.md:421
 msgid "Enable adaptive delay injection to expose data races."
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:384
+#: ../../../ThreadSanitizer.md:422
 msgid "`adaptive_delay_aggressiveness`"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:385 ../../../ThreadSanitizer.md:392
-#: ../../../ThreadSanitizer.md:397 ../../../ThreadSanitizer.md:403
+#: ../../../ThreadSanitizer.md:423 ../../../ThreadSanitizer.md:430
+#: ../../../ThreadSanitizer.md:435 ../../../ThreadSanitizer.md:441
 msgid "int"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:386
+#: ../../../ThreadSanitizer.md:424
 msgid "25"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:387
+#: ../../../ThreadSanitizer.md:425
 msgid ""
 "Controls delay injection intensity for race detection. Higher values inject "
 "more delays to expose races. Value must be greater than 0. Suggested values: "
@@ -571,62 +611,62 @@ msgid ""
 "actual overhead varies by workload and platform."
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:391
+#: ../../../ThreadSanitizer.md:429
 msgid "`adaptive_delay_relaxed_sample_rate`"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:393
+#: ../../../ThreadSanitizer.md:431
 msgid "10000"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:394
+#: ../../../ThreadSanitizer.md:432
 msgid ""
 "Sample 1 in N relaxed atomic operations for delay injection. Relaxed atomics "
 "have minimal synchronization, so sampling helps avoid excessive overhead."
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:396
+#: ../../../ThreadSanitizer.md:434
 msgid "`adaptive_delay_sync_atomic_sample_rate`"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:398
+#: ../../../ThreadSanitizer.md:436
 msgid "100"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:399
+#: ../../../ThreadSanitizer.md:437
 msgid ""
 "Sample 1 in N acquire/release/seq_cst atomic operations for delay injection. "
 "These synchronizing atomics are more likely to expose races, so are sampled "
 "more often."
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:402
+#: ../../../ThreadSanitizer.md:440
 msgid "`adaptive_delay_mutex_sample_rate`"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:404
+#: ../../../ThreadSanitizer.md:442
 msgid "10"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:405
+#: ../../../ThreadSanitizer.md:443
 msgid ""
 "Sample 1 in N mutex/condition variable operations for delay injection. Mutex "
 "ops are high-value synchronization points and are sampled frequently."
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:407
+#: ../../../ThreadSanitizer.md:445
 msgid "`adaptive_delay_max_atomic`"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:408 ../../../ThreadSanitizer.md:415
+#: ../../../ThreadSanitizer.md:446 ../../../ThreadSanitizer.md:453
 msgid "string"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:409
+#: ../../../ThreadSanitizer.md:447
 msgid "`\"sleep_us=50\"`"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:410
+#: ../../../ThreadSanitizer.md:448
 msgid ""
 "Maximum delay for atomic operations. Format: `\"spin=N\"` (N spin cycles, 1 "
 "<= N <= 10,000), `\"yield\"` (one yield to the OS), or `\"sleep_us=N\"` (up "
@@ -634,15 +674,15 @@ msgid ""
 "N."
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:414
+#: ../../../ThreadSanitizer.md:452
 msgid "`adaptive_delay_max_sync`"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:416
+#: ../../../ThreadSanitizer.md:454
 msgid "`\"sleep_us=500\"`"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:417
+#: ../../../ThreadSanitizer.md:455
 msgid ""
 "Maximum delay for synchronization operations (mutex and thread lifecycle "
 "operations). Format: same as `adaptive_delay_max_atomic`. Typically set "
@@ -650,18 +690,18 @@ msgid ""
 "threads and may be more likely to expose races."
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:423
+#: ../../../ThreadSanitizer.md:461
 msgid "Examples"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:425
+#: ../../../ThreadSanitizer.md:463
 msgid "Enable adaptive delay with moderate aggressiveness:"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:431
+#: ../../../ThreadSanitizer.md:469
 msgid "Enable aggressive delay injection:"
 msgstr ""
 
-#: ../../../ThreadSanitizer.md:437
+#: ../../../ThreadSanitizer.md:475
 msgid "Increase sampling frequency for mutex operations:"
 msgstr ""

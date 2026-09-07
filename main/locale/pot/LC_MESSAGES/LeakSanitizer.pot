@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"POT-Creation-Date: 2026-09-07 13:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,10 +53,155 @@ msgid ""
 msgstr ""
 
 #: ../../../LeakSanitizer.md:43
-msgid "Security Considerations"
+msgid "Suppressions"
 msgstr ""
 
 #: ../../../LeakSanitizer.md:45
+msgid ""
+"LeakSanitizer reports can be suppressed if you encounter leaks in third-"
+"party libraries or known locations that cannot be fixed immediately."
+msgstr ""
+
+#: ../../../LeakSanitizer.md:48
+msgid "Suppression Format"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:50
+msgid "Each suppression rule is specified on its own line in the form:"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:56
+msgid ""
+"A memory leak is suppressed if `<pattern>` matches any function name, source "
+"file name, or library/module name in the symbolized stack trace of the leak "
+"report. Wildcards (`*`) are supported, and lines starting with `#` are "
+"treated as comments."
+msgstr ""
+
+#: ../../../LeakSanitizer.md:61
+msgid "Example suppression rules:"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:75
+msgid "Runtime Suppressions"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:77
+msgid ""
+"To specify a suppressions file at runtime, pass its path via the "
+"`suppressions` flag in the `LSAN_OPTIONS` environment variable:"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:84
+msgid ""
+"(When running LeakSanitizer as part of AddressSanitizer, `LSAN_OPTIONS` is "
+"still used to pass LeakSanitizer-specific flags and suppressions.)"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:87
+msgid "Compile-time Default Suppressions"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:89
+msgid ""
+"You can embed default suppressions directly into your executable at compile/"
+"link time by defining the `__lsan_default_suppressions` function in your "
+"source code:"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:102
+msgid ""
+"Both default suppressions and suppressions passed in the file via "
+"`LSAN_OPTIONS=\"suppressions=...\"` will be parsed and applied."
+msgstr ""
+
+#: ../../../LeakSanitizer.md:105
+msgid "Programmatic Disabling"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:107
+msgid ""
+"LeakSanitizer provides fine-grained programmatic control over leak detection "
+"via `<sanitizer/lsan_interface.h>`:"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:110
+msgid ""
+"**Disable around specific code blocks**: Allocations made between calls to "
+"`__lsan_disable()` and `__lsan_enable()` will not be reported as leaks. This "
+"disabling is thread-local and only affects allocations made by the calling "
+"thread. In C++, you can use the RAII wrapper `__lsan::ScopedDisabler`:"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:125
+msgid ""
+"**Ignore specific objects**: `__lsan_ignore_object(const void *p)` marks the "
+"heap object pointed to by `p` (and anything reachable from it) as a non-leak."
+msgstr ""
+
+#: ../../../LeakSanitizer.md:128
+msgid ""
+"**Register custom root regions**: `__lsan_register_root_region(const void "
+"*p, size_t size)` and `__lsan_unregister_root_region(const void *p, size_t "
+"size)` register memory areas (such as custom memory pools or mapped regions) "
+"to be scanned for live pointers during leak checking."
+msgstr ""
+
+#: ../../../LeakSanitizer.md:133
+msgid ""
+"**Explicit leak checking**: `__lsan_do_leak_check()` triggers an immediate "
+"leak check. If leaks are detected and the `exitcode` flag is non-zero "
+"(default), the process terminates; otherwise, it returns normally. Calling "
+"this function disables subsequent automatic leak checks at process exit. "
+"`__lsan_do_recoverable_leak_check()` performs a leak check and returns `0` "
+"if no leaks were detected (or if leak detection is disabled), and `1` if "
+"leaks were found. It prints a report without terminating the process or "
+"disabling the end-of-process check."
+msgstr ""
+
+#: ../../../LeakSanitizer.md:142
+msgid ""
+"**Disable leak checking entirely**: Define `__lsan_is_turned_off()` to "
+"return `1` to disable leak checking for the program."
+msgstr ""
+
+#: ../../../LeakSanitizer.md:145
+msgid "Flags and Options"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:147
+msgid ""
+"Runtime flags can be passed to LeakSanitizer via the `LSAN_OPTIONS` "
+"environment variable:"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:154
+msgid ""
+"To see the full list of available flags, run an instrumented binary with "
+"`LSAN_OPTIONS=\"help=1\"`."
+msgstr ""
+
+#: ../../../LeakSanitizer.md:157
+msgid ""
+"Flags passed via the `LSAN_OPTIONS` environment variable take precedence "
+"over compile-time default options."
+msgstr ""
+
+#: ../../../LeakSanitizer.md:160
+msgid "Compile-time Default Options"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:162
+msgid ""
+"Default options can also be specified at compile/link time by defining "
+"`__lsan_default_options`:"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:173
+msgid "Security Considerations"
+msgstr ""
+
+#: ../../../LeakSanitizer.md:175
 msgid ""
 "LeakSanitizer is a bug detection tool and its runtime is not meant to be "
 "linked against production executables. While it may be useful for testing, "
@@ -65,35 +210,35 @@ msgid ""
 "executable."
 msgstr ""
 
-#: ../../../LeakSanitizer.md:50
+#: ../../../LeakSanitizer.md:180
 msgid "Supported Platforms"
 msgstr ""
 
-#: ../../../LeakSanitizer.md:52
+#: ../../../LeakSanitizer.md:182
 msgid "Android"
 msgstr ""
 
-#: ../../../LeakSanitizer.md:53
+#: ../../../LeakSanitizer.md:183
 msgid "Fuchsia"
 msgstr ""
 
-#: ../../../LeakSanitizer.md:54
+#: ../../../LeakSanitizer.md:184
 msgid "Linux"
 msgstr ""
 
-#: ../../../LeakSanitizer.md:55
+#: ../../../LeakSanitizer.md:185
 msgid "macOS"
 msgstr ""
 
-#: ../../../LeakSanitizer.md:56
+#: ../../../LeakSanitizer.md:186
 msgid "NetBSD"
 msgstr ""
 
-#: ../../../LeakSanitizer.md:58
+#: ../../../LeakSanitizer.md:188
 msgid "More Information"
 msgstr ""
 
-#: ../../../LeakSanitizer.md:60
+#: ../../../LeakSanitizer.md:190
 msgid ""
 "[https://github.com/google/sanitizers/wiki/AddressSanitizerLeakSanitizer]"
 "(https://github.com/google/sanitizers/wiki/AddressSanitizerLeakSanitizer)"
