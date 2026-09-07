@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 08:18+0000\n"
+"POT-Creation-Date: 2026-09-07 13:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,18 +17,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../ObjectiveCLiterals.rst:3
+#: ../../../ObjectiveCLiterals.md:1
 msgid "Objective-C Literals"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:6
+#: ../../../ObjectiveCLiterals.md:3
 msgid "Introduction"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:8
+#: ../../../ObjectiveCLiterals.md:5
 msgid ""
 "Three new features were introduced into clang at the same time: *NSNumber "
-"Literals* provide a syntax for creating ``NSNumber`` from scalar literal "
+"Literals* provide a syntax for creating `NSNumber` from scalar literal "
 "expressions; *Collection Literals* provide a short-hand for creating arrays "
 "and dictionaries; *Object Subscripting* provides a way to use subscripting "
 "with Objective-C objects. Users of Apple compiler releases can use these "
@@ -36,263 +36,261 @@ msgid ""
 "LLVM.org compiler releases can use these features starting with clang v3.1."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:17
+#: ../../../ObjectiveCLiterals.md:14
 msgid ""
 "These language additions simplify common Objective-C programming patterns, "
 "make programs more concise, and improve the safety of container creation."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:21
+#: ../../../ObjectiveCLiterals.md:18
 msgid ""
 "This document describes how the features are implemented in clang, and how "
 "to use them in your own programs."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:25
+#: ../../../ObjectiveCLiterals.md:21
 msgid "NSNumber Literals"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:27
+#: ../../../ObjectiveCLiterals.md:23
 msgid ""
-"The framework class ``NSNumber`` is used to wrap scalar values inside "
-"objects: signed and unsigned integers (``char``, ``short``, ``int``, "
-"``long``, ``long long``), floating point numbers (``float``, ``double``), "
-"and boolean values (``BOOL``, C++ ``bool``). Scalar values wrapped in "
-"objects are also known as *boxed* values."
+"The framework class `NSNumber` is used to wrap scalar values inside objects: "
+"signed and unsigned integers (`char`, `short`, `int`, `long`, `long long`), "
+"floating point numbers (`float`, `double`), and boolean values (`BOOL`, C++ "
+"`bool`). Scalar values wrapped in objects are also known as *boxed* values."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:33
+#: ../../../ObjectiveCLiterals.md:29
 msgid ""
 "In Objective-C, any character, numeric or boolean literal prefixed with the "
-"``'@'`` character will evaluate to a pointer to an ``NSNumber`` object "
+"`'@'` character will evaluate to a pointer to an `NSNumber` object "
 "initialized with that value. C's type suffixes may be used to control the "
 "size of numeric literals."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:39 ../../../ObjectiveCLiterals.rst:270
-#: ../../../ObjectiveCLiterals.rst:324
+#: ../../../ObjectiveCLiterals.md:34 ../../../ObjectiveCLiterals.md:257
+#: ../../../ObjectiveCLiterals.md:308
 msgid "Examples"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:41
-msgid "The following program illustrates the rules for ``NSNumber`` literals:"
+#: ../../../ObjectiveCLiterals.md:36
+msgid "The following program illustrates the rules for `NSNumber` literals:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:70 ../../../ObjectiveCLiterals.rst:299
-#: ../../../ObjectiveCLiterals.rst:452
+#: ../../../ObjectiveCLiterals.md:64 ../../../ObjectiveCLiterals.md:285
+#: ../../../ObjectiveCLiterals.md:432
 msgid "Discussion"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:72
+#: ../../../ObjectiveCLiterals.md:66
 msgid ""
-"NSNumber literals only support literal scalar values after the ``'@'``. "
-"Consequently, ``@INT_MAX`` works, but ``@INT_MIN`` does not, because they "
-"are defined like this:"
+"NSNumber literals only support literal scalar values after the `'@'`. "
+"Consequently, `@INT_MAX` works, but `@INT_MIN` does not, because they are "
+"defined like this:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:81
+#: ../../../ObjectiveCLiterals.md:75
 msgid ""
-"The definition of ``INT_MIN`` is not a simple literal, but a parenthesized "
-"expression. Parenthesized expressions are supported using the `boxed "
-"expression <#objc_boxed_expressions>`_ syntax, which is described in the "
-"next section."
+"The definition of `INT_MIN` is not a simple literal, but a parenthesized "
+"expression. Parenthesized expressions are supported using the [boxed "
+"expression](#boxed-expressions) syntax, which is described in the next "
+"section."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:86
+#: ../../../ObjectiveCLiterals.md:80
 msgid ""
-"Because ``NSNumber`` does not currently support wrapping ``long double`` "
-"values, the use of a ``long double NSNumber`` literal (e.g. ``@123.23L``) "
-"will be rejected by the compiler."
+"Because `NSNumber` does not currently support wrapping `long double` values, "
+"the use of a `long double NSNumber` literal (e.g. `@123.23L`) will be "
+"rejected by the compiler."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:90
+#: ../../../ObjectiveCLiterals.md:84
 msgid ""
-"Previously, the ``BOOL`` type was simply a typedef for ``signed char``, and "
-"``YES`` and ``NO`` were macros that expand to ``(BOOL)1`` and ``(BOOL)0`` "
-"respectively. To support ``@YES`` and ``@NO`` expressions, these macros are "
-"now defined using new language keywords in ``<objc/objc.h>``:"
+"Previously, the `BOOL` type was simply a typedef for `signed char`, and "
+"`YES` and `NO` were macros that expand to `(BOOL)1` and `(BOOL)0` "
+"respectively. To support `@YES` and `@NO` expressions, these macros are now "
+"defined using new language keywords in `<objc/objc.h>`:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:106
+#: ../../../ObjectiveCLiterals.md:100
 msgid ""
-"The compiler implicitly converts ``__objc_yes`` and ``__objc_no`` to "
-"``(BOOL)1`` and ``(BOOL)0``. The keywords are used to disambiguate ``BOOL`` "
-"and integer literals."
+"The compiler implicitly converts `__objc_yes` and `__objc_no` to `(BOOL)1` "
+"and `(BOOL)0`. The keywords are used to disambiguate `BOOL` and integer "
+"literals."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:110
+#: ../../../ObjectiveCLiterals.md:104
 msgid ""
-"Objective-C++ also supports ``@true`` and ``@false`` expressions, which are "
-"equivalent to ``@YES`` and ``@NO``."
+"Objective-C++ also supports `@true` and `@false` expressions, which are "
+"equivalent to `@YES` and `@NO`."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:114
+#: ../../../ObjectiveCLiterals.md:107
 msgid "Boxed Expressions"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:116
+#: ../../../ObjectiveCLiterals.md:109
 msgid "Objective-C provides a new syntax for boxing C expressions:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:122
+#: ../../../ObjectiveCLiterals.md:115
 msgid ""
 "Expressions of scalar (numeric, enumerated, BOOL), C string pointer and some "
 "C structures (via NSValue) are supported:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:146
+#: ../../../ObjectiveCLiterals.md:138
 msgid "Boxed Enums"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:148
+#: ../../../ObjectiveCLiterals.md:140
 msgid ""
 "Cocoa frameworks frequently define constant values using *enums.* Although "
 "enum values are integral, they may not be used directly as boxed literals "
-"(this avoids conflicts with future ``'@'``-prefixed Objective-C keywords). "
+"(this avoids conflicts with future `'@'`-prefixed Objective-C keywords). "
 "Instead, an enum value must be placed inside a boxed expression. The "
-"following example demonstrates configuring an ``AVAudioRecorder`` using a "
+"following example demonstrates configuring an `AVAudioRecorder` using a "
 "dictionary that contains a boxed enumeration value:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:171
+#: ../../../ObjectiveCLiterals.md:163
 msgid ""
-"The expression ``@(AVAudioQualityMax)`` converts ``AVAudioQualityMax`` to an "
-"integer type, and boxes the value accordingly. If the enum has a :ref:`fixed "
+"The expression `@(AVAudioQualityMax)` converts `AVAudioQualityMax` to an "
+"integer type, and boxes the value accordingly. If the enum has a {ref}`fixed "
 "underlying type <objc-fixed-enum>` as in:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:180
+#: ../../../ObjectiveCLiterals.md:172
 msgid ""
-"then the fixed underlying type will be used to select the correct "
-"``NSNumber`` creation method."
+"then the fixed underlying type will be used to select the correct `NSNumber` "
+"creation method."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:183
+#: ../../../ObjectiveCLiterals.md:175
 msgid ""
-"Boxing a value of enum type will result in a ``NSNumber`` pointer with a "
-"creation method according to the underlying type of the enum, which can be "
-"a :ref:`fixed underlying type <objc-fixed-enum>` or a compiler-defined "
-"integer type capable of representing the values of all the members of the "
+"Boxing a value of enum type will result in a `NSNumber` pointer with a "
+"creation method according to the underlying type of the enum, which can be a "
+"{ref}`fixed underlying type <objc-fixed-enum>` or a compiler-defined integer "
+"type capable of representing the values of all the members of the "
 "enumeration:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:196
+#: ../../../ObjectiveCLiterals.md:187
 msgid "Boxed C Strings"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:198
+#: ../../../ObjectiveCLiterals.md:189
 msgid ""
-"A C string literal prefixed by the ``'@'`` token denotes an ``NSString`` "
-"literal in the same way a numeric literal prefixed by the ``'@'`` token "
-"denotes an ``NSNumber`` literal. When the type of the parenthesized "
-"expression is ``(char *)`` or ``(const char *)``, the result of the boxed "
-"expression is a pointer to an ``NSString`` object containing equivalent "
-"character data, which is assumed to be '\\\\0'-terminated and UTF-8 encoded. "
-"The following example converts C-style command line arguments into "
-"``NSString`` objects."
+"A C string literal prefixed by the `'@'` token denotes an `NSString` literal "
+"in the same way a numeric literal prefixed by the `'@'` token denotes an "
+"`NSNumber` literal. When the type of the parenthesized expression is `(char "
+"*)` or `(const char *)`, the result of the boxed expression is a pointer to "
+"an `NSString` object containing equivalent character data, which is assumed "
+"to be '\\\\0'-terminated and UTF-8 encoded. The following example converts C-"
+"style command line arguments into `NSString` objects."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:221
+#: ../../../ObjectiveCLiterals.md:212
 msgid ""
 "As with all C pointers, character pointer expressions can involve arbitrary "
 "pointer arithmetic, therefore programmers must ensure that the character "
-"data is valid. Passing ``NULL`` as the character pointer will raise an "
-"exception at runtime. When possible, the compiler will reject ``NULL`` "
+"data is valid. Passing `NULL` as the character pointer will raise an "
+"exception at runtime. When possible, the compiler will reject `NULL` "
 "character pointers used in boxed expressions."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:228
+#: ../../../ObjectiveCLiterals.md:218
 msgid "Boxed C Structures"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:230
+#: ../../../ObjectiveCLiterals.md:220
 msgid ""
 "Boxed expressions support construction of NSValue objects. It said that C "
 "structures can be used, the only requirement is: structure should be marked "
-"with ``objc_boxable`` attribute. To support older version of frameworks and/"
-"or third-party libraries you may need to add the attribute via ``typedef``."
+"with `objc_boxable` attribute. To support older version of frameworks and/or "
+"third-party libraries you may need to add the attribute via `typedef`."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:264
+#: ../../../ObjectiveCLiterals.md:252
 msgid "Container Literals"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:266
+#: ../../../ObjectiveCLiterals.md:254
 msgid ""
 "Objective-C now supports a new expression syntax for creating immutable "
 "array and dictionary container objects."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:272
+#: ../../../ObjectiveCLiterals.md:259
 msgid "Immutable array expression:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:278
+#: ../../../ObjectiveCLiterals.md:265
 msgid ""
-"This creates an ``NSArray`` with 3 elements. The comma-separated sub-"
+"This creates an `NSArray` with 3 elements. The comma-separated sub-"
 "expressions of an array literal can be any Objective-C object pointer typed "
 "expression."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:282
+#: ../../../ObjectiveCLiterals.md:269
 msgid "Immutable dictionary expression:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:292
+#: ../../../ObjectiveCLiterals.md:279
 msgid ""
-"This creates an ``NSDictionary`` with 3 key/value pairs. Value sub-"
-"expressions of a dictionary literal must be Objective-C object pointer "
-"typed, as in array literals. Key sub-expressions must be of an Objective-C "
-"object pointer type that implements the ``<NSCopying>`` protocol."
+"This creates an `NSDictionary` with 3 key/value pairs. Value sub-expressions "
+"of a dictionary literal must be Objective-C object pointer typed, as in "
+"array literals. Key sub-expressions must be of an Objective-C object pointer "
+"type that implements the `<NSCopying>` protocol."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:301
+#: ../../../ObjectiveCLiterals.md:287
 msgid ""
-"Neither keys nor values can have the value ``nil`` in containers. If the "
-"compiler can prove that a key or value is ``nil`` at compile time, then a "
+"Neither keys nor values can have the value `nil` in containers. If the "
+"compiler can prove that a key or value is `nil` at compile time, then a "
 "warning will be emitted. Otherwise, a runtime error will occur."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:305
+#: ../../../ObjectiveCLiterals.md:291
 msgid ""
 "Using array and dictionary literals is safer than the variadic creation "
 "forms commonly in use today. Array literal expressions expand to calls to "
-"``+[NSArray arrayWithObjects:count:]``, which validates that all objects are "
-"non-``nil``. The variadic form, ``+[NSArray arrayWithObjects:]`` uses "
-"``nil`` as an argument list terminator, which can lead to malformed array "
-"objects. Dictionary literals are similarly created with ``+[NSDictionary "
-"dictionaryWithObjects:forKeys:count:]`` which validates all objects and "
-"keys, unlike ``+[NSDictionary dictionaryWithObjectsAndKeys:]`` which also "
-"uses a ``nil`` parameter as an argument list terminator."
+"`+[NSArray arrayWithObjects:count:]`, which validates that all objects are "
+"non-`nil`. The variadic form, `+[NSArray arrayWithObjects:]` uses `nil` as "
+"an argument list terminator, which can lead to malformed array objects. "
+"Dictionary literals are similarly created with `+[NSDictionary "
+"dictionaryWithObjects:forKeys:count:]` which validates all objects and keys, "
+"unlike `+[NSDictionary dictionaryWithObjectsAndKeys:]` which also uses a "
+"`nil` parameter as an argument list terminator."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:318
+#: ../../../ObjectiveCLiterals.md:303
 msgid "Object Subscripting"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:320
+#: ../../../ObjectiveCLiterals.md:305
 msgid ""
 "Objective-C object pointer values can now be used with C's subscripting "
 "operator."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:326
+#: ../../../ObjectiveCLiterals.md:310
 msgid ""
 "The following code demonstrates the use of object subscripting syntax with "
-"``NSMutableArray`` and ``NSMutableDictionary`` objects:"
+"`NSMutableArray` and `NSMutableDictionary` objects:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:342
+#: ../../../ObjectiveCLiterals.md:326
 msgid ""
 "The next section explains how subscripting expressions map to accessor "
 "methods."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:346
+#: ../../../ObjectiveCLiterals.md:329
 msgid "Subscripting Methods"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:348
+#: ../../../ObjectiveCLiterals.md:331
 msgid ""
 "Objective-C supports two kinds of subscript expressions: *array-style* "
 "subscript expressions use integer typed subscripts; *dictionary-style* "
@@ -305,11 +303,11 @@ msgid ""
 "styles."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:359
+#: ../../../ObjectiveCLiterals.md:341
 msgid "Array-Style Subscripting"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:361
+#: ../../../ObjectiveCLiterals.md:343
 msgid ""
 "When the subscript operand has an integral type, the expression is rewritten "
 "to use one of two different selectors, depending on whether the element is "
@@ -317,19 +315,19 @@ msgid ""
 "index, as in the following example:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:371
-msgid "it is translated into a call to ``objectAtIndexedSubscript:``"
+#: ../../../ObjectiveCLiterals.md:353
+msgid "it is translated into a call to `objectAtIndexedSubscript:`"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:377
+#: ../../../ObjectiveCLiterals.md:359
 msgid "When an expression writes an element using an integral index:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:383
-msgid "it is translated to a call to ``setObject:atIndexedSubscript:``"
+#: ../../../ObjectiveCLiterals.md:365
+msgid "it is translated to a call to `setObject:atIndexedSubscript:`"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:389
+#: ../../../ObjectiveCLiterals.md:371
 msgid ""
 "These message sends are then type-checked and performed just like explicit "
 "message sends. The method used for objectAtIndexedSubscript: must be "
@@ -339,32 +337,32 @@ msgid ""
 "Objective-C pointer type and its second argument having integral type."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:397
+#: ../../../ObjectiveCLiterals.md:379
 msgid ""
 "The meaning of indexes is left up to the declaring class. The compiler will "
 "coerce the index to the appropriate argument type of the method it uses for "
-"type-checking. For an instance of ``NSArray``, reading an element using an "
-"index outside the range ``[0, array.count)`` will raise an exception. For an "
-"instance of ``NSMutableArray``, assigning to an element using an index "
-"within this range will replace that element, but assigning to an element "
-"using an index outside this range will raise an exception; no syntax is "
-"provided for inserting, appending, or removing elements for mutable arrays."
+"type-checking. For an instance of `NSArray`, reading an element using an "
+"index outside the range `[0, array.count)` will raise an exception. For an "
+"instance of `NSMutableArray`, assigning to an element using an index within "
+"this range will replace that element, but assigning to an element using an "
+"index outside this range will raise an exception; no syntax is provided for "
+"inserting, appending, or removing elements for mutable arrays."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:407
+#: ../../../ObjectiveCLiterals.md:389
 msgid ""
 "A class need not declare both methods in order to take advantage of this "
-"language feature. For example, the class ``NSArray`` declares only "
-"``objectAtIndexedSubscript:``, so that assignments to elements will fail to "
-"type-check; moreover, its subclass ``NSMutableArray`` declares ``setObject:"
-"atIndexedSubscript:``."
+"language feature. For example, the class `NSArray` declares only "
+"`objectAtIndexedSubscript:`, so that assignments to elements will fail to "
+"type-check; moreover, its subclass `NSMutableArray` declares `setObject:"
+"atIndexedSubscript:`."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:414
+#: ../../../ObjectiveCLiterals.md:395
 msgid "Dictionary-Style Subscripting"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:416
+#: ../../../ObjectiveCLiterals.md:397
 msgid ""
 "When the subscript operand has an Objective-C object pointer type, the "
 "expression is rewritten to use one of two different selectors, depending on "
@@ -373,30 +371,29 @@ msgid ""
 "in the following example:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:427
-msgid ""
-"it is translated into a call to the ``objectForKeyedSubscript:`` method:"
+#: ../../../ObjectiveCLiterals.md:408
+msgid "it is translated into a call to the `objectForKeyedSubscript:` method:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:433
+#: ../../../ObjectiveCLiterals.md:414
 msgid ""
 "When an expression writes an element using an Objective-C object pointer "
 "subscript:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:440
-msgid "it is translated to a call to ``setObject:forKeyedSubscript:``"
+#: ../../../ObjectiveCLiterals.md:421
+msgid "it is translated to a call to `setObject:forKeyedSubscript:`"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:446
+#: ../../../ObjectiveCLiterals.md:427
 msgid ""
-"The behavior of ``setObject:forKeyedSubscript:`` is class-specific; but in "
+"The behavior of `setObject:forKeyedSubscript:` is class-specific; but in "
 "general it should replace an existing value if one is already associated "
 "with a key, otherwise it should add a new value for the key. No syntax is "
 "provided for removing elements from mutable dictionaries."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:454
+#: ../../../ObjectiveCLiterals.md:434
 msgid ""
 "An Objective-C subscript expression occurs when the base operand of the C "
 "subscript operator has an Objective-C object pointer type. Since this "
@@ -405,7 +402,7 @@ msgid ""
 "forbids such arithmetic."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:460
+#: ../../../ObjectiveCLiterals.md:440
 msgid ""
 "Currently, only subscripts of integral or Objective-C object pointer type "
 "are supported. In C++, a class type can be used if it has a single "
@@ -414,7 +411,7 @@ msgid ""
 "Otherwise, the expression is ill-formed."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:466
+#: ../../../ObjectiveCLiterals.md:446
 msgid ""
 "An Objective-C object subscript expression is always an l-value. If the "
 "expression appears on the left-hand side of a simple assignment operator "
@@ -427,72 +424,71 @@ msgid ""
 "expression, or (in C++) to bind a reference to it."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:477
+#: ../../../ObjectiveCLiterals.md:457
 msgid ""
 "Programs can use object subscripting with Objective-C object pointers of "
-"type ``id``. Normal dynamic message send rules apply; the compiler must see "
+"type `id`. Normal dynamic message send rules apply; the compiler must see "
 "*some* declaration of the subscripting methods, and will pick the "
 "declaration seen first."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:483
+#: ../../../ObjectiveCLiterals.md:462
 msgid "Caveats"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:485
+#: ../../../ObjectiveCLiterals.md:464
 msgid ""
 "Objects created using the literal or boxed expression syntax are not "
 "guaranteed to be uniqued by the runtime, but nor are they guaranteed to be "
 "newly-allocated. As such, the result of performing direct comparisons "
-"against the location of an object literal (using ``==``, ``!=``, ``<``, "
-"``<=``, ``>``, or ``>=``) is not well-defined. This is usually a simple "
-"mistake in code that intended to call the ``isEqual:`` method (or the "
-"``compare:`` method)."
+"against the location of an object literal (using `==`, `!=`, `<`, `<=`, `>`, "
+"or `>=`) is not well-defined. This is usually a simple mistake in code that "
+"intended to call the `isEqual:` method (or the `compare:` method)."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:493
+#: ../../../ObjectiveCLiterals.md:472
 msgid ""
 "This caveat applies to compile-time string literals as well. Historically, "
-"string literals (using the ``@\"...\"`` syntax) have been uniqued across "
+"string literals (using the `@\"...\"` syntax) have been uniqued across "
 "translation units during linking. This is an implementation detail of the "
 "compiler and should not be relied upon. If you are using such code, please "
-"use global string constants instead (``NSString * const MyConst = @\"..."
-"\"``) or use ``isEqual:``."
+"use global string constants instead (`NSString * const MyConst = @\"...\"`) "
+"or use `isEqual:`."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:501
+#: ../../../ObjectiveCLiterals.md:479
 msgid "Grammar Additions"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:503
+#: ../../../ObjectiveCLiterals.md:481
 msgid ""
-"To support the new syntax described above, the Objective-C ``@``-expression "
+"To support the new syntax described above, the Objective-C `@`-expression "
 "grammar has the following new productions:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:538
-msgid "Note: ``@true`` and ``@false`` are only supported in Objective-C++."
+#: ../../../ObjectiveCLiterals.md:516
+msgid "Note: `@true` and `@false` are only supported in Objective-C++."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:541
+#: ../../../ObjectiveCLiterals.md:518
 msgid "Availability Checks"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:543
+#: ../../../ObjectiveCLiterals.md:520
 msgid ""
-"Programs test for the new features by using clang's \\_\\_has\\_feature "
+"Programs test for the new features by using clang's \\_\\_has_feature "
 "checks. Here are examples of their use:"
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:600
+#: ../../../ObjectiveCLiterals.md:577
 msgid ""
-"Code can use also ``__has_feature(objc_bool)`` to check for the availability "
-"of numeric literals support. This checks for the new ``__objc_yes / "
-"__objc_no`` keywords, which enable the use of ``@YES / @NO`` literals."
+"Code can use also `__has_feature(objc_bool)` to check for the availability "
+"of numeric literals support. This checks for the new `__objc_yes / "
+"__objc_no` keywords, which enable the use of `@YES / @NO` literals."
 msgstr ""
 
-#: ../../../ObjectiveCLiterals.rst:605
+#: ../../../ObjectiveCLiterals.md:582
 msgid ""
 "To check whether boxed expressions are supported, use "
-"``__has_feature(objc_boxed_expressions)`` feature macro."
+"`__has_feature(objc_boxed_expressions)` feature macro."
 msgstr ""
