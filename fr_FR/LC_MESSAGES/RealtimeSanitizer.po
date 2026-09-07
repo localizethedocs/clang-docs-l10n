@@ -1,0 +1,483 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../RealtimeSanitizer.md:1
+msgid "RealtimeSanitizer"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:7
+msgid "Introduction"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:9
+msgid ""
+"RealtimeSanitizer (a.k.a. RTSan) is a real-time safety testing tool for C "
+"and C++ projects. RTSan can be used to detect real-time violations, i.e. "
+"calls to methods that are not safe for use in functions with deterministic "
+"run time requirements. RTSan considers any function marked with the "
+"`[[clang::nonblocking]]` attribute to be a real-time function. At run-time, "
+"if RTSan detects a call to `malloc`, `free`, `pthread_mutex_lock`, or "
+"anything else known to have a non-deterministic execution time in a function "
+"marked `[[clang::nonblocking]]` it raises an error."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:18
+msgid ""
+"RTSan performs its analysis at run-time but shares the `[[clang::"
+"nonblocking]]` attribute with the {doc}`FunctionEffectAnalysis` system, "
+"which operates at compile-time to detect potential real-time safety "
+"violations. For comprehensive detection of real-time safety issues, it is "
+"recommended to use both systems together."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:23
+msgid "The runtime slowdown introduced by RealtimeSanitizer is negligible."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:25
+msgid "How to build"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:27
+msgid ""
+"Build LLVM/Clang with [CMake](https://llvm.org/docs/CMake.html) and enable "
+"the `compiler-rt` runtime. An example CMake configuration that will allow "
+"for the use/testing of RealtimeSanitizer:"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:35
+msgid "Usage"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:37
+msgid "There are two requirements:"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:39
+msgid "The code must be compiled with the `-fsanitize=realtime` flag."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:40
+msgid ""
+"Functions that are subject to real-time constraints must be marked with the "
+"`[[clang::nonblocking]]` attribute."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:43
+msgid ""
+"Typically, these attributes should be added onto the functions that are "
+"entry points for threads with real-time priority. These threads are subject "
+"to a fixed callback time, such as audio callback threads or rendering loops "
+"in video game code."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:65
+msgid ""
+"If a real-time safety violation is detected in a `[[clang::nonblocking]]` "
+"context, or any function invoked by that function, the program will exit "
+"with a non-zero exit code."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:87
+msgid "Blocking functions"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:89
+msgid ""
+"Calls to system library functions such as `malloc` are automatically caught "
+"by RealtimeSanitizer. Real-time programmers may also write their own "
+"blocking (real-time unsafe) functions that they wish RealtimeSanitizer to be "
+"aware of. RealtimeSanitizer will raise an error at run time if any function "
+"attributed with `[[clang::blocking]]` is called in a `[[clang::"
+"nonblocking]]` context."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:126
+msgid "Run-time flags"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:128
+msgid ""
+"RealtimeSanitizer supports a number of run-time flags, which can be "
+"specified in the `RTSAN_OPTIONS` environment variable:"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:135
+msgid "Or at compile-time by providing the symbol `__rtsan_default_options`:"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:144
+msgid ""
+"You can see all sanitizer options (some of which are unsupported) by using "
+"the `help` flag:"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:150
+msgid "A **partial** list of flags RealtimeSanitizer respects:"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:152
+msgid "Run-time Flags"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:156
+msgid "Flag name"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:157
+msgid "Default value"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:158
+msgid "Type"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:159
+msgid "Short description"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:160
+msgid "`halt_on_error`"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:161 ../../../RealtimeSanitizer.md:165
+#: ../../../RealtimeSanitizer.md:185 ../../../RealtimeSanitizer.md:193
+msgid "`true`"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:162 ../../../RealtimeSanitizer.md:166
+#: ../../../RealtimeSanitizer.md:170 ../../../RealtimeSanitizer.md:178
+#: ../../../RealtimeSanitizer.md:182 ../../../RealtimeSanitizer.md:186
+#: ../../../RealtimeSanitizer.md:194
+msgid "boolean"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:163
+msgid "Exit after first reported error."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:164
+msgid "`suppress_equal_stacks`"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:167
+msgid ""
+"If true, suppress duplicate reports (i.e. only print each unique error "
+"once). Only particularly useful when `halt_on_error=false`."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:168
+msgid "`print_stats_on_exit`"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:169 ../../../RealtimeSanitizer.md:177
+msgid "`false`"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:171
+msgid "Print stats on exit. Includes total and unique errors."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:172
+msgid "`color`"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:173
+msgid "`\"auto\"`"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:174
+msgid "string"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:175
+msgid "Colorize reports: (always|never|auto)."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:176
+msgid "`fast_unwind_on_fatal`"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:179
+msgid ""
+"If available, use the fast frame-pointer-based unwinder on detected errors. "
+"If true, ensure the code under test has been compiled with frame pointers "
+"with `-fno-omit-frame-pointers` or similar."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:180
+msgid "`abort_on_error`"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:181
+msgid "OS dependent"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:183
+msgid ""
+"If true, the tool calls `abort()` instead of `_exit()` after printing the "
+"error report. On some OSes (macOS, for example) this is beneficial because a "
+"better stack trace is emitted on crash."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:184
+msgid "`symbolize`"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:187
+msgid ""
+"If set, use the symbolizer to turn virtual addresses to file/line locations. "
+"If false, can greatly speed up the error reporting."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:188
+msgid "`suppressions`"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:189
+msgid "`\"\"`"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:190
+msgid "path"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:191
+msgid ""
+"If set to a valid suppressions file, will suppress issue reporting. See "
+"details in [Disabling and Suppressing](#disabling-and-suppressing)."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:192
+msgid "`verify_interceptors`"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:195
+msgid ""
+"If true, verifies interceptors are working at initialization. The program "
+"will abort with error `==ERROR: Interceptors are not working. This may be "
+"because RealtimeSanitizer is loaded too late (e.g. via dlopen)` if an issue "
+"is detected."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:198
+msgid "Some issues with flags can be debugged using the `verbosity=$NUM` flag:"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:207
+msgid "Additional customization"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:209
+msgid ""
+"In addition to `__rtsan_default_options` outlined above, you can provide "
+"definitions of other functions that affect how RTSan operates."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:211
+msgid ""
+"To be notified on every error reported by RTsan, provide a definition of "
+"`__sanitizer_report_error_summary`."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:220
+msgid "The error summary will be of the form:"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:226
+msgid ""
+"To register a callback which will be invoked before a RTSan kills the "
+"process:"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:245
+msgid "Disabling and suppressing"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:247
+msgid ""
+"There are multiple ways to disable error reporting when using "
+"RealtimeSanitizer."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:249
+msgid ""
+"In general, `ScopedDisabler` should be preferred, as it is the most "
+"performant."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:251
+msgid "Suppression methods"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:256
+msgid "Method"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:257
+msgid "Specified at?"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:258
+msgid "Scope"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:259
+msgid "Run-time cost"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:260
+msgid "Description"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:261 ../../../RealtimeSanitizer.md:278
+msgid "`ScopedDisabler`"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:262
+msgid "Compile-time"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:263 ../../../RealtimeSanitizer.md:273
+msgid "Stack"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:264
+msgid "Very low"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:265
+msgid "Violations are ignored for the lifetime of the `ScopedDisabler` object."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:266
+msgid "`function-name-matches` suppression"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:267 ../../../RealtimeSanitizer.md:272
+msgid "Run-time"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:268
+msgid "Single function"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:269
+msgid "Medium"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:270
+msgid ""
+"Suppresses intercepted and `[[clang::blocking]]` function calls by name."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:271
+msgid "`call-stack-contains` suppression"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:274
+msgid "High"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:275
+msgid "Suppresses any stack trace containing the specified pattern."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:280
+msgid ""
+"At compile time, RealtimeSanitizer may be disabled using `__rtsan::"
+"ScopedDisabler`. RTSan ignores any errors originating within the "
+"`ScopedDisabler` instance variable scope."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:293
+msgid ""
+"If RealtimeSanitizer is not enabled at compile time (i.e., the code is not "
+"compiled with the `-fsanitize=realtime` flag), the `ScopedDisabler` is "
+"compiled as a no-op."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:295
+msgid ""
+"In C, you can use the `__rtsan_disable()` and `rtsan_enable()` functions to "
+"manually disable and re-enable RealtimeSanitizer checks."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:312
+msgid ""
+"Each call to `__rtsan_disable()` must be paired with a subsequent call to "
+"`__rtsan_enable()` to restore normal sanitizer functionality. If a "
+"corresponding `rtsan_enable()` call is not made, the behavior is undefined."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:314
+msgid "Suppression file"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:316
+msgid ""
+"At run-time, suppressions may be specified using a suppressions file passed "
+"in `RTSAN_OPTIONS`. Run-time suppression may be useful if the source cannot "
+"be changed."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:328
+msgid "Suppressions specified in this file are one of two flavors."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:330
+msgid ""
+"`function-name-matches` suppresses reporting of any intercepted library "
+"call, or function marked `[[clang::blocking]]` by name. If, for instance, "
+"you know that `malloc` is real-time safe on your system, you can disable the "
+"check for it via `function-name-matches:malloc`."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:332
+msgid ""
+"`call-stack-contains` suppresses reporting of errors in any stack that "
+"contains a string matching the pattern specified. For example, suppressing "
+"error reporting of any non-real-time-safe behavior in `std::vector` may be "
+"specified `call-stack-contains:std::*vector`. You must include symbols in "
+"your build for this method to be effective, unsymbolicated stack traces "
+"cannot be matched. `call-stack-contains` has the highest run-time cost of "
+"any method of suppression."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:334
+msgid ""
+"Patterns may be exact matches or are \"regex-light\" patterns, containing "
+"special characters such as `^$*`."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:336
+msgid ""
+"The number of potential errors suppressed via this method may be seen on "
+"exit when using the `print_stats_on_exit` flag."
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:338
+msgid "Compile-time sanitizer detection"
+msgstr ""
+
+#: ../../../RealtimeSanitizer.md:340
+msgid ""
+"Clang provides the pre-processor macro `__has_feature` which may be used to "
+"detect if RealtimeSanitizer is enabled at compile-time."
+msgstr ""
