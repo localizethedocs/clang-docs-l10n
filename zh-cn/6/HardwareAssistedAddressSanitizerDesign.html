@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Hardware-assisted AddressSanitizer Design Documentation &#8212; Clang 6 文档</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
+    <script src="_static/documentation_options.js?v=04eb3ddf"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/HardwareAssistedAddressSanitizerDesign.html" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="prev" title="ABI tags" href="ItaniumMangleAbiTags.html" />
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Clang 6 文档</span></a></h1>
+        <h2 class="heading"><span>Hardware-assisted AddressSanitizer Design Documentation</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="ItaniumMangleAbiTags.html">ABI tags</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">目录</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="hardware-assisted-addresssanitizer-design-documentation">
+<h1>Hardware-assisted AddressSanitizer Design Documentation<a class="headerlink" href="#hardware-assisted-addresssanitizer-design-documentation" title="Link to this heading">¶</a></h1>
+<p>This page is a design document for
+<strong>hardware-assisted AddressSanitizer</strong> (or <strong>HWASAN</strong>)
+a tool similar to <a class="reference internal" href="AddressSanitizer.html"><span class="doc">AddressSanitizer</span></a>,
+but based on partial hardware assistance.</p>
+<p>The document is a draft, suggestions are welcome.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="AddressSanitizer.html"><span class="doc">AddressSanitizer</span></a>
+tags every 8 bytes of the application memory with a 1 byte tag (using <em>shadow memory</em>),
+uses <em>redzones</em> to find buffer-overflows and
+<em>quarantine</em> to find use-after-free.
+The redzones, the quarantine, and, to a less extent, the shadow, are the
+sources of AddressSanitizer's memory overhead.
+See the <a class="reference external" href="https://www.usenix.org/system/files/conference/atc12/atc12-final39.pdf">AddressSanitizer paper</a> for details.</p>
+<p>AArch64 has the <a class="reference external" href="http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.den0024a/ch12s05s01.html">Address Tagging</a> (or top-byte-ignore, TBI), a hardware feature that allows
+software to use 8 most significant bits of a 64-bit pointer as
+a tag. HWASAN uses <a class="reference external" href="http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.den0024a/ch12s05s01.html">Address Tagging</a>
+to implement a memory safety tool, similar to <a class="reference internal" href="AddressSanitizer.html"><span class="doc">AddressSanitizer</span></a>,
+but with smaller memory overhead and slightly different (mostly better)
+accuracy guarantees.</p>
+</section>
+<section id="algorithm">
+<h2>Algorithm<a class="headerlink" href="#algorithm" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Every heap/stack/global memory object is forcibly aligned by <cite>N</cite> bytes
+(<cite>N</cite> is e.g. 16 or 64). We call <cite>N</cite> the <strong>granularity</strong> of tagging.</p></li>
+<li><p>For every such object a random <cite>K</cite>-bit tag <cite>T</cite> is chosen (<cite>K</cite> is e.g. 4 or 8)</p></li>
+<li><p>The pointer to the object is tagged with <cite>T</cite>.</p></li>
+<li><p>The memory for the object is also tagged with <cite>T</cite>
+(using a <cite>N=&gt;1</cite> shadow memory)</p></li>
+<li><p>Every load and store is instrumented to read the memory tag and compare it
+with the pointer tag, exception is raised on tag mismatch.</p></li>
+</ul>
+</section>
+<section id="instrumentation">
+<h2>Instrumentation<a class="headerlink" href="#instrumentation" title="Link to this heading">¶</a></h2>
+<section id="memory-accesses">
+<h3>Memory Accesses<a class="headerlink" href="#memory-accesses" title="Link to this heading">¶</a></h3>
+<p>All memory accesses are prefixed with an inline instruction sequence that
+verifies the tags. Currently, the following sequence is used:</p>
+<div class="highlight-asm notranslate"><div class="highlight"><pre><span></span><span class="c1">// int foo(int *a) { return *a; }</span>
+<span class="c1">// clang -O2 --target=aarch64-linux -fsanitize=hwaddress -c load.c</span>
+<span class="nl">foo:</span>
+<span class="w">     </span><span class="err">0:</span><span class="w">       </span><span class="err">08</span><span class="w"> </span><span class="nf">dc</span><span class="w"> </span><span class="mi">44</span><span class="w"> </span><span class="no">d3</span><span class="w">     </span><span class="no">ubfx</span><span class="w">    </span><span class="no">x8</span><span class="p">,</span><span class="w"> </span><span class="no">x0</span><span class="p">,</span><span class="w"> </span><span class="mi">#4</span><span class="p">,</span><span class="w"> </span><span class="mi">#52</span><span class="w">  </span><span class="c1">// shadow address</span>
+<span class="w">     </span><span class="err">4:</span><span class="w">       </span><span class="err">08</span><span class="w"> </span><span class="err">01</span><span class="w"> </span><span class="err">40</span><span class="w"> </span><span class="err">39</span><span class="w">     </span><span class="nf">ldrb</span><span class="w">    </span><span class="no">w8</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">x8</span><span class="p">]</span><span class="w">         </span><span class="c1">// load shadow</span>
+<span class="w">     </span><span class="err">8:</span><span class="w">       </span><span class="err">09</span><span class="w"> </span><span class="nf">fc</span><span class="w"> </span><span class="mi">78</span><span class="w"> </span><span class="no">d3</span><span class="w">     </span><span class="no">lsr</span><span class="w">     </span><span class="no">x9</span><span class="p">,</span><span class="w"> </span><span class="no">x0</span><span class="p">,</span><span class="w"> </span><span class="mi">#56</span><span class="w">      </span><span class="c1">// address tag</span>
+<span class="w">     </span><span class="nl">c:</span><span class="w">       </span><span class="err">3</span><span class="nf">f</span><span class="w"> </span><span class="mi">01</span><span class="w"> </span><span class="mi">08</span><span class="w"> </span><span class="mi">6</span><span class="no">b</span><span class="w">     </span><span class="no">cmp</span><span class="w">     </span><span class="no">w9</span><span class="p">,</span><span class="w"> </span><span class="no">w8</span><span class="w">           </span><span class="c1">// compare tags</span>
+<span class="w">    </span><span class="err">10:</span><span class="w">       </span><span class="err">61</span><span class="w"> </span><span class="err">00</span><span class="w"> </span><span class="err">00</span><span class="w"> </span><span class="err">54</span><span class="w">     </span><span class="nf">b.ne</span><span class="w">    </span><span class="mi">#12</span><span class="w">              </span><span class="c1">// jump on mismatch</span>
+<span class="w">    </span><span class="err">14:</span><span class="w">       </span><span class="err">00</span><span class="w"> </span><span class="err">00</span><span class="w"> </span><span class="err">40</span><span class="w"> </span><span class="nf">b9</span><span class="w">     </span><span class="no">ldr</span><span class="w">     </span><span class="no">w0</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">x0</span><span class="p">]</span><span class="w">         </span><span class="c1">// original load</span>
+<span class="w">    </span><span class="err">18:</span><span class="w">       </span><span class="nf">c0</span><span class="w"> </span><span class="mi">03</span><span class="w"> </span><span class="mi">5</span><span class="no">f</span><span class="w"> </span><span class="no">d6</span><span class="w">     </span><span class="no">ret</span>
+<span class="w">    </span><span class="err">1</span><span class="nl">c:</span><span class="w">       </span><span class="err">40</span><span class="w"> </span><span class="err">20</span><span class="w"> </span><span class="err">40</span><span class="w"> </span><span class="nf">d4</span><span class="w">     </span><span class="no">hlt</span><span class="w">     </span><span class="mi">#0</span><span class="no">x102</span><span class="w">           </span><span class="c1">// halt</span>
+<span class="w">    </span><span class="err">20:</span><span class="w">       </span><span class="err">00</span><span class="w"> </span><span class="err">00</span><span class="w"> </span><span class="err">40</span><span class="w"> </span><span class="nf">b9</span><span class="w">     </span><span class="no">ldr</span><span class="w">     </span><span class="no">w0</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">x0</span><span class="p">]</span><span class="w">         </span><span class="c1">// original load</span>
+<span class="w">    </span><span class="err">24:</span><span class="w">       </span><span class="nf">c0</span><span class="w"> </span><span class="mi">03</span><span class="w"> </span><span class="mi">5</span><span class="no">f</span><span class="w"> </span><span class="no">d6</span><span class="w">     </span><span class="no">ret</span>
+</pre></div>
+</div>
+<p>Alternatively, memory accesses are prefixed with a function call.</p>
+</section>
+<section id="heap">
+<h3>Heap<a class="headerlink" href="#heap" title="Link to this heading">¶</a></h3>
+<p>Tagging the heap memory/pointers is done by <cite>malloc</cite>.
+This can be based on any malloc that forces all objects to be N-aligned.
+<cite>free</cite> tags the memory with a different tag.</p>
+</section>
+<section id="stack">
+<h3>Stack<a class="headerlink" href="#stack" title="Link to this heading">¶</a></h3>
+<p>Special compiler instrumentation is required to align the local variables
+by N, tag the memory and the pointers.
+Stack instrumentation is expected to be a major source of overhead,
+but could be optional.
+TODO: details.</p>
+</section>
+<section id="globals">
+<h3>Globals<a class="headerlink" href="#globals" title="Link to this heading">¶</a></h3>
+<p>TODO: details.</p>
+</section>
+<section id="error-reporting">
+<h3>Error reporting<a class="headerlink" href="#error-reporting" title="Link to this heading">¶</a></h3>
+<p>Errors are generated by the <cite>HLT</cite> instruction and are handled by a signal handler.</p>
+</section>
+<section id="attribute">
+<h3>Attribute<a class="headerlink" href="#attribute" title="Link to this heading">¶</a></h3>
+<p>HWASAN uses its own LLVM IR Attribute <cite>sanitize_hwaddress</cite> and a matching
+C function attribute. An alternative would be to re-use ASAN's attribute
+<cite>sanitize_address</cite>. The reasons to use a separate attribute are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Users may need to disable ASAN but not HWASAN, or vise versa,
+because the tools have different trade-offs and compatibility issues.</p></li>
+<li><p>LLVM (ideally) does not use flags to decide which pass is being used,
+ASAN or HWASAN are being applied, based on the function attributes.</p></li>
+</ul>
+</div></blockquote>
+<p>This does mean that users of HWASAN may need to add the new attribute
+to the code that already uses the old attribute.</p>
+</section>
+</section>
+<section id="comparison-with-addresssanitizer">
+<h2>Comparison with AddressSanitizer<a class="headerlink" href="#comparison-with-addresssanitizer" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>HWASAN:</dt><dd><ul class="simple">
+<li><p>Is less portable than <a class="reference internal" href="AddressSanitizer.html"><span class="doc">AddressSanitizer</span></a>
+as it relies on hardware <a class="reference external" href="http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.den0024a/ch12s05s01.html">Address Tagging</a> (AArch64).
+Address Tagging can be emulated with compiler instrumentation,
+but it will require the instrumentation to remove the tags before
+any load or store, which is infeasible in any realistic environment
+that contains non-instrumented code.</p></li>
+<li><p>May have compatibility problems if the target code uses higher
+pointer bits for other purposes.</p></li>
+<li><p>May require changes in the OS kernels (e.g. Linux seems to dislike
+tagged pointers passed from address space:
+<a class="reference external" href="https://www.kernel.org/doc/Documentation/arm64/tagged-pointers.txt">https://www.kernel.org/doc/Documentation/arm64/tagged-pointers.txt</a>).</p></li>
+<li><p><strong>Does not require redzones to detect buffer overflows</strong>,
+but the buffer overflow detection is probabilistic, with roughly
+<cite>(2**K-1)/(2**K)</cite> probability of catching a bug.</p></li>
+<li><p><strong>Does not require quarantine to detect heap-use-after-free,
+or stack-use-after-return</strong>.
+The detection is similarly probabilistic.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The memory overhead of HWASAN is expected to be much smaller
+than that of AddressSanitizer:
+<cite>1/N</cite> extra memory for the shadow
+and some overhead due to <cite>N</cite>-aligning all objects.</p>
+</section>
+<section id="related-work">
+<h2>Related Work<a class="headerlink" href="#related-work" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://lazytyped.blogspot.com/2017/09/getting-started-with-adi.html">SPARC ADI</a> implements a similar tool mostly in hardware.</p></li>
+<li><p><a class="reference external" href="https://www.cc.gatech.edu/~orso/papers/clause.doudalis.orso.prvulovic.pdf">Effective and Efficient Memory Protection Using Dynamic Tainting</a> discusses
+similar approaches (&quot;lock &amp; key&quot;).</p></li>
+<li><p><a class="reference external" href="http://www.cis.upenn.edu/acg/papers/isca12_watchdog.pdf">Watchdog</a> discussed a heavier, but still somewhat similar
+&quot;lock &amp; key&quot; approach.</p></li>
+<li><p><em>TODO: add more &quot;related work&quot; links. Suggestions are welcome.</em></p></li>
+</ul>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="ItaniumMangleAbiTags.html">ABI tags</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">目录</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; 版权所有 2007-2026, The Clang Team.
+      由 <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3创建。
+    </div>
+  </body>
+</html>
