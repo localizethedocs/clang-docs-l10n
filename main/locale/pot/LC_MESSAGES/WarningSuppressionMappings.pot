@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"POT-Creation-Date: 2026-09-14 14:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,22 +21,22 @@ msgstr ""
 msgid "Warning suppression mappings"
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:7
+#: ../../../WarningSuppressionMappings.md:4
 msgid "Introduction"
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:9
+#: ../../../WarningSuppressionMappings.md:6
 msgid ""
 "Warning suppression mappings enable users to suppress Clang's diagnostics at "
 "a per-file granularity. This allows enforcing diagnostics in specific parts "
 "of the project even if there are violations in some headers."
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:13
+#: ../../../WarningSuppressionMappings.md:10
 msgid "Goal and usage"
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:15
+#: ../../../WarningSuppressionMappings.md:12
 msgid ""
 "Clang allows diagnostics to be configured at a translation-unit granularity. "
 "If a `foo.cpp` is compiled with `-Wfoo`, all transitively included headers "
@@ -46,13 +46,13 @@ msgid ""
 "violations are creeping up quicker than the clean up."
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:22
+#: ../../../WarningSuppressionMappings.md:19
 msgid ""
 "Warning suppression mappings aim to alleviate some of these concerns by "
 "making diagnostic configuration granularity finer, at a source file level."
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:25
+#: ../../../WarningSuppressionMappings.md:22
 msgid ""
 "To achieve this, user can create a file that lists which {doc}`diagnostic "
 "groups <DiagnosticsReference>` to suppress in which files or paths, and pass "
@@ -60,7 +60,7 @@ msgid ""
 "mappings` flag."
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:30
+#: ../../../WarningSuppressionMappings.md:27
 msgid ""
 "Note that this mechanism won't enable any diagnostics on its own. Users "
 "should still turn on warnings in their compilations with explicit `-Wfoo` "
@@ -70,28 +70,28 @@ msgid ""
 "preserved."
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:36
+#: ../../../WarningSuppressionMappings.md:33
 msgid "Example"
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:55
+#: ../../../WarningSuppressionMappings.md:52
 msgid "Format"
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:57
+#: ../../../WarningSuppressionMappings.md:54
 msgid ""
 "Warning suppression mappings uses the same format as {doc}"
 "`SanitizerSpecialCaseList`."
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:60
+#: ../../../WarningSuppressionMappings.md:57
 msgid ""
 "Sections describe which diagnostic group's behavior to change, e.g. "
 "`[unused]`. When a diagnostic is matched by multiple sections, the latest "
 "section takes precedence."
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:64
+#: ../../../WarningSuppressionMappings.md:61
 msgid ""
 "Afterwards in each section, users can have multiple entities that match "
 "source files based on the globs. These entities look like `src:*/my/dir/*`. "
@@ -99,15 +99,15 @@ msgid ""
 "suppression. Source files are matched against these globs either:"
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:70
+#: ../../../WarningSuppressionMappings.md:67
 msgid "as paths relative to the current working directory"
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:71
+#: ../../../WarningSuppressionMappings.md:68
 msgid "as absolute paths."
 msgstr ""
 
-#: ../../../WarningSuppressionMappings.md:73
+#: ../../../WarningSuppressionMappings.md:70
 msgid ""
 "When a source file matches multiple globs in a section, the last one takes "
 "precedence."
