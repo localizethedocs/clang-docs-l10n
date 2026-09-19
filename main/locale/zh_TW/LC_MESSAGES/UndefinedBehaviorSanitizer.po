@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"POT-Creation-Date: 2026-09-19 13:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,64 +21,64 @@ msgstr ""
 msgid "UndefinedBehaviorSanitizer"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:7
+#: ../../../UndefinedBehaviorSanitizer.md:4
 msgid "Introduction"
 msgstr "簡介"
 
-#: ../../../UndefinedBehaviorSanitizer.md:9
+#: ../../../UndefinedBehaviorSanitizer.md:6
 msgid ""
 "UndefinedBehaviorSanitizer (UBSan) is a fast undefined behavior detector. "
 "UBSan modifies the program at compile-time to catch various kinds of "
 "undefined behavior during program execution, for example:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:13
+#: ../../../UndefinedBehaviorSanitizer.md:10
 msgid ""
 "Array subscript out of bounds, where the bounds can be statically determined"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:14
+#: ../../../UndefinedBehaviorSanitizer.md:11
 msgid "Bitwise shifts that are out of bounds for their data type"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:15
+#: ../../../UndefinedBehaviorSanitizer.md:12
 msgid "Dereferencing misaligned or null pointers"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:16
+#: ../../../UndefinedBehaviorSanitizer.md:13
 msgid "Signed integer overflow"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:17
+#: ../../../UndefinedBehaviorSanitizer.md:14
 msgid ""
 "Conversion to, from, or between floating-point types which would overflow "
 "the destination"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:20
+#: ../../../UndefinedBehaviorSanitizer.md:17
 msgid "See the full list of available {ref}`checks <ubsan-checks>` below."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:22
+#: ../../../UndefinedBehaviorSanitizer.md:19
 msgid ""
 "UBSan has an optional run-time library which provides better error "
 "reporting. The checks have small runtime cost and no impact on address space "
 "layout or ABI."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:25
+#: ../../../UndefinedBehaviorSanitizer.md:22
 msgid "How to build"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:27
+#: ../../../UndefinedBehaviorSanitizer.md:24
 msgid "Build LLVM/Clang with [CMake](https://llvm.org/docs/CMake.html)."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:29
+#: ../../../UndefinedBehaviorSanitizer.md:26
 msgid "Usage"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:31
+#: ../../../UndefinedBehaviorSanitizer.md:28
 msgid ""
 "Use `clang++` to compile and link your program with the `-"
 "fsanitize=undefined` option. Make sure to use `clang++` (not `ld`) as a "
@@ -87,45 +87,45 @@ msgid ""
 "instead of `clang++` if you're compiling/linking C code."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:49
+#: ../../../UndefinedBehaviorSanitizer.md:46
 msgid ""
 "You can use `-fsanitize=...` and `-fno-sanitize=` to enable and disable one "
 "check or one check group. For an individual check, the last option that "
 "enabling or disabling it wins."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:64
+#: ../../../UndefinedBehaviorSanitizer.md:61
 msgid ""
 "For most checks ({ref}`checks <ubsan-checks>`), the instrumented program "
 "prints a verbose error report and continues execution upon a failed check. "
 "You can use the following options to change the error reporting behavior:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:68
+#: ../../../UndefinedBehaviorSanitizer.md:65
 msgid ""
 "`-fno-sanitize-recover=...`: print a verbose error report and exit the "
 "program;"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:69
+#: ../../../UndefinedBehaviorSanitizer.md:66
 msgid ""
 "`-fsanitize-trap=...`: execute a trap instruction (doesn't require UBSan run-"
 "time support). If the signal is not caught, the program will typically "
 "terminate due to a `SIGILL` or `SIGTRAP` signal."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:73
+#: ../../../UndefinedBehaviorSanitizer.md:70
 msgid "For example:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:79
+#: ../../../UndefinedBehaviorSanitizer.md:76
 msgid ""
 "The program will continue execution after signed integer overflows, exit "
 "after the first invalid use of a null pointer, and trap after the first use "
 "of misaligned pointer."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:87
+#: ../../../UndefinedBehaviorSanitizer.md:84
 msgid ""
 "All checks in the \"undefined\" group are put into trap mode. Since no check "
 "needs run-time support, the UBSan run-time library it not linked. Note that "
@@ -133,37 +133,37 @@ msgid ""
 "enables trap mode for them."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:96
+#: ../../../UndefinedBehaviorSanitizer.md:93
 msgid ""
 "`-fsanitize-trap=` and `-fsanitize-recover=` are a no-op in the absence of a "
 "`-fsanitize=` option. There is no unused command line option warning."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:101
+#: ../../../UndefinedBehaviorSanitizer.md:98
 msgid "Available checks"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:103
+#: ../../../UndefinedBehaviorSanitizer.md:100
 msgid "Available checks are:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:105
+#: ../../../UndefinedBehaviorSanitizer.md:102
 msgid ""
 "`-fsanitize=alignment`: Use of a misaligned pointer or creation of a "
 "misaligned reference. Also sanitizes assume_aligned-like attributes."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:107
+#: ../../../UndefinedBehaviorSanitizer.md:104
 msgid ""
 "`-fsanitize=bool`: Load of a `bool` value which is neither `true` nor "
 "`false`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:109
+#: ../../../UndefinedBehaviorSanitizer.md:106
 msgid "`-fsanitize=builtin`: Passing invalid values to compiler builtins."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:110
+#: ../../../UndefinedBehaviorSanitizer.md:107
 msgid ""
 "`-fsanitize=bounds`: Out of bounds array indexing, in cases where the array "
 "bound can be statically determined. The check includes `-fsanitize=array-"
@@ -171,13 +171,13 @@ msgid ""
 "is not included in `-fsanitize=undefined`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:114
+#: ../../../UndefinedBehaviorSanitizer.md:111
 msgid ""
 "`-fsanitize=enum`: Load of a value of an enumerated type which is not in the "
 "range of representable values for that enumerated type."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:117
+#: ../../../UndefinedBehaviorSanitizer.md:114
 msgid ""
 "`-fsanitize=float-cast-overflow`: Conversion to, from, or between floating-"
 "point types which would overflow the destination. Because the range of "
@@ -186,7 +186,7 @@ msgid ""
 "integer types."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:122
+#: ../../../UndefinedBehaviorSanitizer.md:119
 msgid ""
 "`-fsanitize=float-divide-by-zero`: Floating point division by zero. This is "
 "undefined per the C and C++ standards, but is defined by Clang (and by ISO/"
@@ -194,13 +194,13 @@ msgid ""
 "is not included in `-fsanitize=undefined`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:126
+#: ../../../UndefinedBehaviorSanitizer.md:123
 msgid ""
 "`-fsanitize=function`: Indirect call of a function through a function "
 "pointer of the wrong type."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:128
+#: ../../../UndefinedBehaviorSanitizer.md:125
 msgid ""
 "`-fsanitize=implicit-unsigned-integer-truncation`, `-fsanitize=implicit-"
 "signed-integer-truncation`: Implicit conversion from integer of larger bit "
@@ -214,7 +214,7 @@ msgid ""
 "unintentional."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:139
+#: ../../../UndefinedBehaviorSanitizer.md:136
 msgid ""
 "`-fsanitize=implicit-integer-sign-change`: Implicit conversion between "
 "integer types, if that changes the sign of the value. That is, if the "
@@ -223,11 +223,11 @@ msgid ""
 "this sanitizer are not undefined behavior, but are often unintentional."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:145
+#: ../../../UndefinedBehaviorSanitizer.md:142
 msgid "`-fsanitize=integer-divide-by-zero`: Integer division by zero."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:146
+#: ../../../UndefinedBehaviorSanitizer.md:143
 msgid ""
 "`-fsanitize=implicit-bitfield-conversion`: Implicit conversion from integer "
 "of larger bit width to smaller bitfield, if that results in data loss. This "
@@ -236,36 +236,36 @@ msgid ""
 "bitfields."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:151
+#: ../../../UndefinedBehaviorSanitizer.md:148
 msgid ""
 "`-fsanitize=nonnull-attribute`: Passing null pointer as a function parameter "
 "which is declared to never be null."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:153
+#: ../../../UndefinedBehaviorSanitizer.md:150
 msgid ""
 "`-fsanitize=null`: Use of a null pointer or creation of a null reference."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:155
+#: ../../../UndefinedBehaviorSanitizer.md:152
 msgid ""
 "`-fsanitize=nullability-arg`: Passing null as a function parameter which is "
 "annotated with `_Nonnull`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:157
+#: ../../../UndefinedBehaviorSanitizer.md:154
 msgid ""
 "`-fsanitize=nullability-assign`: Assigning null to an lvalue which is "
 "annotated with `_Nonnull`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:159
+#: ../../../UndefinedBehaviorSanitizer.md:156
 msgid ""
 "`-fsanitize=nullability-return`: Returning null from a function with a "
 "return type annotated with `_Nonnull`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:161
+#: ../../../UndefinedBehaviorSanitizer.md:158
 msgid ""
 "`-fsanitize=objc-cast`: Invalid implicit cast of an ObjC object pointer to "
 "an incompatible type. This is often unintentional, but is not undefined "
@@ -273,7 +273,7 @@ msgid ""
 "Currently only supported on Darwin."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:165
+#: ../../../UndefinedBehaviorSanitizer.md:162
 msgid ""
 "`-fsanitize=object-size`: An attempt to potentially use bytes which the "
 "optimizer can determine are not part of the object being accessed. This will "
@@ -284,26 +284,26 @@ msgid ""
 "able to detect more problems at higher optimization levels."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:173
+#: ../../../UndefinedBehaviorSanitizer.md:170
 msgid ""
 "`-fsanitize=pointer-overflow`: Performing pointer arithmetic which "
 "overflows, or where either the old or new pointer value is a null pointer "
 "(excluding the case where both are null pointers)."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:176
+#: ../../../UndefinedBehaviorSanitizer.md:173
 msgid ""
 "`-fsanitize=return`: In C++, reaching the end of a value-returning function "
 "without returning a value."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:178
+#: ../../../UndefinedBehaviorSanitizer.md:175
 msgid ""
 "`-fsanitize=returns-nonnull-attribute`: Returning null pointer from a "
 "function which is declared to never return null."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:180
+#: ../../../UndefinedBehaviorSanitizer.md:177
 msgid ""
 "`-fsanitize=shift`: Shift operators where the amount shifted is greater or "
 "equal to the promoted bit-width of the left hand side or less than zero, or "
@@ -313,14 +313,14 @@ msgid ""
 "side or right-hand side of shift operation, respectively."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:187
+#: ../../../UndefinedBehaviorSanitizer.md:184
 msgid ""
 "`-fsanitize=unsigned-shift-base`: check that an unsigned left-hand side of a "
 "left shift operation doesn't overflow. Issues caught by this sanitizer are "
 "not undefined behavior, but are often unintentional."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:190
+#: ../../../UndefinedBehaviorSanitizer.md:187
 msgid ""
 "`-fsanitize=signed-integer-overflow`: Signed integer overflow, where the "
 "result of a signed integer computation cannot be represented in its type. "
@@ -332,13 +332,13 @@ msgid ""
 "handled by `-fsanitize=implicit-integer-conversion` group of checks."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:198
+#: ../../../UndefinedBehaviorSanitizer.md:195
 msgid ""
 "`-fsanitize=unreachable`: If control flow reaches an unreachable program "
 "point."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:200
+#: ../../../UndefinedBehaviorSanitizer.md:197
 msgid ""
 "`-fsanitize=unsigned-integer-overflow`: Unsigned integer overflow, where the "
 "result of an unsigned integer computation cannot be represented in its type. "
@@ -348,13 +348,13 @@ msgid ""
 "integer-conversion`)."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:206
+#: ../../../UndefinedBehaviorSanitizer.md:203
 msgid ""
 "`-fsanitize=vla-bound`: A variable-length array whose bound does not "
 "evaluate to a positive value."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:208
+#: ../../../UndefinedBehaviorSanitizer.md:205
 msgid ""
 "`-fsanitize=vptr`: Use of an object whose vptr indicates that it is of the "
 "wrong dynamic type, or that its lifetime has not begun or has ended. "
@@ -364,37 +364,37 @@ msgid ""
 "group. Also it does not support `-fsanitize-trap=vptr`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:215
+#: ../../../UndefinedBehaviorSanitizer.md:212
 msgid "You can also use the following check groups:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:216
+#: ../../../UndefinedBehaviorSanitizer.md:213
 msgid ""
 "`-fsanitize=undefined`: All of the checks listed above other than `float-"
 "divide-by-zero`, `unsigned-integer-overflow`, `implicit-conversion`, `local-"
 "bounds`, `vptr` and the `nullability-*` group of checks."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:220
+#: ../../../UndefinedBehaviorSanitizer.md:217
 msgid ""
 "`-fsanitize=undefined-trap`: Deprecated alias of `-fsanitize=undefined`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:222
+#: ../../../UndefinedBehaviorSanitizer.md:219
 msgid ""
 "`-fsanitize=implicit-integer-truncation`: Catches lossy integral "
 "conversions. Enables `implicit-signed-integer-truncation` and `implicit-"
 "unsigned-integer-truncation`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:225
+#: ../../../UndefinedBehaviorSanitizer.md:222
 msgid ""
 "`-fsanitize=implicit-integer-arithmetic-value-change`: Catches implicit "
 "conversions that change the arithmetic value of the integer. Enables "
 "`implicit-signed-integer-truncation` and `implicit-integer-sign-change`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:228
+#: ../../../UndefinedBehaviorSanitizer.md:225
 msgid ""
 "`-fsanitize=implicit-integer-conversion`: Checks for suspicious behavior of "
 "implicit integer conversions. Enables `implicit-unsigned-integer-"
@@ -402,14 +402,14 @@ msgid ""
 "sign-change`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:233
+#: ../../../UndefinedBehaviorSanitizer.md:230
 msgid ""
 "`-fsanitize=implicit-conversion`: Checks for suspicious behavior of implicit "
 "conversions. Enables `implicit-integer-conversion`, and `implicit-bitfield-"
 "conversion`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:237
+#: ../../../UndefinedBehaviorSanitizer.md:234
 msgid ""
 "`-fsanitize=integer`: Checks for undefined or suspicious integer behavior (e."
 "g. unsigned integer overflow). Enables `signed-integer-overflow`, `unsigned-"
@@ -418,28 +418,28 @@ msgid ""
 "integer-sign-change`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:244
+#: ../../../UndefinedBehaviorSanitizer.md:241
 msgid ""
 "`-fsanitize=nullability`: Enables `nullability-arg`, `nullability-assign`, "
 "and `nullability-return`. While violating nullability does not have "
 "undefined behavior, it is often unintentional, so UBSan offers to catch it."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:249
+#: ../../../UndefinedBehaviorSanitizer.md:246
 msgid "Volatile"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:251
+#: ../../../UndefinedBehaviorSanitizer.md:248
 msgid ""
 "The `null`, `alignment`, `object-size`, `local-bounds`, and `vptr` checks do "
 "not apply to pointers to types with the `volatile` qualifier."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:256
+#: ../../../UndefinedBehaviorSanitizer.md:253
 msgid "Minimal Runtime"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:258
+#: ../../../UndefinedBehaviorSanitizer.md:255
 msgid ""
 "There is a minimal UBSan runtime available suitable for use in production "
 "environments. This runtime has a small attack surface. It only provides very "
@@ -447,7 +447,7 @@ msgid ""
 "fsanitize=vptr` checking."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:263
+#: ../../../UndefinedBehaviorSanitizer.md:260
 msgid ""
 "To use the minimal runtime, add `-fsanitize-minimal-runtime` to the clang "
 "command line options. For example, if you're used to compiling with `-"
@@ -455,47 +455,47 @@ msgid ""
 "fsanitize=undefined -fsanitize-minimal-runtime`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:268
+#: ../../../UndefinedBehaviorSanitizer.md:265
 msgid "Stack traces and report symbolization"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:270
+#: ../../../UndefinedBehaviorSanitizer.md:267
 msgid ""
 "If you want UBSan to print symbolized stack trace for each error report, you "
 "will need to:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:273
+#: ../../../UndefinedBehaviorSanitizer.md:270
 msgid ""
 "Compile with `-g`, `-fno-sanitize-merge` and `-fno-omit-frame-pointer` to "
 "get proper debug information in your binary."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:275
+#: ../../../UndefinedBehaviorSanitizer.md:272
 msgid ""
 "Run your program with environment variable "
 "`UBSAN_OPTIONS=print_stacktrace=1`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:277
+#: ../../../UndefinedBehaviorSanitizer.md:274
 msgid "Make sure `llvm-symbolizer` binary is in `PATH`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:279
+#: ../../../UndefinedBehaviorSanitizer.md:276
 msgid "Logging"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:281
+#: ../../../UndefinedBehaviorSanitizer.md:278
 msgid ""
 "The default log file for diagnostics is \"stderr\". To log diagnostics to "
 "another file, you can set `UBSAN_OPTIONS=log_path=...`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:284
+#: ../../../UndefinedBehaviorSanitizer.md:281
 msgid "Silencing Unsigned Integer Overflow"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:286
+#: ../../../UndefinedBehaviorSanitizer.md:283
 msgid ""
 "To silence reports from unsigned integer overflow, you can set "
 "`UBSAN_OPTIONS=silence_unsigned_overflow=1`. This feature, combined with `-"
@@ -503,11 +503,11 @@ msgid ""
 "providing fuzzing signal without blowing up logs."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:291
+#: ../../../UndefinedBehaviorSanitizer.md:288
 msgid "Disabling instrumentation for common overflow patterns"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:293
+#: ../../../UndefinedBehaviorSanitizer.md:290
 msgid ""
 "There are certain overflow-dependent or overflow-prone code patterns which "
 "produce a lot of noise for integer overflow/truncation sanitizers. Negated "
@@ -518,68 +518,68 @@ msgid ""
 "patterns one should use `-fsanitize-undefined-ignore-overflow-pattern=`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:301
+#: ../../../UndefinedBehaviorSanitizer.md:298
 msgid "Currently, this option supports three overflow-dependent code idioms:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:303
+#: ../../../UndefinedBehaviorSanitizer.md:300
 msgid "`negated-unsigned-const`"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:311
+#: ../../../UndefinedBehaviorSanitizer.md:308
 msgid "`unsigned-post-decr-while`"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:319
+#: ../../../UndefinedBehaviorSanitizer.md:316
 msgid "`add-signed-overflow-test,add-unsigned-overflow-test`"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:327
+#: ../../../UndefinedBehaviorSanitizer.md:324
 msgid "Overflow Pattern Types"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:331
+#: ../../../UndefinedBehaviorSanitizer.md:328
 msgid "Pattern"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:332
+#: ../../../UndefinedBehaviorSanitizer.md:329
 msgid "Sanitizer"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:333
+#: ../../../UndefinedBehaviorSanitizer.md:330
 msgid "negated-unsigned-const"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:334
-#: ../../../UndefinedBehaviorSanitizer.md:336
-#: ../../../UndefinedBehaviorSanitizer.md:338
+#: ../../../UndefinedBehaviorSanitizer.md:331
+#: ../../../UndefinedBehaviorSanitizer.md:333
+#: ../../../UndefinedBehaviorSanitizer.md:335
 msgid "unsigned-integer-overflow"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:335
+#: ../../../UndefinedBehaviorSanitizer.md:332
 msgid "unsigned-post-decr-while"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:337
+#: ../../../UndefinedBehaviorSanitizer.md:334
 msgid "add-unsigned-overflow-test"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:339
+#: ../../../UndefinedBehaviorSanitizer.md:336
 msgid "add-signed-overflow-test"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:340
+#: ../../../UndefinedBehaviorSanitizer.md:337
 msgid "signed-integer-overflow"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:343
+#: ../../../UndefinedBehaviorSanitizer.md:340
 msgid ""
 "Note: `add-signed-overflow-test` suppresses only the check for Undefined "
 "Behavior. Eager Undefined Behavior optimizations are still possible. One may "
 "remedy this with `-fwrapv` or `-fno-strict-overflow`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:347
+#: ../../../UndefinedBehaviorSanitizer.md:344
 msgid ""
 "You can enable all exclusions with `-fsanitize-undefined-ignore-overflow-"
 "pattern=all` or disable all exclusions with `-fsanitize-undefined-ignore-"
@@ -589,22 +589,22 @@ msgid ""
 "`all`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:354
+#: ../../../UndefinedBehaviorSanitizer.md:351
 msgid "Issue Suppression"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:356
+#: ../../../UndefinedBehaviorSanitizer.md:353
 msgid ""
 "UndefinedBehaviorSanitizer is not expected to produce false positives. If "
 "you see one, look again; most likely it is a true positive!"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:359
+#: ../../../UndefinedBehaviorSanitizer.md:356
 msgid ""
 "Disabling Instrumentation with `__attribute__((no_sanitize(\"undefined\")))`"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:361
+#: ../../../UndefinedBehaviorSanitizer.md:358
 msgid ""
 "You disable UBSan checks for particular functions with "
 "`__attribute__((no_sanitize(\"undefined\")))`. You can use all values of `-"
@@ -613,46 +613,46 @@ msgid ""
 "`__attribute__((no_sanitize(\"signed-integer-overflow\")))`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:367
+#: ../../../UndefinedBehaviorSanitizer.md:364
 msgid ""
 "This attribute may not be supported by other compilers, so consider using it "
 "together with `#if defined(__clang__)`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:371
+#: ../../../UndefinedBehaviorSanitizer.md:368
 msgid "Interaction of Inlining with Disabling Sanitizer Instrumentation"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:373
+#: ../../../UndefinedBehaviorSanitizer.md:370
 msgid ""
 "Unlike many of the other sanitizers (e.g., ASan/MSan, TSan), UBSan is "
 "largely compatible with inlining, both the compiler's heuristic inlining as "
 "well as `__attribute__((always_inline))`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:377
+#: ../../../UndefinedBehaviorSanitizer.md:374
 msgid "There are (at least) two exceptions:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:379
+#: ../../../UndefinedBehaviorSanitizer.md:376
 msgid ""
 "inlining may change the layout of variables, which can affect whether the "
 "`alignment` check detects an under-aligned variable"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:381
+#: ../../../UndefinedBehaviorSanitizer.md:378
 msgid ""
 "combining `__attribute((no_sanitize(\"local-bounds\")))` with "
 "`__attribute((always_inline))` is not supported"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:384
+#: ../../../UndefinedBehaviorSanitizer.md:381
 msgid ""
 "Disabling Overflow Instrumentation with "
 "`__attribute__((overflow_behavior(wrap)))`"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:386
+#: ../../../UndefinedBehaviorSanitizer.md:383
 msgid ""
 "For more fine-grained control over how integer overflow is handled, you can "
 "use the `__attribute__((overflow_behavior(wrap)))` attribute. This attribute "
@@ -662,7 +662,7 @@ msgid ""
 "enabled for all other types."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:393
+#: ../../../UndefinedBehaviorSanitizer.md:390
 msgid ""
 "The `overflow_behavior` attribute not only affects UBSan instrumentation but "
 "also changes the fundamental overflow behavior of arithmetic operations on "
@@ -671,7 +671,7 @@ msgid ""
 "will be checked for overflow (regardless of global flags like `-fwrapv`)."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:400
+#: ../../../UndefinedBehaviorSanitizer.md:397
 msgid ""
 "The attribute also affects implicit type promotion rules: when an overflow "
 "behavior type participates in arithmetic operations with standard integer "
@@ -681,18 +681,18 @@ msgid ""
 "the constraints of the smallest annotated type in the expression."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:407
-#: ../../../UndefinedBehaviorSanitizer.md:416
+#: ../../../UndefinedBehaviorSanitizer.md:404
+#: ../../../UndefinedBehaviorSanitizer.md:413
 msgid "For more information, see {doc}`OverflowBehaviorTypes`."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:409
+#: ../../../UndefinedBehaviorSanitizer.md:406
 msgid ""
 "Enforcing Overflow Instrumentation with "
 "`__attribute__((overflow_behavior(trap)))`"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:411
+#: ../../../UndefinedBehaviorSanitizer.md:408
 msgid ""
 "Conversely, you can use `__attribute__((overflow_behavior(trap)))` to "
 "enforce overflow checks for a specific type, even when `-fwrapv` is enabled "
@@ -700,69 +700,69 @@ msgid ""
 "checked for overflow, regardless of the global compiler settings."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:418
+#: ../../../UndefinedBehaviorSanitizer.md:415
 msgid "Suppressing Errors in Recompiled Code (Ignorelist)"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:420
+#: ../../../UndefinedBehaviorSanitizer.md:417
 msgid ""
 "UndefinedBehaviorSanitizer supports `src` and `fun` entity types in {doc}"
 "`SanitizerSpecialCaseList`, that can be used to suppress error reports in "
 "the specified source files or functions."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:424
+#: ../../../UndefinedBehaviorSanitizer.md:421
 msgid "Runtime suppressions"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:426
+#: ../../../UndefinedBehaviorSanitizer.md:423
 msgid ""
 "Sometimes you can suppress UBSan error reports for specific files, "
 "functions, or libraries without recompiling the code. You need to pass a "
 "path to suppression file in a `UBSAN_OPTIONS` environment variable."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:434
+#: ../../../UndefinedBehaviorSanitizer.md:431
 msgid ""
 "Alternatively, you can provide default suppressions by defining a "
 "`__ubsan_default_suppressions` function:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:444
+#: ../../../UndefinedBehaviorSanitizer.md:441
 msgid ""
 "You need to specify a {ref}`check <ubsan-checks>` you are suppressing and "
 "the bug location. For example:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:453
+#: ../../../UndefinedBehaviorSanitizer.md:450
 msgid "There are several limitations:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:455
+#: ../../../UndefinedBehaviorSanitizer.md:452
 msgid ""
 "Sometimes your binary must have enough debug info and/or symbol table, so "
 "that the runtime could figure out source file or function name to match "
 "against the suppression."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:458
+#: ../../../UndefinedBehaviorSanitizer.md:455
 msgid ""
 "It is only possible to suppress recoverable checks. For the example above, "
 "you can additionally pass `-fsanitize-recover=signed-integer-overflow,"
 "alignment,vptr`, although most of UBSan checks are recoverable by default."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:462
+#: ../../../UndefinedBehaviorSanitizer.md:459
 msgid ""
 "Check groups (like `undefined`) can't be used in suppressions file, only "
 "fine-grained checks are supported."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:465
+#: ../../../UndefinedBehaviorSanitizer.md:462
 msgid "Security Considerations"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:467
+#: ../../../UndefinedBehaviorSanitizer.md:464
 msgid ""
 "UndefinedBehaviorSanitizer's runtime is meant for testing purposes and its "
 "usage in production environment should be carefully considered from security "
@@ -771,66 +771,66 @@ msgid ""
 "<minimal-runtime>` or trap mode for all checks."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:473
+#: ../../../UndefinedBehaviorSanitizer.md:470
 msgid "Supported Platforms"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:475
+#: ../../../UndefinedBehaviorSanitizer.md:472
 msgid ""
 "UndefinedBehaviorSanitizer is supported on the following operating systems:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:477
+#: ../../../UndefinedBehaviorSanitizer.md:474
 msgid "Android"
 msgstr "Android"
 
-#: ../../../UndefinedBehaviorSanitizer.md:478
+#: ../../../UndefinedBehaviorSanitizer.md:475
 msgid "Linux"
 msgstr "Linux"
 
-#: ../../../UndefinedBehaviorSanitizer.md:479
+#: ../../../UndefinedBehaviorSanitizer.md:476
 msgid "NetBSD"
 msgstr "NetBSD"
 
-#: ../../../UndefinedBehaviorSanitizer.md:480
+#: ../../../UndefinedBehaviorSanitizer.md:477
 msgid "FreeBSD"
 msgstr "FreeBSD"
 
-#: ../../../UndefinedBehaviorSanitizer.md:481
+#: ../../../UndefinedBehaviorSanitizer.md:478
 msgid "OpenBSD"
 msgstr "OpenBSD"
 
-#: ../../../UndefinedBehaviorSanitizer.md:482
+#: ../../../UndefinedBehaviorSanitizer.md:479
 msgid "macOS"
 msgstr "macOS"
 
-#: ../../../UndefinedBehaviorSanitizer.md:483
+#: ../../../UndefinedBehaviorSanitizer.md:480
 msgid "Windows"
 msgstr "Windows"
 
-#: ../../../UndefinedBehaviorSanitizer.md:485
+#: ../../../UndefinedBehaviorSanitizer.md:482
 msgid ""
 "The runtime library is relatively portable and platform independent. If the "
 "OS you need is not listed above, UndefinedBehaviorSanitizer may already work "
 "for it, or could be made to work with a minor porting effort."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:489
+#: ../../../UndefinedBehaviorSanitizer.md:486
 msgid "Current Status"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:491
+#: ../../../UndefinedBehaviorSanitizer.md:488
 msgid ""
 "UndefinedBehaviorSanitizer is available on selected platforms starting from "
 "LLVM 3.3. The test suite is integrated into the CMake build and can be run "
 "with `check-ubsan` command."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:495
+#: ../../../UndefinedBehaviorSanitizer.md:492
 msgid "Additional Configuration"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:497
+#: ../../../UndefinedBehaviorSanitizer.md:494
 msgid ""
 "UndefinedBehaviorSanitizer adds static check data for each check unless it "
 "is in trap mode. This check data includes the full file name. The option `-"
@@ -840,42 +840,42 @@ msgid ""
 "path. If `N` is negative, the last `N` components will be kept."
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:504
+#: ../../../UndefinedBehaviorSanitizer.md:501
 msgid "Example"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:506
+#: ../../../UndefinedBehaviorSanitizer.md:503
 msgid ""
 "For a file called `/code/library/file.cpp`, here is what would be emitted:"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:508
+#: ../../../UndefinedBehaviorSanitizer.md:505
 msgid ""
 "Default (No flag, or `-fsanitize-undefined-strip-path-components=0`): `/code/"
 "library/file.cpp`"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:509
+#: ../../../UndefinedBehaviorSanitizer.md:506
 msgid "`-fsanitize-undefined-strip-path-components=1`: `code/library/file.cpp`"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:510
+#: ../../../UndefinedBehaviorSanitizer.md:507
 msgid "`-fsanitize-undefined-strip-path-components=2`: `library/file.cpp`"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:511
+#: ../../../UndefinedBehaviorSanitizer.md:508
 msgid "`-fsanitize-undefined-strip-path-components=-1`: `file.cpp`"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:512
+#: ../../../UndefinedBehaviorSanitizer.md:509
 msgid "`-fsanitize-undefined-strip-path-components=-2`: `library/file.cpp`"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:514
+#: ../../../UndefinedBehaviorSanitizer.md:511
 msgid "More Information"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:516
+#: ../../../UndefinedBehaviorSanitizer.md:513
 msgid ""
 "From Oracle blog, including a discussion of error messages: [Improving "
 "Application Security with UndefinedBehaviorSanitizer (UBSan) and GCC]"
@@ -883,14 +883,14 @@ msgid ""
 "undefinedbehaviorsanitizer-ubsan-and-gcc)"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:518
+#: ../../../UndefinedBehaviorSanitizer.md:515
 msgid ""
 "From LLVM project blog: [What Every C Programmer Should Know About Undefined "
 "Behavior](http://blog.llvm.org/2011/05/what-every-c-programmer-should-know."
 "html)"
 msgstr ""
 
-#: ../../../UndefinedBehaviorSanitizer.md:520
+#: ../../../UndefinedBehaviorSanitizer.md:517
 msgid ""
 "From John Regehr's *Embedded in Academia* blog: [A Guide to Undefined "
 "Behavior in C and C++](https://blog.regehr.org/archives/213)"

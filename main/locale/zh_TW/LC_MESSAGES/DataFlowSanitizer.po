@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"POT-Creation-Date: 2026-09-19 13:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,15 +21,15 @@ msgstr ""
 msgid "DataFlowSanitizer"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:13
+#: ../../../DataFlowSanitizer.md:10
 msgid "Introduction"
 msgstr "簡介"
 
-#: ../../../DataFlowSanitizer.md:15
+#: ../../../DataFlowSanitizer.md:12
 msgid "DataFlowSanitizer is a generalised dynamic data flow analysis."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:17
+#: ../../../DataFlowSanitizer.md:14
 msgid ""
 "Unlike other Sanitizer tools, this tool is not designed to detect a specific "
 "class of bugs on its own. Instead, it provides a generic dynamic data flow "
@@ -37,33 +37,33 @@ msgid ""
 "issues within their own code."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:22
+#: ../../../DataFlowSanitizer.md:19
 msgid "How to build libc++ with DFSan"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:24
+#: ../../../DataFlowSanitizer.md:21
 msgid ""
 "DFSan requires either all of your code to be instrumented or for "
 "uninstrumented functions to be listed as `uninstrumented` in the {ref}`ABI "
 "list`."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:27
+#: ../../../DataFlowSanitizer.md:24
 msgid ""
 "If you'd like to have instrumented libc++ functions, then you need to build "
 "it with DFSan instrumentation from source. Here is an example of how to "
 "build libc++ and the libc++ ABI with data flow sanitizer instrumentation."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:45
+#: ../../../DataFlowSanitizer.md:42
 msgid "Note: Ensure you are building with a sufficiently new version of Clang."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:47
+#: ../../../DataFlowSanitizer.md:44
 msgid "Usage"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:49
+#: ../../../DataFlowSanitizer.md:46
 msgid ""
 "With no program changes, applying DataFlowSanitizer to a program will not "
 "alter its behavior. To use DataFlowSanitizer, the program uses API functions "
@@ -72,17 +72,17 @@ msgid ""
 "through the program according to its data flow."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:55
+#: ../../../DataFlowSanitizer.md:52
 msgid ""
 "The APIs are defined in the header file `sanitizer/dfsan_interface.h`. For "
 "further information about each function, please refer to the header file."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:62
+#: ../../../DataFlowSanitizer.md:59
 msgid "ABI List"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:64
+#: ../../../DataFlowSanitizer.md:61
 msgid ""
 "DataFlowSanitizer uses a list of functions known as an ABI list to decide "
 "whether a call to a specific function should use the operating system's "
@@ -97,7 +97,7 @@ msgid ""
 "called from a library or function which cannot be instrumented."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:76
+#: ../../../DataFlowSanitizer.md:73
 msgid ""
 "DataFlowSanitizer's ABI list file is a {doc}`SanitizerSpecialCaseList`. The "
 "pass treats every function in the `uninstrumented` category in the ABI list "
@@ -108,7 +108,7 @@ msgid ""
 "`custom`."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:84
+#: ../../../DataFlowSanitizer.md:81
 msgid ""
 "`discard` -- To the extent that this function writes to (user-accessible) "
 "memory, it also updates labels in shadow memory (this condition is trivially "
@@ -116,13 +116,13 @@ msgid ""
 "return value is unlabelled."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:88
+#: ../../../DataFlowSanitizer.md:85
 msgid ""
 "`functional` -- Like `discard`, except that the label of its return value is "
 "the union of the label of its arguments."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:90
+#: ../../../DataFlowSanitizer.md:87
 msgid ""
 "`custom` -- Instead of calling the function, a custom wrapper `__dfsw_F` is "
 "called, where `F` is the name of the function. This function may wrap the "
@@ -135,7 +135,7 @@ msgid ""
 "the custom function can store the label for the return value. For example:"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:111
+#: ../../../DataFlowSanitizer.md:108
 msgid ""
 "If a function defined in the translation unit being compiled belongs to the "
 "`uninstrumented` category, it will be compiled so as to conform to the "
@@ -143,11 +143,11 @@ msgid ""
 "propagate labels in shadow memory."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:116 ../../../DataFlowSanitizer.md:142
+#: ../../../DataFlowSanitizer.md:113 ../../../DataFlowSanitizer.md:139
 msgid "For example:"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:137
+#: ../../../DataFlowSanitizer.md:134
 msgid ""
 "For instrumented functions, the ABI list supports a `force_zero_labels` "
 "category, which will make all stores and return values set zero labels. "
@@ -155,71 +155,71 @@ msgid ""
 "`uninstrumented` or any of the uninstrumented wrapper kinds."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:150
+#: ../../../DataFlowSanitizer.md:147
 msgid "Compilation Flags"
 msgstr "編譯旗標"
 
-#: ../../../DataFlowSanitizer.md:152
+#: ../../../DataFlowSanitizer.md:149
 msgid ""
 "`-dfsan-abilist` -- The additional ABI list files that control how shadow "
 "parameters are passed. File names are separated by comma."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:154
+#: ../../../DataFlowSanitizer.md:151
 msgid ""
 "`-dfsan-combine-pointer-labels-on-load` -- Controls whether to include or "
 "ignore the labels of pointers in load instructions. Its default value is "
 "true. For example:"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:162
+#: ../../../DataFlowSanitizer.md:159
 msgid ""
 "If the flag is true, the label of `v` is the union of the label of `p` and "
 "the label of `*p`. If the flag is false, the label of `v` is the label of "
 "just `*p`."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:166
+#: ../../../DataFlowSanitizer.md:163
 msgid ""
 "`-dfsan-combine-pointer-labels-on-store` -- Controls whether to include or "
 "ignore the labels of pointers in store instructions. Its default value is "
 "false. For example:"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:174
+#: ../../../DataFlowSanitizer.md:171
 msgid ""
 "If the flag is true, the label of `*p` is the union of the label of `p` and "
 "the label of `v`. If the flag is false, the label of `*p` is the label of "
 "just `v`."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:178
+#: ../../../DataFlowSanitizer.md:175
 msgid ""
 "`-dfsan-combine-offset-labels-on-gep` -- Controls whether to propagate "
 "labels of offsets in GEP instructions. Its default value is true. For "
 "example:"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:185
+#: ../../../DataFlowSanitizer.md:182
 msgid ""
 "If the flag is true, the label of `p` is the union of the label of `p` and "
 "the label of `i`. If the flag is false, the label of `p` is unchanged."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:188
+#: ../../../DataFlowSanitizer.md:185
 msgid ""
 "`-dfsan-track-select-control-flow` -- Controls whether to track the control "
 "flow of select instructions. Its default value is true. For example:"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:195
+#: ../../../DataFlowSanitizer.md:192
 msgid ""
 "If the flag is true, the label of `v` is the union of the labels of `b`, "
 "`v1` and `v2`. If the flag is false, the label of `v` is the union of the "
 "labels of just `v1` and `v2`."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:199
+#: ../../../DataFlowSanitizer.md:196
 msgid ""
 "`-dfsan-event-callbacks` -- An experimental feature that inserts callbacks "
 "for certain data events. Currently callbacks are only inserted for loads, "
@@ -228,14 +228,14 @@ msgid ""
 "definitions for the following callback functions:"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:212
+#: ../../../DataFlowSanitizer.md:209
 msgid ""
 "`-dfsan-conditional-callbacks` -- An experimental feature that inserts "
 "callbacks for control flow conditional expressions. This can be used to find "
 "where tainted values can control execution."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:216
+#: ../../../DataFlowSanitizer.md:213
 msgid ""
 "In addition to this compilation flag, a callback handler must be registered "
 "using `dfsan_set_conditional_callback(my_callback);`, where my_callback is a "
@@ -244,7 +244,7 @@ msgid ""
 "disabled - in this case the dfsan_origin passed in it will always be 0."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:223
+#: ../../../DataFlowSanitizer.md:220
 msgid ""
 "The callback will only be called when a tainted value reaches a conditional "
 "expression for control flow (such as an if's condition). The callback will "
@@ -254,13 +254,13 @@ msgid ""
 "accessed using `dfsan_label dfsan_get_labels_in_signal_conditional();`."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:231
+#: ../../../DataFlowSanitizer.md:228
 msgid ""
 "`-dfsan-reaches-function-callbacks` -- An experimental feature that inserts "
 "callbacks for data entering a function."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:234
+#: ../../../DataFlowSanitizer.md:231
 msgid ""
 "In addition to this compilation flag, a callback handler must be registered "
 "using `dfsan_set_reaches_function_callback(my_callback);`, where my_callback "
@@ -270,7 +270,7 @@ msgid ""
 "in this case the dfsan_origin passed in it will always be 0."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:241
+#: ../../../DataFlowSanitizer.md:238
 msgid ""
 "The callback will be called when a tainted value reaches stack/registers in "
 "the context of a function. Tainted values can reach a function: \\* via the "
@@ -278,7 +278,7 @@ msgid ""
 "the function \\* via the loaded value of a load that occurs in the function"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:247
+#: ../../../DataFlowSanitizer.md:244
 msgid ""
 "The callback will be skipped for conditional expressions inside signal "
 "handlers, as this is prone to deadlock. Tainted values reaching functions "
@@ -286,7 +286,7 @@ msgid ""
 "accessed using `dfsan_label dfsan_get_labels_in_signal_reaches_function()`."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:253
+#: ../../../DataFlowSanitizer.md:250
 msgid ""
 "`-dfsan-track-origins` -- Controls how to track origins. When its value is "
 "0, the runtime does not track origins. When its value is 1, the runtime "
@@ -294,24 +294,24 @@ msgid ""
 "tracks origins at memory load and store operations. Its default value is 0."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:258
+#: ../../../DataFlowSanitizer.md:255
 msgid ""
 "`-dfsan-instrument-with-call-threshold` -- If a function being instrumented "
 "requires more than this number of origin stores, use callbacks instead of "
 "inline checks (-1 means never use callbacks). Its default value is 3500."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:262
+#: ../../../DataFlowSanitizer.md:259
 msgid "Environment Variables"
 msgstr "環境變數"
 
-#: ../../../DataFlowSanitizer.md:264
+#: ../../../DataFlowSanitizer.md:261
 msgid ""
 "`warn_unimplemented` -- Whether to warn on unimplemented functions. Its "
 "default value is false."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:266
+#: ../../../DataFlowSanitizer.md:263
 msgid ""
 "`strict_data_dependencies` -- Whether to propagate labels only when there is "
 "explicit obvious data dependency (e.g., when comparing strings, ignore the "
@@ -320,41 +320,41 @@ msgid ""
 "category in ABI list. Its default value is true."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:271
+#: ../../../DataFlowSanitizer.md:268
 msgid ""
 "`origin_history_size` -- The limit of origin chain length. Non-positive "
 "values mean unlimited. Its default value is 16."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:273
+#: ../../../DataFlowSanitizer.md:270
 msgid ""
 "`origin_history_per_stack_limit` -- The limit of origin node's references "
 "count. Non-positive values mean unlimited. Its default value is 20000."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:275
+#: ../../../DataFlowSanitizer.md:272
 msgid ""
 "`store_context_size` -- The depth limit of origin tracking stack traces. Its "
 "default value is 20."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:277
+#: ../../../DataFlowSanitizer.md:274
 msgid ""
 "`zero_in_malloc` -- Whether to zero shadow space of new allocated memory. "
 "Its default value is true."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:279
+#: ../../../DataFlowSanitizer.md:276
 msgid ""
 "`zero_in_free` --- Whether to zero shadow space of deallocated memory. Its "
 "default value is true."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:282
+#: ../../../DataFlowSanitizer.md:279
 msgid "Example"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:284
+#: ../../../DataFlowSanitizer.md:281
 msgid ""
 "DataFlowSanitizer supports up to 8 labels, to achieve low CPU and code size "
 "overhead. Base labels are simply 8-bit unsigned integers that are powers of "
@@ -362,23 +362,23 @@ msgid ""
 "labels."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:289
+#: ../../../DataFlowSanitizer.md:286
 msgid ""
 "The following program demonstrates label propagation by checking that the "
 "correct labels are propagated."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:335
+#: ../../../DataFlowSanitizer.md:332
 msgid "Origin Tracking"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:337
+#: ../../../DataFlowSanitizer.md:334
 msgid ""
 "DataFlowSanitizer can track origins of labeled values. This feature is "
 "enabled by `-mllvm -dfsan-track-origins=1`. For example,"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:365
+#: ../../../DataFlowSanitizer.md:362
 msgid ""
 "By `-mllvm -dfsan-track-origins=1` DataFlowSanitizer collects only "
 "intermediate stores a labeled value went through. Origin tracking slows down "
@@ -388,20 +388,20 @@ msgid ""
 "value went through. This mode slows down program execution by a factor of 4x."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:372
+#: ../../../DataFlowSanitizer.md:369
 msgid "Current status"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:374
+#: ../../../DataFlowSanitizer.md:371
 msgid ""
 "DataFlowSanitizer is a work in progress, currently under development for "
 "x86_64 Linux."
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:377
+#: ../../../DataFlowSanitizer.md:374
 msgid "Design"
 msgstr ""
 
-#: ../../../DataFlowSanitizer.md:379
+#: ../../../DataFlowSanitizer.md:376
 msgid "Please refer to the {doc}`design document<DataFlowSanitizerDesign>`."
 msgstr ""

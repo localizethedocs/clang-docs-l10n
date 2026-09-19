@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 14:50+0000\n"
+"POT-Creation-Date: 2026-09-19 13:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,73 +21,73 @@ msgstr ""
 msgid "AddressSanitizer"
 msgstr "AddressSanitizer"
 
-#: ../../../AddressSanitizer.md:7
+#: ../../../AddressSanitizer.md:4
 msgid "Introduction"
 msgstr "簡介"
 
-#: ../../../AddressSanitizer.md:9
+#: ../../../AddressSanitizer.md:6
 msgid ""
 "AddressSanitizer is a fast memory error detector. It consists of a compiler "
 "instrumentation module and a run-time library. The tool can detect the "
 "following types of bugs:"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:13
+#: ../../../AddressSanitizer.md:10
 msgid "Out-of-bounds accesses to heap, stack and globals"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:14
+#: ../../../AddressSanitizer.md:11
 msgid "Use-after-free"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:15
+#: ../../../AddressSanitizer.md:12
 msgid ""
 "Use-after-return (clang flag `-fsanitize-address-use-after-return=(never|"
 "runtime|always)` default: `runtime`)"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:16
+#: ../../../AddressSanitizer.md:13
 msgid ""
 "Enable with: `ASAN_OPTIONS=detect_stack_use_after_return=1` (already enabled "
 "on Linux)."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:17
+#: ../../../AddressSanitizer.md:14
 msgid "Disable with: `ASAN_OPTIONS=detect_stack_use_after_return=0`."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:18
+#: ../../../AddressSanitizer.md:15
 msgid "Use-after-scope (clang flag `-fsanitize-address-use-after-scope`)"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:19
+#: ../../../AddressSanitizer.md:16
 msgid "Double-free, invalid free"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:20
+#: ../../../AddressSanitizer.md:17
 msgid "Memory leaks (experimental)"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:22
+#: ../../../AddressSanitizer.md:19
 msgid "Typical slowdown introduced by AddressSanitizer is **2x**."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:24
+#: ../../../AddressSanitizer.md:21
 msgid "How to build"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:26
+#: ../../../AddressSanitizer.md:23
 msgid ""
 "Build LLVM/Clang with [CMake](https://llvm.org/docs/CMake.html) and enable "
 "the `compiler-rt` runtime. An example CMake configuration that will allow "
 "for the use/testing of AddressSanitizer:"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:34
+#: ../../../AddressSanitizer.md:31
 msgid "Usage"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:36
+#: ../../../AddressSanitizer.md:33
 msgid ""
 "Simply compile and link your program with `-fsanitize=address` flag. The "
 "AddressSanitizer run-time library should be linked to the final executable, "
@@ -100,24 +100,24 @@ msgid ""
 "(`-fno-optimize-sibling-calls`)."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:58
+#: ../../../AddressSanitizer.md:55
 msgid "or:"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:67
+#: ../../../AddressSanitizer.md:64
 msgid ""
 "If a bug is detected, the program will print an error message to stderr and "
 "exit with a non-zero exit code. AddressSanitizer exits on the first detected "
 "error. This is by design:"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:71
+#: ../../../AddressSanitizer.md:68
 msgid ""
 "This approach allows AddressSanitizer to produce faster and smaller "
 "generated code (both by ~5%)."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:73
+#: ../../../AddressSanitizer.md:70
 msgid ""
 "Fixing bugs becomes unavoidable. AddressSanitizer does not produce false "
 "alarms. Once a memory corruption occurs, the program is in an inconsistent "
@@ -125,7 +125,7 @@ msgid ""
 "subsequent reports."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:78
+#: ../../../AddressSanitizer.md:75
 msgid ""
 "If your process is sandboxed and you are running on OS X 10.10 or earlier, "
 "you will need to set `DYLD_INSERT_LIBRARIES` environment variable and point "
@@ -137,39 +137,39 @@ msgid ""
 "over."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:86
+#: ../../../AddressSanitizer.md:83
 msgid "Symbolizing the Reports"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:88
+#: ../../../AddressSanitizer.md:85
 msgid ""
 "To make AddressSanitizer symbolize its output you need to set the "
 "`ASAN_SYMBOLIZER_PATH` environment variable to point to the `llvm-"
 "symbolizer` binary (or make sure `llvm-symbolizer` is in your `$PATH`):"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:111
+#: ../../../AddressSanitizer.md:108
 msgid ""
 "If that does not work for you (e.g. your process is sandboxed), you can use "
 "a separate script to symbolize the result offline (online symbolization can "
 "be force disabled by setting `ASAN_OPTIONS=symbolize=0`):"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:125
+#: ../../../AddressSanitizer.md:122
 msgid ""
 "Note that on macOS you may need to run `dsymutil` on your binary to have the "
 "file:line info in the AddressSanitizer reports."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:128
+#: ../../../AddressSanitizer.md:125
 msgid "Additional Checks"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:130
+#: ../../../AddressSanitizer.md:127
 msgid "Initialization order checking"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:132
+#: ../../../AddressSanitizer.md:129
 msgid ""
 "AddressSanitizer can optionally detect dynamic initialization order "
 "problems, when initialization of globals defined in one translation unit "
@@ -178,15 +178,15 @@ msgid ""
 "`ASAN_OPTIONS=check_initialization_order=1`."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:138
+#: ../../../AddressSanitizer.md:135
 msgid "Note that this option is not supported on macOS."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:140
+#: ../../../AddressSanitizer.md:137
 msgid "Stack Use After Return (UAR)"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:142
+#: ../../../AddressSanitizer.md:139
 msgid ""
 "AddressSanitizer can optionally detect stack use after return problems. This "
 "is available by default, or explicitly (`-fsanitize-address-use-after-"
@@ -194,72 +194,72 @@ msgid ""
 "variable `ASAN_OPTIONS=detect_stack_use_after_return=0`."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:148
+#: ../../../AddressSanitizer.md:145
 msgid ""
 "Enabling this check (`-fsanitize-address-use-after-return=always`) will "
 "reduce code size. The code size may be reduced further by completely "
 "eliminating this check (`-fsanitize-address-use-after-return=never`)."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:152
+#: ../../../AddressSanitizer.md:149
 msgid "To summarize: `-fsanitize-address-use-after-return=<mode>`"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:153
+#: ../../../AddressSanitizer.md:150
 msgid ""
 "`never`: Completely disables detection of UAR errors (reduces code size)."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:154
+#: ../../../AddressSanitizer.md:151
 msgid ""
 "`runtime`: Adds the code for detection, but it can be disabled via the "
 "runtime environment (`ASAN_OPTIONS=detect_stack_use_after_return=0`)."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:156
+#: ../../../AddressSanitizer.md:153
 msgid ""
 "`always`: Enables detection of UAR errors in all cases. (reduces code size, "
 "but not as much as `never`)."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:159
+#: ../../../AddressSanitizer.md:156
 msgid "Container Overflow Detection"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:161
+#: ../../../AddressSanitizer.md:158
 msgid ""
 "AddressSanitizer can detect overflows in containers with custom allocators "
 "(such as std::vector) where the library developers have added calls into the "
 "AddressSanitizer runtime to indicate which memory is poisoned etc."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:165
+#: ../../../AddressSanitizer.md:162
 msgid "Note that this feature is prone to false positives:"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:166
+#: ../../../AddressSanitizer.md:163
 msgid ""
 "Partially poisoning objects on stack, e.g. for small string optimization, "
 "can cause both false positives and negatives."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:168
+#: ../../../AddressSanitizer.md:165
 msgid ""
 "If the binary is partially AddressSanitizer instrumented, these checks can "
 "cause false positives."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:171
+#: ../../../AddressSanitizer.md:168
 msgid ""
 "See [Disabling container overflow checks](#disabling-container-overflow-"
 "checks) for details on suppressing checks."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:173
+#: ../../../AddressSanitizer.md:170
 msgid "Memory leak detection"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:175
+#: ../../../AddressSanitizer.md:172
 msgid ""
 "For more information on leak detector in AddressSanitizer, see {doc}"
 "`LeakSanitizer`. The leak detection is turned on by default on Linux, and "
@@ -267,21 +267,83 @@ msgid ""
 "not yet supported on other platforms."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:180
+#: ../../../AddressSanitizer.md:177
+msgid "Flags and Options"
+msgstr ""
+
+#: ../../../AddressSanitizer.md:179
+msgid ""
+"Runtime flags can be passed to AddressSanitizer via the `ASAN_OPTIONS` "
+"environment variable:"
+msgstr ""
+
+#: ../../../AddressSanitizer.md:186
+msgid ""
+"To see the full list of available flags, run an instrumented binary with "
+"`ASAN_OPTIONS=\"help=1\"`."
+msgstr ""
+
+#: ../../../AddressSanitizer.md:189
+msgid ""
+"Flags passed via the `ASAN_OPTIONS` environment variable take precedence "
+"over compile-time default options."
+msgstr ""
+
+#: ../../../AddressSanitizer.md:192
+msgid "Compile-time Default Options"
+msgstr ""
+
+#: ../../../AddressSanitizer.md:194
+msgid ""
+"Default options can be specified at compile/link time by defining the "
+"`__asan_default_options` function in your source code:"
+msgstr ""
+
+#: ../../../AddressSanitizer.md:205
+msgid "Options Evaluation with Integrated Sanitizers"
+msgstr ""
+
+#: ../../../AddressSanitizer.md:207
+msgid ""
+"When running AddressSanitizer with integrated {doc}`LeakSanitizer` or {doc}"
+"`UndefinedBehaviorSanitizer`:"
+msgstr ""
+
+#: ../../../AddressSanitizer.md:209
+msgid ""
+"`__asan_default_options()`, `__lsan_default_options()`, and "
+"`__ubsan_default_options()` are all evaluated independently by the runtime."
+msgstr ""
+
+#: ../../../AddressSanitizer.md:210
+msgid ""
+"The environment variables `ASAN_OPTIONS`, `LSAN_OPTIONS`, and "
+"`UBSAN_OPTIONS` are also parsed independently."
+msgstr ""
+
+#: ../../../AddressSanitizer.md:212
+msgid ""
+"LSan and UBSan flags should be passed via their own environment variables "
+"(`LSAN_OPTIONS`, `UBSAN_OPTIONS`) or default option hooks "
+"(`__lsan_default_options()`, `__ubsan_default_options()`) rather than packed "
+"into `ASAN_OPTIONS` or `__asan_default_options()`."
+msgstr ""
+
+#: ../../../AddressSanitizer.md:214
 msgid "Issue Suppression"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:182
+#: ../../../AddressSanitizer.md:216
 msgid ""
 "AddressSanitizer is not expected to produce false positives. If you see one, "
 "look again; most likely it is a true positive!"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:185
+#: ../../../AddressSanitizer.md:219
 msgid "Suppressing Reports in External Libraries"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:187
+#: ../../../AddressSanitizer.md:221
 msgid ""
 "Runtime interposition allows AddressSanitizer to find bugs in code that is "
 "not being recompiled. If you run into an issue in external libraries, we "
@@ -295,31 +357,65 @@ msgid ""
 "the path of the file relative to the location of your executable."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:202
+#: ../../../AddressSanitizer.md:236
 msgid ""
-"Use the following format to specify the names of the functions or libraries "
-"you want to suppress. You can see these in the error report. Remember that "
-"the narrower the scope of the suppression, the more bugs you will be able to "
-"catch."
+"Each non-empty line of the suppression file represents one suppression of "
+"the form `suppression_type:suppression_pattern`. Supported types are:"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:213
+#: ../../../AddressSanitizer.md:239
+msgid ""
+"`interceptor_via_fun`: Suppress errors when the given function is in the "
+"caller stack trace."
+msgstr ""
+
+#: ../../../AddressSanitizer.md:240
+msgid ""
+"`interceptor_via_lib`: Suppress errors when the call originates from the "
+"given library."
+msgstr ""
+
+#: ../../../AddressSanitizer.md:241
+msgid ""
+"`interceptor_name`: Suppress an interceptor by function name directly (e.g., "
+"`interceptor_name:memcpy`)."
+msgstr ""
+
+#: ../../../AddressSanitizer.md:242
+msgid ""
+"`odr_violation`: Suppress One Definition Rule violation reports for global "
+"variables."
+msgstr ""
+
+#: ../../../AddressSanitizer.md:243
+msgid ""
+"`alloc_dealloc_mismatch`: Suppress allocation/deallocation mismatch errors "
+"for specific functions in the stack trace."
+msgstr ""
+
+#: ../../../AddressSanitizer.md:254
+msgid ""
+"Alternatively, you can provide default suppressions at compile time by "
+"defining the `__asan_default_suppressions` function in your source code:"
+msgstr ""
+
+#: ../../../AddressSanitizer.md:266
 msgid "Conditional Compilation with `__has_feature(address_sanitizer)`"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:215
+#: ../../../AddressSanitizer.md:268
 msgid ""
 "In some cases one may need to execute different code depending on whether "
 "AddressSanitizer is enabled. {ref}`__has_feature <langext-__has_feature-"
 "__has_extension>` can be used for this purpose."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:228
+#: ../../../AddressSanitizer.md:281
 msgid ""
 "Disabling Instrumentation with `__attribute__((no_sanitize(\"address\")))`"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:230
+#: ../../../AddressSanitizer.md:283
 msgid ""
 "Some code should not be instrumented by AddressSanitizer. One may use the "
 "attribute `__attribute__((no_sanitize(\"address\")))` (which has deprecated "
@@ -329,13 +425,13 @@ msgid ""
 "`__has_feature(address_sanitizer)`."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:238
+#: ../../../AddressSanitizer.md:291
 msgid ""
 "The same attribute used on a global variable prevents AddressSanitizer from "
 "adding redzones around it and detecting out of bounds accesses."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:241
+#: ../../../AddressSanitizer.md:294
 msgid ""
 "AddressSanitizer also supports "
 "`__attribute__((disable_sanitizer_instrumentation))`. This attribute works "
@@ -343,34 +439,34 @@ msgid ""
 "prevents instrumentation performed by other sanitizers."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:246
+#: ../../../AddressSanitizer.md:299
 msgid "Interaction of Inlining with Disabling Sanitizer Instrumentation"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:248
+#: ../../../AddressSanitizer.md:301
 msgid ""
 "A `no_sanitize` function will not be inlined heuristically by the compiler "
 "into a sanitized function."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:249
+#: ../../../AddressSanitizer.md:302
 msgid ""
 "An `always_inline` function will adopt the instrumentation status of the "
 "function it is inlined into."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:250
+#: ../../../AddressSanitizer.md:303
 msgid ""
 "Forcibly combining `no_sanitize` and `__attribute__((always_inline))` is not "
 "supported, and will often lead to unexpected results. To avoid mixing these "
 "attributes, use:"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:261
+#: ../../../AddressSanitizer.md:314
 msgid "Explicit Sanitizer Checks with `__builtin_allow_sanitize_check`"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:263
+#: ../../../AddressSanitizer.md:316
 msgid ""
 "The `__builtin_allow_sanitize_check(\"address\")` builtin can be used to "
 "conditionally execute code depending on whether AddressSanitizer checks are "
@@ -380,36 +476,36 @@ msgid ""
 "unchecked by the sanitizer."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:270
+#: ../../../AddressSanitizer.md:323
 msgid "Example:"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:297
+#: ../../../AddressSanitizer.md:350
 msgid "Disabling container overflow checks"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:299
+#: ../../../AddressSanitizer.md:352
 msgid "Runtime suppression"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:301
+#: ../../../AddressSanitizer.md:354
 msgid ""
 "Container overflow checks can be disabled at runtime using the "
 "`ASAN_OPTIONS=detect_container_overflow=0` environment variable."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:304
+#: ../../../AddressSanitizer.md:357
 msgid "Compile time suppression"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:306
+#: ../../../AddressSanitizer.md:359
 msgid ""
 "`-D__SANITIZER_DISABLE_CONTAINER_OVERFLOW__` can be used at compile time to "
 "disable container overflow checks if the container library has added support "
 "for this define."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:310
+#: ../../../AddressSanitizer.md:363
 msgid ""
 "To support a standard way to disable container overflow checks at compile "
 "time, library developers should use this definition in conjunction with the "
@@ -417,31 +513,31 @@ msgid ""
 "related code compiled into user code:"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:315
+#: ../../../AddressSanitizer.md:368
 msgid "The recommended form is"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:327
+#: ../../../AddressSanitizer.md:380
 msgid "This pattern ensures that:"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:329
+#: ../../../AddressSanitizer.md:382
 msgid ""
 "Container overflow annotations are only included when AddressSanitizer is "
 "enabled"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:331
+#: ../../../AddressSanitizer.md:384
 msgid ""
 "Container overflow detection can be disabled by passing `-"
 "D__SANITIZER_DISABLE_CONTAINER_OVERFLOW__` to the compiler"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:334
+#: ../../../AddressSanitizer.md:387
 msgid "Suppressing Errors in Recompiled Code (Ignorelist)"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:336
+#: ../../../AddressSanitizer.md:389
 msgid ""
 "AddressSanitizer supports `src` and `fun` entity types in {doc}"
 "`SanitizerSpecialCaseList`, that can be used to suppress error reports in "
@@ -451,41 +547,35 @@ msgid ""
 "types (you may only specify class or struct types)."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:343
+#: ../../../AddressSanitizer.md:396
 msgid ""
 "You may use an `init` category to suppress reports about initialization-"
 "order problems happening in certain source files or with certain global "
 "variables."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:363
+#: ../../../AddressSanitizer.md:416
 msgid "Suppressing memory leaks"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:365
+#: ../../../AddressSanitizer.md:418
 msgid ""
-"Memory leak reports produced by {doc}`LeakSanitizer` (if it is run as a part "
-"of AddressSanitizer) can be suppressed by a separate file passed as"
+"Memory leak reports produced by {doc}`LeakSanitizer` (when run as part of "
+"AddressSanitizer) can be suppressed at runtime via "
+"`LSAN_OPTIONS=suppressions=...` or at compile time via "
+"`__lsan_default_suppressions()`. See {doc}`LeakSanitizer` for full details "
+"on suppression rules, default options, and programmatic APIs."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:372
-msgid ""
-"which contains lines of the form `leak:<pattern>`. Memory leak will be "
-"suppressed if pattern matches any function name, source file name, or "
-"library name in the symbolized stack trace of the leak report. See [full "
-"documentation](https://github.com/google/sanitizers/wiki/"
-"AddressSanitizerLeakSanitizer#suppressions) for more details."
-msgstr ""
-
-#: ../../../AddressSanitizer.md:378
+#: ../../../AddressSanitizer.md:423
 msgid "Code generation control"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:380
+#: ../../../AddressSanitizer.md:425
 msgid "Instrumentation code outlining"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:382
+#: ../../../AddressSanitizer.md:427
 msgid ""
 "By default AddressSanitizer inlines the instrumentation code to improve the "
 "run-time performance, which leads to increased binary size. Using the (clang "
@@ -494,38 +584,38 @@ msgid ""
 "the generated code, but also reduces the run-time performance."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:388
+#: ../../../AddressSanitizer.md:433
 msgid "Limitations"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:390
+#: ../../../AddressSanitizer.md:435
 msgid ""
 "AddressSanitizer uses more real memory than a native run. Exact overhead "
 "depends on the allocation sizes. The smaller the allocations you make the "
 "bigger the overhead is."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:393
+#: ../../../AddressSanitizer.md:438
 msgid ""
 "AddressSanitizer uses more stack memory. We have seen up to 3x increase."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:394
+#: ../../../AddressSanitizer.md:439
 msgid ""
 "On 64-bit platforms AddressSanitizer maps (but not reserves) 16+ Terabytes "
 "of virtual address space. This means that tools like `ulimit` may not work "
 "as usually expected."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:397
+#: ../../../AddressSanitizer.md:442
 msgid "Static linking of executables is not supported."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:399
+#: ../../../AddressSanitizer.md:444
 msgid "Security Considerations"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:401
+#: ../../../AddressSanitizer.md:446
 msgid ""
 "AddressSanitizer is a bug detection tool and its runtime is not meant to be "
 "linked against production executables. While it may be useful for testing, "
@@ -534,64 +624,64 @@ msgid ""
 "executable."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:406
+#: ../../../AddressSanitizer.md:451
 msgid "Supported Platforms"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:408
+#: ../../../AddressSanitizer.md:453
 msgid "AddressSanitizer is supported on:"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:410
+#: ../../../AddressSanitizer.md:455
 msgid "Linux"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:411
+#: ../../../AddressSanitizer.md:456
 msgid "macOS"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:412
+#: ../../../AddressSanitizer.md:457
 msgid "iOS Simulator"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:413
+#: ../../../AddressSanitizer.md:458
 msgid "Android"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:414
+#: ../../../AddressSanitizer.md:459
 msgid "NetBSD"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:415
+#: ../../../AddressSanitizer.md:460
 msgid "FreeBSD"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:416
+#: ../../../AddressSanitizer.md:461
 msgid "Windows 8.1+"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:418
+#: ../../../AddressSanitizer.md:463
 msgid "Current Status"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:420
+#: ../../../AddressSanitizer.md:465
 msgid ""
 "AddressSanitizer is fully functional on supported platforms starting from "
 "LLVM 3.1. The test suite is integrated into CMake build and can be run with "
 "`make check-asan` command."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:424
+#: ../../../AddressSanitizer.md:469
 msgid ""
 "The Windows port is functional and is used by Chrome and Firefox, but it is "
 "not as well supported as the other ports."
 msgstr ""
 
-#: ../../../AddressSanitizer.md:427
+#: ../../../AddressSanitizer.md:472
 msgid "More Information"
 msgstr ""
 
-#: ../../../AddressSanitizer.md:429
+#: ../../../AddressSanitizer.md:474
 msgid ""
 "[https://github.com/google/sanitizers/wiki/AddressSanitizer](https://github."
 "com/google/sanitizers/wiki/AddressSanitizer)"
