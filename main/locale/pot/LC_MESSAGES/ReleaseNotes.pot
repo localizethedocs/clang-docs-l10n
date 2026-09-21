@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"POT-Creation-Date: 2026-09-21 14:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1577,28 +1577,36 @@ msgid "LoongArch Support"
 msgstr ""
 
 #: ../../../ReleaseNotes.md:831
+msgid ""
+"`loongarch32-*-none-elf` and `loongarch64-*-none-elf` targets now use the "
+"bare-metal toolchain, like other bare-metal targets. The linker is run "
+"directly instead of through `gcc`, and host include directories are no "
+"longer searched."
+msgstr ""
+
+#: ../../../ReleaseNotes.md:836
 msgid "RISC-V Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:833
+#: ../../../ReleaseNotes.md:838
 msgid ""
 "Fixed a bug where the `interrupt` attribute did not accept `machine` "
 "together with both `SiFive-CLIC-preemptible` and `SiFive-CLIC-stack-swap`."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:836
+#: ../../../ReleaseNotes.md:841
 msgid ""
 "Added a new warning when the same interrupt type is specified more than once "
 "in a RISC-V `interrupt` attribute."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:839
+#: ../../../ReleaseNotes.md:844
 msgid ""
 "SiFive CLIC preemptible interrupt handlers now diagnose unsupported frame "
 "pointers instead of producing a backend fatal error."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:842
+#: ../../../ReleaseNotes.md:847
 msgid ""
 "Added `-march=native` for better compatibility with ARM, AArch64, and X86. "
 "This option will be treated like `-mcpu=native` if `-mcpu` is not present. "
@@ -1606,11 +1614,11 @@ msgid ""
 "tune CPU will be selected from `-mcpu`."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:847
+#: ../../../ReleaseNotes.md:852
 msgid "CUDA/HIP Language Changes"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:849
+#: ../../../ReleaseNotes.md:854
 msgid ""
 "HIP compilations now add the `include/libhipcxx` directory from the selected "
 "ROCm installation to the header search path when it exists. This allows "
@@ -1619,17 +1627,17 @@ msgid ""
 "paths."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:855
+#: ../../../ReleaseNotes.md:860
 msgid "CUDA Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:857
+#: ../../../ReleaseNotes.md:862
 msgid ""
 "Added `--cuda-emit-nvcc-abi` to emit the NVCC-compatible host registration "
 "ABI (`__cudaRegisterLinkedBinary`)."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:860
+#: ../../../ReleaseNotes.md:865
 msgid ""
 "Clang now provides device-side definitions of `__cxa_pure_virtual()` and "
 "`__cxa_deleted_virtual()`; previously, any (potential) call to a pure/"
@@ -1637,87 +1645,87 @@ msgid ""
 "program to fail to assemble. This is now fixed. (#GH49183) (#GH67533)"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:865
+#: ../../../ReleaseNotes.md:870
 msgid "AIX Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:867
+#: ../../../ReleaseNotes.md:872
 msgid "NetBSD Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:869
+#: ../../../ReleaseNotes.md:874
 msgid "WebAssembly Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:871
+#: ../../../ReleaseNotes.md:876
 msgid ""
 "Added `__builtin_wasm_memory_copy` and `__builtin_wasm_memory_fill` builtins "
 "for the WebAssembly `memory.copy` and `memory.fill` bulk memory instructions."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:874
+#: ../../../ReleaseNotes.md:879
 msgid "AVR Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:876
+#: ../../../ReleaseNotes.md:881
 msgid "SystemZ Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:878
+#: ../../../ReleaseNotes.md:883
 msgid "DWARF Support in Clang"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:880
+#: ../../../ReleaseNotes.md:885
 msgid "Floating Point Support in Clang"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:882
+#: ../../../ReleaseNotes.md:887
 msgid "Fixed Point Support in Clang"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:884
+#: ../../../ReleaseNotes.md:889
 msgid "AST Matchers"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:886
+#: ../../../ReleaseNotes.md:891
 msgid "clang-format"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:888
+#: ../../../ReleaseNotes.md:893
 msgid ""
 "Add `SpacesInBlockComments` option to control spacing after `/*` and before "
 "`*/` in ordinary block comments."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:890
+#: ../../../ReleaseNotes.md:895
 msgid ""
 "Add `AfterRequiresExpression` sub-option of `BraceWrapping` to wrap the body "
 "of requires expressions. It is enabled by the `Allman`, `Whitesmiths`, and "
 "`GNU` styles of `BreakBeforeBraces`."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:894
+#: ../../../ReleaseNotes.md:899
 msgid ""
 "`QualifierOrder` now supports `typedef`, `consteval`, `constinit`, "
 "`thread_local`, `extern`, `mutable`, `signed`, `unsigned`, `long`, `short`, "
 "and `explicit` declaration specifiers."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:898
+#: ../../../ReleaseNotes.md:903
 msgid "libclang"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:900
+#: ../../../ReleaseNotes.md:905
 msgid ""
 "visit identifier initializers in lambda capture as VarDecl instead of "
 "VariableRef. Warning: this changes behaviour."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:902
+#: ../../../ReleaseNotes.md:907
 msgid "Code Completion"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:904
+#: ../../../ReleaseNotes.md:909
 msgid ""
 "Parameters declared with a `decltype` are now presented as the type the "
 "`decltype` resolves to, e.g. `set_x(int val)` rather than `set_x(decltype(x) "
@@ -1725,45 +1733,45 @@ msgid ""
 "those used by clangd."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:909
+#: ../../../ReleaseNotes.md:914
 msgid ""
 "Members inherited from a dependent base class that is named through an alias "
 "template are suggested by code completion when relevant."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:912
+#: ../../../ReleaseNotes.md:917
 msgid "Static Analyzer"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:914
+#: ../../../ReleaseNotes.md:919
 msgid "Crash and bug fixes"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:925 ../../../ReleaseNotes.md:974
+#: ../../../ReleaseNotes.md:930 ../../../ReleaseNotes.md:979
 msgid "Improvements"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:927
+#: ../../../ReleaseNotes.md:932
 msgid ""
 "The lock-order-reversal check in ``alpha.unix.PthreadLock`` is now disabled "
 "by default. It can be re-enabled with the ``WarnOnLockOrderReversal`` option."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:930
+#: ../../../ReleaseNotes.md:935
 msgid "Moved checkers"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:932
+#: ../../../ReleaseNotes.md:937
 msgid ""
 "The `alpha.cplusplus.UseAfterLifetimeEnd` checker was renamed to `alpha.core."
 "UseAfterLifetimeEnd`."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:934
+#: ../../../ReleaseNotes.md:939
 msgid "Diagnostic changes"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:936
+#: ../../../ReleaseNotes.md:941
 msgid ""
 "For self-assignments during initialization (`T v = v;`), `core.uninitialized."
 "Assign` will not report them as uninitialized accesses (except C++ reference "
@@ -1772,19 +1780,19 @@ msgid ""
 "(#GH187530)"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:940
+#: ../../../ReleaseNotes.md:945
 msgid "Sanitizers"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:942
+#: ../../../ReleaseNotes.md:947
 msgid "Python Binding Changes"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:944
+#: ../../../ReleaseNotes.md:949
 msgid "OpenMP Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:946
+#: ../../../ReleaseNotes.md:951
 msgid ""
 "Canonicalize intra-tiles in loop tiling. `#pragma omp tile` still emits a "
 "min-bounded inner loop, which vectorizes well. When a parent directive such "
@@ -1793,63 +1801,63 @@ msgid ""
 "guard only if the last tile can be partial."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:952
+#: ../../../ReleaseNotes.md:957
 msgid "Not yet supported (diagnosed, left as follow-up):"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:954
+#: ../../../ReleaseNotes.md:959
 msgid ""
 "`collapse` through stacked `#pragma omp tile` (the inner floor is not a "
 "collapsed counter)."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:956
+#: ../../../ReleaseNotes.md:961
 msgid ""
 "A loop transformation (`tile`, `unroll`, `interchange`, ...) that consumes "
 "another tile's intra-tile loop."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:959
+#: ../../../ReleaseNotes.md:964
 msgid ""
 "Added parsing and semantic support for `dims` modifier in `num_teams` and "
 "`thread_limit` clauses for OpenMP 6.1 or later."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:961
+#: ../../../ReleaseNotes.md:966
 msgid ""
 "Added parsing and semantic support for `dims` modifier in `num_teams`, "
 "`thread_limit` and `num_threads` clauses for OpenMP 6.1 or later."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:963
+#: ../../../ReleaseNotes.md:968
 msgid ""
 "Map-type-modifying modifiers applied to a list item with a user-defined "
 "mapper are now propagated onto the maps the mapper expands to."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:965
+#: ../../../ReleaseNotes.md:970
 msgid ""
 "Mapping of expressions with base-pointers through a user-defined mapper (e."
 "g. `map(s.p[0:n])`) now conforms to OpenMP's conditional pointer-attachment, "
 "matching the behavior of such maps outside a mapper."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:968
+#: ../../../ReleaseNotes.md:973
 msgid ""
 "The `holds` clause on the `assume` directive now lowers side-effect-free "
 "conditions to `llvm.assume`, enabling downstream optimizations. Previously "
 "the clause was parsed but its condition was discarded without effect."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:972
+#: ../../../ReleaseNotes.md:977
 msgid "SYCL Support"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:976
+#: ../../../ReleaseNotes.md:981
 msgid "Additional Information"
 msgstr ""
 
-#: ../../../ReleaseNotes.md:978
+#: ../../../ReleaseNotes.md:983
 msgid ""
 "A wide variety of additional information is available on the [Clang web page]"
 "(https://clang.llvm.org/). The web page contains versions of the API "
@@ -1858,7 +1866,7 @@ msgid ""
 "into the \"`clang/docs/`\" directory in the Clang tree."
 msgstr ""
 
-#: ../../../ReleaseNotes.md:985
+#: ../../../ReleaseNotes.md:990
 msgid ""
 "If you have any questions or comments about Clang, please feel free to "
 "contact us on the [Discourse forums (Clang Frontend category)](https://"
