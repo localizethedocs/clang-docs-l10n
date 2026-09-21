@@ -1,0 +1,790 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="UndefinedBehaviorSanitizer" href="UndefinedBehaviorSanitizer.html" /><link rel="prev" title="ThreadSanitizer" href="ThreadSanitizer.html" />
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/MemorySanitizer.html" />
+        <link rel="prefetch" href="_static/LLVMWyvernSmall.png" as="image" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+        <title>MemorySanitizer - Clang</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=548e816e" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86c9e7d9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Clang Release Notes</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="UsersManual.html">Clang Compiler User's Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="LanguageExtensions.html">Clang Language Extensions</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Clang Language Extensions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Block-ABI-Apple.html">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrossCompilation.html">Cross-compilation using Clang</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ClangStaticAnalyzer.html">Clang Static Analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Clang Static Analyzer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="analyzer/checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/user-docs.html">2. User Docs</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 2. User Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/UsingWithXCode.html">2.2. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FilingBugs.html">2.3. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CrossTranslationUnit.html">2.4. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/TaintAnalysisConfiguration.html">2.5. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/Annotations.html">2.6. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FAQ.html">2.7. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/developer-docs.html">3. Developer Docs</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 3. Developer Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/PerformanceInvestigation.html">3.6. Performance Investigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Scalable Static Analysis Framework</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Developer Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DataFlowAnalysisIntro.html">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSanitizer.html">ThreadSanitizer</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataFlowSanitizer.html">DataFlowSanitizer</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of DataFlowSanitizer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="DataFlowSanitizerDesign.html">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerCoverage.html">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ControlFlowIntegrity.html">Control Flow Integrity</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Control Flow Integrity</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StandardCPlusPlusModules.html">Standard C++ Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MisExpect.html">Misexpect</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Misexpect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="OpenCLSupport.html">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Clang HLSL Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of HLSL Design and Implementation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="APINotes.html">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CIR/index.html">ClangIR</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of ClangIR</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CIR/ABILowering.html">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CommandGuide/index.html">Clang "man" pages</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Clang "man" pages</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefactoringEngine.html">Clang's refactoring engine</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ClangTools.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangRepl.html">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InternalsManual.html">"Clang" CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizerDesign.html">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LLVMExceptionHandlingCodeGen.html">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/MemorySanitizer.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/MemorySanitizer.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="memorysanitizer">
+<h1>MemorySanitizer<a class="headerlink" href="#memorysanitizer" title="Link to this heading">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>MemorySanitizer is a detector of uninitialized memory use. It consists of a
+compiler instrumentation module and a run-time library.</p>
+<p>Typical slowdown introduced by MemorySanitizer is <strong>3x</strong>.</p>
+<p>Here is a not comprehensive of list cases when MemorySanitizer will report an error:</p>
+<ul class="simple">
+<li><p>Uninitialized value was used in a conditional branch.</p></li>
+<li><p>Uninitialized pointer was used for memory accesses.</p></li>
+<li><p>Uninitialized value was passed or returned from a function call, which is considered an undefined behavior. The check can be disabled with <code class="docutils literal notranslate"><span class="pre">-fno-sanitize-memory-param-retval</span></code>.</p></li>
+<li><p>Uninitialized data was passed into some libc calls.</p></li>
+</ul>
+</section>
+<section id="how-to-build">
+<h2>How to build<a class="headerlink" href="#how-to-build" title="Link to this heading">¶</a></h2>
+<p>Build LLVM/Clang with <a class="reference external" href="https://llvm.org/docs/CMake.html">CMake</a>.</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p>Simply compile and link your program with <code class="docutils literal notranslate"><span class="pre">-fsanitize=memory</span></code> flag.
+The MemorySanitizer run-time library should be linked to the final
+executable, so make sure to use <code class="docutils literal notranslate"><span class="pre">clang</span></code> (not <code class="docutils literal notranslate"><span class="pre">ld</span></code>) for the final
+link step. When linking shared libraries, the MemorySanitizer run-time
+is not linked, so <code class="docutils literal notranslate"><span class="pre">-Wl,-z,defs</span></code> may cause link errors (don't use it
+with MemorySanitizer). To get a reasonable performance add <code class="docutils literal notranslate"><span class="pre">-O1</span></code> or
+higher. To get meaningful stack traces in error messages add
+<code class="docutils literal notranslate"><span class="pre">-fno-omit-frame-pointer</span></code>. To get perfect stack traces you may need
+to disable inlining (just use <code class="docutils literal notranslate"><span class="pre">-O1</span></code>) and tail call elimination
+(<code class="docutils literal notranslate"><span class="pre">-fno-optimize-sibling-calls</span></code>).</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>cat<span class="w"> </span>umr.cc
+<span class="gp">#</span>include<span class="w"> </span>&lt;stdio.h&gt;
+
+<span class="go">int main(int argc, char** argv) {</span>
+<span class="go">  int* a = new int[10];</span>
+<span class="go">  a[5] = 0;</span>
+<span class="go">  if (a[argc])</span>
+<span class="go">    printf("xx\n");</span>
+<span class="go">  return 0;</span>
+<span class="go">}</span>
+
+<span class="gp">% </span>clang<span class="w"> </span>-fsanitize<span class="o">=</span>memory<span class="w"> </span>-fno-omit-frame-pointer<span class="w"> </span>-g<span class="w"> </span>-O2<span class="w"> </span>umr.cc
+</pre></div>
+</div>
+<p>If a bug is detected, the program will print an error message to
+stderr and exit with a non-zero exit code.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>./a.out
+<span class="go">WARNING: MemorySanitizer: use-of-uninitialized-value</span>
+<span class="gp">    #</span><span class="m">0</span><span class="w"> </span>0x7f45944b418a<span class="w"> </span><span class="k">in</span><span class="w"> </span>main<span class="w"> </span>umr.cc:6
+<span class="gp">    #</span><span class="m">1</span><span class="w"> </span>0x7f45938b676c<span class="w"> </span><span class="k">in</span><span class="w"> </span>__libc_start_main<span class="w"> </span>libc-start.c:226
+</pre></div>
+</div>
+<p>By default, MemorySanitizer exits on the first detected error. If you
+find the error report hard to understand, try enabling
+<a class="reference internal" href="#msan-origins"><span class="std std-ref">origin tracking</span></a>.</p>
+<section id="has-feature-memory-sanitizer">
+<h3><code class="docutils literal notranslate"><span class="pre">__has_feature(memory_sanitizer)</span></code><a class="headerlink" href="#has-feature-memory-sanitizer" title="Link to this heading">¶</a></h3>
+<p>In some cases one may need to execute different code depending on
+whether MemorySanitizer is enabled. <a class="reference internal" href="LanguageExtensions.html#langext-has-feature-has-extension"><span class="std std-ref">__has_feature</span></a> can be used for this purpose.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(__has_feature)</span>
+<span class="cp">#  if __has_feature(memory_sanitizer)</span>
+<span class="c1">// code that builds only under MemorySanitizer</span>
+<span class="cp">#  endif</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</section>
+<section id="attribute-no-sanitize-memory">
+<h3><code class="docutils literal notranslate"><span class="pre">__attribute__((no_sanitize(&quot;memory&quot;)))</span></code><a class="headerlink" href="#attribute-no-sanitize-memory" title="Link to this heading">¶</a></h3>
+<p>Some code should not be checked by MemorySanitizer. One may use the function
+attribute <code class="docutils literal notranslate"><span class="pre">no_sanitize(&quot;memory&quot;)</span></code> to disable uninitialized checks in a
+particular function. MemorySanitizer may still instrument such functions to
+avoid false positives. This attribute may not be supported by other compilers,
+so we suggest to use it together with <code class="docutils literal notranslate"><span class="pre">__has_feature(memory_sanitizer)</span></code>.</p>
+</section>
+<section id="attribute-disable-sanitizer-instrumentation">
+<h3><code class="docutils literal notranslate"><span class="pre">__attribute__((disable_sanitizer_instrumentation))</span></code><a class="headerlink" href="#attribute-disable-sanitizer-instrumentation" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">disable_sanitizer_instrumentation</span></code> attribute can be applied to functions
+to prevent all kinds of instrumentation. As a result, it may introduce false
+positives and therefore should be used with care, and only if absolutely
+required; for example for certain code that cannot tolerate any instrumentation
+and resulting side-effects. This attribute overrides <code class="docutils literal notranslate"><span class="pre">no_sanitize(&quot;memory&quot;)</span></code>.</p>
+</section>
+<section id="interaction-of-inlining-with-disabling-sanitizer-instrumentation">
+<h3>Interaction of Inlining with Disabling Sanitizer Instrumentation<a class="headerlink" href="#interaction-of-inlining-with-disabling-sanitizer-instrumentation" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">no_sanitize</span></code> function will not be inlined heuristically by the compiler into a sanitized function.</p></li>
+<li><p>An <code class="docutils literal notranslate"><span class="pre">always_inline</span></code> function will adopt the instrumentation status of the function it is inlined into.</p></li>
+<li><p>Forcibly combining <code class="docutils literal notranslate"><span class="pre">no_sanitize</span></code> and <code class="docutils literal notranslate"><span class="pre">__attribute__((always_inline))</span></code> is not supported, and will often lead to unexpected results. To avoid mixing these attributes, use:</p></li>
+</ul>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Note, __has_feature test for sanitizers is deprecated, and Clang will support __SANITIZE_&lt;sanitizer&gt;__ similar to GCC.</span>
+<span class="cp">#if __has_feature(memory_sanitizer) || defined(__SANITIZE_MEMORY__) || ... &lt;other sanitizers&gt;</span>
+<span class="cp">#define ALWAYS_INLINE_IF_UNINSTRUMENTED</span>
+<span class="cp">#else</span>
+<span class="cp">#define ALWAYS_INLINE_IF_UNINSTRUMENTED __attribute__((always_inline))</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</section>
+<section id="explicit-sanitizer-checks-with-builtin-allow-sanitize-check">
+<h3>Explicit Sanitizer Checks with <code class="docutils literal notranslate"><span class="pre">__builtin_allow_sanitize_check</span></code><a class="headerlink" href="#explicit-sanitizer-checks-with-builtin-allow-sanitize-check" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">__builtin_allow_sanitize_check(&quot;memory&quot;)</span></code> builtin can be used to
+conditionally execute code depending on whether MemorySanitizer checks are
+enabled and permitted by the current policy (after inlining). This is
+particularly useful for inserting explicit, sanitizer-specific checks around
+operations like syscalls or inline assembly, which might otherwise be unchecked
+by the sanitizer.</p>
+<p>Example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">__msan_check_mem_is_initialized</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="p">);</span>
+
+<span class="kr">inline</span><span class="w"> </span><span class="n">__attribute__</span><span class="p">((</span><span class="n">always_inline</span><span class="p">))</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">my_send</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">__builtin_allow_sanitize_check</span><span class="p">(</span><span class="s">"memory"</span><span class="p">))</span>
+<span class="w">    </span><span class="n">__msan_check_mem_is_initialized</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// ... syscall or other logic where MSan may not see the access ...</span>
+<span class="w">  </span><span class="n">send</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">instrumented_function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="n">my_send</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">));</span><span class="w"> </span><span class="c1">// checks are active</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+
+<span class="n">__attribute__</span><span class="p">((</span><span class="n">no_sanitize</span><span class="p">(</span><span class="s">"memory"</span><span class="p">)))</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">uninstrumented_function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="n">my_send</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">));</span><span class="w"> </span><span class="c1">// checks are skipped</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="ignorelist">
+<h3>Ignorelist<a class="headerlink" href="#ignorelist" title="Link to this heading">¶</a></h3>
+<p>MemorySanitizer supports <code class="docutils literal notranslate"><span class="pre">src</span></code> and <code class="docutils literal notranslate"><span class="pre">fun</span></code> entity types in
+<a class="reference internal" href="SanitizerSpecialCaseList.html"><span class="doc">Sanitizer special case list</span></a>, that can be used to relax MemorySanitizer
+checks for certain source files and functions. All &quot;Use of uninitialized value&quot;
+warnings will be suppressed and all values loaded from memory will be
+considered fully initialized.</p>
+</section>
+</section>
+<section id="report-symbolization">
+<h2>Report symbolization<a class="headerlink" href="#report-symbolization" title="Link to this heading">¶</a></h2>
+<p>MemorySanitizer uses an external symbolizer to print files and line numbers in
+reports. Make sure that <code class="docutils literal notranslate"><span class="pre">llvm-symbolizer</span></code> binary is in <code class="docutils literal notranslate"><span class="pre">PATH</span></code>,
+or set environment variable <code class="docutils literal notranslate"><span class="pre">MSAN_SYMBOLIZER_PATH</span></code> to point to it.</p>
+</section>
+<section id="origin-tracking">
+<span id="msan-origins"></span><h2>Origin Tracking<a class="headerlink" href="#origin-tracking" title="Link to this heading">¶</a></h2>
+<p>MemorySanitizer can track origins of uninitialized values, similar to
+Valgrind's --track-origins option. This feature is enabled by
+<code class="docutils literal notranslate"><span class="pre">-fsanitize-memory-track-origins=2</span></code> (or simply
+<code class="docutils literal notranslate"><span class="pre">-fsanitize-memory-track-origins</span></code>) Clang option. With the code from
+the example above,</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>cat<span class="w"> </span>umr2.cc
+<span class="gp">#</span>include<span class="w"> </span>&lt;stdio.h&gt;
+
+<span class="go">int main(int argc, char** argv) {</span>
+<span class="go">  int* a = new int[10];</span>
+<span class="go">  a[5] = 0;</span>
+<span class="go">  volatile int b = a[argc];</span>
+<span class="go">  if (b)</span>
+<span class="go">    printf("xx\n");</span>
+<span class="go">  return 0;</span>
+<span class="go">}</span>
+
+<span class="gp">% </span>clang<span class="w"> </span>-fsanitize<span class="o">=</span>memory<span class="w"> </span>-fsanitize-memory-track-origins<span class="o">=</span><span class="m">2</span><span class="w"> </span>-fno-omit-frame-pointer<span class="w"> </span>-g<span class="w"> </span>-O2<span class="w"> </span>umr2.cc
+<span class="gp">% </span>./a.out
+<span class="go">WARNING: MemorySanitizer: use-of-uninitialized-value</span>
+<span class="gp">    #</span><span class="m">0</span><span class="w"> </span>0x7f7893912f0b<span class="w"> </span><span class="k">in</span><span class="w"> </span>main<span class="w"> </span>umr2.cc:7
+<span class="gp">    #</span><span class="m">1</span><span class="w"> </span>0x7f789249b76c<span class="w"> </span><span class="k">in</span><span class="w"> </span>__libc_start_main<span class="w"> </span>libc-start.c:226
+
+<span class="go">  Uninitialized value was stored to memory at</span>
+<span class="gp">    #</span><span class="m">0</span><span class="w"> </span>0x7f78938b5c25<span class="w"> </span><span class="k">in</span><span class="w"> </span>__msan_chain_origin<span class="w"> </span>msan.cc:484
+<span class="gp">    #</span><span class="m">1</span><span class="w"> </span>0x7f7893912ecd<span class="w"> </span><span class="k">in</span><span class="w"> </span>main<span class="w"> </span>umr2.cc:6
+
+<span class="go">  Uninitialized value was created by a heap allocation</span>
+<span class="gp">    #</span><span class="m">0</span><span class="w"> </span>0x7f7893901cbd<span class="w"> </span><span class="k">in</span><span class="w"> </span>operator<span class="w"> </span>new<span class="o">[](</span>unsigned<span class="w"> </span>long<span class="o">)</span><span class="w"> </span>msan_new_delete.cc:44
+<span class="gp">    #</span><span class="m">1</span><span class="w"> </span>0x7f7893912e06<span class="w"> </span><span class="k">in</span><span class="w"> </span>main<span class="w"> </span>umr2.cc:4
+</pre></div>
+</div>
+<p>By default, MemorySanitizer collects both allocation points and all
+intermediate stores the uninitialized value went through. Origin
+tracking has proved to be very useful for debugging MemorySanitizer
+reports. It slows down program execution by a factor of 1.5x-2x on top
+of the usual MemorySanitizer slowdown and increases memory overhead.</p>
+<p>Clang option <code class="docutils literal notranslate"><span class="pre">-fsanitize-memory-track-origins=1</span></code> enables a slightly
+faster mode when MemorySanitizer collects only allocation points but
+not intermediate stores.</p>
+</section>
+<section id="use-after-destruction-detection">
+<h2>Use-after-destruction detection<a class="headerlink" href="#use-after-destruction-detection" title="Link to this heading">¶</a></h2>
+<p>MemorySanitizer includes use-after-destruction detection. After invocation of
+the destructor, the object will be considered no longer readable, and using
+underlying memory will lead to error reports in runtime. Refer to the standard
+for <a class="reference external" href="https://eel.is/c++draft/basic.life#1">lifetime</a> definition.</p>
+<p>This feature can be disabled with either:</p>
+<ol class="arabic simple">
+<li><p>Pass additional Clang option <code class="docutils literal notranslate"><span class="pre">-fno-sanitize-memory-use-after-dtor</span></code> during
+compilation.</p></li>
+<li><p>Set environment variable <code class="docutils literal notranslate"><span class="pre">MSAN_OPTIONS=poison_in_dtor=0</span></code> before running
+the program.</p></li>
+</ol>
+</section>
+<section id="handling-external-code">
+<h2>Handling external code<a class="headerlink" href="#handling-external-code" title="Link to this heading">¶</a></h2>
+<p>MemorySanitizer requires that all program code is instrumented. This
+also includes any libraries that the program depends on, even libc.
+Failing to achieve this may result in false reports.
+For the same reason you may need to replace all inline assembly code that writes to memory
+with a pure C/C++ code.</p>
+<p>Full MemorySanitizer instrumentation is very difficult to achieve. To
+make it easier, MemorySanitizer runtime library includes 70+
+interceptors for the most common libc functions. They make it possible
+to run MemorySanitizer-instrumented programs linked with
+uninstrumented libc. For example, the authors were able to bootstrap
+MemorySanitizer-instrumented Clang compiler by linking it with
+self-built instrumented libc++ (as a replacement for libstdc++).</p>
+</section>
+<section id="security-considerations">
+<h2>Security Considerations<a class="headerlink" href="#security-considerations" title="Link to this heading">¶</a></h2>
+<p>MemorySanitizer is a bug detection tool and its runtime is not meant to be
+linked against production executables. While it may be useful for testing,
+MemorySanitizer's runtime was not developed with security-sensitive
+constraints in mind and may compromise the security of the resulting executable.</p>
+</section>
+<section id="supported-platforms">
+<h2>Supported Platforms<a class="headerlink" href="#supported-platforms" title="Link to this heading">¶</a></h2>
+<p>MemorySanitizer is supported on the following OS:</p>
+<ul class="simple">
+<li><p>Linux</p></li>
+<li><p>NetBSD</p></li>
+<li><p>FreeBSD</p></li>
+</ul>
+</section>
+<section id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>MemorySanitizer uses 2x more real memory than a native run, 3x with
+origin tracking.</p></li>
+<li><p>MemorySanitizer maps (but not reserves) 64 Terabytes of virtual
+address space. This means that tools like <code class="docutils literal notranslate"><span class="pre">ulimit</span></code> may not work as
+usually expected.</p></li>
+<li><p>Static linking is not supported.</p></li>
+<li><p>Older versions of MSan (LLVM 3.7 and older) didn't work with
+non-position-independent executables, and could fail on some Linux
+kernel versions with disabled ASLR. Refer to documentation for older versions
+for more details.</p></li>
+<li><p>MemorySanitizer might be incompatible with position-independent executables
+from FreeBSD 13 but there is a check done at runtime and throws a warning
+in this case.</p></li>
+</ul>
+</section>
+<section id="current-status">
+<h2>Current Status<a class="headerlink" href="#current-status" title="Link to this heading">¶</a></h2>
+<p>MemorySanitizer is known to work on large real-world programs
+(like Clang/LLVM itself) that can be recompiled from source, including all
+dependent libraries.</p>
+</section>
+<section id="more-information">
+<h2>More Information<a class="headerlink" href="#more-information" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://github.com/google/sanitizers/wiki/MemorySanitizer">https://github.com/google/sanitizers/wiki/MemorySanitizer</a></p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="UndefinedBehaviorSanitizer.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">UndefinedBehaviorSanitizer</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="ThreadSanitizer.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">ThreadSanitizer</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">MemorySanitizer</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#how-to-build">How to build</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#has-feature-memory-sanitizer"><code class="docutils literal notranslate"><span class="pre">__has_feature(memory_sanitizer)</span></code></a></li>
+<li><a class="reference internal" href="#attribute-no-sanitize-memory"><code class="docutils literal notranslate"><span class="pre">__attribute__((no_sanitize(&quot;memory&quot;)))</span></code></a></li>
+<li><a class="reference internal" href="#attribute-disable-sanitizer-instrumentation"><code class="docutils literal notranslate"><span class="pre">__attribute__((disable_sanitizer_instrumentation))</span></code></a></li>
+<li><a class="reference internal" href="#interaction-of-inlining-with-disabling-sanitizer-instrumentation">Interaction of Inlining with Disabling Sanitizer Instrumentation</a></li>
+<li><a class="reference internal" href="#explicit-sanitizer-checks-with-builtin-allow-sanitize-check">Explicit Sanitizer Checks with <code class="docutils literal notranslate"><span class="pre">__builtin_allow_sanitize_check</span></code></a></li>
+<li><a class="reference internal" href="#ignorelist">Ignorelist</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#report-symbolization">Report symbolization</a></li>
+<li><a class="reference internal" href="#origin-tracking">Origin Tracking</a></li>
+<li><a class="reference internal" href="#use-after-destruction-detection">Use-after-destruction detection</a></li>
+<li><a class="reference internal" href="#handling-external-code">Handling external code</a></li>
+<li><a class="reference internal" href="#security-considerations">Security Considerations</a></li>
+<li><a class="reference internal" href="#supported-platforms">Supported Platforms</a></li>
+<li><a class="reference internal" href="#limitations">Limitations</a></li>
+<li><a class="reference internal" href="#current-status">Current Status</a></li>
+<li><a class="reference internal" href="#more-information">More Information</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=7d86a446"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>

@@ -1,0 +1,809 @@
+<!doctype html>
+<html class="no-js" lang="en-US" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="LeakSanitizer" href="LeakSanitizer.html" /><link rel="prev" title="DataFlowSanitizer" href="DataFlowSanitizer.html" />
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/DataFlowSanitizerDesign.html" />
+        <link rel="prefetch" href="_static/LLVMWyvernSmall.png" as="image" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+        <title>DataFlowSanitizer Design Document - Clang</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=548e816e" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86c9e7d9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Clang Release Notes</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="UsersManual.html">Clang Compiler User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="LanguageExtensions.html">Clang Language Extensions</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Clang Language Extensions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Block-ABI-Apple.html">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrossCompilation.html">Cross-compilation using Clang</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ClangStaticAnalyzer.html">Clang Static Analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Clang Static Analyzer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="analyzer/checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/user-docs.html">2. User Docs</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 2. User Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/UsingWithXCode.html">2.2. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FilingBugs.html">2.3. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CrossTranslationUnit.html">2.4. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/TaintAnalysisConfiguration.html">2.5. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/Annotations.html">2.6. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FAQ.html">2.7. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/developer-docs.html">3. Developer Docs</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 3. Developer Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/PerformanceInvestigation.html">3.6. Performance Investigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Scalable Static Analysis Framework</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Developer Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DataFlowAnalysisIntro.html">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSanitizer.html">ThreadSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MemorySanitizer.html">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="DataFlowSanitizer.html">DataFlowSanitizer</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of DataFlowSanitizer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerCoverage.html">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ControlFlowIntegrity.html">Control Flow Integrity</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Control Flow Integrity</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StandardCPlusPlusModules.html">Standard C++ Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MisExpect.html">Misexpect</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Misexpect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="OpenCLSupport.html">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Clang HLSL Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of HLSL Design and Implementation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="APINotes.html">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CIR/index.html">ClangIR</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of ClangIR</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CIR/ABILowering.html">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CommandGuide/index.html">Clang “man” pages</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Clang “man” pages</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefactoringEngine.html">Clang’s refactoring engine</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ClangTools.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangRepl.html">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InternalsManual.html">“Clang” CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizerDesign.html">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LLVMExceptionHandlingCodeGen.html">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/DataFlowSanitizerDesign.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/DataFlowSanitizerDesign.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="dataflowsanitizer-design-document">
+<h1>DataFlowSanitizer Design Document<a class="headerlink" href="#dataflowsanitizer-design-document" title="Link to this heading">¶</a></h1>
+<p>This document sets out the design for DataFlowSanitizer, a general
+dynamic data flow analysis. Unlike other Sanitizer tools, this tool is
+not designed to detect a specific class of bugs on its own. Instead,
+it provides a generic dynamic data flow analysis framework to be used
+by clients to help detect application-specific issues within their
+own code.</p>
+<p>DataFlowSanitizer is a program instrumentation which can associate
+a number of taint labels with any data stored in any memory region
+accessible by the program. The analysis is dynamic, which means that
+it operates on a running program, and tracks how the labels propagate
+through that program.</p>
+<section id="use-cases">
+<h2>Use Cases<a class="headerlink" href="#use-cases" title="Link to this heading">¶</a></h2>
+<p>This instrumentation can be used as a tool to help monitor how data
+flows from a program’s inputs (sources) to its outputs (sinks).
+This has applications from a privacy/security perspective in that
+one can audit how a sensitive data item is used within a program and
+ensure it isn’t exiting the program anywhere it shouldn’t be.</p>
+</section>
+<section id="interface">
+<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading">¶</a></h2>
+<p>A number of functions are provided which will attach taint labels to
+memory regions and extract the set of labels associated with a
+specific memory region. These functions are declared in the header
+file <code class="docutils literal notranslate"><span class="pre">sanitizer/dfsan_interface.h</span></code>.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">/// Sets the label for each address in [addr,addr+size) to \c label.</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">dfsan_set_label</span><span class="p">(</span><span class="n">dfsan_label</span><span class="w"> </span><span class="n">label</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+
+<span class="c1">/// Sets the label for each address in [addr,addr+size) to the union of the</span>
+<span class="c1">/// current label for that address and \c label.</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">dfsan_add_label</span><span class="p">(</span><span class="n">dfsan_label</span><span class="w"> </span><span class="n">label</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+
+<span class="c1">/// Retrieves the label associated with the given data.</span>
+<span class="c1">///</span>
+<span class="c1">/// The type of 'data' is arbitrary.  The function accepts a value of any type,</span>
+<span class="c1">/// which can be truncated or extended (implicitly or explicitly) as necessary.</span>
+<span class="c1">/// The truncation/extension operations will preserve the label of the original</span>
+<span class="c1">/// value.</span>
+<span class="n">dfsan_label</span><span class="w"> </span><span class="nf">dfsan_get_label</span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="n">data</span><span class="p">);</span>
+
+<span class="c1">/// Retrieves the label associated with the data at the given address.</span>
+<span class="n">dfsan_label</span><span class="w"> </span><span class="nf">dfsan_read_label</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+
+<span class="c1">/// Returns whether the given label contains the label elem.</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">dfsan_has_label</span><span class="p">(</span><span class="n">dfsan_label</span><span class="w"> </span><span class="n">label</span><span class="p">,</span><span class="w"> </span><span class="n">dfsan_label</span><span class="w"> </span><span class="n">elem</span><span class="p">);</span>
+
+<span class="c1">/// Computes the union of \c l1 and \c l2, resulting in a union label.</span>
+<span class="n">dfsan_label</span><span class="w"> </span><span class="nf">dfsan_union</span><span class="p">(</span><span class="n">dfsan_label</span><span class="w"> </span><span class="n">l1</span><span class="p">,</span><span class="w"> </span><span class="n">dfsan_label</span><span class="w"> </span><span class="n">l2</span><span class="p">);</span>
+
+<span class="c1">/// Flushes the DFSan shadow, i.e. forgets about all labels currently associated</span>
+<span class="c1">/// with the application memory.  Use this call to start over the taint tracking</span>
+<span class="c1">/// within the same process.</span>
+<span class="c1">///</span>
+<span class="c1">/// Note: If another thread is working with tainted data during the flush, that</span>
+<span class="c1">/// taint could still be written to shadow after the flush.</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">dfsan_flush</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The following functions are provided to check origin tracking status and results.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">/// Retrieves the immediate origin associated with the given data. The returned</span>
+<span class="c1">/// origin may point to another origin.</span>
+<span class="c1">///</span>
+<span class="c1">/// The type of 'data' is arbitrary. The function accepts a value of any type,</span>
+<span class="c1">/// which can be truncated or extended (implicitly or explicitly) as necessary.</span>
+<span class="c1">/// The truncation/extension operations will preserve the label of the original</span>
+<span class="c1">/// value.</span>
+<span class="n">dfsan_origin</span><span class="w"> </span><span class="nf">dfsan_get_origin</span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="n">data</span><span class="p">);</span>
+
+<span class="c1">/// Retrieves the very first origin associated with the data at the given</span>
+<span class="c1">/// address.</span>
+<span class="n">dfsan_origin</span><span class="w"> </span><span class="nf">dfsan_get_init_origin</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">);</span>
+
+<span class="c1">/// Prints the origin trace of the label at the address `addr` to stderr. It also</span>
+<span class="c1">/// prints description at the beginning of the trace. If origin tracking is not</span>
+<span class="c1">/// on, or the address is not labeled, it prints nothing.</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">dfsan_print_origin_trace</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">description</span><span class="p">);</span>
+
+<span class="c1">/// Prints the origin trace of the label at the address `addr` to a pre-allocated</span>
+<span class="c1">/// output buffer. If origin tracking is not on, or the address is`</span>
+<span class="c1">/// not labeled, it prints nothing.</span>
+<span class="c1">///</span>
+<span class="c1">/// `addr` is the tainted memory address whose origin we are printing.</span>
+<span class="c1">/// `description` is a description printed at the beginning of the trace.</span>
+<span class="c1">/// `out_buf` is the output buffer to write the results to. `out_buf_size` is</span>
+<span class="c1">/// the size of `out_buf`. The function returns the number of symbols that</span>
+<span class="c1">/// should have been written to `out_buf` (not including trailing null byte '\0').</span>
+<span class="c1">/// Thus, the string is truncated iff return value is not less than `out_buf_size`.</span>
+<span class="kt">size_t</span><span class="w"> </span><span class="nf">dfsan_sprint_origin_trace</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">description</span><span class="p">,</span>
+<span class="w">                                 </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">out_buf</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">out_buf_size</span><span class="p">);</span>
+
+<span class="c1">/// Returns the value of `-dfsan-track-origins`.</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">dfsan_get_track_origins</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The following functions are provided to register hooks called by custom wrappers.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">/// Sets a callback to be invoked on calls to `write`.  The callback is invoked</span>
+<span class="c1">/// before the write is done. The write is not guaranteed to succeed when the</span>
+<span class="c1">/// callback executes. Pass in NULL to remove any callback.</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">dfsan_write_callback_t</span><span class="p">)(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">count</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">dfsan_set_write_callback</span><span class="p">(</span><span class="n">dfsan_write_callback_t</span><span class="w"> </span><span class="n">labeled_write_callback</span><span class="p">);</span>
+
+<span class="c1">/// Callbacks to be invoked on calls to `memcmp` or `strncmp`.</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">dfsan_weak_hook_memcmp</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">caller_pc</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">s1</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">s2</span><span class="p">,</span>
+<span class="w">                            </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">dfsan_label</span><span class="w"> </span><span class="n">s1_label</span><span class="p">,</span>
+<span class="w">                            </span><span class="n">dfsan_label</span><span class="w"> </span><span class="n">s2_label</span><span class="p">,</span><span class="w"> </span><span class="n">dfsan_label</span><span class="w"> </span><span class="n">n_label</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">dfsan_weak_hook_strncmp</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">caller_pc</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s1</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s2</span><span class="p">,</span>
+<span class="w">                            </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">dfsan_label</span><span class="w"> </span><span class="n">s1_label</span><span class="p">,</span>
+<span class="w">                            </span><span class="n">dfsan_label</span><span class="w"> </span><span class="n">s2_label</span><span class="p">,</span><span class="w"> </span><span class="n">dfsan_label</span><span class="w"> </span><span class="n">n_label</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="taint-label-representation">
+<h2>Taint label representation<a class="headerlink" href="#taint-label-representation" title="Link to this heading">¶</a></h2>
+<p>We use an 8-bit unsigned integer for the representation of a
+label. The label identifier 0 is special, and means that the data item
+is unlabelled. This is optimizing for low CPU and code size overhead
+of the instrumentation. When a label union operation is requested at a
+join point (any arithmetic or logical operation with two or more
+operands, such as addition), we can simply OR the two labels in O(1).</p>
+<p>Users are responsible for managing the 8 integer labels (i.e., keeping
+track of what labels they have used so far, picking one that is yet
+unused, etc).</p>
+</section>
+<section id="origin-tracking-trace-representation">
+<h2>Origin tracking trace representation<a class="headerlink" href="#origin-tracking-trace-representation" title="Link to this heading">¶</a></h2>
+<p>An origin tracking trace is a list of chains. Each chain has a stack trace
+where the DFSan runtime records a label propagation, and a pointer to its
+previous chain. The very first chain does not point to any chain.</p>
+<p>Every four 4-bytes aligned application bytes share a 4-byte origin trace ID. A
+4-byte origin trace ID contains a 4-bit depth and a 28-bit hash ID of a chain.</p>
+<p>A chain ID is calculated as a hash from a chain structure. A chain structure
+contains a stack ID and the previous chain ID. The chain head has a zero
+previous chain ID. A stack ID is a hash from a stack trace. The 4-bit depth
+limits the maximal length of a path. The environment variable <code class="docutils literal notranslate"><span class="pre">origin_history_size</span></code>
+can set the depth limit. Non-positive values mean unlimited. Its default value
+is 16. When reaching the limit, origin tracking ignores following propagation
+chains.</p>
+<p>The first chain of a trace starts by <code class="docutils literal notranslate"><span class="pre">dfsan_set_label</span></code> with non-zero labels. A
+new chain is appended at the end of a trace at stores or memory transfers when
+<code class="docutils literal notranslate"><span class="pre">-dfsan-track-origins</span></code> is 1. Memory transfers include LLVM memory transfer
+instructions, glibc memcpy and memmove. When <code class="docutils literal notranslate"><span class="pre">-dfsan-track-origins</span></code> is 2, a
+new chain is also appended at loads.</p>
+<p>Other instructions do not create new chains, but simply propagate origin trace
+IDs. If an instruction has more than one operand with non-zero labels, the origin
+trace ID of the last operand with non-zero label is propagated to the result of
+the instruction.</p>
+</section>
+<section id="memory-layout-and-label-management">
+<h2>Memory layout and label management<a class="headerlink" href="#memory-layout-and-label-management" title="Link to this heading">¶</a></h2>
+<p>The following is the memory layout for Linux/x86_64:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Start</p></th>
+<th class="head"><p>End</p></th>
+<th class="head"><p>Use</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x700000000000</p></td>
+<td><p>0x800000000000</p></td>
+<td><p>application 3</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x610000000000</p></td>
+<td><p>0x700000000000</p></td>
+<td><p>unused</p></td>
+</tr>
+<tr class="row-even"><td><p>0x600000000000</p></td>
+<td><p>0x610000000000</p></td>
+<td><p>origin 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x510000000000</p></td>
+<td><p>0x600000000000</p></td>
+<td><p>application 2</p></td>
+</tr>
+<tr class="row-even"><td><p>0x500000000000</p></td>
+<td><p>0x510000000000</p></td>
+<td><p>shadow 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x400000000000</p></td>
+<td><p>0x500000000000</p></td>
+<td><p>unused</p></td>
+</tr>
+<tr class="row-even"><td><p>0x300000000000</p></td>
+<td><p>0x400000000000</p></td>
+<td><p>origin 3</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x200000000000</p></td>
+<td><p>0x300000000000</p></td>
+<td><p>shadow 3</p></td>
+</tr>
+<tr class="row-even"><td><p>0x110000000000</p></td>
+<td><p>0x200000000000</p></td>
+<td><p>origin 2</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x100000000000</p></td>
+<td><p>0x110000000000</p></td>
+<td><p>unused</p></td>
+</tr>
+<tr class="row-even"><td><p>0x010000000000</p></td>
+<td><p>0x100000000000</p></td>
+<td><p>shadow 2</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x000000000000</p></td>
+<td><p>0x010000000000</p></td>
+<td><p>application 1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Each byte of application memory corresponds to a single byte of shadow
+memory, which is used to store its taint label. We map memory, shadow, and
+origin regions to each other with these masks and offsets:</p>
+<ul class="simple">
+<li><p>shadow_addr = memory_addr ^ 0x500000000000</p></li>
+<li><p>origin_addr = shadow_addr + 0x100000000000</p></li>
+</ul>
+<p>As for LLVM SSA registers, we have not found it necessary to associate a label
+with each byte or bit of data, as some other tools do. Instead, labels are
+associated directly with registers. Loads will result in a union of
+all shadow labels corresponding to bytes loaded, and stores will
+result in a copy of the label of the stored value to the shadow of all
+bytes stored to.</p>
+</section>
+<section id="propagating-labels-through-arguments">
+<h2>Propagating labels through arguments<a class="headerlink" href="#propagating-labels-through-arguments" title="Link to this heading">¶</a></h2>
+<p>In order to propagate labels through function arguments and return values,
+DataFlowSanitizer changes the ABI of each function in the translation unit.
+There are currently two supported ABIs:</p>
+<ul class="simple">
+<li><p>Args – Argument and return value labels are passed through additional
+arguments and by modifying the return type.</p></li>
+<li><p>TLS – Argument and return value labels are passed through TLS variables
+<code class="docutils literal notranslate"><span class="pre">__dfsan_arg_tls</span></code> and <code class="docutils literal notranslate"><span class="pre">__dfsan_retval_tls</span></code>.</p></li>
+</ul>
+<p>The main advantage of the TLS ABI is that it is more tolerant of ABI mismatches
+(TLS storage is not shared with any other form of storage, whereas extra
+arguments may be stored in registers which under the native ABI are not used
+for parameter passing and thus could contain arbitrary values). On the other
+hand the args ABI is more efficient and allows ABI mismatches to be more easily
+identified by checking for nonzero labels in nominally unlabelled programs.</p>
+</section>
+<section id="implementing-the-abi-list">
+<h2>Implementing the ABI list<a class="headerlink" href="#implementing-the-abi-list" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="DataFlowSanitizer.html#abi-list"><span class="std std-ref">ABI list</span></a> provides a list of functions
+which conform to the native ABI, each of which is callable from an instrumented
+program. This is implemented by replacing each reference to a native ABI
+function with a reference to a function which uses the instrumented ABI.
+Such functions are automatically-generated wrappers for the native functions.
+For example, given the ABI list example provided in the user manual, the
+following wrappers will be generated under the args ABI:</p>
+<div class="highlight-llvm notranslate"><div class="highlight"><pre><span></span><span class="k">define</span><span class="w"> </span><span class="k">linkonce_odr</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">i8</span><span class="p">*,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="vg">@"dfsw$malloc"</span><span class="p">(</span><span class="kt">i64</span><span class="w"> </span><span class="nv nv-Anonymous">%0</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="nv nv-Anonymous">%1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="nl">entry:</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%2</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="kt">i8</span><span class="p">*</span><span class="w"> </span><span class="vg">@malloc</span><span class="p">(</span><span class="kt">i64</span><span class="w"> </span><span class="nv nv-Anonymous">%0</span><span class="p">)</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%3</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">insertvalue</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">i8</span><span class="p">*,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">undef</span><span class="p">,</span><span class="w"> </span><span class="kt">i8</span><span class="p">*</span><span class="w"> </span><span class="nv nv-Anonymous">%2</span><span class="p">,</span><span class="w"> </span><span class="m">0</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%4</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">insertvalue</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">i8</span><span class="p">*,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="nv nv-Anonymous">%3</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">1</span>
+<span class="w">  </span><span class="k">ret</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">i8</span><span class="p">*,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="nv nv-Anonymous">%4</span>
+<span class="p">}</span>
+
+<span class="k">define</span><span class="w"> </span><span class="k">linkonce_odr</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="vg">@"dfsw$tolower"</span><span class="p">(</span><span class="kt">i32</span><span class="w"> </span><span class="nv nv-Anonymous">%0</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="nv nv-Anonymous">%1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="nl">entry:</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%2</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="vg">@tolower</span><span class="p">(</span><span class="kt">i32</span><span class="w"> </span><span class="nv nv-Anonymous">%0</span><span class="p">)</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%3</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">insertvalue</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">undef</span><span class="p">,</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="nv nv-Anonymous">%2</span><span class="p">,</span><span class="w"> </span><span class="m">0</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%4</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">insertvalue</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="nv nv-Anonymous">%3</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="nv nv-Anonymous">%1</span><span class="p">,</span><span class="w"> </span><span class="m">1</span>
+<span class="w">  </span><span class="k">ret</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="nv nv-Anonymous">%4</span>
+<span class="p">}</span>
+
+<span class="k">define</span><span class="w"> </span><span class="k">linkonce_odr</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">i8</span><span class="p">*,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="vg">@"dfsw$memcpy"</span><span class="p">(</span><span class="kt">i8</span><span class="p">*</span><span class="w"> </span><span class="nv nv-Anonymous">%0</span><span class="p">,</span><span class="w"> </span><span class="kt">i8</span><span class="p">*</span><span class="w"> </span><span class="nv nv-Anonymous">%1</span><span class="p">,</span><span class="w"> </span><span class="kt">i64</span><span class="w"> </span><span class="nv nv-Anonymous">%2</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="nv nv-Anonymous">%3</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="nv nv-Anonymous">%4</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="nv nv-Anonymous">%5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="nl">entry:</span>
+<span class="w">  </span><span class="nv">%labelreturn</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">alloca</span><span class="w"> </span><span class="kt">i16</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%6</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="kt">i8</span><span class="p">*</span><span class="w"> </span><span class="vg">@__dfsw_memcpy</span><span class="p">(</span><span class="kt">i8</span><span class="p">*</span><span class="w"> </span><span class="nv nv-Anonymous">%0</span><span class="p">,</span><span class="w"> </span><span class="kt">i8</span><span class="p">*</span><span class="w"> </span><span class="nv nv-Anonymous">%1</span><span class="p">,</span><span class="w"> </span><span class="kt">i64</span><span class="w"> </span><span class="nv nv-Anonymous">%2</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="nv nv-Anonymous">%3</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="nv nv-Anonymous">%4</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="nv nv-Anonymous">%5</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="p">*</span><span class="w"> </span><span class="nv">%labelreturn</span><span class="p">)</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%7</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">load</span><span class="w"> </span><span class="kt">i16</span><span class="p">*</span><span class="w"> </span><span class="nv">%labelreturn</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%8</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">insertvalue</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">i8</span><span class="p">*,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">undef</span><span class="p">,</span><span class="w"> </span><span class="kt">i8</span><span class="p">*</span><span class="w"> </span><span class="nv nv-Anonymous">%6</span><span class="p">,</span><span class="w"> </span><span class="m">0</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%9</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">insertvalue</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">i8</span><span class="p">*,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="nv nv-Anonymous">%8</span><span class="p">,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="nv nv-Anonymous">%7</span><span class="p">,</span><span class="w"> </span><span class="m">1</span>
+<span class="w">  </span><span class="k">ret</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">i8</span><span class="p">*,</span><span class="w"> </span><span class="kt">i16</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="nv nv-Anonymous">%9</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As an optimization, direct calls to native ABI functions will call the
+native ABI function directly and the pass will compute the appropriate label
+internally. This has the advantage of reducing the number of union operations
+required when the return value label is known to be zero (i.e. <code class="docutils literal notranslate"><span class="pre">discard</span></code>
+functions, or <code class="docutils literal notranslate"><span class="pre">functional</span></code> functions with known unlabelled arguments).</p>
+</section>
+<section id="checking-abi-consistency">
+<h2>Checking ABI Consistency<a class="headerlink" href="#checking-abi-consistency" title="Link to this heading">¶</a></h2>
+<p>DFSan changes the ABI of each function in the module. This makes it possible
+for a function with the native ABI to be called with the instrumented ABI,
+or vice versa, thus possibly invoking undefined behavior. A simple way
+of statically detecting instances of this problem is to append the suffix
+“.dfsan” to the name of each instrumented-ABI function.</p>
+<p>This will not catch every such problem; in particular function pointers passed
+across the instrumented-native barrier cannot be used on the other side.
+These problems could potentially be caught dynamically.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="LeakSanitizer.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">LeakSanitizer</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="DataFlowSanitizer.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">DataFlowSanitizer</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">DataFlowSanitizer Design Document</a><ul>
+<li><a class="reference internal" href="#use-cases">Use Cases</a></li>
+<li><a class="reference internal" href="#interface">Interface</a></li>
+<li><a class="reference internal" href="#taint-label-representation">Taint label representation</a></li>
+<li><a class="reference internal" href="#origin-tracking-trace-representation">Origin tracking trace representation</a></li>
+<li><a class="reference internal" href="#memory-layout-and-label-management">Memory layout and label management</a></li>
+<li><a class="reference internal" href="#propagating-labels-through-arguments">Propagating labels through arguments</a></li>
+<li><a class="reference internal" href="#implementing-the-abi-list">Implementing the ABI list</a></li>
+<li><a class="reference internal" href="#checking-abi-consistency">Checking ABI Consistency</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=ccd1e645"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>

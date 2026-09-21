@@ -1,0 +1,1421 @@
+<!doctype html>
+<html class="no-js" lang="zh-TW" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜尋" href="search.html" /><link rel="next" title="Function Effect Analysis" href="FunctionEffectAnalysis.html" /><link rel="prev" title="3. Summary Extraction Internals" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html" />
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/DataFlowAnalysisIntro.html" />
+        <link rel="prefetch" href="_static/LLVMWyvernSmall.png" as="image" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+        <title>Data flow analysis: an informal introduction - Clang</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=548e816e" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86c9e7d9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜尋" name="q" aria-label="搜尋">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Clang Release Notes</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="UsersManual.html">Clang Compiler User's Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="LanguageExtensions.html">Clang Language Extensions</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Clang Language Extensions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Block-ABI-Apple.html">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrossCompilation.html">使用 Clang 進行交叉編譯</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ClangStaticAnalyzer.html">Clang Static Analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Clang Static Analyzer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="analyzer/checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/user-docs.html">2. User Docs</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 2. User Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/UsingWithXCode.html">2.2. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FilingBugs.html">2.3. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CrossTranslationUnit.html">2.4. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/TaintAnalysisConfiguration.html">2.5. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/Annotations.html">2.6. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FAQ.html">2.7. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/developer-docs.html">3. Developer Docs</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 3. Developer Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/PerformanceInvestigation.html">3.6. 效能調查</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Scalable Static Analysis Framework</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Developer Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSanitizer.html">ThreadSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MemorySanitizer.html">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataFlowSanitizer.html">DataFlowSanitizer</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of DataFlowSanitizer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="DataFlowSanitizerDesign.html">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerCoverage.html">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ControlFlowIntegrity.html">Control Flow Integrity</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Control Flow Integrity</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StandardCPlusPlusModules.html">標準 C++ 模組</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">模組</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MisExpect.html">Misexpect</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Misexpect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="OpenCLSupport.html">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Clang HLSL Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of HLSL Design and Implementation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="APINotes.html">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CIR/index.html">ClangIR</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of ClangIR</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CIR/ABILowering.html">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CommandGuide/index.html">Clang "man" pages</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Clang "man" pages</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefactoringEngine.html">Clang's refactoring engine</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ClangTools.html">概覽</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangRepl.html">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InternalsManual.html">"Clang" CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizerDesign.html">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LLVMExceptionHandlingCodeGen.html">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/DataFlowAnalysisIntro.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/DataFlowAnalysisIntro.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="data-flow-analysis-an-informal-introduction">
+<h1>Data flow analysis: an informal introduction<a class="headerlink" href="#data-flow-analysis-an-informal-introduction" title="連結到這個標頭">¶</a></h1>
+<section id="abstract">
+<h2>Abstract<a class="headerlink" href="#abstract" title="連結到這個標頭">¶</a></h2>
+<p>This document introduces data flow analysis in an informal way. The goal is to
+give the reader an intuitive understanding of how it works, and show how it
+applies to a range of refactoring and bug finding problems.</p>
+<p>Data flow analysis is a well-established technique; it is described in many
+papers, books, and videos. If you would like a more formal, or a more thorough
+explanation of the concepts mentioned in this document, please refer to the
+following resources:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Lattice_(order)">The Lattice article in Wikipedia</a>.</p></li>
+<li><p>Videos on the PacketPrep YouTube channel that introduce lattices and the
+necessary background information:
+<a class="reference external" href="https://www.youtube.com/watch?v=73j_FXBXGm8">#20</a>,
+<a class="reference external" href="https://www.youtube.com/watch?v=b5sDjo9tfE8">#21</a>,
+<a class="reference external" href="https://www.youtube.com/watch?v=saOG7Uooeho">#22</a>,
+<a class="reference external" href="https://www.youtube.com/watch?v=3EAYX-wZH0g">#23</a>,
+<a class="reference external" href="https://www.youtube.com/watch?v=KRkHwQtW6Cc">#24</a>,
+<a class="reference external" href="https://www.youtube.com/watch?v=7Gwzsc4rAgw">#25</a>.</p></li>
+<li><p><a class="reference external" href="https://www.youtube.com/watch?v=OROXJ9-wUQE">Introduction to Dataflow Analysis</a></p></li>
+<li><p><a class="reference external" href="http://www.cs.tau.ac.il/~msagiv/courses/asv/absint-1.pdf">Introduction to abstract interpretation</a>.</p></li>
+<li><p><a class="reference external" href="https://www.cs.umd.edu/~mwh/se-tutorial/symbolic-exec.pdf">Introduction to symbolic execution</a>.</p></li>
+<li><p><a class="reference external" href="https://cs.au.dk/~amoeller/spa/">Static Program Analysis by Anders Møller and Michael I. Schwartzbach</a>.</p></li>
+<li><p><a class="reference external" href="https://css.csail.mit.edu/6.858/2020/readings/exe.pdf">EXE: automatically generating inputs of death</a>
+(a paper that successfully applies symbolic execution to real-world
+software).</p></li>
+</ul>
+</section>
+<section id="data-flow-analysis">
+<h2>Data flow analysis<a class="headerlink" href="#data-flow-analysis" title="連結到這個標頭">¶</a></h2>
+<section id="the-purpose-of-data-flow-analysis">
+<h3>The purpose of data flow analysis<a class="headerlink" href="#the-purpose-of-data-flow-analysis" title="連結到這個標頭">¶</a></h3>
+<p>Data flow analysis is a static analysis technique that proves facts about a
+program or its fragment. It can make conclusions about all paths through the
+program, while taking control flow into account and scaling to large programs.
+The basic idea is propagating facts about the program through the edges of the
+control flow graph (CFG) until a fixpoint is reached.</p>
+</section>
+<section id="sample-problem-and-an-ad-hoc-solution">
+<h3>Sample problem and an ad-hoc solution<a class="headerlink" href="#sample-problem-and-an-ad-hoc-solution" title="連結到這個標頭">¶</a></h3>
+<p>We would like to explain data flow analysis while discussing an example. Let's
+imagine that we want to track possible values of an integer variable in our
+program. Here is how a human could annotate the code:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">Example</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// x is {0}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// x is {5}</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// x is {42}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// x is {5; 42}</span>
+<span class="w">  </span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We use sets of integers to represent possible values of <code class="docutils literal notranslate"><span class="pre">x</span></code>. Local variables
+have unambiguous values between statements, so we annotate program points
+between statements with sets of possible values.</p>
+<p>Here is how we arrived at these annotations. Assigning a constant to <code class="docutils literal notranslate"><span class="pre">x</span></code> allows
+us to make a conclusion that <code class="docutils literal notranslate"><span class="pre">x</span></code> can only have one value. When control flow from
+the &quot;then&quot; and &quot;else&quot; branches joins, <code class="docutils literal notranslate"><span class="pre">x</span></code> can have either value.</p>
+<p>Abstract algebra provides a nice formalism that models this kind of structure,
+namely, a lattice. A join-semilattice is a partially ordered set, in which every
+two elements have a least upper bound (called a <em>join</em>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>join(a, b) ⩾ a   and   join(a, b) ⩾ b   and   join(x, x) = x
+</pre></div>
+</div>
+<p>For this problem we will use the lattice of subsets of integers, with set
+inclusion relation as ordering and set union as a join.</p>
+<p>Lattices are often represented visually as Hasse diagrams. Here is a Hasse
+diagram for our lattice that tracks subsets of integers:</p>
+<figure class="align-default">
+<img alt="Hasse diagram for a lattice of integer sets" class="light-background" src="_images/IntegerSetsInfiniteLattice.svg" />
+</figure>
+<p>Computing the join in the lattice corresponds to finding the lowest common
+ancestor (LCA) between two nodes in its Hasse diagram. There is a vast amount of
+literature on efficiently implementing LCA queries for a DAG, however Efficient
+Implementation of Lattice Operations (1989)
+(<a class="reference external" href="https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.106.4911">CiteSeerX</a>,
+<a class="reference external" href="https://doi.org/10.1145%2F59287.59293">doi</a>) describes a scheme that
+particularly well-suited for programmatic implementation.</p>
+</section>
+<section id="too-much-information-and-top-values">
+<h3>Too much information and &quot;top&quot; values<a class="headerlink" href="#too-much-information-and-top-values" title="連結到這個標頭">¶</a></h3>
+<p>Let's try to find the possible sets of values of <code class="docutils literal notranslate"><span class="pre">x</span></code> in a function that modifies
+<code class="docutils literal notranslate"><span class="pre">x</span></code> in a loop:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">ExampleOfInfiniteSets</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">// x is {0}</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">condition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">  </span><span class="c1">// x is {0; 1; 2; …}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w">  </span><span class="c1">// x is {0; 1; 2; …}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We have an issue: <code class="docutils literal notranslate"><span class="pre">x</span></code> can have any value greater than zero; that's an infinite
+set of values, if the program operated on mathematical integers. In C++ <code class="docutils literal notranslate"><span class="pre">int</span></code> is
+limited by <code class="docutils literal notranslate"><span class="pre">INT_MAX</span></code> so technically we have a set <code class="docutils literal notranslate"><span class="pre">{0;</span> <span class="pre">1;</span> <span class="pre">…;</span> <span class="pre">INT_MAX}</span></code> which is
+still really big.</p>
+<p>To make our analysis practical to compute, we have to limit the amount of
+information that we track. In this case, we can, for example, arbitrarily limit
+the size of sets to 3 elements. If at a certain program point <code class="docutils literal notranslate"><span class="pre">x</span></code> has more than
+3 possible values, we stop tracking specific values at that program point.
+Instead, we denote possible values of <code class="docutils literal notranslate"><span class="pre">x</span></code> with the symbol <code class="docutils literal notranslate"><span class="pre">⊤</span></code> (pronounced &quot;top&quot;
+according to a convention in abstract algebra).</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">ExampleOfTopWithALoop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="c1">// x is {0}</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">condition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">   </span><span class="c1">// x is ⊤</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w">   </span><span class="c1">// x is ⊤</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The statement &quot;at this program point, <code class="docutils literal notranslate"><span class="pre">x</span></code>'s possible values are <code class="docutils literal notranslate"><span class="pre">⊤</span></code>&quot; is
+understood as &quot;at this program point <code class="docutils literal notranslate"><span class="pre">x</span></code> can have any value because we have too
+much information, or the information is conflicting&quot;.</p>
+<p>Note that we can get more than 3 possible values even without a loop:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">ExampleOfTopWithoutLoops</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="c1">// x is {0}</span>
+<span class="w">  </span><span class="k">switch</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="mi">0</span><span class="p">:</span><span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w"> </span><span class="c1">// x is {1}</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">;</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w"> </span><span class="c1">// x is {9}</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="mi">2</span><span class="p">:</span><span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w"> </span><span class="c1">// x is {7}</span>
+<span class="w">    </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w"> </span><span class="c1">// x is {3}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// x is ⊤</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="uninitialized-variables-and-bottom-values">
+<h3>Uninitialized variables and &quot;bottom&quot; values<a class="headerlink" href="#uninitialized-variables-and-bottom-values" title="連結到這個標頭">¶</a></h3>
+<p>When <code class="docutils literal notranslate"><span class="pre">x</span></code> is declared but not initialized, it has no possible values. We
+represent this fact symbolically as <code class="docutils literal notranslate"><span class="pre">⊥</span></code> (pronounced &quot;bottom&quot;).</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">ExampleOfBottom</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w">    </span><span class="c1">// x is ⊥</span>
+<span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w">   </span><span class="c1">// x is {42}</span>
+<span class="w">  </span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that using values read from uninitialized variables is undefined behaviour
+in C++. Generally, compilers and static analysis tools can assume undefined
+behavior does not happen. We must model uninitialized variables only when we are
+implementing a checker that specifically is trying to find uninitialized reads.
+In this example we show how to model uninitialized variables only to demonstrate
+the concept of &quot;bottom&quot;, and how it applies to possible value analysis. We
+describe an analysis that finds uninitialized reads in a section below.</p>
+</section>
+<section id="a-practical-lattice-that-tracks-sets-of-concrete-values">
+<h3>A practical lattice that tracks sets of concrete values<a class="headerlink" href="#a-practical-lattice-that-tracks-sets-of-concrete-values" title="連結到這個標頭">¶</a></h3>
+<p>Taking into account all corner cases covered above, we can put together a
+lattice that we can use in practice to track possible values of integer
+variables. This lattice represents sets of integers with 1, 2, or 3 elements, as
+well as top and bottom. Here is a Hasse diagram for it:</p>
+<figure class="align-default">
+<img alt="Hasse diagram for a lattice of integer sets" class="light-background" src="_images/IntegerSetsFiniteLattice.svg" />
+</figure>
+</section>
+<section id="formalization">
+<h3>Formalization<a class="headerlink" href="#formalization" title="連結到這個標頭">¶</a></h3>
+<p>Let's consider a slightly more complex example, and think about how we can
+compute the sets of possible values algorithmically.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">Example</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w">          </span><span class="c1">// x is ⊥</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">42</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">44</span><span class="p">;</span><span class="w">    </span><span class="c1">// x is {44}</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w">     </span><span class="c1">// x is {5}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w">     </span><span class="c1">// x is {44; 5}</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w">        </span><span class="c1">// x is ⊤</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w">       </span><span class="c1">// x is ⊤</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As humans, we understand the control flow from the program text. We used our
+understanding of control flow to find program points where two flows join.
+Formally, control flow is represented by a CFG (control flow graph):</p>
+<figure class="align-default">
+<img alt="CFG for the code above" class="light-background" src="_images/CFGExample.svg" />
+</figure>
+<p>We can compute sets of possible values by propagating them through the CFG of
+the function:</p>
+<ul class="simple">
+<li><p>When <code class="docutils literal notranslate"><span class="pre">x</span></code> is declared but not initialized, its possible values are <code class="docutils literal notranslate"><span class="pre">{}</span></code>. The
+empty set plays the role of <code class="docutils literal notranslate"><span class="pre">⊥</span></code> in this lattice.</p></li>
+<li><p>When <code class="docutils literal notranslate"><span class="pre">x</span></code> is assigned a concrete value, its possible set of values contains
+just that specific value.</p></li>
+<li><p>When <code class="docutils literal notranslate"><span class="pre">x</span></code> is assigned some unknown value, it can have any value. We represent
+this fact as <code class="docutils literal notranslate"><span class="pre">⊤</span></code>.</p></li>
+<li><p>When two control flow paths join, we compute the set union of incoming
+values (limiting the number of elements to 3, representing larger sets as
+<code class="docutils literal notranslate"><span class="pre">⊤</span></code>).</p></li>
+</ul>
+<p>The sets of possible values are influenced by:</p>
+<ul class="simple">
+<li><p>Statements, for example, assignments.</p></li>
+<li><p>Joins in control flow, for example, ones that appear at the end of &quot;if&quot;
+statements.</p></li>
+</ul>
+<p><strong>Effects of statements</strong> are modeled by what is formally known as a transfer
+function. A transfer function takes two arguments: the statement, and the state
+of <code class="docutils literal notranslate"><span class="pre">x</span></code> at the previous program point. It produces the state of <code class="docutils literal notranslate"><span class="pre">x</span></code> at the next
+program point. For example, the transfer function for assignment ignores the
+state at the previous program point:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// GIVEN: x is {42; 44}</span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="c1">// CONCLUSION: x is {0}</span>
+</pre></div>
+</div>
+<p>The transfer function for <code class="docutils literal notranslate"><span class="pre">+</span></code> performs arithmetic on every set member:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// GIVEN: x is {42, 44}</span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+<span class="c1">// CONCLUSION: x is {142, 144}</span>
+</pre></div>
+</div>
+<p><strong>Effects of control flow</strong> are modeled by joining the knowledge from all
+possible previous program points.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="c1">// GIVEN: x is {42}</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="c1">// GIVEN: x is {44}</span>
+<span class="p">}</span>
+<span class="c1">// CONCLUSION: x is {42; 44}</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// GIVEN: x is {42}</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="c1">// GIVEN: x is {44}</span>
+<span class="p">}</span>
+<span class="c1">// CONCLUSION: {42; 44}</span>
+</pre></div>
+</div>
+<p>The predicate that we marked &quot;given&quot; is usually called a precondition, and the
+conclusion is called a postcondition.</p>
+<p>In terms of the CFG, we join the information from all predecessor basic blocks.</p>
+<figure class="align-default">
+<img alt="Modeling the effects of a CFG basic block" class="light-background" src="_images/CFGJoinRule.svg" />
+</figure>
+<p>Putting it all together, to model the effects of a basic block we compute:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">transfer</span><span class="p">(</span><span class="n">basic_block</span><span class="p">,</span> <span class="n">join</span><span class="p">(</span><span class="n">in_1</span><span class="p">,</span> <span class="n">in_2</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">in_n</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>(Note that there are other ways to write this equation that produce higher
+precision analysis results. The trick is to keep exploring the execution paths
+separately and delay joining until later. However, we won't discuss those
+variations here.)</p>
+<p>To make a conclusion about all paths through the program, we repeat this
+computation on all basic blocks until we reach a fixpoint. In other words, we
+keep propagating information through the CFG until the computed sets of values
+stop changing.</p>
+<p>If the lattice has a finite height and transfer functions are monotonic the
+algorithm is guaranteed to terminate.  Each iteration of the algorithm can
+change computed values only to larger values from the lattice. In the worst
+case, all computed values become <code class="docutils literal notranslate"><span class="pre">⊤</span></code>, which is not very useful, but at least the
+analysis terminates at that point, because it can't change any of the values.</p>
+<p>Fixpoint iteration can be optimised by only reprocessing basic blocks which had
+one of their inputs changed on the previous iteration. This is typically
+implemented using a worklist queue. With this optimisation the time complexity
+becomes <code class="docutils literal notranslate"><span class="pre">O(m</span> <span class="pre">*</span> <span class="pre">|L|)</span></code>, where <code class="docutils literal notranslate"><span class="pre">m</span></code> is the number of basic blocks in the CFG and
+<code class="docutils literal notranslate"><span class="pre">|L|</span></code> is the size of lattice used by the analysis.</p>
+</section>
+</section>
+<section id="symbolic-execution-a-very-short-informal-introduction">
+<h2>Symbolic execution: a very short informal introduction<a class="headerlink" href="#symbolic-execution-a-very-short-informal-introduction" title="連結到這個標頭">¶</a></h2>
+<section id="symbolic-values">
+<h3>Symbolic values<a class="headerlink" href="#symbolic-values" title="連結到這個標頭">¶</a></h3>
+<p>In the previous example where we tried to figure out what values a variable can
+have, the analysis had to be seeded with a concrete value. What if there are no
+assignments of concrete values in the program? We can still deduce some
+interesting information by representing unknown input values symbolically, and
+computing results as symbolic expressions:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">PrintAbs</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w">   </span><span class="c1">// result is {x}</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">x</span><span class="p">;</span><span class="w">  </span><span class="c1">// result is {-x}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">print</span><span class="p">(</span><span class="n">result</span><span class="p">);</span><span class="w">  </span><span class="c1">// result is {x; -x}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We can't say what specific value gets printed, but we know that it is either <code class="docutils literal notranslate"><span class="pre">x</span></code>
+or <code class="docutils literal notranslate"><span class="pre">-x</span></code>.</p>
+<p>Dataflow analysis is an instance of abstract interpretation, and does not dictate
+how exactly the lattice and transfer functions should be designed, beyond the
+necessary conditions for the analysis to converge. Nevertheless, we can use
+symbolic execution ideas to guide our design of the lattice and transfer
+functions: lattice values can be symbolic expressions, and transfer functions
+can construct more complex symbolic expressions from symbolic expressions that
+represent arguments. See <a class="reference external" href="https://cstheory.stackexchange.com/questions/19708/symbolic-execution-is-a-case-of-abstract-interpretation">this StackOverflow
+discussion</a>
+for a further comparison of abstract interpretation and symbolic execution.</p>
+</section>
+<section id="flow-condition">
+<h3>Flow condition<a class="headerlink" href="#flow-condition" title="連結到這個標頭">¶</a></h3>
+<p>A human can say about the previous example that the function returns <code class="docutils literal notranslate"><span class="pre">x</span></code> when
+<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code>, and <code class="docutils literal notranslate"><span class="pre">-x</span></code> when <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">0</span></code>. We can make this conclusion programmatically by
+tracking a flow condition. A flow condition is a predicate written in terms of
+the program state that is true at a specific program point regardless of the
+execution path that led to this statement. For example, the flow condition for
+the program point right before evaluating <code class="docutils literal notranslate"><span class="pre">result</span> <span class="pre">=</span> <span class="pre">x</span></code> is <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code>.</p>
+<p>If we enhance the lattice to be a set of pairs of values and predicates, the
+dataflow analysis computes the following values:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">PrintAbs</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Flow condition: x &gt;= 0.</span>
+<span class="w">    </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w">   </span><span class="c1">// result is {x if x &gt;= 0}</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Flow condition: x &lt; 0.</span>
+<span class="w">    </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">x</span><span class="p">;</span><span class="w">  </span><span class="c1">// result is {-x if x &lt; 0}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">print</span><span class="p">(</span><span class="n">result</span><span class="p">);</span><span class="w">  </span><span class="c1">// result is {x if x &gt;= 0; -x if x &lt; 0}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Of course, in a program with loops, symbolic expressions for flow conditions can
+grow unbounded. A practical static analysis system must control this growth to
+keep the symbolic representations manageable and ensure that the data flow
+analysis terminates. For example, it can use a constraint solver to prune
+impossible flow conditions, and/or it can abstract them, losing precision, after
+their symbolic representations grow beyond some threshold. This is similar to
+how we had to limit the sizes of computed sets of possible values to 3 elements.</p>
+</section>
+<section id="symbolic-pointers">
+<h3>Symbolic pointers<a class="headerlink" href="#symbolic-pointers" title="連結到這個標頭">¶</a></h3>
+<p>This approach proves to be particularly useful for modeling pointer values,
+since we don't care about specific addresses but just want to give a unique
+identifier to a memory location.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">ExampleOfSymbolicPointers</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">     </span><span class="c1">// x is {0}</span>
+<span class="w">  </span><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="c1">// x is {0}      ptr is {&amp;x}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w">   </span><span class="c1">// x is {42}     ptr is {&amp;x}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w">      </span><span class="c1">// x is {0; 42}  ptr is {&amp;x}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="example-finding-output-parameters">
+<h2>Example: finding output parameters<a class="headerlink" href="#example-finding-output-parameters" title="連結到這個標頭">¶</a></h2>
+<p>Let's explore how data flow analysis can help with a problem that is hard to
+solve with other tools in Clang.</p>
+<section id="problem-description">
+<h3>Problem description<a class="headerlink" href="#problem-description" title="連結到這個標頭">¶</a></h3>
+<p>Output parameters are function parameters of pointer or reference type whose
+pointee is completely overwritten by the function, and not read before it is
+overwritten. They are common in pre-C++11 code due to the absence of move
+semantics. In modern C++ output parameters are non-idiomatic, and return values
+are used instead.</p>
+<p>Imagine that we would like to refactor output parameters to return values to
+modernize old code. The first step is to identify refactoring candidates through
+static analysis.</p>
+<p>For example, in the following code snippet the pointer <code class="docutils literal notranslate"><span class="pre">c</span></code> is an output
+parameter:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">Customer</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">account_id</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">GetCustomer</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">account_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We would like to refactor this code into:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">Customer</span><span class="w"> </span><span class="nf">GetCustomer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Customer</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="w">  </span><span class="n">c</span><span class="p">.</span><span class="n">account_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">c</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">c</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>However, in the function below the parameter <code class="docutils literal notranslate"><span class="pre">c</span></code> is not an output parameter
+because its field <code class="docutils literal notranslate"><span class="pre">name</span></code> is not overwritten on every path through the function.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">GetCustomer</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">account_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The code also cannot read the value of the parameter before overwriting it:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">GetCustomer</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">use</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">account_id</span><span class="p">);</span>
+<span class="w">  </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span>
+<span class="w">  </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">account_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Functions that escape the pointer also block the refactoring:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">Customer</span><span class="o">*</span><span class="w"> </span><span class="n">kGlobalCustomer</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">GetCustomer</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span>
+<span class="w">  </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">account_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span>
+<span class="w">  </span><span class="n">kGlobalCustomer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To identify a candidate function for refactoring, we need to do the following:</p>
+<ul class="simple">
+<li><p>Find a function with a non-const pointer or reference parameter.</p></li>
+<li><p>Find the definition of that function.</p></li>
+<li><p>Prove that the function completely overwrites the pointee on all paths
+before returning.</p></li>
+<li><p>Prove that the function reads the pointee only after overwriting it.</p></li>
+<li><p>Prove that the function does not persist the pointer in a data structure
+that is live after the function returns.</p></li>
+</ul>
+<p>There are also requirements that all usage sites of the candidate function must
+satisfy, for example, that function arguments do not alias, that users are not
+taking the address of the function, and so on. Let's consider verifying usage
+site conditions to be a separate static analysis problem.</p>
+</section>
+<section id="lattice-design">
+<h3>Lattice design<a class="headerlink" href="#lattice-design" title="連結到這個標頭">¶</a></h3>
+<p>To analyze the function body we can use a lattice which consists of normal
+states and failure states. A normal state describes program points where we are
+sure that no behaviors that block the refactoring have occurred. Normal states
+keep track of all parameter's member fields that are known to be overwritten on
+every path from function entry to the corresponding program point. Failure
+states accumulate observed violations (unsafe reads and pointer escapes) that
+block the refactoring.</p>
+<p>In the partial order of the lattice failure states compare greater than normal
+states, which guarantees that they &quot;win&quot; when joined with normal states. Order
+between failure states is determined by inclusion relation on the set of
+accumulated violations (lattice's <code class="docutils literal notranslate"><span class="pre">⩽</span></code> is <code class="docutils literal notranslate"><span class="pre">⊆</span></code> on the set of violations). Order
+between normal states is determined by reversed inclusion relation on the set of
+overwritten parameter's member fields (lattice's <code class="docutils literal notranslate"><span class="pre">⩽</span></code> is <code class="docutils literal notranslate"><span class="pre">⊇</span></code> on the set of
+overwritten fields).</p>
+<figure class="align-default">
+<img alt="Lattice for data flow analysis that identifies output parameters" class="light-background" src="_images/OutputParameterIdentificationLattice.svg" />
+</figure>
+<p>To determine whether a statement reads or writes a field we can implement
+symbolic evaluation of <code class="docutils literal notranslate"><span class="pre">DeclRefExpr</span></code>s, <code class="docutils literal notranslate"><span class="pre">LValueToRValue</span></code> casts, pointer
+dereference operator and <code class="docutils literal notranslate"><span class="pre">MemberExpr</span></code>s.</p>
+</section>
+<section id="using-data-flow-results-to-identify-output-parameters">
+<h3>Using data flow results to identify output parameters<a class="headerlink" href="#using-data-flow-results-to-identify-output-parameters" title="連結到這個標頭">¶</a></h3>
+<p>Let's take a look at how we use data flow analysis to identify an output
+parameter. The refactoring can be safely done when the data flow algorithm
+computes a normal state with all of the fields proven to be overwritten in the
+exit basic block of the function.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">Customer</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">account_id</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">GetCustomer</span><span class="p">(</span><span class="n">Customer</span><span class="o">*</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Overwritten: {}</span>
+<span class="w">  </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">account_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span><span class="w"> </span><span class="c1">// Overwritten: {c-&gt;account_id}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span><span class="w">     </span><span class="c1">// Overwritten: {c-&gt;account_id, c-&gt;name}</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span><span class="w">     </span><span class="c1">// Overwritten: {c-&gt;account_id, c-&gt;name}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// Overwritten: {c-&gt;account_id, c-&gt;name}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When the data flow algorithm computes a normal state, but not all fields are
+proven to be overwritten we can't perform the refactoring.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">target</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">Customer</span><span class="o">*</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Overwritten: {}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">account_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w">     </span><span class="c1">// Overwritten: {c-&gt;account_id}</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Konrad"</span><span class="p">;</span><span class="w">  </span><span class="c1">// Overwritten: {c-&gt;name}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// Overwritten: {}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Similarly, when the data flow algorithm computes a failure state, we also can't
+perform the refactoring.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">Customer</span><span class="o">*</span><span class="w"> </span><span class="n">kGlobalCustomer</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">GetCustomer</span><span class="p">(</span><span class="n">Customer</span><span class="o">*</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Overwritten: {}</span>
+<span class="w">  </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">account_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span><span class="w">    </span><span class="c1">// Overwritten: {c-&gt;account_id}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">print</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">);</span><span class="w">       </span><span class="c1">// Unsafe read</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">kGlobalCustomer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">;</span><span class="w">  </span><span class="c1">// Pointer escape</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// Unsafe read, Pointer escape</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="example-finding-dead-stores">
+<h2>Example: finding dead stores<a class="headerlink" href="#example-finding-dead-stores" title="連結到這個標頭">¶</a></h2>
+<p>Let's say we want to find redundant stores, because they indicate potential
+bugs.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetX</span><span class="p">();</span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetY</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>The first store to <code class="docutils literal notranslate"><span class="pre">x</span></code> is never read, probably there is a bug.</p>
+<p>The implementation of dead store analysis is very similar to output parameter
+analysis: we need to track stores and loads, and find stores that were never
+read.</p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Live_variable_analysis">Liveness analysis</a> is a
+generalization of this idea, which is often used to answer many related
+questions, for example:</p>
+<ul class="simple">
+<li><p>finding dead stores,</p></li>
+<li><p>finding uninitialized variables,</p></li>
+<li><p>finding a good point to deallocate memory,</p></li>
+<li><p>finding out if it would be safe to move an object.</p></li>
+</ul>
+</section>
+<section id="example-definitive-initialization">
+<h2>Example: definitive initialization<a class="headerlink" href="#example-definitive-initialization" title="連結到這個標頭">¶</a></h2>
+<p>Definitive initialization proves that variables are known to be initialized when
+read. If we find a variable which is read when not initialized then we generate
+a warning.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">Init</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w">    </span><span class="c1">// x is uninitialized</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cond</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="c1">// x is initialized</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w"> </span><span class="c1">// x is initialized</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w"> </span><span class="c1">// x is initialized</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">Uninit</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w">    </span><span class="c1">// x is uninitialized</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cond</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="c1">// x is initialized</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w"> </span><span class="c1">// x is maybe uninitialized, x is being read, report a bug.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For this purpose we can use lattice in a form of a mapping from variable
+declarations to initialization states; each initialization state is represented
+by the following lattice:</p>
+<figure class="align-default">
+<img alt="Lattice for definitive initialization analysis" class="light-background" src="_images/DefinitiveInitializationLattice.svg" />
+</figure>
+<p>A lattice element could also capture the source locations of the branches that
+lead us to the corresponding program point. Diagnostics would use this
+information to show a sample buggy code path to the user.</p>
+</section>
+<section id="example-refactoring-raw-pointers-to-unique-ptr">
+<h2>Example: refactoring raw pointers to <code class="docutils literal notranslate"><span class="pre">unique_ptr</span></code><a class="headerlink" href="#example-refactoring-raw-pointers-to-unique-ptr" title="連結到這個標頭">¶</a></h2>
+<p>Modern idiomatic C++ uses smart pointers to express memory ownership, however in
+pre-C++11 code one can often find raw pointers that own heap memory blocks.</p>
+<p>Imagine that we would like to refactor raw pointers that own memory to
+<code class="docutils literal notranslate"><span class="pre">unique_ptr</span></code>. There are multiple ways to design a data flow analysis for this
+problem; let's look at one way to do it.</p>
+<p>For example, we would like to refactor the following code that uses raw
+pointers:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">UniqueOwnership1</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Borrow</span><span class="p">(</span><span class="n">pi</span><span class="p">);</span>
+<span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">pi</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">TakeOwnership</span><span class="p">(</span><span class="n">pi</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>into code that uses <code class="docutils literal notranslate"><span class="pre">unique_ptr</span></code>:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">UniqueOwnership1</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Borrow</span><span class="p">(</span><span class="n">pi</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">TakeOwnership</span><span class="p">(</span><span class="n">pi</span><span class="p">.</span><span class="n">release</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This problem can be solved with a lattice in form of map from value declarations
+to pointer states:</p>
+<figure class="align-default">
+<img alt="Lattice that identifies candidates for unique_ptr refactoring" class="light-background" src="_images/UniquePtrLattice.svg" />
+</figure>
+<p>We can perform the refactoring if at the exit of a function <code class="docutils literal notranslate"><span class="pre">pi</span></code> is
+<code class="docutils literal notranslate"><span class="pre">Compatible</span></code>.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">UniqueOwnership1</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">pi</span><span class="p">;</span><span class="w">             </span><span class="c1">// pi is Compatible</span>
+<span class="w">  </span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="p">;</span><span class="w">        </span><span class="c1">// pi is Defined</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Borrow</span><span class="p">(</span><span class="n">pi</span><span class="p">);</span><span class="w">        </span><span class="c1">// pi is Defined</span>
+<span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">pi</span><span class="p">;</span><span class="w">         </span><span class="c1">// pi is Compatible</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">TakeOwnership</span><span class="p">(</span><span class="n">pi</span><span class="p">);</span><span class="w"> </span><span class="c1">// pi is Compatible</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// pi is Compatible</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Let's look at an example where the raw pointer owns two different memory blocks:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">UniqueOwnership2</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="p">;</span><span class="w">  </span><span class="c1">// pi is Defined</span>
+<span class="w">  </span><span class="n">Borrow</span><span class="p">(</span><span class="n">pi</span><span class="p">);</span>
+<span class="w">  </span><span class="k">delete</span><span class="w"> </span><span class="n">pi</span><span class="p">;</span><span class="w">          </span><span class="c1">// pi is Compatible</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">smth</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="p">;</span><span class="w">     </span><span class="c1">// pi is Defined</span>
+<span class="w">    </span><span class="n">Borrow</span><span class="p">(</span><span class="n">pi</span><span class="p">);</span>
+<span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">pi</span><span class="p">;</span><span class="w">        </span><span class="c1">// pi is Compatible</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// pi is Compatible</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It can be refactored to use <code class="docutils literal notranslate"><span class="pre">unique_ptr</span></code> like this:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">UniqueOwnership2</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_unique</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">  </span><span class="n">Borrow</span><span class="p">(</span><span class="n">pi</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">smth</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_unique</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="n">Borrow</span><span class="p">(</span><span class="n">pi</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the following example, the raw pointer is used to access the heap object
+after the ownership has been transferred.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">UniqueOwnership3</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="p">;</span><span class="w"> </span><span class="c1">// pi is Defined</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Borrow</span><span class="p">(</span><span class="n">pi</span><span class="p">);</span>
+<span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">pi</span><span class="p">;</span><span class="w">       </span><span class="c1">// pi is Compatible</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="p">(</span><span class="n">pi</span><span class="p">)};</span><span class="w"> </span><span class="c1">// pi is Compatible</span>
+<span class="w">    </span><span class="n">print</span><span class="p">(</span><span class="o">*</span><span class="n">pi</span><span class="p">);</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// pi is Compatible</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We can refactor this code to use <code class="docutils literal notranslate"><span class="pre">unique_ptr</span></code>, however we would have to
+introduce a non-owning pointer variable, since we can't use the moved-from
+<code class="docutils literal notranslate"><span class="pre">unique_ptr</span></code> to access the object:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">UniqueOwnership3</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Borrow</span><span class="p">(</span><span class="n">pi</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">pi_non_owning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pi</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="w">    </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">pi</span><span class="p">)};</span>
+<span class="w">    </span><span class="n">print</span><span class="p">(</span><span class="o">*</span><span class="n">pi_non_owning</span><span class="p">);</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If the original code didn't call <code class="docutils literal notranslate"><span class="pre">delete</span></code> at the very end of the function, then
+our refactoring may change the point at which we run the destructor and release
+memory. Specifically, if there is some user code after <code class="docutils literal notranslate"><span class="pre">delete</span></code>, then extending
+the lifetime of the object until the end of the function may hold locks for
+longer than necessary, introduce memory overhead etc.</p>
+<p>One solution is to always replace <code class="docutils literal notranslate"><span class="pre">delete</span></code> with a call to <code class="docutils literal notranslate"><span class="pre">reset()</span></code>, and then
+perform another analysis that removes unnecessary <code class="docutils literal notranslate"><span class="pre">reset()</span></code> calls.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">AddedMemoryOverhead</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">HugeObject</span><span class="w"> </span><span class="o">*</span><span class="n">ho</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HugeObject</span><span class="p">();</span>
+<span class="w">  </span><span class="n">use</span><span class="p">(</span><span class="n">ho</span><span class="p">);</span>
+<span class="w">  </span><span class="k">delete</span><span class="w"> </span><span class="n">ho</span><span class="p">;</span><span class="w"> </span><span class="c1">// Release the large amount of memory quickly.</span>
+<span class="w">  </span><span class="n">LongRunningFunction</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This analysis will refuse to refactor code that mixes borrowed pointer values
+and unique ownership. In the following code, <code class="docutils literal notranslate"><span class="pre">GetPtr()</span></code> returns a borrowed
+pointer, which is assigned to <code class="docutils literal notranslate"><span class="pre">pi</span></code>. Then, <code class="docutils literal notranslate"><span class="pre">pi</span></code> is used to hold a uniquely-owned
+pointer. We don't distinguish between these two assignments, and we want each
+assignment to be paired with a corresponding sink; otherwise, we transition the
+pointer to a <code class="docutils literal notranslate"><span class="pre">Conflicting</span></code> state, like in this example.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">ConflictingOwnership</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">pi</span><span class="p">;</span><span class="w">           </span><span class="c1">// pi is Compatible</span>
+<span class="w">  </span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetPtr</span><span class="p">();</span><span class="w">     </span><span class="c1">// pi is Defined</span>
+<span class="w">  </span><span class="n">Borrow</span><span class="p">(</span><span class="n">pi</span><span class="p">);</span><span class="w">        </span><span class="c1">// pi is Defined</span>
+
+<span class="w">  </span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="p">;</span><span class="w">      </span><span class="c1">// pi is Conflicting</span>
+<span class="w">  </span><span class="n">Borrow</span><span class="p">(</span><span class="n">pi</span><span class="p">);</span>
+<span class="w">  </span><span class="k">delete</span><span class="w"> </span><span class="n">pi</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// pi is Conflicting</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We could still handle this case by finding a maximal range in the code where
+<code class="docutils literal notranslate"><span class="pre">pi</span></code> could be in the Compatible state, and only refactoring that part.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">ConflictingOwnership</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">pi</span><span class="p">;</span>
+<span class="w">  </span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetPtr</span><span class="p">();</span>
+<span class="w">  </span><span class="n">Borrow</span><span class="p">(</span><span class="n">pi</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pi_unique</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">  </span><span class="n">Borrow</span><span class="p">(</span><span class="n">pi_unique</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="example-finding-redundant-branch-conditions">
+<h2>Example: finding redundant branch conditions<a class="headerlink" href="#example-finding-redundant-branch-conditions" title="連結到這個標頭">¶</a></h2>
+<p>In the code below <code class="docutils literal notranslate"><span class="pre">b1</span></code> should not be checked in both the outer and inner &quot;if&quot;
+statements. It is likely there is a bug in this code.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">F</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">b1</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">b2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">b1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">f</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">b1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">b2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// Check `b1` again -- unnecessary!</span>
+<span class="w">      </span><span class="n">g</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A checker that finds this pattern syntactically is already implemented in
+ClangTidy using AST matchers (<code class="docutils literal notranslate"><span class="pre">bugprone-redundant-branch-condition</span></code>).</p>
+<p>To implement it using the data flow analysis framework, we can produce a warning
+if any part of the branch condition is implied by the flow condition.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">F</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">b1</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">b2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Flow condition: true.</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">b1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Flow condition: b1.</span>
+<span class="w">    </span><span class="n">f</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">b1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">b2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// `b1` is implied by the flow condition.</span>
+<span class="w">      </span><span class="n">g</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>One way to check this implication is to use a SAT solver. Without a SAT solver,
+we could keep the flow condition in the CNF form and then it would be easy to
+check the implication.</p>
+</section>
+<section id="example-finding-unchecked-std-optional-unwraps">
+<h2>Example: finding unchecked <code class="docutils literal notranslate"><span class="pre">std::optional</span></code> unwraps<a class="headerlink" href="#example-finding-unchecked-std-optional-unwraps" title="連結到這個標頭">¶</a></h2>
+<p>Calling <code class="docutils literal notranslate"><span class="pre">optional::value()</span></code> is only valid if <code class="docutils literal notranslate"><span class="pre">optional::has_value()</span></code> is true. We
+want to show that when <code class="docutils literal notranslate"><span class="pre">x.value()</span></code> is executed, the flow condition implies
+<code class="docutils literal notranslate"><span class="pre">x.has_value()</span></code>.</p>
+<p>In the example below <code class="docutils literal notranslate"><span class="pre">x.value()</span></code> is accessed safely because it is guarded by the
+<code class="docutils literal notranslate"><span class="pre">x.has_value()</span></code> check.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">Example</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">has_value</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>While entering the if branch we deduce that <code class="docutils literal notranslate"><span class="pre">x.has_value()</span></code> is implied by the
+flow condition.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">Example</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Flow condition: true.</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">has_value</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Flow condition: x.has_value() == true.</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// Flow condition: true.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We also need to prove that <code class="docutils literal notranslate"><span class="pre">x</span></code> is not modified between check and value access.
+The modification of <code class="docutils literal notranslate"><span class="pre">x</span></code> may be very subtle:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">F</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">Example</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">has_value</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Flow condition: x.has_value() == true.</span>
+<span class="w">    </span><span class="n">unknown_function</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w"> </span><span class="c1">// may change x.</span>
+<span class="w">    </span><span class="c1">// Flow condition: true.</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="example-finding-dead-code-behind-a-b-experiment-flags">
+<h2>Example: finding dead code behind A/B experiment flags<a class="headerlink" href="#example-finding-dead-code-behind-a-b-experiment-flags" title="連結到這個標頭">¶</a></h2>
+<p>Finding dead code is a classic application of data flow analysis.</p>
+<p>Unused flags for A/B experiment hide dead code. However, this flavor of dead
+code is invisible to the compiler because the flag can be turned on at any
+moment.</p>
+<p>We could make a tool that deletes experiment flags. The user tells us which flag
+they want to delete, and we assume that the it's value is a given constant.</p>
+<p>For example, the user could use the tool to remove <code class="docutils literal notranslate"><span class="pre">example_flag</span></code> from this
+code:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">DEFINE_FLAG</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">example_flag</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="s">"A sample flag."</span><span class="p">);</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">Example</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetFlag</span><span class="p">(</span><span class="n">FLAGS_example_flag</span><span class="p">).</span><span class="n">empty</span><span class="p">();</span>
+<span class="w">  </span><span class="n">f</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">g</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">h</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The tool would simplify the code to:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">Example</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">f</span><span class="p">();</span>
+<span class="w">  </span><span class="n">g</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We can solve this problem with a classic constant propagation lattice combined
+with symbolic evaluation.</p>
+</section>
+<section id="example-finding-inefficient-usages-of-associative-containers">
+<h2>Example: finding inefficient usages of associative containers<a class="headerlink" href="#example-finding-inefficient-usages-of-associative-containers" title="連結到這個標頭">¶</a></h2>
+<p>Real-world code often accidentally performs repeated lookups in associative
+containers:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">Employee</span><span class="o">&gt;</span><span class="w"> </span><span class="n">xs</span><span class="p">;</span>
+<span class="n">xs</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"..."</span><span class="p">;</span>
+<span class="n">xs</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"..."</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>To find the above inefficiency we can use the available expressions analysis to
+understand that <code class="docutils literal notranslate"><span class="pre">m[42]</span></code> is evaluated twice.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">Employee</span><span class="o">&gt;</span><span class="w"> </span><span class="n">xs</span><span class="p">;</span>
+<span class="n">Employee</span><span class="w"> </span><span class="o">&amp;</span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xs</span><span class="p">[</span><span class="mi">42</span><span class="p">];</span>
+<span class="n">e</span><span class="o">-&gt;</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"..."</span><span class="p">;</span>
+<span class="n">e</span><span class="o">-&gt;</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"..."</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>We can also track the <code class="docutils literal notranslate"><span class="pre">m.contains()</span></code> check in the flow condition to find
+redundant checks, like in the example below.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">Employee</span><span class="o">&gt;</span><span class="w"> </span><span class="n">xs</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">xs</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="mi">42</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">xs</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span><span class="mi">42</span><span class="p">,</span><span class="w"> </span><span class="n">someEmployee</span><span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="example-refactoring-types-that-implicitly-convert-to-each-other">
+<h2>Example: refactoring types that implicitly convert to each other<a class="headerlink" href="#example-refactoring-types-that-implicitly-convert-to-each-other" title="連結到這個標頭">¶</a></h2>
+<p>Refactoring one strong type to another is difficult, but the compiler can help:
+once you refactor one reference to the type, the compiler will flag other places
+where this information flows with type mismatch errors. Unfortunately this
+strategy does not work when you are refactoring types that implicitly convert to
+each other, for example, replacing <code class="docutils literal notranslate"><span class="pre">int32_t</span></code> with <code class="docutils literal notranslate"><span class="pre">int64_t</span></code>.</p>
+<p>Imagine that we want to change user IDs from 32 to 64-bit integers. In other
+words, we need to find all integers tainted with user IDs. We can use data flow
+analysis to implement taint analysis.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">UseUser</span><span class="p">(</span><span class="kt">int32_t</span><span class="w"> </span><span class="n">user_id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user_id</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// Variable `id` is tainted with a user ID.</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Taint analysis is very well suited to this problem because the program rarely
+branches on user IDs, and almost certainly does not perform any computation
+(like arithmetic).</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="FunctionEffectAnalysis.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Function Effect Analysis</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title"><span class="section-number">3. </span>Summary Extraction Internals</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Data flow analysis: an informal introduction</a><ul>
+<li><a class="reference internal" href="#abstract">Abstract</a></li>
+<li><a class="reference internal" href="#data-flow-analysis">Data flow analysis</a><ul>
+<li><a class="reference internal" href="#the-purpose-of-data-flow-analysis">The purpose of data flow analysis</a></li>
+<li><a class="reference internal" href="#sample-problem-and-an-ad-hoc-solution">Sample problem and an ad-hoc solution</a></li>
+<li><a class="reference internal" href="#too-much-information-and-top-values">Too much information and &quot;top&quot; values</a></li>
+<li><a class="reference internal" href="#uninitialized-variables-and-bottom-values">Uninitialized variables and &quot;bottom&quot; values</a></li>
+<li><a class="reference internal" href="#a-practical-lattice-that-tracks-sets-of-concrete-values">A practical lattice that tracks sets of concrete values</a></li>
+<li><a class="reference internal" href="#formalization">Formalization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#symbolic-execution-a-very-short-informal-introduction">Symbolic execution: a very short informal introduction</a><ul>
+<li><a class="reference internal" href="#symbolic-values">Symbolic values</a></li>
+<li><a class="reference internal" href="#flow-condition">Flow condition</a></li>
+<li><a class="reference internal" href="#symbolic-pointers">Symbolic pointers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-finding-output-parameters">Example: finding output parameters</a><ul>
+<li><a class="reference internal" href="#problem-description">Problem description</a></li>
+<li><a class="reference internal" href="#lattice-design">Lattice design</a></li>
+<li><a class="reference internal" href="#using-data-flow-results-to-identify-output-parameters">Using data flow results to identify output parameters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-finding-dead-stores">Example: finding dead stores</a></li>
+<li><a class="reference internal" href="#example-definitive-initialization">Example: definitive initialization</a></li>
+<li><a class="reference internal" href="#example-refactoring-raw-pointers-to-unique-ptr">Example: refactoring raw pointers to <code class="docutils literal notranslate"><span class="pre">unique_ptr</span></code></a></li>
+<li><a class="reference internal" href="#example-finding-redundant-branch-conditions">Example: finding redundant branch conditions</a></li>
+<li><a class="reference internal" href="#example-finding-unchecked-std-optional-unwraps">Example: finding unchecked <code class="docutils literal notranslate"><span class="pre">std::optional</span></code> unwraps</a></li>
+<li><a class="reference internal" href="#example-finding-dead-code-behind-a-b-experiment-flags">Example: finding dead code behind A/B experiment flags</a></li>
+<li><a class="reference internal" href="#example-finding-inefficient-usages-of-associative-containers">Example: finding inefficient usages of associative containers</a></li>
+<li><a class="reference internal" href="#example-refactoring-types-that-implicitly-convert-to-each-other">Example: refactoring types that implicitly convert to each other</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=0d9984b1"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=cbf116e0"></script>
+    <script src="_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>

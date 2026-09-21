@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Clang 4.0.0 Release Notes &#8212; Clang 4 說明文件</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
+    <script src="_static/documentation_options.js?v=5178651c"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=cbf116e0"></script>
+    <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/ReleaseNotes.html" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜尋" href="search.html" />
+    <link rel="next" title="Clang Compiler User&#39;s Manual" href="UsersManual.html" />
+    <link rel="prev" title="將 Clang 作為編譯器使用" href="index.html" />
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Clang 4 說明文件</span></a></h1>
+        <h2 class="heading"><span>Clang 4.0.0 Release Notes</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">將 Clang 作為編譯器使用</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">內容</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="UsersManual.html">Clang Compiler User's Manual</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="clang-4-0-0-release-notes">
+<h1>Clang 4.0.0 Release Notes<a class="headerlink" href="#clang-4-0-0-release-notes" title="連結到這個標頭">¶</a></h1>
+<nav class="contents local" id="id1">
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id2">簡介</a></p></li>
+<li><p><a class="reference internal" href="#what-s-new-in-clang-4-0-0" id="id3">What's New in Clang 4.0.0?</a></p>
+<ul>
+<li><p><a class="reference internal" href="#major-new-features" id="id4">Major New Features</a></p></li>
+<li><p><a class="reference internal" href="#improvements-to-thinlto-flto-thin" id="id5">Improvements to ThinLTO (-flto=thin)</a></p></li>
+<li><p><a class="reference internal" href="#new-compiler-flags" id="id6">New Compiler Flags</a></p></li>
+<li><p><a class="reference internal" href="#opencl-c-language-changes-in-clang" id="id7">OpenCL C Language Changes in Clang</a></p></li>
+<li><p><a class="reference internal" href="#static-analyzer" id="id8">Static Analyzer</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#additional-information" id="id9">Additional Information</a></p></li>
+</ul>
+</nav>
+<p>Written by the <a class="reference external" href="http://llvm.org/">LLVM Team</a></p>
+<section id="introduction">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">簡介</a><a class="headerlink" href="#introduction" title="連結到這個標頭">¶</a></h2>
+<p>This document contains the release notes for the Clang C/C++/Objective-C/OpenCL
+frontend, part of the LLVM Compiler Infrastructure, release 4.0.0. Here we
+describe the status of Clang in some detail, including major
+improvements from the previous release and new feature work. For the
+general LLVM release notes, see <a class="reference external" href="http://llvm.org/docs/ReleaseNotes.html">the LLVM
+documentation</a>. All LLVM
+releases may be downloaded from the <a class="reference external" href="http://llvm.org/releases/">LLVM releases web
+site</a>.</p>
+<p>For more information about Clang or LLVM, including information about
+the latest release, please check out the main please see the <a class="reference external" href="http://clang.llvm.org">Clang Web
+Site</a> or the <a class="reference external" href="http://llvm.org">LLVM Web
+Site</a>.</p>
+</section>
+<section id="what-s-new-in-clang-4-0-0">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">What's New in Clang 4.0.0?</a><a class="headerlink" href="#what-s-new-in-clang-4-0-0" title="連結到這個標頭">¶</a></h2>
+<p>Some of the major new features and improvements to Clang are listed
+here. Generic improvements to Clang as a whole or to its underlying
+infrastructure are described first, followed by language-specific
+sections with improvements to Clang's support for those languages.</p>
+<section id="major-new-features">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Major New Features</a><a class="headerlink" href="#major-new-features" title="連結到這個標頭">¶</a></h3>
+<ul>
+<li><p>The <a class="reference external" href="AttributeReference.html#diagnose-if">diagnose_if</a> attribute has been
+added to clang. This attribute allows
+clang to emit a warning or error if a function call meets one or more
+user-specified conditions.</p></li>
+<li><p>Enhanced devirtualization with
+<a class="reference external" href="UsersManual.html#cmdoption-fstrict-vtable-pointers">-fstrict-vtable-pointers</a>.
+Clang devirtualizes across different basic blocks, like loops:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">();</span>
+<span class="p">};</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">indirect</span><span class="p">(</span><span class="n">A</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">        </span><span class="n">a</span><span class="p">.</span><span class="n">foo</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">A</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+<span class="w">    </span><span class="n">indirect</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="improvements-to-thinlto-flto-thin">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Improvements to ThinLTO (-flto=thin)</a><a class="headerlink" href="#improvements-to-thinlto-flto-thin" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>Integration with profile data (PGO). When available, profile data enables
+more accurate function importing decisions, as well as cross-module indirect
+call promotion.</p></li>
+<li><p>Significant build-time and binary-size improvements when compiling with debug
+info (<code class="docutils literal notranslate"><span class="pre">-g</span></code>).</p></li>
+</ul>
+</section>
+<section id="new-compiler-flags">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">New Compiler Flags</a><a class="headerlink" href="#new-compiler-flags" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>The option <code class="docutils literal notranslate"><span class="pre">-Og</span></code> has been added to optimize the debugging experience.
+For now, this option is exactly the same as <code class="docutils literal notranslate"><span class="pre">-O1</span></code>. However, in the future,
+some other optimizations might be enabled or disabled.</p></li>
+<li><p>The option <code class="docutils literal notranslate"><span class="pre">-MJ</span></code> has been added to simplify adding JSON compilation
+database output into existing build systems.</p></li>
+</ul>
+</section>
+<section id="opencl-c-language-changes-in-clang">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">OpenCL C Language Changes in Clang</a><a class="headerlink" href="#opencl-c-language-changes-in-clang" title="連結到這個標頭">¶</a></h3>
+<p><strong>The following bugs in the OpenCL header have been fixed:</strong></p>
+<ul class="simple">
+<li><p>Added missing <code class="docutils literal notranslate"><span class="pre">overloadable</span></code> and <code class="docutils literal notranslate"><span class="pre">convergent</span></code> attributes.</p></li>
+<li><p>Removed some erroneous extra <code class="docutils literal notranslate"><span class="pre">native_*</span></code> functions.</p></li>
+</ul>
+<p><strong>The following bugs in the generation of metadata have been fixed:</strong></p>
+<ul class="simple">
+<li><p>Corrected the SPIR version depending on the OpenCL version.</p></li>
+<li><p>Source level address spaces are taken from the SPIR specification.</p></li>
+<li><p>Image types now contain no access qualifier.</p></li>
+</ul>
+<p><strong>The following bugs in the AMD target have been fixed:</strong></p>
+<ul class="simple">
+<li><p>Corrected the bitwidth of <code class="docutils literal notranslate"><span class="pre">size_t</span></code> and NULL pointer value with respect to
+address spaces.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">cl_khr_subgroups</span></code>, <code class="docutils literal notranslate"><span class="pre">cl_amd_media_ops</span></code> and <code class="docutils literal notranslate"><span class="pre">cl_amd_media_ops2</span></code>
+extensions.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">cl-denorms-are-zero</span></code> support.</p></li>
+<li><p>Changed address spaces for image objects to be <code class="docutils literal notranslate"><span class="pre">constant</span></code>.</p></li>
+<li><p>Added little-endian.</p></li>
+</ul>
+<p><strong>The following bugs in OpenCL 2.0 have been fixed:</strong></p>
+<ul class="simple">
+<li><p>Fixed pipe builtin function return type, added extra argument to generated
+IR intrinsics to propagate size and alignment information of the pipe packed
+type.</p></li>
+<li><p>Improved pipe type to accommodate access qualifiers.</p></li>
+<li><p>Added correct address space to the ObjC block generation and <code class="docutils literal notranslate"><span class="pre">enqueue_kernel</span></code>
+prototype.</p></li>
+<li><p>Improved handling of integer parameters of <code class="docutils literal notranslate"><span class="pre">enqueue_kernel</span></code> prototype. We
+now allow <code class="docutils literal notranslate"><span class="pre">size_t</span></code> instead of <code class="docutils literal notranslate"><span class="pre">int</span></code> for specifying block parameter sizes.</p></li>
+<li><p>Allow using NULL (aka <code class="docutils literal notranslate"><span class="pre">CLK_NULL_QUEUE</span></code>) with <code class="docutils literal notranslate"><span class="pre">queue_t</span></code>.</p></li>
+</ul>
+<p><strong>Improved the following diagnostics:</strong></p>
+<ul class="simple">
+<li><p>Disallow address spaces other than <code class="docutils literal notranslate"><span class="pre">global</span></code> for kernel pointer parameters.</p></li>
+<li><p>Correct the use of half type argument and pointer assignment with
+dereferencing.</p></li>
+<li><p>Disallow variadic arguments in functions and blocks.</p></li>
+<li><p>Allow partial initializer for array and struct.</p></li>
+</ul>
+<p><strong>Some changes to OpenCL extensions have been made:</strong></p>
+<ul>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">cl_khr_mipmap_image</span></code>.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">-cl-ext</span></code> flag to allow overwriting supported extensions otherwise
+set by the target compiled for (Example: <code class="docutils literal notranslate"><span class="pre">-cl-ext=-all,+cl_khr_fp16</span></code>).</p></li>
+<li><p>New types and functions can now be flexibly added to extensions using the
+following pragmas instead of modifying the Clang source code:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma OPENCL EXTENSION the_new_extension_name : begin</span>
+<span class="c1">// declare types and functions associated with the extension here</span>
+<span class="cp">#pragma OPENCL EXTENSION the_new_extension_name : end</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p><strong>Miscellaneous changes:</strong></p>
+<ul class="simple">
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">__builtin_astype</span></code> to cast between different address space objects.</p></li>
+<li><p>Allow using <code class="docutils literal notranslate"><span class="pre">opencl_unroll_hint</span></code> with earlier OpenCL versions than 2.0.</p></li>
+<li><p>Improved handling of floating point literal to default to single precision if
+fp64 extension is not enabled.</p></li>
+<li><p>Refactor <code class="docutils literal notranslate"><span class="pre">sampler_t</span></code> implementation to simplify initializer representation
+which is now handled as a compiler builtin function with an integer value
+passed into it.</p></li>
+<li><p>Change fake address space map to use the SPIR convention.</p></li>
+<li><p>Added <a class="reference external" href="UsersManual.html#opencl-features">the OpenCL manual</a> to Clang
+documentation.</p></li>
+</ul>
+</section>
+<section id="static-analyzer">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Static Analyzer</a><a class="headerlink" href="#static-analyzer" title="連結到這個標頭">¶</a></h3>
+<p>With the option <code class="docutils literal notranslate"><span class="pre">--show-description</span></code>, scan-build's list of defects will also
+show the description of the defects.</p>
+<p>The analyzer now provides better support of code that uses gtest.</p>
+<p>Several new checks were added:</p>
+<ul class="simple">
+<li><p>The analyzer warns when virtual calls are made from constructors or
+destructors. This check is off by default but can be enabled by passing the
+following command to scan-build: <code class="docutils literal notranslate"><span class="pre">-enable-checker</span> <span class="pre">optin.cplusplus.VirtualCall</span></code>.</p></li>
+<li><p>The analyzer checks for synthesized copy properties of mutable types in
+Objective C, such as <code class="docutils literal notranslate"><span class="pre">NSMutableArray</span></code>. Calling the setter for these properties
+will store an immutable copy of the value.</p></li>
+<li><p>The analyzer checks for calls to <code class="docutils literal notranslate"><span class="pre">dispatch_once()</span></code> that use an Objective-C
+instance variable as the predicate. Using an instance variable as a predicate
+may result in the passed-in block being executed multiple times or not at all.
+These calls should be rewritten either to use a lock or to store the predicate
+in a global or static variable.</p></li>
+<li><p>The analyzer checks for unintended comparisons of <code class="docutils literal notranslate"><span class="pre">NSNumber</span></code>, <code class="docutils literal notranslate"><span class="pre">CFNumberRef</span></code>, and
+other Cocoa number objects to scalar values.</p></li>
+</ul>
+</section>
+</section>
+<section id="additional-information">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Additional Information</a><a class="headerlink" href="#additional-information" title="連結到這個標頭">¶</a></h2>
+<p>A wide variety of additional information is available on the <a class="reference external" href="http://clang.llvm.org/">Clang web
+page</a>. The web page contains versions of the
+API documentation which are up-to-date with the Subversion version of
+the source code. You can access versions of these documents specific to
+this release by going into the &quot;<code class="docutils literal notranslate"><span class="pre">clang/docs/</span></code>&quot; directory in the Clang
+tree.</p>
+<p>If you have any questions or comments about Clang, please feel free to
+contact us via the <a class="reference external" href="http://lists.llvm.org/mailman/listinfo/cfe-dev">mailing
+list</a>.</p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">將 Clang 作為編譯器使用</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">內容</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="UsersManual.html">Clang Compiler User's Manual</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; 版權所有 2007-2026, The Clang Team.
+      使用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3 建立。
+    </div>
+  </body>
+</html>
