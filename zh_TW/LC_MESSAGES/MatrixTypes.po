@@ -1,0 +1,462 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../MatrixTypes.md:1
+msgid "Matrix Types"
+msgstr ""
+
+#: ../../../MatrixTypes.md:6
+msgid ""
+"Clang provides a C/C++ language extension that allows users to directly "
+"express fixed-size 2-dimensional matrices as language values and perform "
+"arithmetic on them."
+msgstr ""
+
+#: ../../../MatrixTypes.md:10
+msgid ""
+"This feature is currently experimental, and both its design and its "
+"implementation are in flux."
+msgstr ""
+
+#: ../../../MatrixTypes.md:13
+msgid "Draft Specification"
+msgstr ""
+
+#: ../../../MatrixTypes.md:15
+msgid "Matrix Type"
+msgstr ""
+
+#: ../../../MatrixTypes.md:17
+msgid ""
+"A matrix type is a scalar type with an underlying *element type*, a constant "
+"number of *rows*, and a constant number of *columns*. Matrix types with the "
+"same element type, rows, and columns are the same type. A value of a matrix "
+"type includes storage for `rows * columns` values of the *element type*. The "
+"internal layout, overall size and alignment are implementation-defined."
+msgstr ""
+
+#: ../../../MatrixTypes.md:23
+msgid ""
+"The maximum of the product of the number of rows and columns is "
+"implementation-defined. If that implementation-defined limit is exceeded, "
+"the program is ill-formed."
+msgstr ""
+
+#: ../../../MatrixTypes.md:27
+msgid ""
+"Currently, the element type of a matrix is only permitted to be one of the "
+"following types:"
+msgstr ""
+
+#: ../../../MatrixTypes.md:30
+msgid ""
+"an integer type (as in C23 6.2.5p22), but excluding enumerated types, "
+"`bool`, and `_BitInt` types whose width is not a power of 2;"
+msgstr ""
+
+#: ../../../MatrixTypes.md:32
+msgid "the standard floating types `float` or `double`;"
+msgstr ""
+
+#: ../../../MatrixTypes.md:33
+msgid ""
+"a half-precision floating point type, if one is supported on the target."
+msgstr ""
+
+#: ../../../MatrixTypes.md:35
+msgid "Other types may be supported in the future."
+msgstr ""
+
+#: ../../../MatrixTypes.md:37
+msgid "Matrix Type Attribute"
+msgstr ""
+
+#: ../../../MatrixTypes.md:39
+msgid ""
+"Matrix types can be declared by adding the `matrix_type` attribute to the "
+"declaration of a *typedef* (or a C++ alias declaration). The underlying type "
+"of the *typedef* must be a valid matrix element type. The attribute takes "
+"two arguments, both of which must be integer constant expressions that "
+"evaluate to a value greater than zero. The first specifies the number of "
+"rows, and the second specifies the number of columns. The underlying type of "
+"the *typedef* becomes a matrix type with the given dimensions and an element "
+"type of the former underlying type."
+msgstr ""
+
+#: ../../../MatrixTypes.md:48
+msgid ""
+"If a declaration of a *typedef-name* has a `matrix_type` attribute, then all "
+"declarations of that *typedef-name* shall have a matrix_type attribute with "
+"the same element type, number of rows, and number of columns."
+msgstr ""
+
+#: ../../../MatrixTypes.md:52
+msgid "Standard Conversions"
+msgstr ""
+
+#: ../../../MatrixTypes.md:54
+msgid ""
+"The standard conversions are extended as follows. Note that these "
+"conversions are intentionally not listed as satisfying the constraints for "
+"assignment, which is to say, they are only permitted as explicit casts, not "
+"as implicit conversions."
+msgstr ""
+
+#: ../../../MatrixTypes.md:59
+msgid ""
+"A value of matrix type can be converted to another matrix type if the number "
+"of rows and columns are the same and the value's elements can be converted "
+"to the element type of the result type. The result is a matrix where each "
+"element is the converted corresponding element."
+msgstr ""
+
+#: ../../../MatrixTypes.md:64
+msgid ""
+"A value of any real type (as in C23 6.2.5p14) can be converted to a matrix "
+"type if it can be converted to the element type of the matrix. The result is "
+"a matrix where all elements are the converted original value."
+msgstr ""
+
+#: ../../../MatrixTypes.md:68
+msgid ""
+"If the number of rows or columns differ between the original and resulting "
+"type, the program is ill-formed."
+msgstr ""
+
+#: ../../../MatrixTypes.md:71
+msgid "Arithmetic Conversions"
+msgstr ""
+
+#: ../../../MatrixTypes.md:73
+msgid "The usual arithmetic conversions are extended as follows."
+msgstr ""
+
+#: ../../../MatrixTypes.md:75
+msgid "Insert at the start:"
+msgstr ""
+
+#: ../../../MatrixTypes.md:77
+msgid ""
+"If both operands are of matrix type, no arithmetic conversion is performed."
+msgstr ""
+
+#: ../../../MatrixTypes.md:78
+msgid ""
+"If one operand is of matrix type and the other operand is of a real type, "
+"convert the real type operand to the matrix type according to the standard "
+"conversion rules."
+msgstr ""
+
+#: ../../../MatrixTypes.md:82
+msgid "Matrix Type Element Access Operator"
+msgstr ""
+
+#: ../../../MatrixTypes.md:84
+msgid ""
+"An expression of the form `E1 [E2] [E3]`, where `E1` has matrix type `cv M`, "
+"is a matrix element access expression. Let `T` be the element type of `M`, "
+"and let `R` and `C` be the number of rows and columns in `M` respectively. "
+"The index expressions shall have integral or unscoped enumeration type and "
+"shall not be uses of the comma operator unless parenthesized. The first "
+"index expression shall evaluate to a non-negative value less than `R`, and "
+"the second index expression shall evaluate to a non-negative value less than "
+"`C`, or else the expression has undefined behavior. If `E1` is a prvalue, "
+"the result is a prvalue with type `T` and is the value of the element at the "
+"given row and column in the matrix. Otherwise, the result is a glvalue with "
+"type `cv T` and with the same value category as `E1` which refers to the "
+"element at the given row and column in the matrix."
+msgstr ""
+
+#: ../../../MatrixTypes.md:98
+msgid ""
+"A single subscript expression into a matrix is legal in HLSL and denotes a "
+"vector for the specified row lane, but is ill-formed in C and C++."
+msgstr ""
+
+#: ../../../MatrixTypes.md:101
+msgid ""
+"**Note**: We considered providing an expression of the form `postfix-"
+"expression [expression]` to access columns of a matrix. We think that such "
+"an expression would be problematic once both column and row major matrixes "
+"are supported: depending on the memory layout, either accessing columns or "
+"rows can be done efficiently, but not both. Instead, we propose to provide "
+"builtins to extract rows and columns from a matrix. This makes the "
+"operations more explicit."
+msgstr ""
+
+#: ../../../MatrixTypes.md:109
+msgid "Matrix Type Binary Operators"
+msgstr ""
+
+#: ../../../MatrixTypes.md:111
+msgid ""
+"Given two matrixes, the `+` and `-` operators perform element-wise addition "
+"and subtraction, while the `*` operator performs matrix multiplication. `+`, "
+"`-`, `*`, and `/` can also be used with a matrix and a scalar value, "
+"applying the operation to each element of the matrix."
+msgstr ""
+
+#: ../../../MatrixTypes.md:116
+msgid ""
+"Earlier versions of this extension did not support division by a scalar. You "
+"can test for the availability of this feature with "
+"`__has_extension(matrix_types_scalar_division)`."
+msgstr ""
+
+#: ../../../MatrixTypes.md:120
+msgid "For the expression `M1 BIN_OP M2` where"
+msgstr ""
+
+#: ../../../MatrixTypes.md:122
+msgid ""
+"`BIN_OP` is one of `+` or `-`, one of `M1` and `M2` is of matrix type, and "
+"the other is of matrix type or real type; or"
+msgstr ""
+
+#: ../../../MatrixTypes.md:124
+msgid "`BIN_OP` is `*`, one of `M1` and `M2` is of matrix type, and the"
+msgstr ""
+
+#: ../../../MatrixTypes.md:125
+msgid "other is of a real type; or"
+msgstr ""
+
+#: ../../../MatrixTypes.md:126
+msgid "`BIN_OP` is `/`, `M1` is of matrix type, and `M2` is of a real type:"
+msgstr ""
+
+#: ../../../MatrixTypes.md:127
+msgid ""
+"The usual arithmetic conversions are applied to `M1` and `M2`. \\[ Note: if "
+"`M1` or `M2` are of a real type, they are broadcast to matrices here. — end "
+"note \\]"
+msgstr ""
+
+#: ../../../MatrixTypes.md:129
+msgid "`M1` and `M2` shall be of the same matrix type."
+msgstr ""
+
+#: ../../../MatrixTypes.md:130
+msgid ""
+"The result is equivalent to Res in the following where col is the number of "
+"columns and row is the number of rows in the matrix type:"
+msgstr ""
+
+#: ../../../MatrixTypes.md:140
+msgid "Given the expression `M1 * M2` where `M1` and `M2` are of matrix type:"
+msgstr ""
+
+#: ../../../MatrixTypes.md:142
+msgid "The usual arithmetic conversions are applied to `M1` and `M2`."
+msgstr ""
+
+#: ../../../MatrixTypes.md:143
+msgid ""
+"The type of `M1` shall have the same number of columns as the type of `M2` "
+"has rows. The element types of `M1` and `M2` shall be the same type."
+msgstr ""
+
+#: ../../../MatrixTypes.md:145
+msgid ""
+"The resulting type, `MTy`, is a matrix type with the common element type, "
+"the number of rows of `M1` and the number of columns of `M2`."
+msgstr ""
+
+#: ../../../MatrixTypes.md:147
+msgid ""
+"The result is equivalent to `Res` in the following where `EltTy` is the "
+"element type of `MTy`, `col` is the number of columns, `row` is the number "
+"of rows in `MTy` and `inner` is the number of columns of `M1`:"
+msgstr ""
+
+#: ../../../MatrixTypes.md:163
+msgid ""
+"All operations on matrix types match the behavior of the element type with "
+"respect to signed overflows."
+msgstr ""
+
+#: ../../../MatrixTypes.md:166
+msgid ""
+"With respect to floating-point contraction, rounding and environment rules, "
+"operations on matrix types match the behavior of the elementwise operations "
+"in the corresponding expansions provided above."
+msgstr ""
+
+#: ../../../MatrixTypes.md:170
+msgid ""
+"Operations on floating-point matrices have the same rounding and floating-"
+"point environment behavior as ordinary floating-point operations in the "
+"expression's context. For the purposes of floating-point contraction, all "
+"calculations done as part of a matrix operation are considered intermediate "
+"operations, and their results need not be rounded to the format of the "
+"element type until the final result in the containing expression. This is "
+"subject to the normal restrictions on contraction, such as `#pragma STDC "
+"FP_CONTRACT`."
+msgstr ""
+
+#: ../../../MatrixTypes.md:178
+msgid ""
+"For the `+=`, `-=` and `*=` operators the semantics match their expanded "
+"variants."
+msgstr ""
+
+#: ../../../MatrixTypes.md:181
+msgid "Matrix Type Builtin Operations"
+msgstr ""
+
+#: ../../../MatrixTypes.md:183
+msgid ""
+"Each matrix type supports a collection of builtin expressions that look like "
+"function calls but do not form an overload set. Here they are described as "
+"function declarations with rules for how to construct the argument list "
+"types and return type and the library description elements from [library."
+"description.structure.specifications]/3 in the C++ standard."
+msgstr ""
+
+#: ../../../MatrixTypes.md:189
+msgid "Definitions:"
+msgstr ""
+
+#: ../../../MatrixTypes.md:191
+msgid "*M*, *M1*, *M2*, *M3* - Matrix types"
+msgstr ""
+
+#: ../../../MatrixTypes.md:192
+msgid "*T* - Element type"
+msgstr ""
+
+#: ../../../MatrixTypes.md:193
+msgid "*row*, *col* - Row and column arguments respectively."
+msgstr ""
+
+#: ../../../MatrixTypes.md:195
+msgid "`M2 __builtin_matrix_transpose(M1 matrix)`"
+msgstr ""
+
+#: ../../../MatrixTypes.md:197
+msgid ""
+"**Remarks**: The return type is a cv-unqualified matrix type that has the "
+"same element type as `M1` and has the same number of rows as `M1` has "
+"columns and the same number of columns as `M1` has rows."
+msgstr ""
+
+#: ../../../MatrixTypes.md:201
+msgid ""
+"**Returns**: A matrix `Res` equivalent to the code below, where `col` refers "
+"to the number of columns of `M`, and `row` to the number of rows of `M`."
+msgstr ""
+
+#: ../../../MatrixTypes.md:204 ../../../MatrixTypes.md:243
+msgid "**Effects**: Equivalent to:"
+msgstr ""
+
+#: ../../../MatrixTypes.md:213
+msgid ""
+"`M __builtin_matrix_column_major_load(T *ptr, size_t row, size_t col, size_t "
+"columnStride)`"
+msgstr ""
+
+#: ../../../MatrixTypes.md:215
+msgid ""
+"**Mandates**: `row` and `col` shall be integral constants greater than 0."
+msgstr ""
+
+#: ../../../MatrixTypes.md:217
+msgid "**Preconditions**: `columnStride` is greater than or equal to `row`."
+msgstr ""
+
+#: ../../../MatrixTypes.md:219
+msgid ""
+"**Remarks**: The return type is a cv-unqualified matrix type with an element "
+"type of the cv-unqualified version of `T` and a number of rows and columns "
+"equal to `row` and `col` respectively. The parameter `columnStride` is "
+"optional and if omitted `row` is used as `columnStride`."
+msgstr ""
+
+#: ../../../MatrixTypes.md:224
+msgid "**Returns**: A matrix `Res` equivalent to:"
+msgstr ""
+
+#: ../../../MatrixTypes.md:235
+msgid ""
+"`void __builtin_matrix_column_major_store(M matrix, T *ptr, size_t "
+"columnStride)`"
+msgstr ""
+
+#: ../../../MatrixTypes.md:237
+msgid ""
+"**Preconditions**: `columnStride` is greater than or equal to the number of "
+"rows in `M`."
+msgstr ""
+
+#: ../../../MatrixTypes.md:239
+msgid ""
+"**Remarks**: The type `T` is the const-unqualified version of the matrix "
+"argument’s element type. The parameter `columnStride` is optional and if "
+"omitted, the number of rows of `M` is used as `columnStride`."
+msgstr ""
+
+#: ../../../MatrixTypes.md:253
+msgid "TODOs"
+msgstr ""
+
+#: ../../../MatrixTypes.md:255
+msgid ""
+"TODO: Does it make sense to allow M::element_type, M::rows, and M::columns "
+"where M is a matrix type? We don’t support this anywhere else, but it’s "
+"convenient. The alternative is using template deduction to extract this "
+"information. Also add spelling for C."
+msgstr ""
+
+#: ../../../MatrixTypes.md:260
+msgid "Future Work: Initialization syntax."
+msgstr ""
+
+#: ../../../MatrixTypes.md:262
+msgid "Decisions for the Implementation in Clang"
+msgstr ""
+
+#: ../../../MatrixTypes.md:264
+msgid ""
+"This section details decisions taken for the implementation in Clang and is "
+"not part of the draft specification."
+msgstr ""
+
+#: ../../../MatrixTypes.md:267
+msgid ""
+"The elements of a value of a matrix type are laid out in column-major order "
+"without padding."
+msgstr ""
+
+#: ../../../MatrixTypes.md:270
+msgid ""
+"To change memory layout to row major use the `-fmatrix-memory-layout` flag. "
+"This flag supports two flag argument values either `column-major` or `row-"
+"major` used like so `-fmatrix-memory-layout=column-major`.\\`"
+msgstr ""
+
+#: ../../../MatrixTypes.md:274
+msgid ""
+"We propose to provide a Clang option to override this behavior and allow "
+"contraction of those operations (e.g. *-ffp-contract=matrix*)."
+msgstr ""
+
+#: ../../../MatrixTypes.md:277
+msgid "TODO: Specify how matrix values are passed to functions."
+msgstr ""
