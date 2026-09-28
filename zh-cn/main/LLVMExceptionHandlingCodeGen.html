@@ -1,0 +1,749 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="prev" title="Constant Interpreter" href="ConstantInterpreter.html" />
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/LLVMExceptionHandlingCodeGen.html" />
+        <link rel="prefetch" href="_static/LLVMWyvernSmall.png" as="image" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+        <title>LLVM IR Generation for EH and Cleanups - Clang</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=548e816e" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86c9e7d9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Clang Release Notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="UsersManual.html">Clang Compiler User's Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="LanguageExtensions.html">Clang Language Extensions</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Clang Language Extensions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Block-ABI-Apple.html">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrossCompilation.html">Cross-compilation using Clang</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ClangStaticAnalyzer.html">Clang Static Analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Clang Static Analyzer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="analyzer/checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/user-docs.html">2. User Docs</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 2. User Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/UsingWithXCode.html">2.2. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FilingBugs.html">2.3. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CrossTranslationUnit.html">2.4. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/TaintAnalysisConfiguration.html">2.5. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/Annotations.html">2.6. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FAQ.html">2.7. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/developer-docs.html">3. Developer Docs</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 3. Developer Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/PerformanceInvestigation.html">3.6. Performance Investigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Scalable Static Analysis Framework</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Developer Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DataFlowAnalysisIntro.html">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSanitizer.html">ThreadSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MemorySanitizer.html">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataFlowSanitizer.html">DataFlowSanitizer</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of DataFlowSanitizer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="DataFlowSanitizerDesign.html">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerCoverage.html">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ControlFlowIntegrity.html">Control Flow Integrity</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Control Flow Integrity</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StandardCPlusPlusModules.html">Standard C++ Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MisExpect.html">Misexpect</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Misexpect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="OpenCLSupport.html">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Clang HLSL Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of HLSL Design and Implementation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="APINotes.html">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CIR/index.html">ClangIR</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of ClangIR</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CIR/ABILowering.html">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CommandGuide/index.html">Clang "man" pages</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Clang "man" pages</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefactoringEngine.html">Clang's refactoring engine</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ClangTools.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangRepl.html">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InternalsManual.html">"Clang" CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizerDesign.html">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/LLVMExceptionHandlingCodeGen.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/LLVMExceptionHandlingCodeGen.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="llvm-ir-generation-for-eh-and-cleanups">
+<h1>LLVM IR Generation for EH and Cleanups<a class="headerlink" href="#llvm-ir-generation-for-eh-and-cleanups" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This document describes how Clang's LLVM IR generation represents exception
+handling (EH) and C++ cleanups. It focuses on the data structures and control
+flow patterns used to model normal and exceptional exits, and it outlines how
+the generated IR differs across common ABI models.</p>
+<p>For details on the LLVM IR representation of exception handling, see
+<a class="reference external" href="https://llvm.org/docs/ExceptionHandling.html">LLVM Exception Handling</a>.</p>
+</section>
+<section id="core-model">
+<h2>Core Model<a class="headerlink" href="#core-model" title="Link to this heading">¶</a></h2>
+<p>EH and cleanup handling is centered around an <code class="docutils literal notranslate"><span class="pre">EHScopeStack</span></code> that records
+nested scopes for:</p>
+<ul class="simple">
+<li><p><strong>Cleanups</strong>, which run on normal control flow, exceptional control flow, or
+both. These are used for destructors, full-expression cleanups, and other
+scope-exit actions.</p></li>
+<li><p><strong>Catch scopes</strong>, which represent <code class="docutils literal notranslate"><span class="pre">try</span></code>/<code class="docutils literal notranslate"><span class="pre">catch</span></code> handlers.</p></li>
+<li><p><strong>Filter scopes</strong>, used to model dynamic exception specifications and some
+platform-specific filters.</p></li>
+<li><p><strong>Terminate scopes</strong>, used for <code class="docutils literal notranslate"><span class="pre">noexcept</span></code> and similar termination paths.</p></li>
+</ul>
+<p>Each cleanup is a small object with an <code class="docutils literal notranslate"><span class="pre">Emit</span></code> method. When a cleanup scope is
+popped, the IR generator decides whether it must materialize a normal cleanup
+block (for fallthrough, branch-through, or unresolved <code class="docutils literal notranslate"><span class="pre">goto</span></code> fixups) and/or an
+EH cleanup entry (when exceptional control flow can reach the cleanup). This
+results in a flattened CFG where cleanup lifetime is represented by the blocks
+and edges that flow into those blocks.</p>
+</section>
+<section id="key-components">
+<h2>Key Components<a class="headerlink" href="#key-components" title="Link to this heading">¶</a></h2>
+<p>The LLVM IR generation for EH and cleanups is spread across several core
+components:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CodeGenModule</span></code> owns module-wide state such as the LLVM module, target
+information, and the selected EH personality function. It provides access to
+ABI helpers via <code class="docutils literal notranslate"><span class="pre">CGCXXABI</span></code> and target-specific hooks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CodeGenFunction</span></code> manages per-function state and IR building. It owns the
+<code class="docutils literal notranslate"><span class="pre">EHScopeStack</span></code>, tracks the current insertion point, and emits blocks, calls,
+and branches. Most cleanup and EH control flow is built here.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EHScopeStack</span></code> is the central stack of scopes used to model EH and cleanup
+semantics. It stores <code class="docutils literal notranslate"><span class="pre">EHCleanupScope</span></code> entries for cleanups, along with
+<code class="docutils literal notranslate"><span class="pre">EHCatchScope</span></code>, <code class="docutils literal notranslate"><span class="pre">EHFilterScope</span></code>, and <code class="docutils literal notranslate"><span class="pre">EHTerminateScope</span></code> for handlers and
+termination logic.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EHCleanupScope</span></code> stores the cleanup object plus state data (active flags,
+fixup depth, and enclosing scope links). When a cleanup scope is popped,
+<code class="docutils literal notranslate"><span class="pre">CodeGenFunction</span></code> decides whether to emit a normal cleanup block, an EH
+cleanup entry, or both.</p></li>
+<li><p>Cleanup emission helpers implement the mechanics of branching through
+cleanups, threading fixups, and emitting cleanup blocks.</p></li>
+<li><p>Exception emission helpers implement landing pads, dispatch blocks,
+personality selection, and helper routines for try/catch, filters, and
+terminate handling.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CGCXXABI</span></code> (and its ABI-specific implementations such as
+<code class="docutils literal notranslate"><span class="pre">ItaniumCXXABI</span></code> and <code class="docutils literal notranslate"><span class="pre">MicrosoftCXXABI</span></code>) provide ABI-specific lowering for
+throws, catch handling, and destructor emission details.</p></li>
+<li><p>The cleanup and exception handling code generation is driven by the flow of
+<code class="docutils literal notranslate"><span class="pre">CodeGenFunction</span></code> and its helper classes traversing the AST to emit IR for
+C++ expressions, classes, and statements.</p></li>
+</ul>
+<p>AST traversal in <code class="docutils literal notranslate"><span class="pre">CodeGenFunction</span></code> emits code and pushes cleanups or EH scopes,
+<code class="docutils literal notranslate"><span class="pre">EHScopeStack</span></code> records scope nesting, cleanup and exception helpers materialize
+the CFG as scopes are popped, and <code class="docutils literal notranslate"><span class="pre">CGCXXABI</span></code> supplies ABI-specific details for
+landing pads or funclets.</p>
+</section>
+<section id="cleanup-destination-routing">
+<h2>Cleanup Destination Routing<a class="headerlink" href="#cleanup-destination-routing" title="Link to this heading">¶</a></h2>
+<p>When multiple control flow exits (<code class="docutils literal notranslate"><span class="pre">return</span></code>, <code class="docutils literal notranslate"><span class="pre">break</span></code>, <code class="docutils literal notranslate"><span class="pre">continue</span></code>,
+fallthrough) pass through the same cleanup, the generated IR shares a single
+cleanup block among them. Before entering the cleanup, each exit path stores a
+unique index into a &quot;cleanup destination&quot; slot. After the cleanup code runs, a
+<code class="docutils literal notranslate"><span class="pre">switch</span></code> instruction loads this index and dispatches to the appropriate final
+destination. This avoids duplicating cleanup code for each exit while preserving
+correct control flow.</p>
+<p>For example, if a function has both a <code class="docutils literal notranslate"><span class="pre">return</span></code> and a <code class="docutils literal notranslate"><span class="pre">break</span></code> that exit
+through the same destructor cleanup, both paths branch to the shared cleanup
+block after storing their respective destination indices. The cleanup epilogue
+then switches on the stored index to reach either the return block or the
+loop-exit block.</p>
+<p>When only a single exit passes through a cleanup (the common case), the switch
+is unnecessary and the cleanup block branches directly to its sole destination.</p>
+<section id="branch-fixups-for-forward-gotos">
+<h3>Branch Fixups for Forward Gotos<a class="headerlink" href="#branch-fixups-for-forward-gotos" title="Link to this heading">¶</a></h3>
+<p>A <code class="docutils literal notranslate"><span class="pre">goto</span></code> statement that jumps forward to a label not yet seen poses a special
+problem. The destination's enclosing cleanup scope is unknown at the point the
+<code class="docutils literal notranslate"><span class="pre">goto</span></code> is emitted. This is handled by emitting an optimistic branch and
+recording a &quot;fixup.&quot; When the cleanup scope is later popped, any recorded fixups
+are resolved by rewriting the branch to thread through the cleanup block and
+adding the destination to the cleanup's switch.</p>
+</section>
+</section>
+<section id="exceptional-cleanups-and-eh-dispatch">
+<h2>Exceptional Cleanups and EH Dispatch<a class="headerlink" href="#exceptional-cleanups-and-eh-dispatch" title="Link to this heading">¶</a></h2>
+<p>Exceptional exits (<code class="docutils literal notranslate"><span class="pre">throw</span></code>, <code class="docutils literal notranslate"><span class="pre">invoke</span></code> unwinds) are routed through EH cleanup
+entries, which are reached via a landing pad or a funclet dispatch block,
+depending on the target ABI.</p>
+<p>For Itanium-style EH (such as is used on x86-64 Linux), the IR uses <code class="docutils literal notranslate"><span class="pre">invoke</span></code>
+to call potentially-throwing operations and a <code class="docutils literal notranslate"><span class="pre">landingpad</span></code> instruction to
+capture the exception and selector values. The landing pad aggregates any
+catch and cleanup clauses for the current scope, and branches to a dispatch
+block that compares the selector to type IDs and jumps to the appropriate
+handler.</p>
+<p>For Windows, LLVM IR uses funclet-style EH: <code class="docutils literal notranslate"><span class="pre">catchswitch</span></code> and <code class="docutils literal notranslate"><span class="pre">catchpad</span></code> for
+handlers, and <code class="docutils literal notranslate"><span class="pre">cleanuppad</span></code> for cleanups, with <code class="docutils literal notranslate"><span class="pre">catchret</span></code> and <code class="docutils literal notranslate"><span class="pre">cleanupret</span></code>
+edges to resume normal flow. The personality function determines how these pads
+are interpreted by the backend.</p>
+</section>
+<section id="personality-and-abi-selection">
+<h2>Personality and ABI Selection<a class="headerlink" href="#personality-and-abi-selection" title="Link to this heading">¶</a></h2>
+<p>Each function with exception handling constructs is associated with a
+personality function (e.g. __gxx_personality_v0 for C++ on Linux). The
+personality function determines the ABI-specifc EH behavior of the
+function. The IR generation selects a personality function based on language
+options and the target ABI (e.g., Itanium, MSVC SEH, SJLJ, Wasm EH). This
+decision affects:</p>
+<ul class="simple">
+<li><p>Whether the IR uses landing pads or funclet pads.</p></li>
+<li><p>The shape of dispatch logic for catch and filter scopes.</p></li>
+<li><p>How termination or rethrow paths are modeled.</p></li>
+<li><p>Whether certain helper functions such as exception filters must be outlined.</p></li>
+</ul>
+<p>Because the personality choice is made during IR generation, the CFG shape
+directly reflects ABI-specific details.</p>
+</section>
+<section id="example-array-of-objects-with-throwing-constructor">
+<h2>Example: Array of Objects with Throwing Constructor<a class="headerlink" href="#example-array-of-objects-with-throwing-constructor" title="Link to this heading">¶</a></h2>
+<p>Consider:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyClass</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="n">MyClass</span><span class="p">();</span><span class="w"> </span><span class="c1">// may throw</span>
+<span class="w">  </span><span class="o">~</span><span class="n">MyClass</span><span class="p">();</span>
+<span class="p">};</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">doSomething</span><span class="p">();</span><span class="w"> </span><span class="c1">// may throw</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">f</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">MyClass</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+<span class="w">  </span><span class="n">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="high-level-behavior">
+<h3>High-level behavior<a class="headerlink" href="#high-level-behavior" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Construction of <code class="docutils literal notranslate"><span class="pre">arr</span></code> proceeds element-by-element. If an element constructor
+throws, destructors must run for any elements that were successfully
+constructed before the throw in reverse order of construction.</p></li>
+<li><p>After full construction, the call to <code class="docutils literal notranslate"><span class="pre">doSomething</span></code> may throw, in which case
+the destructors for all constructed elements must run, in reverse order.</p></li>
+<li><p>On normal exit, destructors for all elements run in reverse order.</p></li>
+</ul>
+</section>
+<section id="codegen-flow-and-key-components">
+<h3>Codegen flow and key components<a class="headerlink" href="#codegen-flow-and-key-components" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The surrounding compound statement enters a <code class="docutils literal notranslate"><span class="pre">CodeGenFunction::LexicalScope</span></code>,
+which is a <code class="docutils literal notranslate"><span class="pre">RunCleanupsScope</span></code> and is responsible for popping local cleanups
+at the end of the block.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CodeGenFunction::EmitDecl</span></code> routes the local variable to
+<code class="docutils literal notranslate"><span class="pre">CodeGenFunction::EmitVarDecl</span></code> and then <code class="docutils literal notranslate"><span class="pre">CodeGenFunction::EmitAutoVarDecl</span></code>,
+which in turn calls <code class="docutils literal notranslate"><span class="pre">EmitAutoVarAlloca</span></code>, <code class="docutils literal notranslate"><span class="pre">EmitAutoVarInit</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">EmitAutoVarCleanups</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CodeGenFunction::EmitCXXAggrConstructorCall</span></code> emits the array constructor
+loop. While emitting the loop body, it enters a <code class="docutils literal notranslate"><span class="pre">RunCleanupsScope</span></code> and uses
+<code class="docutils literal notranslate"><span class="pre">CodeGenFunction::pushRegularPartialArrayCleanup</span></code> to register a
+cleanup before calling <code class="docutils literal notranslate"><span class="pre">CodeGenFunction::EmitCXXConstructorCall</span></code> for one
+element in the loop iteration. If this constructor were to throw an exception,
+the cleanup handler would destroy the previously constructed elements in
+reverse order.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CodeGenFunction::EmitAutoVarCleanups</span></code> calls <code class="docutils literal notranslate"><span class="pre">emitAutoVarTypeCleanup</span></code>,
+which ultimately registers a <code class="docutils literal notranslate"><span class="pre">DestroyObject</span></code> cleanup via
+<code class="docutils literal notranslate"><span class="pre">CodeGenFunction::pushDestroy</span></code> / <code class="docutils literal notranslate"><span class="pre">pushFullExprCleanup</span></code> for the full-array
+destructor path.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DestroyObject</span></code> uses <code class="docutils literal notranslate"><span class="pre">CodeGenFunction::destroyCXXObject</span></code>, which emits the
+actual destructor call via <code class="docutils literal notranslate"><span class="pre">CodeGenFunction::EmitCXXDestructorCall</span></code>.</p></li>
+<li><p>Cleanup emission helpers (e.g., <code class="docutils literal notranslate"><span class="pre">CodeGenFunction::PopCleanupBlock</span></code> and
+<code class="docutils literal notranslate"><span class="pre">CodeGenFunction::EmitBranchThroughCleanup</span></code>) thread both normal and EH exits
+through the cleanup blocks as scopes are popped.</p></li>
+<li><p>The cleanup is represented as an <code class="docutils literal notranslate"><span class="pre">EHCleanupScope</span></code> on <code class="docutils literal notranslate"><span class="pre">EHScopeStack</span></code>, and
+its <code class="docutils literal notranslate"><span class="pre">Emit</span></code> method generates a loop that calls the destructor on the
+initialized range in reverse order.</p></li>
+</ul>
+<p>The above function names and flow are accurate as of LLVM 22.0, but this is
+subject to change as the code evolves, and this document might not be updated to
+reflect the exact functions used.</p>
+</section>
+</section>
+<section id="example-temporary-object-materialization">
+<h2>Example: Temporary object materialization<a class="headerlink" href="#example-temporary-object-materialization" title="Link to this heading">¶</a></h2>
+<p>Consider:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyClass</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="n">MyClass</span><span class="p">();</span>
+<span class="w">  </span><span class="o">~</span><span class="n">MyClass</span><span class="p">();</span>
+<span class="p">};</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">useMyClass</span><span class="p">(</span><span class="n">MyClass</span><span class="w"> </span><span class="o">&amp;</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">f</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">useMyClass</span><span class="p">(</span><span class="n">MyClass</span><span class="p">());</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="id1">
+<h3>High-level behavior<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The temporary <code class="docutils literal notranslate"><span class="pre">MyClass</span></code> is materialized for the call argument.</p></li>
+<li><p>The temporary must be destroyed at the end of the full-expression, both on
+the normal path and on the exceptional path if <code class="docutils literal notranslate"><span class="pre">useMyClass</span></code> throws.</p></li>
+<li><p>If the constructor throws, the temporary is not considered constructed and no
+destructor runs.</p></li>
+</ul>
+</section>
+<section id="codegen-flow-and-key-functions">
+<h3>Codegen flow and key functions<a class="headerlink" href="#codegen-flow-and-key-functions" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CodeGenFunction::EmitExprWithCleanups</span></code> wraps the full-expression in a
+<code class="docutils literal notranslate"><span class="pre">RunCleanupsScope</span></code> so that full-expression cleanups are run after the call.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CodeGenFunction::EmitMaterializeTemporaryExpr</span></code> creates storage for the
+temporary via <code class="docutils literal notranslate"><span class="pre">createReferenceTemporary</span></code> and initializes it. For record
+temporaries this flows through <code class="docutils literal notranslate"><span class="pre">EmitAnyExprToMem</span></code> and
+<code class="docutils literal notranslate"><span class="pre">CodeGenFunction::EmitCXXConstructExpr</span></code>, which calls
+<code class="docutils literal notranslate"><span class="pre">CodeGenFunction::EmitCXXConstructorCall</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pushTemporaryCleanup</span></code> registers the destructor as a full-expression
+cleanup by calling <code class="docutils literal notranslate"><span class="pre">CodeGenFunction::pushDestroy</span></code> for
+<code class="docutils literal notranslate"><span class="pre">SD_FullExpression</span></code> temporaries.</p></li>
+<li><p>The cleanup ultimately uses <code class="docutils literal notranslate"><span class="pre">DestroyObject</span></code> and
+<code class="docutils literal notranslate"><span class="pre">CodeGenFunction::destroyCXXObject</span></code>, which emits
+<code class="docutils literal notranslate"><span class="pre">CodeGenFunction::EmitCXXDestructorCall</span></code>.</p></li>
+</ul>
+<p>The above function names and flow are accurate as of LLVM 22.0, but this is
+subject to change as the code evolves, and this document might not be updated to
+reflect the exact functions used.</p>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          <a class="prev-page" href="ConstantInterpreter.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Constant Interpreter</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">LLVM IR Generation for EH and Cleanups</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#core-model">Core Model</a></li>
+<li><a class="reference internal" href="#key-components">Key Components</a></li>
+<li><a class="reference internal" href="#cleanup-destination-routing">Cleanup Destination Routing</a><ul>
+<li><a class="reference internal" href="#branch-fixups-for-forward-gotos">Branch Fixups for Forward Gotos</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exceptional-cleanups-and-eh-dispatch">Exceptional Cleanups and EH Dispatch</a></li>
+<li><a class="reference internal" href="#personality-and-abi-selection">Personality and ABI Selection</a></li>
+<li><a class="reference internal" href="#example-array-of-objects-with-throwing-constructor">Example: Array of Objects with Throwing Constructor</a><ul>
+<li><a class="reference internal" href="#high-level-behavior">High-level behavior</a></li>
+<li><a class="reference internal" href="#codegen-flow-and-key-components">Codegen flow and key components</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-temporary-object-materialization">Example: Temporary object materialization</a><ul>
+<li><a class="reference internal" href="#id1">High-level behavior</a></li>
+<li><a class="reference internal" href="#codegen-flow-and-key-functions">Codegen flow and key functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=7d86a446"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>

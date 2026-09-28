@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Clang 3.9 Release Notes &#8212; Clang 3.9 文档</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
+    <script src="_static/documentation_options.js?v=9016a3c2"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/ReleaseNotes.html" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Clang Compiler User&#39;s Manual" href="UsersManual.html" />
+    <link rel="prev" title="Using Clang as a Compiler" href="index.html" />
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Clang 3.9 文档</span></a></h1>
+        <h2 class="heading"><span>Clang 3.9 Release Notes</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">Using Clang as a Compiler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">目录</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="UsersManual.html">Clang Compiler User's Manual</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="clang-3-9-release-notes">
+<h1>Clang 3.9 Release Notes<a class="headerlink" href="#clang-3-9-release-notes" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="id1">
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id3">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#what-s-new-in-clang-3-9" id="id4">What's New in Clang 3.9?</a></p>
+<ul>
+<li><p><a class="reference internal" href="#major-new-features" id="id5">Major New Features</a></p></li>
+<li><p><a class="reference internal" href="#attribute-changes-in-clang" id="id6">Attribute Changes in Clang</a></p></li>
+<li><p><a class="reference internal" href="#windows-support" id="id7">Windows Support</a></p></li>
+<li><p><a class="reference internal" href="#c-language-changes-in-clang" id="id8">C Language Changes in Clang</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id9">C++ Language Changes in Clang</a></p></li>
+<li><p><a class="reference internal" href="#opencl-c-language-changes-in-clang" id="id10">OpenCL C Language Changes in Clang</a></p></li>
+<li><p><a class="reference internal" href="#openmp-support-in-clang" id="id11">OpenMP Support in Clang</a></p></li>
+<li><p><a class="reference internal" href="#ast-matchers" id="id12">AST Matchers</a></p></li>
+<li><p><a class="reference internal" href="#static-analyzer" id="id13">Static Analyzer</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#additional-information" id="id14">Additional Information</a></p></li>
+</ul>
+</nav>
+<p>Written by the <a class="reference external" href="http://llvm.org/">LLVM Team</a></p>
+<section id="introduction">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>This document contains the release notes for the Clang C/C++/Objective-C
+frontend, part of the LLVM Compiler Infrastructure, release 3.9. Here we
+describe the status of Clang in some detail, including major
+improvements from the previous release and new feature work. For the
+general LLVM release notes, see <a class="reference external" href="http://llvm.org/docs/ReleaseNotes.html">the LLVM
+documentation</a>. All LLVM
+releases may be downloaded from the <a class="reference external" href="http://llvm.org/releases/">LLVM releases web
+site</a>.</p>
+<p>For more information about Clang or LLVM, including information about
+the latest release, please check out the main please see the <a class="reference external" href="http://clang.llvm.org">Clang Web
+Site</a> or the <a class="reference external" href="http://llvm.org">LLVM Web
+Site</a>.</p>
+</section>
+<section id="what-s-new-in-clang-3-9">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">What's New in Clang 3.9?</a><a class="headerlink" href="#what-s-new-in-clang-3-9" title="Link to this heading">¶</a></h2>
+<p>Some of the major new features and improvements to Clang are listed
+here. Generic improvements to Clang as a whole or to its underlying
+infrastructure are described first, followed by language-specific
+sections with improvements to Clang's support for those languages.</p>
+<section id="major-new-features">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Major New Features</a><a class="headerlink" href="#major-new-features" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Clang will no longer pass <code class="docutils literal notranslate"><span class="pre">--build-id</span></code> by default to the linker. In modern
+linkers that is a relatively expensive option. It can be passed explicitly
+with <code class="docutils literal notranslate"><span class="pre">-Wl,--build-id</span></code>. To have clang always pass it, build clang with
+<code class="docutils literal notranslate"><span class="pre">-DENABLE_LINKER_BUILD_ID</span></code>.</p></li>
+<li><p>On Itanium ABI targets, attribute abi_tag is now supported for compatibility
+with GCC. Clang's implementation of abi_tag is mostly compatible with GCC ABI
+version 10.</p></li>
+</ul>
+<section id="improvements-to-clang-s-diagnostics">
+<h4>Improvements to Clang's diagnostics<a class="headerlink" href="#improvements-to-clang-s-diagnostics" title="Link to this heading">¶</a></h4>
+<p>Clang's diagnostics are constantly being improved to catch more issues,
+explain them more clearly, and provide more accurate source information
+about them. The improvements since the 3.8 release include:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-Wcomma</span></code> is a new warning to show most uses of the builtin comma operator.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Wfloat-conversion</span></code> has two new sub-warnings to give finer grain control for
+floating point to integer conversion warnings.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Wfloat-overflow-conversion</span></code> detects when a constant floating point value
+is converted to an integer type and will overflow the target type.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Wfloat-zero-conversion</span></code> detects when a non-zero floating point value is
+converted to a zero integer value.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="attribute-changes-in-clang">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Attribute Changes in Clang</a><a class="headerlink" href="#attribute-changes-in-clang" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">nodebug</span></code> attribute may now be applied to static, global, and local
+variables (but not parameters or non-static data members). This will suppress
+all debugging information for the variable (and its type, if there are no
+other uses of the type).</p></li>
+</ul>
+</section>
+<section id="windows-support">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Windows Support</a><a class="headerlink" href="#windows-support" title="Link to this heading">¶</a></h3>
+<p>TLS is enabled for Cygwin and defaults to -femulated-tls.</p>
+<p>Proper support, including correct mangling and overloading, added for
+MS-specific &quot;__unaligned&quot; type qualifier.</p>
+<p>clang-cl now has limited support for the precompiled header flags /Yc, /Yu, and
+/Fp.  If the precompiled header is passed on the compile command with /FI, then
+the precompiled header flags are honored.  But if the precompiled header is
+included by an <code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">&lt;stdafx.h&gt;</span></code> in each source file instead of by a
+<code class="docutils literal notranslate"><span class="pre">/FIstdafx.h</span></code> flag, these flag continue to be ignored.</p>
+<p>clang-cl has a new flag, <code class="docutils literal notranslate"><span class="pre">/imsvc</span> <span class="pre">&lt;dir&gt;</span></code>, for adding a directory to the system
+include search path (where warnings are disabled by default) without having to
+set <code class="docutils literal notranslate"><span class="pre">%INCLUDE%</span></code>.</p>
+</section>
+<section id="c-language-changes-in-clang">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">C Language Changes in Clang</a><a class="headerlink" href="#c-language-changes-in-clang" title="Link to this heading">¶</a></h3>
+<p>The -faltivec and -maltivec flags no longer silently include altivec.h on Power platforms.</p>
+<p><a class="reference external" href="https://developer.android.com/guide/topics/renderscript/compute.html">RenderScript</a>
+support has been added to the frontend and enabled by the '-x renderscript'
+option or the '.rs' file extension.</p>
+</section>
+<section id="id2">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">C++ Language Changes in Clang</a><a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>Clang now enforces the rule that a <em>using-declaration</em> cannot name an enumerator of a
+scoped enumeration.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Foo</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">E</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="p">}</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Bar</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">Foo</span><span class="o">::</span><span class="n">E</span><span class="o">::</span><span class="n">e</span><span class="p">;</span><span class="w"> </span><span class="c1">// error</span>
+<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Foo</span><span class="o">::</span><span class="n">E</span><span class="o">::</span><span class="n">e</span><span class="p">;</span><span class="w"> </span><span class="c1">// ok</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Clang now enforces the rule that an enumerator of an unscoped enumeration declared at
+class scope can only be named by a <em>using-declaration</em> in a derived class.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="nc">E</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="p">}</span>
+<span class="k">using</span><span class="w"> </span><span class="n">Foo</span><span class="o">::</span><span class="n">e</span><span class="p">;</span><span class="w"> </span><span class="c1">// error</span>
+<span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Foo</span><span class="o">::</span><span class="n">e</span><span class="p">;</span><span class="w"> </span><span class="c1">// ok</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<section id="c-1z-feature-support">
+<h4>C++1z Feature Support<a class="headerlink" href="#c-1z-feature-support" title="Link to this heading">¶</a></h4>
+<p>Clang's experimental support for the upcoming C++1z standard can be enabled with <code class="docutils literal notranslate"><span class="pre">-std=c++1z</span></code>.
+Changes to C++1z features since Clang 3.8:</p>
+<ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">[[fallthrough]]</span></code>, <code class="docutils literal notranslate"><span class="pre">[[nodiscard]]</span></code>, and <code class="docutils literal notranslate"><span class="pre">[[maybe_unused]]</span></code> attributes are
+supported in C++11 onwards, and are largely synonymous with Clang's existing attributes
+<code class="docutils literal notranslate"><span class="pre">[[clang::fallthrough]]</span></code>, <code class="docutils literal notranslate"><span class="pre">[[gnu::warn_unused_result]]</span></code>, and <code class="docutils literal notranslate"><span class="pre">[[gnu::unused]]</span></code>.
+Use <code class="docutils literal notranslate"><span class="pre">-Wimplicit-fallthrough</span></code> to warn on unannotated fallthrough within <code class="docutils literal notranslate"><span class="pre">switch</span></code>
+statements.</p></li>
+<li><p>In C++1z mode, aggregate initialization can be performed for classes with base classes:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">B</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+<span class="n">B</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="c1">// b.n == 1, b.x == 2, b.y == 3</span>
+</pre></div>
+</div>
+</li>
+<li><p>The range in a range-based <code class="docutils literal notranslate"><span class="pre">for</span></code> statement can have different types for its <code class="docutils literal notranslate"><span class="pre">begin</span></code>
+and <code class="docutils literal notranslate"><span class="pre">end</span></code> iterators. This is permitted as an extension in C++11 onwards.</p></li>
+<li><p>Lambda-expressions can explicitly capture <code class="docutils literal notranslate"><span class="pre">*this</span></code> (to capture the surrounding object
+by copy). This is permitted as an extension in C++11 onwards.</p></li>
+<li><p>Objects of enumeration type can be direct-list-initialized from a value of the underlying
+type. <code class="docutils literal notranslate"><span class="pre">E{n}</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">E(n)</span></code>, except that it implies a check for a narrowing
+conversion.</p></li>
+<li><p>Unary <em>fold-expression</em>s over an empty pack are now rejected for all operators
+other than <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">||</span></code>, and <code class="docutils literal notranslate"><span class="pre">,</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="opencl-c-language-changes-in-clang">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">OpenCL C Language Changes in Clang</a><a class="headerlink" href="#opencl-c-language-changes-in-clang" title="Link to this heading">¶</a></h3>
+<p>Clang now has support for all OpenCL 2.0 features.  In particular, the following
+features have been completed since the previous release:</p>
+<ul class="simple">
+<li><p>Pipe builtin functions (s6.13.16.2-4).</p></li>
+<li><p>Dynamic parallelism support via the <code class="docutils literal notranslate"><span class="pre">enqueue_kernel</span></code> Clang builtin function,
+as well as the kernel query functions from s6.13.17.6.</p></li>
+<li><p>Address space conversion functions <code class="docutils literal notranslate"><span class="pre">to_{global/local/private}</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nosvm</span></code> attribute support.</p></li>
+<li><p>Improved diagnostic and generation of Clang Blocks used in OpenCL kernel code.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">opencl_unroll_hint</span></code> pragma.</p></li>
+</ul>
+<p>Several miscellaneous improvements have been made:</p>
+<ul>
+<li><p>Supported extensions are now part of the target representation to give correct
+diagnostics for unsupported target features during compilation. For example,
+when compiling for a target that does not support the double precision
+floating point extension, Clang will give an error when encountering the
+<code class="docutils literal notranslate"><span class="pre">cl_khr_fp64</span></code> pragma. Several missing extensions were added covering up to
+and including OpenCL 2.0.</p></li>
+<li><p>Clang now comes with the OpenCL standard headers declaring builtin types and
+functions up to and including OpenCL 2.0 in <code class="docutils literal notranslate"><span class="pre">lib/Headers/opencl-c.h</span></code>. By
+default, Clang will not include this header. It can be included either using
+the regular <code class="docutils literal notranslate"><span class="pre">-I&lt;path</span> <span class="pre">to</span> <span class="pre">header</span> <span class="pre">location&gt;</span></code> directive or (if the default one
+from installation is to be used) using the <code class="docutils literal notranslate"><span class="pre">-finclude-default-header</span></code>
+frontend flag.</p>
+<p>Example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>echo &quot;bool is_wg_uniform(int i){return get_enqueued_local_size(i)==get_local_size(i);}&quot; &gt; test.cl
+clang -cc1 -finclude-default-header -cl-std=CL2.0 test.cl
+</pre></div>
+</div>
+<p>All builtin function declarations from OpenCL 2.0 will be automatically
+visible in test.cl.</p>
+</li>
+<li><p>Image types have been improved with better diagnostics for access qualifiers.
+Images with one access qualifier type cannot be used in declarations for
+another type. Also qualifiers are now propagated from the frontend down to
+libraries and backends.</p></li>
+<li><p>Diagnostic improvements for OpenCL types, address spaces and vectors.</p></li>
+<li><p>Half type literal support has been added. For example, <code class="docutils literal notranslate"><span class="pre">1.0h</span></code> represents a
+floating point literal in half precision, i.e., the value <code class="docutils literal notranslate"><span class="pre">0xH3C00</span></code>.</p></li>
+<li><p>The Clang driver now accepts OpenCL compiler options <code class="docutils literal notranslate"><span class="pre">-cl-*</span></code> (following the
+OpenCL Spec v1.1-1.2 s5.8). For example, the <code class="docutils literal notranslate"><span class="pre">-cl-std=CL1.2</span></code> option from the
+spec enables compilation for OpenCL 1.2, or <code class="docutils literal notranslate"><span class="pre">-cl-mad-enable</span></code> will enable
+fusing multiply-and-add operations.</p></li>
+<li><p>Clang now uses function metadata instead of module metadata to propagate
+information related to OpenCL kernels e.g. kernel argument information.</p></li>
+</ul>
+</section>
+<section id="openmp-support-in-clang">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">OpenMP Support in Clang</a><a class="headerlink" href="#openmp-support-in-clang" title="Link to this heading">¶</a></h3>
+<p>Added support for all non-offloading features from OpenMP 4.5, including using
+data members in private clauses of non-static member functions. Additionally,
+data members can be used as loop control variables in loop-based directives.</p>
+<p>Currently Clang supports OpenMP 3.1 and all non-offloading features of
+OpenMP 4.0/4.5. Offloading features are under development. Clang defines macro
+_OPENMP and sets it to OpenMP 3.1 (in accordance with OpenMP standard) by
+default. User may change this value using <code class="docutils literal notranslate"><span class="pre">-fopenmp-version=[31|40|45]</span></code> option.</p>
+<p>The codegen for OpenMP constructs was significantly improved to produce much
+more stable and faster code.</p>
+</section>
+<section id="ast-matchers">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">AST Matchers</a><a class="headerlink" href="#ast-matchers" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>has and hasAnyArgument: Matchers no longer ignore parentheses and implicit
+casts on the argument before applying the inner matcher. The fix was done to
+allow for greater control by the user. In all existing checkers that use this
+matcher all instances of code <code class="docutils literal notranslate"><span class="pre">hasAnyArgument(&lt;inner</span> <span class="pre">matcher&gt;)</span></code> or
+<code class="docutils literal notranslate"><span class="pre">has(&lt;inner</span> <span class="pre">matcher&gt;)</span></code> must be changed to
+<code class="docutils literal notranslate"><span class="pre">hasAnyArgument(ignoringParenImpCasts(&lt;inner</span> <span class="pre">matcher&gt;))</span></code> or
+<code class="docutils literal notranslate"><span class="pre">has(ignoringParenImpCasts(&lt;inner</span> <span class="pre">matcher&gt;))</span></code>.</p></li>
+</ul>
+</section>
+<section id="static-analyzer">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">Static Analyzer</a><a class="headerlink" href="#static-analyzer" title="Link to this heading">¶</a></h3>
+<p>The analyzer now checks for incorrect usage of MPI APIs in C and C++. This
+check can be enabled by passing the following command to scan-build:
+<code class="docutils literal notranslate"><span class="pre">-enable-checker</span> <span class="pre">optin.mpi.MPI-Checker.</span></code></p>
+<p>The analyzer now checks for improper instance cleanup up in Objective-C
+<code class="docutils literal notranslate"><span class="pre">-dealloc</span></code> methods under manual retain/release.</p>
+<p>On Windows, checks for memory leaks, double frees, and use-after-free problems
+are now enabled by default.</p>
+<p>The analyzer now includes scan-build-py, an experimental reimplementation of
+scan-build in Python that also creates compilation databases.</p>
+<p>The scan-build tool now supports a <code class="docutils literal notranslate"><span class="pre">--force-analyze-debug-code</span></code> flag that
+forces projects to analyze in debug mode. This flag leaves in assertions and so
+typically results in fewer false positives.</p>
+</section>
+</section>
+<section id="additional-information">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Additional Information</a><a class="headerlink" href="#additional-information" title="Link to this heading">¶</a></h2>
+<p>A wide variety of additional information is available on the <a class="reference external" href="http://clang.llvm.org/">Clang web
+page</a>. The web page contains versions of the
+API documentation which are up-to-date with the Subversion version of
+the source code. You can access versions of these documents specific to
+this release by going into the &quot;<code class="docutils literal notranslate"><span class="pre">clang/docs/</span></code>&quot; directory in the Clang
+tree.</p>
+<p>If you have any questions or comments about Clang, please feel free to
+contact us via the <a class="reference external" href="http://lists.llvm.org/mailman/listinfo/cfe-dev">mailing
+list</a>.</p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">Using Clang as a Compiler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">目录</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="UsersManual.html">Clang Compiler User's Manual</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; 版权所有 2007-2026, The Clang Team.
+      由 <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3创建。
+    </div>
+  </body>
+</html>

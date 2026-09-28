@@ -1,0 +1,954 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="Debugging C++ Coroutines" href="DebuggingCoroutines.html" /><link rel="prev" title="ThinLTO" href="ThinLTO.html" />
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/APINotes.html" />
+        <link rel="prefetch" href="_static/LLVMWyvernSmall.png" as="image" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+        <title>API Notes: Annotations Without Modifying Headers - Clang</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=548e816e" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86c9e7d9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Clang Release Notes</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="UsersManual.html">Clang Compiler User's Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="LanguageExtensions.html">Clang Language Extensions</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Clang Language Extensions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Block-ABI-Apple.html">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrossCompilation.html">Cross-compilation using Clang</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ClangStaticAnalyzer.html">Clang Static Analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Clang Static Analyzer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="analyzer/checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/user-docs.html">2. User Docs</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 2. User Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/UsingWithXCode.html">2.2. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FilingBugs.html">2.3. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CrossTranslationUnit.html">2.4. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/TaintAnalysisConfiguration.html">2.5. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/Annotations.html">2.6. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FAQ.html">2.7. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/developer-docs.html">3. Developer Docs</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 3. Developer Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/PerformanceInvestigation.html">3.6. Performance Investigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Scalable Static Analysis Framework</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Developer Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DataFlowAnalysisIntro.html">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSanitizer.html">ThreadSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MemorySanitizer.html">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataFlowSanitizer.html">DataFlowSanitizer</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of DataFlowSanitizer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="DataFlowSanitizerDesign.html">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerCoverage.html">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ControlFlowIntegrity.html">Control Flow Integrity</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Control Flow Integrity</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StandardCPlusPlusModules.html">Standard C++ Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MisExpect.html">Misexpect</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Misexpect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="OpenCLSupport.html">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Clang HLSL Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of HLSL Design and Implementation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CIR/index.html">ClangIR</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of ClangIR</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CIR/ABILowering.html">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CommandGuide/index.html">Clang "man" pages</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Clang "man" pages</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefactoringEngine.html">Clang's refactoring engine</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ClangTools.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangRepl.html">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InternalsManual.html">"Clang" CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizerDesign.html">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LLVMExceptionHandlingCodeGen.html">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/APINotes.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/APINotes.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="api-notes-annotations-without-modifying-headers">
+<h1>API Notes: Annotations Without Modifying Headers<a class="headerlink" href="#api-notes-annotations-without-modifying-headers" title="Link to this heading">¶</a></h1>
+<p><strong>The Problem:</strong> You have headers you want to use, but you also want to add
+extra information to the API. You don't want to put that information in the
+headers themselves --- perhaps because you want to keep them clean for other
+clients, or perhaps because they're from some open source project and you don't
+want to modify them at all.</p>
+<p><strong>Incomplete solution:</strong> Redeclare all the interesting parts of the API in your
+own header and add the attributes you want. Unfortunately, this:</p>
+<ul class="simple">
+<li><p>doesn't work with attributes that must be present on a definition</p></li>
+<li><p>doesn't allow changing the definition in other ways</p></li>
+<li><p>requires your header to be included in any client code to take effect</p></li>
+</ul>
+<p><strong>Better solution:</strong> Provide a &quot;sidecar&quot; file with the information you want to
+add, and have that automatically get picked up by the module-building logic in
+the compiler.</p>
+<p>That's API notes.</p>
+<p>API notes use a YAML-based file format. YAML is a format best explained by
+example, so here is a <a class="reference external" href="https://github.com/llvm/llvm-project/blob/main/clang/test/APINotes/Inputs/Frameworks/SomeKit.framework/Headers/SomeKit.apinotes">small example</a>
+from the compiler test suite of API
+notes for a hypothetical &quot;SomeKit&quot; framework.</p>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p>API notes files are found relative to the module map that defines a module,
+under the name &quot;SomeKit.apinotes&quot; for a module named &quot;SomeKit&quot;. Additionally, a
+file named &quot;SomeKit_private.apinotes&quot; will also be picked up to go with a
+private module map. For bare modules these two files will be in the same
+directory as the corresponding module map; for framework modules, they should
+be placed in the Headers and PrivateHeaders directories, respectively. The
+module map for a private top-level framework module should be placed in the
+PrivateHeaders directory as well, though it does not need an additional
+&quot;_private&quot; suffix on its name.</p>
+<p>Clang will search for API notes files next to module maps only when passed the
+<code class="docutils literal notranslate"><span class="pre">-fapinotes-modules</span></code> option.</p>
+</section>
+<section id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Since they're identified by module name, API notes cannot be used to modify
+arbitrary textual headers.</p></li>
+</ul>
+</section>
+<section id="versioned-api-notes">
+<h2>&quot;Versioned&quot; API Notes<a class="headerlink" href="#versioned-api-notes" title="Link to this heading">¶</a></h2>
+<p>Many API notes affect how a C API is imported into Swift. In order to change
+that behavior while still remaining backwards-compatible, API notes can be
+selectively applied based on the Swift compatibility version provided to the
+compiler (e.g. <code class="docutils literal notranslate"><span class="pre">-fapi-notes-swift-version=5</span></code>). The rule is that an
+explicitly-versioned API note applies to that version <em>and all earlier
+versions,</em> and any applicable explicitly-versioned API note takes precedence
+over an unversioned API note.</p>
+</section>
+<section id="reference">
+<h2>Reference<a class="headerlink" href="#reference" title="Link to this heading">¶</a></h2>
+<p>An API notes file contains a YAML dictionary with the following top-level
+entries:</p>
+<dl class="field-list">
+<dt class="field-odd">Name<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The name of the module (the framework name, for frameworks). Note that this
+is always the name of a top-level module, even within a private API notes
+file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Name</span><span class="p">:</span> <span class="n">MyFramework</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Classes, Protocols, Tags, Typedefs, Globals, Enumerators, Functions, Namespaces<span class="colon">:</span></dt>
+<dd class="field-even"><p>Arrays of top-level declarations. Each entry in the array must have a
+'Name' key with its Objective-C or C++ name. &quot;Tags&quot; refers to structs,
+C++ classes, enums, and unions; &quot;Classes&quot; refers to Objective-C classes;
+&quot;Enumerators&quot; refers to enum cases.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Classes:
+- Name: MyController
+  …
+- Name: MyView
+  …
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">SwiftVersions<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Contains explicit information for backwards compatibility. Each entry in
+the array contains a 'Version' key, which should be set to '4' for
+annotations that only apply to Swift 4 mode and earlier. The other entries
+in this dictionary are the same declaration entries as at the top level:
+Classes, Protocols, Tags, Typedefs, Globals, Enumerators, and Functions.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>SwiftVersions:
+- Version: 4
+  Classes: …
+  Protocols: …
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>Each entry under 'Classes' and 'Protocols' can contain &quot;Methods&quot; and
+&quot;Properties&quot; arrays, in addition to the attributes described below:</p>
+<dl class="field-list">
+<dt class="field-odd">Methods<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Identified by 'Selector' and 'MethodKind'; the MethodKind is either
+&quot;Instance&quot; or &quot;Class&quot;.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Classes:
+- Name: UIViewController
+  Methods:
+  - Selector: "presentViewController:animated:"
+    MethodKind: Instance
+    …
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Properties<span class="colon">:</span></dt>
+<dd class="field-even"><p>Identified by 'Name' and 'PropertyKind'; the PropertyKind is also either
+&quot;Instance&quot; or &quot;Class&quot;.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Classes:
+- Name: UIView
+  Properties:
+  - Name: subviews
+    PropertyKind: Instance
+    …
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>Each entry under &quot;Tags&quot; can contain &quot;Methods&quot;, &quot;Fields&quot;, and nested &quot;Tags&quot;
+arrays. Methods under Tags are C++ methods identified by 'Name' (rather than
+'Selector' and 'MethodKind' as used for Objective-C methods).</p>
+<dl class="field-list">
+<dt class="field-odd">Methods (under Tags)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Identified by 'Name'.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Tags:
+- Name: MyClass
+  Methods:
+  - Name: doSomething
+    …
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Fields<span class="colon">:</span></dt>
+<dd class="field-even"><p>Identified by 'Name'.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Tags:
+- Name: MyStruct
+  Fields:
+  - Name: value
+    Nullability: O
+    …
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">Tags (nested)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Nested tags follow the same schema as top-level Tags entries.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Tags:
+- Name: OuterClass
+  Tags:
+  - Name: InnerClass
+    …
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>Each declaration supports the following annotations (if relevant to that
+declaration kind), all of which are optional:</p>
+<dl class="field-list">
+<dt class="field-odd">SwiftName<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">NS_SWIFT_NAME</span></code>. For a method, must include the full Swift name
+with all arguments. Use &quot;_&quot; to omit an argument label.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Selector</span><span class="p">:</span> <span class="s2">"presentViewController:animated:"</span>
+  <span class="n">MethodKind</span><span class="p">:</span> <span class="n">Instance</span>
+  <span class="n">SwiftName</span><span class="p">:</span> <span class="s2">"present(_:animated:)"</span>
+
+<span class="o">-</span> <span class="n">Class</span><span class="p">:</span> <span class="n">NSBundle</span>
+  <span class="n">SwiftName</span><span class="p">:</span> <span class="n">Bundle</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">SwiftImportAs<span class="colon">:</span></dt>
+<dd class="field-even"><p>For a class, possible values are <code class="docutils literal notranslate"><span class="pre">owned</span></code> (equivalent to
+<code class="docutils literal notranslate"><span class="pre">SWIFT_SELF_CONTAINED</span></code>) or <code class="docutils literal notranslate"><span class="pre">reference</span></code> (equivalent to
+<code class="docutils literal notranslate"><span class="pre">SWIFT_SHARED_REFERENCE</span></code>, also requires specifying <code class="docutils literal notranslate"><span class="pre">SwiftReleaseOp</span></code> and
+<code class="docutils literal notranslate"><span class="pre">SwiftRetainOp</span></code>).</p>
+<p>For a method, possible values are <code class="docutils literal notranslate"><span class="pre">unsafe</span></code> (equivalent
+to <code class="docutils literal notranslate"><span class="pre">SWIFT_RETURNS_INDEPENDENT_VALUE</span></code>) or <code class="docutils literal notranslate"><span class="pre">computed_property</span></code> (equivalent to
+<code class="docutils literal notranslate"><span class="pre">SWIFT_COMPUTED_PROPERTY</span></code>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Tags</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">OwnedStorage</span>
+  <span class="n">SwiftImportAs</span><span class="p">:</span> <span class="n">owned</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">SwiftRetainOp, SwiftReleaseOp<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Controls the lifetime operations of a class which uses custom reference
+counting. The class must be annotated as a reference type using
+<code class="docutils literal notranslate"><span class="pre">SwiftImportAs:</span> <span class="pre">reference</span></code>. The values are either names of global functions,
+each taking a single parameter of a pointer type, or <code class="docutils literal notranslate"><span class="pre">immortal</span></code> for a type
+that is considered alive for the duration of the program.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Tags</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">RefCountedStorage</span>
+  <span class="n">SwiftImportAs</span><span class="p">:</span> <span class="n">reference</span>
+  <span class="n">SwiftReleaseOp</span><span class="p">:</span> <span class="n">RCRelease</span>
+  <span class="n">SwiftRetainOp</span><span class="p">:</span> <span class="n">RCRetain</span>
+<span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">ImmortalSingleton</span>
+  <span class="n">SwiftImportAs</span><span class="p">:</span> <span class="n">reference</span>
+  <span class="n">SwiftReleaseOp</span><span class="p">:</span> <span class="n">immortal</span>
+  <span class="n">SwiftRetainOp</span><span class="p">:</span> <span class="n">immortal</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">SwiftCopyable<span class="colon">:</span></dt>
+<dd class="field-even"><p>Allows annotating a C++ class as non-copyable in Swift. Equivalent to
+<code class="docutils literal notranslate"><span class="pre">SWIFT_NONCOPYABLE</span></code>, or to an explicit conformance <code class="docutils literal notranslate"><span class="pre">:</span> <span class="pre">~Copyable</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Tags</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">tzdb</span>
+  <span class="n">SwiftCopyable</span><span class="p">:</span> <span class="n">false</span>
+</pre></div>
+</div>
+<p>A non-copyable type can have a &quot;destroy&quot; operation, specified with
+<cite>SwiftDestroyOp</cite>, which will be invoked on the instance when it is no
+longer in use to free up resources.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Tags</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">WGPUAdapterInfo</span>
+  <span class="n">SwiftCopyable</span><span class="p">:</span> <span class="n">false</span>
+  <span class="n">SwiftDestroyOp</span><span class="p">:</span> <span class="n">wgpuAdapterInfoFreeMembers</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">SwiftConformsTo<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Allows annotating a C++ class as conforming to a Swift protocol. Equivalent
+to <code class="docutils literal notranslate"><span class="pre">SWIFT_CONFORMS_TO_PROTOCOL</span></code>. The value is a module-qualified name of a
+Swift protocol.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Tags</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">vector</span>
+  <span class="n">SwiftConformsTo</span><span class="p">:</span> <span class="n">Cxx</span><span class="o">.</span><span class="n">CxxSequence</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">SwiftSafety<span class="colon">:</span></dt>
+<dd class="field-even"><p>Import a declaration as <code class="docutils literal notranslate"><span class="pre">&#64;safe</span></code> or <code class="docutils literal notranslate"><span class="pre">&#64;unsafe</span></code> to Swift.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Tags</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">UnsafeType</span>
+  <span class="n">SwiftSafety</span><span class="p">:</span> <span class="n">unsafe</span>
+<span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">span</span>
+  <span class="n">Methods</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">size</span>
+      <span class="n">SwiftSafety</span><span class="p">:</span> <span class="n">safe</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">Availability, AvailabilityMsg<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A value of &quot;nonswift&quot; is equivalent to <code class="docutils literal notranslate"><span class="pre">NS_SWIFT_UNAVAILABLE</span></code>. A value of
+&quot;available&quot; can be used in the &quot;SwiftVersions&quot; section to undo the effect of
+&quot;nonswift&quot;.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Selector</span><span class="p">:</span> <span class="s2">"dealloc"</span>
+  <span class="n">MethodKind</span><span class="p">:</span> <span class="n">Instance</span>
+  <span class="n">Availability</span><span class="p">:</span> <span class="n">nonswift</span>
+  <span class="n">AvailabilityMsg</span><span class="p">:</span> <span class="s2">"prefer 'deinit'"</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">SwiftPrivate<span class="colon">:</span></dt>
+<dd class="field-even"><p>Equivalent to NS_REFINED_FOR_SWIFT.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">CGColorEqualToColor</span>
+  <span class="n">SwiftPrivate</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">Nullability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Used for properties and globals. There are four options, identified by their
+initials:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Nonnull</span></code> or <code class="docutils literal notranslate"><span class="pre">N</span></code> (corresponding to <code class="docutils literal notranslate"><span class="pre">_Nonnull</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Optional</span></code> or <code class="docutils literal notranslate"><span class="pre">O</span></code> (corresponding to <code class="docutils literal notranslate"><span class="pre">_Nullable</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Unspecified</span></code> or <code class="docutils literal notranslate"><span class="pre">U</span></code> (corresponding to <code class="docutils literal notranslate"><span class="pre">_Null_unspecified</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Scalar</span></code> or <code class="docutils literal notranslate"><span class="pre">S</span></code> (deprecated)</p></li>
+</ul>
+<p>Note that 'Nullability' is overridden by 'Type', even in a &quot;SwiftVersions&quot;
+section.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>'Nullability' can also be used to describe the argument types of methods
+and functions, but this usage is deprecated in favor of 'Parameters' (see
+below).</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">dataSource</span>
+  <span class="n">Nullability</span><span class="p">:</span> <span class="n">O</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">NullabilityOfRet<span class="colon">:</span></dt>
+<dd class="field-even"><p>Used for methods and functions. Describes the nullability of the return type.</p>
+<p>Note that 'NullabilityOfRet' is overridden by 'ResultType', even in a
+&quot;SwiftVersions&quot; section.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>Due to a compiler bug, 'NullabilityOfRet' may change nullability of the
+parameters as well (<a class="reference external" href="rdar://30544062">rdar://30544062</a>). Avoid using it and instead use
+'ResultType' and specify the return type along with a nullability
+annotation (see documentation for 'ResultType').</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Selector</span><span class="p">:</span> <span class="n">superclass</span>
+  <span class="n">MethodKind</span><span class="p">:</span> <span class="n">Class</span>
+  <span class="n">NullabilityOfRet</span><span class="p">:</span> <span class="n">O</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Used for properties and globals. This completely overrides the type of the
+declaration; it should ideally only be used for Swift backwards
+compatibility, when existing type information has been made more precise in a
+header. Prefer 'Nullability' and other annotations when possible.</p>
+<p>We parse the specified type as if it appeared at the location of the
+declaration whose type is being modified.  Macros are not available and
+nullability must be applied explicitly (even in an <code class="docutils literal notranslate"><span class="pre">NS_ASSUME_NONNULL_BEGIN</span></code>
+section).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">delegate</span>
+  <span class="n">PropertyKind</span><span class="p">:</span> <span class="n">Instance</span>
+  <span class="n">Type</span><span class="p">:</span> <span class="s2">"id"</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">ResultType<span class="colon">:</span></dt>
+<dd class="field-even"><p>Used for methods and functions. This completely overrides the return type; it
+should ideally only be used for Swift backwards compatibility, when existing
+type information has been made more precise in a header.</p>
+<p>We parse the specified type as if it appeared at the location of the
+declaration whose type is being modified.  Macros are not available and
+nullability must be applied explicitly (even in an <code class="docutils literal notranslate"><span class="pre">NS_ASSUME_NONNULL_BEGIN</span></code>
+section).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Selector</span><span class="p">:</span> <span class="s2">"subviews"</span>
+  <span class="n">MethodKind</span><span class="p">:</span> <span class="n">Instance</span>
+  <span class="n">ResultType</span><span class="p">:</span> <span class="s2">"NSArray * _Nonnull"</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">SwiftImportAsAccessors<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Used for properties. If true, the property will be exposed in Swift as its
+accessor methods, rather than as a computed property using <code class="docutils literal notranslate"><span class="pre">var</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">currentContext</span>
+  <span class="n">PropertyKind</span><span class="p">:</span> <span class="n">Class</span>
+  <span class="n">SwiftImportAsAccessors</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">NSErrorDomain<span class="colon">:</span></dt>
+<dd class="field-even"><p>Used for <code class="docutils literal notranslate"><span class="pre">NSError</span></code> code enums. The value is the name of the associated
+domain <code class="docutils literal notranslate"><span class="pre">NSString</span></code> constant; an empty string (<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>) means the enum is a
+normal enum rather than an error code.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">MKErrorCode</span>
+  <span class="n">NSErrorDomain</span><span class="p">:</span> <span class="n">MKErrorDomain</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">SwiftWrapper<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Controls <code class="docutils literal notranslate"><span class="pre">NS_STRING_ENUM</span></code> and <code class="docutils literal notranslate"><span class="pre">NS_EXTENSIBLE_STRING_ENUM</span></code>. There are three
+options:</p>
+<ul class="simple">
+<li><p>&quot;struct&quot; (extensible)</p></li>
+<li><p>&quot;enum&quot;</p></li>
+<li><p>&quot;none&quot;</p></li>
+</ul>
+<p>Note that even an &quot;enum&quot; wrapper is still presented as a struct in Swift;
+it's just a &quot;more enum-like&quot; struct.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">AVMediaType</span>
+  <span class="n">SwiftWrapper</span><span class="p">:</span> <span class="n">none</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">EnumKind<span class="colon">:</span></dt>
+<dd class="field-even"><p>Has the same effect as <code class="docutils literal notranslate"><span class="pre">NS_ENUM</span></code> and <code class="docutils literal notranslate"><span class="pre">NS_OPTIONS</span></code>. There are four options:</p>
+<ul class="simple">
+<li><p>&quot;NSEnum&quot; / &quot;CFEnum&quot;</p></li>
+<li><p>&quot;NSClosedEnum&quot; / &quot;CFClosedEnum&quot;</p></li>
+<li><p>&quot;NSOptions&quot; / &quot;CFOptions&quot;</p></li>
+<li><p>&quot;none&quot;</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">GKPhotoSize</span>
+  <span class="n">EnumKind</span><span class="p">:</span> <span class="n">none</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Used for methods and functions. Parameters are identified by a 0-based
+'Position' and support the 'Nullability', 'NoEscape', and 'Type' keys.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>Using 'Parameters' within a parameter entry to describe the parameters of a
+block is not implemented. Use 'Type' on the entire parameter instead.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Selector</span><span class="p">:</span> <span class="s2">"isEqual:"</span>
+  <span class="n">MethodKind</span><span class="p">:</span> <span class="n">Instance</span>
+  <span class="n">Parameters</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">Position</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">Nullability</span><span class="p">:</span> <span class="n">O</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">NoEscape<span class="colon">:</span></dt>
+<dd class="field-even"><p>Used only for block parameters. Equivalent to <code class="docutils literal notranslate"><span class="pre">NS_NOESCAPE</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">dispatch_sync</span>
+  <span class="n">Parameters</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">Position</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">NoEscape</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">SwiftBridge<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Used for Objective-C class types bridged to Swift value types. An empty
+string (&quot;&quot;) means a type is not bridged. Not supported outside of Apple
+frameworks (the Swift side of it requires conforming to implementation-detail
+protocols that are subject to change).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">NSIndexSet</span>
+  <span class="n">SwiftBridge</span><span class="p">:</span> <span class="n">IndexSet</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">SwiftReturnOwnership<span class="colon">:</span></dt>
+<dd class="field-even"><p>Used for methods and functions. Specifies the ownership convention for the
+return value when it is a foreign reference type (a type imported as
+<code class="docutils literal notranslate"><span class="pre">SwiftImportAs:</span> <span class="pre">reference</span></code>). Possible values are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">retained</span></code> --- the caller receives an owned reference
+(equivalent to <code class="docutils literal notranslate"><span class="pre">__attribute__((swift_attr(&quot;returns_retained&quot;)))</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unretained</span></code> --- the caller receives an unowned reference
+(equivalent to <code class="docutils literal notranslate"><span class="pre">__attribute__((swift_attr(&quot;returns_unretained&quot;)))</span></code>).</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Functions</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">createRefCounted</span>
+  <span class="n">SwiftReturnOwnership</span><span class="p">:</span> <span class="n">retained</span>
+<span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">getSharedRefCounted</span>
+  <span class="n">SwiftReturnOwnership</span><span class="p">:</span> <span class="n">unretained</span>
+<span class="n">Tags</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">ImmortalRefType</span>
+  <span class="n">SwiftImportAs</span><span class="p">:</span> <span class="n">reference</span>
+  <span class="n">Methods</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">Name</span><span class="p">:</span> <span class="n">createChild</span>
+    <span class="n">SwiftReturnOwnership</span><span class="p">:</span> <span class="n">retained</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">DesignatedInit<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Used for init methods. Equivalent to <code class="docutils literal notranslate"><span class="pre">NS_DESIGNATED_INITIALIZER</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Selector</span><span class="p">:</span> <span class="s2">"initWithFrame:"</span>
+  <span class="n">MethodKind</span><span class="p">:</span> <span class="n">Instance</span>
+  <span class="n">DesignatedInit</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="DebuggingCoroutines.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Debugging C++ Coroutines</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="ThinLTO.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">ThinLTO</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">API Notes: Annotations Without Modifying Headers</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#limitations">Limitations</a></li>
+<li><a class="reference internal" href="#versioned-api-notes">&quot;Versioned&quot; API Notes</a></li>
+<li><a class="reference internal" href="#reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=7d86a446"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>

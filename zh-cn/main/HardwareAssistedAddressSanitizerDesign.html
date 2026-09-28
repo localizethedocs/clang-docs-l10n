@@ -1,0 +1,802 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="Constant Interpreter" href="ConstantInterpreter.html" /><link rel="prev" title="ABI tags" href="ItaniumMangleAbiTags.html" />
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/HardwareAssistedAddressSanitizerDesign.html" />
+        <link rel="prefetch" href="_static/LLVMWyvernSmall.png" as="image" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+        <title>Hardware-assisted AddressSanitizer Design Documentation - Clang</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=548e816e" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86c9e7d9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Clang Release Notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="UsersManual.html">Clang Compiler User's Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="LanguageExtensions.html">Clang Language Extensions</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Clang Language Extensions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Block-ABI-Apple.html">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrossCompilation.html">Cross-compilation using Clang</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ClangStaticAnalyzer.html">Clang Static Analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Clang Static Analyzer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="analyzer/checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/user-docs.html">2. User Docs</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 2. User Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/UsingWithXCode.html">2.2. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FilingBugs.html">2.3. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CrossTranslationUnit.html">2.4. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/TaintAnalysisConfiguration.html">2.5. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/Annotations.html">2.6. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FAQ.html">2.7. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/developer-docs.html">3. Developer Docs</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 3. Developer Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/PerformanceInvestigation.html">3.6. Performance Investigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Scalable Static Analysis Framework</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Developer Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DataFlowAnalysisIntro.html">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSanitizer.html">ThreadSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MemorySanitizer.html">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataFlowSanitizer.html">DataFlowSanitizer</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of DataFlowSanitizer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="DataFlowSanitizerDesign.html">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerCoverage.html">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ControlFlowIntegrity.html">Control Flow Integrity</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Control Flow Integrity</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StandardCPlusPlusModules.html">Standard C++ Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MisExpect.html">Misexpect</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Misexpect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="OpenCLSupport.html">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Clang HLSL Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of HLSL Design and Implementation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="APINotes.html">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CIR/index.html">ClangIR</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of ClangIR</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CIR/ABILowering.html">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CommandGuide/index.html">Clang "man" pages</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Clang "man" pages</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefactoringEngine.html">Clang's refactoring engine</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ClangTools.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangRepl.html">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InternalsManual.html">"Clang" CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LLVMExceptionHandlingCodeGen.html">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/HardwareAssistedAddressSanitizerDesign.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/HardwareAssistedAddressSanitizerDesign.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="hardware-assisted-addresssanitizer-design-documentation">
+<h1>Hardware-assisted AddressSanitizer Design Documentation<a class="headerlink" href="#hardware-assisted-addresssanitizer-design-documentation" title="Link to this heading">¶</a></h1>
+<p>This page is a design document for
+<strong>hardware-assisted AddressSanitizer</strong> (or <strong>HWASan</strong>)
+a tool similar to <a class="reference internal" href="AddressSanitizer.html"><span class="doc">AddressSanitizer</span></a>,
+but based on partial hardware assistance.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="AddressSanitizer.html"><span class="doc">AddressSanitizer</span></a>
+tags every 8 bytes of the application memory with a 1 byte tag (using <em>shadow memory</em>),
+uses <em>redzones</em> to find buffer-overflows and
+<em>quarantine</em> to find use-after-free.
+The redzones, the quarantine, and, to a lesser extent, the shadow, are the
+sources of AddressSanitizer's memory overhead.
+See the <a class="reference external" href="https://www.usenix.org/system/files/conference/atc12/atc12-final39.pdf">AddressSanitizer paper</a> for details.</p>
+<p>AArch64 has <a class="reference external" href="http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.den0024a/ch12s05s01.html">Address Tagging</a> (or top-byte-ignore, TBI), a hardware feature that allows
+software to use the 8 most significant bits of a 64-bit pointer as
+a tag. HWASAN uses <a class="reference external" href="http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.den0024a/ch12s05s01.html">Address Tagging</a>
+to implement a memory safety tool, similar to <a class="reference internal" href="AddressSanitizer.html"><span class="doc">AddressSanitizer</span></a>,
+but with smaller memory overhead and slightly different (mostly better)
+accuracy guarantees.</p>
+<p>Intel's <a class="reference external" href="https://software.intel.com/content/www/us/en/develop/download/intel-architecture-instruction-set-extensions-programming-reference.html">Linear Address Masking</a> (LAM) also provides address tagging for
+x86_64, though it is not widely available in hardware yet. For x86_64, HWASAN
+has a limited implementation using page aliasing instead.</p>
+</section>
+<section id="algorithm">
+<h2>Algorithm<a class="headerlink" href="#algorithm" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Every heap/stack/global memory object is forcibly aligned by <code class="docutils literal notranslate"><span class="pre">TG</span></code> bytes
+(<code class="docutils literal notranslate"><span class="pre">TG</span></code> is e.g. 16 or 64). We call <code class="docutils literal notranslate"><span class="pre">TG</span></code> the <strong>tagging granularity</strong>.</p></li>
+<li><p>For every such object a random <code class="docutils literal notranslate"><span class="pre">TS</span></code>-bit tag <code class="docutils literal notranslate"><span class="pre">T</span></code> is chosen (<code class="docutils literal notranslate"><span class="pre">TS</span></code>, or tag size, is e.g. 4 or 8)</p></li>
+<li><p>The pointer to the object is tagged with <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p></li>
+<li><p>The memory for the object is also tagged with <code class="docutils literal notranslate"><span class="pre">T</span></code> (using a <code class="docutils literal notranslate"><span class="pre">TG=&gt;1</span></code> shadow memory)</p></li>
+<li><p>Every load and store is instrumented to read the memory tag and compare it
+with the pointer tag, exception is raised on tag mismatch.</p></li>
+</ul>
+<p>For a more detailed discussion of this approach see <a class="reference external" href="https://arxiv.org/pdf/1802.09517.pdf">https://arxiv.org/pdf/1802.09517.pdf</a></p>
+<section id="short-granules">
+<h3>Short granules<a class="headerlink" href="#short-granules" title="Link to this heading">¶</a></h3>
+<p>A short granule is a granule of size between 1 and <code class="docutils literal notranslate"><span class="pre">TG-1</span></code> bytes. The size
+of a short granule is stored at the location in shadow memory where the
+granule's tag is normally stored, while the granule's actual tag is stored
+in the last byte of the granule. This means that in order to verify that a
+pointer tag matches a memory tag, HWASAN must check for two possibilities:</p>
+<ul class="simple">
+<li><p>the pointer tag is equal to the memory tag in shadow memory, or</p></li>
+<li><p>the shadow memory tag is actually a short granule size, the value being loaded
+is in bounds of the granule and the pointer tag is equal to the last byte of
+the granule.</p></li>
+</ul>
+<p>Pointer tags between 1 to <code class="docutils literal notranslate"><span class="pre">TG-1</span></code> are possible and are as likely as any other
+tag. This means that these tags in memory have two interpretations: the full
+tag interpretation (where the pointer tag is between 1 and <code class="docutils literal notranslate"><span class="pre">TG-1</span></code> and the
+last byte of the granule is ordinary data) and the short tag interpretation
+(where the pointer tag is stored in the granule).</p>
+<p>When HWASAN detects an error near a memory tag between 1 and <code class="docutils literal notranslate"><span class="pre">TG-1</span></code>, it
+will show both the memory tag and the last byte of the granule. Currently,
+it is up to the user to disambiguate the two possibilities.</p>
+</section>
+</section>
+<section id="instrumentation">
+<h2>Instrumentation<a class="headerlink" href="#instrumentation" title="Link to this heading">¶</a></h2>
+<section id="memory-accesses">
+<h3>Memory Accesses<a class="headerlink" href="#memory-accesses" title="Link to this heading">¶</a></h3>
+<p>In the majority of cases, memory accesses are prefixed with a call to
+an outlined instruction sequence that verifies the tags. The code size
+and performance overhead of the call is reduced by using a custom calling
+convention that</p>
+<ul class="simple">
+<li><p>preserves most registers, and</p></li>
+<li><p>is specialized to the register containing the address, and the type and
+size of the memory access.</p></li>
+</ul>
+<p>Currently, the following sequence is used:</p>
+<div class="highlight-objdump notranslate"><div class="highlight"><pre><span></span><span class="x">// int foo(int *a) { return *a; }</span>
+<span class="x">// clang -O2 --target=aarch64-linux-android30 -fsanitize=hwaddress -S -o - load.c</span>
+<span class="x">[...]</span>
+<span class="x">foo:</span>
+<span class="x">      stp     x30, x20, [sp, #-16]!</span>
+<span class="x">      adrp    x20, :got:__hwasan_shadow               // load shadow address from GOT into x20</span>
+<span class="x">      ldr     x20, [x20, :got_lo12:__hwasan_shadow]</span>
+<span class="x">      bl      __hwasan_check_x0_2_short_v2            // call outlined tag check</span>
+<span class="x">                                                      // (arguments: x0 = address, x20 = shadow base;</span>
+<span class="x">                                                      // "2" encodes the access type and size)</span>
+<span class="x">      ldr     w0, [x0]                                // inline load</span>
+<span class="x">      ldp     x30, x20, [sp], #16</span>
+<span class="x">      ret</span>
+
+<span class="x">[...]</span>
+<span class="x">__hwasan_check_x0_2_short_v2:</span>
+<span class="x">      sbfx    x16, x0, #4, #52                        // shadow offset</span>
+<span class="x">      ldrb    w16, [x20, x16]                         // load shadow tag</span>
+<span class="x">      cmp     x16, x0, lsr #56                        // extract address tag, compare with shadow tag</span>
+<span class="x">      b.ne    .Ltmp0                                  // jump to short tag handler on mismatch</span>
+<span class="x">.Ltmp1:</span>
+<span class="x">      ret</span>
+<span class="x">.Ltmp0:</span>
+<span class="x">      cmp     w16, #15                                // is this a short tag?</span>
+<span class="x">      b.hi    .Ltmp2                                  // if not, error</span>
+<span class="x">      and     x17, x0, #0xf                           // find the address's position in the short granule</span>
+<span class="x">      add     x17, x17, #3                            // adjust to the position of the last byte loaded</span>
+<span class="x">      cmp     w16, w17                                // check that position is in bounds</span>
+<span class="x">      b.ls    .Ltmp2                                  // if not, error</span>
+<span class="x">      orr     x16, x0, #0xf                           // compute address of last byte of granule</span>
+<span class="x">      ldrb    w16, [x16]                              // load tag from it</span>
+<span class="x">      cmp     x16, x0, lsr #56                        // compare with pointer tag</span>
+<span class="x">      b.eq    .Ltmp1                                  // if matches, continue</span>
+<span class="x">.Ltmp2:</span>
+<span class="x">      stp     x0, x1, [sp, #-256]!                    // save original x0, x1 on stack (they will be overwritten)</span>
+<span class="x">      stp     x29, x30, [sp, #232]                    // create frame record</span>
+<span class="x">      mov     x1, #2                                  // set x1 to a constant indicating the type of failure</span>
+<span class="x">      adrp    x16, :got:__hwasan_tag_mismatch_v2      // call runtime function to save remaining registers and report error</span>
+<span class="x">      ldr     x16, [x16, :got_lo12:__hwasan_tag_mismatch_v2] // (load address from GOT to avoid potential register clobbers in delay load handler)</span>
+<span class="x">      br      x16</span>
+</pre></div>
+</div>
+</section>
+<section id="heap">
+<h3>Heap<a class="headerlink" href="#heap" title="Link to this heading">¶</a></h3>
+<p>Tagging the heap memory/pointers is done by <code class="docutils literal notranslate"><span class="pre">malloc</span></code>.
+This can be based on any malloc that forces all objects to be TG-aligned.
+<code class="docutils literal notranslate"><span class="pre">free</span></code> tags the memory with a different tag.</p>
+</section>
+<section id="stack">
+<h3>Stack<a class="headerlink" href="#stack" title="Link to this heading">¶</a></h3>
+<p>Stack frames are instrumented by aligning all non-promotable allocas
+by <code class="docutils literal notranslate"><span class="pre">TG</span></code> and tagging stack memory in function prologue and epilogue.</p>
+<p>Tags for different allocas in one function are <strong>not</strong> generated
+independently; doing that in a function with <code class="docutils literal notranslate"><span class="pre">M</span></code> allocas would require
+maintaining <code class="docutils literal notranslate"><span class="pre">M</span></code> live stack pointers, significantly increasing register
+pressure. Instead we generate a single base tag value in the prologue,
+and build the tag for alloca number <code class="docutils literal notranslate"><span class="pre">M</span></code> as <code class="docutils literal notranslate"><span class="pre">ReTag(BaseTag,</span> <span class="pre">M)</span></code>, where
+ReTag can be as simple as exclusive-or with constant <code class="docutils literal notranslate"><span class="pre">M</span></code>.</p>
+<p>Stack instrumentation is expected to be a major source of overhead,
+but could be optional.</p>
+</section>
+<section id="globals">
+<h3>Globals<a class="headerlink" href="#globals" title="Link to this heading">¶</a></h3>
+<p>Most globals in HWASAN instrumented code are tagged. This is accomplished
+using the following mechanisms:</p>
+<ul class="simple">
+<li><p>The address of each global has a static tag associated with it. The first
+defined global in a translation unit has a pseudorandom tag associated
+with it, based on the hash of the file path. Subsequent global tags are
+incremental from the previously-assigned tag.</p></li>
+<li><p>The global's tag is added to its symbol address in the object file's symbol
+table. This causes the global's address to be tagged when its address is
+taken.</p></li>
+<li><p>When the address of a global is taken directly (i.e. not via the GOT), a special
+instruction sequence needs to be used to add the tag to the address,
+because the tag would otherwise take the address outside of the small code
+model (4GB on AArch64). No changes are required when the address is taken
+via the GOT because the address stored in the GOT will contain the tag.</p></li>
+<li><p>An associated <code class="docutils literal notranslate"><span class="pre">hwasan_globals</span></code> section is emitted for each tagged global,
+which indicates the address of the global, its size and its tag. These
+sections are concatenated by the linker into a single <code class="docutils literal notranslate"><span class="pre">hwasan_globals</span></code>
+section that is enumerated by the runtime (via an ELF note) when a binary
+is loaded and the memory is tagged accordingly.</p></li>
+</ul>
+<p>A complete example is given below:</p>
+<div class="highlight-objdump notranslate"><div class="highlight"><pre><span></span><span class="x">// int x = 1; int *f() { return &amp;x; }</span>
+<span class="x">// clang -O2 --target=aarch64-linux-android30 -fsanitize=hwaddress -S -o - global.c</span>
+
+<span class="x">[...]</span>
+<span class="x">f:</span>
+<span class="x">      adrp    x0, :pg_hi21_nc:x            // set bits 12-63 to upper bits of untagged address</span>
+<span class="x">      movk    x0, #:prel_g3:x+0x100000000  // set bits 48-63 to tag</span>
+<span class="x">      add     x0, x0, :lo12:x              // set bits 0-11 to lower bits of address</span>
+<span class="x">      ret</span>
+
+<span class="x">[...]</span>
+<span class="x">      .data</span>
+<span class="x">.Lx.hwasan:</span>
+<span class="x">      .word   1</span>
+
+<span class="x">      .globl  x</span>
+<span class="x">      .set x, .Lx.hwasan+0x2d00000000000000</span>
+
+<span class="x">[...]</span>
+<span class="x">      .section        .note.hwasan.globals,"aG",@note,hwasan.module_ctor,comdat</span>
+<span class="x">.Lhwasan.note:</span>
+<span class="x">      .word   8                            // namesz</span>
+<span class="x">      .word   8                            // descsz</span>
+<span class="x">      .word   3                            // NT_LLVM_HWASAN_GLOBALS</span>
+<span class="x">      .asciz  "LLVM\000\000\000"</span>
+<span class="x">      .word   __start_hwasan_globals-.Lhwasan.note</span>
+<span class="x">      .word   __stop_hwasan_globals-.Lhwasan.note</span>
+
+<span class="x">[...]</span>
+<span class="x">      .section        hwasan_globals,"ao",@progbits,.Lx.hwasan,unique,2</span>
+<span class="x">.Lx.hwasan.descriptor:</span>
+<span class="x">      .word   .Lx.hwasan-.Lx.hwasan.descriptor</span>
+<span class="x">      .word   0x2d000004                   // tag = 0x2d, size = 4</span>
+</pre></div>
+</div>
+</section>
+<section id="error-reporting">
+<h3>Error reporting<a class="headerlink" href="#error-reporting" title="Link to this heading">¶</a></h3>
+<p>Errors are generated by the <code class="docutils literal notranslate"><span class="pre">HLT</span></code> instruction and are handled by a signal handler.</p>
+</section>
+<section id="attribute">
+<h3>Attribute<a class="headerlink" href="#attribute" title="Link to this heading">¶</a></h3>
+<p>HWASAN uses its own LLVM IR Attribute <code class="docutils literal notranslate"><span class="pre">sanitize_hwaddress</span></code> and a matching
+C function attribute. An alternative would be to re-use ASAN's attribute
+<code class="docutils literal notranslate"><span class="pre">sanitize_address</span></code>. The reasons to use a separate attribute are:</p>
+<ul class="simple">
+<li><p>Users may need to disable ASAN but not HWASAN, or vise versa,
+because the tools have different trade-offs and compatibility issues.</p></li>
+<li><p>LLVM (ideally) does not use flags to decide which pass is being used,
+ASAN or HWASAN are being applied, based on the function attributes.</p></li>
+</ul>
+<p>This does mean that users of HWASAN may need to add the new attribute
+to the code that already uses the old attribute.</p>
+</section>
+</section>
+<section id="comparison-with-addresssanitizer">
+<h2>Comparison with AddressSanitizer<a class="headerlink" href="#comparison-with-addresssanitizer" title="Link to this heading">¶</a></h2>
+<dl class="simple myst">
+<dt>HWASAN:</dt><dd><ul class="simple">
+<li><p>Is less portable than <a class="reference internal" href="AddressSanitizer.html"><span class="doc">AddressSanitizer</span></a>
+as it relies on hardware <a class="reference external" href="http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.den0024a/ch12s05s01.html">Address Tagging</a> (AArch64).
+Address Tagging can be emulated with compiler instrumentation,
+but it will require the instrumentation to remove the tags before
+any load or store, which is infeasible in any realistic environment
+that contains non-instrumented code.</p></li>
+<li><p>May have compatibility problems if the target code uses higher
+pointer bits for other purposes.</p></li>
+<li><p>May require changes in the OS kernels (e.g. Linux seems to dislike
+tagged pointers passed from address space:
+<a class="reference external" href="https://www.kernel.org/doc/Documentation/arm64/tagged-pointers.txt">https://www.kernel.org/doc/Documentation/arm64/tagged-pointers.txt</a>).</p></li>
+<li><p><strong>Does not require redzones to detect buffer overflows</strong>,
+but the buffer overflow detection is probabilistic, with roughly
+<code class="docutils literal notranslate"><span class="pre">1/(2**TS)</span></code> chance of missing a bug (6.25% or 0.39% with 4 and 8-bit TS
+respectively).</p></li>
+<li><p><strong>Does not require quarantine to detect heap-use-after-free,
+or stack-use-after-return</strong>.
+The detection is similarly probabilistic.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The memory overhead of HWASAN is expected to be much smaller
+than that of AddressSanitizer:
+<code class="docutils literal notranslate"><span class="pre">1/TG</span></code> extra memory for the shadow
+and some overhead due to <code class="docutils literal notranslate"><span class="pre">TG</span></code>-aligning all objects.</p>
+</section>
+<section id="security-considerations">
+<h2>Security Considerations<a class="headerlink" href="#security-considerations" title="Link to this heading">¶</a></h2>
+<p>HWASAN is a bug detection tool and its runtime is not meant to be
+linked against production executables. While it may be useful for testing,
+HWASAN's runtime was not developed with security-sensitive
+constraints in mind and may compromise the security of the resulting executable.</p>
+</section>
+<section id="supported-architectures">
+<h2>Supported architectures<a class="headerlink" href="#supported-architectures" title="Link to this heading">¶</a></h2>
+<p>HWASAN relies on <a class="reference external" href="http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.den0024a/ch12s05s01.html">Address Tagging</a> which is only available on AArch64.
+For other 64-bit architectures it is possible to remove the address tags
+before every load and store by compiler instrumentation, but this variant
+will have limited deployability since not all of the code is
+typically instrumented.</p>
+<p>On x86_64, HWASAN utilizes page aliasing to place tags in userspace address
+bits. Currently only heap tagging is supported. The page aliases rely on
+shared memory, which will cause heap memory to be shared between processes if
+the application calls <code class="docutils literal notranslate"><span class="pre">fork()</span></code>. Therefore x86_64 is really only safe for
+applications that do not fork.</p>
+<p>HWASAN does not currently support 32-bit architectures since they do not
+support <a class="reference external" href="http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.den0024a/ch12s05s01.html">Address Tagging</a> and the address space is too constrained to easily
+implement page aliasing.</p>
+</section>
+<section id="related-work">
+<h2>Related Work<a class="headerlink" href="#related-work" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://lazytyped.blogspot.com/2017/09/getting-started-with-adi.html">SPARC ADI</a> and <a class="reference external" href="https://developer.arm.com/documentation/108035/0100/Introduction-to-the-Memory-Tagging-Extension">Arm MTE</a> implement a similar tool mostly in hardware.</p></li>
+<li><p><a class="reference external" href="https://www.cc.gatech.edu/~orso/papers/clause.doudalis.orso.prvulovic.pdf">Effective and Efficient Memory Protection Using Dynamic Tainting</a> discusses
+similar approaches (&quot;lock &amp; key&quot;).</p></li>
+<li><p><a class="reference external" href="https://www.cis.upenn.edu/acg/papers/isca12_watchdog.pdf">Watchdog</a> discussed a heavier, but still somewhat similar
+&quot;lock &amp; key&quot; approach.</p></li>
+<li><p><em>TODO: add more &quot;related work&quot; links. Suggestions are welcome.</em></p></li>
+</ul>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="ConstantInterpreter.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Constant Interpreter</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="ItaniumMangleAbiTags.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">ABI tags</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Hardware-assisted AddressSanitizer Design Documentation</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#algorithm">Algorithm</a><ul>
+<li><a class="reference internal" href="#short-granules">Short granules</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#instrumentation">Instrumentation</a><ul>
+<li><a class="reference internal" href="#memory-accesses">Memory Accesses</a></li>
+<li><a class="reference internal" href="#heap">Heap</a></li>
+<li><a class="reference internal" href="#stack">Stack</a></li>
+<li><a class="reference internal" href="#globals">Globals</a></li>
+<li><a class="reference internal" href="#error-reporting">Error reporting</a></li>
+<li><a class="reference internal" href="#attribute">Attribute</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#comparison-with-addresssanitizer">Comparison with AddressSanitizer</a></li>
+<li><a class="reference internal" href="#security-considerations">Security Considerations</a></li>
+<li><a class="reference internal" href="#supported-architectures">Supported architectures</a></li>
+<li><a class="reference internal" href="#related-work">Related Work</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=7d86a446"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>

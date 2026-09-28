@@ -1,0 +1,952 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="OpenMP Support" href="OpenMPSupport.html" /><link rel="prev" title="Misexpect" href="MisExpect.html" />
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/OpenCLSupport.html" />
+        <link rel="prefetch" href="_static/LLVMWyvernSmall.png" as="image" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+        <title>OpenCL Support - Clang</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=548e816e" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86c9e7d9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Clang Release Notes</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="UsersManual.html">Clang Compiler User's Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="LanguageExtensions.html">Clang Language Extensions</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Clang Language Extensions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Block-ABI-Apple.html">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrossCompilation.html">Cross-compilation using Clang</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ClangStaticAnalyzer.html">Clang Static Analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Clang Static Analyzer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="analyzer/checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/user-docs.html">2. User Docs</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 2. User Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/UsingWithXCode.html">2.2. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FilingBugs.html">2.3. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CrossTranslationUnit.html">2.4. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/TaintAnalysisConfiguration.html">2.5. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/Annotations.html">2.6. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FAQ.html">2.7. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/developer-docs.html">3. Developer Docs</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 3. Developer Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/PerformanceInvestigation.html">3.6. Performance Investigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Scalable Static Analysis Framework</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Developer Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DataFlowAnalysisIntro.html">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSanitizer.html">ThreadSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MemorySanitizer.html">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataFlowSanitizer.html">DataFlowSanitizer</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of DataFlowSanitizer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="DataFlowSanitizerDesign.html">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerCoverage.html">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ControlFlowIntegrity.html">Control Flow Integrity</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Control Flow Integrity</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StandardCPlusPlusModules.html">Standard C++ Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MisExpect.html">Misexpect</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Misexpect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Clang HLSL Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of HLSL Design and Implementation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="APINotes.html">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CIR/index.html">ClangIR</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of ClangIR</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CIR/ABILowering.html">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CommandGuide/index.html">Clang "man" pages</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Clang "man" pages</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefactoringEngine.html">Clang's refactoring engine</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ClangTools.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangRepl.html">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InternalsManual.html">"Clang" CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizerDesign.html">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LLVMExceptionHandlingCodeGen.html">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/OpenCLSupport.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/OpenCLSupport.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <style type="text/css">
+  .none { background-color: #FFCCCC }
+  .part { background-color: #FFFF99 }
+  .good { background-color: #CCFF99 }
+</style><section id="opencl-support">
+<h1>OpenCL Support<a class="headerlink" href="#opencl-support" title="Link to this heading">¶</a></h1>
+<p>Clang has complete support of OpenCL C versions from 1.0 to 3.0.
+Support for OpenCL 3.0 is in experimental phase (<a class="reference internal" href="#opencl-300"><span class="std std-ref">OpenCL 3.0</span></a>).</p>
+<p>Clang also supports <a class="reference internal" href="#cxx-for-opencl-impl"><span class="std std-ref">the C++ for OpenCL kernel language</span></a>.</p>
+<p>There are also other <a class="reference internal" href="#opencl-experimenal"><span class="std std-ref">new and experimental features</span></a>
+available.</p>
+<p>Details about usage of clang for OpenCL can be found in <a class="reference internal" href="UsersManual.html"><span class="doc">Clang Compiler User's Manual</span></a>.</p>
+<section id="missing-features-or-with-limited-support">
+<h2>Missing features or with limited support<a class="headerlink" href="#missing-features-or-with-limited-support" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>For general issues and bugs with OpenCL in clang refer to <a class="reference external" href="https://github.com/llvm/llvm-project/issues?q=is%3Aopen+is%3Aissue+label%3Aopencl">the GitHub issue
+list</a>.</p></li>
+<li><p>Command-line flag <a class="reference internal" href="UsersManual.html#cmdoption-cl-ext"><code class="xref std std-option docutils literal notranslate"><span class="pre">-cl-ext</span></code></a> (used to override extensions/
+features supported by a target) is missing support of some functionality i.e. that is
+implemented fully through libraries (see <a class="reference internal" href="#opencl-ext-libs"><span class="std std-ref">library-based features and extensions</span></a>).</p></li>
+</ul>
+</section>
+<section id="internals-manual">
+<h2>Internals Manual<a class="headerlink" href="#internals-manual" title="Link to this heading">¶</a></h2>
+<p>This section acts as internal documentation for OpenCL features design
+as well as some important implementation aspects. It is primarily targeted
+at the advanced users and the toolchain developers integrating frontend
+functionality as a component.</p>
+<section id="opencl-metadata">
+<h3>OpenCL Metadata<a class="headerlink" href="#opencl-metadata" title="Link to this heading">¶</a></h3>
+<p>Clang uses metadata to provide additional OpenCL semantics in IR needed for
+backends and OpenCL runtime.</p>
+<p>Each kernel will have function metadata attached to it, specifying the arguments.
+Kernel argument metadata is used to provide source level information for querying
+at runtime, for example using the <a class="reference external" href="https://www.khronos.org/registry/OpenCL/specs/opencl-1.2.pdf#167">clGetKernelArgInfo</a>
+call.</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">-cl-kernel-arg-info</span></code> enables more information about the original
+kernel code to be added e.g. kernel parameter names will appear in the OpenCL
+metadata along with other information.</p>
+<p>The IDs used to encode the OpenCL's logical address spaces in the argument info
+metadata follows the SPIR address space mapping as defined in the SPIR
+specification <a class="reference external" href="https://www.khronos.org/registry/spir/specs/spir_spec-2.0.pdf#18">section 2.2</a></p>
+</section>
+<section id="opencl-specific-options">
+<h3>OpenCL Specific Options<a class="headerlink" href="#opencl-specific-options" title="Link to this heading">¶</a></h3>
+<p>In addition to the options described in <a class="reference internal" href="UsersManual.html"><span class="doc">Clang Compiler User's Manual</span></a> there are the
+following options specific to the OpenCL frontend.</p>
+<p>All the options in this section are frontend-only and therefore if used
+with regular clang driver they require frontend forwarding, e.g. <code class="docutils literal notranslate"><span class="pre">-cc1</span></code>
+or <code class="docutils literal notranslate"><span class="pre">-Xclang</span></code>.</p>
+<dl class="std option" id="id1">
+<span id="opencl-finclude-default-header"></span><dt class="sig sig-object std" id="cmdoption-finclude-default-header">
+<span class="sig-name descname"><span class="pre">-finclude-default-header</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-finclude-default-header" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Adds most of builtin types and function declarations during compilations. By
+default the OpenCL headers are not loaded by the frontend and therefore certain
+builtin types and most of builtin functions are not declared. To load them
+automatically this flag can be passed to the frontend (see also <a class="reference internal" href="UsersManual.html#opencl-header"><span class="std std-ref">the section on the OpenCL Header</span></a>):</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clang<span class="w"> </span>-Xclang<span class="w"> </span>-finclude-default-header<span class="w"> </span>test.cl
+</pre></div>
+</div>
+</div></blockquote>
+<p>Alternatively the internal header <code class="docutils literal notranslate"><span class="pre">opencl-c.h</span></code> containing the declarations
+can be included manually using <code class="docutils literal notranslate"><span class="pre">-include</span></code> or <code class="docutils literal notranslate"><span class="pre">-I</span></code> followed by the path
+to the header location. The header can be found in the clang source tree or
+installation directory.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clang<span class="w"> </span>-I&lt;path<span class="w"> </span>to<span class="w"> </span>clang<span class="w"> </span>sources&gt;/lib/Headers/opencl-c.h<span class="w"> </span>test.cl
+<span class="gp">$ </span>clang<span class="w"> </span>-I&lt;path<span class="w"> </span>to<span class="w"> </span>clang<span class="w"> </span>installation&gt;/lib/clang/&lt;llvm<span class="w"> </span>version&gt;/include/opencl-c.h/opencl-c.h<span class="w"> </span>test.cl
+</pre></div>
+</div>
+</div></blockquote>
+<p>In this example it is assumed that the kernel code contains
+<code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">&lt;opencl-c.h&gt;</span></code> just as a regular C include.</p>
+<p>Because the header is very large and long to parse, PCH (<a class="reference internal" href="PCHInternals.html"><span class="doc">Precompiled Header and Modules Internals</span></a>)
+and modules (<a class="reference internal" href="Modules.html"><span class="doc">Modules</span></a>) can be used internally to improve the compilation
+speed.</p>
+<p>To enable modules for OpenCL:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clang<span class="w"> </span>--target<span class="o">=</span>spir-unknown-unknown<span class="w"> </span>-c<span class="w"> </span>-emit-llvm<span class="w"> </span>-Xclang<span class="w"> </span>-finclude-default-header<span class="w"> </span>-fmodules<span class="w"> </span>-fimplicit-module-maps<span class="w"> </span>-fmodules-cache-path<span class="o">=</span>&lt;path<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>generated<span class="w"> </span>module&gt;<span class="w"> </span>test.cl
+</pre></div>
+</div>
+</div></blockquote>
+<p>Another way to circumvent long parsing latency for the OpenCL builtin
+declarations is to use mechanism enabled by <a class="reference internal" href="#opencl-fdeclare-opencl-builtins"><span class="std std-ref">-fdeclare-opencl-builtins</span></a> flag that is available as an alternative
+feature.</p>
+<dl class="std option" id="id2">
+<span id="opencl-fdeclare-opencl-builtins"></span><dt class="sig sig-object std" id="cmdoption-fdeclare-opencl-builtins">
+<span class="sig-name descname"><span class="pre">-fdeclare-opencl-builtins</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-fdeclare-opencl-builtins" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>In addition to regular header includes with builtin types and functions using
+<a class="reference internal" href="#opencl-finclude-default-header"><span class="std std-ref">-finclude-default-header</span></a>, clang
+supports a fast mechanism to declare builtin functions with
+<code class="docutils literal notranslate"><span class="pre">-fdeclare-opencl-builtins</span></code>. This does not declare the builtin types and
+therefore it has to be used in combination with <code class="docutils literal notranslate"><span class="pre">-finclude-default-header</span></code>
+if full functionality is required.</p>
+<p><strong>Example of Use</strong>:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clang<span class="w"> </span>-Xclang<span class="w"> </span>-fdeclare-opencl-builtins<span class="w"> </span>test.cl
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="std option" id="id3">
+<span id="opencl-fake-address-space-map"></span><dt class="sig sig-object std" id="cmdoption-ffake-address-space-map">
+<span class="sig-name descname"><span class="pre">-ffake-address-space-map</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ffake-address-space-map" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Overrides the target address space map with a fake map.
+This allows adding explicit address space IDs to the bitcode for non-segmented
+memory architectures that do not have separate IDs for each of the OpenCL
+logical address spaces by default. Passing <code class="docutils literal notranslate"><span class="pre">-ffake-address-space-map</span></code> will
+add/override address spaces of the target compiled for with the following values:
+<code class="docutils literal notranslate"><span class="pre">1-global</span></code>, <code class="docutils literal notranslate"><span class="pre">2-constant</span></code>, <code class="docutils literal notranslate"><span class="pre">3-local</span></code>, <code class="docutils literal notranslate"><span class="pre">4-generic</span></code>. The private address
+space is represented by the absence of an address space attribute in the IR (see
+also <a class="reference internal" href="#opencl-addrsp"><span class="std std-ref">the section on the address space attribute</span></a>).</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clang<span class="w"> </span>-cc1<span class="w"> </span>-ffake-address-space-map<span class="w"> </span>test.cl
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="id4">
+<span id="opencl-builtins"></span><span id="id5"></span><h3>OpenCL builtins<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p><strong>Clang builtins</strong></p>
+<p>There are some standard OpenCL functions that are implemented as Clang builtins:</p>
+<ul class="simple">
+<li><p>All pipe functions from <a class="reference external" href="https://www.khronos.org/registry/cl/specs/opencl-2.0-openclc.pdf#160">section 6.13.16.2/6.13.16.3</a> of
+the OpenCL v2.0 kernel language specification.</p></li>
+<li><p>Address space qualifier conversion functions <code class="docutils literal notranslate"><span class="pre">to_global</span></code>/<code class="docutils literal notranslate"><span class="pre">to_local</span></code>/<code class="docutils literal notranslate"><span class="pre">to_private</span></code>
+from <a class="reference external" href="https://www.khronos.org/registry/cl/specs/opencl-2.0-openclc.pdf#101">section 6.13.9</a>.</p></li>
+<li><p>All the <code class="docutils literal notranslate"><span class="pre">enqueue_kernel</span></code> functions from <a class="reference external" href="https://www.khronos.org/registry/cl/specs/opencl-2.0-openclc.pdf#164">section 6.13.17.1</a> and
+enqueue query functions from <a class="reference external" href="https://www.khronos.org/registry/cl/specs/opencl-2.0-openclc.pdf#171">section 6.13.17.5</a>.</p></li>
+</ul>
+<p><strong>Fast builtin function declarations</strong></p>
+<p>The implementation of the fast builtin function declarations (available via the
+<a class="reference internal" href="#opencl-fdeclare-opencl-builtins"><span class="std std-ref">-fdeclare-opencl-builtins option</span></a>) consists
+of the following main components:</p>
+<ul class="simple">
+<li><p>A TableGen definitions file <code class="docutils literal notranslate"><span class="pre">OpenCLBuiltins.td</span></code>. This contains a compact
+representation of the supported builtin functions. When adding new builtin
+function declarations, this is normally the only file that needs modifying.</p></li>
+<li><p>A Clang TableGen emitter defined in <code class="docutils literal notranslate"><span class="pre">ClangOpenCLBuiltinEmitter.cpp</span></code>. During
+Clang build time, the emitter reads the TableGen definition file and
+generates <code class="docutils literal notranslate"><span class="pre">OpenCLBuiltins.inc</span></code>. This generated file contains various tables
+and functions that capture the builtin function data from the TableGen
+definitions in a compact manner.</p></li>
+<li><p>OpenCL specific code in <code class="docutils literal notranslate"><span class="pre">SemaLookup.cpp</span></code>. When <code class="docutils literal notranslate"><span class="pre">Sema::LookupBuiltin</span></code>
+encounters a potential builtin function, it will check if the name corresponds
+to a valid OpenCL builtin function. If so, all overloads of the function are
+inserted using <code class="docutils literal notranslate"><span class="pre">InsertOCLBuiltinDeclarationsFromTable</span></code> and overload
+resolution takes place.</p></li>
+</ul>
+</section>
+<section id="opencl-extensions-and-features">
+<h3>OpenCL Extensions and Features<a class="headerlink" href="#opencl-extensions-and-features" title="Link to this heading">¶</a></h3>
+<p>Clang implements various extensions to OpenCL kernel languages.</p>
+<p>New functionality is accepted as soon as the documentation is detailed to the
+level sufficient to be implemented. There should be an evidence that the
+extension is designed with implementation feasibility in consideration and
+assessment of complexity for C/C++ based compilers. Alternatively, the
+documentation can be accepted in a format of a draft that can be further
+refined during the implementation.</p>
+<section id="implementation-guidelines">
+<h4>Implementation guidelines<a class="headerlink" href="#implementation-guidelines" title="Link to this heading">¶</a></h4>
+<p>This section explains how to extend clang with the new functionality.</p>
+<p><strong>Parsing functionality</strong></p>
+<p>If a new extension is added it needs to be added to the clang frontend source
+code. This also means that the associated macro indicating the presence of the
+extension should be added to clang.</p>
+<p>The default flow for adding a new extension into the frontend is to
+modify <a class="reference external" href="https://github.com/llvm/llvm-project/blob/main/clang/include/clang/Basic/OpenCLExtensions.def">OpenCLExtensions.def</a>,
+containing the list of all extensions and optional features supported by
+the frontend.</p>
+<p>This will add the macro automatically and also add a field in the target
+options <code class="docutils literal notranslate"><span class="pre">clang::TargetOptions::OpenCLFeaturesMap</span></code> to control the exposure
+of the new extension during the compilation.</p>
+<p>Note that by default targets like <code class="docutils literal notranslate"><span class="pre">SPIR-V</span></code>, <code class="docutils literal notranslate"><span class="pre">SPIR</span></code> or <code class="docutils literal notranslate"><span class="pre">X86</span></code> expose all the OpenCL
+extensions. For all other targets the configuration has to be made explicitly.</p>
+<p>Note that the target extension support performed by clang can be overridden
+with <a class="reference internal" href="UsersManual.html#cmdoption-cl-ext"><code class="xref std std-option docutils literal notranslate"><span class="pre">-cl-ext</span></code></a> command-line flags.</p>
+<p id="id6"><span id="opencl-ext-libs"></span><strong>Library functionality</strong></p>
+<p>If an extension adds functionality that does not modify standard language
+parsing it may not require modifying anything other than header files and
+<code class="docutils literal notranslate"><span class="pre">OpenCLBuiltins.td</span></code> detailed in <a class="reference internal" href="#opencl-builtins"><span class="std std-ref">OpenCL builtins</span></a>.
+Most commonly such extensions add functionality via libraries (by adding
+non-native types or functions) parsed regularly. Similar to other languages this
+is the most common way to add new functionality.</p>
+<p>Clang has standard headers where new types and functions are being added,
+for more details refer to
+<a class="reference internal" href="UsersManual.html#opencl-header"><span class="std std-ref">the section on the OpenCL Header</span></a>.
+<strong>Pragmas</strong></p>
+<p>Some extensions alter standard parsing dynamically via pragmas.</p>
+<p>Clang provides a mechanism to add the standard extension pragma
+<code class="docutils literal notranslate"><span class="pre">OPENCL</span> <span class="pre">EXTENSION</span></code> by setting a dedicated flag in the extension list entry of
+<code class="docutils literal notranslate"><span class="pre">OpenCLExtensions.def</span></code>. Note that there is no default behavior for the
+standard extension pragmas as it is not specified (for the standards up to and
+including version 3.0) in a sufficient level of detail and, therefore,
+there is no default functionality provided by clang.</p>
+<p>Pragmas without detailed information of their behavior (e.g. an explanation of
+changes it triggers in the parsing) should not be added to clang. Moreover, the
+pragmas should provide useful functionality to the user. For example, such
+functionality should address a practical use case and not be redundant i.e.
+cannot be achieved using existing features.</p>
+<p>Note that some legacy extensions (published prior to OpenCL 3.0) still
+provide some non-conformant functionality for pragmas e.g. add diagnostics on
+the use of types or functions. This functionality is not guaranteed to remain in
+future releases. However, any future changes should not affect backward
+compatibility.</p>
+</section>
+</section>
+<section id="address-spaces-attribute">
+<span id="id7"></span><span id="opencl-addrsp"></span><h3>Address spaces attribute<a class="headerlink" href="#address-spaces-attribute" title="Link to this heading">¶</a></h3>
+<p>Clang has arbitrary address space support using the <code class="docutils literal notranslate"><span class="pre">address_space(N)</span></code>
+attribute, where <code class="docutils literal notranslate"><span class="pre">N</span></code> is an integer number in the range specified in the
+Clang source code. This addresses spaces can be used along with the OpenCL
+address spaces however when such addresses spaces converted to/from OpenCL
+address spaces the behavior is not governed by OpenCL specification.</p>
+<p>An OpenCL implementation provides a list of standard address spaces using
+keywords: <code class="docutils literal notranslate"><span class="pre">private</span></code>, <code class="docutils literal notranslate"><span class="pre">local</span></code>, <code class="docutils literal notranslate"><span class="pre">global</span></code>, and <code class="docutils literal notranslate"><span class="pre">generic</span></code>. In the AST and
+in the IR each of the address spaces will be represented by unique number
+provided in the Clang source code. The specific IDs for an address space do not
+have to match between the AST and the IR. Typically in the AST address space
+numbers represent logical segments while in the IR they represent physical
+segments.
+Therefore, machines with flat memory segments can map all AST address space
+numbers to the same physical segment ID or skip address space attribute
+completely while generating the IR. However, if the address space information
+is needed by the IR passes e.g. to improve alias analysis, it is recommended
+to keep it and only lower to reflect physical memory segments in the late
+machine passes. The mapping between logical and target address spaces is
+specified in the Clang's source code.</p>
+</section>
+</section>
+<section id="c-for-opencl-implementation-status">
+<span id="id8"></span><span id="cxx-for-opencl-impl"></span><h2>C++ for OpenCL Implementation Status<a class="headerlink" href="#c-for-opencl-implementation-status" title="Link to this heading">¶</a></h2>
+<p>Clang implements language versions 1.0 and 2021 published in <a class="reference external" href="https://github.com/KhronosGroup/OpenCL-Docs/releases/tag/cxxforopencl-docrev2021.12">the official
+release of C++ for OpenCL Documentation</a>.</p>
+<p>Limited support of experimental C++ libraries is described in the <a class="reference internal" href="#opencl-experimenal"><span class="std std-ref">experimental features</span></a>.</p>
+<p>GitHub issues for this functionality are typically prefixed
+with '[C++4OpenCL]' - click <a class="reference external" href="https://github.com/llvm/llvm-project/issues?q=is%3Aissue+is%3Aopen+%5BC%2B%2B4OpenCL%5D">here</a>
+to view the full bug list.</p>
+<section id="id9">
+<h3>Missing features or with limited support<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Support of C++ for OpenCL 2021 is currently in experimental phase. Refer to
+<a class="reference internal" href="#opencl-300"><span class="std std-ref">OpenCL 3.0 status</span></a> for details of common missing
+functionality from OpenCL 3.0.</p></li>
+<li><p>IR generation for non-trivial global destructors is incomplete (See:
+<a class="reference external" href="https://llvm.org/PR48047">PR48047</a>).</p></li>
+<li><p>Support of <a class="reference external" href="https://www.khronos.org/opencl/assets/CXX_for_OpenCL.html#_construction_initialization_and_destruction">destructors with non-default address spaces</a>
+is incomplete (See: <a class="reference external" href="https://reviews.llvm.org/D109609">D109609</a>).</p></li>
+</ul>
+</section>
+</section>
+<section id="opencl-c-3-0-usage">
+<span id="id10"></span><span id="opencl-300"></span><h2>OpenCL C 3.0 Usage<a class="headerlink" href="#opencl-c-3-0-usage" title="Link to this heading">¶</a></h2>
+<p>OpenCL C 3.0 language standard makes most OpenCL C 2.0 features optional. Optional
+functionality in OpenCL C 3.0 is indicated with the presence of feature-test macros
+(list of feature-test macros is <a class="reference external" href="https://www.khronos.org/registry/OpenCL/specs/3.0-unified/html/OpenCL_C.html#features">here</a>).
+Command-line flag <a class="reference internal" href="UsersManual.html#cmdoption-cl-ext"><code class="xref std std-option docutils literal notranslate"><span class="pre">-cl-ext</span></code></a> can be used to override features supported by a target.</p>
+<p>For cases when there is an associated extension for a specific feature (fp64 and 3d image writes)
+user should specify both (extension and feature) in command-line flag:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clang<span class="w"> </span>-cl-std<span class="o">=</span>CL3.0<span class="w"> </span>-cl-ext<span class="o">=</span>+cl_khr_fp64,+__opencl_c_fp64<span class="w"> </span>...
+<span class="gp">$ </span>clang<span class="w"> </span>-cl-std<span class="o">=</span>CL3.0<span class="w"> </span>-cl-ext<span class="o">=</span>-cl_khr_fp64,-__opencl_c_fp64<span class="w"> </span>...
+</pre></div>
+</div>
+</div></blockquote>
+<section id="opencl-c-3-0-implementation-status">
+<h3>OpenCL C 3.0 Implementation Status<a class="headerlink" href="#opencl-c-3-0-implementation-status" title="Link to this heading">¶</a></h3>
+<p>The following table provides an overview of features in OpenCL C 3.0 and their
+implementation status.</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Category</p></th>
+<th class="head"><p>Feature</p></th>
+<th class="head"><p>Status</p></th>
+<th class="head"><p>Reviews</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Command line interface</p></td>
+<td><p>New value for <code class="docutils literal notranslate"><span class="pre">-cl-std</span></code> flag</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D88300">D88300</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Predefined macros</p></td>
+<td><p>New version macro</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D88300">D88300</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Predefined macros</p></td>
+<td><p>Feature macros</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D95776">D95776</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Feature optionality</p></td>
+<td><p>Generic address space</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D95778">D95778</a> and <a class="reference external" href="https://reviews.llvm.org/D103401">D103401</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Feature optionality</p></td>
+<td><p>Builtin function overloads with generic address space</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D105526">D105526</a>, <a class="reference external" href="https://reviews.llvm.org/D107769">D107769</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Feature optionality</p></td>
+<td><p>Program scope variables in global memory</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D103191">D103191</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Feature optionality</p></td>
+<td><p>3D image writes including builtin functions</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D106260">D106260</a> (frontend)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Feature optionality</p></td>
+<td><p>read_write images including builtin functions</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D104915">D104915</a> (frontend) and <a class="reference external" href="https://reviews.llvm.org/D107539">D107539</a>, <a class="reference external" href="https://reviews.llvm.org/D117899">D117899</a> (functions)</p></td>
+</tr>
+<tr class="row-even"><td><p>Feature optionality</p></td>
+<td><p>C11 atomics memory scopes, ordering and builtin function</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D106111">D106111</a>, <a class="reference external" href="https://reviews.llvm.org/D119420">D119420</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Feature optionality</p></td>
+<td><p>Blocks and Device-side kernel enqueue including builtin functions</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D115640">D115640</a>, <a class="reference external" href="https://reviews.llvm.org/D118605">D118605</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Feature optionality</p></td>
+<td><p>Pipes including builtin functions</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D107154">D107154</a> (frontend) and <a class="reference external" href="https://reviews.llvm.org/D105858">D105858</a> (functions)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Feature optionality</p></td>
+<td><p>Work group collective builtin functions</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D105858">D105858</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Feature optionality</p></td>
+<td><p>Image types and builtin functions</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D103911">D103911</a> (frontend) and <a class="reference external" href="https://reviews.llvm.org/D107539">D107539</a> (functions)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Feature optionality</p></td>
+<td><p>Double precision floating point type</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D96524">D96524</a></p></td>
+</tr>
+<tr class="row-even"><td><p>New functionality</p></td>
+<td><p>RGBA vector components</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D99969">D99969</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>New functionality</p></td>
+<td><p>Subgroup functions</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D105858">D105858</a>, <a class="reference external" href="https://reviews.llvm.org/D118999">D118999</a></p></td>
+</tr>
+<tr class="row-even"><td><p>New functionality</p></td>
+<td><p>Atomic mem scopes: subgroup, all devices including functions</p></td>
+<td><p><span class="good">done</span></p></td>
+<td><p><a class="reference external" href="https://reviews.llvm.org/D103241">D103241</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="experimental-features">
+<span id="id11"></span><span id="opencl-experimenal"></span><h2>Experimental features<a class="headerlink" href="#experimental-features" title="Link to this heading">¶</a></h2>
+<p>Clang provides the following new WIP features for the developers to experiment
+and provide early feedback or contribute with further improvements.
+Feel free to contact us on <a class="reference external" href="https://discourse.llvm.org/c/clang/6">the Discourse forums (Clang Frontend category)</a> or file <a class="reference external" href="https://github.com/llvm/llvm-project/issues/new">a GitHub issue</a>.</p>
+<section id="c-libraries-for-opencl">
+<span id="opencl-experimental-cxxlibs"></span><h3>C++ libraries for OpenCL<a class="headerlink" href="#c-libraries-for-opencl" title="Link to this heading">¶</a></h3>
+<p>There is ongoing work to support C++ standard libraries from <a class="reference external" href="https://libcxx.llvm.org/">LLVM's libcxx</a> in OpenCL kernel code using C++ for OpenCL mode.</p>
+<p>It is currently possible to include <code class="docutils literal notranslate"><span class="pre">type_traits</span></code> from C++17 in the kernel
+sources when the following clang extensions are enabled
+<code class="docutils literal notranslate"><span class="pre">__cl_clang_function_pointers</span></code> and <code class="docutils literal notranslate"><span class="pre">__cl_clang_variadic_functions</span></code>,
+see <a class="reference internal" href="LanguageExtensions.html"><span class="doc">Clang Language Extensions</span></a> for more details. The use of non-conformant
+features enabled by the extensions does not expose non-conformant behavior
+beyond the compilation i.e. does not get generated in IR or binary.
+The extension only appear in metaprogramming
+mechanism to identify or verify the properties of types. This allows to provide
+the full C++ functionality without a loss of portability. To avoid unsafe use
+of the extensions it is recommended that the extensions are disabled directly
+after the header include.</p>
+<p><strong>Example of Use</strong>:</p>
+<p>The example of kernel code with <code class="docutils literal notranslate"><span class="pre">type_traits</span></code> is illustrated here.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma OPENCL EXTENSION __cl_clang_function_pointers : enable</span>
+<span class="cp">#pragma OPENCL EXTENSION __cl_clang_variadic_functions : enable</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;type_traits&gt;</span>
+<span class="cp">#pragma OPENCL EXTENSION __cl_clang_function_pointers : disable</span>
+<span class="cp">#pragma OPENCL EXTENSION __cl_clang_variadic_functions : disable</span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">sint_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_signed</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+
+<span class="n">__kernel</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">sint_type</span><span class="p">,</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The possible clang invocation to compile the example is as follows:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clang<span class="w"> </span>-I&lt;path<span class="w"> </span>to<span class="w"> </span>libcxx<span class="w"> </span>checkout<span class="w"> </span>or<span class="w"> </span>installation&gt;/include<span class="w"> </span>test.clcpp
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">type_traits</span></code> is a header only library and therefore no extra
+linking step against the standard libraries is required. See full example
+in <a class="reference external" href="https://godbolt.org/z/5WbnTfb65">Compiler Explorer</a>.</p>
+<p>More OpenCL specific C++ library implementations built on top of libcxx
+are available in <a class="reference external" href="https://github.com/KhronosGroup/libclcxx">libclcxx</a>
+project.</p>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="OpenMPSupport.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">OpenMP Support</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="MisExpect.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Misexpect</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">OpenCL Support</a><ul>
+<li><a class="reference internal" href="#missing-features-or-with-limited-support">Missing features or with limited support</a></li>
+<li><a class="reference internal" href="#internals-manual">Internals Manual</a><ul>
+<li><a class="reference internal" href="#opencl-metadata">OpenCL Metadata</a></li>
+<li><a class="reference internal" href="#opencl-specific-options">OpenCL Specific Options</a></li>
+<li><a class="reference internal" href="#id4">OpenCL builtins</a></li>
+<li><a class="reference internal" href="#opencl-extensions-and-features">OpenCL Extensions and Features</a><ul>
+<li><a class="reference internal" href="#implementation-guidelines">Implementation guidelines</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#address-spaces-attribute">Address spaces attribute</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#c-for-opencl-implementation-status">C++ for OpenCL Implementation Status</a><ul>
+<li><a class="reference internal" href="#id9">Missing features or with limited support</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#opencl-c-3-0-usage">OpenCL C 3.0 Usage</a><ul>
+<li><a class="reference internal" href="#opencl-c-3-0-implementation-status">OpenCL C 3.0 Implementation Status</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#experimental-features">Experimental features</a><ul>
+<li><a class="reference internal" href="#c-libraries-for-opencl">C++ libraries for OpenCL</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=7d86a446"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>
