@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"POT-Creation-Date: 2026-09-28 16:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -461,33 +461,42 @@ msgstr ""
 
 #: ../../../SourceBasedCodeCoverage.md:347
 msgid ""
-"Forward-declare `void __llvm_profile_initialize_file(void)` and call it once "
-"from each instrumented executable. This function parses `LLVM_PROFILE_FILE`, "
-"sets the output path, and truncates any existing files at that path. To get "
-"the same behavior without truncating existing files, pass a filename pattern "
-"string to `void __llvm_profile_set_filename(char *)`. These calls can be "
-"placed anywhere so long as they precede all calls to "
-"`__llvm_profile_write_file`."
+"Include `<profile/instr_prof_interface.h>` to declare the profiling runtime "
+"APIs. (If including compiler interface headers is challenging in your build "
+"environment, all of the functions below can instead be forward-declared "
+"directly, using `extern \"C\"` in C++ files.)"
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:354
+#: ../../../SourceBasedCodeCoverage.md:351
 msgid ""
-"Forward-declare `int __llvm_profile_write_file(void)` and call it to write "
-"out a profile. This function returns 0 on success, and a non-zero value "
-"otherwise. Calling this function multiple times appends profile data to an "
-"existing on-disk raw profile."
+"Call `void __llvm_profile_initialize_file(void)` once from each instrumented "
+"executable. This function parses `LLVM_PROFILE_FILE`, sets the output path, "
+"and truncates any existing files at that path. To get the same behavior "
+"without truncating existing files, pass a filename pattern string to `void "
+"__llvm_profile_set_filename(const char *)`. These calls can be placed "
+"anywhere so long as they precede all calls to `__llvm_profile_write_file`."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:359
-#: ../../../SourceBasedCodeCoverage.md:384
-msgid "In C++ files, declare these as `extern \"C\"`."
+#: ../../../SourceBasedCodeCoverage.md:357
+msgid ""
+"Note: You can call `const char *__llvm_profile_get_filename(void)` to get "
+"the currently configured filename. This returns a `malloc`-allocated string "
+"that must be passed to `free()` (or a *static* `\"\"` on allocation failure)."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:361
+#: ../../../SourceBasedCodeCoverage.md:360
+msgid ""
+"Call `int __llvm_profile_write_file(void)` to write out a profile. This "
+"function returns 0 on success, and a non-zero value otherwise. Calling this "
+"function multiple times appends profile data to an existing on-disk raw "
+"profile."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.md:365
 msgid "Using the profiling runtime without a filesystem"
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:363
+#: ../../../SourceBasedCodeCoverage.md:367
 msgid ""
 "The profiling runtime also supports freestanding environments that lack a "
 "filesystem. The runtime ships as a static archive that's structured to make "
@@ -495,41 +504,64 @@ msgid ""
 "the client application uses."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:368
+#: ../../../SourceBasedCodeCoverage.md:372
 msgid ""
 "The first step is to export `__llvm_profile_runtime`, as above, to disable "
 "the default static initializers. Instead of calling the `*_file()` APIs "
-"described above, use the following to save the profile directly to a buffer "
-"under your control:"
+"described above, use the following functions from `<profile/"
+"instr_prof_interface.h>` to save the profile directly to a buffer under your "
+"control:"
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:373
+#: ../../../SourceBasedCodeCoverage.md:378
 msgid ""
-"Forward-declare `uint64_t __llvm_profile_get_size_for_buffer(void)` and call "
-"it to determine the size of the profile. You'll need to allocate a buffer of "
-"this size."
+"Call `uint64_t __llvm_profile_get_size_for_buffer(void)` to determine the "
+"size of the profile. You'll need to allocate a buffer of this size."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:376
+#: ../../../SourceBasedCodeCoverage.md:380
 msgid ""
-"Forward-declare `int __llvm_profile_write_buffer(char *Buffer)` and call it "
-"to copy the current counters to `Buffer`, which is expected to already be "
-"allocated and big enough for the profile."
+"Call `int __llvm_profile_write_buffer(char *Buffer)` to copy the current "
+"counters to `Buffer`, which is expected to already be allocated and big "
+"enough for the profile."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:379
+#: ../../../SourceBasedCodeCoverage.md:383
 msgid ""
-"Optionally, forward-declare `void __llvm_profile_reset_counters(void)` and "
-"call it to reset the counters before entering a specific section to be "
-"profiled. This is only useful if there is some setup that should be excluded "
-"from the profile."
+"Optionally, call `void __llvm_profile_reset_counters(void)` to reset the "
+"counters before entering a specific section to be profiled. This is only "
+"useful if there is some setup that should be excluded from the profile."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:386
+#: ../../../SourceBasedCodeCoverage.md:387
+msgid ""
+"You can also merge raw profile data from an existing buffer into the current "
+"process's in-memory counters:"
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.md:390
+msgid ""
+"Call `int __llvm_profile_check_compatibility(const char *ProfileData, "
+"uint64_t ProfileSize)` to verify that the raw profile in `ProfileData` (of "
+"size `ProfileSize` bytes) was generated by the same binary and structurally "
+"matches the in-process counters and bitmaps. This function returns 0 on "
+"success, and a non-zero value otherwise."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.md:395
+msgid ""
+"Call `int __llvm_profile_merge_from_buffer(const char *ProfileData, uint64_t "
+"ProfileSize)` to merge the raw profile in `ProfileData` into the in-process "
+"counters and bitmaps. **The caller is expected to have verified "
+"compatibility beforehand.** This function returns 0 on success, and a non-"
+"zero value if the profile data is invalid or corrupted."
+msgstr ""
+
+#: ../../../SourceBasedCodeCoverage.md:401
 msgid "Collecting coverage reports for the llvm project"
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:388
+#: ../../../SourceBasedCodeCoverage.md:403
 msgid ""
 "To prepare a coverage report for llvm (and any of its sub-projects), add `-"
 "DLLVM_BUILD_INSTRUMENTED_COVERAGE=On` to the CMake configuration. Raw "
@@ -537,18 +569,18 @@ msgid ""
 "report, run `llvm/utils/prepare-code-coverage-artifact.py`."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:393
+#: ../../../SourceBasedCodeCoverage.md:408
 msgid ""
 "To specify an alternate directory for raw profiles, use `-"
 "DLLVM_PROFILE_DATA_DIR`. To change the size of the profile merge pool, use `-"
 "DLLVM_PROFILE_MERGE_POOL_SIZE`."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:397
+#: ../../../SourceBasedCodeCoverage.md:412
 msgid "Drawbacks and limitations"
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:399
+#: ../../../SourceBasedCodeCoverage.md:414
 msgid ""
 "Prior to version 2.26, the GNU binutils BFD linker cannot link programs "
 "compiled with `-fcoverage-mapping` in its `--gc-sections` mode. Possible "
@@ -556,42 +588,42 @@ msgid ""
 "of BFD, or using the Gold linker."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:404
+#: ../../../SourceBasedCodeCoverage.md:419
 msgid ""
 "Code coverage does not handle unpredictable changes in control flow or stack "
 "unwinding in the presence of exceptions precisely. Consider the following "
 "function:"
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:415
+#: ../../../SourceBasedCodeCoverage.md:430
 msgid ""
 "If the call to `may_throw()` propagates an exception into `f`, the code "
 "coverage tool may mark the `return` statement as executed even though it is "
 "not. A call to `longjmp()` can have similar effects."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:419
+#: ../../../SourceBasedCodeCoverage.md:434
 msgid "Clang implementation details"
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:421
+#: ../../../SourceBasedCodeCoverage.md:436
 msgid ""
 "This section may be of interest to those wishing to understand or improve "
 "the clang code coverage implementation."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:424
+#: ../../../SourceBasedCodeCoverage.md:439
 msgid "Gap regions"
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:426
+#: ../../../SourceBasedCodeCoverage.md:441
 msgid ""
 "Gap regions are source regions with counts. A reporting tool cannot set a "
 "line execution count to the count from a gap region unless that region is "
 "the only one on a line."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:430
+#: ../../../SourceBasedCodeCoverage.md:445
 msgid ""
 "Gap regions are used to eliminate unnatural artifacts in coverage reports, "
 "such as red \"unexecuted\" highlights present at the end of an otherwise "
@@ -599,11 +631,11 @@ msgid ""
 "that is otherwise not executed."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:435
+#: ../../../SourceBasedCodeCoverage.md:450
 msgid "Branch regions"
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:437
+#: ../../../SourceBasedCodeCoverage.md:452
 msgid ""
 "When viewing branch coverage details in source-based file-level sub-views "
 "using `--show-branches`, it is recommended that users show all macro "
@@ -613,7 +645,7 @@ msgid ""
 "for a function or source file."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:444
+#: ../../../SourceBasedCodeCoverage.md:459
 msgid ""
 "Branch coverage is not tracked for constant folded branch conditions since "
 "branches are not generated for these cases. In the source-based file-level "
@@ -621,24 +653,24 @@ msgid ""
 "that users are informed about what happened."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:449
+#: ../../../SourceBasedCodeCoverage.md:464
 msgid ""
 "Branch coverage is tied directly to branch-generating conditions in the "
 "source code. Users should not see hidden branches that aren't actually tied "
 "to the source code."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:453
+#: ../../../SourceBasedCodeCoverage.md:468
 msgid "MC/DC Instrumentation"
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:455
+#: ../../../SourceBasedCodeCoverage.md:470
 msgid ""
 "When instrumenting for Modified Condition/Decision Coverage (MC/DC) using "
 "the clang option `-fcoverage-mcdc`, there are two hard limits."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:458
+#: ../../../SourceBasedCodeCoverage.md:473
 msgid ""
 "The maximum number of terms is limited to 32767, which is practical for "
 "handwritten expressions. To be more restrictive in order to enforce coding "
@@ -647,14 +679,14 @@ msgid ""
 "DC coverage."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:463
+#: ../../../SourceBasedCodeCoverage.md:478
 msgid ""
 "The number of test vectors (the maximum number of possible combinations of "
 "expressions) is limited to 2,147,483,646. In this case, approximately 256MiB "
 "(==2GiB/8) is used to record test vectors."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:467
+#: ../../../SourceBasedCodeCoverage.md:482
 msgid ""
 "To reduce memory usage, users can limit the maximum number of test vectors "
 "per expression with `-Xclang -fmcdc-max-test-vectors=m`. If the number of "
@@ -663,7 +695,7 @@ msgid ""
 "coverage."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:473
+#: ../../../SourceBasedCodeCoverage.md:488
 msgid ""
 "The number of test vectors `m`, for `n` terms in an expression, can be `m <= "
 "2^n` in the theoretical worst case, but is usually much smaller. In simple "
@@ -672,17 +704,17 @@ msgid ""
 "vectors."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:479
+#: ../../../SourceBasedCodeCoverage.md:494
 msgid ""
 "Expressions such as `((a0 && b0) || (a1 && b1) || ...)` can cause the number "
 "of test vectors to increase exponentially."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:482
+#: ../../../SourceBasedCodeCoverage.md:497
 msgid "Switch statements"
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:484
+#: ../../../SourceBasedCodeCoverage.md:499
 msgid ""
 "The region mapping for a switch body consists of a gap region that covers "
 "the entire body (starting from the '{' in 'switch (...) {', and terminating "
@@ -691,7 +723,7 @@ msgid ""
 "to appear uncovered."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:489
+#: ../../../SourceBasedCodeCoverage.md:504
 msgid ""
 "When a switch case is visited, the parent region is extended: if the parent "
 "region has no start location, its start location becomes the start of the "
@@ -699,13 +731,13 @@ msgid ""
 "body, in which the switch body and the single case share a count."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:494
+#: ../../../SourceBasedCodeCoverage.md:509
 msgid ""
 "For switches with `CompoundStmt` bodies, a new region is created at the "
 "start of each switch case."
 msgstr ""
 
-#: ../../../SourceBasedCodeCoverage.md:497
+#: ../../../SourceBasedCodeCoverage.md:512
 msgid ""
 "Branch regions are also generated for each switch case, including the "
 "default case. If there is no explicitly defined default case in the source "

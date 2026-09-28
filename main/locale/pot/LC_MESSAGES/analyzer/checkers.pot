@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"POT-Creation-Date: 2026-09-28 16:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -229,8 +229,8 @@ msgid ""
 "defined as error. Specifically on x86/x86-64 target if the pointer address "
 "space is 256 (x86 GS Segment), 257 (x86 FS Segment), or 258 (x86 SS "
 "Segment), a null dereference is not defined as error. See [X86/X86-64 "
-"Language Extensions](https://clang.llvm.org/docs/LanguageExtensions."
-"html#memory-references-to-specified-segments) for reference."
+"Language Extensions](../LanguageExtensions.md#memory-references-to-specified-"
+"segments) for reference."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:203
@@ -689,8 +689,8 @@ msgid ""
 "This checker does not accept the coding pattern where an enum type is used "
 "to store combinations of flag values. Such enums should be annotated with "
 "the `__attribute__((flag_enum))` or by the `[[clang::flag_enum]]` attribute "
-"to signal this intent. Refer to the [documentation](https://clang.llvm.org/"
-"docs/AttributeReference.html#flag-enum) of this Clang attribute."
+"to signal this intent. Refer to the [documentation](../AttributeReference."
+"md#flag-enum) of this Clang attribute."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:831
@@ -764,8 +764,8 @@ msgid ""
 "+Do+not+call+va_arg+with+an+argument+of+the+incorrect+type), which describes "
 "several issues related to the use of `va_arg()`. (The problem reported by "
 "this checker is shown in the second code example; the first, unrelated code "
-"example is covered by the clang diagnostic [-Wvarargs](https://clang.llvm."
-"org/docs/DiagnosticsReference.html#wvarargs).)"
+"example is covered by the clang diagnostic [-Wvarargs](../"
+"DiagnosticsReference.md#wvarargs).)"
 msgstr ""
 
 #: ../../../analyzer/checkers.md:921
@@ -2641,8 +2641,8 @@ msgstr ""
 msgid ""
 "The attribute states that the returned value is dangling after the lifetime "
 "of the annotated parameter, or of the implicit object argument, has ended. "
-"Refer to the [documentation](https://clang.llvm.org/docs/AttributeReference."
-"html#lifetimebound) of this Clang attribute."
+"Refer to the [documentation](../AttributeReference.md#lifetimebound) of this "
+"Clang attribute."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:3375
@@ -3267,10 +3267,100 @@ msgid ""
 msgstr ""
 
 #: ../../../analyzer/checkers.md:4197
-msgid "webkit.RetainPtrCtorAdoptChecker"
+msgid "alpha.webkit.UnborrowedLocalVarsChecker"
 msgstr ""
 
 #: ../../../analyzer/checkers.md:4199
+msgid ""
+"A *CanBorrow* type tracks views into its interior at runtime. It calls "
+"`crashIfBorrowed()` in methods that destroy its interior. `WTF::Vector` is a "
+"motivating example: `append()` calls `crashIfBorrowed()`."
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4201
+msgid ""
+"`Borrow<T>` is an RAII object that tracks a view into a `CanBorrow` type: "
+"while a `Borrow<T>` on a `CanBorrow` object is in scope, views into the "
+"object remain valid (otherwise the program crashes)."
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4203
+msgid ""
+"The goal of this rule is to require a pointer/reference/view into a "
+"`CanBorrow` type to be guarded by an overlooking `Borrow<T>`."
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4205
+msgid "These are examples do not warn:"
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4229
+msgid "These are examples warn:"
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4274
+msgid ""
+"A value counts as a loan when it reaches its origin through a `[[clang::"
+"lifetimebound]]` edge. That attribute does not distinguish a view into an "
+"object's interior from another name for the object itself. `foo6` shows why "
+"the checker resolves that ambiguity toward reporting."
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4276
+msgid ""
+"The cost is that an identity function is reported even though its result "
+"really is an alias:"
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4287
+msgid "Includes built-in recognition for std view types. For example:"
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4307
+msgid "alpha.webkit.UnborrowedCallArgsChecker"
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4309
+msgid ""
+"The same rule as alpha.webkit.UnborrowedLocalVarsChecker, applied to "
+"function arguments."
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4330
+msgid "The implicit object argument counts as an argument:"
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4343
+msgid "These examples do not warn:"
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4353
+msgid "alpha.webkit.UnborrowedLambdaCapturesChecker"
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4355
+msgid ""
+"The same rule as alpha.webkit.UnborrowedLocalVarsChecker, applied to lambda "
+"captures."
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4357
+msgid ""
+"Note: It is impossible for an escaping closure to capture a Borrow since "
+"Borrow is stack-only."
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4372
+msgid ""
+"A NOESCAPE callee runs the lambda before returning, so a `Borrow` in the "
+"enclosing scope protects the capture:"
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4387
+msgid "webkit.RetainPtrCtorAdoptChecker"
+msgstr ""
+
+#: ../../../analyzer/checkers.md:4389
 msgid ""
 "The goal of this rule is to make sure the constructors of RetainPtr and "
 "OSObjectPtr as well as adoptNS, adoptCF, and adoptOSObject are used "
@@ -3279,138 +3369,138 @@ msgid ""
 "RetainPtr or OSObjectPtr constructor should be used. Warn otherwise."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4203
+#: ../../../analyzer/checkers.md:4393
 msgid "These are examples of cases that we consider correct:"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4211
+#: ../../../analyzer/checkers.md:4401
 msgid ""
 "Here are some examples of cases that we consider incorrect use of RetainPtr "
 "constructor and adoptCF"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4219
+#: ../../../analyzer/checkers.md:4409
 msgid "Debug Checkers"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4223
+#: ../../../analyzer/checkers.md:4413
 msgid "debug"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4225
+#: ../../../analyzer/checkers.md:4415
 msgid ""
 "Checkers used for debugging the analyzer. {doc}`developer-docs/DebugChecks` "
 "page contains a detailed description."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4230
+#: ../../../analyzer/checkers.md:4420
 msgid "debug.AnalysisOrder"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4232
+#: ../../../analyzer/checkers.md:4422
 msgid "Print callbacks that are called during analysis in order."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4236
+#: ../../../analyzer/checkers.md:4426
 msgid "debug.ConfigDumper"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4238
+#: ../../../analyzer/checkers.md:4428
 msgid "Dump config table."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4242
+#: ../../../analyzer/checkers.md:4432
 msgid "debug.DumpCFG Display"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4244
+#: ../../../analyzer/checkers.md:4434
 msgid "Control-Flow Graphs."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4248
+#: ../../../analyzer/checkers.md:4438
 msgid "debug.DumpCallGraph"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4250
+#: ../../../analyzer/checkers.md:4440
 msgid "Display Call Graph."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4254
+#: ../../../analyzer/checkers.md:4444
 msgid "debug.DumpCalls"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4256
+#: ../../../analyzer/checkers.md:4446
 msgid "Print calls as they are traversed by the engine."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4260
+#: ../../../analyzer/checkers.md:4450
 msgid "debug.DumpDominators"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4262
+#: ../../../analyzer/checkers.md:4452
 msgid "Print the dominance tree for a given CFG."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4266
+#: ../../../analyzer/checkers.md:4456
 msgid "debug.DumpLiveVars"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4268
+#: ../../../analyzer/checkers.md:4458
 msgid "Print results of live variable analysis."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4272
+#: ../../../analyzer/checkers.md:4462
 msgid "debug.DumpTraversal"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4274
+#: ../../../analyzer/checkers.md:4464
 msgid "Print branch conditions as they are traversed by the engine."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4278
+#: ../../../analyzer/checkers.md:4468
 msgid "debug.ExprInspection"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4280
+#: ../../../analyzer/checkers.md:4470
 msgid "Check the analyzer's understanding of expressions."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4284
+#: ../../../analyzer/checkers.md:4474
 msgid "debug.Stats"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4286
+#: ../../../analyzer/checkers.md:4476
 msgid "Emit warnings with analyzer statistics."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4290
+#: ../../../analyzer/checkers.md:4480
 msgid "debug.TaintTest"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4292
+#: ../../../analyzer/checkers.md:4482
 msgid "Mark tainted symbols as such."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4296
+#: ../../../analyzer/checkers.md:4486
 msgid "debug.ViewCFG"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4298
+#: ../../../analyzer/checkers.md:4488
 msgid "View Control-Flow Graphs using GraphViz."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4302
+#: ../../../analyzer/checkers.md:4492
 msgid "debug.ViewCallGraph"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4304
+#: ../../../analyzer/checkers.md:4494
 msgid "View Call Graph using GraphViz."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4308
+#: ../../../analyzer/checkers.md:4498
 msgid "debug.ViewExplodedGraph"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4310
+#: ../../../analyzer/checkers.md:4500
 msgid "View Exploded Graphs using GraphViz."
 msgstr ""
