@@ -1,0 +1,851 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ClangOffloadBundler.md:1
+msgid "Clang Offload Bundler"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:4
+msgid "Introduction"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:6
+msgid ""
+"For heterogeneous single source programming languages, use one or more `--"
+"offload-arch=<target-id>` Clang options to specify the target IDs of the "
+"code to generate for the offload code regions."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:10
+msgid ""
+"The tool chain may perform multiple compilations of a translation unit to "
+"produce separate code objects for the host and potentially multiple "
+"offloaded devices. The `clang-offload-bundler` tool may be used as part of "
+"the tool chain to combine these multiple code objects into a single bundled "
+"code object."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:15
+msgid ""
+"The tool chain may use a bundled code object as an intermediate step so that "
+"each tool chain step consumes and produces a single file as in traditional "
+"non-heterogeneous tool chains. The bundled code object contains the code "
+"objects for the host and all the offload devices."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:20
+msgid ""
+"A bundled code object may also be used to bundle just the offloaded code "
+"objects, and embedded as data into the host code object. The host "
+"compilation includes an `init` function that will use the runtime "
+"corresponding to the offload kind (see {ref}`clang-offload-kind-table`) to "
+"load the offload code objects appropriate for the devices present when the "
+"host program is executed."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:26
+msgid ""
+"{program}`clang-offload-bundler` is located in `clang/tools/clang-offload-"
+"bundler`."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:72 ../../../ClangOffloadBundler.md:504
+msgid "Usage"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:74
+msgid "This tool can be used as follows for bundling:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:80
+msgid "or, it can be used as follows for unbundling:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:86 ../../../ClangOffloadBundler.md:93
+msgid "Supported File Formats"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:88
+msgid ""
+"Multiple text and binary file formats are supported for bundling/unbundling. "
+"See {ref}`supported-file-formats-table` for a list of currently supported "
+"input formats. Use the `File Type` column to determine the value to pass to "
+"the `--type` option based on the type of input files while bundling/"
+"unbundling."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:113
+msgid "Bundled Text File Layout"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:115
+msgid ""
+"The text file formats are concatenated with comments that have a magic "
+"string and bundle entry ID in between. The BNF syntax to represent a code "
+"object bundle file is:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:127
+msgid "**comment**"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:129
+msgid ""
+"The symbol used for starting a single-line comment in the file type of "
+"constituting bundles. E.g. it is \";\" for ll `File Type` and \"#\" for "
+"\"s\" `File Type`."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:133
+msgid "**bundle_id**"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:135
+msgid "The {ref}`clang-bundle-entry-id` for the enclosing bundle."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:137
+msgid "**eol**"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:139
+msgid "The end-of-line character."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:141
+msgid "**bundle**"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:143
+msgid "The code object stored in one of the supported text file formats."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:145
+msgid "**OFFLOAD_BUNDLER_MAGIC_STR\\_\\_**"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:147
+msgid ""
+"The magic string that marks the existence of offloading data i.e. "
+"\"\\_\\_CLANG_OFFLOAD_BUNDLE\\_\\_\"."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:152
+msgid "Bundled Binary File Layout"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:154
+msgid "The layout of a bundled code object is defined by the following table:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:156
+msgid "Bundled Code Object Layout"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:160
+msgid "Field"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:161
+msgid "Type"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:162
+msgid "Size in Bytes"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:163 ../../../ClangOffloadBundler.md:249
+msgid "Description"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:164
+msgid "Magic String"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:165 ../../../ClangOffloadBundler.md:185
+#: ../../../ClangOffloadBundler.md:206
+msgid "string"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:166
+msgid "24"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:167
+msgid "`__CLANG_OFFLOAD_BUNDLE__`"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:168
+msgid "Number Of Bundle Entries"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:169 ../../../ClangOffloadBundler.md:173
+#: ../../../ClangOffloadBundler.md:177 ../../../ClangOffloadBundler.md:181
+#: ../../../ClangOffloadBundler.md:194 ../../../ClangOffloadBundler.md:198
+#: ../../../ClangOffloadBundler.md:202
+msgid "integer"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:170 ../../../ClangOffloadBundler.md:174
+#: ../../../ClangOffloadBundler.md:178 ../../../ClangOffloadBundler.md:182
+#: ../../../ClangOffloadBundler.md:195 ../../../ClangOffloadBundler.md:199
+#: ../../../ClangOffloadBundler.md:203
+msgid "8"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:171
+msgid "Number of bundle entries."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:172
+msgid "1st Bundle Entry Code Object Offset"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:175
+msgid "Byte offset from beginning of bundled code object to 1st code object."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:176 ../../../ClangOffloadBundler.md:211
+msgid "1st Bundle Entry Code Object Size"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:179
+msgid "Byte size of 1st code object."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:180 ../../../ClangOffloadBundler.md:186
+#: ../../../ClangOffloadBundler.md:207
+msgid "1st Bundle Entry ID Length"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:183
+msgid "Character length of bundle entry ID of 1st code object."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:184
+msgid "1st Bundle Entry ID"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:187
+msgid ""
+"Bundle entry ID of 1st code object. This is not NUL terminated. See {ref}"
+"`clang-bundle-entry-id`."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:189 ../../../ClangOffloadBundler.md:213
+msgid "..."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:193
+msgid "Nth Bundle Entry Code Object Offset"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:197 ../../../ClangOffloadBundler.md:219
+msgid "Nth Bundle Entry Code Object Size"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:201
+msgid "Nth Bundle Entry ID Length"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:205
+msgid "Nth Bundle Entry ID"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:209
+msgid "1st Bundle Entry Code Object"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:210 ../../../ClangOffloadBundler.md:218
+msgid "bytes"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:217
+msgid "Nth Bundle Entry Code Object"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:225
+msgid "Bundle Entry ID"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:227
+msgid ""
+"Each entry in a bundled code object (see {ref}`clang-bundled-code-object-"
+"layout-text` and {ref}`clang-bundled-code-object-layout`) has a bundle entry "
+"ID that indicates the kind of the entry's code object and the runtime that "
+"manages it."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:231
+msgid "Bundle entry ID syntax is defined by the following BNF syntax:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:237 ../../../ClangOffloadBundler.md:344
+msgid "Where:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:239
+msgid "**offload-kind**"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:241
+msgid ""
+"The runtime responsible for managing the bundled entry code object. See {ref}"
+"`clang-offload-kind-table`."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:244
+msgid "Bundled Code Object Offload Kind"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:248
+msgid "Offload Kind"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:250
+msgid "host"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:251
+msgid ""
+"Host code object. `clang-offload-bundler` always includes this entry as the "
+"first bundled code object entry. For an embedded bundled code object, this "
+"entry is not used by the runtime and so is generally an empty code object."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:254
+msgid "hip"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:255
+msgid ""
+"Offload code object for the HIP language. Used for all HIP language offload "
+"code objects when the `clang-offload-bundler` is used to bundle code objects "
+"as intermediate steps of the tool chain. Also used for AMD GPU code objects "
+"before ABI version V4 when the `clang-offload-bundler` is used to create a "
+"*fat binary* to be loaded by the HIP runtime. The fat binary can be loaded "
+"directly from a file, or be embedded in the host code object as a data "
+"section with the name `.hip_fatbin`."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:262
+msgid "hipv4"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:263
+msgid ""
+"Offload code object for the HIP language. Used for AMD GPU code objects with "
+"at least ABI version V4 and above when the `clang-offload-bundler` is used "
+"to create a *fat binary* to be loaded by the HIP runtime. The fat binary can "
+"be loaded directly from a file, or be embedded in the host code object as a "
+"data section with the name `.hip_fatbin`."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:268
+msgid "openmp"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:269
+msgid "Offload code object for the OpenMP language extension."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:272
+msgid ""
+"Note: The distinction between the `hip` and `hipv4` offload kinds is "
+"historically based. Originally, these designations might have indicated "
+"different versions of the code object ABI. However, as the system has "
+"evolved, the ABI version is now embedded directly within the code object "
+"itself, making these historical distinctions irrelevant during the "
+"unbundling process. Consequently, `hip` and `hipv4` are treated as "
+"compatible in current implementations, facilitating interchangeable handling "
+"of code objects without differentiation based on offload kind."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:280
+msgid "**target-triple**"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:282
+msgid ""
+"The target triple of the code object. See [Target Triple](https://clang.llvm."
+"org/docs/CrossCompilation.html#target-triple)."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:284
+msgid ""
+"LLVM target triples can be with or without the optional environment field:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:286
+msgid "`<arch><sub>-<vendor>-<sys>`, or `<arch><sub>-<vendor>-<sys>-<env>`"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:289
+msgid ""
+"However, in order to standardize outputs for tools that consume bitcode "
+"bundles and to parse a target ID containing dashes, the bundler only accepts "
+"target triples in the 4-field format:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:293
+msgid "`<arch><sub>-<vendor>-<sys>-<env>`"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:295
+msgid "**target-id**"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:297
+msgid ""
+"The canonical target ID of the code object. Present only if the target "
+"supports a target ID. See {ref}`clang-target-id`."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:302
+msgid "Bundled Code Object Composition"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:304
+msgid ""
+"Each entry of a bundled code object must have a different bundle entry ID."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:305
+msgid ""
+"There can be multiple entries for the same processor provided they differ in "
+"target feature settings."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:307
+msgid ""
+"If there is an entry with a target feature specified as *Any*, then all "
+"entries must specify that target feature as *Any* for the same processor."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:310
+msgid "There may be additional target-specific restrictions."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:314
+msgid "Compatibility Rules for Bundle Entry ID"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:316
+msgid ""
+"A code object, specified using its Bundle Entry ID, can be loaded and "
+"executed on a target processor if:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:319
+msgid "Their offload kinds are the same or compatible."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:320
+msgid "Their target triples are compatible."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:321
+msgid ""
+"Their Target IDs are compatible as defined in {ref}`compatibility-target-id`."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:325
+msgid "Target ID"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:327
+msgid ""
+"A target ID is used to indicate the processor and optionally its "
+"configuration, expressed by a set of target features, that affect ISA "
+"generation. It is target specific if a target ID is supported, or if the "
+"target triple alone is sufficient to specify the ISA generation."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:332
+msgid ""
+"It is used with the `-mcpu=<target-id>` and `--offload-arch=<target-id>` "
+"Clang compilation options to specify the kind of code to generate."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:335
+msgid ""
+"It is also used as part of the bundle entry ID to identify the code object. "
+"See {ref}`clang-bundle-entry-id`."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:338
+msgid "Target ID syntax is defined by the following BNF syntax:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:346
+msgid "**processor**"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:348
+msgid "Is the target-specific processor or any alternative processor name."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:350
+msgid "**target-feature**"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:352
+msgid ""
+"Is a target feature name that is supported by the processor. Each target "
+"feature must appear at most once in a target ID and can have one of three "
+"values:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:356
+msgid "*Any*"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:358
+msgid ""
+"Specified by omitting the target feature from the target ID. A code object "
+"compiled with a target ID specifying the default value of a target feature "
+"can be loaded and executed on a processor configured with the target feature "
+"on or off."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:363
+msgid "*On*"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:365
+msgid ""
+"Specified by `+`, indicating the target feature is enabled. A code object "
+"compiled with a target ID specifying a target feature on can only be loaded "
+"on a processor configured with the target feature on."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:369
+msgid "*Off*"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:371
+msgid ""
+"Specified by `-`, indicating the target feature is disabled. A code object "
+"compiled with a target ID specifying a target feature off can only be loaded "
+"on a processor configured with the target feature off."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:377
+msgid "Compatibility Rules for Target ID"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:379
+msgid ""
+"A code object compiled for a Target ID is considered compatible for a target "
+"if:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:382
+msgid "Their processor is the same."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:383
+msgid "Their feature set is compatible as defined above."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:385
+msgid "There are two forms of target ID:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:387
+msgid "*Non-Canonical Form*"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:389
+msgid ""
+"The non-canonical form is used as the input to user commands to allow the "
+"user greater convenience. It allows both the primary and alternative "
+"processor name to be used and the target features may be specified in any "
+"order."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:393
+msgid "*Canonical Form*"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:395
+msgid ""
+"The canonical form is used for all generated output to allow greater "
+"convenience for tools that consume the information. It is also used for "
+"internal passing of information between tools. Only the primary and not "
+"alternative processor name is used and the target features are specified in "
+"alphabetic order. Command line tools convert non-canonical form to canonical "
+"form."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:402
+msgid "Target-Specific information"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:404
+msgid "Target-specific information is available for the following:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:406
+msgid "*AMD GPU*"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:408
+msgid ""
+"AMD GPU supports target ID and target features. See [User Guide for AMDGPU "
+"Backend](https://llvm.org/docs/AMDGPUUsage.html) which defines the "
+"[processors](https://llvm.org/docs/AMDGPUUsage.html#amdgpu-processors) and "
+"[target features](https://llvm.org/docs/AMDGPUUsage.html#amdgpu-target-"
+"features) supported."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:415
+msgid "Most other targets do not support target IDs."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:417
+msgid "Archive Unbundling"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:419
+msgid ""
+"Unbundling of a heterogeneous device archive (HDA) is done to create device-"
+"specific archives. HDA is in a format compatible with GNU `ar` utility and "
+"contains a collection of bundled device binaries where each bundle file will "
+"contain device binaries for a host and one or more targets. The output "
+"device-specific archive is in a format compatible with GNU `ar` utility and "
+"contains a collection of device binaries for a specific target."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:439
+msgid ""
+"The clang-offload-bundler extracts compatible device binaries for a given "
+"target from the bundled device binaries in a heterogeneous device archive "
+"and creates a target-specific device archive without bundling."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:443
+msgid ""
+"The clang-offload-bundler determines whether a device binary is compatible "
+"with a target by comparing bundle IDs. Two bundle IDs are considered "
+"compatible if:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:447
+msgid "Their offload kinds are the same"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:448
+msgid "Their target triples are the same"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:449
+msgid "Their Target IDs are the same"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:451
+msgid "Creating a Heterogeneous Device Archive"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:453
+msgid "Compile source file(s) to generate object file(s)"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:473
+msgid ""
+"Create a heterogeneous device archive by combining all the object file(s)"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:479
+msgid "Extracting a Device Specific Archive"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:481
+msgid ""
+"UnbundleArchive takes a heterogeneous device archive file (\".a\") as input "
+"containing bundled device binary files, and a list of offload targets (not "
+"host), and extracts the device binaries into a new archive file for each "
+"offload target. Each resulting archive file contains all device binaries "
+"compatible with that particular offload target. Compatibility between a "
+"device binary in HDA and a target is based on the compatibility between "
+"their bundle entry IDs as defined in {ref}`compatibility-bundle-entry-id`."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:489
+msgid "The following cases may arise during compatibility testing:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:491
+msgid ""
+"A binary is compatible with one or more targets: Insert the binary into the "
+"device-specific archive of each compatible target."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:493
+msgid "A binary is not compatible with any target: Skip the binary."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:494
+msgid ""
+"One or more binaries are compatible with a target: Insert all binaries into "
+"the device-specific archive of the target. The insertion need not be ordered."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:496
+msgid ""
+"No binary is compatible with a target: If `allow-missing-bundles` option is "
+"present then create an empty archive for the target. Otherwise, produce an "
+"error without creating an archive."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:500
+msgid ""
+"The created archive file does not contain an index of the symbols and device "
+"binary files are named as `<Parent Bundle Name>-<DeviceBinary's TargetID>`, "
+"with ':' replaced with `_`."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:515
+msgid "Additional Options while Archive Unbundling"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:517
+msgid "**-allow-missing-bundles**"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:519
+msgid "Create an empty archive file if no compatible device binary is found."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:521
+msgid "**-check-input-archive**"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:523
+msgid ""
+"Check if input heterogeneous device archive follows rules for composition as "
+"defined in {ref}`code-object-composition` before creating device-specific "
+"archive(s)."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:527
+msgid "**-debug-only=CodeObjectCompatibility**"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:529
+msgid ""
+"Verbose printing of matched/unmatched comparisons between bundle entry id of "
+"a device binary from HDA and bundle entry ID of a given target processor "
+"(see {ref}`compatibility-bundle-entry-id`)."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:533
+msgid "Compression and Decompression"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:535
+msgid ""
+"`clang-offload-bundler` provides features to compress and decompress the "
+"full bundle, leveraging inherent redundancies within the bundle entries. Use "
+"the `-compress` command-line option to enable this compression capability."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:539
+msgid ""
+"The compressed offload bundle begins with a header followed by the "
+"compressed binary data:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:541
+msgid "**Magic Number (4 bytes)**:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:543
+msgid ""
+"This is a unique identifier to distinguish compressed offload bundles. The "
+"value is the string 'CCOB' (Compressed Clang Offload Bundle)."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:546
+msgid "**Version Number (16-bit unsigned int)**:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:547
+msgid ""
+"This denotes the version of the compressed offload bundle format. The "
+"current version is `3`."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:550
+msgid "**Compression Method (16-bit unsigned int)**:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:551
+msgid ""
+"This field indicates the compression method used. The value corresponds to "
+"either `zlib` or `zstd`, represented as a 16-bit unsigned integer cast from "
+"the LLVM compression enumeration."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:555
+msgid "**Total File Size (unsigned int, 32-bit in v2, 64-bit in v3)**:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:556
+msgid ""
+"This is the total size (in bytes) of the file, including the header. "
+"Available in version 2 and above."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:559
+msgid ""
+"**Uncompressed Binary Size (unsigned int, 32-bit in v2, 64-bit in v3)**:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:560
+msgid ""
+"This is the size (in bytes) of the binary data before it was compressed."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:562
+msgid "**Hash (64-bit unsigned int)**:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:563
+msgid ""
+"This is a 64-bit truncated MD5 hash of the uncompressed binary data. It "
+"serves for verification and caching purposes."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:566
+msgid "**Compressed Data**:"
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:567
+msgid ""
+"The actual compressed binary data follows the header. Its size can be "
+"inferred from the total size of the file minus the header size."
+msgstr ""
+
+#: ../../../ClangOffloadBundler.md:571
+msgid ""
+"Version 3 is now the default format. For backward compatibility with older "
+"HIP runtimes that support version 2 only, set the environment variable "
+"`COMPRESSED_BUNDLE_FORMAT_VERSION=2`."
+msgstr ""

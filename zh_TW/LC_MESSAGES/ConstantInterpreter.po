@@ -1,0 +1,462 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ConstantInterpreter.md:1
+msgid "Constant Interpreter"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:4
+msgid "Introduction"
+msgstr "簡介"
+
+#: ../../../ConstantInterpreter.md:6
+msgid ""
+"The bytecode interpreter aims to replace the existing AST traversal-based "
+"evaluator in Clang, improving performance on constructs which are executed "
+"inefficiently by the evaluator. The interpreter is activated by passing `-"
+"fexperimental-new-constant-interpreter` to clang."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:11
+msgid ""
+"Since Clang 23, the bytecode interpreter can also be enabled by default by "
+"passing `-DCLANG_USE_EXPERIMENTAL_CONST_INTERP=ON` to cmake. In that case, "
+"it can be deactivated again via `-fno-experimental-new-constant-interpreter`."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:16
+msgid "Bytecode Compilation"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:18
+msgid ""
+"Bytecode compilation is handled in `Compiler.h` for statements and for "
+"expressions. The compiler has two different backends: one to generate "
+"bytecode for functions (`ByteCodeEmitter`) and one to directly evaluate "
+"expressions as they are compiled, without generating bytecode "
+"(`EvalEmitter`). All functions are compiled to bytecode, while toplevel "
+"expressions used in constant contexts are directly evaluated since the "
+"bytecode would never be reused. This mechanism aims to pave the way towards "
+"replacing the evaluator, improving its performance on functions and loops, "
+"while being just as fast on single-use toplevel expressions."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:29
+msgid ""
+"The interpreter relies on stack-based, strongly-typed opcodes. The glue "
+"logic between the code generator, along with the enumeration and description "
+"of opcodes, can be found in `Opcodes.td`. The opcodes are implemented as "
+"generic template methods in `Interp.h` and instantiated with the relevant "
+"primitive types by the interpreter loop or by the evaluating emitter."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:36
+msgid "Primitive Types"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:38
+msgid "`PT_{U|S}int{8|16|32|64}`"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:40
+msgid ""
+"Signed or unsigned integers of a specific bit width. 1-byte types are also 1 "
+"byte in size. Sizes >= 16 bits are implemented using the `Integral` class. "
+"They take up 24 bytes each since they need to be able to represent a pointer "
+"that has been casted to an integer."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:45
+msgid "`PT_IntAP{S}`"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:47
+msgid ""
+"Signed or unsigned integers of an arbitrary, but fixed width used to "
+"implement integral types which are required by the target, but are not "
+"supported by the host. Under the hood, they rely on `APInt`. The `Integral` "
+"specialisation for these types is required by opcodes to share an "
+"implementation with fixed integrals."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:53
+msgid "`PT_Bool`"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:55
+msgid ""
+"Representation for boolean types, essentially a 1-bit unsigned `Integral`."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:58
+msgid "`PT_Float`"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:60
+msgid ""
+"Arbitrary, but fixed precision floating point numbers. Could be specialised "
+"in the future similarly to integers in order to improve floating point "
+"performance."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:64
+msgid "`PT_Ptr`"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:66
+msgid ""
+"Pointer type, defined in `\"Pointer.h\"`. The most common type of pointer is "
+"a \"BlockPointer\", which points to an `interp::Block`. But other pointer "
+"types exist, such as typeid pointers or integral pointers."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:71
+msgid "`PT_MemberPtr`"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:73
+msgid ""
+"Member pointer type, can also be a null member pointer. Defined in "
+"`\"MemberPointer.h\"`"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:76
+msgid "Composite types"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:78
+msgid ""
+"The interpreter distinguishes two kinds of composite types: arrays and "
+"records (structs and classes). Unions are represented as records, except at "
+"most a single field can be marked as active. The contents of inactive fields "
+"are kept until they are reactivated and overwritten. Complex numbers "
+"(`_Complex`) and vectors (`__attribute((vector_size(16)))`) are treated as "
+"arrays."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:85
+msgid "Bytecode Execution"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:87
+msgid ""
+"Bytecode is executed using a stack-based interpreter. The execution context "
+"consists of an `InterpStack`, along with a chain of `InterpFrame` objects "
+"storing the call frames. Frames are built by call instructions and destroyed "
+"by return instructions. They perform one allocation to reserve space for all "
+"locals in a single block. These objects store all the required information "
+"to emit stack traces whenever evaluation fails."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:95
+msgid "Memory Organisation"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:97
+msgid ""
+"Memory management in the interpreter relies on 3 data structures: `Block` "
+"objects which store the data and associated inline metadata, `Pointer` "
+"objects which refer to or into blocks, and `Descriptor` structures which "
+"describe blocks and subobjects nested inside blocks."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:102
+msgid "Blocks"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:104
+msgid ""
+"Blocks contain data interleaved with metadata. They are allocated either "
+"statically in the code generator (globals, static members, dummy parameter "
+"values etc.) or dynamically in the interpreter, when creating the frame "
+"containing the local variables of a function. Blocks are associated with a "
+"descriptor that characterises the entire allocation, along with a few "
+"additional attributes:"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:111
+msgid ""
+"`IsStatic` indicates whether the block has static duration in the "
+"interpreter, i.e. it is not a local in a frame."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:113
+msgid ""
+"`DeclID` identifies each global declaration (it is set to an invalid and "
+"irrelevant value for locals) in order to prevent illegal writes and reads "
+"involving globals and temporaries with static storage duration."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:117
+msgid ""
+"Static blocks are never deallocated, but local ones might be deallocated "
+"even when there are live pointers to them. Pointers are only valid as long "
+"as the blocks they point to are valid, so a block with pointers to it whose "
+"lifetime ends is kept alive until all pointers to it go out of scope. Since "
+"the frame is destroyed on function exit, such blocks are turned into a "
+"`DeadBlock` and copied to storage managed by the interpreter itself, not the "
+"frame. Reads and writes to these blocks are illegal and cause an appropriate "
+"diagnostic to be emitted. When the last pointer goes out of scope, dead "
+"blocks are also deallocated."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:127
+msgid ""
+"The lifetime of blocks is managed through 2 methods stored in the descriptor "
+"of the block:"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:130
+msgid ""
+"**CtorFn**: initializes the metadata which is stored in the block, alongside "
+"actual data. Invokes the default constructors of objects which are not "
+"trivial (`Pointer`, `Floating`, etc.)"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:133
+msgid "**DtorFn**: invokes the destructors of non-trivial objects."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:135
+msgid ""
+"Blocks track all the pointers into them through an intrusive doubly-linked "
+"list, required to adjust and invalidate all pointers when transforming a "
+"block into a dead block. If the lifetime of an object ends, all pointers to "
+"it are invalidated, emitting the appropriate diagnostics when dereferenced."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:141
+msgid ""
+"Records are laid out identically to arrays of composites: each field and "
+"base class is preceded by an inline descriptor. The `InlineDescriptor` saves "
+"information about the initialization state, constness, mutability, lifetime, "
+"etc. of a field."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:146
+msgid "Consider this struct:"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:155
+msgid ""
+"When allocating space for `s`, we allocate 24 bytes (not counting the "
+"`Descriptor` instances we created for the `Record` and the field). The field "
+"`c` needs 8 bytes, since we align to pointer size (this example uses a 64 "
+"bit system). The `InlineDescriptor` preceding the field data uses up the "
+"remaining 16 bytes."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:160
+msgid ""
+"Inline descriptors are filled in by the `CtorFn` of blocks, which leaves "
+"storage in an uninitialised, but valid state."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:163
+msgid "Descriptors"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:165
+msgid ""
+"Descriptors are generated at bytecode compilation time and contain "
+"information required to determine if a particular memory access is allowed "
+"in constexpr. They also carry all the information required to emit a "
+"diagnostic involving a memory access, such as the declaration which "
+"originates the block. Currently there is a single kind of descriptor "
+"encoding information for all block types."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:172
+msgid "Pointers"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:174
+msgid "Pointers, implemented in `Pointer.h` are represented as a tagged union."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:176
+msgid ""
+"**BlockPointer**: used to reference memory allocated and managed by the "
+"interpreter, being the only pointer kind which allows dereferencing in the "
+"interpreter"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:179
+msgid ""
+"**TypeIDPointer**: tracks information for the opaque type returned by "
+"`typeid`"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:181
+msgid ""
+"**IntegralPointer**: a pointer formed from an integer, think `(int*)123`."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:182
+msgid "**FunctionPointer**: a pointer to a function."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:184
+msgid ""
+"Besides the previously mentioned union, a number of other pointer-like types "
+"have their own type:"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:187
+msgid "**FunctionPointer** tracks functions."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:188
+msgid "**MemberPointer** tracks C++ object members"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:190
+msgid "BlockPointer"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:192
+msgid ""
+"Block pointers track a `Pointee`, the block to which they point, along with "
+"a `Base` and an `Offset`. The base identifies the innermost field, while the "
+"offset points to an array element relative to the base (including one-past-"
+"end pointers). The offset identifies the array element or field which is "
+"referenced, while the base points to the outer object or array which "
+"contains the field. These two fields allow all pointers to be uniquely "
+"identified, disambiguated and characterised."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:200
+msgid "As an example, consider the following structure:"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:217
+msgid ""
+"On the target, `&a` and `&a.b.x` are equal. So are `&a.c[0]` and `&a.c[0]."
+"a`. In the interpreter, all these pointers must be distinguished since they "
+"are all allowed to address a distinct range of memory."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:222
+msgid ""
+"In the interpreter, the object would require 240 bytes of storage and would "
+"have its fields interleaved with metadata. The pointers which can be derived "
+"to the object are illustrated in the following diagram:"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:237
+msgid ""
+"The `Base` offset of all pointers points to the start of a field or an array "
+"and is preceded by an inline descriptor (unless `Base` is zero, pointing to "
+"the root). All the relevant attributes can be read from either the inline "
+"descriptor or the descriptor of the block."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:242
+msgid ""
+"Array elements are identified by the `Offset` field of pointers, pointing to "
+"past the inline descriptors for composites and before the actual data in the "
+"case of primitive arrays. The `Offset` points to the offset where primitives "
+"can be read from. As an example, `a.c + 1` would have the same base as `a.c` "
+"since it is an element of `a.c`, but its offset would point to `&a.c[1]`. "
+"The array-to-pointer decay operation adjusts a pointer to an array (where "
+"the offset is equal to the base) to a pointer to the first element."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:251
+msgid "TypeInfoPointer"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:253
+msgid ""
+"`TypeInfoPointer` tracks two types: the type assigned to `std::type_info` "
+"and the type which was passed to `typeinfo`. It is part of the tagged union "
+"in `Pointer`."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:257
+msgid "Interpretation"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:259
+msgid ""
+"After bytecode has been generated (or not, for expressions), the bytecode is "
+"then interpreted. The bytecode is stack-based and uses `InterpStack` to "
+"allocate memory for the produced values."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:263
+msgid "Here is an example function:"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:272
+msgid ""
+"Which generates the following bytecode (this can be produced via `interp::"
+"Function::dump()`):"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:284
+msgid ""
+"As you can see, all instructions here are type-aware. We're first pushing "
+"both parameter values to the stack. Then the `Add` opcode will add them up "
+"and push the result to the stack, which will be returned via the `Ret` "
+"opcode."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:288
+msgid "Debugging"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:290
+msgid "Here are a few hints when working on the bytecode interpreter:"
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:292
+msgid ""
+"Setting a breakpoint on `CCEDiag` and `FFDiag` will stop the debugger when a "
+"diagnostic is emitted."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:294
+msgid ""
+"If you want to see the bytecode of a function call `dump()` on the `interp::"
+"Function`."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:295
+msgid ""
+"Additionally to the last point, `interp::Function::dump(CodePtr)` exists, "
+"which you can pass the current `OpPC` and it will then show you where in the "
+"bytecode that opcode is."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:297
+msgid ""
+"`interp::Pointer` has an `operator<<` that prints useful information. Try it "
+"e.g. via `llvm::errs() << Ptr << '\\n';`."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:299
+msgid "Printing `APValue` instances also works via `APValue::dump()`."
+msgstr ""
+
+#: ../../../ConstantInterpreter.md:300
+msgid ""
+"If you want to see *everything* that's being evaluated, add debugging output "
+"to the `evaluate*` functions in `Context.cpp`."
+msgstr ""
