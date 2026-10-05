@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Source-based Code Coverage &#8212; Clang 9 說明文件</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
+    <script src="_static/documentation_options.js?v=9e9749be"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=cbf116e0"></script>
+    <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/SourceBasedCodeCoverage.html" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜尋" href="search.html" />
+    <link rel="next" title="模組" href="Modules.html" />
+    <link rel="prev" title="ShadowCallStack" href="ShadowCallStack.html" />
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Clang 9 說明文件</span></a></h1>
+        <h2 class="heading"><span>Source-based Code Coverage</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="ShadowCallStack.html">ShadowCallStack</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">內容</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="Modules.html">模組</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="source-based-code-coverage">
+<h1>Source-based Code Coverage<a class="headerlink" href="#source-based-code-coverage" title="連結到這個標頭">¶</a></h1>
+<nav class="contents local" id="id1">
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id2">簡介</a></p></li>
+<li><p><a class="reference internal" href="#the-code-coverage-workflow" id="id3">The code coverage workflow</a></p></li>
+<li><p><a class="reference internal" href="#compiling-with-coverage-enabled" id="id4">Compiling with coverage enabled</a></p></li>
+<li><p><a class="reference internal" href="#running-the-instrumented-program" id="id5">Running the instrumented program</a></p></li>
+<li><p><a class="reference internal" href="#creating-coverage-reports" id="id6">Creating coverage reports</a></p></li>
+<li><p><a class="reference internal" href="#exporting-coverage-data" id="id7">Exporting coverage data</a></p></li>
+<li><p><a class="reference internal" href="#interpreting-reports" id="id8">Interpreting reports</a></p></li>
+<li><p><a class="reference internal" href="#format-compatibility-guarantees" id="id9">Format compatibility guarantees</a></p></li>
+<li><p><a class="reference internal" href="#using-the-profiling-runtime-without-static-initializers" id="id10">Using the profiling runtime without static initializers</a></p></li>
+<li><p><a class="reference internal" href="#collecting-coverage-reports-for-the-llvm-project" id="id11">Collecting coverage reports for the llvm project</a></p></li>
+<li><p><a class="reference internal" href="#drawbacks-and-limitations" id="id12">Drawbacks and limitations</a></p></li>
+</ul>
+</nav>
+<section id="introduction">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">簡介</a><a class="headerlink" href="#introduction" title="連結到這個標頭">¶</a></h2>
+<p>This document explains how to use clang's source-based code coverage feature.
+It's called &quot;source-based&quot; because it operates on AST and preprocessor
+information directly. This allows it to generate very precise coverage data.</p>
+<p>Clang ships two other code coverage implementations:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="SanitizerCoverage.html"><span class="doc">SanitizerCoverage</span></a> - A low-overhead tool meant for use alongside the
+various sanitizers. It can provide up to edge-level coverage.</p></li>
+<li><p>gcov - A GCC-compatible coverage implementation which operates on DebugInfo.
+This is enabled by <code class="docutils literal notranslate"><span class="pre">-ftest-coverage</span></code> or <code class="docutils literal notranslate"><span class="pre">--coverage</span></code>.</p></li>
+</ul>
+<p>From this point onwards &quot;code coverage&quot; will refer to the source-based kind.</p>
+</section>
+<section id="the-code-coverage-workflow">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">The code coverage workflow</a><a class="headerlink" href="#the-code-coverage-workflow" title="連結到這個標頭">¶</a></h2>
+<p>The code coverage workflow consists of three main steps:</p>
+<ul class="simple">
+<li><p>Compiling with coverage enabled.</p></li>
+<li><p>Running the instrumented program.</p></li>
+<li><p>Creating coverage reports.</p></li>
+</ul>
+<p>The next few sections work through a complete, copy-'n-paste friendly example
+based on this program:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="w"> </span><span class="n">cat</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="n">EOF</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">foo</span><span class="p">.</span><span class="n">cc</span>
+<span class="cp">#define BAR(x) ((x) || (x))</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">foo</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">I</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">BAR</span><span class="p">(</span><span class="n">I</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">foo</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="n">foo</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">EOF</span>
+</pre></div>
+</div>
+</section>
+<section id="compiling-with-coverage-enabled">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Compiling with coverage enabled</a><a class="headerlink" href="#compiling-with-coverage-enabled" title="連結到這個標頭">¶</a></h2>
+<p>To compile code with coverage enabled, pass <code class="docutils literal notranslate"><span class="pre">-fprofile-instr-generate</span>
+<span class="pre">-fcoverage-mapping</span></code> to the compiler:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Step<span class="w"> </span><span class="m">1</span>:<span class="w"> </span>Compile<span class="w"> </span>with<span class="w"> </span>coverage<span class="w"> </span>enabled.
+<span class="gp">% </span>clang++<span class="w"> </span>-fprofile-instr-generate<span class="w"> </span>-fcoverage-mapping<span class="w"> </span>foo.cc<span class="w"> </span>-o<span class="w"> </span>foo
+</pre></div>
+</div>
+<p>Note that linking together code with and without coverage instrumentation is
+supported. Uninstrumented code simply won't be accounted for in reports.</p>
+</section>
+<section id="running-the-instrumented-program">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Running the instrumented program</a><a class="headerlink" href="#running-the-instrumented-program" title="連結到這個標頭">¶</a></h2>
+<p>The next step is to run the instrumented program. When the program exits it
+will write a <strong>raw profile</strong> to the path specified by the <code class="docutils literal notranslate"><span class="pre">LLVM_PROFILE_FILE</span></code>
+environment variable. If that variable does not exist, the profile is written
+to <code class="docutils literal notranslate"><span class="pre">default.profraw</span></code> in the current directory of the program. If
+<code class="docutils literal notranslate"><span class="pre">LLVM_PROFILE_FILE</span></code> contains a path to a non-existent directory, the missing
+directory structure will be created.  Additionally, the following special
+<strong>pattern strings</strong> are rewritten:</p>
+<ul class="simple">
+<li><p>&quot;%p&quot; expands out to the process ID.</p></li>
+<li><p>&quot;%h&quot; expands out to the hostname of the machine running the program.</p></li>
+<li><p>&quot;%Nm&quot; expands out to the instrumented binary's signature. When this pattern
+is specified, the runtime creates a pool of N raw profiles which are used for
+on-line profile merging. The runtime takes care of selecting a raw profile
+from the pool, locking it, and updating it before the program exits.  If N is
+not specified (i.e the pattern is &quot;%m&quot;), it's assumed that <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">1</span></code>. N must
+be between 1 and 9. The merge pool specifier can only occur once per filename
+pattern.</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Step<span class="w"> </span><span class="m">2</span>:<span class="w"> </span>Run<span class="w"> </span>the<span class="w"> </span>program.
+<span class="gp">% </span><span class="nv">LLVM_PROFILE_FILE</span><span class="o">=</span><span class="s2">&quot;foo.profraw&quot;</span><span class="w"> </span>./foo
+</pre></div>
+</div>
+</section>
+<section id="creating-coverage-reports">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Creating coverage reports</a><a class="headerlink" href="#creating-coverage-reports" title="連結到這個標頭">¶</a></h2>
+<p>Raw profiles have to be <strong>indexed</strong> before they can be used to generate
+coverage reports. This is done using the &quot;merge&quot; tool in <code class="docutils literal notranslate"><span class="pre">llvm-profdata</span></code>
+(which can combine multiple raw profiles and index them at the same time):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Step<span class="w"> </span><span class="m">3</span><span class="o">(</span>a<span class="o">)</span>:<span class="w"> </span>Index<span class="w"> </span>the<span class="w"> </span>raw<span class="w"> </span>profile.
+<span class="gp">% </span>llvm-profdata<span class="w"> </span>merge<span class="w"> </span>-sparse<span class="w"> </span>foo.profraw<span class="w"> </span>-o<span class="w"> </span>foo.profdata
+</pre></div>
+</div>
+<p>There are multiple different ways to render coverage reports. The simplest
+option is to generate a line-oriented report:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Step<span class="w"> </span><span class="m">3</span><span class="o">(</span>b<span class="o">)</span>:<span class="w"> </span>Create<span class="w"> </span>a<span class="w"> </span>line-oriented<span class="w"> </span>coverage<span class="w"> </span>report.
+<span class="gp">% </span>llvm-cov<span class="w"> </span>show<span class="w"> </span>./foo<span class="w"> </span>-instr-profile<span class="o">=</span>foo.profdata
+</pre></div>
+</div>
+<p>This report includes a summary view as well as dedicated sub-views for
+templated functions and their instantiations. For our example program, we get
+distinct views for <code class="docutils literal notranslate"><span class="pre">foo&lt;int&gt;(...)</span></code> and <code class="docutils literal notranslate"><span class="pre">foo&lt;float&gt;(...)</span></code>.  If
+<code class="docutils literal notranslate"><span class="pre">-show-line-counts-or-regions</span></code> is enabled, <code class="docutils literal notranslate"><span class="pre">llvm-cov</span></code> displays sub-line
+region counts (even in macro expansions):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    1|   20|#define BAR(x) ((x) || (x))
+                           ^20     ^2
+    2|    2|template &lt;typename T&gt; void foo(T x) {
+    3|   22|  for (unsigned I = 0; I &lt; 10; ++I) { BAR(I); }
+                                   ^22     ^20  ^20^20
+    4|    2|}
+------------------
+| void foo&lt;int&gt;(int):
+|      2|    1|template &lt;typename T&gt; void foo(T x) {
+|      3|   11|  for (unsigned I = 0; I &lt; 10; ++I) { BAR(I); }
+|                                     ^11     ^10  ^10^10
+|      4|    1|}
+------------------
+| void foo&lt;float&gt;(int):
+|      2|    1|template &lt;typename T&gt; void foo(T x) {
+|      3|   11|  for (unsigned I = 0; I &lt; 10; ++I) { BAR(I); }
+|                                     ^11     ^10  ^10^10
+|      4|    1|}
+------------------
+</pre></div>
+</div>
+<p>To generate a file-level summary of coverage statistics instead of a
+line-oriented report, try:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Step<span class="w"> </span><span class="m">3</span><span class="o">(</span>c<span class="o">)</span>:<span class="w"> </span>Create<span class="w"> </span>a<span class="w"> </span>coverage<span class="w"> </span>summary.
+<span class="gp">% </span>llvm-cov<span class="w"> </span>report<span class="w"> </span>./foo<span class="w"> </span>-instr-profile<span class="o">=</span>foo.profdata
+<span class="go">Filename           Regions    Missed Regions     Cover   Functions  Missed Functions  Executed       Lines      Missed Lines     Cover</span>
+<span class="go">--------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">/tmp/foo.cc             13                 0   100.00%           3                 0   100.00%          13                 0   100.00%</span>
+<span class="go">--------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">TOTAL                   13                 0   100.00%           3                 0   100.00%          13                 0   100.00%</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">llvm-cov</span></code> tool supports specifying a custom demangler, writing out
+reports in a directory structure, and generating html reports. For the full
+list of options, please refer to the <a class="reference external" href="https://llvm.org/docs/CommandGuide/llvm-cov.html">command guide</a>.</p>
+<p>A few final notes:</p>
+<ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">-sparse</span></code> flag is optional but can result in dramatically smaller
+indexed profiles. This option should not be used if the indexed profile will
+be reused for PGO.</p></li>
+<li><p>Raw profiles can be discarded after they are indexed. Advanced use of the
+profile runtime library allows an instrumented program to merge profiling
+information directly into an existing raw profile on disk. The details are
+out of scope.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">llvm-profdata</span></code> tool can be used to merge together multiple raw or
+indexed profiles. To combine profiling data from multiple runs of a program,
+try e.g:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>llvm-profdata<span class="w"> </span>merge<span class="w"> </span>-sparse<span class="w"> </span>foo1.profraw<span class="w"> </span>foo2.profdata<span class="w"> </span>-o<span class="w"> </span>foo3.profdata
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="exporting-coverage-data">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Exporting coverage data</a><a class="headerlink" href="#exporting-coverage-data" title="連結到這個標頭">¶</a></h2>
+<p>Coverage data can be exported into JSON using the <code class="docutils literal notranslate"><span class="pre">llvm-cov</span> <span class="pre">export</span></code>
+sub-command. There is a comprehensive reference which defines the structure of
+the exported data at a high level in the llvm-cov source code.</p>
+</section>
+<section id="interpreting-reports">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Interpreting reports</a><a class="headerlink" href="#interpreting-reports" title="連結到這個標頭">¶</a></h2>
+<p>There are four statistics tracked in a coverage summary:</p>
+<ul class="simple">
+<li><p>Function coverage is the percentage of functions which have been executed at
+least once. A function is considered to be executed if any of its
+instantiations are executed.</p></li>
+<li><p>Instantiation coverage is the percentage of function instantiations which
+have been executed at least once. Template functions and static inline
+functions from headers are two kinds of functions which may have multiple
+instantiations.</p></li>
+<li><p>Line coverage is the percentage of code lines which have been executed at
+least once. Only executable lines within function bodies are considered to be
+code lines.</p></li>
+<li><p>Region coverage is the percentage of code regions which have been executed at
+least once. A code region may span multiple lines (e.g in a large function
+body with no control flow). However, it's also possible for a single line to
+contain multiple code regions (e.g in &quot;return x || y &amp;&amp; z&quot;).</p></li>
+</ul>
+<p>Of these four statistics, function coverage is usually the least granular while
+region coverage is the most granular. The project-wide totals for each
+statistic are listed in the summary.</p>
+</section>
+<section id="format-compatibility-guarantees">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Format compatibility guarantees</a><a class="headerlink" href="#format-compatibility-guarantees" title="連結到這個標頭">¶</a></h2>
+<ul class="simple">
+<li><p>There are no backwards or forwards compatibility guarantees for the raw
+profile format. Raw profiles may be dependent on the specific compiler
+revision used to generate them. It's inadvisable to store raw profiles for
+long periods of time.</p></li>
+<li><p>Tools must retain <strong>backwards</strong> compatibility with indexed profile formats.
+These formats are not forwards-compatible: i.e, a tool which uses format
+version X will not be able to understand format version (X+k).</p></li>
+<li><p>Tools must also retain <strong>backwards</strong> compatibility with the format of the
+coverage mappings emitted into instrumented binaries. These formats are not
+forwards-compatible.</p></li>
+<li><p>The JSON coverage export format has a (major, minor, patch) version triple.
+Only a major version increment indicates a backwards-incompatible change. A
+minor version increment is for added functionality, and patch version
+increments are for bugfixes.</p></li>
+</ul>
+</section>
+<section id="using-the-profiling-runtime-without-static-initializers">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Using the profiling runtime without static initializers</a><a class="headerlink" href="#using-the-profiling-runtime-without-static-initializers" title="連結到這個標頭">¶</a></h2>
+<p>By default the compiler runtime uses a static initializer to determine the
+profile output path and to register a writer function. To collect profiles
+without using static initializers, do this manually:</p>
+<ul class="simple">
+<li><p>Export a <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">__llvm_profile_runtime</span></code> symbol from each instrumented shared
+library and executable. When the linker finds a definition of this symbol, it
+knows to skip loading the object which contains the profiling runtime's
+static initializer.</p></li>
+<li><p>Forward-declare <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">__llvm_profile_initialize_file(void)</span></code> and call it
+once from each instrumented executable. This function parses
+<code class="docutils literal notranslate"><span class="pre">LLVM_PROFILE_FILE</span></code>, sets the output path, and truncates any existing files
+at that path. To get the same behavior without truncating existing files,
+pass a filename pattern string to <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">__llvm_profile_set_filename(char</span>
+<span class="pre">*)</span></code>.  These calls can be placed anywhere so long as they precede all calls
+to <code class="docutils literal notranslate"><span class="pre">__llvm_profile_write_file</span></code>.</p></li>
+<li><p>Forward-declare <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">__llvm_profile_write_file(void)</span></code> and call it to write
+out a profile. This function returns 0 when it succeeds, and a non-zero value
+otherwise. Calling this function multiple times appends profile data to an
+existing on-disk raw profile.</p></li>
+</ul>
+<p>In C++ files, declare these as <code class="docutils literal notranslate"><span class="pre">extern</span> <span class="pre">&quot;C&quot;</span></code>.</p>
+</section>
+<section id="collecting-coverage-reports-for-the-llvm-project">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Collecting coverage reports for the llvm project</a><a class="headerlink" href="#collecting-coverage-reports-for-the-llvm-project" title="連結到這個標頭">¶</a></h2>
+<p>To prepare a coverage report for llvm (and any of its sub-projects), add
+<code class="docutils literal notranslate"><span class="pre">-DLLVM_BUILD_INSTRUMENTED_COVERAGE=On</span></code> to the cmake configuration. Raw
+profiles will be written to <code class="docutils literal notranslate"><span class="pre">$BUILD_DIR/profiles/</span></code>. To prepare an html
+report, run <code class="docutils literal notranslate"><span class="pre">llvm/utils/prepare-code-coverage-artifact.py</span></code>.</p>
+<p>To specify an alternate directory for raw profiles, use
+<code class="docutils literal notranslate"><span class="pre">-DLLVM_PROFILE_DATA_DIR</span></code>. To change the size of the profile merge pool, use
+<code class="docutils literal notranslate"><span class="pre">-DLLVM_PROFILE_MERGE_POOL_SIZE</span></code>.</p>
+</section>
+<section id="drawbacks-and-limitations">
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">Drawbacks and limitations</a><a class="headerlink" href="#drawbacks-and-limitations" title="連結到這個標頭">¶</a></h2>
+<ul>
+<li><p>Prior to version 2.26, the GNU binutils BFD linker is not able link programs
+compiled with <code class="docutils literal notranslate"><span class="pre">-fcoverage-mapping</span></code> in its <code class="docutils literal notranslate"><span class="pre">--gc-sections</span></code> mode.  Possible
+workarounds include disabling <code class="docutils literal notranslate"><span class="pre">--gc-sections</span></code>, upgrading to a newer version
+of BFD, or using the Gold linker.</p></li>
+<li><p>Code coverage does not handle unpredictable changes in control flow or stack
+unwinding in the presence of exceptions precisely. Consider the following
+function:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">may_throw</span><span class="p">();</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If the call to <code class="docutils literal notranslate"><span class="pre">may_throw()</span></code> propagates an exception into <code class="docutils literal notranslate"><span class="pre">f</span></code>, the code
+coverage tool may mark the <code class="docutils literal notranslate"><span class="pre">return</span></code> statement as executed even though it is
+not. A call to <code class="docutils literal notranslate"><span class="pre">longjmp()</span></code> can have similar effects.</p>
+</li>
+</ul>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="ShadowCallStack.html">ShadowCallStack</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">內容</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="Modules.html">模組</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; 版權所有 2007-2026, The Clang Team.
+      使用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3 建立。
+    </div>
+  </body>
+</html>
