@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"POT-Creation-Date: 2026-10-05 16:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,15 +72,30 @@ msgid ""
 "your program with the `-fopenmp-optimistic-collapse`."
 msgstr ""
 
-#: ../../../OpenMPSupport.md:45
+#: ../../../OpenMPSupport.md:44
+msgid ""
+"C++20 structured bindings are now supported in OpenMP constructs. Bindings "
+"from structured binding declarations can be used in data-sharing clauses "
+"(``private``, ``firstprivate``, ``lastprivate``, ``shared``, ``linear``), "
+"and in ``map`` clauses for target directives. Limitations: tuple-like "
+"bindings (using the tuple protocol with ``get<N>()``) are not yet supported; "
+"conditional lastprivate and reductions are not yet supported. Important "
+"restriction for target regions: if the original variable is explicitly "
+"mapped (e.g., ``map(tofrom: t)``) but only bindings from it, and not the "
+"original variable itself, are used in the target region, the compiler emits "
+"an error. Either use the original variable directly in the target region, or "
+"map the bindings explicitly instead of the original variable."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:58
 msgid "GPU devices support"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:47
+#: ../../../OpenMPSupport.md:60
 msgid "Data-sharing modes"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:49
+#: ../../../OpenMPSupport.md:62
 msgid ""
 "Clang supports two data-sharing models for Cuda devices: `Generic` and "
 "`Cuda` modes. The default mode is `Generic`. `Cuda` mode can give an "
@@ -94,27 +109,27 @@ msgid ""
 "be used for tuning."
 msgstr ""
 
-#: ../../../OpenMPSupport.md:59
+#: ../../../OpenMPSupport.md:72
 msgid "Features not supported or with limited support for Cuda devices"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:61
+#: ../../../OpenMPSupport.md:74
 msgid "Cancellation constructs are not supported."
 msgstr ""
 
-#: ../../../OpenMPSupport.md:62
+#: ../../../OpenMPSupport.md:75
 msgid "Doacross loop nest is not supported."
 msgstr ""
 
-#: ../../../OpenMPSupport.md:63
+#: ../../../OpenMPSupport.md:76
 msgid "User-defined reductions are supported only for trivial types."
 msgstr ""
 
-#: ../../../OpenMPSupport.md:64
+#: ../../../OpenMPSupport.md:77
 msgid "Nested parallelism: inner parallel regions are executed sequentially."
 msgstr ""
 
-#: ../../../OpenMPSupport.md:65
+#: ../../../OpenMPSupport.md:78
 msgid ""
 "Debug information for OpenMP target regions is supported, but sometimes it "
 "may be required to manually specify the address class of the inspected "
@@ -122,11 +137,11 @@ msgid ""
 "global memory, but the debug info may be not aware of it."
 msgstr ""
 
-#: ../../../OpenMPSupport.md:72
+#: ../../../OpenMPSupport.md:85
 msgid "OpenMP 5.0 Implementation Details"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:74
+#: ../../../OpenMPSupport.md:87
 msgid ""
 "The following table provides a quick overview over various OpenMP 5.0 "
 "features and their implementation status. Please post on the [Discourse "
@@ -634,11 +649,11 @@ msgstr ""
 msgid "memory model update (seq_cst, acq_rel, release, acquire,...)"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:152
+#: ../../../OpenMPSupport.md:165
 msgid "OpenMP 5.1 Implementation Details"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:154
+#: ../../../OpenMPSupport.md:167
 msgid ""
 "The following table provides a quick overview over various OpenMP 5.1 "
 "features and their implementation status. Please post on the [Discourse "
@@ -1022,11 +1037,11 @@ msgstr ""
 msgid "parsing/sema done: [D131830][D131830], [D141531][D141531]"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:219
+#: ../../../OpenMPSupport.md:232
 msgid "OpenMP 5.2 Implementation Details"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:221
+#: ../../../OpenMPSupport.md:234
 msgid ""
 "The following table provides a quick overview of various OpenMP 5.2 features "
 "and their implementation status. Please post on the [Discourse forums "
@@ -1138,7 +1153,7 @@ msgstr ""
 msgid "dispatch construct extension to support end directive"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:254
+#: ../../../OpenMPSupport.md:267
 msgid "OpenMP 5.2 Deprecations"
 msgstr ""
 
@@ -1194,11 +1209,11 @@ msgstr ""
 msgid "ompd prefix usage for some ICVs"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:273
+#: ../../../OpenMPSupport.md:286
 msgid "OpenMP 6.0 Implementation Details"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:275
+#: ../../../OpenMPSupport.md:288
 msgid ""
 "The following table provides a quick overview of various OpenMP 6.0 features "
 "and their implementation status. Please post on the [Discourse forums "
@@ -1657,7 +1672,7 @@ msgstr ""
 msgid "OMPT: removed sync_region_barrier(_implicit) enum value"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:363
+#: ../../../OpenMPSupport.md:376
 msgid "OpenMP 6.0 Deprecations"
 msgstr ""
 
@@ -1669,11 +1684,11 @@ msgstr ""
 msgid "OMPT: transfer_to_device / transfer_from_device enums"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:372
+#: ../../../OpenMPSupport.md:385
 msgid "OpenMP 6.1 Implementation Details (Experimental)"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:374
+#: ../../../OpenMPSupport.md:387
 msgid ""
 "The following table provides a quick overview over various OpenMP 6.1 "
 "features and their implementation status. Since OpenMP 6.1 has not yet been "
@@ -1693,6 +1708,12 @@ msgstr ""
 
 #: ../../../OpenMPSupport.md:15
 msgid "loop flatten transformation"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"Clang: @loopacino ([PR206977][PR206977]); non-rectangular loops are not "
+"supported yet"
 msgstr ""
 
 #: ../../../OpenMPSupport.md:15
@@ -1732,11 +1753,11 @@ msgid ""
 "C/C++: @kevinsala ([PR206412][PR208353]); Fortran: @skc7, @kparzysz, @mjklemm"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:391
+#: ../../../OpenMPSupport.md:404
 msgid "OpenMP Extensions"
 msgstr ""
 
-#: ../../../OpenMPSupport.md:393
+#: ../../../OpenMPSupport.md:406
 msgid ""
 "The following table provides a quick overview over various OpenMP extensions "
 "and their implementation status. These extensions are not currently defined "
