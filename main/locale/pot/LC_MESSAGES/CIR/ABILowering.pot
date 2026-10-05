@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"POT-Creation-Date: 2026-10-05 16:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,23 +65,23 @@ msgid ""
 "with minimal dialect-specific adaptation (e.g. cdecl when calling C from "
 "Fortran). ABI compliance will be validated through differential testing "
 "against Classic Clang CodeGen, and performance overhead should remain under "
-"5% compared to a direct, dialect-specific implementation. Variadic calls are "
-"lowered on x86_64 by classifying each call site from its own operand types, "
-"since an argument passed through an ellipsis competes for registers with the "
-"declared ones. An indirect variadic call whose operands already carry their "
-"wire form is left as written. One that needs an ABI rewrite is deferred, as "
-"is variadic lowering for other targets."
+"5% compared to a direct, dialect-specific implementation. Variadic calls, "
+"direct or indirect, are lowered on x86_64 by classifying each call site from "
+"its own operand types, since an argument passed through an ellipsis competes "
+"for registers with the declared ones. As in Classic Clang CodeGen, the "
+"call's function type keeps only the declared parameters. Variadic lowering "
+"for other targets is deferred."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:42
+#: ../../../CIR/ABILowering.md:41
 msgid "Background and Context"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:44
+#: ../../../CIR/ABILowering.md:43
 msgid "What is Calling Convention Lowering?"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:46
+#: ../../../CIR/ABILowering.md:45
 msgid ""
 "Calling convention lowering transforms high-level function signatures to "
 "match target ABI (Application Binary Interface) requirements. When a "
@@ -94,7 +94,7 @@ msgid ""
 "aggregate:"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:67
+#: ../../../CIR/ABILowering.md:66
 msgid ""
 "Calling convention lowering is complex for several reasons: it is highly "
 "target-specific (each architecture has different rules for registers vs. "
@@ -104,15 +104,15 @@ msgid ""
 "(e.g. x86_64 System V vs. Windows x64), adding further complexity."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:74
+#: ../../../CIR/ABILowering.md:73
 msgid "Existing Implementations"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:76
+#: ../../../CIR/ABILowering.md:75
 msgid "Classic Clang CodeGen"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:78
+#: ../../../CIR/ABILowering.md:77
 msgid ""
 "Classic Clang CodeGen (located in `clang/lib/CodeGen/`) transforms calling "
 "conventions during the AST-to-LLVM-IR lowering process. This implementation "
@@ -122,11 +122,11 @@ msgid ""
 "frontends."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:84
+#: ../../../CIR/ABILowering.md:83
 msgid "CIR Incubator"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:86
+#: ../../../CIR/ABILowering.md:85
 msgid ""
 "The CIR incubator includes a calling convention lowering pass in `clang/lib/"
 "CIR/Dialect/Transforms/TargetLowering/` that transforms CIR operations into "
@@ -136,11 +136,11 @@ msgid ""
 "other MLIR dialects."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:93
+#: ../../../CIR/ABILowering.md:92
 msgid "LLVM ABI Lowering Library"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:95
+#: ../../../CIR/ABILowering.md:94
 msgid ""
 "A 2025 Google Summer of Code project produced [PR #140112](https://github."
 "com/llvm/llvm-project/pull/140112), which proposes extracting Clang's ABI "
@@ -153,7 +153,7 @@ msgid ""
 "`abi::Type*`."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:105
+#: ../../../CIR/ABILowering.md:104
 msgid ""
 "Our approach is to complete and extend this library and use it as the single "
 "source of truth for ABI classification. One implementation in one place "
@@ -163,7 +163,7 @@ msgid ""
 "reimplementing ABI logic."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:111
+#: ../../../CIR/ABILowering.md:110
 msgid ""
 "**Current state.** The x86_64 implementation is largely complete and under "
 "review. AArch64 and some other targets are not yet implemented; there is no "
@@ -176,27 +176,27 @@ msgid ""
 "accepted."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:120
+#: ../../../CIR/ABILowering.md:119
 msgid ""
 "**Our approach.** The approach is to complete and extend the ABI library (e."
 "g. AArch64, review feedback, tests) and add an **MLIR integration layer** so "
 "that MLIR dialects can use it:"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:124
+#: ../../../CIR/ABILowering.md:123
 msgid ""
 "**ABITypeMapper**: maps `mlir::Type` to `abi::Type*`, analogous to "
 "QualTypeMapper for Clang."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:126
+#: ../../../CIR/ABILowering.md:125
 msgid ""
 "**MLIR ABI lowering pass**: uses the library's `ABIInfo` for classification, "
 "then performs dialect-specific rewriting via `ABIRewriteContext` for CIR, "
 "FIR, and other dialects."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:130
+#: ../../../CIR/ABILowering.md:129
 msgid ""
 "The CIR incubator serves as a **reference only** (e.g. for AArch64 "
 "algorithms). We do not upstream the incubator's CIR-specific ABI "
@@ -204,11 +204,11 @@ msgid ""
 "ABI library where appropriate."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:135
+#: ../../../CIR/ABILowering.md:134
 msgid "Requirements for MLIR Dialects"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:137
+#: ../../../CIR/ABILowering.md:136
 msgid ""
 "CIR needs to lower C/C++ calling conventions correctly, with initial support "
 "for x86_64 and AArch64 targets. It must handle structs, unions, and complex "
@@ -222,11 +222,11 @@ msgid ""
 "validation capabilities."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:147
+#: ../../../CIR/ABILowering.md:146
 msgid "Proposed Solution"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:149
+#: ../../../CIR/ABILowering.md:148
 msgid ""
 "**Core.** The LLVM ABI library in `llvm/lib/ABI/` performs ABI "
 "classification on `abi::Type*`. It provides `ABIInfo` and target-specific "
@@ -234,7 +234,7 @@ msgid ""
 "the single place where ABI rules are implemented."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:154
+#: ../../../CIR/ABILowering.md:153
 msgid ""
 "**MLIR side.** To use this library from MLIR dialects we add an integration "
 "layer: (1) **ABITypeMapper** maps `mlir::Type` to `abi::Type*` (analogous to "
@@ -246,7 +246,7 @@ msgid ""
 "dialect-specific."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:163
+#: ../../../CIR/ABILowering.md:162
 msgid ""
 "The following diagram shows the layering. At the top, the ABI library holds "
 "the ABI logic. In the middle, adapters connect frontends to it: Classic "
@@ -256,15 +256,15 @@ msgid ""
 "Fortran)."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:193
+#: ../../../CIR/ABILowering.md:192
 msgid "Design Overview"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:195
+#: ../../../CIR/ABILowering.md:194
 msgid "Architecture Diagram"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:197
+#: ../../../CIR/ABILowering.md:196
 msgid ""
 "The following diagram shows how the design builds on the ABI library "
 "(Section 3). At the top, the ABI library holds the classification logic. The "
@@ -276,11 +276,11 @@ msgid ""
 "lives in the ABI library."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:232
+#: ../../../CIR/ABILowering.md:231
 msgid "ABI Library, Adapter, and Dialect Layers"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:234
+#: ../../../CIR/ABILowering.md:233
 msgid ""
 "The architecture has three parts. **The ABI library** (`llvm/lib/ABI/`) is "
 "the single source of truth for ABI classification: it operates on `abi::"
@@ -296,11 +296,11 @@ msgid ""
 "performed on `abi::Type*` inside the ABI library."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:246
+#: ../../../CIR/ABILowering.md:245
 msgid "Key Components"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:248
+#: ../../../CIR/ABILowering.md:247
 msgid ""
 "The framework is built from the following components. **The ABI library** "
 "(`llvm/lib/ABI/`) provides the single source of truth for ABI "
@@ -318,7 +318,7 @@ msgid ""
 "structure."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:263
+#: ../../../CIR/ABILowering.md:262
 msgid ""
 "The **MLIR ABI lowering pass** orchestrates the flow: it uses ABITypeMapper, "
 "calls the library's ABIInfo, and drives rewriting from the classification "
@@ -330,21 +330,21 @@ msgid ""
 "library."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:271
+#: ../../../CIR/ABILowering.md:270
 msgid "ABI Lowering Flow: How the Pieces Fit Together"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:273
+#: ../../../CIR/ABILowering.md:272
 msgid ""
 "This section describes the end-to-end flow of ABI lowering, showing how all "
 "interfaces and components work together."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:276
+#: ../../../CIR/ABILowering.md:275
 msgid "Step 1: Function Signature Analysis"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:278
+#: ../../../CIR/ABILowering.md:277
 msgid ""
 "The ABI lowering pass begins by analyzing the function signature. Function "
 "operations are identified via MLIR's `FunctionOpInterface`, which provides "
@@ -356,11 +356,11 @@ msgid ""
 "classification logic in the next step."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:293
+#: ../../../CIR/ABILowering.md:292
 msgid "Step 2: Type Mapping via ABITypeMapper"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:295
+#: ../../../CIR/ABILowering.md:294
 msgid ""
 "For each argument and the return type, the pass maps `mlir::Type` to `abi::"
 "Type*` using ABITypeMapper. The mapper produces the representation that the "
@@ -368,35 +368,35 @@ msgid ""
 "coercion types when needed."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:308
+#: ../../../CIR/ABILowering.md:307
 msgid ""
 "**Key Point**: Classification runs in the ABI library on `abi::Type*`; "
 "ABITypeMapper is the only bridge from dialect types to that representation."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:311
+#: ../../../CIR/ABILowering.md:310
 msgid "Step 3: ABI Classification"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:313
+#: ../../../CIR/ABILowering.md:312
 msgid ""
 "The library's target-specific `ABIInfo` (e.g. X86_64) performs "
 "classification on `abi::Type*` and produces the library's classification "
 "result (e.g. ABIFunctionInfo and ABIArgInfo as defined in `llvm/lib/ABI/`):"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:326
+#: ../../../CIR/ABILowering.md:325
 msgid ""
 "Output: the library's classification (e.g. ABIFunctionInfo) for all "
 "arguments and return: \\* `%arg0 (i32)` → Direct (pass as-is) \\* `%arg1 "
 "(struct)` → Expand (split into two i64 fields) \\* Return type → Direct"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:332
+#: ../../../CIR/ABILowering.md:331
 msgid "Step 4: Function Signature Rewriting"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:334
+#: ../../../CIR/ABILowering.md:333
 msgid ""
 "After the library's classification is complete, the pass rewrites the "
 "function to match the ABI requirements using the dialect's "
@@ -407,18 +407,18 @@ msgid ""
 "the single struct parameter."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:349
+#: ../../../CIR/ABILowering.md:348
 msgid ""
 "**Key Point**: The original function had signature `(i32, struct) -> i32`, "
 "but the ABI-lowered function has signature `(i32, i64, i64) -> i32` with the "
 "struct expanded into its constituent fields."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:353
+#: ../../../CIR/ABILowering.md:352
 msgid "Step 5: Argument Expansion"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:355
+#: ../../../CIR/ABILowering.md:354
 msgid ""
 "With the function signature rewritten, the pass updates all call sites to "
 "match the new signature, using the classification from the ABI library to "
@@ -428,35 +428,35 @@ msgid ""
 "extract fields and construct the new call with the expanded argument list."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:373
+#: ../../../CIR/ABILowering.md:372
 msgid ""
 "**Key Point**: `ABIRewriteContext` abstracts the dialect-specific operation "
 "creation, so the lowering logic doesn't need to know about CIR operations."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:376
+#: ../../../CIR/ABILowering.md:375
 msgid "Step 6: Return Value Handling"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:378
+#: ../../../CIR/ABILowering.md:377
 msgid "For functions returning large structs (indirect return):"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:387
+#: ../../../CIR/ABILowering.md:386
 msgid "Complete Flow Diagram"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:389
+#: ../../../CIR/ABILowering.md:388
 msgid ""
 "The diagram below combines the three-layer architecture (Section 4.1) with "
 "the step-by-step flow, showing which layer owns each step."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:446
+#: ../../../CIR/ABILowering.md:445
 msgid "Key Interactions Between Components"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:448
+#: ../../../CIR/ABILowering.md:447
 msgid ""
 "Classification lives in the ABI library: `ABIInfo` operates on `abi::Type*` "
 "and produces classification results (e.g. ABIArgInfo, ABIFunctionInfo). MLIR "
@@ -466,7 +466,7 @@ msgid ""
 "result to drive rewriting through the dialect's ABIRewriteContext."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:455
+#: ../../../CIR/ABILowering.md:454
 msgid ""
 "ABIRewriteContext consumes the classification (e.g. \"Expand\" for a struct) "
 "and performs the actual IR changes: createFunction with the lowered "
@@ -476,15 +476,15 @@ msgid ""
 "limits dialect code to operation creation."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:462
+#: ../../../CIR/ABILowering.md:461
 msgid "ABIRewriteContext and Target Registry"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:464
+#: ../../../CIR/ABILowering.md:463
 msgid "ABIRewriteContext Interface"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:466
+#: ../../../CIR/ABILowering.md:465
 msgid ""
 "ABIRewriteContext is the only dialect-specific layer: CIR and FIR each "
 "implement it to create their own dialect operations (e.g. cir.call, fir."
@@ -498,7 +498,7 @@ msgid ""
 "function signatures and call sites as indicated by the classification result."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:477
+#: ../../../CIR/ABILowering.md:476
 msgid ""
 "The interface defines two high-level methods: "
 "`rewriteFunctionDefinition(funcOp, classification, builder)` rewrites a "
@@ -511,7 +511,7 @@ msgid ""
 "creation using its own builder internally."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:487
+#: ../../../CIR/ABILowering.md:486
 msgid ""
 "Each dialect implementing ABI lowering must provide a concrete "
 "`ABIRewriteContext` subclass. This is a significant but one-time cost: CIR "
@@ -525,11 +525,11 @@ msgid ""
 "propagated to every dialect independently."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:498
+#: ../../../CIR/ABILowering.md:497
 msgid "Target Registry"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:500
+#: ../../../CIR/ABILowering.md:499
 msgid ""
 "We use the library's target selection or registry to obtain the appropriate "
 "ABIInfo for the compilation target (e.g. X86_64, AArch64). We do not "
@@ -539,35 +539,35 @@ msgid ""
 "library to MLIR dialects."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:507
+#: ../../../CIR/ABILowering.md:506
 msgid "CIR Pass Pipeline Position"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:509
+#: ../../../CIR/ABILowering.md:508
 msgid ""
 "For the CIR dialect, the calling-convention lowering pass is named `cir-call-"
 "conv-lowering` and runs late in the CIR-to-LLVM pipeline:"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:512
+#: ../../../CIR/ABILowering.md:511
 msgid ""
 "`cir-target-lowering` legalizes target-specific operations (e.g. atomic "
 "synchronization scopes)."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:514
+#: ../../../CIR/ABILowering.md:513
 msgid ""
 "`cir-cxxabi-lowering` lowers C++-specific high-level types (member pointers, "
 "vtable lookups, etc.) to ABI-specific representations."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:516
+#: ../../../CIR/ABILowering.md:515
 msgid ""
 "`cir-call-conv-lowering` rewrites function signatures and call sites to "
 "match the target ABI's calling convention rules."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:519
+#: ../../../CIR/ABILowering.md:518
 msgid ""
 "`cir-call-conv-lowering` requires a `dlti.dl_spec` attribute on the module "
 "so it can query type sizes and alignments through MLIR's `DataLayout`. When "
@@ -575,11 +575,11 @@ msgid ""
 "silently using a default layout."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:524
+#: ../../../CIR/ABILowering.md:523
 msgid "The pass takes one of two driver modes via pass options:"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:526
+#: ../../../CIR/ABILowering.md:525
 msgid ""
 "`target=<name>` selects a real ABI target. The first supported value is "
 "`test` (the MLIR test target in `mlir/lib/ABI/Targets/Test/`, used for "
@@ -588,7 +588,7 @@ msgid ""
 "ABI library ships them."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:531
+#: ../../../CIR/ABILowering.md:530
 msgid ""
 "`classification-attr=<name>` reads a pre-built `FunctionClassifica tion` "
 "from a `DictionaryAttr` named `<name>` on each `cir.func` and rewrites "
@@ -597,15 +597,15 @@ msgid ""
 "classifier."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:537
+#: ../../../CIR/ABILowering.md:536
 msgid "Exactly one of the two options must be set."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:539
+#: ../../../CIR/ABILowering.md:538
 msgid "Enabling the Pass"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:541
+#: ../../../CIR/ABILowering.md:540
 msgid ""
 "`cir-call-conv-lowering` runs by default whenever ClangIR code generation is "
 "enabled on an x86_64 target. On every other triple the pipeline omits the "
@@ -613,7 +613,7 @@ msgid ""
 "signatures reach the LLVM dialect in their high-level form."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:546
+#: ../../../CIR/ABILowering.md:545
 msgid ""
 "`-fno-clangir-call-conv-lowering` turns the pass off and `-fclangir-call-"
 "conv-lowering` turns it back on. The last one on the command line wins, so a "
@@ -622,21 +622,21 @@ msgid ""
 "through `-Xclang`."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:552
+#: ../../../CIR/ABILowering.md:551
 msgid "Open Questions"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:554
+#: ../../../CIR/ABILowering.md:553
 msgid ""
 "The following items are open for discussion. This section may be revised, "
 "shortened, or removed before final merge."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:557
+#: ../../../CIR/ABILowering.md:556
 msgid "How to Handle clang::TargetInfo Dependency in MLIR?"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:559
+#: ../../../CIR/ABILowering.md:558
 msgid ""
 "The CIR incubator currently uses `clang::TargetInfo` to query target-"
 "specific properties needed for ABI decisions, such as pointer width, "
@@ -646,11 +646,11 @@ msgid ""
 "should it use MLIR-based mechanisms?"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:565
+#: ../../../CIR/ABILowering.md:564
 msgid "Three approaches are under consideration."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:567
+#: ../../../CIR/ABILowering.md:566
 msgid ""
 "Continue using `clang::TargetInfo` directly, accepting an MLIR→Clang "
 "dependency for this target-specific infrastructure. This approach requires "
@@ -661,7 +661,7 @@ msgid ""
 "than dependent on it."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:574
+#: ../../../CIR/ABILowering.md:573
 msgid ""
 "Combine `llvm::Triple` with MLIR's `DataLayoutInterface`, supplemented by "
 "module-level attributes for ABI-specific properties not covered by the data "
@@ -670,7 +670,7 @@ msgid ""
 "attributes and some upfront design work."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:579
+#: ../../../CIR/ABILowering.md:578
 msgid ""
 "Create a new `mlir::target::TargetInfo` abstraction with minimal methods "
 "tailored specifically for ABI needs (approximately 15-20 methods). This "
@@ -679,7 +679,7 @@ msgid ""
 "`clang::TargetInfo`."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:585
+#: ../../../CIR/ABILowering.md:584
 msgid ""
 "Option 2 is recommended as the preferred approach. It maintains MLIR's "
 "independence from Clang, which is important for MLIR's mission to be "
@@ -691,11 +691,11 @@ msgid ""
 "due to the architectural concerns around MLIR depending on Clang."
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:594
+#: ../../../CIR/ABILowering.md:593
 msgid "Scope: C Calling Convention vs. Arbitrary Calling Conventions"
 msgstr ""
 
-#: ../../../CIR/ABILowering.md:596
+#: ../../../CIR/ABILowering.md:595
 msgid ""
 "This design focuses on the **C calling convention layer** (e.g. cdecl, "
 "System V, AAPCS). C++ ABI concerns such as non-trivial copy constructors or "

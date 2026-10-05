@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"POT-Creation-Date: 2026-10-05 16:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -454,17 +454,24 @@ msgstr ""
 
 #: ../../../SanitizerCoverage.md:533
 msgid ""
+"Set `print_coverage_summary=0` (for example, `ASAN_OPTIONS=coverage=1:"
+"print_coverage_summary=0`) to suppress the `SanitizerCoverage:` summary "
+"line. Coverage files are still written."
+msgstr ""
+
+#: ../../../SanitizerCoverage.md:537
+msgid ""
 "Every time you run an executable instrumented with SanitizerCoverage one `*."
 "sancov` file is created during the process shutdown. If the executable is "
 "dynamically linked against instrumented DSOs, one `*.sancov` file will be "
 "also created for every DSO."
 msgstr ""
 
-#: ../../../SanitizerCoverage.md:538
+#: ../../../SanitizerCoverage.md:542
 msgid "Sancov data format"
 msgstr ""
 
-#: ../../../SanitizerCoverage.md:540
+#: ../../../SanitizerCoverage.md:544
 msgid ""
 "The format of `*.sancov` files is very simple: the first 8 bytes is the "
 "magic, one of `0xC0BFFFFFFFFFFF64` and `0xC0BFFFFFFFFFFF32`. The last byte "
@@ -473,11 +480,11 @@ msgid ""
 "run."
 msgstr ""
 
-#: ../../../SanitizerCoverage.md:545
+#: ../../../SanitizerCoverage.md:549
 msgid "Sancov Tool"
 msgstr ""
 
-#: ../../../SanitizerCoverage.md:547
+#: ../../../SanitizerCoverage.md:551
 msgid ""
 "A simple `sancov` tool is provided to process coverage files. The tool is "
 "part of LLVM project and is currently supported only on Linux. It can handle "
@@ -487,15 +494,15 @@ msgid ""
 "these files using module names and binaries file names."
 msgstr ""
 
-#: ../../../SanitizerCoverage.md:590
+#: ../../../SanitizerCoverage.md:594
 msgid "Coverage Reports"
 msgstr ""
 
-#: ../../../SanitizerCoverage.md:592
+#: ../../../SanitizerCoverage.md:596
 msgid "**Experimental**"
 msgstr ""
 
-#: ../../../SanitizerCoverage.md:594
+#: ../../../SanitizerCoverage.md:598
 msgid ""
 "`.sancov` files do not contain enough information to generate a source-level "
 "coverage report. The missing information is contained in debug info of the "
@@ -503,18 +510,18 @@ msgid ""
 "first:"
 msgstr ""
 
-#: ../../../SanitizerCoverage.md:603
+#: ../../../SanitizerCoverage.md:607
 msgid ""
 "The `.symcov` file can be browsed overlaid over the source code by running "
 "`tools/sancov/coverage-report-server.py` script that will start an HTTP "
 "server."
 msgstr ""
 
-#: ../../../SanitizerCoverage.md:607
+#: ../../../SanitizerCoverage.md:611
 msgid "Output directory"
 msgstr ""
 
-#: ../../../SanitizerCoverage.md:609
+#: ../../../SanitizerCoverage.md:613
 msgid ""
 "By default, .sancov files are created in the current working directory. This "
 "can be changed with `ASAN_OPTIONS=coverage_dir=/path`:"

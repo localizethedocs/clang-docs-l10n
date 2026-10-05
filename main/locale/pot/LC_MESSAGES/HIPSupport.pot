@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"POT-Creation-Date: 2026-10-05 16:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -196,7 +196,7 @@ msgid "Environment Variable"
 msgstr ""
 
 #: ../../../HIPSupport.md:118 ../../../HIPSupport.md:144
-#: ../../../HIPSupport.md:815
+#: ../../../HIPSupport.md:820
 msgid "Description"
 msgstr ""
 
@@ -256,11 +256,11 @@ msgid ""
 "dependencies that might cause issues in the long run. Use them with caution."
 msgstr ""
 
-#: ../../../HIPSupport.md:138 ../../../HIPSupport.md:809
+#: ../../../HIPSupport.md:138 ../../../HIPSupport.md:814
 msgid "Predefined Macros"
 msgstr ""
 
-#: ../../../HIPSupport.md:143 ../../../HIPSupport.md:814
+#: ../../../HIPSupport.md:143 ../../../HIPSupport.md:819
 msgid "Macro"
 msgstr ""
 
@@ -977,7 +977,7 @@ msgid ""
 "how the function was reached."
 msgstr ""
 
-#: ../../../HIPSupport.md:567 ../../../HIPSupport.md:1089
+#: ../../../HIPSupport.md:567 ../../../HIPSupport.md:1094
 msgid "Example"
 msgstr ""
 
@@ -1243,37 +1243,46 @@ msgstr ""
 #: ../../../HIPSupport.md:757
 msgid ""
 "`CodeGen` is similarly relaxed, with implicitly `__host__` functions being "
-"emitted as well."
+"emitted as well. Because CUDA device code generation otherwise discards the "
+"exception-handling representation of a C++ `try` statement, HIPStdPar emits "
+"an unsupported-operation marker that is diagnosed later only if the "
+"containing function is reachable from an accelerator kernel."
 msgstr ""
 
-#: ../../../HIPSupport.md:760
+#: ../../../HIPSupport.md:763
 msgid "Implementation - Middle-End"
 msgstr ""
 
-#: ../../../HIPSupport.md:762
+#: ../../../HIPSupport.md:765
 msgid "We add two `opt` passes:"
 msgstr ""
 
-#: ../../../HIPSupport.md:764
+#: ../../../HIPSupport.md:767
 msgid "`HipStdParAcceleratorCodeSelectionPass`"
 msgstr ""
 
-#: ../../../HIPSupport.md:766
+#: ../../../HIPSupport.md:769
 msgid ""
 "For all kernels in a `Module`, compute reachability, where a function `F` is "
 "reachable from a kernel `K` if and only if there exists a direct call-chain "
 "rooted in `F` that includes `K`;"
 msgstr ""
 
-#: ../../../HIPSupport.md:769
+#: ../../../HIPSupport.md:772
+msgid ""
+"Diagnose unsupported constructs, including C++ exception handling, when they "
+"are reachable from a kernel;"
+msgstr ""
+
+#: ../../../HIPSupport.md:774
 msgid "Remove all functions that are not reachable from kernels;"
 msgstr ""
 
-#: ../../../HIPSupport.md:770
+#: ../../../HIPSupport.md:775
 msgid "This pass is only run when compiling for the accelerator."
 msgstr ""
 
-#: ../../../HIPSupport.md:772
+#: ../../../HIPSupport.md:777
 msgid ""
 "The first pass assumes that the only code that the user intended to offload "
 "was that which was directly or transitively invocable as part of an "
@@ -1284,11 +1293,11 @@ msgid ""
 "observing how widespread accelerators, such as GPUs, work."
 msgstr ""
 
-#: ../../../HIPSupport.md:780
+#: ../../../HIPSupport.md:785
 msgid "`HipStdParAllocationInterpositionPass`"
 msgstr ""
 
-#: ../../../HIPSupport.md:782
+#: ../../../HIPSupport.md:787
 msgid ""
 "Iterate through all functions in a `Module`, and replace standard "
 "allocation / deallocation functions with accelerator-aware equivalents, "
@@ -1297,45 +1306,45 @@ msgid ""
 "stdpar#allocation--deallocation-interposition-status);"
 msgstr ""
 
-#: ../../../HIPSupport.md:787
+#: ../../../HIPSupport.md:792
 msgid "This is only run when compiling for the host."
 msgstr ""
 
-#: ../../../HIPSupport.md:789
+#: ../../../HIPSupport.md:794
 msgid "The second pass is optional."
 msgstr ""
 
-#: ../../../HIPSupport.md:791
+#: ../../../HIPSupport.md:796
 msgid "Implementation - Forwarding Header"
 msgstr ""
 
-#: ../../../HIPSupport.md:793
+#: ../../../HIPSupport.md:798
 msgid "The forwarding header implements two pieces of functionality:"
 msgstr ""
 
-#: ../../../HIPSupport.md:795
+#: ../../../HIPSupport.md:800
 msgid ""
 "It forwards algorithms to a target accelerator, which is done by relying on "
 "C++ language rules around overloading:"
 msgstr ""
 
-#: ../../../HIPSupport.md:798
+#: ../../../HIPSupport.md:803
 msgid ""
 "overloads taking an explicit argument of type `parallel_unsequenced_policy` "
 "are introduced into the `std` namespace;"
 msgstr ""
 
-#: ../../../HIPSupport.md:800
+#: ../../../HIPSupport.md:805
 msgid "these will get preferentially selected versus the master template;"
 msgstr ""
 
-#: ../../../HIPSupport.md:801
+#: ../../../HIPSupport.md:806
 msgid ""
 "the body forwards to the equivalent algorithm from the accelerator specific "
 "library"
 msgstr ""
 
-#: ../../../HIPSupport.md:804
+#: ../../../HIPSupport.md:809
 msgid ""
 "It provides allocation / deallocation functions that are equivalent to the "
 "standard ones, but obtain memory by invoking [hipMallocManaged](https://rocm."
@@ -1345,21 +1354,21 @@ msgid ""
 "group___memory.html#ga740d08da65cae1441ba32f8fedb863d1)."
 msgstr ""
 
-#: ../../../HIPSupport.md:816
+#: ../../../HIPSupport.md:821
 msgid "`__HIPSTDPAR__`"
 msgstr ""
 
-#: ../../../HIPSupport.md:817
+#: ../../../HIPSupport.md:822
 msgid ""
 "Defined when Clang is compiling code in algorithm offload mode, enabled with "
 "the `--hipstdpar` compiler option."
 msgstr ""
 
-#: ../../../HIPSupport.md:819
+#: ../../../HIPSupport.md:824
 msgid "`__HIPSTDPAR_INTERPOSE_ALLOC__` / `__HIPSTDPAR_INTERPOSE_ALLOC_V1__`"
 msgstr ""
 
-#: ../../../HIPSupport.md:820
+#: ../../../HIPSupport.md:825
 msgid ""
 "Defined only when compiling in algorithm offload mode, when the user enables "
 "interposition mode with the `--hipstdpar-interpose-alloc` compiler option, "
@@ -1367,15 +1376,15 @@ msgid ""
 "should be replaced with accelerator aware variants."
 msgstr ""
 
-#: ../../../HIPSupport.md:826
+#: ../../../HIPSupport.md:831
 msgid "Restrictions"
 msgstr ""
 
-#: ../../../HIPSupport.md:828
+#: ../../../HIPSupport.md:833
 msgid "We define two modes in which runtime execution can occur:"
 msgstr ""
 
-#: ../../../HIPSupport.md:830
+#: ../../../HIPSupport.md:835
 msgid ""
 "**HMM Mode** - this assumes that the [HMM](https://docs.kernel.org/mm/hmm."
 "html) subsystem of the Linux kernel is used to provide transparent on-demand "
@@ -1384,7 +1393,7 @@ msgid ""
 "it follows the C++ memory model;"
 msgstr ""
 
-#: ../../../HIPSupport.md:835
+#: ../../../HIPSupport.md:840
 msgid ""
 "**Interposition Mode** - this is a fallback mode for cases where transparent "
 "on-demand paging is unavailable (e.g. in the Windows OS), which means that "
@@ -1392,132 +1401,132 @@ msgid ""
 "allocated memory is inaccessible for the accelerator."
 msgstr ""
 
-#: ../../../HIPSupport.md:840
+#: ../../../HIPSupport.md:845
 msgid "The following restrictions imposed on user code apply to both modes:"
 msgstr ""
 
-#: ../../../HIPSupport.md:842
+#: ../../../HIPSupport.md:847
 msgid ""
 "Pointers to function, and all associated features, such as e.g. dynamic "
 "polymorphism, cannot be used (directly or transitively) by the user provided "
 "callable passed to an algorithm invocation;"
 msgstr ""
 
-#: ../../../HIPSupport.md:845
+#: ../../../HIPSupport.md:850
 msgid ""
 "`static` (except for program-wide unique ones) / `thread` storage duration "
 "variables cannot be used (directly or transitively) in name by the user "
 "provided callable;"
 msgstr ""
 
-#: ../../../HIPSupport.md:848
+#: ../../../HIPSupport.md:853
 msgid ""
 "User code must be compiled in `-fgpu-rdc` mode in order for global / "
 "namespace scope variables / program-wide unique `static` storage duration "
 "variables to be usable in name by the user provided callable;"
 msgstr ""
 
-#: ../../../HIPSupport.md:851
+#: ../../../HIPSupport.md:856
 msgid ""
 "Only algorithms that are invoked with the `parallel_unsequenced_policy` are "
 "candidates for offload;"
 msgstr ""
 
-#: ../../../HIPSupport.md:853
+#: ../../../HIPSupport.md:858
 msgid ""
 "Only algorithms that are invoked with iterator arguments that model "
 "[random_access_iterator](https://en.cppreference.com/w/cpp/iterator/"
 "random_access_iterator) are candidates for offload;"
 msgstr ""
 
-#: ../../../HIPSupport.md:856
+#: ../../../HIPSupport.md:861
 msgid ""
 "[Exceptions](https://en.cppreference.com/w/cpp/language/exceptions) cannot "
 "be used by the user provided callable;"
 msgstr ""
 
-#: ../../../HIPSupport.md:858
+#: ../../../HIPSupport.md:863
 msgid ""
 "Dynamic memory allocation (e.g. `operator new`) cannot be used by the user "
 "provided callable;"
 msgstr ""
 
-#: ../../../HIPSupport.md:860
+#: ../../../HIPSupport.md:865
 msgid ""
 "Selective offload is not possible i.e. it is not possible to indicate that "
 "only some algorithms invoked with the `parallel_unsequenced_policy` are to "
 "be executed on the accelerator."
 msgstr ""
 
-#: ../../../HIPSupport.md:864
+#: ../../../HIPSupport.md:869
 msgid ""
 "In addition to the above, using **Interposition Mode** imposes the following "
 "additional restrictions:"
 msgstr ""
 
-#: ../../../HIPSupport.md:867
+#: ../../../HIPSupport.md:872
 msgid ""
 "All code that is expected to interoperate has to be recompiled with the `--"
 "hipstdpar-interpose-alloc` flag i.e. it is not safe to compose libraries "
 "that have been independently compiled;"
 msgstr ""
 
-#: ../../../HIPSupport.md:871
+#: ../../../HIPSupport.md:876
 msgid "Current Support"
 msgstr ""
 
-#: ../../../HIPSupport.md:873
+#: ../../../HIPSupport.md:878
 msgid ""
 "At the moment, C++ Standard Parallelism Offload is only available for AMD "
 "GPUs, when the [ROCm](https://rocm.docs.amd.com/en/latest/) stack is used, "
 "on the Linux operating system. Support is synthesised in the following table:"
 msgstr ""
 
-#: ../../../HIPSupport.md:811
+#: ../../../HIPSupport.md:816
 msgid "[Processor](https://llvm.org/docs/AMDGPUUsage.html#amdgpu-processors)"
 msgstr ""
 
-#: ../../../HIPSupport.md:811
+#: ../../../HIPSupport.md:816
 msgid "HMM Mode"
 msgstr ""
 
-#: ../../../HIPSupport.md:811
+#: ../../../HIPSupport.md:816
 msgid "Interposition Mode"
 msgstr ""
 
-#: ../../../HIPSupport.md:811
+#: ../../../HIPSupport.md:816
 msgid "GCN GFX9 (Vega)"
 msgstr ""
 
-#: ../../../HIPSupport.md:811
+#: ../../../HIPSupport.md:816
 msgid "YES"
 msgstr ""
 
-#: ../../../HIPSupport.md:811
+#: ../../../HIPSupport.md:816
 msgid "GCN GFX10.1 (RDNA 1)"
 msgstr ""
 
-#: ../../../HIPSupport.md:811
+#: ../../../HIPSupport.md:816
 msgid "*NO*"
 msgstr ""
 
-#: ../../../HIPSupport.md:811
+#: ../../../HIPSupport.md:816
 msgid "GCN GFX10.3 (RDNA 2)"
 msgstr ""
 
-#: ../../../HIPSupport.md:811
+#: ../../../HIPSupport.md:816
 msgid "GCN GFX11 (RDNA 3)"
 msgstr ""
 
-#: ../../../HIPSupport.md:811
+#: ../../../HIPSupport.md:816
 msgid "GCN GFX12 (RDNA 4)"
 msgstr ""
 
-#: ../../../HIPSupport.md:885
+#: ../../../HIPSupport.md:890
 msgid "The minimum Linux kernel version for running in HMM mode is 6.4."
 msgstr ""
 
-#: ../../../HIPSupport.md:887
+#: ../../../HIPSupport.md:892
 msgid ""
 "The forwarding header is packaged by [ROCm](https://rocm.docs.amd.com/en/"
 "latest/), and is obtainable by installing the `hipstdpar` packege. The list "
@@ -1528,11 +1537,11 @@ msgid ""
 "optimization/hipstdpar/README.html)."
 msgstr ""
 
-#: ../../../HIPSupport.md:894
+#: ../../../HIPSupport.md:899
 msgid "HIP Specific Elements"
 msgstr ""
 
-#: ../../../HIPSupport.md:896
+#: ../../../HIPSupport.md:901
 msgid ""
 "There is no defined interop with the [HIP kernel language](https://rocm.docs."
 "amd.com/projects/HIP/en/latest/reference/kernel_language.html); whilst "
@@ -1540,7 +1549,7 @@ msgid ""
 "are not guaranteed to, and thus cannot be relied upon by user code;"
 msgstr ""
 
-#: ../../../HIPSupport.md:901
+#: ../../../HIPSupport.md:906
 msgid ""
 "A consequence of the above is that both bitcode linking and linking "
 "relocatable object files will \"work\", but it is not guaranteed to remain "
@@ -1548,13 +1557,13 @@ msgid ""
 "in the future."
 msgstr ""
 
-#: ../../../HIPSupport.md:906
+#: ../../../HIPSupport.md:911
 msgid ""
 "Combining explicit HIP, CUDA or OpenMP Offload compilation with `--"
 "hipstdpar` based offloading is not allowed or supported in any way."
 msgstr ""
 
-#: ../../../HIPSupport.md:909
+#: ../../../HIPSupport.md:914
 msgid ""
 "There is no way to target different accelerators via a standard algorithm "
 "invocation ([this might be addressed in future C++ standards](https://www."
@@ -1565,46 +1574,46 @@ msgid ""
 "interface e.g.:"
 msgstr ""
 
-#: ../../../HIPSupport.md:940
+#: ../../../HIPSupport.md:945
 msgid ""
 "Note that this is a temporary, unsafe workaround for a deficiency in the C++ "
 "Standard."
 msgstr ""
 
-#: ../../../HIPSupport.md:943
+#: ../../../HIPSupport.md:948
 msgid "Open Questions / Future Developments"
 msgstr ""
 
-#: ../../../HIPSupport.md:945
+#: ../../../HIPSupport.md:950
 msgid ""
 "The restriction on the use of `static` / `thread` storage duration variables "
 "in offloaded algorithms might be lifted;"
 msgstr ""
 
-#: ../../../HIPSupport.md:947
+#: ../../../HIPSupport.md:952
 msgid ""
 "The restriction on the use of dynamic memory allocation in offloaded "
 "algorithms will be lifted in the future."
 msgstr ""
 
-#: ../../../HIPSupport.md:949
+#: ../../../HIPSupport.md:954
 msgid ""
 "The restriction on the use of pointers to function, and associated features "
 "such as dynamic polymorphism might be lifted in the future, when running in "
 "**HMM Mode**;"
 msgstr ""
 
-#: ../../../HIPSupport.md:952
+#: ../../../HIPSupport.md:957
 msgid ""
 "Offload support might be extended to cases where the `parallel_policy` is "
 "used for some or all targets."
 msgstr ""
 
-#: ../../../HIPSupport.md:955
+#: ../../../HIPSupport.md:960
 msgid "Profile-Guided Optimization for Device Code"
 msgstr ""
 
-#: ../../../HIPSupport.md:957
+#: ../../../HIPSupport.md:962
 msgid ""
 "Clang supports IR-level profile-guided optimization (PGO) for HIP device "
 "code on AMD GPUs. `-fprofile-generate` instruments both host and device "
@@ -1613,18 +1622,18 @@ msgid ""
 "passes the appropriate profile to each side."
 msgstr ""
 
-#: ../../../HIPSupport.md:963 ../../../HIPSupport.md:1082
+#: ../../../HIPSupport.md:968 ../../../HIPSupport.md:1087
 msgid "Prerequisites"
 msgstr ""
 
-#: ../../../HIPSupport.md:965
+#: ../../../HIPSupport.md:970
 msgid ""
 "The toolchain must be built with the AMDGPU profile runtime enabled, which "
 "requires building `compiler-rt` for the `amdgcn-amd-amdhsa` target via the "
 "runtimes build. A minimal CMake configuration is:"
 msgstr ""
 
-#: ../../../HIPSupport.md:979
+#: ../../../HIPSupport.md:984
 msgid ""
 "`COMPILER_RT_BUILD_PROFILE_ROCM` controls building the host-side ROCm/HIP "
 "device profile collection runtime, `clang_rt.profile_rocm`. It is on by "
@@ -1634,17 +1643,17 @@ msgid ""
 "nostdlibinc` headers."
 msgstr ""
 
-#: ../../../HIPSupport.md:986
+#: ../../../HIPSupport.md:991
 msgid "Generate phase"
 msgstr ""
 
-#: ../../../HIPSupport.md:988
+#: ../../../HIPSupport.md:993
 msgid ""
 "The driver forwards `-fprofile-generate` to the device compiler and links "
 "the device profile runtime into the embedded device image."
 msgstr ""
 
-#: ../../../HIPSupport.md:1000
+#: ../../../HIPSupport.md:1005
 msgid ""
 "When the instrumented binary exits, the runtime writes raw profile files "
 "into `pgo_data/`. Host profiles use the standard LLVM profile filename; "
@@ -1655,33 +1664,33 @@ msgid ""
 "runs do not need a separate device-side naming scheme."
 msgstr ""
 
-#: ../../../HIPSupport.md:1009
+#: ../../../HIPSupport.md:1014
 msgid ""
 "Merge the host profile and each device architecture's profile separately:"
 msgstr ""
 
-#: ../../../HIPSupport.md:1018
+#: ../../../HIPSupport.md:1023
 msgid "Use phase"
 msgstr ""
 
-#: ../../../HIPSupport.md:1020
+#: ../../../HIPSupport.md:1025
 msgid ""
 "Host and device compilations consume different profiles, and each GPU "
 "architecture consumes its own. `-Xarch_host` selects the host profile and `-"
 "Xarch_<gpu-arch>` selects the per-architecture device profile:"
 msgstr ""
 
-#: ../../../HIPSupport.md:1034
+#: ../../../HIPSupport.md:1039
 msgid ""
 "For a single-arch build, `-Xarch_device` is a convenient shorthand that "
 "applies the same profile to every offload architecture:"
 msgstr ""
 
-#: ../../../HIPSupport.md:1044
+#: ../../../HIPSupport.md:1049
 msgid "Block uniformity profiles"
 msgstr ""
 
-#: ../../../HIPSupport.md:1046
+#: ../../../HIPSupport.md:1051
 msgid ""
 "On AMDGPU targets, device PGO also records a per-block uniformity signal. "
 "For each instrumented block, the profile records whether the block is "
@@ -1691,14 +1700,14 @@ msgid ""
 "distinguish blocks that are usually uniform from blocks that are divergent."
 msgstr ""
 
-#: ../../../HIPSupport.md:1054
+#: ../../../HIPSupport.md:1059
 msgid ""
 "No extra driver option is needed; use the same generate, merge, and use "
 "commands shown above. `llvm-profdata show --counts` prints the uniformity "
 "information when it is present:"
 msgstr ""
 
-#: ../../../HIPSupport.md:1062
+#: ../../../HIPSupport.md:1067
 msgid ""
 "`U` means the block was classified as uniform, and `D` means it was "
 "classified as divergent. Profiles produced by older toolchains or by targets "
@@ -1706,27 +1715,27 @@ msgid ""
 "not provide block-uniformity guidance."
 msgstr ""
 
-#: ../../../HIPSupport.md:1067
+#: ../../../HIPSupport.md:1072
 msgid "Notes"
 msgstr ""
 
-#: ../../../HIPSupport.md:1069
+#: ../../../HIPSupport.md:1074
 msgid ""
 "The instrumented build is slower than a normal build; only the use phase "
 "produces the optimized binary intended for deployment."
 msgstr ""
 
-#: ../../../HIPSupport.md:1071
+#: ../../../HIPSupport.md:1076
 msgid ""
 "Set `LLVM_PROFILE_VERBOSE=1` to print runtime diagnostics for profile file "
 "creation and device profile collection."
 msgstr ""
 
-#: ../../../HIPSupport.md:1074
+#: ../../../HIPSupport.md:1079
 msgid "Source-Based Code Coverage for Device Code"
 msgstr ""
 
-#: ../../../HIPSupport.md:1076
+#: ../../../HIPSupport.md:1081
 msgid ""
 "Clang supports source-based code coverage for HIP device code on AMD GPUs. "
 "Device code is instrumented with the same `-fprofile-instr-generate -"
@@ -1735,7 +1744,7 @@ msgid ""
 "consumed by `llvm-profdata` and `llvm-cov`."
 msgstr ""
 
-#: ../../../HIPSupport.md:1084
+#: ../../../HIPSupport.md:1089
 msgid ""
 "Source-based device coverage relies on the AMDGPU profile runtime, so the "
 "toolchain must be built with the same CMake configuration used for HIP "
@@ -1743,13 +1752,13 @@ msgid ""
 "Optimization for Device Code](#profile-guided-optimization-for-device-code)."
 msgstr ""
 
-#: ../../../HIPSupport.md:1091
+#: ../../../HIPSupport.md:1096
 msgid ""
 "Given a HIP program `demo.hip`, the following commands produce an LCOV "
 "report covering device code:"
 msgstr ""
 
-#: ../../../HIPSupport.md:1114
+#: ../../../HIPSupport.md:1119
 msgid ""
 "The device ELF is extracted from the `.hip_fatbin` section of the host "
 "binary and then unbundled with `clang-offload-bundler`. The unbundle target "
@@ -1761,32 +1770,32 @@ msgid ""
 "object because the coverage mapping for device functions is emitted there."
 msgstr ""
 
-#: ../../../HIPSupport.md:1124
+#: ../../../HIPSupport.md:1129
 msgid "SPIR-V Support on HIPAMD ToolChain"
 msgstr ""
 
-#: ../../../HIPSupport.md:1126
+#: ../../../HIPSupport.md:1131
 msgid ""
 "The HIPAMD ToolChain supports targeting [AMDGCN Flavoured SPIR-V](https://"
 "llvm.org/docs/SPIRVUsage.html#target-triples). The support for SPIR-V in the "
 "ROCm and HIPAMD ToolChain is under active development."
 msgstr ""
 
-#: ../../../HIPSupport.md:1131
+#: ../../../HIPSupport.md:1136
 msgid "Compilation Process"
 msgstr ""
 
-#: ../../../HIPSupport.md:1133
+#: ../../../HIPSupport.md:1138
 msgid ""
 "When compiling HIP programs with the intent of utilizing SPIR-V, the process "
 "diverges from the traditional compilation flow:"
 msgstr ""
 
-#: ../../../HIPSupport.md:1136
+#: ../../../HIPSupport.md:1141
 msgid "Using `--offload-arch=amdgcnspirv`"
 msgstr ""
 
-#: ../../../HIPSupport.md:1138
+#: ../../../HIPSupport.md:1143
 msgid ""
 "**Target Triple**: The `--offload-arch=amdgcnspirv` flag instructs the "
 "compiler to use the target triple `spirv64-amd-amdhsa`. This approach does "
@@ -1795,31 +1804,31 @@ msgid ""
 "be generated at run time, when the concrete target is known."
 msgstr ""
 
-#: ../../../HIPSupport.md:1143
+#: ../../../HIPSupport.md:1148
 msgid ""
 "**SPIR-V emission**: The program is compiled to LLVM Intermediate "
 "Representation (IR), which is subsequently lowered into SPIR-V via the SPIR-"
 "V backend."
 msgstr ""
 
-#: ../../../HIPSupport.md:1148
+#: ../../../HIPSupport.md:1153
 msgid ""
 "The SPIR-V backend does not currently preserve debug information. Pass `-no-"
 "use-spirv-backend` on the command line to fall back to the legacy "
 "translation path, which retains debug information."
 msgstr ""
 
-#: ../../../HIPSupport.md:1152
+#: ../../../HIPSupport.md:1157
 msgid ""
 "**Clang Offload Bundler**: The resulting SPIR-V is embedded in the Clang "
 "offload bundler with the bundle ID `hip-spirv64-amd-amdhsa--amdgcnspirv`."
 msgstr ""
 
-#: ../../../HIPSupport.md:1155
+#: ../../../HIPSupport.md:1160
 msgid "Architecture Specific Macros"
 msgstr ""
 
-#: ../../../HIPSupport.md:1157
+#: ../../../HIPSupport.md:1162
 msgid ""
 "None of the architecture specific {doc}`AMDGPU macros <AMDGPUSupport>` are "
 "defined when targeting SPIR-V. An alternative, more flexible mechanism to "
