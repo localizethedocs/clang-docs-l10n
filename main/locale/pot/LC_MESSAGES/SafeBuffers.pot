@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"POT-Creation-Date: 2026-10-12 17:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -124,8 +124,8 @@ msgid ""
 "acting as \"hardened custom containers\" to replace raw pointers. However, "
 "such approach would be very unergonomic in C, and safety guarantees will be "
 "lower due to lack of good encapsulation technology. A better approach to "
-"bounds safety for non-C++ programs, [-fbounds-safety](https://clang.llvm.org/"
-"docs/BoundsSafety.html), is currently in development."
+"bounds safety for non-C++ programs, [-fbounds-safety](BoundsSafety.md), is "
+"currently in development."
 msgstr ""
 
 #: ../../../SafeBuffers.md:67
@@ -455,16 +455,16 @@ msgstr ""
 #: ../../../SafeBuffers.md:324
 msgid ""
 "This behavior is analogous to `#pragma clang diagnostic` ([documentation]"
-"(https://clang.llvm.org/docs/UsersManual.html#controlling-diagnostics-via-"
-"pragmas)) However, `#pragma clang unsafe_buffer_usage` is specialized and "
-"recommended over `#pragma clang diagnostic` for a number of technical and "
-"non-technical reasons. Most importantly, `#pragma clang unsafe_buffer_usage` "
-"is more suitable for security audits because it is significantly simpler and "
-"describes unsafe code in a more formal manner. On the contrary, `#pragma "
-"clang diagnostic` comes with a push/pop syntax (as opposed to the begin/end "
-"syntax) and it offers ways to suppress warnings without mentioning them by "
-"name (such as `-Weverything`), which can make it difficult to determine at a "
-"glance whether the warning is suppressed on any given line of code."
+"(UsersManual.md#controlling-diagnostics-via-pragmas)) However, `#pragma "
+"clang unsafe_buffer_usage` is specialized and recommended over `#pragma "
+"clang diagnostic` for a number of technical and non-technical reasons. Most "
+"importantly, `#pragma clang unsafe_buffer_usage` is more suitable for "
+"security audits because it is significantly simpler and describes unsafe "
+"code in a more formal manner. On the contrary, `#pragma clang diagnostic` "
+"comes with a push/pop syntax (as opposed to the begin/end syntax) and it "
+"offers ways to suppress warnings without mentioning them by name (such as `-"
+"Weverything`), which can make it difficult to determine at a glance whether "
+"the warning is suppressed on any given line of code."
 msgstr ""
 
 #: ../../../SafeBuffers.md:336
@@ -505,24 +505,32 @@ msgstr ""
 
 #: ../../../SafeBuffers.md:356
 msgid ""
+"In `main(int argc, char **argv)`, where the function signature is fixed by "
+"the language standard and `argv` cannot be changed to a `std::span`. "
+"Warnings on `main`'s `argv` parameter can also be selectively suppressed via "
+"the `-Wno-unsafe-buffer-usage-main-argv` compiler flag."
+msgstr ""
+
+#: ../../../SafeBuffers.md:361
+msgid ""
 "Interoperation with unsafe code may require a lot of suppressions. You are "
 "encouraged to introduce \"unsafe wrapper functions\" for various unsafe "
 "operations that you need to perform regularly."
 msgstr ""
 
-#: ../../../SafeBuffers.md:360
+#: ../../../SafeBuffers.md:365
 msgid ""
 "For example, if you regularly receive pointer/size pairs from unsafe code, "
 "you may want to introduce a wrapper function for the unsafe span constructor:"
 msgstr ""
 
-#: ../../../SafeBuffers.md:374
+#: ../../../SafeBuffers.md:379
 msgid ""
 "Such wrapper function can be used to suppress warnings about unsafe span "
 "constructor usage in a more ergonomic manner:"
 msgstr ""
 
-#: ../../../SafeBuffers.md:385
+#: ../../../SafeBuffers.md:390
 msgid ""
 "The code remains unsafe but it also continues to be nicely readable, and it "
 "proves that `-Wunsafe-buffer-usage` has done it best to notify you about the "
@@ -531,23 +539,22 @@ msgid ""
 "information passed into the wrapper is correct.**"
 msgstr ""
 
-#: ../../../SafeBuffers.md:391
+#: ../../../SafeBuffers.md:396
 msgid ""
 "Flag bounds information discontinuities with `[[clang::unsafe_buffer_usage]]`"
 msgstr ""
 
-#: ../../../SafeBuffers.md:393
+#: ../../../SafeBuffers.md:398
 msgid ""
 "The clang attribute `[[clang::unsafe_buffer_usage]]` ([attribute "
-"documentation](https://clang.llvm.org/docs/AttributeReference.html#unsafe-"
-"buffer-usage)) allows the user to annotate various objects, such as "
-"functions or member variables, as incompatible with the Safe Buffers "
-"programming model. You are encouraged to do that for arbitrary reasons, but "
-"typically the main reason to do that is when an unsafe function needs to be "
-"provided for backwards compatibility."
+"documentation](AttributeReference.md#unsafe-buffer-usage)) allows the user "
+"to annotate various objects, such as functions or member variables, as "
+"incompatible with the Safe Buffers programming model. You are encouraged to "
+"do that for arbitrary reasons, but typically the main reason to do that is "
+"when an unsafe function needs to be provided for backwards compatibility."
 msgstr ""
 
-#: ../../../SafeBuffers.md:401
+#: ../../../SafeBuffers.md:406
 msgid ""
 "For example, in the previous section we've seen how the example function "
 "`get_last_element()` needed to have its parameter types changed in order to "
@@ -559,7 +566,7 @@ msgid ""
 "by adding a \"compatibility overload\":"
 msgstr ""
 
-#: ../../../SafeBuffers.md:425
+#: ../../../SafeBuffers.md:430
 msgid ""
 "Such an overload allows the surrounding code to continue to work. It is both "
 "source-compatible and binary-compatible. It is also strictly safer than the "
@@ -574,14 +581,14 @@ msgid ""
 "remind the callers to update their code:"
 msgstr ""
 
-#: ../../../SafeBuffers.md:449
+#: ../../../SafeBuffers.md:454
 msgid ""
 "The compatibility overload can be further simplified with the help of the "
 "`unsafe_forge_span()` wrapper as described in the previous section -- and it "
 "even makes the pragmas unnecessary:"
 msgstr ""
 
-#: ../../../SafeBuffers.md:461
+#: ../../../SafeBuffers.md:466
 msgid ""
 "Notice how the attribute `[[clang::unsafe_buffer_usage]]` does **not** "
 "suppress the warnings within the function on its own. Similarly, functions "
@@ -590,15 +597,15 @@ msgid ""
 "unsafe_buffer_usage]]`. They serve two different purposes:"
 msgstr ""
 
-#: ../../../SafeBuffers.md:467
+#: ../../../SafeBuffers.md:472
 msgid "The pragma says that the function isn't safely **written**;"
 msgstr ""
 
-#: ../../../SafeBuffers.md:468
+#: ../../../SafeBuffers.md:473
 msgid "The attribute says that the function isn't safe to **use**."
 msgstr ""
 
-#: ../../../SafeBuffers.md:470
+#: ../../../SafeBuffers.md:475
 msgid ""
 "Also notice how we've made an **unsafe** wrapper for a **safe** function. "
 "This is significantly better than making a **safe** wrapper for an "
@@ -606,7 +613,7 @@ msgid ""
 "more unsafe and undesirable than the previous solution:"
 msgstr ""
 
-#: ../../../SafeBuffers.md:495
+#: ../../../SafeBuffers.md:500
 msgid ""
 "**Structs and classes**, unlike functions, cannot be overloaded. If a struct "
 "contains an unsafe buffer (in the form of a nested array or a pointer/size "
@@ -616,7 +623,7 @@ msgid ""
 "incompatibilities with the surrounding client code."
 msgstr ""
 
-#: ../../../SafeBuffers.md:502
+#: ../../../SafeBuffers.md:507
 msgid ""
 "Additionally, member variables of a class cannot be naturally \"hidden\" "
 "from client code. If a class needs to be used by clients who haven't updated "
@@ -626,7 +633,7 @@ msgid ""
 "types for these member variables."
 msgstr ""
 
-#: ../../../SafeBuffers.md:509
+#: ../../../SafeBuffers.md:514
 msgid ""
 "In such cases there's usually no backwards-compatible way to use safe types "
 "directly. The best option is usually to discourage the clients from using "
@@ -635,35 +642,35 @@ msgid ""
 "of the class to provide safe \"accessors\" to the unsafe data."
 msgstr ""
 
-#: ../../../SafeBuffers.md:515
+#: ../../../SafeBuffers.md:520
 msgid ""
 "For example, let's assume the worst-case scenario: `struct foo` is an unsafe "
 "struct type fully defined in a header shared between plain C code and C++ "
 "code:"
 msgstr ""
 
-#: ../../../SafeBuffers.md:525
+#: ../../../SafeBuffers.md:530
 msgid ""
 "In this case you can achieve safety in C++ code by annotating the member "
 "variables as unsafe and encapsulating them into safe accessor methods:"
 msgstr ""
 
-#: ../../../SafeBuffers.md:555
+#: ../../../SafeBuffers.md:560
 msgid "Future Work"
 msgstr ""
 
-#: ../../../SafeBuffers.md:557
+#: ../../../SafeBuffers.md:562
 msgid ""
 "The `-Wunsafe-buffer-usage` technology is in active development. The warning "
 "is largely ready for everyday use but it is continuously improved to reduce "
 "unnecessary noise as well as cover some of the trickier unsafe operations."
 msgstr ""
 
-#: ../../../SafeBuffers.md:561
+#: ../../../SafeBuffers.md:566
 msgid "Fix-It Hints for `-Wunsafe-buffer-usage`"
 msgstr ""
 
-#: ../../../SafeBuffers.md:563
+#: ../../../SafeBuffers.md:568
 msgid ""
 "A code transformation tool is in development that can semi-automatically "
 "transform large bodies of code to follow the C++ Safe Buffers programming "
@@ -671,7 +678,7 @@ msgid ""
 "buffer-usage-suggestions` in addition to `-Wunsafe-buffer-usage`."
 msgstr ""
 
-#: ../../../SafeBuffers.md:568
+#: ../../../SafeBuffers.md:573
 msgid ""
 "Fixits produced this way currently assume the default approach described in "
 "this document as they suggest standard containers and views (most notably "
@@ -680,11 +687,11 @@ msgid ""
 "bounds checks actually happen."
 msgstr ""
 
-#: ../../../SafeBuffers.md:574
+#: ../../../SafeBuffers.md:579
 msgid "Static Analysis to Identify Suspicious Sources of Bounds Information"
 msgstr ""
 
-#: ../../../SafeBuffers.md:576
+#: ../../../SafeBuffers.md:581
 msgid ""
 "The unsafe constructor `span(pointer, size)` is often a necessary evil when "
 "it comes to interoperation with unsafe code. However, passing the correct "
@@ -695,7 +702,7 @@ msgid ""
 "the size are coming from \"suspiciously different\" sources."
 msgstr ""
 
-#: ../../../SafeBuffers.md:583
+#: ../../../SafeBuffers.md:588
 msgid ""
 "Such analysis will be able to identify the source of information with "
 "significantly higher precision than that of the compiler, making it much "
