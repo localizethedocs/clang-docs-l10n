@@ -1,0 +1,1076 @@
+<!doctype html>
+<html class="no-js" lang="fr-FR" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Recherche" href="search.html" /><link rel="next" title="SanitizerStats" href="SanitizerStats.html" /><link rel="prev" title="RealtimeSanitizer" href="RealtimeSanitizer.html" />
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/SanitizerCoverage.html" />
+        <link rel="prefetch" href="_static/LLVMWyvernSmall.png" as="image" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+        <title>SanitizerCoverage - Clang</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=548e816e" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86c9e7d9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Recherche" name="q" aria-label="Recherche">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Clang Release Notes</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="UsersManual.html">Clang Compiler User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="LanguageExtensions.html">Clang Language Extensions</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Clang Language Extensions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Block-ABI-Apple.html">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrossCompilation.html">Cross-compilation using Clang</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ClangStaticAnalyzer.html">Clang Static Analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Clang Static Analyzer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="analyzer/checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/user-docs.html">2. User Docs</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 2. User Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/UsingWithXCode.html">2.2. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FilingBugs.html">2.3. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CrossTranslationUnit.html">2.4. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/TaintAnalysisConfiguration.html">2.5. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/Annotations.html">2.6. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FAQ.html">2.7. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/developer-docs.html">3. Developer Docs</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 3. Developer Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/PerformanceInvestigation.html">3.6. Performance Investigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Scalable Static Analysis Framework</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Developer Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DataFlowAnalysisIntro.html">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSanitizer.html">ThreadSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MemorySanitizer.html">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataFlowSanitizer.html">DataFlowSanitizer</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of DataFlowSanitizer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="DataFlowSanitizerDesign.html">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ControlFlowIntegrity.html">Control Flow Integrity</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Control Flow Integrity</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StandardCPlusPlusModules.html">Standard C++ Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MisExpect.html">Misexpect</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Misexpect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="OpenCLSupport.html">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Clang HLSL Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of HLSL Design and Implementation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="APINotes.html">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CIR/index.html">ClangIR</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of ClangIR</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CIR/ABILowering.html">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CommandGuide/index.html">Clang « man » pages</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Clang « man » pages</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefactoringEngine.html">Clang’s refactoring engine</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ClangTools.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangRepl.html">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InternalsManual.html">« Clang » CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizerDesign.html">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LLVMExceptionHandlingCodeGen.html">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/SanitizerCoverage.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/SanitizerCoverage.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="sanitizercoverage">
+<h1>SanitizerCoverage<a class="headerlink" href="#sanitizercoverage" title="Lien vers cette rubrique">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Lien vers cette rubrique">¶</a></h2>
+<p>LLVM has a simple code coverage instrumentation built in (SanitizerCoverage).
+It inserts calls to user-defined functions on function-, basic-block-, and edge- levels.
+Default implementations of those callbacks are provided and implement
+simple coverage reporting and visualization,
+however if you need <em>just</em> coverage visualization you may want to use
+<a class="reference internal" href="SourceBasedCodeCoverage.html"><span class="doc">SourceBasedCodeCoverage</span></a> instead.</p>
+</section>
+<section id="tracing-pcs-with-guards">
+<h2>Tracing PCs with guards<a class="headerlink" href="#tracing-pcs-with-guards" title="Lien vers cette rubrique">¶</a></h2>
+<p>With <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=trace-pc-guard</span></code> the compiler will insert the following code
+on every edge:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>__sanitizer_cov_trace_pc_guard(&amp;guard_variable)
+</pre></div>
+</div>
+<p>Every edge will have its own <code class="docutils literal notranslate"><span class="pre">guard_variable</span></code> (uint32_t).</p>
+<p>The compiler will also insert calls to a module constructor:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// The guards are [start, stop).</span>
+<span class="c1">// This function will be called at least once per DSO and may be called</span>
+<span class="c1">// more than once with the same values of start/stop.</span>
+<span class="n">__sanitizer_cov_trace_pc_guard_init</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">stop</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>With an additional <code class="docutils literal notranslate"><span class="pre">...=trace-pc,indirect-calls</span></code> flag
+<code class="docutils literal notranslate"><span class="pre">__sanitizer_cov_trace_pc_indirect(void</span> <span class="pre">*callee)</span></code> will be inserted on every indirect call.</p>
+<p>The functions <code class="docutils literal notranslate"><span class="pre">__sanitizer_cov_trace_pc_*</span></code> should be defined by the user.</p>
+<p>Example:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// trace-pc-guard-cb.cc</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sanitizer/coverage_interface.h&gt;</span>
+
+<span class="c1">// This callback is inserted by the compiler as a module constructor</span>
+<span class="c1">// into every DSO. 'start' and 'stop' correspond to the</span>
+<span class="c1">// beginning and end of the section with the guards for the entire</span>
+<span class="c1">// binary (executable or DSO). The callback will be called at least</span>
+<span class="c1">// once per DSO and may be called multiple times with the same parameters.</span>
+<span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">__sanitizer_cov_trace_pc_guard_init</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">start</span><span class="p">,</span>
+<span class="w">                                                    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">stop</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w">  </span><span class="c1">// Counter for the guards.</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">start</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">*</span><span class="n">start</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w">  </span><span class="c1">// Initialize only once.</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"INIT: %p %p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">stop</span><span class="p">);</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">start</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">stop</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">++</span><span class="n">N</span><span class="p">;</span><span class="w">  </span><span class="c1">// Guards should start from 1.</span>
+<span class="p">}</span>
+
+<span class="c1">// This callback is inserted by the compiler on every edge in the</span>
+<span class="c1">// control flow (some optimizations apply).</span>
+<span class="c1">// Typically, the compiler will emit the code like this:</span>
+<span class="c1">//    if(*guard)</span>
+<span class="c1">//      __sanitizer_cov_trace_pc_guard(guard);</span>
+<span class="c1">// But for large functions it will emit a simple call:</span>
+<span class="c1">//    __sanitizer_cov_trace_pc_guard(guard);</span>
+<span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">__sanitizer_cov_trace_pc_guard</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">guard</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!*</span><span class="n">guard</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w">  </span><span class="c1">// Duplicate the guard check.</span>
+<span class="w">  </span><span class="c1">// If you set *guard to 0 this code will not be called again for this edge.</span>
+<span class="w">  </span><span class="c1">// Now you can get the PC and do whatever you want:</span>
+<span class="w">  </span><span class="c1">//   store it somewhere or symbolize it and print right away.</span>
+<span class="w">  </span><span class="c1">// The values of `*guard` are as you set them in</span>
+<span class="w">  </span><span class="c1">// __sanitizer_cov_trace_pc_guard_init and so you can make them consecutive</span>
+<span class="w">  </span><span class="c1">// and use them to dereference an array or a bit vector.</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">PC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__builtin_return_address</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">PcDescr</span><span class="p">[</span><span class="mi">1024</span><span class="p">];</span>
+<span class="w">  </span><span class="c1">// This function is a part of the sanitizer run-time.</span>
+<span class="w">  </span><span class="c1">// To use it, link with AddressSanitizer or other sanitizer.</span>
+<span class="w">  </span><span class="n">__sanitizer_symbolize_pc</span><span class="p">(</span><span class="n">PC</span><span class="p">,</span><span class="w"> </span><span class="s">"%p %F %L"</span><span class="p">,</span><span class="w"> </span><span class="n">PcDescr</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">PcDescr</span><span class="p">));</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"guard: %p %x PC %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">guard</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">guard</span><span class="p">,</span><span class="w"> </span><span class="n">PcDescr</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// trace-pc-guard-example.cc</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">foo</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">clang++ -g  -fsanitize-coverage=trace-pc-guard trace-pc-guard-example.cc -c</span>
+<span class="go">clang++ trace-pc-guard-cb.cc trace-pc-guard-example.o -fsanitize=address</span>
+<span class="go">ASAN_OPTIONS=strip_path_prefix=`pwd`/ ./a.out</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">INIT: 0x71bcd0 0x71bce0</span>
+<span class="go">guard: 0x71bcd4 2 PC 0x4ecd5b in main trace-pc-guard-example.cc:2</span>
+<span class="go">guard: 0x71bcd8 3 PC 0x4ecd9e in main trace-pc-guard-example.cc:3:7</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ASAN_OPTIONS=strip_path_prefix=`pwd`/ ./a.out with-foo</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">INIT: 0x71bcd0 0x71bce0</span>
+<span class="go">guard: 0x71bcd4 2 PC 0x4ecd5b in main trace-pc-guard-example.cc:3</span>
+<span class="go">guard: 0x71bcdc 4 PC 0x4ecdc7 in main trace-pc-guard-example.cc:4:17</span>
+<span class="go">guard: 0x71bcd0 1 PC 0x4ecd20 in foo() trace-pc-guard-example.cc:2:14</span>
+</pre></div>
+</div>
+</section>
+<section id="inline-8bit-counters">
+<h2>Inline 8bit-counters<a class="headerlink" href="#inline-8bit-counters" title="Lien vers cette rubrique">¶</a></h2>
+<p><strong>Experimental, may change or disappear in future</strong></p>
+<p>With <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=inline-8bit-counters</span></code> the compiler will insert
+inline counter increments on every edge.
+This is similar to <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=trace-pc-guard</span></code> but instead of a
+callback the instrumentation simply increments a counter.</p>
+<p>Users need to implement a single function to capture the counters at startup.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">extern</span><span class="w"> </span><span class="s">"C"</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">__sanitizer_cov_8bit_counters_init</span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">end</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// [start,end) is the array of 8-bit counters created for the current DSO.</span>
+<span class="w">  </span><span class="c1">// Capture this array in order to read/modify the counters.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="inline-bool-flag">
+<h2>Inline bool-flag<a class="headerlink" href="#inline-bool-flag" title="Lien vers cette rubrique">¶</a></h2>
+<p><strong>Experimental, may change or disappear in future</strong></p>
+<p>With <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=inline-bool-flag</span></code> the compiler will insert
+setting an inline boolean to true on every edge.
+This is similar to <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=inline-8bit-counter</span></code> but instead of
+an increment of a counter, it just sets a boolean to true.</p>
+<p>Users need to implement a single function to capture the flags at startup.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">extern</span><span class="w"> </span><span class="s">"C"</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">__sanitizer_cov_bool_flag_init</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="o">*</span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="o">*</span><span class="n">end</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// [start,end) is the array of boolean flags created for the current DSO.</span>
+<span class="w">  </span><span class="c1">// Capture this array in order to read/modify the flags.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="pc-table">
+<h2>PC-Table<a class="headerlink" href="#pc-table" title="Lien vers cette rubrique">¶</a></h2>
+<p><strong>Experimental, may change or disappear in future</strong></p>
+<p><strong>Note:</strong> this instrumentation might be incompatible with dead code stripping
+(<code class="docutils literal notranslate"><span class="pre">-Wl,-gc-sections</span></code>) for linkers other than LLD, thus resulting in a
+significant binary size overhead. For more information, see
+<a class="reference external" href="https://bugs.llvm.org/show_bug.cgi?id=34636">Bug 34636</a>.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=pc-table</span></code> the compiler will create a table of
+instrumented PCs. Requires either <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=inline-8bit-counters</span></code>,
+or <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=inline-bool-flag</span></code>, or <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=trace-pc-guard</span></code>.</p>
+<p>Users need to implement a single function to capture the PC table at startup:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">extern</span><span class="w"> </span><span class="s">"C"</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">__sanitizer_cov_pcs_init</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">uintptr_t</span><span class="w"> </span><span class="o">*</span><span class="n">pcs_beg</span><span class="p">,</span>
+<span class="w">                              </span><span class="k">const</span><span class="w"> </span><span class="kt">uintptr_t</span><span class="w"> </span><span class="o">*</span><span class="n">pcs_end</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// [pcs_beg,pcs_end) is the array of ptr-sized integers representing</span>
+<span class="w">  </span><span class="c1">// pairs [PC,PCFlags] for every instrumented block in the current DSO.</span>
+<span class="w">  </span><span class="c1">// Capture this array in order to read the PCs and their Flags.</span>
+<span class="w">  </span><span class="c1">// The number of PCs and PCFlags for a given DSO is the same as the number</span>
+<span class="w">  </span><span class="c1">// of 8-bit counters (-fsanitize-coverage=inline-8bit-counters), or</span>
+<span class="w">  </span><span class="c1">// boolean flags (-fsanitize-coverage=inline=bool-flags), or trace_pc_guard</span>
+<span class="w">  </span><span class="c1">// callbacks (-fsanitize-coverage=trace-pc-guard).</span>
+<span class="w">  </span><span class="c1">// A PCFlags describes the basic block:</span>
+<span class="w">  </span><span class="c1">//  * bit0: 1 if the block is the function entry block, 0 otherwise.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="tracing-pcs">
+<h2>Tracing PCs<a class="headerlink" href="#tracing-pcs" title="Lien vers cette rubrique">¶</a></h2>
+<p>With <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=trace-pc</span></code> the compiler will insert
+<code class="docutils literal notranslate"><span class="pre">__sanitizer_cov_trace_pc()</span></code> on every edge.
+With an additional <code class="docutils literal notranslate"><span class="pre">...=trace-pc,indirect-calls</span></code> flag
+<code class="docutils literal notranslate"><span class="pre">__sanitizer_cov_trace_pc_indirect(void</span> <span class="pre">*callee)</span></code> will be inserted on every indirect call.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=trace-pc-entry-exit</span></code> the compiler will insert
+<code class="docutils literal notranslate"><span class="pre">__sanitizer_cov_trace_pc_entry()</span></code> on function entry, and insert
+<code class="docutils literal notranslate"><span class="pre">__sanitizer_cov_trace_pc_exit()</span></code> on function return;
+<code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=trace-pc</span></code> or <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=trace-pc-guard</span></code> must
+still be passed to instrument all basic blocks.</p>
+<p>With the combination <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=trace-pc-entry-exit,trace-pc</span></code>,
+<code class="docutils literal notranslate"><span class="pre">__sanitizer_cov_trace_pc()</span></code> will be omitted in the entry basic block because
+the block is already covered by <code class="docutils literal notranslate"><span class="pre">__sanitizer_cov_trace_pc_entry()</span></code>, which can
+be used to both record that the function has been entered and record coverage of
+the entry basic block.
+However, with <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=trace-pc-entry-exit,trace-pc-guard</span></code>, both
+callbacks are called for the entry block because
+<code class="docutils literal notranslate"><span class="pre">__sanitizer_cov_trace_pc_entry()</span></code> does not provide a <code class="docutils literal notranslate"><span class="pre">guard_variable</span></code>.</p>
+<p>These callbacks are not implemented in the Sanitizer run-time and should be defined
+by the user.
+This mechanism is used for fuzzing the Linux kernel
+(<a class="reference external" href="https://github.com/google/syzkaller">https://github.com/google/syzkaller</a>).</p>
+</section>
+<section id="instrumentation-points">
+<h2>Instrumentation points<a class="headerlink" href="#instrumentation-points" title="Lien vers cette rubrique">¶</a></h2>
+<p>Sanitizer Coverage offers different levels of instrumentation.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">edge</span></code> (default): edges are instrumented (see below).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bb</span></code>: basic blocks are instrumented.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">func</span></code>: only the entry block of every function will be instrumented.</p></li>
+</ul>
+<p>Use these flags together with <code class="docutils literal notranslate"><span class="pre">trace-pc-guard</span></code> or <code class="docutils literal notranslate"><span class="pre">trace-pc</span></code>,
+like this: <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=func,trace-pc-guard</span></code>.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">edge</span></code> or <code class="docutils literal notranslate"><span class="pre">bb</span></code> is used, some of the edges/blocks may still be left
+uninstrumented (pruned) if such instrumentation is considered redundant.
+Use <code class="docutils literal notranslate"><span class="pre">no-prune</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=bb,no-prune,trace-pc-guard</span></code>)
+to disable pruning. This could be useful for better coverage visualization.</p>
+<section id="edge-coverage">
+<h3>Edge coverage<a class="headerlink" href="#edge-coverage" title="Lien vers cette rubrique">¶</a></h3>
+<p>Consider this code:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="w">    </span><span class="o">*</span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It contains 3 basic blocks, let’s name them A, B, C:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A
+|\
+| \
+|  B
+| /
+|/
+C
+</pre></div>
+</div>
+<p>If blocks A, B, and C are all covered we know for certain that the edges A=&gt;B
+and B=&gt;C were executed, but we still don’t know if the edge A=&gt;C was executed.
+Such edges of control flow graph are called
+<a class="reference external" href="https://en.wikipedia.org/wiki/Control_flow_graph#Special_edges">critical</a>.
+The edge-level coverage simply splits all critical edges by introducing new
+dummy blocks and then instruments those blocks:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A
+|\
+| \
+D  B
+| /
+|/
+C
+</pre></div>
+</div>
+</section>
+</section>
+<section id="tracing-data-flow">
+<h2>Tracing data flow<a class="headerlink" href="#tracing-data-flow" title="Lien vers cette rubrique">¶</a></h2>
+<p>Support for data-flow-guided fuzzing.
+With <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=trace-cmp</span></code> the compiler will insert extra instrumentation
+around comparison instructions and switch statements.
+Similarly, with <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=trace-div</span></code> the compiler will instrument
+integer division instructions (to capture the right argument of division)
+and with <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=trace-gep</span></code> –
+the <a class="reference external" href="https://llvm.org/docs/GetElementPtr.html">LLVM GEP instructions</a>
+(to capture array indices).
+Similarly, with <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=trace-loads</span></code> and <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=trace-stores</span></code>
+the compiler will instrument loads and stores, respectively.</p>
+<p>Currently, these flags do not work by themselves - they require one
+of <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage={trace-pc,inline-8bit-counters,inline-bool}</span></code>
+flags to work.</p>
+<p>Unless <code class="docutils literal notranslate"><span class="pre">no-prune</span></code> option is provided, some of the comparison instructions
+will not be instrumented.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Called before a comparison instruction.</span>
+<span class="c1">// Arg1 and Arg2 are arguments of the comparison.</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_trace_cmp1</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">Arg1</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">Arg2</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_trace_cmp2</span><span class="p">(</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">Arg1</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">Arg2</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_trace_cmp4</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">Arg1</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">Arg2</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_trace_cmp8</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">Arg1</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">Arg2</span><span class="p">);</span>
+
+<span class="c1">// Called before a comparison instruction if exactly one of the arguments is constant.</span>
+<span class="c1">// Arg1 and Arg2 are arguments of the comparison, Arg1 is a compile-time constant.</span>
+<span class="c1">// These callbacks are emitted by -fsanitize-coverage=trace-cmp since 2017-08-11</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_trace_const_cmp1</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">Arg1</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">Arg2</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_trace_const_cmp2</span><span class="p">(</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">Arg1</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">Arg2</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_trace_const_cmp4</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">Arg1</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">Arg2</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_trace_const_cmp8</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">Arg1</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">Arg2</span><span class="p">);</span>
+
+<span class="c1">// Called before a switch statement.</span>
+<span class="c1">// Val is the switch operand.</span>
+<span class="c1">// Cases[0] is the number of case constants.</span>
+<span class="c1">// Cases[1] is the size of Val in bits.</span>
+<span class="c1">// Cases[2:] are the case constants.</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_trace_switch</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">Val</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="n">Cases</span><span class="p">);</span>
+
+<span class="c1">// Called before a division statement.</span>
+<span class="c1">// Val is the second argument of division.</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_trace_div4</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">Val</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_trace_div8</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">Val</span><span class="p">);</span>
+
+<span class="c1">// Called before a GetElementPtr (GEP) instruction</span>
+<span class="c1">// for every non-constant array index.</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_trace_gep</span><span class="p">(</span><span class="kt">uintptr_t</span><span class="w"> </span><span class="n">Idx</span><span class="p">);</span>
+
+<span class="c1">// Called before a load of appropriate size. Addr is the address of the load.</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_load1</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_load2</span><span class="p">(</span><span class="kt">uint16_t</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_load4</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_load8</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_load16</span><span class="p">(</span><span class="kt">__int128</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">);</span>
+<span class="c1">// Called before a store of appropriate size. Addr is the address of the store.</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_store1</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_store2</span><span class="p">(</span><span class="kt">uint16_t</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_store4</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_store8</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_store16</span><span class="p">(</span><span class="kt">__int128</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="tracing-control-flow">
+<h2>Tracing control flow<a class="headerlink" href="#tracing-control-flow" title="Lien vers cette rubrique">¶</a></h2>
+<p>With <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=control-flow</span></code> the compiler will create a table to collect
+control flow for each function. More specifically, for each basic block in the function,
+two lists are populated. One list for successors of the basic block and another list for
+non-intrinsic called functions.</p>
+<p><strong>TODO:</strong> in the current implementation, indirect calls are not tracked
+and are only marked with special value (-1) in the list.</p>
+<p>Each table row consists of the basic block address
+followed by <code class="docutils literal notranslate"><span class="pre">null</span></code>-ended lists of successors and callees.
+The table is encoded in a special section named <code class="docutils literal notranslate"><span class="pre">sancov_cfs</span></code></p>
+<p>Example:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">foo</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+<span class="w">  </span><span class="k">else</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The code above contains 4 basic blocks, let’s name them A, B, C, D:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A
+|\
+| \
+B  C
+| /
+|/
+D
+</pre></div>
+</div>
+<p>The collected control flow table is as follows:
+<code class="docutils literal notranslate"><span class="pre">A,</span> <span class="pre">B,</span> <span class="pre">C,</span> <span class="pre">null,</span> <span class="pre">null,</span> <span class="pre">B,</span> <span class="pre">D,</span> <span class="pre">null,</span> <span class="pre">&#64;bar,</span> <span class="pre">null,</span> <span class="pre">C,</span> <span class="pre">D,</span> <span class="pre">null,</span> <span class="pre">null,</span> <span class="pre">D,</span> <span class="pre">null,</span> <span class="pre">null.</span></code></p>
+<p>Users need to implement a single function to capture the CF table at startup:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">extern</span><span class="w"> </span><span class="s">"C"</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">__sanitizer_cov_cfs_init</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">uintptr_t</span><span class="w"> </span><span class="o">*</span><span class="n">cfs_beg</span><span class="p">,</span>
+<span class="w">                              </span><span class="k">const</span><span class="w"> </span><span class="kt">uintptr_t</span><span class="w"> </span><span class="o">*</span><span class="n">cfs_end</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// [cfs_beg,cfs_end) is the array of ptr-sized integers representing</span>
+<span class="w">  </span><span class="c1">// the collected control flow.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="tracing-stack-depth">
+<h2>Tracing Stack Depth<a class="headerlink" href="#tracing-stack-depth" title="Lien vers cette rubrique">¶</a></h2>
+<p>With <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage=stack-depth</span></code> the compiler will track how much
+stack space has been used for a function call chain. Leaf functions are
+not included in this tracing.</p>
+<p>The maximum depth of a function call graph is stored in the thread-local
+<code class="docutils literal notranslate"><span class="pre">__sancov_lowest_stack</span></code> variable. Instrumentation is inserted in every
+non-leaf function to check the frame pointer against this variable,
+and if it is lower, store the current frame pointer. This effectively
+inserts the following:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">extern</span><span class="w"> </span><span class="k">thread_local</span><span class="w"> </span><span class="kt">uintptr_t</span><span class="w"> </span><span class="n">__sancov_lowest_stack</span><span class="p">;</span>
+
+<span class="kt">uintptr_t</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uintptr_t</span><span class="p">)</span><span class="n">__builtin_frame_address</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">stack</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">__sancov_lowest_stack</span><span class="p">)</span>
+<span class="w">  </span><span class="n">__sancov_lowest_stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage-stack-depth-callback-min=N</span></code> (where
+<code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>) is also used, the tracking is delegated to a callback,
+<code class="docutils literal notranslate"><span class="pre">__sanitizer_cov_stack_depth</span></code>, instead of adding instrumentation to
+update <code class="docutils literal notranslate"><span class="pre">__sancov_lowest_stack</span></code>. The <code class="docutils literal notranslate"><span class="pre">N</span></code> of the argument is used
+to determine which functions to instrument. Only functions estimated
+to be using <code class="docutils literal notranslate"><span class="pre">N</span></code> bytes or more of stack space will be instrumented to
+call the tracing callback. In the case of a dynamically sized stack,
+the callback is unconditionally added.</p>
+<p>The callback takes no arguments and is responsible for determining
+the stack usage and doing any needed comparisons and storage. A roughly
+equivalent implementation of <code class="docutils literal notranslate"><span class="pre">__sancov_lowest_stack</span></code> using the callback
+would look like this:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">__sanitizer_cov_stack_depth</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">uintptr_t</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uintptr_t</span><span class="p">)</span><span class="n">__builtin_frame_address</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">stack</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">__sancov_lowest_stack</span><span class="p">)</span>
+<span class="w">    </span><span class="n">__sancov_lowest_stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="gated-trace-callbacks">
+<h2>Gated Trace Callbacks<a class="headerlink" href="#gated-trace-callbacks" title="Lien vers cette rubrique">¶</a></h2>
+<p>Gate the invocation of the tracing callbacks with
+<code class="docutils literal notranslate"><span class="pre">-sanitizer-coverage-gated-trace-callbacks</span></code>.</p>
+<p>When this option is enabled, the instrumentation will not call into the
+runtime-provided callbacks for tracing, thus only incurring in a trivial
+branch without going through a function call.</p>
+<p>It is up to the runtime to toggle the value of the global variable in order to
+enable tracing.</p>
+<p>This option is only supported for trace-pc-guard and trace-cmp.</p>
+</section>
+<section id="disabling-instrumentation-with-attribute-no-sanitize-coverage">
+<h2>Disabling instrumentation with <code class="docutils literal notranslate"><span class="pre">__attribute__((no_sanitize(&quot;coverage&quot;)))</span></code><a class="headerlink" href="#disabling-instrumentation-with-attribute-no-sanitize-coverage" title="Lien vers cette rubrique">¶</a></h2>
+<p>It is possible to disable coverage instrumentation for select functions via the
+function attribute <code class="docutils literal notranslate"><span class="pre">__attribute__((no_sanitize(&quot;coverage&quot;)))</span></code>. Because this
+attribute may not be supported by other compilers, it is recommended to use it
+together with <code class="docutils literal notranslate"><span class="pre">__has_feature(coverage_sanitizer)</span></code>.</p>
+</section>
+<section id="disabling-instrumentation-without-source-modification">
+<h2>Disabling instrumentation without source modification<a class="headerlink" href="#disabling-instrumentation-without-source-modification" title="Lien vers cette rubrique">¶</a></h2>
+<p>It is sometimes useful to tell SanitizerCoverage to instrument only a subset of the
+functions in your target without modifying source files.
+With <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage-allowlist=allowlist.txt</span></code>
+and <code class="docutils literal notranslate"><span class="pre">-fsanitize-coverage-ignorelist=blocklist.txt</span></code>,
+you can specify such a subset through the combination of an allowlist and a blocklist.</p>
+<p>SanitizerCoverage will only instrument functions that satisfy two conditions.
+First, the function should belong to a source file with a path that is both allowlisted
+and not blocklisted.
+Second, the function should have a mangled name that is both allowlisted and not blocklisted.</p>
+<p>The allowlist and blocklist format is similar to that of the sanitizer blocklist format.
+The default allowlist will match every source file and every function.
+The default blocklist will match no source file and no function.</p>
+<p>A common use case is to have the allowlist list folders or source files for which you want
+instrumentation and allow all function names, while the blocklist will opt out some specific
+files or functions that the allowlist loosely allowed.</p>
+<p>Here is an example allowlist:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Enable instrumentation for a whole folder
+src:bar/*
+# Enable instrumentation for a specific source file
+src:foo/a.cpp
+# Enable instrumentation for all functions in those files
+fun:*
+</pre></div>
+</div>
+<p>And an example blocklist:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Disable instrumentation for a specific source file that the allowlist allowed
+src:bar/b.cpp
+# Disable instrumentation for a specific function that the allowlist allowed
+fun:*myFunc*
+</pre></div>
+</div>
+<p>The use of <code class="docutils literal notranslate"><span class="pre">*</span></code> wildcards above is required because function names are matched after mangling.
+Without the wildcards, one would have to write the whole mangled name.</p>
+<p>Be careful that the paths of source files are matched exactly as they are provided on the clang
+command line.
+For example, the allowlist above would include file <code class="docutils literal notranslate"><span class="pre">bar/b.cpp</span></code> if the path was provided
+exactly like this, but would it would fail to include it with other ways to refer to the same
+file such as <code class="docutils literal notranslate"><span class="pre">./bar/b.cpp</span></code>, or <code class="docutils literal notranslate"><span class="pre">bar\b.cpp</span></code> on Windows.
+So, please make sure to always double check that your lists are correctly applied.</p>
+</section>
+<section id="default-implementation">
+<h2>Default implementation<a class="headerlink" href="#default-implementation" title="Lien vers cette rubrique">¶</a></h2>
+<p>The sanitizer run-time (AddressSanitizer, MemorySanitizer, etc) provide a
+default implementations of some of the coverage callbacks.
+You may use this implementation to dump the coverage on disk at the process
+exit.</p>
+<p>Example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>cat<span class="w"> </span>-n<span class="w"> </span>cov.cc
+<span class="go">     1  #include &lt;stdio.h&gt;</span>
+<span class="go">     2  __attribute__((noinline))</span>
+<span class="go">     3  void foo() { printf("foo\n"); }</span>
+<span class="go">     4</span>
+<span class="go">     5  int main(int argc, char **argv) {</span>
+<span class="go">     6    if (argc == 2)</span>
+<span class="go">     7      foo();</span>
+<span class="go">     8    printf("main\n");</span>
+<span class="go">     9  }</span>
+<span class="gp">% </span>clang++<span class="w"> </span>-g<span class="w"> </span>cov.cc<span class="w"> </span>-fsanitize<span class="o">=</span>address<span class="w"> </span>-fsanitize-coverage<span class="o">=</span>trace-pc-guard
+<span class="gp">% </span><span class="nv">ASAN_OPTIONS</span><span class="o">=</span><span class="nv">coverage</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./a.out<span class="p">;</span><span class="w"> </span>wc<span class="w"> </span>-c<span class="w"> </span>*.sancov
+<span class="go">main</span>
+<span class="go">SanitizerCoverage: ./a.out.7312.sancov 2 PCs written</span>
+<span class="go">24 a.out.7312.sancov</span>
+<span class="gp">% </span><span class="nv">ASAN_OPTIONS</span><span class="o">=</span><span class="nv">coverage</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./a.out<span class="w"> </span>foo<span class="w"> </span><span class="p">;</span><span class="w"> </span>wc<span class="w"> </span>-c<span class="w"> </span>*.sancov
+<span class="go">foo</span>
+<span class="go">main</span>
+<span class="go">SanitizerCoverage: ./a.out.7316.sancov 3 PCs written</span>
+<span class="go">24 a.out.7312.sancov</span>
+<span class="go">32 a.out.7316.sancov</span>
+</pre></div>
+</div>
+<p>Every time you run an executable instrumented with SanitizerCoverage
+one <code class="docutils literal notranslate"><span class="pre">*.sancov</span></code> file is created during the process shutdown.
+If the executable is dynamically linked against instrumented DSOs,
+one <code class="docutils literal notranslate"><span class="pre">*.sancov</span></code> file will be also created for every DSO.</p>
+<section id="sancov-data-format">
+<h3>Sancov data format<a class="headerlink" href="#sancov-data-format" title="Lien vers cette rubrique">¶</a></h3>
+<p>The format of <code class="docutils literal notranslate"><span class="pre">*.sancov</span></code> files is very simple: the first 8 bytes is the magic,
+one of <code class="docutils literal notranslate"><span class="pre">0xC0BFFFFFFFFFFF64</span></code> and <code class="docutils literal notranslate"><span class="pre">0xC0BFFFFFFFFFFF32</span></code>. The last byte of the
+magic defines the size of the following offsets. The rest of the data is the
+offsets in the corresponding binary/DSO that were executed during the run.</p>
+</section>
+<section id="sancov-tool">
+<h3>Sancov Tool<a class="headerlink" href="#sancov-tool" title="Lien vers cette rubrique">¶</a></h3>
+<p>A simple <code class="docutils literal notranslate"><span class="pre">sancov</span></code> tool is provided to process coverage files.
+The tool is part of LLVM project and is currently supported only on Linux.
+It can handle symbolization tasks autonomously without any extra support
+from the environment. You need to pass .sancov files (named
+<code class="docutils literal notranslate"><span class="pre">&lt;module_name&gt;.&lt;pid&gt;.sancov</span></code> and paths to all corresponding binary elf files.
+Sancov matches these files using module names and binaries file names.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">USAGE: sancov [options] &lt;action&gt; &lt;binary files...&gt; &lt;.sancov files...&gt; &lt;.symcov files...&gt;</span>
+
+<span class="go">Action (required):</span>
+<span class="go">  -covered-functions     Print all covered funcions.</span>
+<span class="go">  -diff                  Compute difference between two sancov files (A - B) and write to the new output sancov file</span>
+<span class="go">  -html-report           REMOVED. Use -symbolize &amp; coverage-report-server.py.</span>
+<span class="go">  -merge                 Merges reports.</span>
+<span class="go">  -not-covered-functions Print all not covered funcions.</span>
+<span class="go">  -print-coverage-pcs    Print coverage instrumentation points addresses.</span>
+<span class="go">  -print-coverage-stats  Print coverage statistics.</span>
+<span class="go">  -print                 Print coverage addresses</span>
+<span class="go">  -symbolize             Produces a symbolized JSON report from binary report.</span>
+<span class="go">  -union                 Compute union of multiple sancov files and write to the new output sancov file</span>
+
+<span class="go">Generic Options:</span>
+<span class="go">  -help    Display this help</span>
+<span class="go">  -h       Alias for --help</span>
+<span class="go">  -version Display the version</span>
+<span class="go">  -v       Alias for --version</span>
+
+<span class="go">OPTIONS:</span>
+<span class="go">  -demangle=0          Alias for --no-demangle</span>
+<span class="go">  -demangle            Demangle function names</span>
+<span class="go">  -ignorelist=&lt;string&gt; Ignorelist file (sanitizer ignorelist format)</span>
+<span class="go">  -no-demangle         Do not demangle function names</span>
+<span class="go">  -no-skip-dead-files  List dead source files in reports</span>
+<span class="go">  -output=&lt;string&gt;     Output file for diff and union actions</span>
+<span class="go">  -skip-dead-files=0   Alias for --no-skip-dead-files</span>
+<span class="go">  -skip-dead-files     Do not list dead source files in reports</span>
+<span class="go">  -strip_path_prefix=&lt;string&gt;</span>
+<span class="go">                      Strip this prefix from files paths in reports</span>
+<span class="go">  -use_default_ignorelist=0</span>
+<span class="go">                      Alias for --no-use_default_ignore_list</span>
+</pre></div>
+</div>
+</section>
+<section id="coverage-reports">
+<h3>Coverage Reports<a class="headerlink" href="#coverage-reports" title="Lien vers cette rubrique">¶</a></h3>
+<p><strong>Experimental</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">.sancov</span></code> files do not contain enough information to generate a source-level
+coverage report. The missing information is contained
+in debug info of the binary. Thus the <code class="docutils literal notranslate"><span class="pre">.sancov</span></code> has to be symbolized
+to produce a <code class="docutils literal notranslate"><span class="pre">.symcov</span></code> file first:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sancov -symbolize my_program.123.sancov my_program &gt; my_program.123.symcov</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">.symcov</span></code> file can be browsed overlaid over the source code by
+running <code class="docutils literal notranslate"><span class="pre">tools/sancov/coverage-report-server.py</span></code> script that will start
+an HTTP server.</p>
+</section>
+<section id="output-directory">
+<h3>Output directory<a class="headerlink" href="#output-directory" title="Lien vers cette rubrique">¶</a></h3>
+<p>By default, .sancov files are created in the current working directory.
+This can be changed with <code class="docutils literal notranslate"><span class="pre">ASAN_OPTIONS=coverage_dir=/path</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span><span class="nv">ASAN_OPTIONS</span><span class="o">=</span><span class="s2">"coverage=1:coverage_dir=/tmp/cov"</span><span class="w"> </span>./a.out<span class="w"> </span>foo
+<span class="gp">% </span>ls<span class="w"> </span>-l<span class="w"> </span>/tmp/cov/*sancov
+<span class="go">-rw-r----- 1 kcc eng 4 Nov 27 12:21 a.out.22673.sancov</span>
+<span class="go">-rw-r----- 1 kcc eng 8 Nov 27 12:21 a.out.22679.sancov</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="SanitizerStats.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">SanitizerStats</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="RealtimeSanitizer.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">RealtimeSanitizer</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">SanitizerCoverage</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#tracing-pcs-with-guards">Tracing PCs with guards</a></li>
+<li><a class="reference internal" href="#inline-8bit-counters">Inline 8bit-counters</a></li>
+<li><a class="reference internal" href="#inline-bool-flag">Inline bool-flag</a></li>
+<li><a class="reference internal" href="#pc-table">PC-Table</a></li>
+<li><a class="reference internal" href="#tracing-pcs">Tracing PCs</a></li>
+<li><a class="reference internal" href="#instrumentation-points">Instrumentation points</a><ul>
+<li><a class="reference internal" href="#edge-coverage">Edge coverage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tracing-data-flow">Tracing data flow</a></li>
+<li><a class="reference internal" href="#tracing-control-flow">Tracing control flow</a></li>
+<li><a class="reference internal" href="#tracing-stack-depth">Tracing Stack Depth</a></li>
+<li><a class="reference internal" href="#gated-trace-callbacks">Gated Trace Callbacks</a></li>
+<li><a class="reference internal" href="#disabling-instrumentation-with-attribute-no-sanitize-coverage">Disabling instrumentation with <code class="docutils literal notranslate"><span class="pre">__attribute__((no_sanitize(&quot;coverage&quot;)))</span></code></a></li>
+<li><a class="reference internal" href="#disabling-instrumentation-without-source-modification">Disabling instrumentation without source modification</a></li>
+<li><a class="reference internal" href="#default-implementation">Default implementation</a><ul>
+<li><a class="reference internal" href="#sancov-data-format">Sancov data format</a></li>
+<li><a class="reference internal" href="#sancov-tool">Sancov Tool</a></li>
+<li><a class="reference internal" href="#coverage-reports">Coverage Reports</a></li>
+<li><a class="reference internal" href="#output-directory">Output directory</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=711a3ba7"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=aa914e54"></script>
+    <script src="_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>

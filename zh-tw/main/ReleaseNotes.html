@@ -1,0 +1,1530 @@
+<!doctype html>
+<html class="no-js" lang="zh-TW" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜尋" href="search.html" /><link rel="next" title="Clang Compiler User&#39;s Manual" href="UsersManual.html" /><link rel="prev" title="將 Clang 作為編譯器使用" href="index.html" />
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/ReleaseNotes.html" />
+        <link rel="prefetch" href="_static/LLVMWyvernSmall.png" as="image" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+        <title>Clang Release Notes - Clang</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=548e816e" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86c9e7d9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜尋" name="q" aria-label="搜尋">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Clang Release Notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="UsersManual.html">Clang Compiler User's Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="LanguageExtensions.html">Clang Language Extensions</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Clang Language Extensions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Block-ABI-Apple.html">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrossCompilation.html">使用 Clang 進行交叉編譯</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ClangStaticAnalyzer.html">Clang Static Analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Clang Static Analyzer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="analyzer/checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/user-docs.html">2. User Docs</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 2. User Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/UsingWithXCode.html">2.2. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FilingBugs.html">2.3. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CrossTranslationUnit.html">2.4. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/TaintAnalysisConfiguration.html">2.5. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/Annotations.html">2.6. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FAQ.html">2.7. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/developer-docs.html">3. Developer Docs</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 3. Developer Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/PerformanceInvestigation.html">3.6. 效能調查</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Scalable Static Analysis Framework</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Developer Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DataFlowAnalysisIntro.html">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSanitizer.html">ThreadSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MemorySanitizer.html">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataFlowSanitizer.html">DataFlowSanitizer</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of DataFlowSanitizer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="DataFlowSanitizerDesign.html">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerCoverage.html">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ControlFlowIntegrity.html">Control Flow Integrity</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Control Flow Integrity</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StandardCPlusPlusModules.html">標準 C++ 模組</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">模組</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MisExpect.html">Misexpect</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Misexpect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="OpenCLSupport.html">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Clang HLSL Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of HLSL Design and Implementation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="APINotes.html">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CIR/index.html">ClangIR</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of ClangIR</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CIR/ABILowering.html">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CommandGuide/index.html">Clang "man" pages</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Clang "man" pages</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefactoringEngine.html">Clang's refactoring engine</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ClangTools.html">概覽</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangRepl.html">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InternalsManual.html">"Clang" CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizerDesign.html">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LLVMExceptionHandlingCodeGen.html">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/ReleaseNotes.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/ReleaseNotes.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="clang-release-releasenotestitle">
+<h1>Clang Release Notes<a class="headerlink" href="#clang-release-releasenotestitle" title="連結到這個標頭">¶</a></h1>
+<p>Written by the <a class="reference external" href="https://llvm.org/">LLVM Team</a></p>
+<section id="introduction">
+<h2>簡介<a class="headerlink" href="#introduction" title="連結到這個標頭">¶</a></h2>
+<p>This document contains the release notes for the Clang C/C++/Objective-C
+frontend, part of the LLVM Compiler Infrastructure, release . Here we
+describe the status of Clang in some detail, including major
+improvements from the previous release and new feature work. For the
+general LLVM release notes, see <a class="reference external" href="https://llvm.org/docs/ReleaseNotes.html">the LLVM
+documentation</a>. For the libc++ release notes,
+see <a class="reference external" href="https://libcxx.llvm.org/ReleaseNotes.html">this page</a>. All LLVM releases
+may be downloaded from the <a class="reference external" href="https://llvm.org/releases/">LLVM releases web site</a>.</p>
+<p>For more information about Clang or LLVM, including information about the
+latest release, please see the <a class="reference external" href="https://clang.llvm.org">Clang Web Site</a> or the
+<a class="reference external" href="https://llvm.org">LLVM Web Site</a>.</p>
+</section>
+<section id="potentially-breaking-changes">
+<h2>Potentially Breaking Changes<a class="headerlink" href="#potentially-breaking-changes" title="連結到這個標頭">¶</a></h2>
+<section id="c-c-language-potentially-breaking-changes">
+<h3>C/C++ Language Potentially Breaking Changes<a class="headerlink" href="#c-c-language-potentially-breaking-changes" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-Wunicode-whitespace</span></code> now defaults to an error.
+The previous behavior can be restored with <code class="docutils literal notranslate"><span class="pre">-Wno-error=unicode-whitespace</span></code>.
+Clang will stop accepting non-ascii whitespaces as token separators
+in a future version of Clang.</p></li>
+</ul>
+</section>
+<section id="c-specific-potentially-breaking-changes">
+<h3>C++ Specific Potentially Breaking Changes<a class="headerlink" href="#c-specific-potentially-breaking-changes" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">[[carries_dependency]]</span></code> attribute is no longer recognized, in any language
+mode, as it was removed from the standard by
+<a class="reference external" href="https://wg21.link/P3475R2">P3475R2</a>.</p></li>
+</ul>
+</section>
+<section id="objective-c-specific-potentially-breaking-changes">
+<h3>Objective-C Specific Potentially Breaking Changes<a class="headerlink" href="#objective-c-specific-potentially-breaking-changes" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>Fixed an issue where AST consumers based on <code class="docutils literal notranslate"><span class="pre">RecursiveASTVisitor</span></code> would bypass
+the exception parameter declaration inside Objective-C <code class="docutils literal notranslate"><span class="pre">&#64;catch</span></code> blocks. This
+could cause tooling that previously ignored the parameter declaration to now
+find valid issues. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/212564">#212564</a>)</p></li>
+</ul>
+</section>
+<section id="abi-changes-in-this-version">
+<h3>ABI Changes in This Version<a class="headerlink" href="#abi-changes-in-this-version" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>Except on PlayStation, Clang now derives the x86-64 System V AVX ABI level
+for 256- and 512-bit vector arguments and returns from effective per-function
+target features. Features and <code class="docutils literal notranslate"><span class="pre">arch=</span></code> CPUs that imply AVX or AVX512F are
+honored, and calls use the caller's features, matching GCC. Per-function
+features cannot lower the translation-unit ABI level;
+<code class="docutils literal notranslate"><span class="pre">-fclang-abi-compat=23</span></code> restores the previous behavior. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/193298">#193298</a>)</p></li>
+<li><p>On SPARC, a <code class="docutils literal notranslate"><span class="pre">_Complex</span></code> value with an integer element type is now passed and
+returned packed into the one or two integer registers it fits in, matching GCC.
+Clang previously passed such a value indirectly and returned it with one part
+per register.
+<code class="docutils literal notranslate"><span class="pre">-fclang-abi-compat=23</span></code> restores the previous behavior. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/212340">#212340</a>)</p></li>
+<li><p>On SPARC64, a <code class="docutils literal notranslate"><span class="pre">_Complex</span> <span class="pre">char</span></code> or <code class="docutils literal notranslate"><span class="pre">_Complex</span> <span class="pre">short</span></code> is now
+right-justified in its slot in the parameter array, like every other scalar
+narrower than a slot, rather than left-justified the way a small struct is.
+<code class="docutils literal notranslate"><span class="pre">-fclang-abi-compat=23</span></code> restores the previous behavior. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/212340">#212340</a>)</p></li>
+<li><p>On MIPS, a <code class="docutils literal notranslate"><span class="pre">_Complex</span></code> value with an integer element type is now returned packed
+into a single integer register when it fits in one, matching GCC. A <code class="docutils literal notranslate"><span class="pre">_Complex</span> <span class="pre">char</span></code> or
+<code class="docutils literal notranslate"><span class="pre">_Complex</span> <span class="pre">short</span></code>, and on N32/N64 also a <code class="docutils literal notranslate"><span class="pre">_Complex</span> <span class="pre">int</span></code>, is no longer returned
+with one part per register. <code class="docutils literal notranslate"><span class="pre">-fclang-abi-compat=23</span></code> restores the previous
+behavior. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/212109">#212109</a>)</p></li>
+<li><p>On MIPS N32/N64, a <code class="docutils literal notranslate"><span class="pre">_Complex</span> <span class="pre">float</span></code> or <code class="docutils literal notranslate"><span class="pre">_Complex</span> <span class="pre">double</span></code> argument is now packed
+into integer registers, or onto the stack, once there is no longer room to give
+each of its parts a floating-point register, matching GCC. Clang previously
+always passed the parts separately. <code class="docutils literal notranslate"><span class="pre">-fclang-abi-compat=23</span></code> restores the previous
+behavior. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/212109">#212109</a>)</p></li>
+<li><p>On MIPS N32/N64, an <code class="docutils literal notranslate"><span class="pre">__int128</span></code> now correctly start in an even-numbered register
+or 16-byte aligned stack slot, matching GCC.</p></li>
+<li><p>Except on PlayStation, on x86-64 System V a non-zero-width unnamed bit-field
+now classifies the eightbytes it occupies as INTEGER, like a named bit-field,
+matching GCC. Aggregates where this changes the classification may be passed
+or returned differently -- a struct holding a run of <code class="docutils literal notranslate"><span class="pre">__int128</span></code> bit-fields,
+for example, now travels in the two integer registers the ABI assigns it.
+This also fixes a crash when such a struct was passed or returned.
+<code class="docutils literal notranslate"><span class="pre">-fclang-abi-compat=23</span></code> restores the previous behavior. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/202205">#202205</a>)</p></li>
+<li><p>Clang now considers matrix types in its isHomogeneousAggregate() handling,
+which can lead to differences in how structures containing matrix types are
+classified for ABI purposes. The previous exclusion of matrix types appears
+to have been accidental. Matrix types now follow the same rules as arrays
+for homogeneous aggregate classification.
+<code class="docutils literal notranslate"><span class="pre">-fclang-abi-compat=23</span></code> restores the previous behavior. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/218799">#218799</a>)</p></li>
+</ul>
+</section>
+<section id="ast-dumping-potentially-breaking-changes">
+<h3>AST Dumping Potentially Breaking Changes<a class="headerlink" href="#ast-dumping-potentially-breaking-changes" title="連結到這個標頭">¶</a></h3>
+</section>
+<section id="clang-frontend-potentially-breaking-changes">
+<h3>Clang Frontend Potentially Breaking Changes<a class="headerlink" href="#clang-frontend-potentially-breaking-changes" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>Templight support has been removed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-fstack-clash-protection</span></code> has been enabled implicitly by default for android
+target triples (except 32b arm targets). Can be disabled via
+<code class="docutils literal notranslate"><span class="pre">-fno-stack-clash-protection</span></code>.</p></li>
+</ul>
+</section>
+<section id="clang-python-bindings-potentially-breaking-changes">
+<h3>Clang Python Bindings Potentially Breaking Changes<a class="headerlink" href="#clang-python-bindings-potentially-breaking-changes" title="連結到這個標頭">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">CompletionChunkKind</span></code> instance's <code class="docutils literal notranslate"><span class="pre">__str__</span></code> representation has been adapted to be consistent with other enums in the library.
+The representation now follows the <code class="docutils literal notranslate"><span class="pre">CompletionChunkKind.VARIANT_NAME</span></code> scheme instead of <code class="docutils literal notranslate"><span class="pre">VariantName</span></code>.</p></li>
+<li><p>Remove the deprecated <code class="docutils literal notranslate"><span class="pre">SPELLING_CACHE</span></code> alias.
+All usage should be migrated to use <code class="docutils literal notranslate"><span class="pre">CompletionChunk.SPELLING_CACHE</span></code> instead.
+Note that this uses <code class="docutils literal notranslate"><span class="pre">CompletionChunkKind</span></code> enumeration as keys, instead of integer values.</p></li>
+<li><p>Remove the deprecated <code class="docutils literal notranslate"><span class="pre">CompletionChunk.isKind...</span></code> methods.
+Existing uses should be adapted to directly compare equality of the <code class="docutils literal notranslate"><span class="pre">CompletionChunk</span></code> kind with the corresponding <code class="docutils literal notranslate"><span class="pre">CompletionChunkKind</span></code> variant.</p>
+<p>Affected methods: <code class="docutils literal notranslate"><span class="pre">isKindOptional</span></code>, <code class="docutils literal notranslate"><span class="pre">isKindTypedText</span></code>, <code class="docutils literal notranslate"><span class="pre">isKindPlaceHolder</span></code>,
+<code class="docutils literal notranslate"><span class="pre">isKindInformative</span></code> and <code class="docutils literal notranslate"><span class="pre">isKindResultType</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CompletionString.availability</span></code> now returns instances of <code class="docutils literal notranslate"><span class="pre">AvailabilityKind</span></code>.
+As a result, the <code class="docutils literal notranslate"><span class="pre">__str__</span></code> representation of its return values changed.
+Like other libclang enums, it now follows the <code class="docutils literal notranslate"><span class="pre">CompletionChunkKind.VARIANT_NAME</span></code> scheme instead of <code class="docutils literal notranslate"><span class="pre">VariantName</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Cursor</span></code> instance's <code class="docutils literal notranslate"><span class="pre">enum_value</span></code> method now returns 1 instead of -1 for <code class="docutils literal notranslate"><span class="pre">true</span></code> bool enumeration values</p></li>
+</ul>
+</section>
+<section id="opencl-potentially-breaking-changes">
+<h3>OpenCL Potentially Breaking Changes<a class="headerlink" href="#opencl-potentially-breaking-changes" title="連結到這個標頭">¶</a></h3>
+</section>
+</section>
+<section id="what-s-new-in-clang">
+<h2>What's New in Clang ?<a class="headerlink" href="#what-s-new-in-clang" title="連結到這個標頭">¶</a></h2>
+<section id="c-language-changes">
+<h3>C++ Language Changes<a class="headerlink" href="#c-language-changes" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>Clang now supports friend declarations with a dependent nested name specifier. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/104057">#104057</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">auto()</span></code> casts are accepted as an extension pre-C++23.</p></li>
+</ul>
+<section id="c-2d-feature-support">
+<h4>C++2d Feature Support<a class="headerlink" href="#c-2d-feature-support" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Clang now supports <a class="reference external" href="https://wg21.link/p3658r1">P3658R1</a> (Adjust identifier
+following new Unicode recommendations), applied as a DR to all C++ language
+modes.</p></li>
+<li><p>Clang now supports <a class="reference external" href="https://wg21.link/p3670r4">P3670R4</a> (Pack indexing for
+template names), which allows a pack of templates to be indexed, as in
+<code class="docutils literal notranslate"><span class="pre">TT...[0]&lt;int&gt;</span></code>. Like pack indexing of types and expressions, this is
+available in all C++ language modes as an extension, controlled by
+<code class="docutils literal notranslate"><span class="pre">-Wc++2d-extensions</span></code> and <code class="docutils literal notranslate"><span class="pre">-Wpre-c++2d-compat</span></code>, and <code class="docutils literal notranslate"><span class="pre">__cpp_pack_indexing</span></code> is
+bumped to <code class="docutils literal notranslate"><span class="pre">202606L</span></code>.</p></li>
+</ul>
+</section>
+<section id="c-2c-feature-support">
+<h4>C++2c Feature Support<a class="headerlink" href="#c-2c-feature-support" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">__builtin_type_order</span></code> for compatibility with GCC as part of the
+implementation of <a class="reference external" href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p2830r10.html">P2830R10</a> (Constexpr Type Ordering).</p></li>
+<li><p>Clang now supports <a class="reference external" href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3533r2.html">P3533R2</a> (constexpr virtual inheritance).</p></li>
+<li><p>Implemented the language part of <a class="reference external" href="https://wg21.link/P3475R2">P3475R2</a> (Defang
+and deprecate <code class="docutils literal notranslate"><span class="pre">memory_order::consume</span></code>) by removing support for the
+<code class="docutils literal notranslate"><span class="pre">[[carries_dependency]]</span></code> attribute.</p></li>
+</ul>
+</section>
+<section id="c-23-feature-support">
+<h4>C++23 Feature Support<a class="headerlink" href="#c-23-feature-support" title="連結到這個標頭">¶</a></h4>
+</section>
+<section id="c-20-feature-support">
+<h4>C++20 Feature Support<a class="headerlink" href="#c-20-feature-support" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Now clang-scan-deps in P1689 format can find the dependencies described in
+module map file. See the documents of standard C++ modules for details.</p></li>
+</ul>
+</section>
+<section id="c-17-feature-support">
+<h4>C++17 Feature Support<a class="headerlink" href="#c-17-feature-support" title="連結到這個標頭">¶</a></h4>
+</section>
+<section id="resolutions-to-c-defect-reports">
+<h4>Resolutions to C++ Defect Reports<a class="headerlink" href="#resolutions-to-c-defect-reports" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Clang now falls back to alignment-aware allocation functions for
+non-overaligned types, implementing <a class="reference external" href="https://wg21.link/cwg2282">CWG2282</a>.</p></li>
+<li><p>Clang now converts floating-point values to boolean first when converting
+them to an enumeration type with a fixed <code class="docutils literal notranslate"><span class="pre">bool</span></code> underlying type. This
+resolves <a class="reference external" href="https://wg21.link/cwg1094">CWG1094</a>.</p></li>
+</ul>
+</section>
+</section>
+<section id="id1">
+<h3>C Language Changes<a class="headerlink" href="#id1" title="連結到這個標頭">¶</a></h3>
+<section id="c2y-feature-support">
+<h4>C2y Feature Support<a class="headerlink" href="#c2y-feature-support" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Clang now supports C2y's new syntax for <code class="docutils literal notranslate"><span class="pre">if</span></code> and <code class="docutils literal notranslate"><span class="pre">switch</span></code> statements with
+initializer and condition variables, as specified in
+<a class="reference external" href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3356.htm">N3356</a>_. For
+example:</p></li>
+</ul>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// attribute list on declarations are also supported</span>
+<span class="w">  </span><span class="k">switch</span><span class="w"> </span><span class="p">([[</span><span class="na">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">default</span><span class="o">:</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="p">[[</span><span class="na">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="w">  </span><span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Clang now diagnoses the use of the same identifier with both internal and
+external linkage within a translation unit, as made ill-formed by
+<a class="reference external" href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3410.pdf">N3410</a>.
+This is also diagnosed in older C language modes as the behavior was
+undefined prior to C2y. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/54215">#54215</a>)</p></li>
+</ul>
+</section>
+<section id="c23-feature-support">
+<h4>C23 Feature Support<a class="headerlink" href="#c23-feature-support" title="連結到這個標頭">¶</a></h4>
+</section>
+</section>
+<section id="objective-c-language-changes">
+<h3>Objective-C Language Changes<a class="headerlink" href="#objective-c-language-changes" title="連結到這個標頭">¶</a></h3>
+</section>
+<section id="non-comprehensive-list-of-changes-in-this-release">
+<h3>Non-comprehensive list of changes in this release<a class="headerlink" href="#non-comprehensive-list-of-changes-in-this-release" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>Clang tools now resolve tool names without a path in compilation databases
+through <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p></li>
+<li><p>On musl targets, the driver now links <code class="docutils literal notranslate"><span class="pre">libssp_nonshared.a</span></code> when stack
+protection is enabled and the library is present in the toolchain library
+paths, matching what musl distributions configure GCC to do.</p></li>
+<li><p>Clang now allows GNU computed <code class="docutils literal notranslate"><span class="pre">goto</span></code> extension in <code class="docutils literal notranslate"><span class="pre">constexpr</span></code> functions, matching the relaxed
+<code class="docutils literal notranslate"><span class="pre">constexpr</span></code> function body rules introduced in C++23.</p></li>
+<li><p>Added support for the <code class="docutils literal notranslate"><span class="pre">__builtin_strlcat</span></code> and <code class="docutils literal notranslate"><span class="pre">__builtin_strlcpy</span></code> builtins.</p></li>
+</ul>
+</section>
+<section id="new-compiler-flags">
+<h3>New Compiler Flags<a class="headerlink" href="#new-compiler-flags" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>New option <code class="docutils literal notranslate"><span class="pre">-fdefined-pointer-subtraction</span></code> added to preserve stable semantics
+when subtracting pointers to unrelated objects.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">--print-cxx-stdlib</span></code> and <code class="docutils literal notranslate"><span class="pre">--print-cxx-stdlib-include-dirs</span></code> to print
+the C++ standard library selected by the driver and the include directories
+added for it.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">-mscs-reg=&lt;reg&gt;</span></code> on Hexagon to select which callee-saved register
+(<code class="docutils literal notranslate"><span class="pre">r16</span></code>-<code class="docutils literal notranslate"><span class="pre">r27</span></code>, default <code class="docutils literal notranslate"><span class="pre">r18</span></code>) holds the shadow call stack pointer under
+<code class="docutils literal notranslate"><span class="pre">-fsanitize=shadow-call-stack</span></code>. The selected register must also be reserved
+with the matching <code class="docutils literal notranslate"><span class="pre">-ffixed-&lt;reg&gt;</span></code>.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">-fmodules-ignore-search-path=&lt;path&gt;</span></code>, the search-path counterpart to
+<code class="docutils literal notranslate"><span class="pre">-fmodules-ignore-macro=&lt;macro&gt;</span></code>: the path is dropped from the context hash of
+every module and physically removed from every module build, and kept only for
+the translation unit itself. This lets builds that differ only in a search
+path share one module cache, and is only sound when no module needs the path
+-- a lookup that would have resolved through an ignored path simply fails.</p></li>
+</ul>
+</section>
+<section id="deprecated-compiler-flags">
+<h3>Deprecated Compiler Flags<a class="headerlink" href="#deprecated-compiler-flags" title="連結到這個標頭">¶</a></h3>
+</section>
+<section id="modified-compiler-flags">
+<h3>Modified Compiler Flags<a class="headerlink" href="#modified-compiler-flags" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>All options of the <code class="docutils literal notranslate"><span class="pre">-fzero-call-used-regs</span></code> compiler flag are now allowed on RISC-V.</p></li>
+</ul>
+</section>
+<section id="removed-compiler-flags">
+<h3>Removed Compiler Flags<a class="headerlink" href="#removed-compiler-flags" title="連結到這個標頭">¶</a></h3>
+</section>
+<section id="attribute-changes-in-clang">
+<h3>Attribute Changes in Clang<a class="headerlink" href="#attribute-changes-in-clang" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>Clang now properly propagates attributes on class and variable templates to their redeclarations, which will result in redeclarations not interfering with diagnostics. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/209812">#209812</a>)</p></li>
+<li><p>Clang now recognizes the <code class="docutils literal notranslate"><span class="pre">[[gnu::flag_enum]]</span></code> attribute and treats it equivalent to <code class="docutils literal notranslate"><span class="pre">[[clang::flag_enum]]</span></code></p></li>
+</ul>
+</section>
+<section id="improvements-to-clang-s-diagnostics">
+<h3>Improvements to Clang's diagnostics<a class="headerlink" href="#improvements-to-clang-s-diagnostics" title="連結到這個標頭">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Wfortify-source</span></code> now diagnoses when <code class="docutils literal notranslate"><span class="pre">strlcat</span></code>, <code class="docutils literal notranslate"><span class="pre">__builtin_strlcat</span></code>, <code class="docutils literal notranslate"><span class="pre">strlcpy</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">__builtin_strlcpy</span></code> is called with a size argument larger than the destination buffer.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">cannot</span> <span class="pre">overload</span> <span class="pre">a</span> <span class="pre">member</span> <span class="pre">function</span></code> diagnostic now describes the previous
+declaration first, matching the order in which the declarations appear in the
+source. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/219803">#219803</a>)</p></li>
+<li><p>More consistent rendering of Unicode characters in diagnostic messages.</p></li>
+<li><p>Fixed <code class="docutils literal notranslate"><span class="pre">-Wunused-parameter</span></code> to diagnose coroutine parameters that are only
+considered during allocation function lookup or promise object
+initialization, while not diagnosing parameters passed to the selected
+allocation function or promise constructor. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/217501">#217501</a>)</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">wb</span></code> and <code class="docutils literal notranslate"><span class="pre">uwb</span></code> <code class="docutils literal notranslate"><span class="pre">_BitInt</span></code> literal suffixes are no longer diagnosed by default
+before C23. They stay in <code class="docutils literal notranslate"><span class="pre">-Wc23-extensions</span></code> and are still reported under
+<code class="docutils literal notranslate"><span class="pre">-pedantic</span></code> or when that group is enabled explicitly, matching how the <code class="docutils literal notranslate"><span class="pre">_BitInt</span></code>
+type itself is already handled.</p></li>
+<li><p>Fixed bug in <code class="docutils literal notranslate"><span class="pre">-Wdocumentation</span></code> so that it correctly handles explicit
+function template instantiations (#64087).</p></li>
+<li><p>When a <code class="docutils literal notranslate"><span class="pre">constexpr</span></code> range-based for loop variable cannot be initialized by a
+constant expression, Clang now emits a single note identifying the read of
+the loop's implicit <code class="docutils literal notranslate"><span class="pre">__begin</span></code> variable, instead of a generic note about
+reading a non-constexpr variable followed by a <code class="docutils literal notranslate"><span class="pre">declared</span> <span class="pre">here</span></code> note.
+(<a class="reference external" href="https://github.com/llvm/llvm-project/issues/211926">#211926</a>)</p></li>
+<li><p>Fixed concept template parameters not being recognized in <code class="docutils literal notranslate"><span class="pre">-Wdocumentation</span></code>
+when mentioned in tparam comments. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/64087">#64087</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Wunused-but-set-variable</span></code> now diagnoses file-scope variables with
+internal linkage (<code class="docutils literal notranslate"><span class="pre">static</span></code> storage class) that are assigned but never used.
+This new coverage is added under the subgroup <code class="docutils literal notranslate"><span class="pre">-Wunused-but-set-global</span></code>,
+allowing it to be disabled independently with <code class="docutils literal notranslate"><span class="pre">-Wno-unused-but-set-global</span></code>.
+(<a class="reference external" href="https://github.com/llvm/llvm-project/issues/148361">#148361</a>)</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">-Wlifetime-safety</span></code> to enable lifetime safety analysis,
+a CFG-based intra-procedural analysis that detects use-after-free and related
+temporal safety bugs. See the
+<a class="reference external" href="https://discourse.llvm.org/t/rfc-intra-procedural-lifetime-analysis-in-clang/86291">RFC</a>
+for more details. By design, this warning is enabled in <code class="docutils literal notranslate"><span class="pre">-Weverything</span></code>. To disable
+the analysis, use <code class="docutils literal notranslate"><span class="pre">-Wno-lifetime-safety</span></code> or <code class="docutils literal notranslate"><span class="pre">-fno-lifetime-safety</span></code>.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">-Wlifetime-safety-suggestions</span></code> to enable lifetime annotation suggestions.
+This provides suggestions for function parameters that
+should be marked <code class="docutils literal notranslate"><span class="pre">[[clang::lifetimebound]]</span></code> based on lifetime analysis. For
+example, for the following function:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="nf">p</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">in</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Clang will suggest:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="nl">warning</span><span class="p">:</span><span class="w"> </span><span class="n">parameter</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">intra</span><span class="o">-</span><span class="n">TU</span><span class="w"> </span><span class="n">function</span><span class="w"> </span><span class="n">should</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">marked</span><span class="w"> </span><span class="p">[[</span><span class="na">clang</span><span class="p">::</span><span class="na">lifetimebound</span><span class="p">]]</span>
+<span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">in</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">       </span><span class="o">^~~~~~~</span>
+<span class="w">               </span><span class="p">[[</span><span class="na">clang</span><span class="p">::</span><span class="na">lifetimebound</span><span class="p">]]</span>
+<span class="nl">note</span><span class="p">:</span><span class="w"> </span><span class="n">param</span><span class="w"> </span><span class="n">returned</span><span class="w"> </span><span class="n">here</span>
+<span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">in</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">                         </span><span class="o">^~</span>
+</pre></div>
+</div>
+</li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">-Wlifetime-safety-noescape</span></code> to detect misuse of <code class="docutils literal notranslate"><span class="pre">[[clang::noescape]]</span></code>
+annotation where the parameter escapes through return. For example:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="nf">p</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">in</span><span class="w"> </span><span class="p">[[</span><span class="na">clang</span><span class="p">::</span><span class="na">noescape</span><span class="p">]])</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">in</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Clang will warn:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="nl">warning</span><span class="p">:</span><span class="w"> </span><span class="n">parameter</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">marked</span><span class="w"> </span><span class="p">[[</span><span class="na">clang</span><span class="p">::</span><span class="na">noescape</span><span class="p">]]</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="n">escapes</span>
+<span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">in</span><span class="w"> </span><span class="p">[[</span><span class="na">clang</span><span class="p">::</span><span class="na">noescape</span><span class="p">]])</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">in</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">       </span><span class="o">^~~~~~~</span>
+<span class="nl">note</span><span class="p">:</span><span class="w"> </span><span class="n">returned</span><span class="w"> </span><span class="n">here</span>
+<span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">in</span><span class="w"> </span><span class="p">[[</span><span class="na">clang</span><span class="p">::</span><span class="na">noescape</span><span class="p">]])</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">in</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">                                             </span><span class="o">^~</span>
+</pre></div>
+</div>
+</li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">-Wlifetime-safety-dangling-field</span></code> to detect dangling field references
+when stack memory escapes to class fields. This is part of <code class="docutils literal notranslate"><span class="pre">-Wlifetime-safety</span></code>
+and detects cases where local variables or parameters are stored in fields but
+outlive their scope. For example:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">DanglingView</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">view</span><span class="p">;</span>
+<span class="w">  </span><span class="n">DanglingView</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">view</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span><span class="w">  </span><span class="c1">// warning: address of stack memory escapes to a field</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</li>
+<li><p>Improved <code class="docutils literal notranslate"><span class="pre">-Wassign-enum</span></code> performance by caching enum enumerator values. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/176454">#176454</a>)</p></li>
+<li><p>Fixed a false negative in <code class="docutils literal notranslate"><span class="pre">-Warray-bounds</span></code> where the warning was suppressed
+when accessing a member function on a past-the-end array element.
+(<a class="reference external" href="https://github.com/llvm/llvm-project/issues/179128">#179128</a>)</p></li>
+<li><p>Added a missing space to the FixIt for the <code class="docutils literal notranslate"><span class="pre">implicit-int</span></code> group of diagnostics and
+made sure that only one such diagnostic and FixIt is emitted per declaration group. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/179354">#179354</a>)</p></li>
+<li><p>Fixed the Fix-It insertion point for <code class="docutils literal notranslate"><span class="pre">expected</span> <span class="pre">';'</span> <span class="pre">after</span> <span class="pre">alias</span> <span class="pre">declaration</span></code>
+when parsing alias declarations involving a token-split <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> sequence
+(for example, <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">A</span> <span class="pre">=</span> <span class="pre">X&lt;int&gt;&gt;;</span></code>). (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/184425">#184425</a>)</p></li>
+<li><p>Fixed incorrect <code class="docutils literal notranslate"><span class="pre">implicitly</span> <span class="pre">deleted</span></code> diagnostic for explicitly deleted
+candidate function. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/185693">#185693</a>)</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">-Wloop-analysis</span></code> warning has been extended to catch more cases of
+variable modification inside lambda expressions (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/132038">#132038</a>).</p></li>
+<li><p>Clang now emits <code class="docutils literal notranslate"><span class="pre">-Wsizeof-pointer-memaccess</span></code> when snprintf/vsnprintf use the sizeof
+the destination buffer(dynamically allocated) in the len parameter(<a class="reference external" href="https://github.com/llvm/llvm-project/issues/162366">#162366</a>)</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">-Wmodule-map-path-outside-directory</span></code> (off by default) to warn on
+header and umbrella directory paths that use <code class="docutils literal notranslate"><span class="pre">..</span></code> to refer outside the module
+directory in module maps found via implicit search
+(<code class="docutils literal notranslate"><span class="pre">-fimplicit-module-maps</span></code>). This does not affect module maps specified
+explicitly via <code class="docutils literal notranslate"><span class="pre">-fmodule-map-file=</span></code>.</p></li>
+<li><p>Honour <code class="docutils literal notranslate"><span class="pre">[[maybe_unused]]</span></code> attribute on private fields.
+<code class="docutils literal notranslate"><span class="pre">-Wunused-private-field</span></code> no longer emits a warning for annotated private
+fields.</p></li>
+<li><p>Improved <code class="docutils literal notranslate"><span class="pre">-Wgnu-zero-variadic-macro-arguments</span></code> to suggest using
+<code class="docutils literal notranslate"><span class="pre">__VA_OPT__</span></code> if the current language version supports it(<a class="reference external" href="https://github.com/llvm/llvm-project/issues/188624">#188624</a>)</p></li>
+<li><p>Clang now emits an error when implicitly casting a complex type to a built-in vector type. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/186805">#186805</a>)</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">-Wnonportable-include-path-separator</span></code> (off by default) to catch
+#include directives that use backslashes as a path separator. The warning
+includes a FixIt to change all the backslashes to forward slashes, so that the
+code can automatically be made portable to other host platforms that don't
+support backslashes.</p></li>
+<li><p>Clang now explains why template deduction fails for explicit template arguments.</p></li>
+<li><p>No longer emitting a <code class="docutils literal notranslate"><span class="pre">-Wpre-c2y-compat</span></code> or extension diagnostic about use
+of octal literals with a <code class="docutils literal notranslate"><span class="pre">0o</span></code> prefix, and no longer emitting a
+<code class="docutils literal notranslate"><span class="pre">-Wdeprecated-octal-literals</span></code> diagnostic for use of octal literals without
+a <code class="docutils literal notranslate"><span class="pre">0o</span></code> prefix, when the literal is expanded from a macro defined in a
+system header. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/192389">#192389</a>)</p></li>
+<li><p>Improved error recovery for missing semicolons after class members. Clang now avoids
+skipping subsequent valid declarations when their previous decl is missing semicolon.</p></li>
+<li><p>Removed the body of lambdas from some diagnostic messages.</p></li>
+<li><p>Fixed false positive host-device mismatch errors in discarded <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">constexpr</span></code> branches for CUDA/HIP;
+such calls are now correctly skipped.</p></li>
+<li><p>Clang now errors when a function declaration aliases a variable or vice versa. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/195550">#195550</a>)</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">-Wattribute-alias</span></code> to diagnose type mismatches between an alias and its aliased function. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/195550">#195550</a>)</p></li>
+<li><p>The diagnostics around <code class="docutils literal notranslate"><span class="pre">__block</span></code> now explain why a variable cannot be marked <code class="docutils literal notranslate"><span class="pre">__block</span></code>. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/197213">#197213</a>)</p></li>
+<li><p>Extended <code class="docutils literal notranslate"><span class="pre">-Wnonportable-include-path</span></code> to warn about trailing whitespace and dots in <code class="docutils literal notranslate"><span class="pre">#include</span></code> paths. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/190610">#190610</a>)</p></li>
+<li><p>Clang now emits error when attribute is missing closing <code class="docutils literal notranslate"><span class="pre">]]</span></code> followed by <code class="docutils literal notranslate"><span class="pre">;;</span></code>. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/187223">#187223</a>)</p></li>
+<li><p>Clang now rejects inline asm constraints and clobbers that contain an
+embedded null character, instead of silently truncating them. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/173900">#173900</a>)</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">-Wstringop-overread</span></code> to warn when <code class="docutils literal notranslate"><span class="pre">memcpy</span></code>, <code class="docutils literal notranslate"><span class="pre">memmove</span></code>, <code class="docutils literal notranslate"><span class="pre">memcmp</span></code>,
+and related builtins read more bytes than the source buffer size (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/83728">#83728</a>).</p></li>
+<li><p>Diagnostics for the C++11 range-based for statement now report the correct
+iterator type in notes for invalid iterator types.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Wfortify-source</span></code> now warns when the constant-evaluated argument to
+<code class="docutils literal notranslate"><span class="pre">umask</span></code> has bits set outside <code class="docutils literal notranslate"><span class="pre">0777</span></code>. Those bits are silently discarded
+by the kernel, so setting them is almost always a typo (matching the
+bionic libc <code class="docutils literal notranslate"><span class="pre">diagnose_if</span></code> check).</p></li>
+<li><p>Improved how Unicode characters are displayed in diagnostic messages.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Wtautological-pointer-compare</span></code> and <code class="docutils literal notranslate"><span class="pre">-Wpointer-bool-conversion</span></code> now
+diagnose a reference to a function (e.g. of type <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">(&amp;)()</span></code>) compared
+against or converted to a null pointer, the same as a bare function name.
+(<a class="reference external" href="https://github.com/llvm/llvm-project/issues/46362">#46362</a>)</p></li>
+<li><p>Clang now attempts to print enumerator names rather than C-style cast expressions
+in more diagnostics.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Wunsafe-buffer-usage</span></code> now warns about unsafe two-parameter constructors of
+<code class="docutils literal notranslate"><span class="pre">std::string_view</span></code> (pointer and size), consistent with the existing warning for <code class="docutils literal notranslate"><span class="pre">std::span</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Wno-unsafe-buffer-usage-in-static-sized-array</span></code> now also suppresses warnings
+for pointer arithmetic on statically-sized arrays when the offset is a
+non-negative constant within the array bounds.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Wc++98-compat</span></code> now diagnoses explicit conversion functions in C++20 and
+later, matching the behavior in C++11 through C++17. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/161689">#161689</a>)</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">-Wcounter-extension</span></code> as a diagnostic group under <code class="docutils literal notranslate"><span class="pre">-Wc2y-extensions</span></code> to
+control <code class="docutils literal notranslate"><span class="pre">__COUNTER__</span></code> being diagnosed as an extension. This allows <code class="docutils literal notranslate"><span class="pre">-pedantic</span></code>
+users to disable the diagnostic with <code class="docutils literal notranslate"><span class="pre">-Wno-counter-extension</span></code> without having
+to disable all pedantic diagnostics. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/196557">#196557</a>)</p></li>
+<li><p>Clang now diagnoses more details when a constraint evaluates to false.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Wpointer-arith</span></code> no longer reports subtraction of pointers to a variably
+modified type, such as <code class="docutils literal notranslate"><span class="pre">int[n]</span></code>, as a subtraction of pointers to a type of
+zero size, unless the size is provably zero: a zero-sized base element or a
+dimension that is a zero integer constant, as in <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">Empty</span> <span class="pre">vla[n]</span></code> or
+<code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">vla[n][0]</span></code>. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/28328">#28328</a>)</p></li>
+<li><p>Fixed a missing <code class="docutils literal notranslate"><span class="pre">-Wconstant-conversion</span></code> diagnostic for signed <code class="docutils literal notranslate"><span class="pre">char</span></code> arrays.</p></li>
+<li><p>Clang now diagnoses passing wrong vector type as a mask to <code class="docutils literal notranslate"><span class="pre">__builtin_shufflevector</span></code>. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/218132">#218132</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Wdelete-abstract-non-virtual-dtor</span></code> and <code class="docutils literal notranslate"><span class="pre">-Wdelete-non-abstract-non-virtual-dtor</span></code>
+no longer warn when the selected deallocation function is a destroying
+<code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">delete</span></code>, since such a delete expression never invokes the
+destructor. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/65524">#65524</a>)</p></li>
+<li><p>Fixed a false-positive <code class="docutils literal notranslate"><span class="pre">-Wshadow</span></code> warning when a variable in an
+inline-defined friend function shares the name of a non-static class
+member variable. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/221190">#221190</a>)</p></li>
+<li><p>Clang now diagnoses matrix logical operations are only supported for HLSL. (GH222381)</p></li>
+<li><p>Improve the input size mismatch diagnostic when calling <code class="docutils literal notranslate"><span class="pre">__builtin_shufflevector</span></code> with valid
+vector element types but different sizes. (GH221791)</p></li>
+<li><p>Suggests the correct location for an attribute written before the <code class="docutils literal notranslate"><span class="pre">using</span></code>
+keyword of an alias-declaration. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/155787">#155787</a>)</p></li>
+<li><p>Improve Clang diagnoses when unary <code class="docutils literal notranslate"><span class="pre">__imag</span></code> operator with non-complex type operand is used as lvalue. (GH222383)</p></li>
+</ul>
+</section>
+<section id="improvements-to-clang-s-time-trace">
+<h3>Improvements to Clang's time-trace<a class="headerlink" href="#improvements-to-clang-s-time-trace" title="連結到這個標頭">¶</a></h3>
+</section>
+<section id="improvements-to-coverage-mapping">
+<h3>Improvements to Coverage Mapping<a class="headerlink" href="#improvements-to-coverage-mapping" title="連結到這個標頭">¶</a></h3>
+</section>
+<section id="bug-fixes-in-this-version">
+<h3>Bug Fixes in This Version<a class="headerlink" href="#bug-fixes-in-this-version" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>Fixed incorrect handling of C++ import preprocessing token when a digraph character after import. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/190693">#190693</a>)</p></li>
+<li><p>Fixed an assertion failure when passing a wide string literal to <code class="docutils literal notranslate"><span class="pre">__builtin_nan</span></code>. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/212108">#212108</a>)</p></li>
+<li><p>Fixed a constraint comparison bug in partial ordering. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/182671">#182671</a>)</p></li>
+<li><p>Fixed a rejected-valid case that used an explicit object parameter in an out-of-line definition of a nested class member. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/136472">#136472</a>)</p></li>
+<li><p>Fixed an assertion on omp taskloop transparent (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/197162">#197162</a>)</p></li>
+<li><p>Fixed a bug where <code class="docutils literal notranslate"><span class="pre">__func__</span></code>, <code class="docutils literal notranslate"><span class="pre">__PRETTY_FUNCTION__</span></code> and <code class="docutils literal notranslate"><span class="pre">__FUNCTION__</span></code> were not resolving to the proper function when inside a lambda return type (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/211811">#211811</a>)</p></li>
+<li><p>Fixed USR generation for declarations whose signature mentions a class-type
+non-type template parameter. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/212351">#212351</a>)</p></li>
+<li><p>Fixed an assertion caused by Microsoft integer literals exceeding the maximum value. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/212504">#212504</a>)</p></li>
+<li><p>Fixed an assertion failure when a value of a Unicode character type (<code class="docutils literal notranslate"><span class="pre">char8_t</span></code>, <code class="docutils literal notranslate"><span class="pre">char16_t</span></code>, <code class="docutils literal notranslate"><span class="pre">char32_t</span></code>) was implicitly splatted to a vector of the same element type, e.g. when comparing an <code class="docutils literal notranslate"><span class="pre">ext_vector_type</span></code> of <code class="docutils literal notranslate"><span class="pre">char32_t</span></code> with one of its elements. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/202317">#202317</a>)</p></li>
+<li><p>Fixed a crash when checking scalar type with excess braces. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/69213">#69213</a>), (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/137845">#137845</a>), (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/198767">#198767</a>), (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/207566">#207566</a>), (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/106180">#106180</a>)</p></li>
+<li><p>Fixed an assertion crash when instantiating a nested requirement with an invalid constraint. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/213575">#213575</a>)</p></li>
+<li><p>Clang now defines the GCC-compatible predefined macro <code class="docutils literal notranslate"><span class="pre">__SIG_ATOMIC_TYPE__</span></code>. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/213895">#213895</a>)</p></li>
+<li><p>Fixed IEEE f128 complex mul/div using the IBM f128 libcalls on powerpc. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/216820">#216820</a>)</p></li>
+<li><p>Fixed an ICE that occurred when a structured binding pack is expanded outside the lambda where it was declared. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/214160">#214160</a>)</p></li>
+<li><p>Fixed a bug where a stray closing curley brace in an OpenMP/OpenACC pragma could cause pragma parsing issues when inside of a member function. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/214195">#214195</a>)</p></li>
+<li><p>Fixed a bug where preprocessor directives following comments were not correctly recognized when using -C. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/48361">#48361</a>)</p></li>
+<li><p>Fixed a crash when declaring a member template within a local class inside an OpenMP region. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/216052">#216052</a>)</p></li>
+<li><p>Fixed a bug where repeated #imports of modular headers in non-modular compilation were translated to #pragma clang module import. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/216924">#216924</a>)</p></li>
+<li><p>Fixed an assertion when <code class="docutils literal notranslate"><span class="pre">#pragma</span> <span class="pre">omp</span> <span class="pre">declare</span> <span class="pre">simd</span></code> or <code class="docutils literal notranslate"><span class="pre">#pragma</span> <span class="pre">omp</span> <span class="pre">declare</span> <span class="pre">variant</span></code> is followed by another OpenMP declarative directive containing a qualified identifier. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/217204">#217204</a>)</p></li>
+<li><p>Fixed a crash when an <code class="docutils literal notranslate"><span class="pre">asm</span></code> label names the register for a global variable of incomplete type. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/219746">#219746</a>)</p></li>
+<li><p>Fixed an ICE hat occurred when using <code class="docutils literal notranslate"><span class="pre">__imag</span> <span class="pre">int/float</span></code> as lvalue in assignment. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/119498">#119498</a>)</p></li>
+<li><p>Fixed an assertion failure in <code class="docutils literal notranslate"><span class="pre">-Wsign-compare</span></code> when a negated or complemented vector of unsigned integers was compared against a signed constant. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/203575">#203575</a>)</p></li>
+</ul>
+<section id="bug-fixes-to-compiler-builtins">
+<h4>Bug Fixes to Compiler Builtins<a class="headerlink" href="#bug-fixes-to-compiler-builtins" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Fixed a crash when classifying a call to a builtin with dependent arguments,
+such as when the call is used as an <code class="docutils literal notranslate"><span class="pre">auto</span></code> non-type template argument.</p></li>
+<li><p>Fixed an assertion failure when diagnosing a constant evaluation failure
+inside a member function call synthesized by <code class="docutils literal notranslate"><span class="pre">__builtin_invoke</span></code>. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/185241">#185241</a>)</p></li>
+<li><p>Fixed a crash in <code class="docutils literal notranslate"><span class="pre">__builtin_dump_struct</span></code> when <code class="docutils literal notranslate"><span class="pre">-Werror</span></code> promotes
+format warnings to errors. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/211943">#211943</a>)</p></li>
+<li><p>Fixed a wrong code generation in <code class="docutils literal notranslate"><span class="pre">__builtin_clear_padding</span></code> wherein the
+wrong bits of the <code class="docutils literal notranslate"><span class="pre">_BitInt</span></code> type were cleared in big-endian mode.</p></li>
+<li><p>Fixed an assertion failure when <code class="docutils literal notranslate"><span class="pre">__builtin_vectorelements</span></code> is applied to a
+reference to a vector type; <code class="docutils literal notranslate"><span class="pre">vec_step</span></code> (in C++ for OpenCL) and
+<code class="docutils literal notranslate"><span class="pre">__builtin_ptrauth_type_discriminator</span></code> similarly no longer accept reference
+types that their evaluation silently mishandled. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/216997">#216997</a>)</p></li>
+</ul>
+</section>
+<section id="bug-fixes-to-attribute-support">
+<h4>Bug Fixes to Attribute Support<a class="headerlink" href="#bug-fixes-to-attribute-support" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Fixed crash (assertion) when the <code class="docutils literal notranslate"><span class="pre">alloc_align</span></code> attribute was applied to a declaration whose type has a <code class="docutils literal notranslate"><span class="pre">FunctionProtoType</span></code> but which is not itself a <code class="docutils literal notranslate"><span class="pre">FunctionDecl</span></code>, such as a function-pointer variable. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/122058">#122058</a>)</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">counted_by</span></code>/<code class="docutils literal notranslate"><span class="pre">counted_by_or_null</span></code> diagnostic that rejects a pointer whose
+pointee is a struct with a flexible array member (e.g.
+<code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">with_fam</span> <span class="pre">*</span> <span class="pre">__sized_by(size)</span> <span class="pre">ptr;</span></code>) was incorrectly also applied to
+the <code class="docutils literal notranslate"><span class="pre">sized_by</span></code>/<code class="docutils literal notranslate"><span class="pre">sized_by_or_null</span></code> attributes. Because <code class="docutils literal notranslate"><span class="pre">sized_by</span></code> and
+<code class="docutils literal notranslate"><span class="pre">sized_by_or_null</span></code> describe the size in bytes rather than a count of elements,
+they are now correctly accepted on such pointers.</p></li>
+<li><p>Fixed a crash when an <code class="docutils literal notranslate"><span class="pre">address_space</span></code> attribute with a dependent argument was
+written after the declarator-id, where it appertains to the declared entity
+rather than to a declarator chunk. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/196982">#196982</a>, <a class="reference external" href="https://github.com/llvm/llvm-project/issues/111463">#111463</a>)</p></li>
+</ul>
+</section>
+<section id="bug-fixes-to-c-support">
+<h4>Bug Fixes to C++ Support<a class="headerlink" href="#bug-fixes-to-c-support" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Fixed the destruction timing of temporaries created by default member
+initializers during aggregate initialization. Such an initializer is part of
+the full-expression containing the aggregate initialization. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/85601">#85601</a>)</p></li>
+<li><p>Fixed false-positive module ODR diagnostics when a type is found through a
+using-declaration in one definition and directly in another. ODR hashing also
+now distinguishes differently qualified uses of types found through
+using-declarations. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/78850">#78850</a>)</p></li>
+<li><p>Fixed an assertion when diagnosing module ODR violations for enum underlying
+types found through using-declarations with the same name but different types.</p></li>
+<li><p>Fixed a false type mismatch when a typedef naming an anonymous enumeration
+was used through a C++20 named module and its defining header was subsequently
+included. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/213299">#213299</a>)</p></li>
+<li><p>Fixed an issue where <code class="docutils literal notranslate"><span class="pre">__typeof__</span></code> incorrectly rejected cv-qualified function types.</p></li>
+<li><p>Fixed an assertion failure when <code class="docutils literal notranslate"><span class="pre">#embed</span></code> was used in the braced initializer
+of an array new-expression, or of an array whose elements are of class type.
+(<a class="reference external" href="https://github.com/llvm/llvm-project/issues/128985">#128985</a>)</p></li>
+<li><p>Fixed a bug where top-level CV qualifiers (such as <code class="docutils literal notranslate"><span class="pre">const</span></code>) were dropped from pointers modified by Microsoft pointer attributes (like <code class="docutils literal notranslate"><span class="pre">__ptr32</span></code> and <code class="docutils literal notranslate"><span class="pre">__ptr64</span></code>) and WebAssembly's <code class="docutils literal notranslate"><span class="pre">__funcref</span></code>.</p></li>
+<li><p>Fixed a bug where we accepted <code class="docutils literal notranslate"><span class="pre">__super</span></code> being qualified by a scope specifier, causing codegen to assertion fail elsewhere. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/212988">#212988</a>)</p></li>
+<li><p>Fixed an issue where we tried to compare invalid NTTPs for variable declarations, which ended up in hitting an assertion with a constrained non-plain-auto NTTP, which we don't quite implement yet. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/208658">#208658</a>)</p></li>
+<li><p>Fixed a crash when a using-declaration naming an unresolvable member of a
+dependent base was shadowed by an invalid using-declaration. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/209427">#209427</a>)</p></li>
+<li><p>Fixed a CTAD bug when combining with concepts. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/124715">#124715</a>)</p></li>
+<li><p>Fixed a regression where an internal-linkage function (e.g. a <code class="docutils literal notranslate"><span class="pre">static</span></code> or
+anonymous-namespace helper) declared in the global module fragment of the
+current translation unit was removed from the overload set when the calling
+template was instantiated after the global module fragment was closed,
+producing a spurious &quot;no matching function&quot; error with no candidate notes.
+(<a class="reference external" href="https://github.com/llvm/llvm-project/issues/210822">#210822</a>)</p></li>
+<li><p>Fixed a crash when module directive export module foo not following a
+semicolon and there are no rest pp-tokens in current module file. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/187771">#187771</a>)</p></li>
+<li><p>Fixed concept evaluation bugs where some declarations were not added to
+the current instantiation scope. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/198052">#198052</a>)</p></li>
+<li><p>Fixed a crash when a lambda parameter pack was given a default argument that
+is a pack expansion referencing an enclosing function's parameter pack (e.g.
+<code class="docutils literal notranslate"><span class="pre">[](Types...</span> <span class="pre">=</span> <span class="pre">args...)</span> <span class="pre">{}</span></code>). Clang now diagnoses the illegal default
+argument instead of asserting. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/210714">#210714</a>)</p></li>
+<li><p>Fixed a crash on invalid code where a <code class="docutils literal notranslate"><span class="pre">decltype</span></code> not followed by <code class="docutils literal notranslate"><span class="pre">(</span></code> was
+parsed where a nested-name-specifier could appear (e.g. <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">decltype</span> <span class="pre">=</span> <span class="pre">0;</span></code>).
+Clang now diagnoses the error instead of asserting. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/211207">#211207</a>)</p></li>
+<li><p>Fixed an assertion failure when a parenthesized structured binding declarator
+was followed by a function declarator and body (e.g. <code class="docutils literal notranslate"><span class="pre">([a,</span> <span class="pre">b])()</span> <span class="pre">{}</span></code>).
+(<a class="reference external" href="https://github.com/llvm/llvm-project/issues/218144">#218144</a>, <a class="reference external" href="https://github.com/llvm/llvm-project/issues/193687">#193687</a>)</p></li>
+<li><p>Fixed a crash when computing the implicit deletion of a defaulted comparison
+operator required an access check that ran while an enclosing declaration
+was still being parsed. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/210692">#210692</a>)</p></li>
+<li><p>Fixed an assertion when a call to a class object was resolved through a
+conversion function to a function pointer that was introduced into the class
+by a using-declaration (e.g. <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">Base::operator</span> <span class="pre">auto;</span></code>). Such a conversion
+function is now also diagnosed if it is deleted. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/189146">#189146</a>)</p></li>
+<li><p>A workaround that was introduced to fix an issue with the <code class="docutils literal notranslate"><span class="pre">&lt;format&gt;</span></code> header present in some versions of
+libstdc++15 has been extended to support preprocessed input. Previously, splitting the preprocessing and
+compilation step would result in the fix not being applied. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/160314">#160314</a>)</p></li>
+<li><p>A defaulted copy or move assignment operator for a union was left with an
+empty body and copied nothing when the operator was actually called, for
+example through a pointer to member. Clang now synthesizes a whole-object
+copy so the union's object representation is copied, matching the defaulted
+union copy constructor.</p></li>
+<li><p>Compute value dependence correctly for structured bindings. This mostly
+affect C++26 constexpr structured bindings and expansion statements, but
+also affects some uses of plain structured bindings. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/211930">#211930</a>)</p></li>
+<li><p>Fixed an assertion when instantiating the body of a C++26 expansion
+statement after a fatal error had occurred. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/214917">#214917</a>)</p></li>
+<li><p>Fixed an assertion when an invalid statement appeared in a <code class="docutils literal notranslate"><span class="pre">switch</span></code>
+statement nested inside a C++26 expansion statement. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/210575">#210575</a>)</p></li>
+<li><p>Fixed friend declarations sometimes making non-visible default arguments
+incorrectly visible to default argument redefinition checks across modules.</p></li>
+<li><p>Fixed handling of SFINAE failures for expressions which depend on in-class
+member initializers of templates which are not yet parsed. An example is
+using <code class="docutils literal notranslate"><span class="pre">__is_constructible</span></code> on a nested class template inside the definition
+of the containing class. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/215166">#215166</a>)</p></li>
+<li><p>Fixed a bug where Clang incorrectly required <code class="docutils literal notranslate"><span class="pre">promise.return_value()</span></code> for a
+dependent <code class="docutils literal notranslate"><span class="pre">co_return</span></code> operand that inits to <code class="docutils literal notranslate"><span class="pre">void</span></code>, instead of using
+<code class="docutils literal notranslate"><span class="pre">promise.return_void()</span></code>. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/218368">#218368</a>)</p></li>
+<li><p>Fixed merging of lambdas across modules in the case where neither lambda is
+imported from an AST file. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/214560">#214560</a>)</p></li>
+<li><p>Fixed a crash when a non-type template parameter of reference type is bound
+to a subobject and is used in a context that requires an implicit conversion.
+(<a class="reference external" href="https://github.com/llvm/llvm-project/issues/215900">#215900</a>)</p></li>
+<li><p>Fixed an assertion when mangling an abbreviated function template whose
+return type has an ABI tag. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/204178">#204178</a>)</p></li>
+<li><p>Fixed an assertion during template argument deduction where a function parameter pack is referenced by other types in the function type. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/28877">#28877</a>), (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/213760">#213760</a>)</p></li>
+<li><p>Fixed a regression where deprecation warnings were omitted for synthesized
+deduction guide. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/160543">#160543</a>)</p></li>
+<li><p>Fixed an assertion when a redeclaration of a function template or an out-of-line
+definition of a member of a class template added a default argument to a
+parameter that follows a parameter pack (e.g.
+<code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">&lt;typename...</span> <span class="pre">T&gt;</span> <span class="pre">S::S(T...,</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10)</span> <span class="pre">{}</span></code>).  (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/216211">#216211</a>)</p></li>
+<li><p>Fixed an assertion failure when instantiating a late-parsed function template defined in an earlier translation unit with -fdelayed-template-parsing. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/217073">#217073</a>)</p></li>
+<li><p>Allow redeclaration lookup to consider conversion function templates, allowing
+Clang to match an in-class specialization such as <code class="docutils literal notranslate"><span class="pre">template&lt;&gt;</span> <span class="pre">operator</span> <span class="pre">int()</span></code>
+against a prior conversion function template <code class="docutils literal notranslate"><span class="pre">template&lt;class</span> <span class="pre">T&gt;</span> <span class="pre">operator</span> <span class="pre">T()</span></code>.
+(<a class="reference external" href="https://github.com/llvm/llvm-project/issues/218261">#218261</a>)</p></li>
+<li><p>Fixed an assertion when an ill-formed qualified member function definition
+inside a union caused the union to be treated as a polymorphic class.
+(<a class="reference external" href="https://github.com/llvm/llvm-project/issues/213854">#213854</a>)</p></li>
+<li><p>Fixed an assertion when a type-trait keyword that had already been made
+available as an identifier (e.g. <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">__make_unsigned</span></code>) was seen again
+in a token that was lexed and cached before the first occurrence was parsed.
+(<a class="reference external" href="https://github.com/llvm/llvm-project/issues/214128">#214128</a>)</p></li>
+<li><p>Fixed a crash when a coroutine keyword appeared inside a mem-initializer on a
+function that is not a constructor. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/194298">#194298</a>)</p></li>
+<li><p>Fixed an assertion when a defaulted comparison operator was synthesized for a
+class with an invalid non-static data member, such as one qualified with an
+address space. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/194605">#194605</a>)</p></li>
+<li><p>Fixed deduction of the template parameters appearing in the type of a
+constant template parameter of reference type. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/40328">#40328</a>)</p></li>
+<li><p>Fixed an issue where an explicit specialization of a constexpr variable would
+result in a link error. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/219796">#219796</a>)</p></li>
+<li><p>Fixed ambiguous overload where two non-static member functions with
+different signatures could be incorrectly considered equivalent. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/224499">#224499</a>)</p></li>
+</ul>
+</section>
+<section id="bug-fixes-to-ast-handling">
+<h4>Bug Fixes to AST Handling<a class="headerlink" href="#bug-fixes-to-ast-handling" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Fixed a non-deterministic ordering of unused local typedefs that made
+serialized PCH/AST files and <code class="docutils literal notranslate"><span class="pre">-Wunused-local-typedef</span></code> diagnostics
+non-reproducible across runs. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/209639">#209639</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FunctionDecl::getReturnTypeSourceRange()</span></code> now returns correct source
+location of a trailing return type. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/162649">#162649</a>)</p></li>
+<li><p>Added missed information to the AST node representing the member function
+when calling a explicit object member function. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/218829">#218829</a>)</p></li>
+</ul>
+</section>
+<section id="miscellaneous-bug-fixes">
+<h4>Miscellaneous Bug Fixes<a class="headerlink" href="#miscellaneous-bug-fixes" title="連結到這個標頭">¶</a></h4>
+</section>
+<section id="miscellaneous-clang-crashes-fixed">
+<h4>Miscellaneous Clang Crashes Fixed<a class="headerlink" href="#miscellaneous-clang-crashes-fixed" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Fixed a crash in CTAD for type alias templates when the aggregate deduction guide could not be resolved. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/206994">#206994</a>)</p></li>
+<li><p>Fixed a crash when instantiating an invalid dependent friend destructor declaration in a class template. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/210234">#210234</a>)</p></li>
+<li><p>Fixed an assertion failure in <code class="docutils literal notranslate"><span class="pre">-extract-api</span></code> when a documentation comment
+contains invalid UTF-8. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/212393">#212393</a>)</p></li>
+<li><p>Fixed a crash in codegen on 32-bit targets caused by a struct too large to
+represent in <code class="docutils literal notranslate"><span class="pre">size_t</span></code>. The <code class="docutils literal notranslate"><span class="pre">err_struct_too_large</span></code> check now scales the
+threshold to the target's <code class="docutils literal notranslate"><span class="pre">size_t</span></code> width instead of using a fixed
+threshold of <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;&lt;</span> <span class="pre">60</span></code> regardless of the target.</p></li>
+<li><p>Fixed a crash when generating fake uses for parameters of bodyless destructors with <code class="docutils literal notranslate"><span class="pre">-fextend-variable-liveness</span></code>.</p></li>
+<li><p>Fixed a crash when filling in the <code class="docutils literal notranslate"><span class="pre">TypeLoc</span></code> for an <code class="docutils literal notranslate"><span class="pre">AttributedType</span></code>
+that was inherited from a different declarator, for example when
+<code class="docutils literal notranslate"><span class="pre">__typeof__</span></code> resolves to the type of another, already-processed
+declaration. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/217489">#217489</a>)</p></li>
+<li><p>Fixed an assertion failure when instantiating a block that captures
+<code class="docutils literal notranslate"><span class="pre">this</span></code> via a member access through a dependent base class.</p></li>
+<li><p>Fixed <code class="docutils literal notranslate"><span class="pre">DiagnoseUnguardedAvailability::TraverseIfStmt</span></code> dereferencing a nullptr
+on <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">consteval</span> <span class="pre">{}</span></code>. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/220004">#220004</a>)</p></li>
+<li><p>Fixed an assertion when the <code class="docutils literal notranslate"><span class="pre">dim</span></code> argument to an OpenACC <code class="docutils literal notranslate"><span class="pre">gang</span></code> clause
+evaluated to a value not representable by a signed integer, such as an
+unsigned wrap around. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/221418">#221418</a>)</p></li>
+<li><p>Fixed an assertion failure when a method or function definition follows an
+Objective-C <code class="docutils literal notranslate"><span class="pre">&#64;implementation</span></code> that was ended by a nested <code class="docutils literal notranslate"><span class="pre">&#64;interface</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&#64;protocol</span></code> or <code class="docutils literal notranslate"><span class="pre">&#64;implementation</span></code> before its <code class="docutils literal notranslate"><span class="pre">&#64;end</span></code>. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/209503">#209503</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="openacc-specific-changes">
+<h3>OpenACC Specific Changes<a class="headerlink" href="#openacc-specific-changes" title="連結到這個標頭">¶</a></h3>
+</section>
+<section id="opencl-specific-changes">
+<h3>OpenCL Specific Changes<a class="headerlink" href="#opencl-specific-changes" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>Extensions <code class="docutils literal notranslate"><span class="pre">cl_khr_extended_bit_ops</span></code>, <code class="docutils literal notranslate"><span class="pre">cl_khr_integer_dot_product</span></code>,
+<code class="docutils literal notranslate"><span class="pre">cl_khr_subgroup_extended_types</span></code>, <code class="docutils literal notranslate"><span class="pre">cl_khr_subgroup_rotate</span></code>,
+<code class="docutils literal notranslate"><span class="pre">cl_khr_subgroup_shuffle</span></code>, and <code class="docutils literal notranslate"><span class="pre">cl_khr_subgroup_shuffle_relative</span></code> are
+promoted to core features in OpenCL C 3.1. A target claiming OpenCL C 3.1
+conformance without supporting one of these features is now diagnosed.</p></li>
+</ul>
+</section>
+<section id="target-specific-changes">
+<h3>Target Specific Changes<a class="headerlink" href="#target-specific-changes" title="連結到這個標頭">¶</a></h3>
+<section id="amdgpu-support">
+<h4>AMDGPU Support<a class="headerlink" href="#amdgpu-support" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Deprecated the following builtins in favor of <code class="docutils literal notranslate"><span class="pre">__builtin_amdgcn_ballot_w32</span></code> or
+<code class="docutils literal notranslate"><span class="pre">__builtin_amdgcn_ballot_w64</span></code>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">__builtin_amdgcn_uicmp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__builtin_amdgcn_uicmpl</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__builtin_amdgcn_sicmpl</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__builtin_amdgcn_fcmp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__builtin_amdgcn_fcmpf</span></code></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="directx-support">
+<h4>DirectX Support<a class="headerlink" href="#directx-support" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">clang-dxc</span></code> and HLSL support are now enabled by default, following the
+promotion of the DirectX backend to an official LLVM target.</p></li>
+</ul>
+</section>
+<section id="nvptx-support">
+<h4>NVPTX Support<a class="headerlink" href="#nvptx-support" title="連結到這個標頭">¶</a></h4>
+</section>
+<section id="x86-support">
+<h4>X86 Support<a class="headerlink" href="#x86-support" title="連結到這個標頭">¶</a></h4>
+</section>
+<section id="arm-and-aarch64-support">
+<h4>Arm and AArch64 Support<a class="headerlink" href="#arm-and-aarch64-support" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Added support for pointer authentication discrimination of C++ virtual table
+pointers stored in VTTs via the <code class="docutils literal notranslate"><span class="pre">-fptrauth-vtt-vtable-pointer-discrimination</span></code>
+option.</p></li>
+</ul>
+</section>
+<section id="android-support">
+<h4>Android Support<a class="headerlink" href="#android-support" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Enabled PAC and BTI by default for AArch64 Android targets.</p></li>
+</ul>
+</section>
+<section id="windows-support">
+<h4>Windows Support<a class="headerlink" href="#windows-support" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Clang now accepts <code class="docutils literal notranslate"><span class="pre">_except</span></code> as an alias for <code class="docutils literal notranslate"><span class="pre">__except</span></code> in SEH handler
+position when <code class="docutils literal notranslate"><span class="pre">-fms-compatibility</span></code> is enabled, matching the existing
+<code class="docutils literal notranslate"><span class="pre">_try</span></code>, <code class="docutils literal notranslate"><span class="pre">_finally</span></code>, and <code class="docutils literal notranslate"><span class="pre">_leave</span></code> aliases. <code class="docutils literal notranslate"><span class="pre">_except</span></code> remains an ordinary
+identifier outside that context.</p></li>
+<li><p>Fixed <code class="docutils literal notranslate"><span class="pre">setjmp</span></code> on 32-bit Arm passing the frame pointer, rather than the
+stack pointer as it was on entry to the function, as the frame value the CRT
+stores in the <code class="docutils literal notranslate"><span class="pre">jmp_buf</span></code>. Clang now uses <code class="docutils literal notranslate"><span class="pre">llvm.sponentry</span></code> there, as it
+already did on AArch64.</p></li>
+<li><p>Fixed a bug where Clang did not match the MSVC ABI on Arm64 when an
+over-aligned base class is followed by another base class. MSVC on Arm64 (but
+not Arm64EC or x64) reuses the tail padding of the over-aligned base for the
+subsequent base; Clang now does the same.
+(<a class="reference external" href="https://github.com/llvm/llvm-project/issues/210174">#210174</a>)</p></li>
+</ul>
+</section>
+<section id="loongarch-support">
+<h4>LoongArch Support<a class="headerlink" href="#loongarch-support" title="連結到這個標頭">¶</a></h4>
+</section>
+<section id="risc-v-support">
+<h4>RISC-V Support<a class="headerlink" href="#risc-v-support" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Fixed a bug where the <code class="docutils literal notranslate"><span class="pre">interrupt</span></code> attribute did not accept <code class="docutils literal notranslate"><span class="pre">machine</span></code> together
+with both <code class="docutils literal notranslate"><span class="pre">SiFive-CLIC-preemptible</span></code> and <code class="docutils literal notranslate"><span class="pre">SiFive-CLIC-stack-swap</span></code>.</p></li>
+<li><p>Added a new warning when the same interrupt type is specified more than
+once in a RISC-V <code class="docutils literal notranslate"><span class="pre">interrupt</span></code> attribute.</p></li>
+<li><p>SiFive CLIC preemptible interrupt handlers now diagnose unsupported frame
+pointers instead of producing a backend fatal error.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">-march=native</span></code> for better compatibility with ARM, AArch64, and X86. This
+option will be treated like <code class="docutils literal notranslate"><span class="pre">-mcpu=native</span></code> if <code class="docutils literal notranslate"><span class="pre">-mcpu</span></code> is not present. If
+<code class="docutils literal notranslate"><span class="pre">-mcpu</span></code> is present, the ISA will be selected from the host CPU and the tune
+CPU will be selected from <code class="docutils literal notranslate"><span class="pre">-mcpu</span></code>.</p></li>
+</ul>
+</section>
+<section id="cuda-hip-language-changes">
+<h4>CUDA/HIP Language Changes<a class="headerlink" href="#cuda-hip-language-changes" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>HIP compilations now add the <code class="docutils literal notranslate"><span class="pre">include/libhipcxx</span></code> directory from the selected
+ROCm installation to the header search path when it exists. This allows
+libhipcxx headers to be included with paths such as <code class="docutils literal notranslate"><span class="pre">&lt;cuda/std/atomic&gt;</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">-nogpuinc</span></code> option disables this path together with the other HIP include
+paths.</p></li>
+</ul>
+</section>
+<section id="cuda-support">
+<h4>CUDA Support<a class="headerlink" href="#cuda-support" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">--cuda-emit-nvcc-abi</span></code> to emit the NVCC-compatible host registration ABI
+(<code class="docutils literal notranslate"><span class="pre">__cudaRegisterLinkedBinary</span></code>).</p></li>
+<li><p>Clang now provides device-side definitions of <code class="docutils literal notranslate"><span class="pre">__cxa_pure_virtual()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">__cxa_deleted_virtual()</span></code>; previously, any (potential) call to a pure/deleted
+virtual function that could not be optimised out would cause the program to
+fail to assemble. This is now fixed. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/49183">#49183</a>) (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/67533">#67533</a>)</p></li>
+</ul>
+</section>
+<section id="aix-support">
+<h4>AIX Support<a class="headerlink" href="#aix-support" title="連結到這個標頭">¶</a></h4>
+</section>
+<section id="netbsd-support">
+<h4>NetBSD Support<a class="headerlink" href="#netbsd-support" title="連結到這個標頭">¶</a></h4>
+</section>
+<section id="webassembly-support">
+<h4>WebAssembly Support<a class="headerlink" href="#webassembly-support" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">__builtin_wasm_memory_copy</span></code> and <code class="docutils literal notranslate"><span class="pre">__builtin_wasm_memory_fill</span></code> builtins
+for the WebAssembly <code class="docutils literal notranslate"><span class="pre">memory.copy</span></code> and <code class="docutils literal notranslate"><span class="pre">memory.fill</span></code> bulk memory instructions.</p></li>
+</ul>
+</section>
+<section id="avr-support">
+<h4>AVR Support<a class="headerlink" href="#avr-support" title="連結到這個標頭">¶</a></h4>
+</section>
+<section id="systemz-support">
+<h4>SystemZ Support<a class="headerlink" href="#systemz-support" title="連結到這個標頭">¶</a></h4>
+</section>
+</section>
+<section id="dwarf-support-in-clang">
+<h3>DWARF Support in Clang<a class="headerlink" href="#dwarf-support-in-clang" title="連結到這個標頭">¶</a></h3>
+</section>
+<section id="floating-point-support-in-clang">
+<h3>Floating Point Support in Clang<a class="headerlink" href="#floating-point-support-in-clang" title="連結到這個標頭">¶</a></h3>
+</section>
+<section id="fixed-point-support-in-clang">
+<h3>Fixed Point Support in Clang<a class="headerlink" href="#fixed-point-support-in-clang" title="連結到這個標頭">¶</a></h3>
+</section>
+<section id="ast-matchers">
+<h3>AST Matchers<a class="headerlink" href="#ast-matchers" title="連結到這個標頭">¶</a></h3>
+</section>
+<section id="clang-format">
+<h3>clang-format<a class="headerlink" href="#clang-format" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">SpacesInBlockComments</span></code> option to control spacing after <code class="docutils literal notranslate"><span class="pre">/*</span></code> and
+before <code class="docutils literal notranslate"><span class="pre">*/</span></code> in ordinary block comments.</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">AfterRequiresExpression</span></code> sub-option of <code class="docutils literal notranslate"><span class="pre">BraceWrapping</span></code> to wrap the
+body of requires expressions. It is enabled by the <code class="docutils literal notranslate"><span class="pre">Allman</span></code>, <code class="docutils literal notranslate"><span class="pre">Whitesmiths</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">GNU</span></code> styles of <code class="docutils literal notranslate"><span class="pre">BreakBeforeBraces</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QualifierOrder</span></code> now supports <code class="docutils literal notranslate"><span class="pre">typedef</span></code>, <code class="docutils literal notranslate"><span class="pre">consteval</span></code>, <code class="docutils literal notranslate"><span class="pre">constinit</span></code>,
+<code class="docutils literal notranslate"><span class="pre">thread_local</span></code>, <code class="docutils literal notranslate"><span class="pre">extern</span></code>, <code class="docutils literal notranslate"><span class="pre">mutable</span></code>, <code class="docutils literal notranslate"><span class="pre">signed</span></code>, <code class="docutils literal notranslate"><span class="pre">unsigned</span></code>, <code class="docutils literal notranslate"><span class="pre">long</span></code>, <code class="docutils literal notranslate"><span class="pre">short</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">explicit</span></code> declaration specifiers.</p></li>
+</ul>
+</section>
+<section id="libclang">
+<h3>libclang<a class="headerlink" href="#libclang" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>visit identifier initializers in lambda capture as VarDecl instead of VariableRef. Warning: this changes behaviour.</p></li>
+</ul>
+</section>
+<section id="code-completion">
+<h3>Code Completion<a class="headerlink" href="#code-completion" title="連結到這個標頭">¶</a></h3>
+<ul class="simple">
+<li><p>Parameters declared with a <code class="docutils literal notranslate"><span class="pre">decltype</span></code> are now presented as the type the
+<code class="docutils literal notranslate"><span class="pre">decltype</span></code> resolves to, e.g. <code class="docutils literal notranslate"><span class="pre">set_x(int</span> <span class="pre">val)</span></code> rather than
+<code class="docutils literal notranslate"><span class="pre">set_x(decltype(x)</span> <span class="pre">val)</span></code>. This affects the completion strings produced by
+libclang as well as those used by clangd.</p></li>
+<li><p>Members inherited from a dependent base class that is named through an alias
+template are suggested by code completion when relevant.</p></li>
+</ul>
+</section>
+<section id="static-analyzer">
+<h3>Static Analyzer<a class="headerlink" href="#static-analyzer" title="連結到這個標頭">¶</a></h3>
+<section id="crash-and-bug-fixes">
+<h4>Crash and bug fixes<a class="headerlink" href="#crash-and-bug-fixes" title="連結到這個標頭">¶</a></h4>
+</section>
+<section id="improvements">
+<h4>Improvements<a class="headerlink" href="#improvements" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>The lock-order-reversal check in <code class="docutils literal notranslate"><span class="pre">alpha.unix.PthreadLock</span></code> is now disabled by default.
+It can be re-enabled with the <code class="docutils literal notranslate"><span class="pre">WarnOnLockOrderReversal</span></code> option.</p></li>
+</ul>
+</section>
+<section id="moved-checkers">
+<h4>Moved checkers<a class="headerlink" href="#moved-checkers" title="連結到這個標頭">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">alpha.cplusplus.UseAfterLifetimeEnd</span></code> checker was renamed to <code class="docutils literal notranslate"><span class="pre">alpha.core.UseAfterLifetimeEnd</span></code>.</p>
+</section>
+<section id="diagnostic-changes">
+<h4>Diagnostic changes<a class="headerlink" href="#diagnostic-changes" title="連結到這個標頭">¶</a></h4>
+<ul class="simple">
+<li><p>For self-assignments during initialization (<code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">v</span> <span class="pre">=</span> <span class="pre">v;</span></code>), <code class="docutils literal notranslate"><span class="pre">core.uninitialized.Assign</span></code> will not report them as uninitialized accesses (except C++ reference types), and the checks will be delayed until the first accesses of these variables; <code class="docutils literal notranslate"><span class="pre">deadcode.DeadStores</span></code> will not report them as dead stores. (<a class="reference external" href="https://github.com/llvm/llvm-project/issues/187530">#187530</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="sanitizers">
+<span id="release-notes-sanitizers"></span><h3>Sanitizers<a class="headerlink" href="#sanitizers" title="連結到這個標頭">¶</a></h3>
+</section>
+<section id="python-binding-changes">
+<h3>Python Binding Changes<a class="headerlink" href="#python-binding-changes" title="連結到這個標頭">¶</a></h3>
+</section>
+<section id="openmp-support">
+<h3>OpenMP Support<a class="headerlink" href="#openmp-support" title="連結到這個標頭">¶</a></h3>
+<ul>
+<li><p>Canonicalize intra-tiles in loop tiling. <code class="docutils literal notranslate"><span class="pre">#pragma</span> <span class="pre">omp</span> <span class="pre">tile</span></code> still emits a
+min-bounded inner loop, which vectorizes well. When a parent directive such as
+<code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">collapse(n)</span></code> needs a constant per-tile trip count, Clang rereads a
+droppable hint and treats that inner loop as rectangular, with an overshoot
+guard only if the last tile can be partial.</p>
+<p>Not yet supported (diagnosed, left as follow-up):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">collapse</span></code> through stacked <code class="docutils literal notranslate"><span class="pre">#pragma</span> <span class="pre">omp</span> <span class="pre">tile</span></code> (the inner floor is not a
+collapsed counter).</p></li>
+<li><p>A loop transformation (<code class="docutils literal notranslate"><span class="pre">tile</span></code>, <code class="docutils literal notranslate"><span class="pre">unroll</span></code>, <code class="docutils literal notranslate"><span class="pre">interchange</span></code>, ...) that consumes
+another tile's intra-tile loop.</p></li>
+</ul>
+</li>
+<li><p>Added parsing and semantic support for <code class="docutils literal notranslate"><span class="pre">dims</span></code> modifier in <code class="docutils literal notranslate"><span class="pre">num_teams</span></code> and
+<code class="docutils literal notranslate"><span class="pre">thread_limit</span></code> clauses for OpenMP 6.1 or later.</p></li>
+<li><p>Added parsing and semantic support for <code class="docutils literal notranslate"><span class="pre">dims</span></code> modifier in <code class="docutils literal notranslate"><span class="pre">num_teams</span></code>,
+<code class="docutils literal notranslate"><span class="pre">thread_limit</span></code> and <code class="docutils literal notranslate"><span class="pre">num_threads</span></code> clauses for OpenMP 6.1 or later.</p></li>
+<li><p>Map-type-modifying modifiers applied to a list item with a user-defined mapper
+are now propagated onto the maps the mapper expands to.</p></li>
+<li><p>Mapping of expressions with base-pointers through a user-defined mapper (e.g.
+<code class="docutils literal notranslate"><span class="pre">map(s.p[0:n])</span></code>) now conforms to OpenMP's conditional pointer-attachment,
+matching the behavior of such maps outside a mapper.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">holds</span></code> clause on the <code class="docutils literal notranslate"><span class="pre">assume</span></code> directive now lowers side-effect-free
+conditions to <code class="docutils literal notranslate"><span class="pre">llvm.assume</span></code>, enabling downstream optimizations. Previously
+the clause was parsed but its condition was discarded without effect.</p></li>
+</ul>
+</section>
+<section id="sycl-support">
+<h3>SYCL Support<a class="headerlink" href="#sycl-support" title="連結到這個標頭">¶</a></h3>
+<section id="id2">
+<h4>Improvements<a class="headerlink" href="#id2" title="連結到這個標頭">¶</a></h4>
+</section>
+</section>
+</section>
+<section id="additional-information">
+<h2>Additional Information<a class="headerlink" href="#additional-information" title="連結到這個標頭">¶</a></h2>
+<p>A wide variety of additional information is available on the <a class="reference external" href="https://clang.llvm.org/">Clang web
+page</a>. The web page contains versions of the
+API documentation which are up-to-date with the Git version of
+the source code. You can access versions of these documents specific to
+this release by going into the &quot;<code class="docutils literal notranslate"><span class="pre">clang/docs/</span></code>&quot; directory in the Clang
+tree.</p>
+<p>If you have any questions or comments about Clang, please feel free to
+contact us on the <a class="reference external" href="https://discourse.llvm.org/c/clang/6">Discourse forums (Clang Frontend category)</a>.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="UsersManual.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Clang Compiler User's Manual</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Home</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Clang Release Notes</a><ul>
+<li><a class="reference internal" href="#introduction">簡介</a></li>
+<li><a class="reference internal" href="#potentially-breaking-changes">Potentially Breaking Changes</a><ul>
+<li><a class="reference internal" href="#c-c-language-potentially-breaking-changes">C/C++ Language Potentially Breaking Changes</a></li>
+<li><a class="reference internal" href="#c-specific-potentially-breaking-changes">C++ Specific Potentially Breaking Changes</a></li>
+<li><a class="reference internal" href="#objective-c-specific-potentially-breaking-changes">Objective-C Specific Potentially Breaking Changes</a></li>
+<li><a class="reference internal" href="#abi-changes-in-this-version">ABI Changes in This Version</a></li>
+<li><a class="reference internal" href="#ast-dumping-potentially-breaking-changes">AST Dumping Potentially Breaking Changes</a></li>
+<li><a class="reference internal" href="#clang-frontend-potentially-breaking-changes">Clang Frontend Potentially Breaking Changes</a></li>
+<li><a class="reference internal" href="#clang-python-bindings-potentially-breaking-changes">Clang Python Bindings Potentially Breaking Changes</a></li>
+<li><a class="reference internal" href="#opencl-potentially-breaking-changes">OpenCL Potentially Breaking Changes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#what-s-new-in-clang">What's New in Clang ?</a><ul>
+<li><a class="reference internal" href="#c-language-changes">C++ Language Changes</a><ul>
+<li><a class="reference internal" href="#c-2d-feature-support">C++2d Feature Support</a></li>
+<li><a class="reference internal" href="#c-2c-feature-support">C++2c Feature Support</a></li>
+<li><a class="reference internal" href="#c-23-feature-support">C++23 Feature Support</a></li>
+<li><a class="reference internal" href="#c-20-feature-support">C++20 Feature Support</a></li>
+<li><a class="reference internal" href="#c-17-feature-support">C++17 Feature Support</a></li>
+<li><a class="reference internal" href="#resolutions-to-c-defect-reports">Resolutions to C++ Defect Reports</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id1">C Language Changes</a><ul>
+<li><a class="reference internal" href="#c2y-feature-support">C2y Feature Support</a></li>
+<li><a class="reference internal" href="#c23-feature-support">C23 Feature Support</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#objective-c-language-changes">Objective-C Language Changes</a></li>
+<li><a class="reference internal" href="#non-comprehensive-list-of-changes-in-this-release">Non-comprehensive list of changes in this release</a></li>
+<li><a class="reference internal" href="#new-compiler-flags">New Compiler Flags</a></li>
+<li><a class="reference internal" href="#deprecated-compiler-flags">Deprecated Compiler Flags</a></li>
+<li><a class="reference internal" href="#modified-compiler-flags">Modified Compiler Flags</a></li>
+<li><a class="reference internal" href="#removed-compiler-flags">Removed Compiler Flags</a></li>
+<li><a class="reference internal" href="#attribute-changes-in-clang">Attribute Changes in Clang</a></li>
+<li><a class="reference internal" href="#improvements-to-clang-s-diagnostics">Improvements to Clang's diagnostics</a></li>
+<li><a class="reference internal" href="#improvements-to-clang-s-time-trace">Improvements to Clang's time-trace</a></li>
+<li><a class="reference internal" href="#improvements-to-coverage-mapping">Improvements to Coverage Mapping</a></li>
+<li><a class="reference internal" href="#bug-fixes-in-this-version">Bug Fixes in This Version</a><ul>
+<li><a class="reference internal" href="#bug-fixes-to-compiler-builtins">Bug Fixes to Compiler Builtins</a></li>
+<li><a class="reference internal" href="#bug-fixes-to-attribute-support">Bug Fixes to Attribute Support</a></li>
+<li><a class="reference internal" href="#bug-fixes-to-c-support">Bug Fixes to C++ Support</a></li>
+<li><a class="reference internal" href="#bug-fixes-to-ast-handling">Bug Fixes to AST Handling</a></li>
+<li><a class="reference internal" href="#miscellaneous-bug-fixes">Miscellaneous Bug Fixes</a></li>
+<li><a class="reference internal" href="#miscellaneous-clang-crashes-fixed">Miscellaneous Clang Crashes Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#openacc-specific-changes">OpenACC Specific Changes</a></li>
+<li><a class="reference internal" href="#opencl-specific-changes">OpenCL Specific Changes</a></li>
+<li><a class="reference internal" href="#target-specific-changes">Target Specific Changes</a><ul>
+<li><a class="reference internal" href="#amdgpu-support">AMDGPU Support</a></li>
+<li><a class="reference internal" href="#directx-support">DirectX Support</a></li>
+<li><a class="reference internal" href="#nvptx-support">NVPTX Support</a></li>
+<li><a class="reference internal" href="#x86-support">X86 Support</a></li>
+<li><a class="reference internal" href="#arm-and-aarch64-support">Arm and AArch64 Support</a></li>
+<li><a class="reference internal" href="#android-support">Android Support</a></li>
+<li><a class="reference internal" href="#windows-support">Windows Support</a></li>
+<li><a class="reference internal" href="#loongarch-support">LoongArch Support</a></li>
+<li><a class="reference internal" href="#risc-v-support">RISC-V Support</a></li>
+<li><a class="reference internal" href="#cuda-hip-language-changes">CUDA/HIP Language Changes</a></li>
+<li><a class="reference internal" href="#cuda-support">CUDA Support</a></li>
+<li><a class="reference internal" href="#aix-support">AIX Support</a></li>
+<li><a class="reference internal" href="#netbsd-support">NetBSD Support</a></li>
+<li><a class="reference internal" href="#webassembly-support">WebAssembly Support</a></li>
+<li><a class="reference internal" href="#avr-support">AVR Support</a></li>
+<li><a class="reference internal" href="#systemz-support">SystemZ Support</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dwarf-support-in-clang">DWARF Support in Clang</a></li>
+<li><a class="reference internal" href="#floating-point-support-in-clang">Floating Point Support in Clang</a></li>
+<li><a class="reference internal" href="#fixed-point-support-in-clang">Fixed Point Support in Clang</a></li>
+<li><a class="reference internal" href="#ast-matchers">AST Matchers</a></li>
+<li><a class="reference internal" href="#clang-format">clang-format</a></li>
+<li><a class="reference internal" href="#libclang">libclang</a></li>
+<li><a class="reference internal" href="#code-completion">Code Completion</a></li>
+<li><a class="reference internal" href="#static-analyzer">Static Analyzer</a><ul>
+<li><a class="reference internal" href="#crash-and-bug-fixes">Crash and bug fixes</a></li>
+<li><a class="reference internal" href="#improvements">Improvements</a></li>
+<li><a class="reference internal" href="#moved-checkers">Moved checkers</a></li>
+<li><a class="reference internal" href="#diagnostic-changes">Diagnostic changes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sanitizers">Sanitizers</a></li>
+<li><a class="reference internal" href="#python-binding-changes">Python Binding Changes</a></li>
+<li><a class="reference internal" href="#openmp-support">OpenMP Support</a></li>
+<li><a class="reference internal" href="#sycl-support">SYCL Support</a><ul>
+<li><a class="reference internal" href="#id2">Improvements</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#additional-information">Additional Information</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=0d9984b1"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=cbf116e0"></script>
+    <script src="_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>

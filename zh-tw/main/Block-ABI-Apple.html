@@ -1,0 +1,1340 @@
+<!doctype html>
+<html class="no-js" lang="zh-TW" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜尋" href="search.html" /><link rel="next" title="Objective-C Automatic Reference Counting (ARC)" href="AutomaticReferenceCounting.html" /><link rel="prev" title="Language Specification for Blocks" href="BlockLanguageSpec.html" />
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/Block-ABI-Apple.html" />
+        <link rel="prefetch" href="_static/LLVMWyvernSmall.png" as="image" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+        <title>Block Implementation Specification - Clang</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=548e816e" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86c9e7d9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜尋" name="q" aria-label="搜尋">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Clang Release Notes</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="UsersManual.html">Clang Compiler User's Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="LanguageExtensions.html">Clang Language Extensions</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Clang Language Extensions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrossCompilation.html">使用 Clang 進行交叉編譯</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ClangStaticAnalyzer.html">Clang Static Analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Clang Static Analyzer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="analyzer/checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/user-docs.html">2. User Docs</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 2. User Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/UsingWithXCode.html">2.2. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FilingBugs.html">2.3. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CrossTranslationUnit.html">2.4. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/TaintAnalysisConfiguration.html">2.5. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/Annotations.html">2.6. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FAQ.html">2.7. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/developer-docs.html">3. Developer Docs</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 3. Developer Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/PerformanceInvestigation.html">3.6. 效能調查</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Scalable Static Analysis Framework</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Developer Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DataFlowAnalysisIntro.html">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSanitizer.html">ThreadSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MemorySanitizer.html">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataFlowSanitizer.html">DataFlowSanitizer</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of DataFlowSanitizer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="DataFlowSanitizerDesign.html">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerCoverage.html">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ControlFlowIntegrity.html">Control Flow Integrity</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Control Flow Integrity</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StandardCPlusPlusModules.html">標準 C++ 模組</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">模組</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MisExpect.html">Misexpect</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Misexpect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="OpenCLSupport.html">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Clang HLSL Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of HLSL Design and Implementation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="APINotes.html">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CIR/index.html">ClangIR</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of ClangIR</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CIR/ABILowering.html">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CommandGuide/index.html">Clang "man" pages</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Clang "man" pages</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefactoringEngine.html">Clang's refactoring engine</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ClangTools.html">概覽</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangRepl.html">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InternalsManual.html">"Clang" CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizerDesign.html">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LLVMExceptionHandlingCodeGen.html">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/Block-ABI-Apple.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/Block-ABI-Apple.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="block-implementation-specification">
+<h1>Block Implementation Specification<a class="headerlink" href="#block-implementation-specification" title="連結到這個標頭">¶</a></h1>
+<section id="history">
+<h2>History<a class="headerlink" href="#history" title="連結到這個標頭">¶</a></h2>
+<ul class="simple">
+<li><p>2008/7/14 - created.</p></li>
+<li><p>2008/8/21 - revised, C++.</p></li>
+<li><p>2008/9/24 - add <code class="docutils literal notranslate"><span class="pre">NULL</span></code> <code class="docutils literal notranslate"><span class="pre">isa</span></code> field to <code class="docutils literal notranslate"><span class="pre">__block</span></code> storage.</p></li>
+<li><p>2008/10/1 - revise block layout to use a <code class="docutils literal notranslate"><span class="pre">static</span></code> descriptor structure.</p></li>
+<li><p>2008/10/6 - revise block layout to use an unsigned long int flags.</p></li>
+<li><p>2008/10/28 - specify use of <code class="docutils literal notranslate"><span class="pre">_Block_object_assign</span></code> and
+<code class="docutils literal notranslate"><span class="pre">_Block_object_dispose</span></code> for all &quot;Object&quot; types in helper functions.</p></li>
+<li><p>2008/10/30 - revise new layout to have invoke function in same place.</p></li>
+<li><p>2008/10/30 - add <code class="docutils literal notranslate"><span class="pre">__weak</span></code> support.</p></li>
+<li><p>2010/3/16 - rev for stret return, signature field.</p></li>
+<li><p>2010/4/6 - improved wording.</p></li>
+<li><p>2013/1/6 - improved wording and converted to rst.</p></li>
+</ul>
+<p>This document describes the Apple ABI implementation specification of Blocks.</p>
+<p>The first shipping version of this ABI is found in Mac OS X 10.6, and shall be
+referred to as 10.6.ABI. As of 2010/3/16, the following describes the ABI
+contract with the runtime and the compiler, and, as necessary, will be referred
+to as ABI.2010.3.16.</p>
+<p>Since the Apple ABI references symbols from other elements of the system, any
+attempt to use this ABI on systems prior to SnowLeopard is undefined.</p>
+</section>
+<section id="high-level">
+<h2>High Level<a class="headerlink" href="#high-level" title="連結到這個標頭">¶</a></h2>
+<p>The ABI of <code class="docutils literal notranslate"><span class="pre">Blocks</span></code> consists of their layout and the runtime functions required
+by the compiler. A <code class="docutils literal notranslate"><span class="pre">Block</span></code> of type <code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">(^)(P...)</span></code> consists of a structure of
+the following form:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">Block_literal_1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">isa</span><span class="p">;</span><span class="w"> </span><span class="c1">// initialized to &amp;_NSConcreteStackBlock or &amp;_NSConcreteGlobalBlock</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="n">R</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">invoke</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">Block_literal_1</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">P</span><span class="p">...);</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">Block_descriptor_1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">reserved</span><span class="p">;</span><span class="w">     </span><span class="c1">// NULL</span>
+<span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w">         </span><span class="c1">// sizeof(struct Block_literal_1)</span>
+<span class="w">        </span><span class="c1">// optional helper functions</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">copy_helper</span><span class="p">)(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">);</span><span class="w">     </span><span class="c1">// IFF (1&lt;&lt;25)</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">dispose_helper</span><span class="p">)(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">);</span><span class="w">             </span><span class="c1">// IFF (1&lt;&lt;25)</span>
+<span class="w">        </span><span class="c1">// required ABI.2010.3.16</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">signature</span><span class="p">;</span><span class="w">                         </span><span class="c1">// IFF (1&lt;&lt;30)</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="o">*</span><span class="n">descriptor</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// imported variables</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>The following flags bits are in use thusly for a possible ABI.2010.3.16:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Set to true on blocks that have captures (and thus are not true</span>
+<span class="w">    </span><span class="c1">// global blocks) but are known not to escape for various other</span>
+<span class="w">    </span><span class="c1">// reasons. For backward compatibility with old runtimes, whenever</span>
+<span class="w">    </span><span class="c1">// BLOCK_IS_NOESCAPE is set, BLOCK_IS_GLOBAL is set too. Copying a</span>
+<span class="w">    </span><span class="c1">// non-escaping block returns the original block and releasing such a</span>
+<span class="w">    </span><span class="c1">// block is a no-op, which is exactly how global blocks are handled.</span>
+<span class="w">    </span><span class="n">BLOCK_IS_NOESCAPE</span><span class="w">      </span><span class="o">=</span><span class="w">  </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">23</span><span class="p">),</span>
+
+<span class="w">    </span><span class="n">BLOCK_HAS_COPY_DISPOSE</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">25</span><span class="p">),</span>
+<span class="w">    </span><span class="n">BLOCK_HAS_CTOR</span><span class="w"> </span><span class="o">=</span><span class="w">          </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">26</span><span class="p">),</span><span class="w"> </span><span class="c1">// helpers have C++ code</span>
+<span class="w">    </span><span class="n">BLOCK_IS_GLOBAL</span><span class="w"> </span><span class="o">=</span><span class="w">         </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">28</span><span class="p">),</span>
+<span class="w">    </span><span class="n">BLOCK_HAS_STRET</span><span class="w"> </span><span class="o">=</span><span class="w">         </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">29</span><span class="p">),</span><span class="w"> </span><span class="c1">// IFF BLOCK_HAS_SIGNATURE</span>
+<span class="w">    </span><span class="n">BLOCK_HAS_SIGNATURE</span><span class="w"> </span><span class="o">=</span><span class="w">     </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">30</span><span class="p">),</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>In 10.6.ABI the (1&lt;&lt;29) was usually set and was always ignored by the runtime -
+it had been a transitional marker that did not get deleted after the
+transition. This bit is now paired with (1&lt;&lt;30), and represented as the pair
+(3&lt;&lt;29), for the following combinations of valid bit settings, and their
+meanings:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">flags</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="o">&lt;&lt;</span><span class="mi">29</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="o">&lt;&lt;</span><span class="mi">29</span><span class="p">):</span><span class="w">      </span><span class="mf">10.6</span><span class="p">.</span><span class="n">ABI</span><span class="p">,</span><span class="w"> </span><span class="n">no</span><span class="w"> </span><span class="n">signature</span><span class="w"> </span><span class="n">field</span><span class="w"> </span><span class="n">available</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">29</span><span class="p">):</span><span class="w">      </span><span class="mf">10.6</span><span class="p">.</span><span class="n">ABI</span><span class="p">,</span><span class="w"> </span><span class="n">no</span><span class="w"> </span><span class="n">signature</span><span class="w"> </span><span class="n">field</span><span class="w"> </span><span class="n">available</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="o">&lt;&lt;</span><span class="mi">29</span><span class="p">):</span><span class="w"> </span><span class="n">ABI</span><span class="mf">.2010.3.16</span><span class="p">,</span><span class="w"> </span><span class="n">regular</span><span class="w"> </span><span class="n">calling</span><span class="w"> </span><span class="n">convention</span><span class="p">,</span><span class="w"> </span><span class="n">presence</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">signature</span><span class="w"> </span><span class="n">field</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="o">&lt;&lt;</span><span class="mi">29</span><span class="p">):</span><span class="w"> </span><span class="n">ABI</span><span class="mf">.2010.3.16</span><span class="p">,</span><span class="w"> </span><span class="n">stret</span><span class="w"> </span><span class="n">calling</span><span class="w"> </span><span class="n">convention</span><span class="p">,</span><span class="w"> </span><span class="n">presence</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">signature</span><span class="w"> </span><span class="n">field</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The signature field is not always populated.</p>
+<p>The following discussions are presented as 10.6.ABI otherwise.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Block</span></code> literals may occur within functions where the structure is created in
+stack local memory. They may also appear as initialization expressions for
+<code class="docutils literal notranslate"><span class="pre">Block</span></code> variables of global or <code class="docutils literal notranslate"><span class="pre">static</span></code> local variables.</p>
+<p>When a <code class="docutils literal notranslate"><span class="pre">Block</span></code> literal expression is evaluated the stack based structure is
+initialized as follows:</p>
+<ol class="arabic">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">static</span></code> descriptor structure is declared and initialized as follows:</p>
+<p>a. The <code class="docutils literal notranslate"><span class="pre">invoke</span></code> function pointer is set to a function that takes the
+<code class="docutils literal notranslate"><span class="pre">Block</span></code> structure as its first argument and the rest of the arguments (if
+any) to the <code class="docutils literal notranslate"><span class="pre">Block</span></code> and executes the <code class="docutils literal notranslate"><span class="pre">Block</span></code> compound statement.</p>
+<p>b. The <code class="docutils literal notranslate"><span class="pre">size</span></code> field is set to the size of the following <code class="docutils literal notranslate"><span class="pre">Block</span></code> literal
+structure.</p>
+<p>c. The <code class="docutils literal notranslate"><span class="pre">copy_helper</span></code> and <code class="docutils literal notranslate"><span class="pre">dispose_helper</span></code> function pointers are set to
+respective helper functions if they are required by the <code class="docutils literal notranslate"><span class="pre">Block</span></code> literal.</p>
+</li>
+<li><p>A stack (or global) <code class="docutils literal notranslate"><span class="pre">Block</span></code> literal data structure is created and
+initialized as follows:</p>
+<p>a. The <code class="docutils literal notranslate"><span class="pre">isa</span></code> field is set to the address of the external
+<code class="docutils literal notranslate"><span class="pre">_NSConcreteStackBlock</span></code>, which is a block of uninitialized memory supplied
+in <code class="docutils literal notranslate"><span class="pre">libSystem</span></code>, or <code class="docutils literal notranslate"><span class="pre">_NSConcreteGlobalBlock</span></code> if this is a static or file
+level <code class="docutils literal notranslate"><span class="pre">Block</span></code> literal.</p>
+<p>b. The <code class="docutils literal notranslate"><span class="pre">flags</span></code> field is set to zero unless there are variables imported
+into the <code class="docutils literal notranslate"><span class="pre">Block</span></code> that need helper functions for program level
+<code class="docutils literal notranslate"><span class="pre">Block_copy()</span></code> and <code class="docutils literal notranslate"><span class="pre">Block_release()</span></code> operations, in which case the
+<code class="docutils literal notranslate"><span class="pre">(1&lt;&lt;25)</span></code> flags bit is set.</p>
+</li>
+</ol>
+<p>As an example, the <code class="docutils literal notranslate"><span class="pre">Block</span></code> literal expression:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="o">^</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"hello world</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>would cause the following to be created on a 32-bit system:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">isa</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">invoke</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_1</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_descriptor_1</span><span class="w"> </span><span class="o">*</span><span class="n">descriptor</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_invoke_1</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_1</span><span class="w"> </span><span class="o">*</span><span class="n">_block</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"hello world</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_descriptor_1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Block_size</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">__block_descriptor_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_1</span><span class="p">)</span><span class="w"> </span><span class="p">};</span>
+</pre></div>
+</div>
+<p>and where the <code class="docutils literal notranslate"><span class="pre">Block</span></code> literal itself appears:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_1</span><span class="w"> </span><span class="n">_block_literal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="o">&amp;</span><span class="n">_NSConcreteStackBlock</span><span class="p">,</span>
+<span class="w">     </span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">29</span><span class="p">),</span><span class="w"> </span><span class="o">&lt;</span><span class="n">uninitialized</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">     </span><span class="n">__block_invoke_1</span><span class="p">,</span>
+<span class="w">     </span><span class="o">&amp;</span><span class="n">__block_descriptor_1</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">Block</span></code> imports other <code class="docutils literal notranslate"><span class="pre">Block</span></code> references, <code class="docutils literal notranslate"><span class="pre">const</span></code> copies of other
+variables, and variables marked <code class="docutils literal notranslate"><span class="pre">__block</span></code>. In Objective-C, variables may
+additionally be objects.</p>
+<p>When a <code class="docutils literal notranslate"><span class="pre">Block</span></code> literal expression is used as the initial value of a global
+or <code class="docutils literal notranslate"><span class="pre">static</span></code> local variable, it is initialized as follows:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_1</span><span class="w"> </span><span class="n">__block_literal_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="o">&amp;</span><span class="n">_NSConcreteGlobalBlock</span><span class="p">,</span>
+<span class="w">      </span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">28</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">29</span><span class="p">),</span><span class="w"> </span><span class="o">&lt;</span><span class="n">uninitialized</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">      </span><span class="n">__block_invoke_1</span><span class="p">,</span>
+<span class="w">      </span><span class="o">&amp;</span><span class="n">__block_descriptor_1</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>that is, a different address is provided as the first value and a particular
+(1&lt;&lt;28) bit is set in the <code class="docutils literal notranslate"><span class="pre">flags</span></code> field, and otherwise it is the same as for
+stack based <code class="docutils literal notranslate"><span class="pre">Block</span></code> literals. This is an optimization that can be used for
+any <code class="docutils literal notranslate"><span class="pre">Block</span></code> literal that imports no <code class="docutils literal notranslate"><span class="pre">const</span></code> or <code class="docutils literal notranslate"><span class="pre">__block</span></code> storage
+variables.</p>
+</section>
+<section id="imported-variables">
+<h2>Imported Variables<a class="headerlink" href="#imported-variables" title="連結到這個標頭">¶</a></h2>
+<p>Variables of <code class="docutils literal notranslate"><span class="pre">auto</span></code> storage class are imported as <code class="docutils literal notranslate"><span class="pre">const</span></code> copies. Variables
+of <code class="docutils literal notranslate"><span class="pre">__block</span></code> storage class are imported as a pointer to an enclosing data
+structure. Global variables are simply referenced and not considered as
+imported.</p>
+<section id="imported-const-copy-variables">
+<h3>Imported <code class="docutils literal notranslate"><span class="pre">const</span></code> copy variables<a class="headerlink" href="#imported-const-copy-variables" title="連結到這個標頭">¶</a></h3>
+<p>Automatic storage variables not marked with <code class="docutils literal notranslate"><span class="pre">__block</span></code> are imported as
+<code class="docutils literal notranslate"><span class="pre">const</span></code> copies.</p>
+<p>The simplest example is that of importing a variable of type <code class="docutils literal notranslate"><span class="pre">int</span></code>:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">^</span><span class="n">vv</span><span class="p">)(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">^</span><span class="p">{</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"x is %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="p">;</span>
+<span class="n">vv</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>which would be compiled to:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_2</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">isa</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">invoke</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_2</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_descriptor_2</span><span class="w"> </span><span class="o">*</span><span class="n">descriptor</span><span class="p">;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_invoke_2</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_2</span><span class="w"> </span><span class="o">*</span><span class="n">_block</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"x is %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">_block</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_descriptor_2</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Block_size</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">__block_descriptor_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_2</span><span class="p">)</span><span class="w"> </span><span class="p">};</span>
+</pre></div>
+</div>
+<p>and:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_2</span><span class="w"> </span><span class="n">__block_literal_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="o">&amp;</span><span class="n">_NSConcreteStackBlock</span><span class="p">,</span>
+<span class="w">      </span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">29</span><span class="p">),</span><span class="w"> </span><span class="o">&lt;</span><span class="n">uninitialized</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">      </span><span class="n">__block_invoke_2</span><span class="p">,</span>
+<span class="w">      </span><span class="o">&amp;</span><span class="n">__block_descriptor_2</span><span class="p">,</span>
+<span class="w">      </span><span class="n">x</span>
+<span class="w"> </span><span class="p">};</span>
+</pre></div>
+</div>
+<p>In summary, scalars, structures, unions, and function pointers are generally
+imported as <code class="docutils literal notranslate"><span class="pre">const</span></code> copies with no need for helper functions.</p>
+</section>
+<section id="imported-const-copy-of-block-reference">
+<h3>Imported <code class="docutils literal notranslate"><span class="pre">const</span></code> copy of <code class="docutils literal notranslate"><span class="pre">Block</span></code> reference<a class="headerlink" href="#imported-const-copy-of-block-reference" title="連結到這個標頭">¶</a></h3>
+<p>The first case where copy and dispose helper functions are required is for the
+case of when a <code class="docutils literal notranslate"><span class="pre">Block</span></code> itself is imported. In this case both a
+<code class="docutils literal notranslate"><span class="pre">copy_helper</span></code> function and a <code class="docutils literal notranslate"><span class="pre">dispose_helper</span></code> function are needed. The
+<code class="docutils literal notranslate"><span class="pre">copy_helper</span></code> function is passed both the existing stack based pointer and the
+pointer to the new heap version and should call back into the runtime to
+actually do the copy operation on the imported fields within the <code class="docutils literal notranslate"><span class="pre">Block</span></code>. The
+runtime functions are all described in <a class="reference internal" href="#runtimehelperfunctions"><span class="std std-ref">Runtime Helper Functions</span></a>.</p>
+<p>A quick example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">^</span><span class="n">existingBlock</span><span class="p">)(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span>
+<span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">^</span><span class="n">vv</span><span class="p">)(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">^</span><span class="p">{</span><span class="w"> </span><span class="n">existingBlock</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="n">vv</span><span class="p">();</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_3</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="p">...;</span><span class="w"> </span><span class="c1">// existing block</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_4</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">isa</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">invoke</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_4</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_3</span><span class="w"> </span><span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="n">existingBlock</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_invoke_4</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_2</span><span class="w"> </span><span class="o">*</span><span class="n">_block</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">__block</span><span class="o">-&gt;</span><span class="n">existingBlock</span><span class="o">-&gt;</span><span class="n">invoke</span><span class="p">(</span><span class="n">__block</span><span class="o">-&gt;</span><span class="n">existingBlock</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_copy_4</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_4</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_4</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="c1">//_Block_copy_assign(&amp;dst-&gt;existingBlock, src-&gt;existingBlock, 0);</span>
+<span class="w">     </span><span class="n">_Block_object_assign</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dst</span><span class="o">-&gt;</span><span class="n">existingBlock</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="o">-&gt;</span><span class="n">existingBlock</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_BLOCK</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_dispose_4</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_4</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="c1">// was _Block_destroy</span>
+<span class="w">     </span><span class="n">_Block_object_dispose</span><span class="p">(</span><span class="n">src</span><span class="o">-&gt;</span><span class="n">existingBlock</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_BLOCK</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_descriptor_4</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Block_size</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">copy_helper</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_4</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_4</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">dispose_helper</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_4</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span><span class="n">__block_descriptor_4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_4</span><span class="p">),</span>
+<span class="w">    </span><span class="n">__block_copy_4</span><span class="p">,</span>
+<span class="w">    </span><span class="n">__block_dispose_4</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>and where said <code class="docutils literal notranslate"><span class="pre">Block</span></code> is used:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_4</span><span class="w"> </span><span class="n">_block_literal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="o">&amp;</span><span class="n">_NSConcreteStackBlock</span><span class="p">,</span>
+<span class="w">      </span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">25</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">29</span><span class="p">),</span><span class="w"> </span><span class="o">&lt;</span><span class="n">uninitialized</span><span class="o">&gt;</span>
+<span class="w">      </span><span class="n">__block_invoke_4</span><span class="p">,</span>
+<span class="w">      </span><span class="o">&amp;</span><span class="w"> </span><span class="n">__block_descriptor_4</span>
+<span class="w">      </span><span class="n">existingBlock</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<section id="importing-attribute-nsobject-variables">
+<h4>Importing <code class="docutils literal notranslate"><span class="pre">__attribute__((NSObject))</span></code> variables<a class="headerlink" href="#importing-attribute-nsobject-variables" title="連結到這個標頭">¶</a></h4>
+<p>GCC introduces <code class="docutils literal notranslate"><span class="pre">__attribute__((NSObject))</span></code> on structure pointers to mean &quot;this
+is an object&quot;. This is useful because many low level data structures are
+declared as opaque structure pointers, e.g. <code class="docutils literal notranslate"><span class="pre">CFStringRef</span></code>, <code class="docutils literal notranslate"><span class="pre">CFArrayRef</span></code>,
+etc. When used from C, however, these are still really objects and are the
+second case where that requires copy and dispose helper functions to be
+generated. The copy helper functions generated by the compiler should use the
+<code class="docutils literal notranslate"><span class="pre">_Block_object_assign</span></code> runtime helper function and in the dispose helper the
+<code class="docutils literal notranslate"><span class="pre">_Block_object_dispose</span></code> runtime helper function should be called.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">Block</span></code> foo in the following:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">Opaque</span><span class="w"> </span><span class="o">*</span><span class="n">__attribute__</span><span class="p">((</span><span class="n">NSObject</span><span class="p">))</span><span class="w"> </span><span class="n">objectPointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span>
+<span class="p">...</span>
+<span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">^</span><span class="n">foo</span><span class="p">)(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">^</span><span class="p">{</span><span class="w">  </span><span class="n">CFPrint</span><span class="p">(</span><span class="n">objectPointer</span><span class="p">);</span><span class="w"> </span><span class="p">};</span>
+</pre></div>
+</div>
+<p>would have the following helper functions generated:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">__block_copy_foo</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="n">_Block_object_assign</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dst</span><span class="o">-&gt;</span><span class="n">objectPointer</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="o">-&gt;</span><span class="w"> </span><span class="n">objectPointer</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_OBJECT</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_dispose_foo</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="n">_Block_object_dispose</span><span class="p">(</span><span class="n">src</span><span class="o">-&gt;</span><span class="n">objectPointer</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_OBJECT</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="imported-block-marked-variables">
+<h3>Imported <code class="docutils literal notranslate"><span class="pre">__block</span></code> marked variables<a class="headerlink" href="#imported-block-marked-variables" title="連結到這個標頭">¶</a></h3>
+<section id="layout-of-block-marked-variables">
+<h4>Layout of <code class="docutils literal notranslate"><span class="pre">__block</span></code> marked variables<a class="headerlink" href="#layout-of-block-marked-variables" title="連結到這個標頭">¶</a></h4>
+<p>The compiler must embed variables that are marked <code class="docutils literal notranslate"><span class="pre">__block</span></code> in a specialized
+structure of the form:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_foo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">isa</span><span class="p">;</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">Block_byref</span><span class="w"> </span><span class="o">*</span><span class="n">forwarding</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span><span class="w">   </span><span class="c1">//refcount;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+<span class="w">    </span><span class="k">typeof</span><span class="p">(</span><span class="n">marked_variable</span><span class="p">)</span><span class="w"> </span><span class="n">marked_variable</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Variables of certain types require helper functions for when <code class="docutils literal notranslate"><span class="pre">Block_copy()</span></code>
+and <code class="docutils literal notranslate"><span class="pre">Block_release()</span></code> are performed upon a referencing <code class="docutils literal notranslate"><span class="pre">Block</span></code>. At the &quot;C&quot;
+level only variables that are of type <code class="docutils literal notranslate"><span class="pre">Block</span></code> or ones that have
+<code class="docutils literal notranslate"><span class="pre">__attribute__((NSObject))</span></code> marked require helper functions. In Objective-C
+objects require helper functions and in C++ stack based objects require helper
+functions. Variables that require helper functions use the form:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_foo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">isa</span><span class="p">;</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_foo</span><span class="w"> </span><span class="o">*</span><span class="n">forwarding</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span><span class="w">   </span><span class="c1">//refcount;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// helper functions called via Block_copy() and Block_release()</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">byref_keep</span><span class="p">)(</span><span class="kt">void</span><span class="w">  </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">byref_dispose</span><span class="p">)(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="w">    </span><span class="k">typeof</span><span class="p">(</span><span class="n">marked_variable</span><span class="p">)</span><span class="w"> </span><span class="n">marked_variable</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>The structure is initialized such that:</p>
+<p>a. The <code class="docutils literal notranslate"><span class="pre">forwarding</span></code> pointer is set to the beginning of its enclosing
+structure.</p>
+<p>b. The <code class="docutils literal notranslate"><span class="pre">size</span></code> field is initialized to the total size of the enclosing
+structure.</p>
+<p>c. The <code class="docutils literal notranslate"><span class="pre">flags</span></code> field is set to either 0 if no helper functions are needed
+or <code class="docutils literal notranslate"><span class="pre">(1&lt;&lt;25)</span></code> if they are.</p>
+<p>d. The helper functions are initialized (if present).
+e. The variable itself is set to its initial value.
+f. The <code class="docutils literal notranslate"><span class="pre">isa</span></code> field is set to <code class="docutils literal notranslate"><span class="pre">NULL</span></code>.</p>
+</section>
+<section id="access-to-block-variables-from-within-its-lexical-scope">
+<h4>Access to <code class="docutils literal notranslate"><span class="pre">__block</span></code> variables from within its lexical scope<a class="headerlink" href="#access-to-block-variables-from-within-its-lexical-scope" title="連結到這個標頭">¶</a></h4>
+<p>In order to &quot;move&quot; the variable to the heap upon a <code class="docutils literal notranslate"><span class="pre">copy_helper</span></code> operation the
+compiler must rewrite access to such a variable to be indirect through the
+structures <code class="docutils literal notranslate"><span class="pre">forwarding</span></code> pointer. For example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">__block</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>would be rewritten to be:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_i</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">isa</span><span class="p">;</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_i</span><span class="w"> </span><span class="o">*</span><span class="n">forwarding</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span><span class="w">   </span><span class="c1">//refcount;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">captured_i</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_i</span><span class="p">),</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">};</span>
+
+<span class="n">i</span><span class="p">.</span><span class="n">forwarding</span><span class="o">-&gt;</span><span class="n">captured_i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>In the case of a <code class="docutils literal notranslate"><span class="pre">Block</span></code> reference variable being marked <code class="docutils literal notranslate"><span class="pre">__block</span></code> the
+helper code generated must use the <code class="docutils literal notranslate"><span class="pre">_Block_object_assign</span></code> and
+<code class="docutils literal notranslate"><span class="pre">_Block_object_dispose</span></code> routines supplied by the runtime to make the
+copies. For example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__block</span><span class="w"> </span><span class="nf">void</span><span class="w"> </span><span class="p">(</span><span class="n">voidBlock</span><span class="p">)(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blockA</span><span class="p">;</span>
+<span class="n">voidBlock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blockB</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>would translate into:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_voidBlock</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">isa</span><span class="p">;</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_voidBlock</span><span class="w"> </span><span class="o">*</span><span class="n">forwarding</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span><span class="w">   </span><span class="c1">//refcount;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">byref_keep</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_voidBlock</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_voidBlock</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">byref_dispose</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_voidBlock</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">^</span><span class="n">captured_voidBlock</span><span class="p">)(</span><span class="kt">void</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">_block_byref_keep_helper</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_voidBlock</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_voidBlock</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">//_Block_copy_assign(&amp;dst-&gt;captured_voidBlock, src-&gt;captured_voidBlock, 0);</span>
+<span class="w">    </span><span class="n">_Block_object_assign</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dst</span><span class="o">-&gt;</span><span class="n">captured_voidBlock</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="o">-&gt;</span><span class="n">captured_voidBlock</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_BLOCK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_BYREF_CALLER</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">_block_byref_dispose_helper</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_voidBlock</span><span class="w"> </span><span class="o">*</span><span class="n">param</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">//_Block_destroy(param-&gt;captured_voidBlock, 0);</span>
+<span class="w">    </span><span class="n">_Block_object_dispose</span><span class="p">(</span><span class="n">param</span><span class="o">-&gt;</span><span class="n">captured_voidBlock</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_BLOCK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_BYREF_CALLER</span><span class="p">)}</span>
+</pre></div>
+</div>
+<p>and:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_voidBlock</span><span class="w"> </span><span class="n">voidBlock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{(</span><span class="w"> </span><span class="p">.</span><span class="n">forwarding</span><span class="o">=&amp;</span><span class="n">voidBlock</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">flags</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">25</span><span class="p">),</span><span class="w"> </span><span class="p">.</span><span class="n">size</span><span class="o">=</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_voidBlock</span><span class="w"> </span><span class="o">*</span><span class="p">),</span>
+<span class="w">    </span><span class="p">.</span><span class="n">byref_keep</span><span class="o">=</span><span class="n">_block_byref_keep_helper</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">byref_dispose</span><span class="o">=</span><span class="n">_block_byref_dispose_helper</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">captured_voidBlock</span><span class="o">=</span><span class="n">blockA</span><span class="w"> </span><span class="p">)};</span>
+
+<span class="n">voidBlock</span><span class="p">.</span><span class="n">forwarding</span><span class="o">-&gt;</span><span class="n">captured_voidBlock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blockB</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="importing-block-variables-into-blocks">
+<h4>Importing <code class="docutils literal notranslate"><span class="pre">__block</span></code> variables into <code class="docutils literal notranslate"><span class="pre">Blocks</span></code><a class="headerlink" href="#importing-block-variables-into-blocks" title="連結到這個標頭">¶</a></h4>
+<p>A <code class="docutils literal notranslate"><span class="pre">Block</span></code> that uses a <code class="docutils literal notranslate"><span class="pre">__block</span></code> variable in its compound statement body must
+import the variable and emit <code class="docutils literal notranslate"><span class="pre">copy_helper</span></code> and <code class="docutils literal notranslate"><span class="pre">dispose_helper</span></code> helper
+functions that, in turn, call back into the runtime to actually copy or release
+the <code class="docutils literal notranslate"><span class="pre">byref</span></code> data block using the functions <code class="docutils literal notranslate"><span class="pre">_Block_object_assign</span></code> and
+<code class="docutils literal notranslate"><span class="pre">_Block_object_dispose</span></code>.</p>
+<p>For example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">__block</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="n">functioncall</span><span class="p">(</span><span class="o">^</span><span class="p">{</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+</pre></div>
+</div>
+<p>would translate to:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_i</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">isa</span><span class="p">;</span><span class="w">  </span><span class="c1">// set to NULL</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_voidBlock</span><span class="w"> </span><span class="o">*</span><span class="n">forwarding</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span><span class="w">   </span><span class="c1">//refcount;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">byref_keep</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_i</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_i</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">byref_dispose</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_i</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">captured_i</span><span class="p">;</span>
+<span class="p">};</span>
+
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">isa</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">invoke</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_descriptor_5</span><span class="w"> </span><span class="o">*</span><span class="n">descriptor</span><span class="p">;</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_i</span><span class="w"> </span><span class="o">*</span><span class="n">i_holder</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_invoke_5</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">_block</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">_block</span><span class="o">-&gt;</span><span class="n">forwarding</span><span class="o">-&gt;</span><span class="n">captured_i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_copy_5</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="c1">//_Block_byref_assign_copy(&amp;dst-&gt;captured_i, src-&gt;captured_i);</span>
+<span class="w">     </span><span class="n">_Block_object_assign</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dst</span><span class="o">-&gt;</span><span class="n">captured_i</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="o">-&gt;</span><span class="n">captured_i</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_BYREF</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_BYREF_CALLER</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_dispose_5</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="c1">//_Block_byref_release(src-&gt;captured_i);</span>
+<span class="w">     </span><span class="n">_Block_object_dispose</span><span class="p">(</span><span class="n">src</span><span class="o">-&gt;</span><span class="n">captured_i</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_BYREF</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_BYREF_CALLER</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_descriptor_5</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Block_size</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">copy_helper</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">dispose_helper</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span><span class="n">__block_descriptor_5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="p">)</span><span class="w"> </span><span class="n">__block_copy_5</span><span class="p">,</span><span class="w"> </span><span class="n">__block_dispose_5</span><span class="w"> </span><span class="p">};</span>
+</pre></div>
+</div>
+<p>and:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_i</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{(</span><span class="w"> </span><span class="p">.</span><span class="n">isa</span><span class="o">=</span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">forwarding</span><span class="o">=&amp;</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">size</span><span class="o">=</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_i</span><span class="p">),</span><span class="w"> </span><span class="p">.</span><span class="n">captured_i</span><span class="o">=</span><span class="mi">2</span><span class="w"> </span><span class="p">)};</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="n">_block_literal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="o">&amp;</span><span class="n">_NSConcreteStackBlock</span><span class="p">,</span>
+<span class="w">      </span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">25</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">29</span><span class="p">),</span><span class="w"> </span><span class="o">&lt;</span><span class="n">uninitialized</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">      </span><span class="n">__block_invoke_5</span><span class="p">,</span>
+<span class="w">      </span><span class="o">&amp;</span><span class="n">__block_descriptor_5</span><span class="p">,</span>
+<span class="w">      </span><span class="o">&amp;</span><span class="n">i</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</section>
+<section id="importing-attribute-nsobject-block-variables">
+<h4>Importing <code class="docutils literal notranslate"><span class="pre">__attribute__((NSObject))</span></code> <code class="docutils literal notranslate"><span class="pre">__block</span></code> variables<a class="headerlink" href="#importing-attribute-nsobject-block-variables" title="連結到這個標頭">¶</a></h4>
+<p>A <code class="docutils literal notranslate"><span class="pre">__block</span></code> variable that is also marked <code class="docutils literal notranslate"><span class="pre">__attribute__((NSObject))</span></code> should
+have <code class="docutils literal notranslate"><span class="pre">byref_keep</span></code> and <code class="docutils literal notranslate"><span class="pre">byref_dispose</span></code> helper functions that use
+<code class="docutils literal notranslate"><span class="pre">_Block_object_assign</span></code> and <code class="docutils literal notranslate"><span class="pre">_Block_object_dispose</span></code>.</p>
+</section>
+<section id="block-escapes">
+<h4><code class="docutils literal notranslate"><span class="pre">__block</span></code> escapes<a class="headerlink" href="#block-escapes" title="連結到這個標頭">¶</a></h4>
+<p>Because <code class="docutils literal notranslate"><span class="pre">Blocks</span></code> referencing <code class="docutils literal notranslate"><span class="pre">__block</span></code> variables may have <code class="docutils literal notranslate"><span class="pre">Block_copy()</span></code>
+performed upon them the underlying storage for the variables may move to the
+heap. In Objective-C Garbage Collection Only compilation environments the heap
+used is the garbage collected one and no further action is required. Otherwise
+the compiler must issue a call to potentially release any heap storage for
+<code class="docutils literal notranslate"><span class="pre">__block</span></code> variables at all escapes or terminations of their scope. The call
+should be:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">_Block_object_dispose</span><span class="p">(</span><span class="o">&amp;</span><span class="n">_block_byref_foo</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_BYREF</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="nesting">
+<h4>Nesting<a class="headerlink" href="#nesting" title="連結到這個標頭">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">Blocks</span></code> may contain <code class="docutils literal notranslate"><span class="pre">Block</span></code> literal expressions. Any variables used within
+inner blocks are imported into all enclosing <code class="docutils literal notranslate"><span class="pre">Block</span></code> scopes even if the
+variables are not used. This includes <code class="docutils literal notranslate"><span class="pre">const</span></code> imports as well as <code class="docutils literal notranslate"><span class="pre">__block</span></code>
+variables.</p>
+</section>
+</section>
+</section>
+<section id="objective-c-extensions-to-blocks">
+<h2>Objective C Extensions to <code class="docutils literal notranslate"><span class="pre">Blocks</span></code><a class="headerlink" href="#objective-c-extensions-to-blocks" title="連結到這個標頭">¶</a></h2>
+<section id="importing-objects">
+<h3>Importing Objects<a class="headerlink" href="#importing-objects" title="連結到這個標頭">¶</a></h3>
+<p>Objects should be treated as <code class="docutils literal notranslate"><span class="pre">__attribute__((NSObject))</span></code> variables; all
+<code class="docutils literal notranslate"><span class="pre">copy_helper</span></code>, <code class="docutils literal notranslate"><span class="pre">dispose_helper</span></code>, <code class="docutils literal notranslate"><span class="pre">byref_keep</span></code>, and <code class="docutils literal notranslate"><span class="pre">byref_dispose</span></code>
+helper functions should use <code class="docutils literal notranslate"><span class="pre">_Block_object_assign</span></code> and
+<code class="docutils literal notranslate"><span class="pre">_Block_object_dispose</span></code>. There should be no code generated that uses
+<code class="docutils literal notranslate"><span class="pre">*-retain</span></code> or <code class="docutils literal notranslate"><span class="pre">*-release</span></code> methods.</p>
+</section>
+<section id="blocks-as-objects">
+<h3><code class="docutils literal notranslate"><span class="pre">Blocks</span></code> as Objects<a class="headerlink" href="#blocks-as-objects" title="連結到這個標頭">¶</a></h3>
+<p>The compiler will treat <code class="docutils literal notranslate"><span class="pre">Blocks</span></code> as objects when synthesizing property setters
+and getters, will characterize them as objects when generating garbage
+collection strong and weak layout information in the same manner as objects, and
+will issue strong and weak write-barrier assignments in the same manner as
+objects.</p>
+</section>
+<section id="weak-block-support">
+<h3><code class="docutils literal notranslate"><span class="pre">__weak</span> <span class="pre">__block</span></code> Support<a class="headerlink" href="#weak-block-support" title="連結到這個標頭">¶</a></h3>
+<p>Objective-C (and Objective-C++) support the <code class="docutils literal notranslate"><span class="pre">__weak</span></code> attribute on <code class="docutils literal notranslate"><span class="pre">__block</span></code>
+variables. Under normal circumstances the compiler uses the Objective-C runtime
+helper support functions <code class="docutils literal notranslate"><span class="pre">objc_assign_weak</span></code> and <code class="docutils literal notranslate"><span class="pre">objc_read_weak</span></code>. Both
+should continue to be used for all reads and writes of <code class="docutils literal notranslate"><span class="pre">__weak</span> <span class="pre">__block</span></code>
+variables:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">objc_read_weak</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="o">-&gt;</span><span class="n">byref_i</span><span class="o">-&gt;</span><span class="n">forwarding</span><span class="o">-&gt;</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">__weak</span></code> variable is stored in a <code class="docutils literal notranslate"><span class="pre">_block_byref_foo</span></code> structure and the
+<code class="docutils literal notranslate"><span class="pre">Block</span></code> has copy and dispose helpers for this structure that call:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">_Block_object_assign</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dest</span><span class="o">-&gt;</span><span class="n">_block_byref_i</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="o">-&gt;</span><span class="w"> </span><span class="n">_block_byref_i</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_WEAK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_BYREF</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>and:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">_Block_object_dispose</span><span class="p">(</span><span class="n">src</span><span class="o">-&gt;</span><span class="n">_block_byref_i</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_WEAK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_BYREF</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In turn, the <code class="docutils literal notranslate"><span class="pre">block_byref</span></code> copy support helpers distinguish between whether
+the <code class="docutils literal notranslate"><span class="pre">__block</span></code> variable is a <code class="docutils literal notranslate"><span class="pre">Block</span></code> or not and should either call:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">_Block_object_assign</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dest</span><span class="o">-&gt;</span><span class="n">_block_byref_i</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="o">-&gt;</span><span class="n">_block_byref_i</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_WEAK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_OBJECT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_BYREF_CALLER</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>for something declared as an object or:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">_Block_object_assign</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dest</span><span class="o">-&gt;</span><span class="n">_block_byref_i</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="o">-&gt;</span><span class="n">_block_byref_i</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_WEAK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_BLOCK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_BYREF_CALLER</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>for something declared as a <code class="docutils literal notranslate"><span class="pre">Block</span></code>.</p>
+<p>A full example follows:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__block</span><span class="w"> </span><span class="n">__weak</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="n">obj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="n">initialization</span><span class="w"> </span><span class="n">expression</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="n">functioncall</span><span class="p">(</span><span class="o">^</span><span class="p">{</span><span class="w"> </span><span class="p">[</span><span class="n">obj</span><span class="w"> </span><span class="n">somemessage</span><span class="p">];</span><span class="w"> </span><span class="p">});</span>
+</pre></div>
+</div>
+<p>would translate to:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_obj</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">isa</span><span class="p">;</span><span class="w">  </span><span class="c1">// uninitialized</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_obj</span><span class="w"> </span><span class="o">*</span><span class="n">forwarding</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span><span class="w">   </span><span class="c1">//refcount;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">byref_keep</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_i</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_i</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">byref_dispose</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_i</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="n">captured_obj</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">_block_byref_obj_keep</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_voidBlock</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_voidBlock</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">//_Block_copy_assign(&amp;dst-&gt;captured_obj, src-&gt;captured_obj, 0);</span>
+<span class="w">    </span><span class="n">_Block_object_assign</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dst</span><span class="o">-&gt;</span><span class="n">captured_obj</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="o">-&gt;</span><span class="n">captured_obj</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_OBJECT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_WEAK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_BYREF_CALLER</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">_block_byref_obj_dispose</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_voidBlock</span><span class="w"> </span><span class="o">*</span><span class="n">param</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">//_Block_destroy(param-&gt;captured_obj, 0);</span>
+<span class="w">    </span><span class="n">_Block_object_dispose</span><span class="p">(</span><span class="n">param</span><span class="o">-&gt;</span><span class="n">captured_obj</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_OBJECT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_WEAK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_BYREF_CALLER</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>for the block <code class="docutils literal notranslate"><span class="pre">byref</span></code> part and:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">isa</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">invoke</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_descriptor_5</span><span class="w"> </span><span class="o">*</span><span class="n">descriptor</span><span class="p">;</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_obj</span><span class="w"> </span><span class="o">*</span><span class="n">byref_obj</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_invoke_5</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">_block</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="p">[</span><span class="n">objc_read_weak</span><span class="p">(</span><span class="o">&amp;</span><span class="n">_block</span><span class="o">-&gt;</span><span class="n">byref_obj</span><span class="o">-&gt;</span><span class="n">forwarding</span><span class="o">-&gt;</span><span class="n">captured_obj</span><span class="p">)</span><span class="w"> </span><span class="n">somemessage</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_copy_5</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="c1">//_Block_byref_assign_copy(&amp;dst-&gt;byref_obj, src-&gt;byref_obj);</span>
+<span class="w">     </span><span class="n">_Block_object_assign</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dst</span><span class="o">-&gt;</span><span class="n">byref_obj</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="o">-&gt;</span><span class="n">byref_obj</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_BYREF</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_WEAK</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_dispose_5</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="c1">//_Block_byref_release(src-&gt;byref_obj);</span>
+<span class="w">     </span><span class="n">_Block_object_dispose</span><span class="p">(</span><span class="n">src</span><span class="o">-&gt;</span><span class="n">byref_obj</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_BYREF</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">BLOCK_FIELD_IS_WEAK</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_descriptor_5</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Block_size</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">copy_helper</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">dispose_helper</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span><span class="n">__block_descriptor_5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_5</span><span class="p">),</span><span class="w"> </span><span class="n">__block_copy_5</span><span class="p">,</span><span class="w"> </span><span class="n">__block_dispose_5</span><span class="w"> </span><span class="p">};</span>
+</pre></div>
+</div>
+<p>and within the compound statement:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">truct</span><span class="w"> </span><span class="n">_block_byref_obj</span><span class="w"> </span><span class="n">obj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{(</span><span class="w"> </span><span class="p">.</span><span class="n">forwarding</span><span class="o">=&amp;</span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">flags</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">25</span><span class="p">),</span><span class="w"> </span><span class="p">.</span><span class="n">size</span><span class="o">=</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_obj</span><span class="p">),</span>
+<span class="w">                 </span><span class="p">.</span><span class="n">byref_keep</span><span class="o">=</span><span class="n">_block_byref_obj_keep</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">byref_dispose</span><span class="o">=</span><span class="n">_block_byref_obj_dispose</span><span class="p">,</span>
+<span class="w">                 </span><span class="p">.</span><span class="n">captured_obj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="n">initialization</span><span class="w"> </span><span class="n">expression</span><span class="o">&gt;</span><span class="w"> </span><span class="p">)};</span>
+
+<span class="n">truct</span><span class="w"> </span><span class="n">__block_literal_5</span><span class="w"> </span><span class="n">_block_literal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="o">&amp;</span><span class="n">_NSConcreteStackBlock</span><span class="p">,</span>
+<span class="w">     </span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">25</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">29</span><span class="p">),</span><span class="w"> </span><span class="o">&lt;</span><span class="n">uninitialized</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">     </span><span class="n">__block_invoke_5</span><span class="p">,</span>
+<span class="w">     </span><span class="o">&amp;</span><span class="n">__block_descriptor_5</span><span class="p">,</span>
+<span class="w">     </span><span class="o">&amp;</span><span class="n">obj</span><span class="p">,</span><span class="w">        </span><span class="c1">// a reference to the on-stack structure containing "captured_obj"</span>
+<span class="p">};</span>
+
+
+<span class="n">functioncall</span><span class="p">(</span><span class="n">_block_literal</span><span class="o">-&gt;</span><span class="n">invoke</span><span class="p">(</span><span class="o">&amp;</span><span class="n">_block_literal</span><span class="p">));</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="c-support">
+<h2>C++ Support<a class="headerlink" href="#c-support" title="連結到這個標頭">¶</a></h2>
+<p>Within a block stack based C++ objects are copied into <code class="docutils literal notranslate"><span class="pre">const</span></code> copies using
+the copy constructor. It is an error if a stack based C++ object is used within
+a block if it does not have a copy constructor. In addition both copy and
+destroy helper routines must be synthesized for the block to support the
+<code class="docutils literal notranslate"><span class="pre">Block_copy()</span></code> operation, and the flags work marked with the (1&lt;&lt;26) bit in
+addition to the (1&lt;&lt;25) bit. The copy helper should call the constructor using
+appropriate offsets of the variable within the supplied stack based block source
+and heap based destination for all <code class="docutils literal notranslate"><span class="pre">const</span></code> constructed copies, and similarly
+should call the destructor in the destroy routine.</p>
+<p>As an example, suppose a C++ class <code class="docutils literal notranslate"><span class="pre">FOO</span></code> existed with a copy constructor.
+Within a code block a stack version of a <code class="docutils literal notranslate"><span class="pre">FOO</span></code> object is declared and used
+within a <code class="docutils literal notranslate"><span class="pre">Block</span></code> literal expression:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="n">FOO</span><span class="w"> </span><span class="n">foo</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">^</span><span class="n">block</span><span class="p">)(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">^</span><span class="p">{</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">foo</span><span class="p">.</span><span class="n">value</span><span class="p">());</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The compiler would synthesize:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_10</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">isa</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">invoke</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_10</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_descriptor_10</span><span class="w"> </span><span class="o">*</span><span class="n">descriptor</span><span class="p">;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">FOO</span><span class="w"> </span><span class="n">foo</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_invoke_10</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_10</span><span class="w"> </span><span class="o">*</span><span class="n">_block</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">_block</span><span class="o">-&gt;</span><span class="n">foo</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_copy_10</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_10</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_10</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="n">FOO_ctor</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dst</span><span class="o">-&gt;</span><span class="n">foo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">src</span><span class="o">-&gt;</span><span class="n">foo</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">__block_dispose_10</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_10</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="n">FOO_dtor</span><span class="p">(</span><span class="o">&amp;</span><span class="n">src</span><span class="o">-&gt;</span><span class="n">foo</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_descriptor_10</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Block_size</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">copy_helper</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_10</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_10</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">dispose_helper</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_10</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span><span class="n">__block_descriptor_10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_10</span><span class="p">),</span><span class="w"> </span><span class="n">__block_copy_10</span><span class="p">,</span><span class="w"> </span><span class="n">__block_dispose_10</span><span class="w"> </span><span class="p">};</span>
+</pre></div>
+</div>
+<p>and the code would be:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="n">FOO</span><span class="w"> </span><span class="n">foo</span><span class="p">;</span>
+<span class="w">  </span><span class="n">comp_ctor</span><span class="p">(</span><span class="o">&amp;</span><span class="n">foo</span><span class="p">);</span><span class="w"> </span><span class="c1">// default constructor</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_10</span><span class="w"> </span><span class="n">_block_literal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="o">&amp;</span><span class="n">_NSConcreteStackBlock</span><span class="p">,</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">25</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">26</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">29</span><span class="p">),</span><span class="w"> </span><span class="o">&lt;</span><span class="n">uninitialized</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">__block_invoke_10</span><span class="p">,</span>
+<span class="w">    </span><span class="o">&amp;</span><span class="n">__block_descriptor_10</span><span class="p">,</span>
+<span class="w">   </span><span class="p">};</span>
+<span class="w">   </span><span class="n">comp_ctor</span><span class="p">(</span><span class="o">&amp;</span><span class="n">_block_literal</span><span class="o">-&gt;</span><span class="n">foo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">foo</span><span class="p">);</span><span class="w">  </span><span class="c1">// const copy into stack version</span>
+<span class="w">   </span><span class="k">struct</span><span class="w"> </span><span class="nc">__block_literal_10</span><span class="w"> </span><span class="o">&amp;</span><span class="n">block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">_block_literal</span><span class="p">;</span><span class="w">  </span><span class="c1">// assign literal to block variable</span>
+<span class="w">   </span><span class="n">block</span><span class="o">-&gt;</span><span class="n">invoke</span><span class="p">(</span><span class="n">block</span><span class="p">);</span><span class="w">    </span><span class="c1">// invoke block</span>
+<span class="w">   </span><span class="n">comp_dtor</span><span class="p">(</span><span class="o">&amp;</span><span class="n">_block_literal</span><span class="o">-&gt;</span><span class="n">foo</span><span class="p">);</span><span class="w"> </span><span class="c1">// destroy stack version of const block copy</span>
+<span class="w">   </span><span class="n">comp_dtor</span><span class="p">(</span><span class="o">&amp;</span><span class="n">foo</span><span class="p">);</span><span class="w"> </span><span class="c1">// destroy original version</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>C++ objects stored in <code class="docutils literal notranslate"><span class="pre">__block</span></code> storage start out on the stack in a
+<code class="docutils literal notranslate"><span class="pre">block_byref</span></code> data structure as do other variables. Such objects (if not
+<code class="docutils literal notranslate"><span class="pre">const</span></code> objects) must support a regular copy constructor. The <code class="docutils literal notranslate"><span class="pre">block_byref</span></code>
+data structure will have copy and destroy helper routines synthesized by the
+compiler. The copy helper will have code created to perform the copy
+constructor based on the initial stack <code class="docutils literal notranslate"><span class="pre">block_byref</span></code> data structure, and will
+also set the (1&lt;&lt;26) bit in addition to the (1&lt;&lt;25) bit. The destroy helper
+will have code to do the destructor on the object stored within the supplied
+<code class="docutils literal notranslate"><span class="pre">block_byref</span></code> heap data structure. For example,</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">__block</span><span class="w"> </span><span class="n">FOO</span><span class="w"> </span><span class="n">blockStorageFoo</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>requires the normal constructor for the embedded <code class="docutils literal notranslate"><span class="pre">blockStorageFoo</span></code> object:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">FOO_ctor</span><span class="p">(</span><span class="o">&amp;</span><span class="w"> </span><span class="n">_block_byref_blockStorageFoo</span><span class="o">-&gt;</span><span class="n">blockStorageFoo</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>and at scope termination the destructor:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">FOO_dtor</span><span class="p">(</span><span class="o">&amp;</span><span class="w"> </span><span class="n">_block_byref_blockStorageFoo</span><span class="o">-&gt;</span><span class="n">blockStorageFoo</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Note that the forwarding indirection is <em>NOT</em> used.</p>
+<p>The compiler would need to generate (if used from a block literal) the following
+copy/dispose helpers:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">_block_byref_obj_keep</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_blockStorageFoo</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_blockStorageFoo</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="n">FOO_ctor</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dst</span><span class="o">-&gt;</span><span class="n">blockStorageFoo</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">src</span><span class="o">-&gt;</span><span class="n">blockStorageFoo</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">_block_byref_obj_dispose</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_block_byref_blockStorageFoo</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="n">FOO_dtor</span><span class="p">(</span><span class="o">&amp;</span><span class="n">src</span><span class="o">-&gt;</span><span class="n">blockStorageFoo</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>for the appropriately named constructor and destructor for the class/struct
+<code class="docutils literal notranslate"><span class="pre">FOO</span></code>.</p>
+<p>To support member variable and function access the compiler will synthesize a
+<code class="docutils literal notranslate"><span class="pre">const</span></code> pointer to a block version of the <code class="docutils literal notranslate"><span class="pre">this</span></code> pointer.</p>
+</section>
+<section id="runtime-helper-functions">
+<span id="runtimehelperfunctions"></span><h2>Runtime Helper Functions<a class="headerlink" href="#runtime-helper-functions" title="連結到這個標頭">¶</a></h2>
+<p>The runtime helper functions are described in
+<code class="docutils literal notranslate"><span class="pre">/usr/local/include/Block_private.h</span></code>. To summarize their use, a <code class="docutils literal notranslate"><span class="pre">Block</span></code>
+requires copy/dispose helpers if it imports any block variables, <code class="docutils literal notranslate"><span class="pre">__block</span></code>
+storage variables, <code class="docutils literal notranslate"><span class="pre">__attribute__((NSObject))</span></code> variables, or C++ <code class="docutils literal notranslate"><span class="pre">const</span></code>
+copied objects with constructor/destructors. The (1&lt;&lt;26) bit is set and
+functions are generated.</p>
+<p>The block copy helper function should, for each of the variables of the type
+mentioned above, call:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">_Block_object_assign</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dst</span><span class="o">-&gt;</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="o">-&gt;</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_</span><span class="o">&lt;</span><span class="n">apropos</span><span class="o">&gt;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>in the copy helper and:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">_Block_object_dispose</span><span class="p">(</span><span class="o">-&gt;</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_FIELD_</span><span class="o">&lt;</span><span class="n">apropos</span><span class="o">&gt;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>in the dispose helper where <code class="docutils literal notranslate"><span class="pre">&lt;apropos&gt;</span></code> is:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">BLOCK_FIELD_IS_OBJECT</span><span class="w">   </span><span class="o">=</span><span class="w">  </span><span class="mi">3</span><span class="p">,</span><span class="w">  </span><span class="c1">// id, NSObject, __attribute__((NSObject)), block, ...</span>
+<span class="w">    </span><span class="n">BLOCK_FIELD_IS_BLOCK</span><span class="w">    </span><span class="o">=</span><span class="w">  </span><span class="mi">7</span><span class="p">,</span><span class="w">  </span><span class="c1">// a block variable</span>
+<span class="w">    </span><span class="n">BLOCK_FIELD_IS_BYREF</span><span class="w">    </span><span class="o">=</span><span class="w">  </span><span class="mi">8</span><span class="p">,</span><span class="w">  </span><span class="c1">// the on stack structure holding the __block variable</span>
+
+<span class="w">    </span><span class="n">BLOCK_FIELD_IS_WEAK</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w">  </span><span class="c1">// declared __weak</span>
+
+<span class="w">    </span><span class="n">BLOCK_BYREF_CALLER</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="c1">// called from byref copy/dispose helpers</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>and of course the constructors/destructors for <code class="docutils literal notranslate"><span class="pre">const</span></code> copied C++ objects.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">block_byref</span></code> data structure similarly requires copy/dispose helpers for
+block variables, <code class="docutils literal notranslate"><span class="pre">__attribute__((NSObject))</span></code> variables, or C++ <code class="docutils literal notranslate"><span class="pre">const</span></code>
+copied objects with constructor/destructors, and again the (1&lt;&lt;26) bit is set
+and functions are generated in the same manner.</p>
+<p>Under ObjC we allow <code class="docutils literal notranslate"><span class="pre">__weak</span></code> as an attribute on <code class="docutils literal notranslate"><span class="pre">__block</span></code> variables, and
+this causes the addition of <code class="docutils literal notranslate"><span class="pre">BLOCK_FIELD_IS_WEAK</span></code> orred onto the
+<code class="docutils literal notranslate"><span class="pre">BLOCK_FIELD_IS_BYREF</span></code> flag when copying the <code class="docutils literal notranslate"><span class="pre">block_byref</span></code> structure in the
+<code class="docutils literal notranslate"><span class="pre">Block</span></code> copy helper, and onto the <code class="docutils literal notranslate"><span class="pre">BLOCK_FIELD_&lt;apropos&gt;</span></code> field within the
+<code class="docutils literal notranslate"><span class="pre">block_byref</span></code> copy/dispose helper calls.</p>
+<p>The prototypes, and summary, of the helper functions are:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* Certain field types require runtime assistance when being copied to the</span>
+<span class="cm">   heap.  The following function is used to copy fields of types: blocks,</span>
+<span class="cm">   pointers to byref structures, and objects (including</span>
+<span class="cm">   __attribute__((NSObject)) pointers.  BLOCK_FIELD_IS_WEAK is orthogonal to</span>
+<span class="cm">   the other choices which are mutually exclusive.  Only in a Block copy</span>
+<span class="cm">   helper will one see BLOCK_FIELD_IS_BYREF.</span>
+<span class="cm">*/</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">_Block_object_assign</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">destAddr</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">object</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">);</span>
+
+<span class="cm">/* Similarly a compiler generated dispose helper needs to call back for each</span>
+<span class="cm">   field of the byref data structure.  (Currently the implementation only</span>
+<span class="cm">   packs one field into the byref structure but in principle there could be</span>
+<span class="cm">   more).  The same flags used in the copy helper should be used for each</span>
+<span class="cm">   call generated to this function:</span>
+<span class="cm">*/</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">_Block_object_dispose</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">object</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="copyright">
+<h2>Copyright<a class="headerlink" href="#copyright" title="連結到這個標頭">¶</a></h2>
+<p>Copyright 2008-2010 Apple, Inc.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="AutomaticReferenceCounting.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Objective-C Automatic Reference Counting (ARC)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="BlockLanguageSpec.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Language Specification for Blocks</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Block Implementation Specification</a><ul>
+<li><a class="reference internal" href="#history">History</a></li>
+<li><a class="reference internal" href="#high-level">High Level</a></li>
+<li><a class="reference internal" href="#imported-variables">Imported Variables</a><ul>
+<li><a class="reference internal" href="#imported-const-copy-variables">Imported <code class="docutils literal notranslate"><span class="pre">const</span></code> copy variables</a></li>
+<li><a class="reference internal" href="#imported-const-copy-of-block-reference">Imported <code class="docutils literal notranslate"><span class="pre">const</span></code> copy of <code class="docutils literal notranslate"><span class="pre">Block</span></code> reference</a><ul>
+<li><a class="reference internal" href="#importing-attribute-nsobject-variables">Importing <code class="docutils literal notranslate"><span class="pre">__attribute__((NSObject))</span></code> variables</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#imported-block-marked-variables">Imported <code class="docutils literal notranslate"><span class="pre">__block</span></code> marked variables</a><ul>
+<li><a class="reference internal" href="#layout-of-block-marked-variables">Layout of <code class="docutils literal notranslate"><span class="pre">__block</span></code> marked variables</a></li>
+<li><a class="reference internal" href="#access-to-block-variables-from-within-its-lexical-scope">Access to <code class="docutils literal notranslate"><span class="pre">__block</span></code> variables from within its lexical scope</a></li>
+<li><a class="reference internal" href="#importing-block-variables-into-blocks">Importing <code class="docutils literal notranslate"><span class="pre">__block</span></code> variables into <code class="docutils literal notranslate"><span class="pre">Blocks</span></code></a></li>
+<li><a class="reference internal" href="#importing-attribute-nsobject-block-variables">Importing <code class="docutils literal notranslate"><span class="pre">__attribute__((NSObject))</span></code> <code class="docutils literal notranslate"><span class="pre">__block</span></code> variables</a></li>
+<li><a class="reference internal" href="#block-escapes"><code class="docutils literal notranslate"><span class="pre">__block</span></code> escapes</a></li>
+<li><a class="reference internal" href="#nesting">Nesting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#objective-c-extensions-to-blocks">Objective C Extensions to <code class="docutils literal notranslate"><span class="pre">Blocks</span></code></a><ul>
+<li><a class="reference internal" href="#importing-objects">Importing Objects</a></li>
+<li><a class="reference internal" href="#blocks-as-objects"><code class="docutils literal notranslate"><span class="pre">Blocks</span></code> as Objects</a></li>
+<li><a class="reference internal" href="#weak-block-support"><code class="docutils literal notranslate"><span class="pre">__weak</span> <span class="pre">__block</span></code> Support</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#c-support">C++ Support</a></li>
+<li><a class="reference internal" href="#runtime-helper-functions">Runtime Helper Functions</a></li>
+<li><a class="reference internal" href="#copyright">Copyright</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=0d9984b1"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=cbf116e0"></script>
+    <script src="_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>

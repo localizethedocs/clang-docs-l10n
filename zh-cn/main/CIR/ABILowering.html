@@ -1,0 +1,1129 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" /><link rel="next" title="2. ClangIR Cleanup and Exception Handling Design" href="CleanupAndEHDesign.html" /><link rel="prev" title="ClangIR" href="index.html" />
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/CIR/ABILowering.html" />
+        <link rel="prefetch" href="../_static/LLVMWyvernSmall.png" as="image" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+        <title>1. ClangIR ABI Lowering Design Document - Clang</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=548e816e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=86c9e7d9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="../ltd-provenance.js"></script>
+<script type="text/javascript" src="../ltd-current.js"></script>
+<script type="text/javascript" src="../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes.html">Clang Release Notes</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../UsersManual.html">Clang Compiler User's Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../LanguageExtensions.html">Clang Language Extensions</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Clang Language Extensions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Block-ABI-Apple.html">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CrossCompilation.html">Cross-compilation using Clang</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ClangStaticAnalyzer.html">Clang Static Analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Clang Static Analyzer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../analyzer/checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../analyzer/user-docs.html">2. User Docs</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 2. User Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../analyzer/user-docs/CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../analyzer/user-docs/UsingWithXCode.html">2.2. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../analyzer/user-docs/FilingBugs.html">2.3. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../analyzer/user-docs/CrossTranslationUnit.html">2.4. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../analyzer/user-docs/TaintAnalysisConfiguration.html">2.5. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../analyzer/user-docs/Annotations.html">2.6. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../analyzer/user-docs/FAQ.html">2.7. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../analyzer/developer-docs.html">3. Developer Docs</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 3. Developer Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../analyzer/developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../analyzer/developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../analyzer/developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../analyzer/developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../analyzer/developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../analyzer/developer-docs/PerformanceInvestigation.html">3.6. Performance Investigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../analyzer/developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Scalable Static Analysis Framework</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Developer Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../DataFlowAnalysisIntro.html">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ThreadSanitizer.html">ThreadSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MemorySanitizer.html">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../DataFlowSanitizer.html">DataFlowSanitizer</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of DataFlowSanitizer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../DataFlowSanitizerDesign.html">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SanitizerCoverage.html">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ControlFlowIntegrity.html">Control Flow Integrity</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Control Flow Integrity</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../StandardCPlusPlusModules.html">Standard C++ Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../MisExpect.html">Misexpect</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Misexpect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../OpenCLSupport.html">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Clang HLSL Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of HLSL Design and Implementation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../APINotes.html">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">ClangIR</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of ClangIR</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../CommandGuide/index.html">Clang "man" pages</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Clang "man" pages</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RefactoringEngine.html">Clang's refactoring engine</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ClangTools.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ClangRepl.html">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../InternalsManual.html">"Clang" CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../HardwareAssistedAddressSanitizerDesign.html">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LLVMExceptionHandlingCodeGen.html">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/CIR/ABILowering.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/CIR/ABILowering.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="clangir-abi-lowering-design-document">
+<h1><span class="section-number">1. </span>ClangIR ABI Lowering Design Document<a class="headerlink" href="#clangir-abi-lowering-design-document" title="Link to this heading">¶</a></h1>
+<section id="introduction">
+<h2><span class="section-number">1.1. </span>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>This design describes calling convention lowering that builds on the LLVM ABI
+Lowering Library in <code class="docutils literal notranslate"><span class="pre">llvm/lib/ABI/</span></code>: we use its <code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code> and target ABI
+logic and add an MLIR integration layer (ABITypeMapper, ABI lowering pass, and
+dialect rewriters). The framework relies on the LLVM ABI library as the single
+source of truth for ABI classification. MLIR dialects use it via an adapter
+layer. The design provides a way to perform ABI-compliant calling convention
+lowering that can be used by any MLIR dialect that implements the necessary
+interfaces. Inputs are high-level function signatures in CIR, FIR, or other
+MLIR dialect. Outputs are ABI-lowered signatures and call sites. Lowering
+runs as an MLIR pass in the compilation pipeline.</p>
+<section id="design-goals">
+<h3><span class="section-number">1.1.1. </span>Design Goals<a class="headerlink" href="#design-goals" title="Link to this heading">¶</a></h3>
+<p>Building on the LLVM ABI library and adding an MLIR integration layer avoids
+duplicating complex ABI logic across MLIR dialects, reduces maintenance, and
+keeps a single source of ABI compliance in <code class="docutils literal notranslate"><span class="pre">llvm/lib/ABI/</span></code>. The separation
+between the ABI library (classification) and dialect-specific ABIRewriteContext
+(rewriting) enables clearer testing and a straightforward migration path from
+the CIR incubator by porting useful algorithms into the ABI library where
+appropriate.</p>
+<p>A central goal is that generated code be call-compatible with Classic Clang
+CodeGen and other compilers. Parity is with Classic Clang CodeGen output,
+not only with the incubator. Success means CIR correctly lowers x86_64 and
+AArch64 calling conventions with full ABI compliance using the LLVM ABI library
+and MLIR integration layer; FIR can adopt the same infrastructure with minimal
+dialect-specific adaptation (e.g. cdecl when calling C from Fortran). ABI
+compliance will be validated through differential testing against Classic Clang
+CodeGen, and performance overhead should remain under 5% compared to a direct,
+dialect-specific implementation. Variadic calls are lowered on x86_64 by
+classifying each call site from its own operand types, since an argument
+passed through an ellipsis competes for registers with the declared ones.
+An indirect variadic call whose operands already carry their wire form is left
+as written. One that needs an ABI rewrite is deferred, as is variadic
+lowering for other targets.</p>
+</section>
+</section>
+<section id="background-and-context">
+<h2><span class="section-number">1.2. </span>Background and Context<a class="headerlink" href="#background-and-context" title="Link to this heading">¶</a></h2>
+<section id="what-is-calling-convention-lowering">
+<h3><span class="section-number">1.2.1. </span>What is Calling Convention Lowering?<a class="headerlink" href="#what-is-calling-convention-lowering" title="Link to this heading">¶</a></h3>
+<p>Calling convention lowering transforms high-level function signatures to match
+target ABI (Application Binary Interface) requirements. When a function is
+declared at the source level with convenient, language-level types, these types
+must be translated into the specific register assignments, memory layouts, and
+calling sequences that the target architecture expects. For example, on x86_64
+System V ABI, a struct containing two 64-bit integers might be &quot;expanded&quot; into
+two separate arguments passed in registers, rather than being passed as a single
+aggregate:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span><span class="c1">// High-level CIR</span>
+<span class="nb">func</span> <span class="nf">@foo</span><span class="p">(</span><span class="kt">i32</span><span class="p">,</span> <span class="nx">struct</span><span class="p">&lt;</span><span class="kt">i64</span><span class="p">,</span> <span class="kt">i64</span><span class="p">&gt;)</span> <span class="o">-&gt;</span> <span class="kt">i32</span>
+
+<span class="c1">// After ABI lowering</span>
+<span class="nb">func</span> <span class="nf">@foo</span><span class="p">(</span><span class="kt">i32</span> <span class="nv">%arg0</span><span class="p">,</span> <span class="kt">i64</span> <span class="nv">%arg1</span><span class="p">,</span> <span class="kt">i64</span> <span class="nv">%arg2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">i32</span>
+<span class="c1">//        ^       ^            ^        ^</span>
+<span class="c1">//        |       |            +--------+ struct expanded into fields</span>
+<span class="c1">//        |       +---- first field passed in register</span>
+<span class="c1">//        +---- small integer passed in register</span>
+</pre></div>
+</div>
+<p>Calling convention lowering is complex for several reasons: it is highly
+target-specific (each architecture has different rules for registers vs.
+memory), type-dependent (rules differ for integers, floats, structs, unions,
+arrays), and context-sensitive (varargs, virtual calls, conventions like
+vectorcall or preserve_most). The same target may have multiple ABI variants
+(e.g. x86_64 System V vs. Windows x64), adding further complexity.</p>
+</section>
+<section id="existing-implementations">
+<h3><span class="section-number">1.2.2. </span>Existing Implementations<a class="headerlink" href="#existing-implementations" title="Link to this heading">¶</a></h3>
+<section id="classic-clang-codegen">
+<h4><span class="section-number">1.2.2.1. </span>Classic Clang CodeGen<a class="headerlink" href="#classic-clang-codegen" title="Link to this heading">¶</a></h4>
+<p>Classic Clang CodeGen (located in <code class="docutils literal notranslate"><span class="pre">clang/lib/CodeGen/</span></code>) transforms calling
+conventions during the AST-to-LLVM-IR lowering process. This implementation is
+mature and well-tested, handling all supported targets with comprehensive ABI
+coverage. However, it's tightly coupled to both Clang's AST representation and
+LLVM IR, making it difficult to reuse for MLIR-based frontends.</p>
+</section>
+<section id="cir-incubator">
+<h4><span class="section-number">1.2.2.2. </span>CIR Incubator<a class="headerlink" href="#cir-incubator" title="Link to this heading">¶</a></h4>
+<p>The CIR incubator includes a calling convention lowering pass in
+<code class="docutils literal notranslate"><span class="pre">clang/lib/CIR/Dialect/Transforms/TargetLowering/</span></code> that transforms CIR
+operations into ABI-lowered CIR operations as an MLIR pass. This implementation
+successfully adapted logic from Classic Clang CodeGen to work within the MLIR
+framework. However, it relies on CIR-specific types and operations, preventing
+reuse by other MLIR dialects.</p>
+</section>
+<section id="llvm-abi-lowering-library">
+<h4><span class="section-number">1.2.2.3. </span>LLVM ABI Lowering Library<a class="headerlink" href="#llvm-abi-lowering-library" title="Link to this heading">¶</a></h4>
+<p>A 2025 Google Summer of Code project produced <a class="reference external" href="https://github.com/llvm/llvm-project/pull/140112">PR
+#140112</a>, which proposes
+extracting Clang's ABI logic into a reusable library in <code class="docutils literal notranslate"><span class="pre">llvm/lib/ABI/</span></code>. The
+design centers on a shadow type system (<code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code>) separate from both
+Clang's AST types and LLVM IR types, enabling the ABI classification algorithms
+to work independently of any specific frontend representation. The library
+includes abstract <code class="docutils literal notranslate"><span class="pre">ABIInfo</span></code> base classes and target-specific implementations
+(e.g. x86_64, BPF) and provides QualTypeMapper for Clang to map <code class="docutils literal notranslate"><span class="pre">QualType</span></code> to
+<code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code>.</p>
+<p>Our approach is to complete and extend this library and use it as the single
+source of truth for ABI classification. One implementation in one place reduces
+duplication, simplifies bug fixes, and creates a path for Classic Clang CodeGen
+to use the same logic in the future. MLIR dialects (CIR, FIR, and others) will
+use the library via an adapter layer rather than reimplementing ABI logic.</p>
+<p><strong>Current state.</strong> The x86_64 implementation is largely complete and under
+review. AArch64 and some other targets are not yet implemented; there is no
+MLIR integration today. The work is being upstreamed in smaller parts (e.g.
+<a class="reference external" href="https://github.com/llvm/llvm-project/pull/158329">PR 158329</a>); progress is
+limited by reviewer bandwidth. The overhead of the shadow type system
+(converting to and from <code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code>) has been measured at under 0.1% for clang
+-O0, so it is negligible for CIR. Our approach therefore depends on the ABI
+library being merged upstream or our contributions to it being accepted.</p>
+<p><strong>Our approach.</strong> The approach is to complete and extend the ABI library (e.g.
+AArch64, review feedback, tests) and add an <strong>MLIR integration layer</strong> so that
+MLIR dialects can use it:</p>
+<ul class="simple">
+<li><p><strong>ABITypeMapper</strong>: maps <code class="docutils literal notranslate"><span class="pre">mlir::Type</span></code> to <code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code>, analogous to
+QualTypeMapper for Clang.</p></li>
+<li><p><strong>MLIR ABI lowering pass</strong>: uses the library's <code class="docutils literal notranslate"><span class="pre">ABIInfo</span></code> for classification,
+then performs dialect-specific rewriting via <code class="docutils literal notranslate"><span class="pre">ABIRewriteContext</span></code> for CIR,
+FIR, and other dialects.</p></li>
+</ul>
+<p>The CIR incubator serves as a <strong>reference only</strong> (e.g. for AArch64 algorithms).
+We do not upstream the incubator's CIR-specific ABI implementation as the
+long-term solution; we port useful algorithms into the ABI library where
+appropriate.</p>
+</section>
+</section>
+<section id="requirements-for-mlir-dialects">
+<h3><span class="section-number">1.2.3. </span>Requirements for MLIR Dialects<a class="headerlink" href="#requirements-for-mlir-dialects" title="Link to this heading">¶</a></h3>
+<p>CIR needs to lower C/C++ calling conventions correctly, with initial support for
+x86_64 and AArch64 targets. It must handle structs, unions, and complex types,
+as well as support instance methods and virtual calls. FIR's initial need is
+<strong>cdecl for calling C from Fortran</strong> (C interop); that is in scope.
+Fortran-specific ABI semantics (e.g. CHARACTER hidden length parameters, array
+descriptors) are out of initial scope; full Fortran ABI lowering is a broader
+goal. Both dialects share common requirements: strict target ABI compliance,
+efficient lowering with minimal overhead, extensibility for adding new target
+architectures, and comprehensive testability and validation capabilities.</p>
+</section>
+</section>
+<section id="proposed-solution">
+<h2><span class="section-number">1.3. </span>Proposed Solution<a class="headerlink" href="#proposed-solution" title="Link to this heading">¶</a></h2>
+<p><strong>Core.</strong> The LLVM ABI library in <code class="docutils literal notranslate"><span class="pre">llvm/lib/ABI/</span></code> performs ABI classification
+on <code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code>. It provides <code class="docutils literal notranslate"><span class="pre">ABIInfo</span></code> and target-specific implementations
+(x86_64, BPF, and eventually AArch64 and others). This is the single place
+where ABI rules are implemented.</p>
+<p><strong>MLIR side.</strong> To use this library from MLIR dialects we add an integration
+layer: (1) <strong>ABITypeMapper</strong> maps <code class="docutils literal notranslate"><span class="pre">mlir::Type</span></code> to <code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code> (analogous to
+QualTypeMapper for Clang). (2) A <strong>generic ABI lowering pass</strong> invokes the
+library's <code class="docutils literal notranslate"><span class="pre">ABIInfo</span></code> for classification, then (3) performs <strong>dialect-specific
+rewriting</strong> via the <code class="docutils literal notranslate"><span class="pre">ABIRewriteContext</span></code> interface—each dialect (CIR, FIR,
+etc.) implements only the glue to create its own operations (e.g. <code class="docutils literal notranslate"><span class="pre">cir.call</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fir.call</span></code>). Classification logic is shared; operation creation is
+dialect-specific.</p>
+<p>The following diagram shows the layering. At the top, the ABI library holds
+the ABI logic. In the middle, adapters connect frontends to it: Classic Clang
+CodeGen uses QualTypeMapper; MLIR uses ABITypeMapper and the ABI lowering pass.
+At the bottom, each dialect implements <code class="docutils literal notranslate"><span class="pre">ABIRewriteContext</span></code> only; FIR is shown
+as a consumer for cdecl/C interop (e.g. calling C from Fortran).</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>┌─────────────────────────────────────────────────────────────────┐
+│  LLVM ABI Library (llvm/lib/ABI/)                               │
+│  ABIInfo, abi::Type*, target implementations (X86, AArch64,…)   │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+            ┌─────────────────┴─────────────────┐
+            │                                   │
+            ▼                                   ▼
+┌───────────────────────┐         ┌───────────────────────────────┐
+│  Classic CodeGen      │         │  MLIR adapter                 │
+│  QualTypeMapper       │         │  ABITypeMapper + ABI pass     │
+└───────────────────────┘         └───────────────────────────────┘
+                                                │
+                               ┌────────────────┼────────────────┐
+                               │                │                │
+                               ▼                ▼                ▼
+                         ┌────────────┐   ┌────────────┐   ┌────────────┐
+                         │ CIR        │   │ FIR        │   │ Future     │
+                         │ ABIRewrite │   │ (cdecl/C   │   │ Dialects   │
+                         │ Context    │   │  interop)  │   │            │
+                         └────────────┘   └────────────┘   └────────────┘
+</pre></div>
+</div>
+</section>
+<section id="design-overview">
+<h2><span class="section-number">1.4. </span>Design Overview<a class="headerlink" href="#design-overview" title="Link to this heading">¶</a></h2>
+<section id="architecture-diagram">
+<h3><span class="section-number">1.4.1. </span>Architecture Diagram<a class="headerlink" href="#architecture-diagram" title="Link to this heading">¶</a></h3>
+<p>The following diagram shows how the design builds on the ABI library (Section
+3). At the top, the ABI library holds the classification logic. The middle
+layer adapts MLIR to the ABI library: ABITypeMapper converts <code class="docutils literal notranslate"><span class="pre">mlir::Type</span></code> to
+<code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code>, and the MLIR ABI lowering pass invokes the library's <code class="docutils literal notranslate"><span class="pre">ABIInfo</span></code>
+and uses the classification to drive rewriting. At the bottom, each dialect
+implements only <code class="docutils literal notranslate"><span class="pre">ABIRewriteContext</span></code> for operation creation; there is no
+separate type abstraction layer in MLIR for classification—that lives in the ABI
+library.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>┌─────────────────────────────────────────────────────────────────────────┐
+│  LLVM ABI Library (llvm/lib/ABI/) — single source of truth              │
+│  abi::Type*, ABIInfo, target implementations (X86_64, AArch64, …)       │
+│  Input: abi::Type*  →  Output: classification (ABIArgInfo, etc.)        │
+└─────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  MLIR adapter                                                           │
+│  ABITypeMapper (mlir::Type → abi::Type*)  +  MLIR ABI lowering pass     │
+│  (1) Map types  (2) Call ABIInfo  (3) Drive rewriting from              │
+│  classification result                                                  │
+└─────────────────────────────────────────────────────────────────────────┘
+                                      │
+                    ┌─────────────────┼─────────────────┐
+                    ▼                 ▼                 ▼
+              ┌────────────┐    ┌────────────┐    ┌────────────┐
+              │ CIR        │    │ FIR        │    │ Future     │
+              │ ABIRewrite │    │ ABIRewrite │    │ Dialects   │
+              │ Context    │    │ Context    │    │            │
+              └────────────┘    └────────────┘    └────────────┘
+              Dialect-specific operation creation only (no type
+              abstraction for classification in MLIR)
+</pre></div>
+</div>
+</section>
+<section id="abi-library-adapter-and-dialect-layers">
+<h3><span class="section-number">1.4.2. </span>ABI Library, Adapter, and Dialect Layers<a class="headerlink" href="#abi-library-adapter-and-dialect-layers" title="Link to this heading">¶</a></h3>
+<p>The architecture has three parts. <strong>The ABI library</strong> (<code class="docutils literal notranslate"><span class="pre">llvm/lib/ABI/</span></code>) is
+the single source of truth for ABI classification: it operates on <code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code>
+and produces classification results (e.g. ABIArgInfo, ABIFunctionInfo).
+Target-specific <code class="docutils literal notranslate"><span class="pre">ABIInfo</span></code> implementations (X86_64, AArch64, etc.) live there.
+The <strong>adapter layer</strong> is MLIR-specific: ABITypeMapper maps <code class="docutils literal notranslate"><span class="pre">mlir::Type</span></code> to
+<code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code>, and the MLIR ABI lowering pass (1) maps types, (2) calls the
+library's ABIInfo, and (3) uses the classification to drive rewriting. The
+<strong>dialect layer</strong> is only ABIRewriteContext: each dialect (CIR, FIR) implements
+operation creation (createFunction, createCall, createExtractValue, etc.).
+There is no type abstraction layer in MLIR for classification; type queries for
+ABI are performed on <code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code> inside the ABI library.</p>
+</section>
+<section id="key-components">
+<h3><span class="section-number">1.4.3. </span>Key Components<a class="headerlink" href="#key-components" title="Link to this heading">¶</a></h3>
+<p>The framework is built from the following components. <strong>The ABI library</strong>
+(<code class="docutils literal notranslate"><span class="pre">llvm/lib/ABI/</span></code>) provides the single source of truth for ABI classification:
+the <code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code> type system, the <code class="docutils literal notranslate"><span class="pre">ABIInfo</span></code> base and target-specific
+implementations (e.g. X86_64, AArch64), and the classification result types
+(e.g. ABIArgInfo, ABIFunctionInfo). <strong>ABITypeMapper</strong> maps <code class="docutils literal notranslate"><span class="pre">mlir::Type</span></code> to
+<code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code> so that MLIR dialect types can be classified by the ABI library.
+The generic mapper relies on existing MLIR type interfaces (e.g.
+<code class="docutils literal notranslate"><span class="pre">DataLayoutTypeInterface</span></code>) for size and alignment, and pattern-matches on
+standard type categories (integers, floats, pointers, structs, arrays,
+vectors) to build <code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code>. Dialects whose types do not conform to
+standard MLIR type categories (e.g. CIR's <code class="docutils literal notranslate"><span class="pre">cir::IntType</span></code> is not
+<code class="docutils literal notranslate"><span class="pre">mlir::IntegerType</span></code>) may need dialect-aware mapping alongside the generic
+mapper to preserve semantics such as signedness, pointer identity, and
+record field structure.</p>
+<p>The <strong>MLIR ABI lowering pass</strong> orchestrates the flow: it uses ABITypeMapper,
+calls the library's ABIInfo, and drives rewriting from the classification
+result. <strong>ABIRewriteContext</strong> is the dialect-specific interface for operation
+creation (each dialect implements it to produce e.g. cir.call, fir.call). A
+<strong>target registry</strong> (or equivalent) is used to select the appropriate ABIInfo
+for the compilation target. There is no ABITypeInterface or separate &quot;ABIInfo
+in MLIR&quot;; classification lives entirely in the ABI library.</p>
+</section>
+<section id="abi-lowering-flow-how-the-pieces-fit-together">
+<h3><span class="section-number">1.4.4. </span>ABI Lowering Flow: How the Pieces Fit Together<a class="headerlink" href="#abi-lowering-flow-how-the-pieces-fit-together" title="Link to this heading">¶</a></h3>
+<p>This section describes the end-to-end flow of ABI lowering, showing how all
+interfaces and components work together.</p>
+<section id="step-1-function-signature-analysis">
+<h4><span class="section-number">1.4.4.1. </span>Step 1: Function Signature Analysis<a class="headerlink" href="#step-1-function-signature-analysis" title="Link to this heading">¶</a></h4>
+<p>The ABI lowering pass begins by analyzing the function signature. Function
+operations are identified via MLIR's <code class="docutils literal notranslate"><span class="pre">FunctionOpInterface</span></code>, which provides
+access to the function type, argument types, and return types. The pass
+extracts the parameter types and return type to prepare them for classification.
+At this stage, the types are still in their high-level, dialect-specific form
+(e.g., <code class="docutils literal notranslate"><span class="pre">!cir.struct</span></code> for CIR, or <code class="docutils literal notranslate"><span class="pre">!fir.type</span></code> for FIR). The pass collect
+these types into a list that will be fed to the classification logic in the next
+step.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span><span class="nx">Input</span><span class="p">:</span> <span class="nx">func</span> <span class="nf">@foo</span><span class="p">(</span><span class="nv">%arg0:</span> <span class="kt">!cir.int</span><span class="p">&lt;</span><span class="nx">u</span><span class="p">,</span> <span class="mf">32</span><span class="p">&gt;,</span>
+       <span class="nv">%arg1:</span> <span class="kt">!cir.struct</span><span class="p">&lt;{</span><span class="kt">!cir.int</span><span class="p">&lt;</span><span class="nx">u</span><span class="p">,</span> <span class="mf">64</span><span class="p">&gt;,</span>
+                            <span class="kt">!cir.int</span><span class="p">&lt;</span><span class="nx">u</span><span class="p">,</span> <span class="mf">64</span><span class="p">&gt;}&gt;)</span> <span class="o">-&gt;</span> <span class="kt">!cir.int</span><span class="p">&lt;</span><span class="nx">u</span><span class="p">,</span> <span class="mf">32</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="step-2-type-mapping-via-abitypemapper">
+<h4><span class="section-number">1.4.4.2. </span>Step 2: Type Mapping via ABITypeMapper<a class="headerlink" href="#step-2-type-mapping-via-abitypemapper" title="Link to this heading">¶</a></h4>
+<p>For each argument and the return type, the pass maps <code class="docutils literal notranslate"><span class="pre">mlir::Type</span></code> to
+<code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code> using ABITypeMapper. The mapper produces the representation that
+the library's ABIInfo expects; optionally, it can map back to MLIR types for
+coercion types when needed.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Map dialect types to the library's type system</span>
+<span class="n">ABITypeMapper</span><span class="w"> </span><span class="nf">abiTypeMapper</span><span class="p">(</span><span class="k">module</span><span class="p">.</span><span class="n">getDataLayout</span><span class="p">());</span>
+<span class="n">abi</span><span class="o">::</span><span class="n">Type</span><span class="w"> </span><span class="o">*</span><span class="n">arg0Abi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">abiTypeMapper</span><span class="p">.</span><span class="n">map</span><span class="p">(</span><span class="n">arg0Type</span><span class="p">);</span><span class="w">   </span><span class="c1">// i32 -&gt; IntegerType</span>
+<span class="n">abi</span><span class="o">::</span><span class="n">Type</span><span class="w"> </span><span class="o">*</span><span class="n">arg1Abi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">abiTypeMapper</span><span class="p">.</span><span class="n">map</span><span class="p">(</span><span class="n">arg1Type</span><span class="p">);</span><span class="w">   </span><span class="c1">// struct -&gt; RecordType</span>
+<span class="n">abi</span><span class="o">::</span><span class="n">Type</span><span class="w"> </span><span class="o">*</span><span class="n">retAbi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">abiTypeMapper</span><span class="p">.</span><span class="n">map</span><span class="p">(</span><span class="n">returnType</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><strong>Key Point</strong>: Classification runs in the ABI library on <code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code>;
+ABITypeMapper is the only bridge from dialect types to that representation.</p>
+</section>
+<section id="step-3-abi-classification">
+<h4><span class="section-number">1.4.4.3. </span>Step 3: ABI Classification<a class="headerlink" href="#step-3-abi-classification" title="Link to this heading">¶</a></h4>
+<p>The library's target-specific <code class="docutils literal notranslate"><span class="pre">ABIInfo</span></code> (e.g. X86_64) performs classification
+on <code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code> and produces the library's classification result
+(e.g. ABIFunctionInfo and ABIArgInfo as defined in <code class="docutils literal notranslate"><span class="pre">llvm/lib/ABI/</span></code>):</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// The MLIR ABI lowering pass obtains the ABIInfo from the target</span>
+<span class="c1">// registry based on the module's target triple (see Section 5.2).</span>
+<span class="n">llvm</span><span class="o">::</span><span class="n">abi</span><span class="o">::</span><span class="n">ABIInfo</span><span class="w"> </span><span class="o">*</span><span class="n">abiInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getABIInfo</span><span class="p">();</span><span class="w">  </span><span class="c1">// e.g. X86_64</span>
+<span class="n">llvm</span><span class="o">::</span><span class="n">abi</span><span class="o">::</span><span class="n">ABIFunctionInfo</span><span class="w"> </span><span class="n">abiFI</span><span class="p">;</span>
+<span class="n">abiInfo</span><span class="o">-&gt;</span><span class="n">computeInfo</span><span class="p">(</span><span class="n">abiFI</span><span class="p">,</span><span class="w"> </span><span class="n">arg0Abi</span><span class="p">,</span><span class="w"> </span><span class="n">arg1Abi</span><span class="p">,</span><span class="w"> </span><span class="n">retAbi</span><span class="p">);</span>
+<span class="c1">// For struct&lt;i64,i64&gt; on x86_64: produces Expand (two i64 args)</span>
+</pre></div>
+</div>
+<p>Output: the library's classification (e.g. ABIFunctionInfo) for all arguments
+and return:
+* <code class="docutils literal notranslate"><span class="pre">%arg0</span> <span class="pre">(i32)</span></code> → Direct (pass as-is)
+* <code class="docutils literal notranslate"><span class="pre">%arg1</span> <span class="pre">(struct)</span></code> → Expand (split into two i64 fields)
+* Return type → Direct</p>
+</section>
+<section id="step-4-function-signature-rewriting">
+<h4><span class="section-number">1.4.4.4. </span>Step 4: Function Signature Rewriting<a class="headerlink" href="#step-4-function-signature-rewriting" title="Link to this heading">¶</a></h4>
+<p>After the library's classification is complete, the pass rewrites the function
+to match the ABI requirements using the dialect's <code class="docutils literal notranslate"><span class="pre">ABIRewriteContext</span></code>. The
+classification result (from the ABI library) describes the lowered signature;
+the rewrite context creates the actual dialect operations. For example, if a
+struct is classified as &quot;Expand&quot;, the new function signature will have multiple
+scalar parameters instead of the single struct parameter.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">ABIRewriteContext</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getDialectRewriteContext</span><span class="p">();</span>
+
+<span class="c1">// Create new function with lowered signature</span>
+<span class="n">FunctionType</span><span class="w"> </span><span class="n">newType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span><span class="w"> </span><span class="c1">// (i32, i64, i64) -&gt; i32</span>
+<span class="n">Operation</span><span class="w"> </span><span class="o">*</span><span class="n">newFunc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">createFunction</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span><span class="w"> </span><span class="s">"foo"</span><span class="p">,</span><span class="w"> </span><span class="n">newType</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><strong>Key Point</strong>: The original function had signature <code class="docutils literal notranslate"><span class="pre">(i32,</span> <span class="pre">struct)</span> <span class="pre">-&gt;</span> <span class="pre">i32</span></code>, but
+the ABI-lowered function has signature <code class="docutils literal notranslate"><span class="pre">(i32,</span> <span class="pre">i64,</span> <span class="pre">i64)</span> <span class="pre">-&gt;</span> <span class="pre">i32</span></code> with the
+struct expanded into its constituent fields.</p>
+</section>
+<section id="step-5-argument-expansion">
+<h4><span class="section-number">1.4.4.5. </span>Step 5: Argument Expansion<a class="headerlink" href="#step-5-argument-expansion" title="Link to this heading">¶</a></h4>
+<p>With the function signature rewritten, the pass updates all call sites to match
+the new signature, using the classification from the ABI library to drive
+rewriting via <code class="docutils literal notranslate"><span class="pre">ABIRewriteContext</span></code>. For arguments classified as &quot;Expand&quot;, the
+pass breaks down the aggregate into its constituent parts (e.g. struct into two
+i64 values). The rewrite context provides operations to extract fields and
+construct the new call with the expanded argument list.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Original call: call @foo(%val0, %structVal)</span>
+<span class="c1">// Need to extract struct fields:</span>
+
+<span class="n">Value</span><span class="w"> </span><span class="n">field0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">createExtractValue</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span><span class="w"> </span><span class="n">structVal</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">});</span><span class="w"> </span><span class="c1">// extract 1st i64</span>
+<span class="n">Value</span><span class="w"> </span><span class="n">field1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">createExtractValue</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span><span class="w"> </span><span class="n">structVal</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">});</span><span class="w"> </span><span class="c1">// extract 2nd i64</span>
+
+<span class="c1">// New call with expanded arguments</span>
+<span class="n">ctx</span><span class="p">.</span><span class="n">createCall</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span><span class="w"> </span><span class="n">newFunc</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">resultType</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">val0</span><span class="p">,</span><span class="w"> </span><span class="n">field0</span><span class="p">,</span><span class="w"> </span><span class="n">field1</span><span class="p">});</span>
+</pre></div>
+</div>
+<p><strong>Key Point</strong>: <code class="docutils literal notranslate"><span class="pre">ABIRewriteContext</span></code> abstracts the dialect-specific operation
+creation, so the lowering logic doesn't need to know about CIR operations.</p>
+</section>
+<section id="step-6-return-value-handling">
+<h4><span class="section-number">1.4.4.6. </span>Step 6: Return Value Handling<a class="headerlink" href="#step-6-return-value-handling" title="Link to this heading">¶</a></h4>
+<p>For functions returning large structs (indirect return):</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// If return type is classified as Indirect:</span>
+<span class="n">Value</span><span class="w"> </span><span class="n">sretPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">createAlloca</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span><span class="w"> </span><span class="n">retType</span><span class="p">,</span><span class="w"> </span><span class="n">alignment</span><span class="p">);</span>
+<span class="n">ctx</span><span class="p">.</span><span class="n">createCall</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span><span class="w"> </span><span class="n">func</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="p">{</span><span class="n">sretPtr</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="n">otherArgs</span><span class="p">});</span>
+<span class="n">Value</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">createLoad</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span><span class="w"> </span><span class="n">sretPtr</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="complete-flow-diagram">
+<h4><span class="section-number">1.4.4.7. </span>Complete Flow Diagram<a class="headerlink" href="#complete-flow-diagram" title="Link to this heading">¶</a></h4>
+<p>The diagram below combines the three-layer architecture (Section 4.1) with the
+step-by-step flow, showing which layer owns each step.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span> ┌─────────────────────────────────────────────────────────┐
+ │ Input: High-Level Function (CIR/FIR/other dialect)      │
+ │   func @foo(%arg0: i32, %arg1: struct&lt;i64,i64&gt;) -&gt; i32  │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+╔═══════════════════════════╪═══════════════════════════════╗
+║  MLIR Adapter Layer       │                               ║
+║                           ▼                               ║
+║  Step 1: Extract types from FunctionOpInterface           ║
+║            arg0: mlir::Type, arg1: mlir::Type, ret: …     ║
+║                           │                               ║
+║                           ▼                               ║
+║  Step 2: ABITypeMapper    │                               ║
+║            mlir::Type ──&gt; abi::Type*                      ║
+║            (uses DataLayoutTypeInterface for size/align)  ║
+╚═══════════════════════════╪═══════════════════════════════╝
+                            │
+╔═══════════════════════════╪═══════════════════════════════╗
+║  LLVM ABI Library         │  (llvm/lib/ABI/)              ║
+║                           ▼                               ║
+║  Step 3: ABIInfo::computeInfo() on abi::Type*             ║
+║            Applies target rules (e.g. x86_64 System V)    ║
+║            Produces: ABIArgInfo per arg/return            ║
+║              arg0 (i32)   → Direct                        ║
+║              arg1 (struct)→ Expand (two i64 fields)       ║
+║              return (i32) → Direct                        ║
+╚═══════════════════════════╪═══════════════════════════════╝
+                            │
+╔═══════════════════════════╪═══════════════════════════════╗
+║  Dialect-Specific Layer   │  (ABIRewriteContext)          ║
+║                           ▼                               ║
+║  Step 4: Rewrite function signature                       ║
+║            (i32, struct) -&gt; i32                           ║
+║            becomes (i32, i64, i64) -&gt; i32                 ║
+║                           │                               ║
+║                           ▼                               ║
+║  Step 5: Rewrite call sites                               ║
+║            createExtractValue() to expand struct args     ║
+║            createCall() with lowered arg list             ║
+║                           │                               ║
+║                           ▼                               ║
+║  Step 6: Handle return values                             ║
+║            Indirect: createAlloca + sret pointer          ║
+║            Coerced: memory-based reinterpretation         ║
+╚═══════════════════════════╪═══════════════════════════════╝
+                            │
+                            ▼
+ ┌─────────────────────────────────────────────────────────┐
+ │ Output: ABI-Lowered Function                            │
+ │   func @foo(%arg0: i32, %arg1: i64, %arg2: i64) -&gt; i32  │
+ └─────────────────────────────────────────────────────────┘
+</pre></div>
+</div>
+</section>
+<section id="key-interactions-between-components">
+<h4><span class="section-number">1.4.4.8. </span>Key Interactions Between Components<a class="headerlink" href="#key-interactions-between-components" title="Link to this heading">¶</a></h4>
+<p>Classification lives in the ABI library: <code class="docutils literal notranslate"><span class="pre">ABIInfo</span></code> operates on <code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code>
+and produces classification results (e.g. ABIArgInfo, ABIFunctionInfo). MLIR
+types reach the ABI library only via ABITypeMapper, which converts
+<code class="docutils literal notranslate"><span class="pre">mlir::Type</span></code> to <code class="docutils literal notranslate"><span class="pre">abi::Type*</span></code>. The lowering pass (1) maps types with
+ABITypeMapper, (2) calls the library's ABIInfo to get classification, and (3)
+uses that result to drive rewriting through the dialect's ABIRewriteContext.</p>
+<p>ABIRewriteContext consumes the classification (e.g. &quot;Expand&quot; for a struct) and
+performs the actual IR changes: createFunction with the lowered signature,
+createExtractValue and createCall at call sites. Each dialect implements
+ABIRewriteContext to produce its own operations (e.g. cir.call, fir.call).
+This keeps classification in one place (the ABI library) and limits dialect code
+to operation creation.</p>
+</section>
+</section>
+</section>
+<section id="abirewritecontext-and-target-registry">
+<h2><span class="section-number">1.5. </span>ABIRewriteContext and Target Registry<a class="headerlink" href="#abirewritecontext-and-target-registry" title="Link to this heading">¶</a></h2>
+<section id="abirewritecontext-interface">
+<h3><span class="section-number">1.5.1. </span>ABIRewriteContext Interface<a class="headerlink" href="#abirewritecontext-interface" title="Link to this heading">¶</a></h3>
+<p>ABIRewriteContext is the only dialect-specific layer: CIR and FIR each
+implement it to create their own dialect operations (e.g. cir.call, fir.call).
+In a module with mixed dialect content, the pass selects the appropriate
+ABIRewriteContext for each function based on the dialect of its operations.
+Classification is performed by the library's ABIInfo and produces the library's
+result (e.g. ABIFunctionInfo, ABIArgInfo); ABIRewriteContext consumes that
+classification to perform the actual IR rewriting. ABIRewriteContext is also
+responsible for updating ABI-related attributes (e.g. sret, byval, signext,
+zeroext, inreg) on the rewritten function signatures and call sites as indicated
+by the classification result.</p>
+<p>The interface defines two high-level methods:
+<code class="docutils literal notranslate"><span class="pre">rewriteFunctionDefinition(funcOp,</span> <span class="pre">classification,</span> <span class="pre">builder)</span></code> rewrites a
+function's signature and body (coercing return values, adapting arguments,
+handling sret), and <code class="docutils literal notranslate"><span class="pre">rewriteCallSite(callOp,</span> <span class="pre">classification,</span> <span class="pre">builder)</span></code>
+rewrites a call to match the lowered callee (coercing arguments, handling
+coerced returns). Each method encapsulates the full rewriting logic for its
+scope, using the dialect's own builder operations internally
+(e.g. <code class="docutils literal notranslate"><span class="pre">cir::CastOp</span></code>, <code class="docutils literal notranslate"><span class="pre">cir::AllocaOp</span></code>, <code class="docutils literal notranslate"><span class="pre">cir::StoreOp</span></code>). Each dialect
+handles operation creation using its own builder internally.</p>
+<p>Each dialect implementing ABI lowering must provide a concrete
+<code class="docutils literal notranslate"><span class="pre">ABIRewriteContext</span></code> subclass. This is a significant but one-time cost:
+CIR implements <code class="docutils literal notranslate"><span class="pre">CIRABIRewriteContext</span></code>, FIR implements <code class="docutils literal notranslate"><span class="pre">FIRABIRewriteContext</span></code>,
+and any future dialect reuses the shared classification infrastructure by
+providing its own context implementation. The alternative—reimplementing the
+entire ABI classification logic per dialect—would require 8,000-15,000 lines per
+dialect (the combined size of x86_64 and AArch64 classification code plus all
+supporting infrastructure), introduce divergent behavior across dialects, and
+create a maintenance burden where ABI bug fixes must be propagated to every
+dialect independently.</p>
+</section>
+<section id="target-registry">
+<h3><span class="section-number">1.5.2. </span>Target Registry<a class="headerlink" href="#target-registry" title="Link to this heading">¶</a></h3>
+<p>We use the library's target selection or registry to obtain the appropriate
+ABIInfo for the compilation target (e.g. X86_64, AArch64). We do not introduce
+a separate MLIR TargetRegistry unless the MLIR ABI pass needs it for pass
+options or configuration. The dependency direction is: the MLIR ABI pass
+depends on <code class="docutils literal notranslate"><span class="pre">llvm/lib/ABI</span></code>; there is no reverse dependency from the ABI library
+to MLIR dialects.</p>
+</section>
+<section id="cir-pass-pipeline-position">
+<h3><span class="section-number">1.5.3. </span>CIR Pass Pipeline Position<a class="headerlink" href="#cir-pass-pipeline-position" title="Link to this heading">¶</a></h3>
+<p>For the CIR dialect, the calling-convention lowering pass is named
+<code class="docutils literal notranslate"><span class="pre">cir-call-conv-lowering</span></code> and runs late in the CIR-to-LLVM pipeline:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cir-target-lowering</span></code> legalizes target-specific operations (e.g.
+atomic synchronization scopes).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cir-cxxabi-lowering</span></code> lowers C++-specific high-level types (member
+pointers, vtable lookups, etc.) to ABI-specific representations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cir-call-conv-lowering</span></code> rewrites function signatures and call sites
+to match the target ABI's calling convention rules.</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">cir-call-conv-lowering</span></code> requires a <code class="docutils literal notranslate"><span class="pre">dlti.dl_spec</span></code> attribute on the
+module so it can query type sizes and alignments through MLIR's
+<code class="docutils literal notranslate"><span class="pre">DataLayout</span></code>. When the attribute is missing, the pass emits a
+diagnostic and fails rather than silently using a default layout.</p>
+<p>The pass takes one of two driver modes via pass options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">target=&lt;name&gt;</span></code> selects a real ABI target. The first supported value
+is <code class="docutils literal notranslate"><span class="pre">test</span></code> (the MLIR test target in <code class="docutils literal notranslate"><span class="pre">mlir/lib/ABI/Targets/Test/</span></code>,
+used for testing the rewriter without depending on the in-progress
+LLVM ABI library targets). Real targets (<code class="docutils literal notranslate"><span class="pre">x86_64</span></code>, <code class="docutils literal notranslate"><span class="pre">aarch64</span></code>,
+...) will be added as the LLVM ABI library ships them.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">classification-attr=&lt;name&gt;</span></code> reads a pre-built <code class="docutils literal notranslate"><span class="pre">FunctionClassifica</span> <span class="pre">tion</span></code> from a <code class="docutils literal notranslate"><span class="pre">DictionaryAttr</span></code> named <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code> on each <code class="docutils literal notranslate"><span class="pre">cir.func</span></code>
+and rewrites accordingly. This driver is for tests that need to
+exercise rewriter behavior against arbitrary classifications without
+routing through any real classifier.</p></li>
+</ul>
+<p>Exactly one of the two options must be set.</p>
+</section>
+<section id="enabling-the-pass">
+<h3><span class="section-number">1.5.4. </span>Enabling the Pass<a class="headerlink" href="#enabling-the-pass" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">cir-call-conv-lowering</span></code> runs by default whenever ClangIR code generation is
+enabled on an x86_64 target. On every other triple the pipeline omits the
+pass, because x86_64 System V is the only classifier implemented so far, and
+signatures reach the LLVM dialect in their high-level form.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-fno-clangir-call-conv-lowering</span></code> turns the pass off and
+<code class="docutils literal notranslate"><span class="pre">-fclangir-call-conv-lowering</span></code> turns it back on. The last one on the
+command line wins, so a build can disable the pass globally and re-enable it
+for a single translation unit. Both are <code class="docutils literal notranslate"><span class="pre">-cc1</span></code> options, so reach them from
+the driver through <code class="docutils literal notranslate"><span class="pre">-Xclang</span></code>.</p>
+</section>
+</section>
+<section id="open-questions">
+<h2><span class="section-number">1.6. </span>Open Questions<a class="headerlink" href="#open-questions" title="Link to this heading">¶</a></h2>
+<p>The following items are open for discussion. This section may be revised,
+shortened, or removed before final merge.</p>
+<section id="how-to-handle-clang-targetinfo-dependency-in-mlir">
+<h3><span class="section-number">1.6.1. </span>How to Handle clang::TargetInfo Dependency in MLIR?<a class="headerlink" href="#how-to-handle-clang-targetinfo-dependency-in-mlir" title="Link to this heading">¶</a></h3>
+<p>The CIR incubator currently uses <code class="docutils literal notranslate"><span class="pre">clang::TargetInfo</span></code> to query target-specific
+properties needed for ABI decisions, such as pointer width, alignment,
+endianness, and calling convention availability. Moving this functionality to
+MLIR dialect-agnostic infrastructure raises an architectural question: should
+MLIR code depend on a Clang library, or should it use MLIR-based mechanisms?</p>
+<p>Three approaches are under consideration.</p>
+<ol class="arabic simple">
+<li><p>Continue using <code class="docutils literal notranslate"><span class="pre">clang::TargetInfo</span></code> directly, accepting an MLIR→Clang
+dependency for this target-specific infrastructure. This approach requires
+no additional implementation since it already works in the CIR incubator,
+and <code class="docutils literal notranslate"><span class="pre">clang::TargetInfo</span></code> provides comprehensive, battle-tested coverage of
+all target properties. However, it creates a dependency relationship that
+may violate MLIR's architectural principle of being a peer to Clang rather
+than dependent on it.</p></li>
+<li><p>Combine <code class="docutils literal notranslate"><span class="pre">llvm::Triple</span></code> with MLIR's <code class="docutils literal notranslate"><span class="pre">DataLayoutInterface</span></code>, supplemented by
+module-level attributes for ABI-specific properties not covered by the data
+layout. This approach maintains clean layering with no Clang dependency and
+follows MLIR patterns, but requires defining approximately 10-15 additional
+attributes and some upfront design work.</p></li>
+<li><p>Create a new <code class="docutils literal notranslate"><span class="pre">mlir::target::TargetInfo</span></code> abstraction with minimal methods
+tailored specifically for ABI needs (approximately 15-20 methods). This
+provides clean layering without Clang dependency but requires implementing
+and maintaining target-specific code that duplicates some knowledge from
+<code class="docutils literal notranslate"><span class="pre">clang::TargetInfo</span></code>.</p></li>
+</ol>
+<p>Option 2 is recommended as the preferred approach. It maintains MLIR's
+independence from Clang, which is important for MLIR's mission to be reusable by
+non-Clang frontends like Rust, Julia, and Swift. Target information is input
+metadata rather than an output format, so it should be expressible through
+MLIR's existing mechanisms rather than requiring external dependencies. Option
+3 serves as an acceptable fallback if Option 2 proves insufficient during
+prototyping, while Option 1 is not recommended due to the architectural concerns
+around MLIR depending on Clang.</p>
+</section>
+<section id="scope-c-calling-convention-vs-arbitrary-calling-conventions">
+<h3><span class="section-number">1.6.2. </span>Scope: C Calling Convention vs. Arbitrary Calling Conventions<a class="headerlink" href="#scope-c-calling-convention-vs-arbitrary-calling-conventions" title="Link to this heading">¶</a></h3>
+<p>This design focuses on the <strong>C calling convention layer</strong> (e.g. cdecl, System V,
+AAPCS). C++ ABI concerns such as non-trivial copy constructors or destructors
+are largely handled elsewhere in the compilation pipeline; the ABI library and
+MLIR integration layer address how arguments and return values are passed at the
+C ABI boundary. An open question is whether the design should remain explicitly
+scoped to C calling conventions only, or be general enough to support arbitrary
+calling conventions (e.g. vectorcall, preserve_most) via extensible interfaces.
+Clarifying this scope will guide the design of the LLVM ABI library integration
+and the MLIR pass.</p>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="CleanupAndEHDesign.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title"><span class="section-number">2. </span>ClangIR Cleanup and Exception Handling Design</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">ClangIR</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">1. ClangIR ABI Lowering Design Document</a><ul>
+<li><a class="reference internal" href="#introduction">1.1. Introduction</a><ul>
+<li><a class="reference internal" href="#design-goals">1.1.1. Design Goals</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#background-and-context">1.2. Background and Context</a><ul>
+<li><a class="reference internal" href="#what-is-calling-convention-lowering">1.2.1. What is Calling Convention Lowering?</a></li>
+<li><a class="reference internal" href="#existing-implementations">1.2.2. Existing Implementations</a><ul>
+<li><a class="reference internal" href="#classic-clang-codegen">1.2.2.1. Classic Clang CodeGen</a></li>
+<li><a class="reference internal" href="#cir-incubator">1.2.2.2. CIR Incubator</a></li>
+<li><a class="reference internal" href="#llvm-abi-lowering-library">1.2.2.3. LLVM ABI Lowering Library</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#requirements-for-mlir-dialects">1.2.3. Requirements for MLIR Dialects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#proposed-solution">1.3. Proposed Solution</a></li>
+<li><a class="reference internal" href="#design-overview">1.4. Design Overview</a><ul>
+<li><a class="reference internal" href="#architecture-diagram">1.4.1. Architecture Diagram</a></li>
+<li><a class="reference internal" href="#abi-library-adapter-and-dialect-layers">1.4.2. ABI Library, Adapter, and Dialect Layers</a></li>
+<li><a class="reference internal" href="#key-components">1.4.3. Key Components</a></li>
+<li><a class="reference internal" href="#abi-lowering-flow-how-the-pieces-fit-together">1.4.4. ABI Lowering Flow: How the Pieces Fit Together</a><ul>
+<li><a class="reference internal" href="#step-1-function-signature-analysis">1.4.4.1. Step 1: Function Signature Analysis</a></li>
+<li><a class="reference internal" href="#step-2-type-mapping-via-abitypemapper">1.4.4.2. Step 2: Type Mapping via ABITypeMapper</a></li>
+<li><a class="reference internal" href="#step-3-abi-classification">1.4.4.3. Step 3: ABI Classification</a></li>
+<li><a class="reference internal" href="#step-4-function-signature-rewriting">1.4.4.4. Step 4: Function Signature Rewriting</a></li>
+<li><a class="reference internal" href="#step-5-argument-expansion">1.4.4.5. Step 5: Argument Expansion</a></li>
+<li><a class="reference internal" href="#step-6-return-value-handling">1.4.4.6. Step 6: Return Value Handling</a></li>
+<li><a class="reference internal" href="#complete-flow-diagram">1.4.4.7. Complete Flow Diagram</a></li>
+<li><a class="reference internal" href="#key-interactions-between-components">1.4.4.8. Key Interactions Between Components</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#abirewritecontext-and-target-registry">1.5. ABIRewriteContext and Target Registry</a><ul>
+<li><a class="reference internal" href="#abirewritecontext-interface">1.5.1. ABIRewriteContext Interface</a></li>
+<li><a class="reference internal" href="#target-registry">1.5.2. Target Registry</a></li>
+<li><a class="reference internal" href="#cir-pass-pipeline-position">1.5.3. CIR Pass Pipeline Position</a></li>
+<li><a class="reference internal" href="#enabling-the-pass">1.5.4. Enabling the Pass</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#open-questions">1.6. Open Questions</a><ul>
+<li><a class="reference internal" href="#how-to-handle-clang-targetinfo-dependency-in-mlir">1.6.1. How to Handle clang::TargetInfo Dependency in MLIR?</a></li>
+<li><a class="reference internal" href="#scope-c-calling-convention-vs-arbitrary-calling-conventions">1.6.2. Scope: C Calling Convention vs. Arbitrary Calling Conventions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=7d86a446"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>

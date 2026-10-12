@@ -1,0 +1,1103 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="Clang SYCL Linker" href="ClangSYCLLinker.html" /><link rel="prev" title="Clang Offload Bundler" href="ClangOffloadBundler.html" />
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/ClangRepl.html" />
+        <link rel="prefetch" href="_static/LLVMWyvernSmall.png" as="image" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+        <title>Clang-Repl - Clang</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=548e816e" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86c9e7d9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Clang Release Notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="UsersManual.html">Clang Compiler User's Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="LanguageExtensions.html">Clang Language Extensions</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Clang Language Extensions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Block-ABI-Apple.html">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrossCompilation.html">Cross-compilation using Clang</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ClangStaticAnalyzer.html">Clang Static Analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Clang Static Analyzer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="analyzer/checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/user-docs.html">2. User Docs</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 2. User Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/UsingWithXCode.html">2.2. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FilingBugs.html">2.3. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CrossTranslationUnit.html">2.4. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/TaintAnalysisConfiguration.html">2.5. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/Annotations.html">2.6. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FAQ.html">2.7. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/developer-docs.html">3. Developer Docs</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 3. Developer Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/PerformanceInvestigation.html">3.6. Performance Investigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Scalable Static Analysis Framework</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Developer Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DataFlowAnalysisIntro.html">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSanitizer.html">ThreadSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MemorySanitizer.html">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataFlowSanitizer.html">DataFlowSanitizer</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of DataFlowSanitizer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="DataFlowSanitizerDesign.html">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerCoverage.html">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ControlFlowIntegrity.html">Control Flow Integrity</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Control Flow Integrity</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StandardCPlusPlusModules.html">Standard C++ Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MisExpect.html">Misexpect</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Misexpect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="OpenCLSupport.html">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Clang HLSL Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of HLSL Design and Implementation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="APINotes.html">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CIR/index.html">ClangIR</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of ClangIR</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CIR/ABILowering.html">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CommandGuide/index.html">Clang "man" pages</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Clang "man" pages</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefactoringEngine.html">Clang's refactoring engine</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ClangTools.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InternalsManual.html">"Clang" CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizerDesign.html">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LLVMExceptionHandlingCodeGen.html">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/ClangRepl.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/ClangRepl.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="clang-repl">
+<h1>Clang-Repl<a class="headerlink" href="#clang-repl" title="Link to this heading">¶</a></h1>
+<p><strong>Clang-Repl</strong> is an interactive C++ interpreter that allows for incremental
+compilation. It supports interactive programming for C++ in a
+read-evaluate-print-loop (REPL) style. It uses Clang as a library to compile the
+high level programming language into LLVM IR. Then the LLVM IR is executed by
+the LLVM just-in-time (JIT) infrastructure.</p>
+<p>Clang-Repl is suitable for exploratory programming and in places where time
+to insight is important. Clang-Repl is a project inspired by the work in
+<a class="reference external" href="https://github.com/root-project/cling">Cling</a>, a LLVM-based C/C++ interpreter
+developed by the field of high energy physics and used by the scientific data
+analysis framework <a class="reference external" href="https://root.cern/">ROOT</a>. Clang-Repl allows to move parts
+of Cling upstream, making them useful and available to a broader audience.</p>
+<section id="clang-repl-basic-data-flow">
+<h2>Clang-Repl Basic Data Flow<a class="headerlink" href="#clang-repl-basic-data-flow" title="Link to this heading">¶</a></h2>
+<img alt="ClangRepl design" class="align-center" src="_images/ClangRepl_design.png" />
+<p>Clang-Repl data flow can be divided into roughly 8 phases:</p>
+<ol class="arabic simple">
+<li><p>Clang-Repl controls the input infrastructure by an interactive prompt or by
+an interface allowing the incremental processing of input.</p></li>
+<li><p>Then it sends the input to the underlying incremental facilities in Clang
+infrastructure.</p></li>
+<li><p>Clang compiles the input into an AST representation.</p></li>
+<li><p>When required the AST can be further transformed in order to attach specific
+behavior.</p></li>
+<li><p>The AST representation is then lowered to LLVM IR.</p></li>
+<li><p>The LLVM IR is the input format for LLVM’s JIT compilation infrastructure.
+The tool will instruct the JIT to run specified functions, translating them
+into machine code targeting the underlying device architecture (eg. Intel
+x86 or NVPTX).</p></li>
+<li><p>The LLVM JIT lowers the LLVM IR to machine code.</p></li>
+<li><p>The machine code is then executed.</p></li>
+</ol>
+</section>
+<section id="build-instructions">
+<h2>Build Instructions:<a class="headerlink" href="#build-instructions" title="Link to this heading">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>llvm-project
+<span class="gp">$ </span>mkdir<span class="w"> </span>build
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>build
+<span class="gp">$ </span>cmake<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>RelWithDebInfo<span class="w"> </span>-DLLVM_ENABLE_PROJECTS<span class="o">=</span>clang<span class="w"> </span>-G<span class="w"> </span><span class="s2">"Unix Makefiles"</span><span class="w"> </span>../llvm
+</pre></div>
+</div>
+<p><strong>Note here</strong>, above RelWithDebInfo - Debug / Release</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build . --target clang clang-repl -j n</span>
+<span class="go">   OR</span>
+<span class="go">cmake --build . --target clang clang-repl</span>
+</pre></div>
+</div>
+<p><strong>Clang-repl</strong> is built under llvm-project/build/bin. Proceed into the directory <strong>llvm-project/build/bin</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./clang-repl</span>
+<span class="go">clang-repl&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="clang-repl-usage">
+<h2>Clang-Repl Usage<a class="headerlink" href="#clang-repl-usage" title="Link to this heading">¶</a></h2>
+<p><strong>Clang-Repl</strong> is an interactive C++ interpreter that allows for incremental
+compilation. It supports interactive programming for C++ in a
+read-evaluate-print-loop (REPL) style. It uses Clang as a library to compile the
+high level programming language into LLVM IR. Then the LLVM IR is executed by
+the LLVM just-in-time (JIT) infrastructure.</p>
+</section>
+<section id="basic">
+<h2>Basic:<a class="headerlink" href="#basic" title="Link to this heading">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>clang-repl&gt; #include &lt;iostream&gt;
+clang-repl&gt; int f() { std::cout &lt;&lt; "Hello Interpreted World!\n"; return 0; }
+clang-repl&gt; auto r = f();
+ // Prints Hello Interpreted World!
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>clang-repl&gt; #include&lt;iostream&gt;
+clang-repl&gt; using namespace std;
+clang-repl&gt; std::cout &lt;&lt; "Welcome to CLANG-REPL" &lt;&lt; std::endl;
+Welcome to CLANG-REPL
+// Prints Welcome to CLANG-REPL
+</pre></div>
+</div>
+</section>
+<section id="function-definitions-and-calls">
+<h2>Function Definitions and Calls:<a class="headerlink" href="#function-definitions-and-calls" title="Link to this heading">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>clang-repl&gt; #include &lt;iostream&gt;
+clang-repl&gt; int sum(int a, int b){ return a+b; };
+clang-repl&gt; int c = sum(9,10);
+clang-repl&gt; std::cout &lt;&lt; c &lt;&lt; std::endl;
+19
+clang-repl&gt;
+</pre></div>
+</div>
+</section>
+<section id="iterative-structures">
+<h2>Iterative Structures:<a class="headerlink" href="#iterative-structures" title="Link to this heading">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>clang-repl&gt; #include &lt;iostream&gt;
+clang-repl&gt; for (int i = 0;i &lt; 3;i++){ std::cout &lt;&lt; i &lt;&lt; std::endl;}
+0
+1
+2
+clang-repl&gt; while(i &lt; 7){ i++; std::cout &lt;&lt; i &lt;&lt; std::endl;}
+4
+5
+6
+7
+</pre></div>
+</div>
+</section>
+<section id="classes-and-structures">
+<h2>Classes and Structures:<a class="headerlink" href="#classes-and-structures" title="Link to this heading">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>clang-repl&gt; #include &lt;iostream&gt;
+clang-repl&gt; class Rectangle {int width, height; public: void set_values (int,int);\
+clang-repl... int area() {return width*height;}};
+clang-repl&gt;  void Rectangle::set_values (int x, int y) { width = x;height = y;}
+clang-repl&gt; int main () { Rectangle rect;rect.set_values (3,4);\
+clang-repl... std::cout &lt;&lt; "area: " &lt;&lt; rect.area() &lt;&lt; std::endl;\
+clang-repl... return 0;}
+clang-repl&gt; main();
+area: 12
+clang-repl&gt;
+// Note: This '\' can be used for continuation of the statements in the next line
+</pre></div>
+</div>
+</section>
+<section id="lamdas">
+<h2>Lamdas:<a class="headerlink" href="#lamdas" title="Link to this heading">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>clang-repl&gt; #include &lt;iostream&gt;
+clang-repl&gt; using namespace std;
+clang-repl&gt; auto welcome = []()  { std::cout &lt;&lt; "Welcome to REPL" &lt;&lt; std::endl;};
+clang-repl&gt; welcome();
+Welcome to REPL
+</pre></div>
+</div>
+</section>
+<section id="comments">
+<h2>Comments:<a class="headerlink" href="#comments" title="Link to this heading">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>clang-repl&gt; // Comments in Clang-Repl
+clang-repl&gt; /* Comments in Clang-Repl */
+</pre></div>
+</div>
+</section>
+<section id="built-in-commands">
+<h2>Built in Commands:<a class="headerlink" href="#built-in-commands" title="Link to this heading">¶</a></h2>
+<p>clang-repl has some special commands that are of the form <code class="docutils literal notranslate"><span class="pre">%&lt;something&gt;</span></code>. To list all these commands, use the <code class="docutils literal notranslate"><span class="pre">%help</span></code> command:</p>
+<section id="help">
+<h3>Help:<a class="headerlink" href="#help" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">%help</span></code> command lists all built in clang-repl commands.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>clang-repl&gt; %help
+</pre></div>
+</div>
+</section>
+<section id="using-dynamic-libraries">
+<h3>Using Dynamic Libraries:<a class="headerlink" href="#using-dynamic-libraries" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">%lib</span></code> command links a dynamic library.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>clang-repl&gt; %lib print.so
+clang-repl&gt; #include"print.hpp"
+clang-repl&gt; print(9);
+9
+</pre></div>
+</div>
+<p><strong>Generation of dynamic library</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>// print.cpp
+#include &lt;iostream&gt;
+#include "print.hpp"
+
+void print(int a)
+{
+   std::cout &lt;&lt; a &lt;&lt; std::endl;
+}
+
+// print.hpp
+void print (int a);
+
+// Commands
+clang++-17  -c -o print.o print.cpp
+clang-17 -shared print.o -o print.so
+</pre></div>
+</div>
+</section>
+<section id="undo">
+<h3>Undo:<a class="headerlink" href="#undo" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">%undo</span></code> command undoes the previous input.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>clang-repl&gt; int a = 1; a
+(int) 1
+clang-repl&gt; %undo
+clang-repl&gt; a
+In file included from &lt;&lt;&lt; inputs &gt;&gt;&gt;:1:
+input_line_2:1:1: error: use of undeclared identifier 'a'
+1 | a
+* | ^
+error: Parsing failed.
+</pre></div>
+</div>
+</section>
+<section id="quit">
+<h3>Quit:<a class="headerlink" href="#quit" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">%quit</span></code> command terminates clang-repl.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>clang-repl&gt; %quit
+</pre></div>
+</div>
+<p>Just like Clang, Clang-Repl can be integrated in existing applications as a library
+(using the clangInterpreter library). This turns your C++ compiler into a service that
+can incrementally consume and execute code. The <strong>Compiler as A Service</strong> (<strong>CaaS</strong>)
+concept helps support advanced use cases such as template instantiations on demand and
+automatic language interoperability. It also helps static languages such as C/C++ become
+apt for data science.</p>
+</section>
+</section>
+<section id="execution-results-handling-in-clang-repl">
+<h2>Execution Results Handling in Clang-Repl<a class="headerlink" href="#execution-results-handling-in-clang-repl" title="Link to this heading">¶</a></h2>
+<p>Execution Results Handling features discussed below help extend the Clang-Repl
+functionality by creating an interface between the execution results of a
+program and the compiled program.</p>
+<p>1. <strong>Capture Execution Results</strong>: This feature helps capture the execution results
+of a program and bring them back to the compiled program.</p>
+<p>2. <strong>Dump Captured Execution Results</strong>: This feature helps create a temporary dump
+for Value Printing/Automatic Printf, that is, to display the value and type of
+the captured data.</p>
+</section>
+<section id="capture-execution-results">
+<h2>1. Capture Execution Results<a class="headerlink" href="#capture-execution-results" title="Link to this heading">¶</a></h2>
+<p>In many cases, it is useful to bring back the program execution result to the
+compiled program. This result can be stored in an object of type <strong>Value</strong>.</p>
+<section id="how-execution-results-are-captured-value-synthesis">
+<h3>How Execution Results are captured (Value Synthesis):<a class="headerlink" href="#how-execution-results-are-captured-value-synthesis" title="Link to this heading">¶</a></h3>
+<p>The synthesizer chooses which expression to synthesize, and then it replaces
+the original expression with the synthesized expression. Depending on the
+expression type, it may choose to save an object (<code class="docutils literal notranslate"><span class="pre">LastValue</span></code>) of type 'value'
+while allocating memory to it (<code class="docutils literal notranslate"><span class="pre">SetValueWithAlloc()</span></code>), or not
+(<code class="docutils literal notranslate"><span class="pre">SetValueNoAlloc()</span></code>).</p>
+<figure class="align-center" id="valuesynthesis">
+     digraph &quot;valuesynthesis&quot; {
+         rankdir=&quot;LR&quot;;
+         graph [fontname=&quot;Verdana&quot;, fontsize=&quot;12&quot;];
+         node [fontname=&quot;Verdana&quot;, fontsize=&quot;12&quot;];
+         edge [fontname=&quot;Sans&quot;, fontsize=&quot;9&quot;];
+
+         start [label=&quot; Create an Object \n 'Last Value' \n of type 'Value' &quot;, shape=&quot;note&quot;, fontcolor=white, fillcolor=&quot;#3333ff&quot;, style=filled];
+         assign [label=&quot; Assign the result \n to the 'LastValue' \n (based on respective \n Memory Allocation \n scenario) &quot;, shape=&quot;box&quot;]
+         print [label=&quot; Pretty Print \n the Value Object &quot;, shape=&quot;Msquare&quot;, fillcolor=&quot;yellow&quot;, style=filled];
+         start -&gt; assign;
+         assign -&gt; print;
+
+           subgraph SynthesizeExpression {
+             synth [label=&quot; SynthesizeExpr() &quot;, shape=&quot;note&quot;, fontcolor=white, fillcolor=&quot;#3333ff&quot;, style=filled];
+             mem [label=&quot; New Memory \n Allocation? &quot;, shape=&quot;diamond&quot;];
+             withaloc [label=&quot; SetValueWithAlloc() &quot;, shape=&quot;box&quot;];
+             noaloc [label=&quot; SetValueNoAlloc() &quot;, shape=&quot;box&quot;];
+             right [label=&quot; 1. RValue Structure \n (a temporary value)&quot;, shape=&quot;box&quot;];
+             left2 [label=&quot; 2. LValue Structure \n (a variable with \n an address)&quot;, shape=&quot;box&quot;];
+             left3 [label=&quot; 3. Built-In Type \n (int, float, etc.)&quot;, shape=&quot;box&quot;];
+             output [label=&quot; move to 'Assign' step &quot;, shape=&quot;box&quot;];
+
+             synth -&gt; mem;
+             mem -&gt; withaloc [label=&quot;Yes&quot;];
+             mem -&gt; noaloc [label=&quot;No&quot;];
+             withaloc -&gt; right;
+             noaloc -&gt; left2;
+             noaloc -&gt; left3;
+             right -&gt; output;
+             left2 -&gt; output;
+             left3 -&gt; output;
+      }
+            output -&gt; assign
+      }<figcaption>
+<p><span class="caption-text">Value Synthesis</span><a class="headerlink" href="#valuesynthesis" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="where-is-the-captured-result-stored">
+<h3>Where is the captured result stored?<a class="headerlink" href="#where-is-the-captured-result-stored" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">LastValue</span></code> holds the last result of the value printing. It is a class member
+because it can be accessed even after subsequent inputs.</p>
+<p><strong>Note:</strong> If no value printing happens, then it is in an invalid state.</p>
+</section>
+<section id="improving-efficiency-and-user-experience">
+<h3>Improving Efficiency and User Experience<a class="headerlink" href="#improving-efficiency-and-user-experience" title="Link to this heading">¶</a></h3>
+<p>The Value object is essentially used to create a mapping between an expression
+'type' and the allocated 'memory'. Built-in types (bool, char, int,
+float, double, etc.) are copyable. Their memory allocation size is known
+and the Value object can introduce a small-buffer optimization.
+In case of objects, the <code class="docutils literal notranslate"><span class="pre">Value</span></code> class provides reference-counted memory
+management.</p>
+<p>The implementation maps the type as written and the Clang Type to be able to use
+the preprocessor to synthesize the relevant cast operations. For example,
+<code class="docutils literal notranslate"><span class="pre">X(char,</span> <span class="pre">Char_S)</span></code>, where <code class="docutils literal notranslate"><span class="pre">char</span></code> is the type from the language's type system
+and <code class="docutils literal notranslate"><span class="pre">Char_S</span></code> is the Clang builtin type which represents it. This mapping helps
+to import execution results from the interpreter in a compiled program and vice
+versa. The <code class="docutils literal notranslate"><span class="pre">Value.h</span></code> header file can be included at runtime and this is why it
+has a very low token count and was developed with strict constraints in mind.</p>
+<p>This also enables the user to receive the computed 'type' back in their code
+and then transform the type into something else (e.g., re-cast a double into
+a float). Normally, the compiler can handle these conversions transparently,
+but in interpreter mode, the compiler cannot see all the 'from' and 'to' types,
+so it cannot implicitly do the conversions. So this logic enables providing
+these conversions on request.</p>
+<p>On-request conversions can help improve the user experience, by allowing
+conversion to a desired 'to' type, when the 'from' type is unknown or unclear.</p>
+</section>
+<section id="significance-of-this-feature">
+<h3>Significance of this Feature<a class="headerlink" href="#significance-of-this-feature" title="Link to this heading">¶</a></h3>
+<p>The 'Value' object enables wrapping a memory region that comes from the
+JIT, and bringing it back to the compiled code (and vice versa).
+This is a very useful functionality when:</p>
+<ul class="simple">
+<li><p>connecting an interpreter to the compiled code, or</p></li>
+<li><p>connecting an interpreter in another language.</p></li>
+</ul>
+<p>For example, this feature helps transport values across boundaries. A notable
+example is the cppyy project code makes use of this feature to enable running C++
+within Python. It enables transporting values/information between C++
+and Python.</p>
+<p>Note: <a class="reference external" href="https://github.com/wlav/cppyy/">cppyy</a> is an automatic, run-time,
+Python-to-C++ bindings generator, for calling C++ from Python and Python from C++.
+It uses LLVM along with a C++ interpreter (e.g., Cling) to enable features like
+run-time instantiation of C++ templates, cross-inheritance, callbacks,
+auto-casting, transparent use of smart pointers, etc.</p>
+<p>In a nutshell, this feature enables a new way of developing code, paving the
+way for language interoperability and easier interactive programming.</p>
+</section>
+</section>
+<section id="implementation-details">
+<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Link to this heading">¶</a></h2>
+<section id="interpreter-as-a-repl-vs-as-a-library">
+<h3>Interpreter as a REPL vs. as a Library<a class="headerlink" href="#interpreter-as-a-repl-vs-as-a-library" title="Link to this heading">¶</a></h3>
+<p>1 - If we're using the interpreter in interactive (REPL) mode, it will dump
+the value (i.e., value printing).</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">if (LastValue.isValid()) {</span>
+<span class="go">  if (!V) {</span>
+<span class="go">    LastValue.dump();</span>
+<span class="go">    LastValue.clear();</span>
+<span class="go">  } else</span>
+<span class="go">    *V = std::move(LastValue);</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>2 - If we're using the interpreter as a library, then it will pass the value
+to the user.</p>
+</section>
+<section id="incremental-ast-consumer">
+<h3>Incremental AST Consumer<a class="headerlink" href="#incremental-ast-consumer" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">IncrementalASTConsumer</span></code> class wraps the original code generator
+<code class="docutils literal notranslate"><span class="pre">ASTConsumer</span></code> and it performs a hook, to traverse all the top-level decls, to
+look for expressions to synthesize, based on the <code class="docutils literal notranslate"><span class="pre">isSemiMissing()</span></code> condition.</p>
+<p>If this condition is found to be true, then <code class="docutils literal notranslate"><span class="pre">Interp.SynthesizeExpr()</span></code> will be
+invoked.</p>
+<p><strong>Note:</strong> Following is a sample code snippet. Actual code may vary over time.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">for (Decl *D : DGR)</span>
+<span class="go">  if (auto *TSD = llvm::dyn_cast&lt;TopLevelStmtDecl&gt;(D);</span>
+<span class="go">      TSD &amp;&amp; TSD-&gt;isSemiMissing())</span>
+<span class="go">    TSD-&gt;setStmt(Interp.SynthesizeExpr(cast&lt;Expr&gt;(TSD-&gt;getStmt())));</span>
+
+<span class="go">return Consumer-&gt;HandleTopLevelDecl(DGR);</span>
+</pre></div>
+</div>
+<p>The synthesizer will then choose the relevant expression, based on its type.</p>
+</section>
+<section id="communication-between-compiled-code-and-interpreted-code">
+<h3>Communication between Compiled Code and Interpreted Code<a class="headerlink" href="#communication-between-compiled-code-and-interpreted-code" title="Link to this heading">¶</a></h3>
+<p>In Clang-Repl there is <strong>interpreted code</strong>, and this feature adds a 'value'
+runtime that can talk to the <strong>compiled code</strong>.</p>
+<p>Following is an example where the compiled code interacts with the interpreter
+code. The execution results of an expression are stored in the object 'V' of
+type Value. This value is then printed, effectively helping the interpreter
+use a value from the compiled code.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">int Global = 42;</span>
+<span class="go">void setGlobal(int val) { Global = val; }</span>
+<span class="go">int getGlobal() { return Global; }</span>
+<span class="go">Interp.ParseAndExecute(“void setGlobal(int val);”);</span>
+<span class="go">Interp.ParseAndExecute(“int getGlobal();”);</span>
+<span class="go">Value V;</span>
+<span class="go">Interp.ParseAndExecute(“getGlobal()”, &amp;V);</span>
+<span class="go">std::cout &lt;&lt; V.getAs&lt;int&gt;() &lt;&lt; “\n”; // Prints 42</span>
+</pre></div>
+</div>
+<p><strong>Note:</strong> Above is an example of interoperability between the compiled code and
+the interpreted code. Interoperability between languages (e.g., C++ and Python)
+works similarly.</p>
+</section>
+</section>
+<section id="dump-captured-execution-results">
+<h2>2. Dump Captured Execution Results<a class="headerlink" href="#dump-captured-execution-results" title="Link to this heading">¶</a></h2>
+<p>This feature helps create a temporary dump to display the value and type
+(pretty print) of the desired data. This is a good way to interact with the
+interpreter during interactive programming.</p>
+<section id="how-value-printing-is-simplified-automatic-printf">
+<h3>How value printing is simplified (Automatic Printf)<a class="headerlink" href="#how-value-printing-is-simplified-automatic-printf" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Automatic</span> <span class="pre">Printf</span></code> feature makes it easy to display variable values during
+program execution. Using the <code class="docutils literal notranslate"><span class="pre">printf</span></code> function repeatedly is not required.
+This is achieved using an extension in the <code class="docutils literal notranslate"><span class="pre">libclangInterpreter</span></code> library.</p>
+<p>To automatically print the value of an expression, simply write the expression
+in the global scope <strong>without a semicolon</strong>.</p>
+<figure class="align-center" id="automaticprintf">
+     digraph &quot;AutomaticPrintF&quot; {
+         size=&quot;6,4&quot;;
+         rankdir=&quot;LR&quot;;
+         graph [fontname=&quot;Verdana&quot;, fontsize=&quot;12&quot;];
+         node [fontname=&quot;Verdana&quot;, fontsize=&quot;12&quot;];
+         edge [fontname=&quot;Sans&quot;, fontsize=&quot;9&quot;];
+
+         manual [label=&quot; Manual PrintF &quot;, shape=&quot;box&quot;];
+         int1 [label=&quot; int ( &amp;) 42 &quot;, shape=&quot;box&quot;]
+         auto [label=&quot; Automatic PrintF &quot;, shape=&quot;box&quot;];
+         int2 [label=&quot; int ( &amp;) 42 &quot;, shape=&quot;box&quot;]
+
+         auto -&gt; int2 [label=&quot;int x = 42; \n x&quot;];
+         manual -&gt; int1 [label=&quot;int x = 42; \n printf(&amp;quot;(int &amp;) %d \\n&amp;quot;, x);&quot;];
+     }<figcaption>
+<p><span class="caption-text">Automatic PrintF</span><a class="headerlink" href="#automaticprintf" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="id1">
+<h3>Significance of this feature<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>Inspired by a similar implementation in <a class="reference external" href="https://github.com/root-project/cling">Cling</a>,
+this feature added to upstream Clang repo has essentially extended the syntax of
+C++, so that it can be more helpful for people that are writing code for data
+science applications.</p>
+<p>This is useful, for example, when you want to experiment with a set of values
+against a set of functions, and you'd like to know the results right away.
+This is similar to how Python works (hence its popularity in data science
+research), but the superior performance of C++, along with this flexibility
+makes it a more attractive option.</p>
+</section>
+</section>
+<section id="id2">
+<h2>Implementation Details<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="parsing-mechanism">
+<h3>Parsing mechanism:<a class="headerlink" href="#parsing-mechanism" title="Link to this heading">¶</a></h3>
+<p>The Interpreter in Clang-Repl (<code class="docutils literal notranslate"><span class="pre">Interpreter.cpp</span></code>) includes the function
+<code class="docutils literal notranslate"><span class="pre">ParseAndExecute()</span></code> that can accept a 'Value' parameter to capture the result.
+But if the value parameter is made optional and it is omitted (i.e., that the
+user does not want to utilize it elsewhere), then the last value can be
+validated and pushed into the <code class="docutils literal notranslate"><span class="pre">dump()</span></code> function.</p>
+<figure class="align-center" id="parsing">
+
+     digraph &quot;prettyprint&quot; {
+         rankdir=&quot;LR&quot;;
+         graph [fontname=&quot;Verdana&quot;, fontsize=&quot;12&quot;];
+         node [fontname=&quot;Verdana&quot;, fontsize=&quot;12&quot;];
+         edge [fontname=&quot;Verdana&quot;, fontsize=&quot;9&quot;];
+
+         parse [label=&quot; ParseAndExecute() \n in Clang &quot;, shape=&quot;box&quot;];
+         capture [label=&quot; Capture 'Value' parameter \n for processing? &quot;, shape=&quot;diamond&quot;];
+         use [label=&quot;  Use for processing  &quot;, shape=&quot;box&quot;];
+         dump [label=&quot;  Validate and push  \n to dump()&quot;, shape=&quot;box&quot;];
+         callp [label=&quot;  call print() function &quot;, shape=&quot;box&quot;];
+         type [label=&quot;  Print the Type \n ReplPrintTypeImpl()&quot;, shape=&quot;box&quot;];
+         data [label=&quot;  Print the Data \n ReplPrintDataImpl() &quot;, shape=&quot;box&quot;];
+         output [label=&quot;  Output Pretty Print \n to the user  &quot;, shape=&quot;box&quot;, fontcolor=white, fillcolor=&quot;#3333ff&quot;, style=filled];
+
+         parse -&gt; capture [label=&quot;Optional 'Value' Parameter&quot;];
+         capture -&gt; use [label=&quot;Yes&quot;];
+         use -&gt; End;
+         capture -&gt; dump [label=&quot;No&quot;];
+         dump -&gt; callp;
+         callp -&gt; type;
+         callp -&gt; data;
+         type -&gt; output;
+         data -&gt; output;
+      }<figcaption>
+<p><span class="caption-text">Parsing Mechanism</span><a class="headerlink" href="#parsing" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p><strong>Note:</strong> Following is a sample code snippet. Actual code may vary over time.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">llvm::Error Interpreter::ParseAndExecute(llvm::StringRef Code, Value *V) {</span>
+
+<span class="go">auto PTU = Parse(Code);</span>
+<span class="go">if (!PTU)</span>
+<span class="go">    return PTU.takeError();</span>
+<span class="go">if (PTU-&gt;TheModule)</span>
+<span class="go">    if (llvm::Error Err = Execute(*PTU))</span>
+<span class="go">    return Err;</span>
+
+<span class="go">if (LastValue.isValid()) {</span>
+<span class="go">    if (!V) {</span>
+<span class="go">    LastValue.dump();</span>
+<span class="go">    LastValue.clear();</span>
+<span class="go">    } else</span>
+<span class="go">    *V = std::move(LastValue);</span>
+<span class="go">}</span>
+<span class="go">return llvm::Error::success();</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">dump()</span></code> function (in <code class="docutils literal notranslate"><span class="pre">value.cpp</span></code>) calls the <code class="docutils literal notranslate"><span class="pre">print()</span></code> function.</p>
+<p>Printing the Data and Type are handled in their respective functions:
+<code class="docutils literal notranslate"><span class="pre">ReplPrintDataImpl()</span></code> and <code class="docutils literal notranslate"><span class="pre">ReplPrintTypeImpl()</span></code>.</p>
+</section>
+<section id="annotation-token-annot-repl-input-end">
+<h3>Annotation Token (annot_repl_input_end)<a class="headerlink" href="#annotation-token-annot-repl-input-end" title="Link to this heading">¶</a></h3>
+<p>This feature uses a new token (<code class="docutils literal notranslate"><span class="pre">annot_repl_input_end</span></code>) to consider printing the
+value of an expression if it doesn't end with a semicolon. When parsing an
+Expression Statement, if the last semicolon is missing, then the code will
+pretend that there one and set a marker there for later utilization, and
+continue parsing.</p>
+<p>A semicolon is normally required in C++, but this feature expands the C++
+syntax to handle cases where a missing semicolon is expected (i.e., when
+handling an expression statement). It also makes sure that an error is not
+generated for the missing semicolon in this specific case.</p>
+<p>This is accomplished by identifying the end position of the user input
+(expression statement). This helps store and return the expression statement
+effectively, so that it can be printed (displayed to the user automatically).</p>
+<p><strong>Note:</strong> This logic is only available for C++ for now, since part of the
+implementation itself requires C++ features. Future versions may support more
+languages.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Token *CurTok = nullptr;</span>
+<span class="go">// If the semicolon is missing at the end of REPL input, consider if</span>
+<span class="go">// we want to do value printing. Note this is only enabled in C++ mode</span>
+<span class="go">// since part of the implementation requires C++ language features.</span>
+<span class="go">// Note we shouldn't eat the token since the callback needs it.</span>
+<span class="go">if (Tok.is(tok::annot_repl_input_end) &amp;&amp; Actions.getLangOpts().CPlusPlus)</span>
+<span class="go">  CurTok = &amp;Tok;</span>
+<span class="go">else</span>
+<span class="go">  // Otherwise, eat the semicolon.</span>
+<span class="go">  ExpectAndConsumeSemi(diag::err_expected_semi_after_expr);</span>
+
+<span class="go">StmtResult R = handleExprStmt(Expr, StmtCtx);</span>
+<span class="go">if (CurTok &amp;&amp; !R.isInvalid())</span>
+<span class="go">  CurTok-&gt;setAnnotationValue(R.get());</span>
+
+<span class="go">return R;</span>
+<span class="go">  }</span>
+</pre></div>
+</div>
+</section>
+<section id="ast-transformation">
+<h3>AST Transformation<a class="headerlink" href="#ast-transformation" title="Link to this heading">¶</a></h3>
+<p>When Sema encounters the <code class="docutils literal notranslate"><span class="pre">annot_repl_input_end</span></code> token, it knows to transform
+the AST before the real CodeGen process. It will consume the token and set a
+'semi missing' bit in the respective decl.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">if (Tok.is(tok::annot_repl_input_end) &amp;&amp;</span>
+<span class="go">    Tok.getAnnotationValue() != nullptr) {</span>
+<span class="go">    ConsumeAnnotationToken();</span>
+<span class="go">    cast&lt;TopLevelStmtDecl&gt;(DeclsInGroup.back())-&gt;setSemiMissing();</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>In the AST Consumer, traverse all the Top Level Decls, to look for expressions
+to synthesize. If the current Decl is the Top Level Statement
+Decl(<code class="docutils literal notranslate"><span class="pre">TopLevelStmtDecl</span></code>) and has a semicolon missing, then ask the interpreter
+to synthesize another expression (an internal function call) to replace this
+original expression.</p>
+</section>
+<section id="detailed-rfc-and-discussion">
+<h3>Detailed RFC and Discussion:<a class="headerlink" href="#detailed-rfc-and-discussion" title="Link to this heading">¶</a></h3>
+<p>For more technical details, community discussion and links to patches related
+to these features,
+Please visit: <a class="reference external" href="https://discourse.llvm.org/t/rfc-handle-execution-results-in-clang-repl/68493">RFC on LLVM Discourse</a>.</p>
+<p>Some logic presented in the RFC (e.g. ValueGetter()) may be outdated,
+compared to the final developed solution.</p>
+</section>
+</section>
+<section id="related-reading">
+<h2>Related Reading<a class="headerlink" href="#related-reading" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://root.cern/blog/cling-in-llvm/">Cling Transitions to LLVM's Clang-Repl</a></p>
+<p><a class="reference external" href="https://lists.llvm.org/pipermail/llvm-dev/2020-July/143257.html">Moving (parts of) the Cling REPL in Clang</a></p>
+<p><a class="reference external" href="https://arxiv.org/pdf/2203.06139.pdf">GPU Accelerated Automatic Differentiation With Clad</a></p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="ClangSYCLLinker.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Clang SYCL Linker</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="ClangOffloadBundler.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Clang Offload Bundler</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Clang-Repl</a><ul>
+<li><a class="reference internal" href="#clang-repl-basic-data-flow">Clang-Repl Basic Data Flow</a></li>
+<li><a class="reference internal" href="#build-instructions">Build Instructions:</a></li>
+<li><a class="reference internal" href="#clang-repl-usage">Clang-Repl Usage</a></li>
+<li><a class="reference internal" href="#basic">Basic:</a></li>
+<li><a class="reference internal" href="#function-definitions-and-calls">Function Definitions and Calls:</a></li>
+<li><a class="reference internal" href="#iterative-structures">Iterative Structures:</a></li>
+<li><a class="reference internal" href="#classes-and-structures">Classes and Structures:</a></li>
+<li><a class="reference internal" href="#lamdas">Lamdas:</a></li>
+<li><a class="reference internal" href="#comments">Comments:</a></li>
+<li><a class="reference internal" href="#built-in-commands">Built in Commands:</a><ul>
+<li><a class="reference internal" href="#help">Help:</a></li>
+<li><a class="reference internal" href="#using-dynamic-libraries">Using Dynamic Libraries:</a></li>
+<li><a class="reference internal" href="#undo">Undo:</a></li>
+<li><a class="reference internal" href="#quit">Quit:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#execution-results-handling-in-clang-repl">Execution Results Handling in Clang-Repl</a></li>
+<li><a class="reference internal" href="#capture-execution-results">1. Capture Execution Results</a><ul>
+<li><a class="reference internal" href="#how-execution-results-are-captured-value-synthesis">How Execution Results are captured (Value Synthesis):</a></li>
+<li><a class="reference internal" href="#where-is-the-captured-result-stored">Where is the captured result stored?</a></li>
+<li><a class="reference internal" href="#improving-efficiency-and-user-experience">Improving Efficiency and User Experience</a></li>
+<li><a class="reference internal" href="#significance-of-this-feature">Significance of this Feature</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#implementation-details">Implementation Details</a><ul>
+<li><a class="reference internal" href="#interpreter-as-a-repl-vs-as-a-library">Interpreter as a REPL vs. as a Library</a></li>
+<li><a class="reference internal" href="#incremental-ast-consumer">Incremental AST Consumer</a></li>
+<li><a class="reference internal" href="#communication-between-compiled-code-and-interpreted-code">Communication between Compiled Code and Interpreted Code</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dump-captured-execution-results">2. Dump Captured Execution Results</a><ul>
+<li><a class="reference internal" href="#how-value-printing-is-simplified-automatic-printf">How value printing is simplified (Automatic Printf)</a></li>
+<li><a class="reference internal" href="#id1">Significance of this feature</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id2">Implementation Details</a><ul>
+<li><a class="reference internal" href="#parsing-mechanism">Parsing mechanism:</a></li>
+<li><a class="reference internal" href="#annotation-token-annot-repl-input-end">Annotation Token (annot_repl_input_end)</a></li>
+<li><a class="reference internal" href="#ast-transformation">AST Transformation</a></li>
+<li><a class="reference internal" href="#detailed-rfc-and-discussion">Detailed RFC and Discussion:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#related-reading">Related Reading</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=7d86a446"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>

@@ -1,0 +1,1617 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="LTO Visibility" href="LTOVisibility.html" /><link rel="prev" title="Control Flow Integrity" href="ControlFlowIntegrity.html" />
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/ControlFlowIntegrityDesign.html" />
+        <link rel="prefetch" href="_static/LLVMWyvernSmall.png" as="image" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+        <title>Control Flow Integrity Design Documentation - Clang</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=548e816e" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86c9e7d9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Clang Release Notes</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="UsersManual.html">Clang Compiler User's Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="LanguageExtensions.html">Clang Language Extensions</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Clang Language Extensions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Block-ABI-Apple.html">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrossCompilation.html">Cross-compilation using Clang</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ClangStaticAnalyzer.html">Clang Static Analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Clang Static Analyzer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="analyzer/checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/user-docs.html">2. User Docs</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 2. User Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/UsingWithXCode.html">2.2. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FilingBugs.html">2.3. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CrossTranslationUnit.html">2.4. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/TaintAnalysisConfiguration.html">2.5. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/Annotations.html">2.6. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FAQ.html">2.7. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/developer-docs.html">3. Developer Docs</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 3. Developer Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/PerformanceInvestigation.html">3.6. Performance Investigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Scalable Static Analysis Framework</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Developer Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DataFlowAnalysisIntro.html">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSanitizer.html">ThreadSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MemorySanitizer.html">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataFlowSanitizer.html">DataFlowSanitizer</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of DataFlowSanitizer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="DataFlowSanitizerDesign.html">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerCoverage.html">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="ControlFlowIntegrity.html">Control Flow Integrity</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Control Flow Integrity</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StandardCPlusPlusModules.html">Standard C++ Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MisExpect.html">Misexpect</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Misexpect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="OpenCLSupport.html">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Clang HLSL Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of HLSL Design and Implementation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="APINotes.html">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CIR/index.html">ClangIR</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of ClangIR</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CIR/ABILowering.html">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CommandGuide/index.html">Clang "man" pages</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Clang "man" pages</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefactoringEngine.html">Clang's refactoring engine</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ClangTools.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangRepl.html">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InternalsManual.html">"Clang" CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Control Flow Integrity Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizerDesign.html">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LLVMExceptionHandlingCodeGen.html">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/ControlFlowIntegrityDesign.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/ControlFlowIntegrityDesign.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="control-flow-integrity-design-documentation">
+<h1>Control Flow Integrity Design Documentation<a class="headerlink" href="#control-flow-integrity-design-documentation" title="Link to this heading">¶</a></h1>
+<p>This page documents the design of the <a class="reference internal" href="ControlFlowIntegrity.html"><span class="doc">Control Flow Integrity</span></a> schemes
+supported by Clang.</p>
+<section id="forward-edge-cfi-for-virtual-calls">
+<h2>Forward-Edge CFI for Virtual Calls<a class="headerlink" href="#forward-edge-cfi-for-virtual-calls" title="Link to this heading">¶</a></h2>
+<p>This scheme works by allocating, for each static type used to make a virtual
+call, a region of read-only storage in the object file holding a bit vector
+that maps onto to the region of storage used for those virtual tables. Each
+set bit in the bit vector corresponds to the <a class="reference external" href="https://itanium-cxx-abi.github.io/cxx-abi/abi.html#vtable-general">address point</a> for a virtual
+table compatible with the static type for which the bit vector is being built.</p>
+<p>For example, consider the following three C++ classes:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f1</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f2</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f3</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">B</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f1</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f2</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f3</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">C</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f1</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f2</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f3</span><span class="p">();</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>The scheme will cause the virtual tables for A, B and C to be laid out
+consecutively:</p>
+<div class="table-wrapper colwidths-auto docutils container" id="id3">
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Virtual Table Layout for A, B, C</span><a class="headerlink" href="#id3" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>0</p></th>
+<th class="head"><p>1</p></th>
+<th class="head"><p>2</p></th>
+<th class="head"><p>3</p></th>
+<th class="head"><p>4</p></th>
+<th class="head"><p>5</p></th>
+<th class="head"><p>6</p></th>
+<th class="head"><p>7</p></th>
+<th class="head"><p>8</p></th>
+<th class="head"><p>9</p></th>
+<th class="head"><p>10</p></th>
+<th class="head"><p>11</p></th>
+<th class="head"><p>12</p></th>
+<th class="head"><p>13</p></th>
+<th class="head"><p>14</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A::offset-to-top</p></td>
+<td><p>&amp;A::rtti</p></td>
+<td><p>&amp;A::f1</p></td>
+<td><p>&amp;A::f2</p></td>
+<td><p>&amp;A::f3</p></td>
+<td><p>B::offset-to-top</p></td>
+<td><p>&amp;B::rtti</p></td>
+<td><p>&amp;B::f1</p></td>
+<td><p>&amp;B::f2</p></td>
+<td><p>&amp;B::f3</p></td>
+<td><p>C::offset-to-top</p></td>
+<td><p>&amp;C::rtti</p></td>
+<td><p>&amp;C::f1</p></td>
+<td><p>&amp;C::f2</p></td>
+<td><p>&amp;C::f3</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The bit vector for static types A, B and C will look like this:</p>
+<div class="table-wrapper colwidths-auto docutils container" id="id4">
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Bit Vectors for A, B, C</span><a class="headerlink" href="#id4" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>0</p></th>
+<th class="head"><p>1</p></th>
+<th class="head"><p>2</p></th>
+<th class="head"><p>3</p></th>
+<th class="head"><p>4</p></th>
+<th class="head"><p>5</p></th>
+<th class="head"><p>6</p></th>
+<th class="head"><p>7</p></th>
+<th class="head"><p>8</p></th>
+<th class="head"><p>9</p></th>
+<th class="head"><p>10</p></th>
+<th class="head"><p>11</p></th>
+<th class="head"><p>12</p></th>
+<th class="head"><p>13</p></th>
+<th class="head"><p>14</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>B</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>C</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Bit vectors are represented in the object file as byte arrays. By loading
+from indexed offsets into the byte array and applying a mask, a program can
+test bits from the bit set with a relatively short instruction sequence. Bit
+vectors may overlap so long as they use different bits. For the full details,
+see the <a class="reference external" href="https://llvm.org/docs/doxygen/html/structllvm_1_1ByteArrayBuilder.html">ByteArrayBuilder</a> class.</p>
+<p>In this case, assuming A is laid out at offset 0 in bit 0, B at offset 0 in
+bit 1 and C at offset 0 in bit 2, the byte array would look like this:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">char</span><span class="w"> </span><span class="n">bits</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">};</span>
+</pre></div>
+</div>
+<p>To emit a virtual call, the compiler will assemble code that checks that
+the object's virtual table pointer is in-bounds and aligned and that the
+relevant bit is set in the bit vector.</p>
+<p>For example on x86 a typical virtual call may look like this:</p>
+<div class="highlight-objdump notranslate"><div class="highlight"><pre><span></span><span class="x">ca7fbb:       48 8b 0f                mov    (%rdi),%rcx</span>
+<span class="x">ca7fbe:       48 8d 15 c3 42 fb 07    lea    0x7fb42c3(%rip),%rdx</span>
+<span class="x">ca7fc5:       48 89 c8                mov    %rcx,%rax</span>
+<span class="x">ca7fc8:       48 29 d0                sub    %rdx,%rax</span>
+<span class="x">ca7fcb:       48 c1 c0 3d             rol    $0x3d,%rax</span>
+<span class="x">ca7fcf:       48 3d 7f 01 00 00       cmp    $0x17f,%rax</span>
+<span class="x">ca7fd5:       0f 87 36 05 00 00       ja     ca8511</span>
+<span class="x">ca7fdb:       48 8d 15 c0 0b f7 06    lea    0x6f70bc0(%rip),%rdx</span>
+<span class="x">ca7fe2:       f6 04 10 10             testb  $0x10,(%rax,%rdx,1)</span>
+<span class="x">ca7fe6:       0f 84 25 05 00 00       je     ca8511</span>
+<span class="x">ca7fec:       ff 91 98 00 00 00       callq  *0x98(%rcx)</span>
+<span class="x">  [...]</span>
+<span class="x">ca8511:       0f 0b                   ud2</span>
+</pre></div>
+</div>
+<p>The compiler relies on co-operation from the linker in order to assemble
+the bit vectors for the whole program. It currently does this using LLVM's
+<a class="reference external" href="https://llvm.org/docs/TypeMetadata.html">type metadata</a> mechanism together with link-time optimization.</p>
+<section id="optimizations">
+<h3>Optimizations<a class="headerlink" href="#optimizations" title="Link to this heading">¶</a></h3>
+<p>The scheme as described above is the fully general variant of the scheme.
+Most of the time we are able to apply one or more of the following
+optimizations to improve binary size or performance.</p>
+<p>In fact, if you try the above example with the current version of the
+compiler, you will probably find that it will not use the described virtual
+table layout or machine instructions. Some of the optimizations we are about
+to introduce cause the compiler to use a different layout or a different
+sequence of machine instructions.</p>
+<section id="stripping-leading-trailing-zeros-in-bit-vectors">
+<h4>Stripping Leading/Trailing Zeros in Bit Vectors<a class="headerlink" href="#stripping-leading-trailing-zeros-in-bit-vectors" title="Link to this heading">¶</a></h4>
+<p>If a bit vector contains leading or trailing zeros, we can strip them from
+the vector. The compiler will emit code to check if the pointer is in range
+of the region covered by ones, and perform the bit vector check using a
+truncated version of the bit vector. For example, the bit vectors for our
+example class hierarchy will be emitted like this:</p>
+<div class="table-wrapper colwidths-auto docutils container" id="id5">
+<table class="docutils align-default" id="id5">
+<caption><span class="caption-text">Bit Vectors for A, B, C</span><a class="headerlink" href="#id5" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>0</p></th>
+<th class="head"><p>1</p></th>
+<th class="head"><p>2</p></th>
+<th class="head"><p>3</p></th>
+<th class="head"><p>4</p></th>
+<th class="head"><p>5</p></th>
+<th class="head"><p>6</p></th>
+<th class="head"><p>7</p></th>
+<th class="head"><p>8</p></th>
+<th class="head"><p>9</p></th>
+<th class="head"><p>10</p></th>
+<th class="head"><p>11</p></th>
+<th class="head"><p>12</p></th>
+<th class="head"><p>13</p></th>
+<th class="head"><p>14</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>B</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p>1</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>C</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p>1</p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="short-inline-bit-vectors">
+<h4>Short Inline Bit Vectors<a class="headerlink" href="#short-inline-bit-vectors" title="Link to this heading">¶</a></h4>
+<p>If the vector is sufficiently short, we can represent it as an inline constant
+on x86. This saves us a few instructions when reading the correct element
+of the bit vector.</p>
+<p>If the bit vector fits in 32 bits, the code looks like this:</p>
+<div class="highlight-objdump notranslate"><div class="highlight"><pre><span></span><span class="x"> dc2:       48 8b 03                mov    (%rbx),%rax</span>
+<span class="x"> dc5:       48 8d 15 14 1e 00 00    lea    0x1e14(%rip),%rdx</span>
+<span class="x"> dcc:       48 89 c1                mov    %rax,%rcx</span>
+<span class="x"> dcf:       48 29 d1                sub    %rdx,%rcx</span>
+<span class="x"> dd2:       48 c1 c1 3d             rol    $0x3d,%rcx</span>
+<span class="x"> dd6:       48 83 f9 03             cmp    $0x3,%rcx</span>
+<span class="x"> dda:       77 2f                   ja     e0b &lt;main+0x9b&gt;</span>
+<span class="x"> ddc:       ba 09 00 00 00          mov    $0x9,%edx</span>
+<span class="x"> de1:       0f a3 ca                bt     %ecx,%edx</span>
+<span class="x"> de4:       73 25                   jae    e0b &lt;main+0x9b&gt;</span>
+<span class="x"> de6:       48 89 df                mov    %rbx,%rdi</span>
+<span class="x"> de9:       ff 10                   callq  *(%rax)</span>
+<span class="x">[...]</span>
+<span class="x"> e0b:       0f 0b                   ud2</span>
+</pre></div>
+</div>
+<p>Or if the bit vector fits in 64 bits:</p>
+<div class="highlight-objdump notranslate"><div class="highlight"><pre><span></span><span class="x">11a6:       48 8b 03                mov    (%rbx),%rax</span>
+<span class="x">11a9:       48 8d 15 d0 28 00 00    lea    0x28d0(%rip),%rdx</span>
+<span class="x">11b0:       48 89 c1                mov    %rax,%rcx</span>
+<span class="x">11b3:       48 29 d1                sub    %rdx,%rcx</span>
+<span class="x">11b6:       48 c1 c1 3d             rol    $0x3d,%rcx</span>
+<span class="x">11ba:       48 83 f9 2a             cmp    $0x2a,%rcx</span>
+<span class="x">11be:       77 35                   ja     11f5 &lt;main+0xb5&gt;</span>
+<span class="x">11c0:       48 ba 09 00 00 00 00    movabs $0x40000000009,%rdx</span>
+<span class="x">11c7:       04 00 00</span>
+<span class="x">11ca:       48 0f a3 ca             bt     %rcx,%rdx</span>
+<span class="x">11ce:       73 25                   jae    11f5 &lt;main+0xb5&gt;</span>
+<span class="x">11d0:       48 89 df                mov    %rbx,%rdi</span>
+<span class="x">11d3:       ff 10                   callq  *(%rax)</span>
+<span class="x">[...]</span>
+<span class="x">11f5:       0f 0b                   ud2</span>
+</pre></div>
+</div>
+<p>If the bit vector consists of a single bit, there is only one possible
+virtual table, and the check can consist of a single equality comparison:</p>
+<div class="highlight-objdump notranslate"><div class="highlight"><pre><span></span><span class="x">9a2:   48 8b 03                mov    (%rbx),%rax</span>
+<span class="x">9a5:   48 8d 0d a4 13 00 00    lea    0x13a4(%rip),%rcx</span>
+<span class="x">9ac:   48 39 c8                cmp    %rcx,%rax</span>
+<span class="x">9af:   75 25                   jne    9d6 &lt;main+0x86&gt;</span>
+<span class="x">9b1:   48 89 df                mov    %rbx,%rdi</span>
+<span class="x">9b4:   ff 10                   callq  *(%rax)</span>
+<span class="x">[...]</span>
+<span class="x">9d6:   0f 0b                   ud2</span>
+</pre></div>
+</div>
+</section>
+<section id="virtual-table-layout">
+<h4>Virtual Table Layout<a class="headerlink" href="#virtual-table-layout" title="Link to this heading">¶</a></h4>
+<p>The compiler lays out classes of disjoint hierarchies in separate regions
+of the object file. At worst, bit vectors in disjoint hierarchies only
+need to cover their disjoint hierarchy. But the closer that classes in
+sub-hierarchies are laid out to each other, the smaller the bit vectors for
+those sub-hierarchies need to be (see &quot;Stripping Leading/Trailing Zeros in Bit
+Vectors&quot; above). The <a class="reference external" href="https://github.com/llvm/llvm-project/blob/main/llvm/include/llvm/Transforms/IPO/LowerTypeTests.h">GlobalLayoutBuilder</a> class is responsible for laying
+out the globals efficiently to minimize the sizes of the underlying bitsets.</p>
+</section>
+<section id="alignment">
+<h4>Alignment<a class="headerlink" href="#alignment" title="Link to this heading">¶</a></h4>
+<p>If all gaps between address points in a particular bit vector are multiples
+of powers of 2, the compiler can compress the bit vector by strengthening
+the alignment requirements of the virtual table pointer. For example, given
+this class hierarchy:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f1</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f2</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">B</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f1</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f2</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f3</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f4</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f5</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f6</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">C</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f1</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f2</span><span class="p">();</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>The virtual tables will be laid out like this:</p>
+<div class="table-wrapper colwidths-auto docutils container" id="id6">
+<table class="docutils align-default" id="id6">
+<caption><span class="caption-text">Virtual Table Layout for A, B, C</span><a class="headerlink" href="#id6" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>0</p></th>
+<th class="head"><p>1</p></th>
+<th class="head"><p>2</p></th>
+<th class="head"><p>3</p></th>
+<th class="head"><p>4</p></th>
+<th class="head"><p>5</p></th>
+<th class="head"><p>6</p></th>
+<th class="head"><p>7</p></th>
+<th class="head"><p>8</p></th>
+<th class="head"><p>9</p></th>
+<th class="head"><p>10</p></th>
+<th class="head"><p>11</p></th>
+<th class="head"><p>12</p></th>
+<th class="head"><p>13</p></th>
+<th class="head"><p>14</p></th>
+<th class="head"><p>15</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A::offset-to-top</p></td>
+<td><p>&amp;A::rtti</p></td>
+<td><p>&amp;A::f1</p></td>
+<td><p>&amp;A::f2</p></td>
+<td><p>B::offset-to-top</p></td>
+<td><p>&amp;B::rtti</p></td>
+<td><p>&amp;B::f1</p></td>
+<td><p>&amp;B::f2</p></td>
+<td><p>&amp;B::f3</p></td>
+<td><p>&amp;B::f4</p></td>
+<td><p>&amp;B::f5</p></td>
+<td><p>&amp;B::f6</p></td>
+<td><p>C::offset-to-top</p></td>
+<td><p>&amp;C::rtti</p></td>
+<td><p>&amp;C::f1</p></td>
+<td><p>&amp;C::f2</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Notice that each address point for A is separated by 4 words. This lets us
+emit a compressed bit vector for A that looks like this:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>2</p></th>
+<th class="head"><p>6</p></th>
+<th class="head"><p>10</p></th>
+<th class="head"><p>14</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>At call sites, the compiler will strengthen the alignment requirements by
+using a different rotate count. For example, on a 64-bit machine where the
+address points are 4-word aligned (as in A from our example), the <code class="docutils literal notranslate"><span class="pre">rol</span></code>
+instruction may look like this:</p>
+<div class="highlight-objdump notranslate"><div class="highlight"><pre><span></span><span class="x">dd2:       48 c1 c1 3b             rol    $0x3b,%rcx</span>
+</pre></div>
+</div>
+</section>
+<section id="padding-to-powers-of-2">
+<h4>Padding to Powers of 2<a class="headerlink" href="#padding-to-powers-of-2" title="Link to this heading">¶</a></h4>
+<p>Of course, this alignment scheme works best if the address points are
+in fact aligned correctly. To make this more likely to happen, we insert
+padding between virtual tables that in many cases aligns address points to
+a power of 2. Specifically, our padding aligns virtual tables to the next
+highest power of 2 bytes; because address points for specific base classes
+normally appear at fixed offsets within the virtual table, this normally
+has the effect of aligning the address points as well.</p>
+<p>This scheme introduces tradeoffs between decreased space overhead for
+instructions and bit vectors and increased overhead in the form of padding. We
+therefore limit the amount of padding so that we align to no more than 128
+bytes. This number was found experimentally to provide a good tradeoff.</p>
+</section>
+<section id="eliminating-bit-vector-checks-for-all-ones-bit-vectors">
+<h4>Eliminating Bit Vector Checks for All-Ones Bit Vectors<a class="headerlink" href="#eliminating-bit-vector-checks-for-all-ones-bit-vectors" title="Link to this heading">¶</a></h4>
+<p>If the bit vector is all ones, the bit vector check is redundant; we simply
+need to check that the address is in range and well aligned. This is more
+likely to occur if the virtual tables are padded.</p>
+</section>
+</section>
+<section id="forward-edge-cfi-for-virtual-calls-by-interleaving-virtual-tables">
+<h3>Forward-Edge CFI for Virtual Calls by Interleaving Virtual Tables<a class="headerlink" href="#forward-edge-cfi-for-virtual-calls-by-interleaving-virtual-tables" title="Link to this heading">¶</a></h3>
+<p>Dimitar et. al. proposed a novel approach that interleaves virtual tables in
+<a class="footnote-reference brackets" href="#ivtbl" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.
+This approach is more efficient in terms of space because padding and bit vectors are no longer needed.
+At the same time, it is also more efficient in terms of performance because in the interleaved layout
+address points of the virtual tables are consecutive, thus the validity check of a virtual
+vtable pointer is always a range check.</p>
+<p>At a high level, the interleaving scheme consists of three steps: 1) split virtual table groups into
+separate virtual tables, 2) order virtual tables by a pre-order traversal of the class hierarchy
+and 3) interleave virtual tables.</p>
+<p>The interleaving scheme implemented in LLVM is inspired by
+<a class="reference external" href="https://cseweb.ucsd.edu/~lerner/papers/ivtbl-ndss16.pdf">Protecting C++ Dynamic Dispatch Through VTable Interleaving</a>
+by Dimitar Bounov, Rami Gökhan Kıcı, and Sorin Lerner, but has its own
+enhancements (more in [Interleave virtual tables]).</p>
+<section id="split-virtual-table-groups-into-separate-virtual-tables">
+<h4>Split virtual table groups into separate virtual tables<a class="headerlink" href="#split-virtual-table-groups-into-separate-virtual-tables" title="Link to this heading">¶</a></h4>
+<p>The Itanium C++ ABI glues multiple individual virtual tables for a class into a combined virtual table (virtual table group).
+The interleaving scheme, however, can only work with individual virtual tables so it must split the combined virtual tables first.
+In comparison, the old scheme does not require the splitting but it is more efficient when the combined virtual tables have been split.
+The <a class="reference external" href="https://github.com/llvm/llvm-project/blob/main/llvm/lib/Transforms/IPO/GlobalSplit.cpp">GlobalSplit</a> pass is responsible for splitting combined virtual tables into individual ones.</p>
+</section>
+<section id="order-virtual-tables-by-a-pre-order-traversal-of-the-class-hierarchy">
+<h4>Order virtual tables by a pre-order traversal of the class hierarchy<a class="headerlink" href="#order-virtual-tables-by-a-pre-order-traversal-of-the-class-hierarchy" title="Link to this heading">¶</a></h4>
+<p>This step is common to both the old scheme described above and the interleaving scheme.
+For the interleaving scheme, since the combined virtual tables have been split in the previous step,
+this step ensures that for any class all the compatible virtual tables will appear consecutively.
+For the old scheme, the same property may not hold since it may work on combined virtual tables.</p>
+<p>For example, consider the following four C++ classes:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f1</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">B</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f1</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f2</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">C</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f1</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f3</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">D</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f1</span><span class="p">();</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f2</span><span class="p">();</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>This step will arrange the virtual tables for A, B, C, and D in the order of <em>vtable-of-A, vtable-of-B, vtable-of-D, vtable-of-C</em>.</p>
+</section>
+<section id="interleave-virtual-tables">
+<h4>Interleave virtual tables<a class="headerlink" href="#interleave-virtual-tables" title="Link to this heading">¶</a></h4>
+<p>This step is where the interleaving scheme deviates from the old scheme. Instead of laying out
+whole virtual tables in the previously computed order, the interleaving scheme lays out table
+entries of the virtual tables strategically to ensure the following properties:</p>
+<ol class="arabic simple">
+<li><p>offset-to-top and RTTI fields layout property</p></li>
+</ol>
+<p>The Itanium C++ ABI specifies that offset-to-top and RTTI fields appear at the offsets behind the
+address point. Note that libraries like libcxxabi do assume this property.</p>
+<ol class="arabic simple" start="2">
+<li><p>virtual function entry layout property</p></li>
+</ol>
+<p>For each virtual function the distance between a virtual table entry for this function and the corresponding
+address point is always the same. This property ensures that dynamic dispatch still works with the interleaving layout.</p>
+<p>Note that the interleaving scheme in the CFI implementation guarantees both properties above whereas the original scheme proposed
+in <a class="footnote-reference brackets" href="#ivtbl" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> only guarantees the second property.</p>
+<p>To illustrate how the interleaving algorithm works, let us continue with the running example.
+The algorithm first separates all the virtual table entries into two work lists. To do so,
+it starts by allocating two work lists, one initialized with all the offset-to-top entries of virtual tables in the order
+computed in the last step, one initialized with all the RTTI entries in the same order.</p>
+<div class="table-wrapper colwidths-auto docutils container" id="id7">
+<table class="docutils align-default" id="id7">
+<caption><span class="caption-text">Work list 1 Layout</span><a class="headerlink" href="#id7" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>0</p></th>
+<th class="head"><p>1</p></th>
+<th class="head"><p>2</p></th>
+<th class="head"><p>3</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A::offset-to-top</p></td>
+<td><p>B::offset-to-top</p></td>
+<td><p>D::offset-to-top</p></td>
+<td><p>C::offset-to-top</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper colwidths-auto docutils container" id="id8">
+<table class="docutils align-default" id="id8">
+<caption><span class="caption-text">Work list 2 layout</span><a class="headerlink" href="#id8" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>0</p></th>
+<th class="head"><p>1</p></th>
+<th class="head"><p>2</p></th>
+<th class="head"><p>3</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>&amp;A::rtti</p></td>
+<td><p>&amp;B::rtti</p></td>
+<td><p>&amp;D::rtti</p></td>
+<td><p>&amp;C::rtti</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Then for each virtual function the algorithm goes through all the virtual tables in the previously computed order
+to collect all the related entries into a virtual function list.
+After this step, there are the following virtual function lists:</p>
+<div class="table-wrapper colwidths-auto docutils container" id="id9">
+<table class="docutils align-default" id="id9">
+<caption><span class="caption-text">f1 list</span><a class="headerlink" href="#id9" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>0</p></th>
+<th class="head"><p>1</p></th>
+<th class="head"><p>2</p></th>
+<th class="head"><p>3</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>&amp;A::f1</p></td>
+<td><p>&amp;B::f1</p></td>
+<td><p>&amp;D::f1</p></td>
+<td><p>&amp;C::f1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper colwidths-auto docutils container" id="id10">
+<table class="docutils align-default" id="id10">
+<caption><span class="caption-text">f2 list</span><a class="headerlink" href="#id10" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>0</p></th>
+<th class="head"><p>1</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>&amp;B::f2</p></td>
+<td><p>&amp;D::f2</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper colwidths-auto docutils container" id="id11">
+<table class="docutils align-default" id="id11">
+<caption><span class="caption-text">f3 list</span><a class="headerlink" href="#id11" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>0</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>&amp;C::f3</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Next, the algorithm picks the longest remaining virtual function list and appends the whole list to the shortest work list
+until no function lists are left, and pads the shorter work list so that they are of the same length.
+In the example, f1 list will be first added to work list 1, then f2 list will be added
+to work list 2, and finally f3 list will be added to the work list 2. Since work list 1 now has one more entry than
+work list 2, a padding entry is added to the latter. After this step, the two work lists look like:</p>
+<div class="table-wrapper colwidths-auto docutils container" id="id12">
+<table class="docutils align-default" id="id12">
+<caption><span class="caption-text">Work list 1 Layout</span><a class="headerlink" href="#id12" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>0</p></th>
+<th class="head"><p>1</p></th>
+<th class="head"><p>2</p></th>
+<th class="head"><p>3</p></th>
+<th class="head"><p>4</p></th>
+<th class="head"><p>5</p></th>
+<th class="head"><p>6</p></th>
+<th class="head"><p>7</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A::offset-to-top</p></td>
+<td><p>B::offset-to-top</p></td>
+<td><p>D::offset-to-top</p></td>
+<td><p>C::offset-to-top</p></td>
+<td><p>&amp;A::f1</p></td>
+<td><p>&amp;B::f1</p></td>
+<td><p>&amp;D::f1</p></td>
+<td><p>&amp;C::f1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper colwidths-auto docutils container" id="id13">
+<table class="docutils align-default" id="id13">
+<caption><span class="caption-text">Work list 2 layout</span><a class="headerlink" href="#id13" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>0</p></th>
+<th class="head"><p>1</p></th>
+<th class="head"><p>2</p></th>
+<th class="head"><p>3</p></th>
+<th class="head"><p>4</p></th>
+<th class="head"><p>5</p></th>
+<th class="head"><p>6</p></th>
+<th class="head"><p>7</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>&amp;A::rtti</p></td>
+<td><p>&amp;B::rtti</p></td>
+<td><p>&amp;D::rtti</p></td>
+<td><p>&amp;C::rtti</p></td>
+<td><p>&amp;B::f2</p></td>
+<td><p>&amp;D::f2</p></td>
+<td><p>&amp;C::f3</p></td>
+<td><p>padding</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Finally, the algorithm merges the two work lists into the interleaved layout by alternatingly
+moving the head of each list to the final layout. After this step, the final interleaved layout looks like:</p>
+<div class="table-wrapper colwidths-auto docutils container" id="id14">
+<table class="docutils align-default" id="id14">
+<caption><span class="caption-text">Interleaved layout</span><a class="headerlink" href="#id14" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>0</p></th>
+<th class="head"><p>1</p></th>
+<th class="head"><p>2</p></th>
+<th class="head"><p>3</p></th>
+<th class="head"><p>4</p></th>
+<th class="head"><p>5</p></th>
+<th class="head"><p>6</p></th>
+<th class="head"><p>7</p></th>
+<th class="head"><p>8</p></th>
+<th class="head"><p>9</p></th>
+<th class="head"><p>10</p></th>
+<th class="head"><p>11</p></th>
+<th class="head"><p>12</p></th>
+<th class="head"><p>13</p></th>
+<th class="head"><p>14</p></th>
+<th class="head"><p>15</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A::offset-to-top</p></td>
+<td><p>&amp;A::rtti</p></td>
+<td><p>B::offset-to-top</p></td>
+<td><p>&amp;B::rtti</p></td>
+<td><p>D::offset-to-top</p></td>
+<td><p>&amp;D::rtti</p></td>
+<td><p>C::offset-to-top</p></td>
+<td><p>&amp;C::rtti</p></td>
+<td><p>&amp;A::f1</p></td>
+<td><p>&amp;B::f2</p></td>
+<td><p>&amp;B::f1</p></td>
+<td><p>&amp;D::f2</p></td>
+<td><p>&amp;D::f1</p></td>
+<td><p>&amp;C::f3</p></td>
+<td><p>&amp;C::f1</p></td>
+<td><p>padding</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In the above interleaved layout, each virtual table's offset-to-top and RTTI are always adjacent, which shows that the layout has the first property.
+For the second property, let us look at f2 as an example. In the interleaved layout,
+there are two entries for f2: B::f2 and D::f2. The distance between &amp;B::f2
+and its address point D::offset-to-top (the entry immediately after &amp;B::rtti) is 5 entry-length, so is the distance between &amp;D::f2 and C::offset-to-top (the entry immediately after &amp;D::rtti).</p>
+</section>
+</section>
+</section>
+<section id="forward-edge-cfi-for-indirect-function-calls">
+<h2>Forward-Edge CFI for Indirect Function Calls<a class="headerlink" href="#forward-edge-cfi-for-indirect-function-calls" title="Link to this heading">¶</a></h2>
+<p>Under forward-edge CFI for indirect function calls, each unique function
+type has its own bit vector, and at each call site we need to check that the
+function pointer is a member of the function type's bit vector. This scheme
+works in a similar way to forward-edge CFI for virtual calls, the distinction
+being that we need to build bit vectors of function entry points rather than
+of virtual tables.</p>
+<p>Unlike when re-arranging global variables, we cannot re-arrange functions
+in a particular order and base our calculations on the layout of the
+functions' entry points, as we have no idea how large a particular function
+will end up being (the function sizes could even depend on how we arrange
+the functions). Instead, we build a jump table, which is a block of code
+consisting of one branch instruction for each of the functions in the bit
+set that branches to the target function, and redirect any taken function
+addresses to the corresponding jump table entry. In this way, the distance
+between function entry points is predictable and controllable. In the object
+file's symbol table, the symbols for the target functions also refer to the
+jump table entries, so that addresses taken outside the module will pass
+any verification done inside the module.</p>
+<p>In more concrete terms, suppose we have three functions <code class="docutils literal notranslate"><span class="pre">f</span></code>, <code class="docutils literal notranslate"><span class="pre">g</span></code>,
+<code class="docutils literal notranslate"><span class="pre">h</span></code> which are all of the same type, and a function foo that returns their
+addresses:</p>
+<div class="highlight-gas notranslate"><div class="highlight"><pre><span></span><span class="nl">f:</span>
+<span class="nf">mov</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span>
+<span class="nf">ret</span>
+
+<span class="nl">g:</span>
+<span class="nf">mov</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span>
+<span class="nf">ret</span>
+
+<span class="nl">h:</span>
+<span class="nf">mov</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span>
+<span class="nf">ret</span>
+
+<span class="nl">foo:</span>
+<span class="nf">mov</span><span class="w"> </span><span class="no">f</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span>
+<span class="nf">mov</span><span class="w"> </span><span class="no">g</span><span class="p">,</span><span class="w"> </span><span class="nv">%edx</span>
+<span class="nf">mov</span><span class="w"> </span><span class="no">h</span><span class="p">,</span><span class="w"> </span><span class="nv">%ecx</span>
+<span class="nf">ret</span>
+</pre></div>
+</div>
+<p>Our jump table will (conceptually) look like this:</p>
+<div class="highlight-gas notranslate"><div class="highlight"><pre><span></span><span class="nl">f:</span>
+<span class="nf">jmp</span><span class="w"> </span><span class="no">.Ltmp0</span><span class="w"> </span><span class="c1">; 5 bytes</span>
+<span class="nf">int3</span><span class="w">       </span><span class="c1">; 1 byte</span>
+<span class="nf">int3</span><span class="w">       </span><span class="c1">; 1 byte</span>
+<span class="nf">int3</span><span class="w">       </span><span class="c1">; 1 byte</span>
+
+<span class="nl">g:</span>
+<span class="nf">jmp</span><span class="w"> </span><span class="no">.Ltmp1</span><span class="w"> </span><span class="c1">; 5 bytes</span>
+<span class="nf">int3</span><span class="w">       </span><span class="c1">; 1 byte</span>
+<span class="nf">int3</span><span class="w">       </span><span class="c1">; 1 byte</span>
+<span class="nf">int3</span><span class="w">       </span><span class="c1">; 1 byte</span>
+
+<span class="nl">h:</span>
+<span class="nf">jmp</span><span class="w"> </span><span class="no">.Ltmp2</span><span class="w"> </span><span class="c1">; 5 bytes</span>
+<span class="nf">int3</span><span class="w">       </span><span class="c1">; 1 byte</span>
+<span class="nf">int3</span><span class="w">       </span><span class="c1">; 1 byte</span>
+<span class="nf">int3</span><span class="w">       </span><span class="c1">; 1 byte</span>
+
+<span class="nl">.Ltmp0:</span>
+<span class="nf">mov</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span>
+<span class="nf">ret</span>
+
+<span class="nl">.Ltmp1:</span>
+<span class="nf">mov</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span>
+<span class="nf">ret</span>
+
+<span class="nl">.Ltmp2:</span>
+<span class="nf">mov</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span>
+<span class="nf">ret</span>
+
+<span class="nl">foo:</span>
+<span class="nf">mov</span><span class="w"> </span><span class="no">f</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span>
+<span class="nf">mov</span><span class="w"> </span><span class="no">g</span><span class="p">,</span><span class="w"> </span><span class="nv">%edx</span>
+<span class="nf">mov</span><span class="w"> </span><span class="no">h</span><span class="p">,</span><span class="w"> </span><span class="nv">%ecx</span>
+<span class="nf">ret</span>
+</pre></div>
+</div>
+<p>Because the addresses of <code class="docutils literal notranslate"><span class="pre">f</span></code>, <code class="docutils literal notranslate"><span class="pre">g</span></code>, <code class="docutils literal notranslate"><span class="pre">h</span></code> are evenly spaced at a power of
+2, and function types do not overlap (unlike class types with base classes),
+we can normally apply the [Alignment] and [Eliminating Bit Vector Checks
+for All-Ones Bit Vectors][eliminating bit vector checks for all-ones bit vectors] optimizations thus simplifying the check at each
+call site to a range and alignment check.</p>
+</section>
+<section id="shared-library-support">
+<h2>Shared library support<a class="headerlink" href="#shared-library-support" title="Link to this heading">¶</a></h2>
+<p><strong>EXPERIMENTAL</strong></p>
+<p>The basic CFI mode described above assumes that the application is a
+monolithic binary; at least that all possible virtual/indirect call
+targets and the entire class hierarchy are known at link time. The
+cross-DSO mode, enabled with <strong>-f[no-]sanitize-cfi-cross-dso</strong> relaxes
+this requirement by allowing virtual and indirect calls to cross the
+DSO boundary.</p>
+<p>Assuming the following setup: the binary consists of several
+instrumented and several uninstrumented DSOs. Some of them may be
+dlopen-ed/dlclose-d periodically, even frequently.</p>
+<ul class="simple">
+<li><p>Calls made from uninstrumented DSOs are not checked and just work.</p></li>
+<li><p>Calls inside any instrumented DSO are fully protected.</p></li>
+<li><p>Calls between different instrumented DSOs are also protected, with a
+performance penalty (in addition to the monolithic CFI overhead).</p></li>
+<li><p>Calls from an instrumented DSO to an uninstrumented one are unchecked and
+just work, with performance penalty.</p></li>
+<li><p>Calls from an instrumented DSO outside of any known DSO are detected as CFI
+violations.</p></li>
+</ul>
+<p>In the monolithic scheme a call site is instrumented as</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>if (!InlinedFastCheck(f))
+  abort();
+call *f
+</pre></div>
+</div>
+<p>In the cross-DSO scheme it becomes</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>if (!InlinedFastCheck(f))
+  __cfi_slowpath(CallSiteTypeId, f);
+call *f
+</pre></div>
+</div>
+<section id="callsitetypeid">
+<h3>CallSiteTypeId<a class="headerlink" href="#callsitetypeid" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">CallSiteTypeId</span></code> is a stable process-wide identifier of the
+call-site type. For a virtual call site, the type in question is the class
+type; for an indirect function call it is the function signature. The
+mapping from a type to an identifier is an ABI detail. In the current,
+experimental, implementation the identifier of type T is calculated as
+follows:</p>
+<ul class="simple">
+<li><p>Obtain the mangled name for &quot;typeinfo name for T&quot;.</p></li>
+<li><p>Calculate MD5 hash of the name as a string.</p></li>
+<li><p>Reinterpret the first 8 bytes of the hash as a little-endian
+64-bit integer.</p></li>
+</ul>
+<p>It is possible, but unlikely, that collisions in the
+<code class="docutils literal notranslate"><span class="pre">CallSiteTypeId</span></code> hashing will result in weaker CFI checks that would
+still be conservatively correct.</p>
+</section>
+<section id="cfi-check">
+<h3>CFI_Check<a class="headerlink" href="#cfi-check" title="Link to this heading">¶</a></h3>
+<p>In the general case, only the target DSO knows whether the call to
+function <code class="docutils literal notranslate"><span class="pre">f</span></code> with type <code class="docutils literal notranslate"><span class="pre">CallSiteTypeId</span></code> is valid or not. To
+export this information, every DSO implements</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="n">__cfi_check</span><span class="p">(</span><span class="n">uint64</span><span class="w"> </span><span class="n">CallSiteTypeId</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">TargetAddr</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">DiagData</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This function provides external modules with access to CFI checks for
+the targets inside this DSO. For each known <code class="docutils literal notranslate"><span class="pre">CallSiteTypeId</span></code>, this
+function performs an <code class="docutils literal notranslate"><span class="pre">llvm.type.test</span></code> with the corresponding type
+identifier. It reports an error if the type is unknown, or if the
+check fails. Depending on the values of compiler flags
+<code class="docutils literal notranslate"><span class="pre">-fsanitize-trap</span></code> and <code class="docutils literal notranslate"><span class="pre">-fsanitize-recover</span></code>, this function may
+print an error, abort and/or return to the caller. <code class="docutils literal notranslate"><span class="pre">DiagData</span></code> is an
+opaque pointer to the diagnostic information about the error, or
+<code class="docutils literal notranslate"><span class="pre">null</span></code> if the caller does not provide this information.</p>
+<p>The basic implementation is a large switch statement over all values
+of CallSiteTypeId supported by this DSO, and each case is similar to
+the InlinedFastCheck() in the basic CFI mode.</p>
+</section>
+<section id="cfi-shadow">
+<h3>CFI Shadow<a class="headerlink" href="#cfi-shadow" title="Link to this heading">¶</a></h3>
+<p>To route CFI checks to the target DSO's __cfi_check function, a
+mapping from possible virtual / indirect call targets to the
+corresponding __cfi_check functions is maintained. This mapping is
+implemented as a sparse array of 2 bytes for every possible page (4096
+bytes) of memory. The table is kept readonly most of the time.</p>
+<p>There are 3 types of shadow values:</p>
+<ul class="simple">
+<li><p>Address in a CFI-instrumented DSO.</p></li>
+<li><p>Unchecked address (a “trusted” non-instrumented DSO). Encoded as
+value 0xFFFF.</p></li>
+<li><p>Invalid address (everything else). Encoded as value 0.</p></li>
+</ul>
+<p>For a CFI-instrumented DSO, a shadow value encodes the address of the
+__cfi_check function for all call targets in the corresponding memory
+page. If Addr is the target address, and V is the shadow value, then
+the address of __cfi_check is calculated as</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>__cfi_check = AlignUpTo(Addr, 4096) - (V + 1) * 4096
+</pre></div>
+</div>
+<p>This works as long as __cfi_check is aligned by 4096 bytes and located
+below any call targets in its DSO, but not more than 256MB apart from
+them.</p>
+</section>
+<section id="cfi-slowpath">
+<h3>CFI_SlowPath<a class="headerlink" href="#cfi-slowpath" title="Link to this heading">¶</a></h3>
+<p>The slow path check is implemented in a runtime support library as</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="n">__cfi_slowpath</span><span class="p">(</span><span class="n">uint64</span><span class="w"> </span><span class="n">CallSiteTypeId</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">TargetAddr</span><span class="p">)</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">__cfi_slowpath_diag</span><span class="p">(</span><span class="n">uint64</span><span class="w"> </span><span class="n">CallSiteTypeId</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">TargetAddr</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">DiagData</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>These functions loads a shadow value for <code class="docutils literal notranslate"><span class="pre">TargetAddr</span></code>, finds the
+address of <code class="docutils literal notranslate"><span class="pre">__cfi_check</span></code> as described above and calls
+that. <code class="docutils literal notranslate"><span class="pre">DiagData</span></code> is an opaque pointer to diagnostic data which is
+passed verbatim to <code class="docutils literal notranslate"><span class="pre">__cfi_check</span></code>, and <code class="docutils literal notranslate"><span class="pre">__cfi_slowpath</span></code> passes
+<code class="docutils literal notranslate"><span class="pre">nullptr</span></code> instead.</p>
+<p>Compiler-RT library contains reference implementations of slowpath
+functions, but they have unresolvable issues with correctness and
+performance in the handling of dlopen(). It is recommended that
+platforms provide their own implementations, usually as part of libc
+or libdl.</p>
+</section>
+<section id="position-independent-executable-requirement">
+<h3>Position-independent executable requirement<a class="headerlink" href="#position-independent-executable-requirement" title="Link to this heading">¶</a></h3>
+<p>Cross-DSO CFI mode requires that the main executable is built as PIE.
+In non-PIE executables the address of an external function (taken from
+the main executable) is the address of that function’s PLT record in
+the main executable. This would break the CFI checks.</p>
+</section>
+</section>
+<section id="backward-edge-cfi-for-return-statements-rcfi">
+<h2>Backward-edge CFI for return statements (RCFI)<a class="headerlink" href="#backward-edge-cfi-for-return-statements-rcfi" title="Link to this heading">¶</a></h2>
+<p>This section is a proposal. As of March 2017 it is not implemented.</p>
+<p>Backward-edge control flow (<code class="docutils literal notranslate"><span class="pre">RET</span></code> instructions) can be hijacked
+via overwriting the return address (<code class="docutils literal notranslate"><span class="pre">RA</span></code>) on stack.
+Various mitigation techniques (e.g. <a class="reference external" href="https://clang.llvm.org/docs/SafeStack.html">SafeStack</a>, <a class="reference external" href="https://xlab.tencent.com/en/2016/11/02/return-flow-guard">RFG</a>, <a class="reference external" href="https://software.intel.com/en-us/blogs/2016/06/09/intel-release-new-technology-specifications-protect-rop-attacks">Intel CET</a>)
+try to detect or prevent <code class="docutils literal notranslate"><span class="pre">RA</span></code> corruption on stack.</p>
+<p>RCFI enforces the expected control flow in several different ways described below.
+RCFI heavily relies on LTO.</p>
+<section id="leaf-functions">
+<h3>Leaf Functions<a class="headerlink" href="#leaf-functions" title="Link to this heading">¶</a></h3>
+<p>If <code class="docutils literal notranslate"><span class="pre">f()</span></code> is a leaf function (i.e. it has no calls
+except maybe no-return calls) it can be called using a special calling convention
+that stores <code class="docutils literal notranslate"><span class="pre">RA</span></code> in a dedicated register <code class="docutils literal notranslate"><span class="pre">R</span></code> before the <code class="docutils literal notranslate"><span class="pre">CALL</span></code> instruction.
+<code class="docutils literal notranslate"><span class="pre">f()</span></code> does not spill <code class="docutils literal notranslate"><span class="pre">R</span></code> and does not use the <code class="docutils literal notranslate"><span class="pre">RET</span></code> instruction,
+instead it uses the value in <code class="docutils literal notranslate"><span class="pre">R</span></code> to <code class="docutils literal notranslate"><span class="pre">JMP</span></code> to <code class="docutils literal notranslate"><span class="pre">RA</span></code>.</p>
+<p>This flavour of CFI is <em>precise</em>, i.e. the function is guaranteed to return
+to the point exactly following the call.</p>
+<p>An alternative approach is to
+copy <code class="docutils literal notranslate"><span class="pre">RA</span></code> from stack to <code class="docutils literal notranslate"><span class="pre">R</span></code> in the first instruction of <code class="docutils literal notranslate"><span class="pre">f()</span></code>,
+then <code class="docutils literal notranslate"><span class="pre">JMP</span></code> to <code class="docutils literal notranslate"><span class="pre">R</span></code>.
+This approach is simpler to implement (does not require changing the caller)
+but weaker (there is a small window when <code class="docutils literal notranslate"><span class="pre">RA</span></code> is actually stored on stack).</p>
+</section>
+<section id="functions-called-once">
+<h3>Functions called once<a class="headerlink" href="#functions-called-once" title="Link to this heading">¶</a></h3>
+<p>Suppose <code class="docutils literal notranslate"><span class="pre">f()</span></code> is called in just one place in the program
+(assuming we can verify this in LTO mode).
+In this case we can replace the <code class="docutils literal notranslate"><span class="pre">RET</span></code> instruction with a <code class="docutils literal notranslate"><span class="pre">JMP</span></code> instruction
+with the immediate constant for <code class="docutils literal notranslate"><span class="pre">RA</span></code>.
+This will <em>precisely</em> enforce the return control flow no matter what is stored on stack.</p>
+<p>Another variant is to compare <code class="docutils literal notranslate"><span class="pre">RA</span></code> on stack with the known constant and abort
+if they don't match; then <code class="docutils literal notranslate"><span class="pre">JMP</span></code> to the known constant address.</p>
+</section>
+<section id="functions-called-in-a-small-number-of-call-sites">
+<h3>Functions called in a small number of call sites<a class="headerlink" href="#functions-called-in-a-small-number-of-call-sites" title="Link to this heading">¶</a></h3>
+<p>We may extend the above approach to cases where <code class="docutils literal notranslate"><span class="pre">f()</span></code>
+is called more than once (but still a small number of times).
+With LTO we know all possible values of <code class="docutils literal notranslate"><span class="pre">RA</span></code> and we check them
+one-by-one (or using binary search) against the value on stack.
+If the match is found, we <code class="docutils literal notranslate"><span class="pre">JMP</span></code> to the known constant address, otherwise abort.</p>
+<p>This protection is <em>near-precise</em>, i.e. it guarantees that the control flow will
+be transferred to one of the valid return addresses for this function,
+but not necessary to the point of the most recent <code class="docutils literal notranslate"><span class="pre">CALL</span></code>.</p>
+</section>
+<section id="general-case">
+<h3>General case<a class="headerlink" href="#general-case" title="Link to this heading">¶</a></h3>
+<p>For functions called multiple times a <em>return jump table</em> is constructed
+in the same manner as jump tables for indirect function calls (see above).
+The correct jump table entry (or its index) is passed by <code class="docutils literal notranslate"><span class="pre">CALL</span></code> to <code class="docutils literal notranslate"><span class="pre">f()</span></code>
+(as an extra argument) and then spilled to stack.
+The <code class="docutils literal notranslate"><span class="pre">RET</span></code> instruction is replaced with a load of the jump table entry,
+jump table range check, and <code class="docutils literal notranslate"><span class="pre">JMP</span></code> to the jump table entry.</p>
+<p>This protection is also <em>near-precise</em>.</p>
+</section>
+<section id="returns-from-functions-called-indirectly">
+<h3>Returns from functions called indirectly<a class="headerlink" href="#returns-from-functions-called-indirectly" title="Link to this heading">¶</a></h3>
+<p>If a function is called indirectly, the return jump table is constructed for the
+equivalence class of functions instead of a single function.</p>
+</section>
+<section id="cross-dso-calls">
+<h3>Cross-DSO calls<a class="headerlink" href="#cross-dso-calls" title="Link to this heading">¶</a></h3>
+<p>Consider two instrumented DSOs, <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code>. <code class="docutils literal notranslate"><span class="pre">A</span></code> defines <code class="docutils literal notranslate"><span class="pre">f()</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code> calls it.</p>
+<p>This case will be handled similarly to the cross-DSO scheme using the slow path callback.</p>
+</section>
+<section id="non-goals">
+<h3>Non-goals<a class="headerlink" href="#non-goals" title="Link to this heading">¶</a></h3>
+<p>RCFI does not protect <code class="docutils literal notranslate"><span class="pre">RET</span></code> instructions:</p>
+<ul class="simple">
+<li><p>in non-instrumented DSOs,</p></li>
+<li><p>in instrumented DSOs for functions that are called from non-instrumented DSOs,</p></li>
+<li><p>embedded into other instructions (e.g. <code class="docutils literal notranslate"><span class="pre">0f4fc3</span> <span class="pre">cmovg</span> <span class="pre">%ebx,%eax</span></code>).</p></li>
+</ul>
+</section>
+</section>
+<section id="hardware-support">
+<h2>Hardware support<a class="headerlink" href="#hardware-support" title="Link to this heading">¶</a></h2>
+<p>We believe that the above design can be efficiently implemented in hardware.
+A single new instruction added to an ISA would allow to perform the forward-edge CFI check
+with fewer bytes per check (smaller code size overhead) and potentially more
+efficiently. The current software-only instrumentation requires at least
+32-bytes per check (on x86_64).
+A hardware instruction may probably be less than ~ 12 bytes.
+Such instruction would check that the argument pointer is in-bounds,
+and is properly aligned, and if the checks fail it will either trap (in monolithic scheme)
+or call the slow path function (cross-DSO scheme).
+The bit vector lookup is probably too complex for a hardware implementation.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//  This instruction checks that 'Ptr'</span>
+<span class="c1">//   * is aligned by (1 &lt;&lt; kAlignment) and</span>
+<span class="c1">//   * is inside [kRangeBeg, kRangeBeg+(kRangeSize&lt;&lt;kAlignment))</span>
+<span class="c1">//  and if the check fails it jumps to the given target (slow path).</span>
+<span class="c1">//</span>
+<span class="c1">// 'Ptr' is a register, pointing to the virtual function table</span>
+<span class="c1">//    or to the function which we need to check. We may require an explicit</span>
+<span class="c1">//    fixed register to be used.</span>
+<span class="c1">// 'kAlignment' is a 4-bit constant.</span>
+<span class="c1">// 'kRangeSize' is a ~20-bit constant.</span>
+<span class="c1">// 'kRangeBeg' is a PC-relative constant (~28 bits)</span>
+<span class="c1">//    pointing to the beginning of the allowed range for 'Ptr'.</span>
+<span class="c1">// 'kFailedCheckTarget': is a PC-relative constant (~28 bits)</span>
+<span class="c1">//    representing the target to branch to when the check fails.</span>
+<span class="c1">//    If kFailedCheckTarget==0, the process will trap</span>
+<span class="c1">//    (monolithic binary scheme).</span>
+<span class="c1">//    Otherwise it will jump to a handler that implements `CFI_SlowPath`</span>
+<span class="c1">//    (cross-DSO scheme).</span>
+<span class="n">CFI_Check</span><span class="p">(</span><span class="n">Ptr</span><span class="p">,</span><span class="w"> </span><span class="n">kAlignment</span><span class="p">,</span><span class="w"> </span><span class="n">kRangeSize</span><span class="p">,</span><span class="w"> </span><span class="n">kRangeBeg</span><span class="p">,</span><span class="w"> </span><span class="n">kFailedCheckTarget</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Ptr</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kRangeBeg</span><span class="w"> </span><span class="o">||</span>
+<span class="w">       </span><span class="n">Ptr</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">kRangeBeg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">kRangeSize</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">kAlignment</span><span class="p">)</span><span class="w"> </span><span class="o">||</span>
+<span class="w">       </span><span class="n">Ptr</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">((</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">kAlignment</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span>
+<span class="w">         </span><span class="n">Jump</span><span class="p">(</span><span class="n">kFailedCheckTarget</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>An alternative and more compact encoding would not use <code class="docutils literal notranslate"><span class="pre">kFailedCheckTarget</span></code>,
+and will trap on check failure instead.
+This will allow us to fit the instruction into <strong>8-9 bytes</strong>.
+The cross-DSO checks will be performed by a trap handler and
+performance-critical ones will have to be black-listed and checked using the
+software-only scheme.</p>
+<p>Note that such hardware extension would be complementary to checks
+at the callee side, such as e.g. <strong>Intel ENDBRANCH</strong>.
+Moreover, CFI would have two benefits over ENDBRANCH: a) precision and b)
+ability to protect against invalid casts between polymorphic types.</p>
+</section>
+</section>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="ivtbl" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>)</span>
+<p><a class="reference external" href="https://cseweb.ucsd.edu/~lerner/papers/ivtbl-ndss16.pdf">Protecting C++ Dynamic Dispatch Through VTable Interleaving</a>. Dimitar Bounov, Rami Gökhan Kıcı, Sorin Lerner.</p>
+</aside>
+</aside>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="LTOVisibility.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">LTO Visibility</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="ControlFlowIntegrity.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Control Flow Integrity</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Control Flow Integrity Design Documentation</a><ul>
+<li><a class="reference internal" href="#forward-edge-cfi-for-virtual-calls">Forward-Edge CFI for Virtual Calls</a><ul>
+<li><a class="reference internal" href="#optimizations">Optimizations</a><ul>
+<li><a class="reference internal" href="#stripping-leading-trailing-zeros-in-bit-vectors">Stripping Leading/Trailing Zeros in Bit Vectors</a></li>
+<li><a class="reference internal" href="#short-inline-bit-vectors">Short Inline Bit Vectors</a></li>
+<li><a class="reference internal" href="#virtual-table-layout">Virtual Table Layout</a></li>
+<li><a class="reference internal" href="#alignment">Alignment</a></li>
+<li><a class="reference internal" href="#padding-to-powers-of-2">Padding to Powers of 2</a></li>
+<li><a class="reference internal" href="#eliminating-bit-vector-checks-for-all-ones-bit-vectors">Eliminating Bit Vector Checks for All-Ones Bit Vectors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#forward-edge-cfi-for-virtual-calls-by-interleaving-virtual-tables">Forward-Edge CFI for Virtual Calls by Interleaving Virtual Tables</a><ul>
+<li><a class="reference internal" href="#split-virtual-table-groups-into-separate-virtual-tables">Split virtual table groups into separate virtual tables</a></li>
+<li><a class="reference internal" href="#order-virtual-tables-by-a-pre-order-traversal-of-the-class-hierarchy">Order virtual tables by a pre-order traversal of the class hierarchy</a></li>
+<li><a class="reference internal" href="#interleave-virtual-tables">Interleave virtual tables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#forward-edge-cfi-for-indirect-function-calls">Forward-Edge CFI for Indirect Function Calls</a></li>
+<li><a class="reference internal" href="#shared-library-support">Shared library support</a><ul>
+<li><a class="reference internal" href="#callsitetypeid">CallSiteTypeId</a></li>
+<li><a class="reference internal" href="#cfi-check">CFI_Check</a></li>
+<li><a class="reference internal" href="#cfi-shadow">CFI Shadow</a></li>
+<li><a class="reference internal" href="#cfi-slowpath">CFI_SlowPath</a></li>
+<li><a class="reference internal" href="#position-independent-executable-requirement">Position-independent executable requirement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#backward-edge-cfi-for-return-statements-rcfi">Backward-edge CFI for return statements (RCFI)</a><ul>
+<li><a class="reference internal" href="#leaf-functions">Leaf Functions</a></li>
+<li><a class="reference internal" href="#functions-called-once">Functions called once</a></li>
+<li><a class="reference internal" href="#functions-called-in-a-small-number-of-call-sites">Functions called in a small number of call sites</a></li>
+<li><a class="reference internal" href="#general-case">General case</a></li>
+<li><a class="reference internal" href="#returns-from-functions-called-indirectly">Returns from functions called indirectly</a></li>
+<li><a class="reference internal" href="#cross-dso-calls">Cross-DSO calls</a></li>
+<li><a class="reference internal" href="#non-goals">Non-goals</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#hardware-support">Hardware support</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=7d86a446"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>

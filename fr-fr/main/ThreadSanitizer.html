@@ -1,0 +1,991 @@
+<!doctype html>
+<html class="no-js" lang="fr-FR" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Recherche" href="search.html" /><link rel="next" title="MemorySanitizer" href="MemorySanitizer.html" /><link rel="prev" title="Hardware-assisted AddressSanitizer" href="HardwareAssistedAddressSanitizer.html" />
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/ThreadSanitizer.html" />
+        <link rel="prefetch" href="_static/LLVMWyvernSmall.png" as="image" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.07.19 -->
+        <title>ThreadSanitizer - Clang</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=548e816e" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86c9e7d9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="ltd-provenance.js"></script>
+<script type="text/javascript" src="ltd-current.js"></script>
+<script type="text/javascript" src="../../ltd-config.js"></script>
+<script type="text/javascript" src="../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Recherche" name="q" aria-label="Recherche">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Clang Release Notes</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="UsersManual.html">Clang Compiler User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="LanguageExtensions.html">Clang Language Extensions</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Clang Language Extensions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Block-ABI-Apple.html">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrossCompilation.html">Cross-compilation using Clang</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ClangStaticAnalyzer.html">Clang Static Analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Clang Static Analyzer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="analyzer/checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/user-docs.html">2. User Docs</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 2. User Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/UsingWithXCode.html">2.2. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FilingBugs.html">2.3. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/CrossTranslationUnit.html">2.4. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/TaintAnalysisConfiguration.html">2.5. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/Annotations.html">2.6. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/user-docs/FAQ.html">2.7. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="analyzer/developer-docs.html">3. Developer Docs</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 3. Developer Docs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/PerformanceInvestigation.html">3.6. Performance Investigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="analyzer/developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Scalable Static Analysis Framework</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Developer Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DataFlowAnalysisIntro.html">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">ThreadSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MemorySanitizer.html">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataFlowSanitizer.html">DataFlowSanitizer</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of DataFlowSanitizer</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="DataFlowSanitizerDesign.html">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerCoverage.html">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ControlFlowIntegrity.html">Control Flow Integrity</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Control Flow Integrity</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StandardCPlusPlusModules.html">Standard C++ Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MisExpect.html">Misexpect</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Misexpect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="OpenCLSupport.html">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Clang HLSL Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of HLSL Design and Implementation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="APINotes.html">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CIR/index.html">ClangIR</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of ClangIR</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CIR/ABILowering.html">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CIR/CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="CommandGuide/index.html">Clang « man » pages</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Clang « man » pages</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefactoringEngine.html">Clang’s refactoring engine</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ClangTools.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangRepl.html">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InternalsManual.html">« Clang » CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HardwareAssistedAddressSanitizerDesign.html">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LLVMExceptionHandlingCodeGen.html">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/ThreadSanitizer.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/ThreadSanitizer.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="threadsanitizer">
+<h1>ThreadSanitizer<a class="headerlink" href="#threadsanitizer" title="Lien vers cette rubrique">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Lien vers cette rubrique">¶</a></h2>
+<p>ThreadSanitizer is a tool that detects data races. It consists of a compiler
+instrumentation module and a run-time library. Typical slowdown introduced by
+ThreadSanitizer is about <strong>5x-15x</strong>. Typical memory overhead introduced by
+ThreadSanitizer is about <strong>5x-10x</strong>.</p>
+</section>
+<section id="how-to-build">
+<h2>How to build<a class="headerlink" href="#how-to-build" title="Lien vers cette rubrique">¶</a></h2>
+<p>Build LLVM/Clang with <a class="reference external" href="https://llvm.org/docs/CMake.html">CMake</a>.</p>
+</section>
+<section id="supported-platforms">
+<h2>Supported Platforms<a class="headerlink" href="#supported-platforms" title="Lien vers cette rubrique">¶</a></h2>
+<p>ThreadSanitizer is supported on the following OS:</p>
+<ul class="simple">
+<li><p>Android aarch64, x86_64</p></li>
+<li><p>Darwin arm64, x86_64</p></li>
+<li><p>FreeBSD</p></li>
+<li><p>Linux aarch64, x86_64, powerpc64, powerpc64le</p></li>
+<li><p>NetBSD</p></li>
+</ul>
+<p>Support for other 64-bit architectures is possible, contributions are welcome.
+Support for 32-bit platforms is problematic and is not planned.</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Lien vers cette rubrique">¶</a></h2>
+<p>Simply compile and link your program with <code class="docutils literal notranslate"><span class="pre">-fsanitize=thread</span></code>. To get a
+reasonable performance add <code class="docutils literal notranslate"><span class="pre">-O1</span></code> or higher. Use <code class="docutils literal notranslate"><span class="pre">-g</span></code> to get file names
+and line numbers in the warning messages.</p>
+<p>Example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>cat<span class="w"> </span>projects/compiler-rt/lib/tsan/lit_tests/tiny_race.c
+<span class="gp">#</span>include<span class="w"> </span>&lt;pthread.h&gt;
+<span class="go">int Global;</span>
+<span class="go">void *Thread1(void *x) {</span>
+<span class="go">  Global = 42;</span>
+<span class="go">  return x;</span>
+<span class="go">}</span>
+<span class="go">int main() {</span>
+<span class="go">  pthread_t t;</span>
+<span class="go">  pthread_create(&amp;t, NULL, Thread1, NULL);</span>
+<span class="go">  Global = 43;</span>
+<span class="go">  pthread_join(t, NULL);</span>
+<span class="go">  return Global;</span>
+<span class="go">}</span>
+
+<span class="gp">$ </span>clang<span class="w"> </span>-fsanitize<span class="o">=</span>thread<span class="w"> </span>-g<span class="w"> </span>-O1<span class="w"> </span>tiny_race.c
+</pre></div>
+</div>
+<p>If a bug is detected, the program will print an error message to stderr.
+Currently, ThreadSanitizer symbolizes its output using an external
+<code class="docutils literal notranslate"><span class="pre">addr2line</span></code> process (this will be fixed in future).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>%<span class="w"> </span>./a.out
+WARNING:<span class="w"> </span>ThreadSanitizer:<span class="w"> </span>data<span class="w"> </span>race<span class="w"> </span><span class="o">(</span><span class="nv">pid</span><span class="o">=</span><span class="m">19219</span><span class="o">)</span>
+<span class="w">  </span>Write<span class="w"> </span>of<span class="w"> </span>size<span class="w"> </span><span class="m">4</span><span class="w"> </span>at<span class="w"> </span>0x7fcf47b21bc0<span class="w"> </span>by<span class="w"> </span>thread<span class="w"> </span>T1:
+<span class="w">    </span><span class="c1">#0 Thread1 tiny_race.c:4 (exe+0x00000000a360)</span>
+
+<span class="w">  </span>Previous<span class="w"> </span>write<span class="w"> </span>of<span class="w"> </span>size<span class="w"> </span><span class="m">4</span><span class="w"> </span>at<span class="w"> </span>0x7fcf47b21bc0<span class="w"> </span>by<span class="w"> </span>main<span class="w"> </span>thread:
+<span class="w">    </span><span class="c1">#0 main tiny_race.c:10 (exe+0x00000000a3b4)</span>
+
+<span class="w">  </span>Thread<span class="w"> </span>T1<span class="w"> </span><span class="o">(</span>running<span class="o">)</span><span class="w"> </span>created<span class="w"> </span>at:
+<span class="w">    </span><span class="c1">#0 pthread_create tsan_interceptors.cc:705 (exe+0x00000000c790)</span>
+<span class="w">    </span><span class="c1">#1 main tiny_race.c:9 (exe+0x00000000a3a4)</span>
+</pre></div>
+</div>
+</section>
+<section id="has-feature-thread-sanitizer">
+<h2><code class="docutils literal notranslate"><span class="pre">__has_feature(thread_sanitizer)</span></code><a class="headerlink" href="#has-feature-thread-sanitizer" title="Lien vers cette rubrique">¶</a></h2>
+<p>In some cases one may need to execute different code depending on whether
+ThreadSanitizer is enabled.
+<a class="reference internal" href="LanguageExtensions.html#langext-has-feature-has-extension"><span class="std std-ref">__has_feature</span></a> can be used for
+this purpose.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(__has_feature)</span>
+<span class="cp">#  if __has_feature(thread_sanitizer)</span>
+<span class="c1">// code that builds only under ThreadSanitizer</span>
+<span class="cp">#  endif</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</section>
+<section id="attribute-no-sanitize-thread">
+<h2><code class="docutils literal notranslate"><span class="pre">__attribute__((no_sanitize(&quot;thread&quot;)))</span></code><a class="headerlink" href="#attribute-no-sanitize-thread" title="Lien vers cette rubrique">¶</a></h2>
+<p>Some code should not be instrumented by ThreadSanitizer. One may use the
+function attribute <code class="docutils literal notranslate"><span class="pre">no_sanitize(&quot;thread&quot;)</span></code> to disable instrumentation of plain
+(non-atomic) loads/stores in a particular function. ThreadSanitizer still
+instruments such functions to avoid false positives and provide meaningful stack
+traces. This attribute may not be supported by other compilers, so we suggest
+to use it together with <code class="docutils literal notranslate"><span class="pre">__has_feature(thread_sanitizer)</span></code>.</p>
+</section>
+<section id="attribute-disable-sanitizer-instrumentation">
+<h2><code class="docutils literal notranslate"><span class="pre">__attribute__((disable_sanitizer_instrumentation))</span></code><a class="headerlink" href="#attribute-disable-sanitizer-instrumentation" title="Lien vers cette rubrique">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">disable_sanitizer_instrumentation</span></code> attribute can be applied to functions
+to prevent all kinds of instrumentation. As a result, it may introduce false
+positives and incorrect stack traces. Therefore, it should be used with care,
+and only if absolutely required; for example for certain code that cannot
+tolerate any instrumentation and resulting side-effects. This attribute
+overrides <code class="docutils literal notranslate"><span class="pre">no_sanitize(&quot;thread&quot;)</span></code>.</p>
+</section>
+<section id="interaction-of-inlining-with-disabling-sanitizer-instrumentation">
+<h2>Interaction of Inlining with Disabling Sanitizer Instrumentation<a class="headerlink" href="#interaction-of-inlining-with-disabling-sanitizer-instrumentation" title="Lien vers cette rubrique">¶</a></h2>
+<ul class="simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">no_sanitize</span></code> function will not be inlined heuristically by the compiler into a sanitized function.</p></li>
+<li><p>An <code class="docutils literal notranslate"><span class="pre">always_inline</span></code> function will adopt the instrumentation status of the function it is inlined into.</p></li>
+<li><p>Forcibly combining <code class="docutils literal notranslate"><span class="pre">no_sanitize</span></code> and <code class="docutils literal notranslate"><span class="pre">__attribute__((always_inline))</span></code> is not supported, and will often lead to unexpected results. To avoid mixing these attributes, use:</p></li>
+</ul>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Note, __has_feature test for sanitizers is deprecated, and Clang will support __SANITIZE_&lt;sanitizer&gt;__ similar to GCC.</span>
+<span class="cp">#if __has_feature(thread_sanitizer) || defined(__SANITIZE_THREAD__) || ... &lt;other sanitizers&gt;</span>
+<span class="cp">#define ALWAYS_INLINE_IF_UNINSTRUMENTED</span>
+<span class="cp">#else</span>
+<span class="cp">#define ALWAYS_INLINE_IF_UNINSTRUMENTED __attribute__((always_inline))</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</section>
+<section id="explicit-sanitizer-checks-with-builtin-allow-sanitize-check">
+<h2>Explicit Sanitizer Checks with <code class="docutils literal notranslate"><span class="pre">__builtin_allow_sanitize_check</span></code><a class="headerlink" href="#explicit-sanitizer-checks-with-builtin-allow-sanitize-check" title="Lien vers cette rubrique">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">__builtin_allow_sanitize_check(&quot;thread&quot;)</span></code> builtin can be used to
+conditionally execute code depending on whether ThreadSanitizer checks are
+enabled and permitted by the current policy (after inlining). This is
+particularly useful for inserting explicit, sanitizer-specific checks around
+operations like syscalls or inline assembly, which might otherwise be unchecked
+by the sanitizer.</p>
+<p>Example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">__tsan_read8</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+
+<span class="kr">inline</span><span class="w"> </span><span class="n">__attribute__</span><span class="p">((</span><span class="n">always_inline</span><span class="p">))</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">my_helper</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">__builtin_allow_sanitize_check</span><span class="p">(</span><span class="s">"thread"</span><span class="p">))</span>
+<span class="w">    </span><span class="n">__tsan_read8</span><span class="p">(</span><span class="n">addr</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// ... actual logic, e.g. inline assembly ...</span>
+<span class="w">  </span><span class="k">asm</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="p">(</span><span class="s">"..."</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"r"</span><span class="w"> </span><span class="p">(</span><span class="n">addr</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"memory"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">instrumented_function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="n">my_helper</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_data</span><span class="p">);</span><span class="w"> </span><span class="c1">// checks are active</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+
+<span class="n">__attribute__</span><span class="p">((</span><span class="n">no_sanitize</span><span class="p">(</span><span class="s">"thread"</span><span class="p">)))</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">uninstrumented_function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="n">my_helper</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_data</span><span class="p">);</span><span class="w"> </span><span class="c1">// checks are skipped</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="ignorelist">
+<h2>Ignorelist<a class="headerlink" href="#ignorelist" title="Lien vers cette rubrique">¶</a></h2>
+<p>ThreadSanitizer supports <code class="docutils literal notranslate"><span class="pre">src</span></code> and <code class="docutils literal notranslate"><span class="pre">fun</span></code> entity types in
+<a class="reference internal" href="SanitizerSpecialCaseList.html"><span class="doc">Sanitizer special case list</span></a>, that can be used to suppress data race reports
+in the specified source files or functions. Unlike functions marked with
+<code class="docutils literal notranslate"><span class="pre">no_sanitize(&quot;thread&quot;)</span></code> attribute, ignored functions are not instrumented
+at all. This can lead to false positives due to missed synchronization via
+atomic operations and missed stack frames in reports.</p>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ignore exactly this function (the names are mangled in C++)</span>
+fun:_Z8MyFooBarv
+<span class="c1"># Ignore all functions containing MyFooBar</span>
+fun:*MyFooBar*
+<span class="c1"># Ignore the whole file</span>
+src:file_with_tricky_code.cc
+</pre></div>
+</div>
+</section>
+<section id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Lien vers cette rubrique">¶</a></h2>
+<ul>
+<li><p>ThreadSanitizer uses more real memory than a native run. At the default
+settings the memory overhead is 5x plus 1Mb per each thread. Settings with 3x
+(less accurate analysis) and 9x (more accurate analysis) overhead are also
+available.</p></li>
+<li><p>ThreadSanitizer maps (but does not reserve) a lot of virtual address space.
+This means that tools like <code class="docutils literal notranslate"><span class="pre">ulimit</span></code> may not work as usually expected.</p></li>
+<li><p>Libc/libstdc++ static linking is not supported.</p></li>
+<li><p>Non-position-independent executables are not supported. Therefore, the
+<code class="docutils literal notranslate"><span class="pre">fsanitize=thread</span></code> flag will cause Clang to act as though the <code class="docutils literal notranslate"><span class="pre">-fPIE</span></code>
+flag had been supplied if compiling without <code class="docutils literal notranslate"><span class="pre">-fPIC</span></code>, and as though the
+<code class="docutils literal notranslate"><span class="pre">-pie</span></code> flag had been supplied if linking an executable.</p></li>
+<li><p>ThreadSanitizer generally requires all code to be compiled with
+<code class="docutils literal notranslate"><span class="pre">-fsanitize=thread</span></code>. If some code (such as pre-compiled dynamic libraries)
+is not compiled with the flag, TSan may fail to detect races or may report
+false positives. Refer to the <code class="docutils literal notranslate"><span class="pre">ignore_interceptors_accesses</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ignore_noninstrumented_modules</span></code> run-time options to work around issues
+arising from non-instrumented modules.</p></li>
+<li><p>On Linux, disabling ASLR may cause ThreadSanitizer to fail to allocate shadow
+memory, printing the error <code class="docutils literal notranslate"><span class="pre">FATAL:</span> <span class="pre">ThreadSanitizer</span> <span class="pre">can</span> <span class="pre">not</span> <span class="pre">mmap</span> <span class="pre">the</span> <span class="pre">shadow</span> <span class="pre">memory</span> <span class="pre">(something</span> <span class="pre">is</span> <span class="pre">mapped</span> <span class="pre">at</span> <span class="pre">...)</span></code>.
+Note that GDB disables ASLR by default. To debug ThreadSanitizer binaries under
+GDB, configure it to preserve ASLR by running:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>gdb<span class="w"> </span>-ex<span class="w"> </span><span class="s1">'set disable-randomization off'</span><span class="w"> </span>--args<span class="w"> </span>./a.out
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="security-considerations">
+<h2>Security Considerations<a class="headerlink" href="#security-considerations" title="Lien vers cette rubrique">¶</a></h2>
+<p>ThreadSanitizer is a bug detection tool and its runtime is not meant to be
+linked against production executables. While it may be useful for testing,
+ThreadSanitizer’s runtime was not developed with security-sensitive
+constraints in mind and may compromise the security of the resulting executable.</p>
+</section>
+<section id="current-status">
+<h2>Current Status<a class="headerlink" href="#current-status" title="Lien vers cette rubrique">¶</a></h2>
+<p>ThreadSanitizer is in beta stage. It is known to work on large C++ programs
+using pthreads, but we do not promise anything (yet). C++11 threading is
+supported with llvm libc++. The test suite is integrated into CMake build
+and can be run with <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">check-tsan</span></code> command.</p>
+<p>We are actively working on enhancing the tool — stay tuned. Any help,
+especially in the form of minimized standalone tests is more than welcome.</p>
+</section>
+<section id="run-time-flags">
+<h2>Run-time Flags<a class="headerlink" href="#run-time-flags" title="Lien vers cette rubrique">¶</a></h2>
+<p>ThreadSanitizer supports a number of run-time flags, which can be specified
+in the <code class="docutils literal notranslate"><span class="pre">TSAN_OPTIONS</span></code> environment variable. Separate flags are separated
+with spaces.</p>
+<p>Example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">TSAN_OPTIONS</span><span class="o">=</span><span class="s2">"history_size=7 halt_on_error=1"</span><span class="w"> </span>./myprogram
+</pre></div>
+</div>
+<p>The most common run-time flags are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">detect_deadlocks</span></code> (default: <code class="docutils literal notranslate"><span class="pre">true</span></code>): Controls whether deadlock detection is
+enabled.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exitcode</span></code> (default: <code class="docutils literal notranslate"><span class="pre">66</span></code>): Override the exit status if an error is found. Note
+that for ThreadSanitizer the default exitcode is 66, unlike other sanitizers.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">force_seq_cst_atomics</span></code> (default: <code class="docutils literal notranslate"><span class="pre">false</span></code>): If set, all atomic operations are
+treated as sequentially consistent (seq_cst). Useful for debugging relaxed atomic
+ordering bugs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">halt_on_error</span></code> (default: <code class="docutils literal notranslate"><span class="pre">false</span></code>): Exit after the first reported error.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">history_size</span></code> (default: <code class="docutils literal notranslate"><span class="pre">0</span></code>): Controls per-thread history size, which
+determines how many previous memory accesses are remembered per thread. If
+you see « failed to restore the stack » reports, try increasing this flag
+(values from 0 to 7 are supported).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ignore_interceptors_accesses</span></code> (default: <code class="docutils literal notranslate"><span class="pre">false</span></code> on Linux/Windows, <code class="docutils literal notranslate"><span class="pre">true</span></code>
+on Apple platforms): Ignore reads and writes from all interceptors.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ignore_noninstrumented_modules</span></code> (default: <code class="docutils literal notranslate"><span class="pre">false</span></code> on Linux/Windows, <code class="docutils literal notranslate"><span class="pre">true</span></code>
+on Apple platforms): Ignore interceptors called from non-instrumented modules.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">log_path</span></code> (default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>): If set, write logs to <code class="docutils literal notranslate"><span class="pre">log_path.pid</span></code> instead of
+stderr. Special values are <code class="docutils literal notranslate"><span class="pre">stdout</span></code> and <code class="docutils literal notranslate"><span class="pre">stderr</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">print_full_thread_history</span></code> (default: <code class="docutils literal notranslate"><span class="pre">false</span></code>): Print creation stack traces for
+all threads involved in the report and their ancestor threads back to the main thread.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">report_atomic_races</span></code> (default: <code class="docutils literal notranslate"><span class="pre">true</span></code>): Report races between atomic and
+plain memory accesses.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">suppressions</span></code> (default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>): Path to a suppressions file.</p></li>
+</ul>
+<p>To see the complete list of flags and their descriptions, run an instrumented
+binary with the <code class="docutils literal notranslate"><span class="pre">help=1</span></code> option:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">TSAN_OPTIONS</span><span class="o">=</span><span class="s2">"help=1"</span><span class="w"> </span>./myprogram
+</pre></div>
+</div>
+<p>You can also refer to the source declarations in the LLVM repository under
+<code class="docutils literal notranslate"><span class="pre">compiler-rt/lib/tsan/rtl/tsan_flags.inc</span></code> (ThreadSanitizer-specific flags)
+and <code class="docutils literal notranslate"><span class="pre">compiler-rt/lib/sanitizer_common/sanitizer_flags.inc</span></code> (common sanitizer
+flags).</p>
+<p>Flags passed via the <code class="docutils literal notranslate"><span class="pre">TSAN_OPTIONS</span></code> environment variable take precedence over
+compile-time default options.</p>
+<p>Default options can also be specified at compile/link time by defining
+<code class="docutils literal notranslate"><span class="pre">__tsan_default_options</span></code>:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sanitizer/tsan_interface.h&gt;</span>
+
+<span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">__tsan_default_options</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="s">"report_atomic_races=0:halt_on_error=1"</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="suppressions">
+<h2>Suppressions<a class="headerlink" href="#suppressions" title="Lien vers cette rubrique">¶</a></h2>
+<p>If you have a data race or thread leak that you are already aware of but cannot
+fix right away (e.g., in a third-party library), you can suppress the reports
+at run-time using a suppressions file.</p>
+<p>Specify the suppressions file path via the <code class="docutils literal notranslate"><span class="pre">suppressions</span></code> flag in the
+<code class="docutils literal notranslate"><span class="pre">TSAN_OPTIONS</span></code> environment variable:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">TSAN_OPTIONS</span><span class="o">=</span><span class="s2">"suppressions=/path/to/suppressions.supp"</span><span class="w"> </span>./myprogram
+</pre></div>
+</div>
+<p>Alternatively, you can provide default suppressions at compile time by defining
+the <code class="docutils literal notranslate"><span class="pre">__tsan_default_suppressions</span></code> function in your source code:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sanitizer/tsan_interface.h&gt;</span>
+
+<span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">__tsan_default_suppressions</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="s">"race:foobar</span><span class="se">\n</span><span class="s">"</span>
+<span class="w">         </span><span class="s">"race:NuclearRocket::Launch</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Each non-empty line of the suppressions file represents one suppression of the
+form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">suppression_type</span><span class="p">:</span><span class="n">suppression_pattern</span>
+</pre></div>
+</div>
+<p>The supported <code class="docutils literal notranslate"><span class="pre">suppression_type</span></code> values are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">race</span></code>: Suppresses data race reports. The pattern is matched against function
+names, source file names, or global variable names in the stacks of the report.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">race_top</span></code>: Suppresses data race reports only when matching the top frame of the stack trace.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mutex</span></code>: Suppresses mutex-related invalid operations (double lock, invalid unlock, unlock from wrong thread, etc.).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">thread</span></code>: Suppresses thread leak reports. The pattern is matched against the
+name of the leaked thread.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">signal</span></code>: Suppresses signal-unsafe handler warnings and errno usage in signal handlers.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deadlock</span></code>: Suppresses lock inversion / deadlock reports.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">called_from_lib</span></code>: Suppresses reports if the call originated from a specific
+non-instrumented library.</p></li>
+</ul>
+<p>The pattern can contain the <code class="docutils literal notranslate"><span class="pre">*</span></code> wildcard, which matches any substring. By
+default, <code class="docutils literal notranslate"><span class="pre">*</span></code> is automatically prepended and appended to each pattern. You can
+use <code class="docutils literal notranslate"><span class="pre">^</span></code> and <code class="docutils literal notranslate"><span class="pre">$</span></code> to anchor patterns to the beginning and end of the string.
+Lines starting with <code class="docutils literal notranslate"><span class="pre">#</span></code> are treated as comments.</p>
+<p>Example of a suppressions file:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># Suppress data races in a third-party library 'foobar'
+race:foobar
+# Suppress data races matching the top stack frame
+race_top:MyFrame
+# Suppress data races in a specific function
+race:NuclearRocket::Launch
+# Suppress data races in a specific source file
+race:src/surgery/laser_scalpel.cc
+# Suppress data races on a specific global variable
+race:global_var
+# Suppress a leaked thread by name
+thread:MonitoringThread
+# Suppress mutex misuse in a specific function
+mutex:bad_mutex_fn
+# Suppress signal-unsafe handler warnings
+signal:signal_handler
+# Suppress lock inversion / deadlock in a function
+deadlock:potential_deadlock_fn
+# Suppress warnings called from an uninstrumented library
+called_from_lib:libzmq.so
+</pre></div>
+</div>
+</section>
+<section id="adaptive-delay">
+<h2>Adaptive Delay<a class="headerlink" href="#adaptive-delay" title="Lien vers cette rubrique">¶</a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Lien vers cette rubrique">¶</a></h3>
+<p>Adaptive Delay is an optional ThreadSanitizer feature that injects delays at
+synchronization points to explore novel thread interleavings and increase the
+likelihood of exposing data races. By perturbing thread scheduling, adaptive
+delay creates more opportunities for concurrent accesses to shared data,
+improving race detection.</p>
+<p>Adaptive delay is particularly useful for:</p>
+<ul class="simple">
+<li><p>Detecting races in rarely-executed thread interleavings or code paths</p></li>
+<li><p>Testing parallel data structures and algorithms</p></li>
+</ul>
+<p>When enabled, adaptive delay maintains a configurable time budget to balance
+race exposure against performance overhead. The delays can be</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>random amount of spin cycles</p></li>
+<li><p>a single yield to the OS scheduler</p></li>
+<li><p>random usleep</p></li>
+</ul>
+</div></blockquote>
+<p>The strategy prioritizes high-value synchronization points:</p>
+<ul class="simple">
+<li><p>Relaxed atomic operations receive cheap delays (spin cycles) with low sampling</p></li>
+<li><p>Synchronizing atomic operations (acquire/release/seq_cst) receive moderate
+delays with higher sampling</p></li>
+<li><p>Mutex and thread lifecycle operations receive the longest delays with highest
+sampling</p></li>
+</ul>
+<p>The delays focus on synchronization points with clear happens-before relationships,
+as those are most likely to expose data races.</p>
+</section>
+<section id="enabling-adaptive-delay">
+<h3>Enabling Adaptive Delay<a class="headerlink" href="#enabling-adaptive-delay" title="Lien vers cette rubrique">¶</a></h3>
+<p>Adaptive delay is disabled by default. Enable it by setting the
+<code class="docutils literal notranslate"><span class="pre">enable_adaptive_delay</span></code> flag:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">TSAN_OPTIONS</span><span class="o">=</span><span class="nv">enable_adaptive_delay</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./myapp
+</pre></div>
+</div>
+</section>
+<section id="configuration-options">
+<h3>Configuration Options<a class="headerlink" href="#configuration-options" title="Lien vers cette rubrique">¶</a></h3>
+<div class="table-wrapper colwidths-given docutils container" id="adaptive-delay-options-table">
+<table class="docutils align-default" id="adaptive-delay-options-table">
+<caption><span class="caption-text">Adaptive Delay Options</span><a class="headerlink" href="#adaptive-delay-options-table" title="Lien vers ce tableau">¶</a></caption>
+<colgroup>
+<col style="width: 35.0%" />
+<col style="width: 10.0%" />
+<col style="width: 15.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Flag</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enable_adaptive_delay</span></code></p></td>
+<td><p>bool</p></td>
+<td><p>false</p></td>
+<td><p>Enable adaptive delay injection to expose data races.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">adaptive_delay_aggressiveness</span></code></p></td>
+<td><p>int</p></td>
+<td><p>25</p></td>
+<td><p>Controls delay injection intensity for race detection. Higher values inject
+more delays to expose races. Value must be greater than 0. Suggested values:
+10 (minimal), 50 (moderate), 200 (aggressive). This is a tuning parameter;
+actual overhead varies by workload and platform.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">adaptive_delay_relaxed_sample_rate</span></code></p></td>
+<td><p>int</p></td>
+<td><p>10000</p></td>
+<td><p>Sample 1 in N relaxed atomic operations for delay injection. Relaxed atomics
+have minimal synchronization, so sampling helps avoid excessive overhead.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">adaptive_delay_sync_atomic_sample_rate</span></code></p></td>
+<td><p>int</p></td>
+<td><p>100</p></td>
+<td><p>Sample 1 in N acquire/release/seq_cst atomic operations for delay injection.
+These synchronizing atomics are more likely to expose races, so are sampled
+more often.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">adaptive_delay_mutex_sample_rate</span></code></p></td>
+<td><p>int</p></td>
+<td><p>10</p></td>
+<td><p>Sample 1 in N mutex/condition variable operations for delay injection. Mutex
+ops are high-value synchronization points and are sampled frequently.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">adaptive_delay_max_atomic</span></code></p></td>
+<td><p>string</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;sleep_us=50&quot;</span></code></p></td>
+<td><p>Maximum delay for atomic operations. Format: <code class="docutils literal notranslate"><span class="pre">&quot;spin=N&quot;</span></code> (N spin cycles,
+1 &lt;= N &lt;= 10,000), <code class="docutils literal notranslate"><span class="pre">&quot;yield&quot;</span></code> (one yield to the OS), or <code class="docutils literal notranslate"><span class="pre">&quot;sleep_us=N&quot;</span></code>
+(up to N microseconds). The delay is randomly chosen up to the specified
+maximum N.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">adaptive_delay_max_sync</span></code></p></td>
+<td><p>string</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;sleep_us=500&quot;</span></code></p></td>
+<td><p>Maximum delay for synchronization operations (mutex and thread lifecycle
+operations). Format: same as <code class="docutils literal notranslate"><span class="pre">adaptive_delay_max_atomic</span></code>. Typically set
+longer than atomic delays since these operations involve waking blocked threads
+and may be more likely to expose races.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Lien vers cette rubrique">¶</a></h3>
+<p>Enable adaptive delay with moderate aggressiveness:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">TSAN_OPTIONS</span><span class="o">=</span><span class="nv">enable_adaptive_delay</span><span class="o">=</span><span class="m">1</span>:adaptive_delay_aggressiveness<span class="o">=</span><span class="m">50</span><span class="w"> </span>./myapp
+</pre></div>
+</div>
+<p>Enable aggressive delay injection:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">TSAN_OPTIONS</span><span class="o">=</span><span class="nv">enable_adaptive_delay</span><span class="o">=</span><span class="m">1</span>:adaptive_delay_aggressiveness<span class="o">=</span><span class="m">200</span><span class="w"> </span>./myapp
+</pre></div>
+</div>
+<p>Increase sampling frequency for mutex operations:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">TSAN_OPTIONS</span><span class="o">=</span><span class="nv">enable_adaptive_delay</span><span class="o">=</span><span class="m">1</span>:adaptive_delay_mutex_sample_rate<span class="o">=</span><span class="m">5</span><span class="w"> </span>./myapp
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="MemorySanitizer.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">MemorySanitizer</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="HardwareAssistedAddressSanitizer.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Hardware-assisted AddressSanitizer</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">ThreadSanitizer</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#how-to-build">How to build</a></li>
+<li><a class="reference internal" href="#supported-platforms">Supported Platforms</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#has-feature-thread-sanitizer"><code class="docutils literal notranslate"><span class="pre">__has_feature(thread_sanitizer)</span></code></a></li>
+<li><a class="reference internal" href="#attribute-no-sanitize-thread"><code class="docutils literal notranslate"><span class="pre">__attribute__((no_sanitize(&quot;thread&quot;)))</span></code></a></li>
+<li><a class="reference internal" href="#attribute-disable-sanitizer-instrumentation"><code class="docutils literal notranslate"><span class="pre">__attribute__((disable_sanitizer_instrumentation))</span></code></a></li>
+<li><a class="reference internal" href="#interaction-of-inlining-with-disabling-sanitizer-instrumentation">Interaction of Inlining with Disabling Sanitizer Instrumentation</a></li>
+<li><a class="reference internal" href="#explicit-sanitizer-checks-with-builtin-allow-sanitize-check">Explicit Sanitizer Checks with <code class="docutils literal notranslate"><span class="pre">__builtin_allow_sanitize_check</span></code></a></li>
+<li><a class="reference internal" href="#ignorelist">Ignorelist</a></li>
+<li><a class="reference internal" href="#limitations">Limitations</a></li>
+<li><a class="reference internal" href="#security-considerations">Security Considerations</a></li>
+<li><a class="reference internal" href="#current-status">Current Status</a></li>
+<li><a class="reference internal" href="#run-time-flags">Run-time Flags</a></li>
+<li><a class="reference internal" href="#suppressions">Suppressions</a></li>
+<li><a class="reference internal" href="#adaptive-delay">Adaptive Delay</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#enabling-adaptive-delay">Enabling Adaptive Delay</a></li>
+<li><a class="reference internal" href="#configuration-options">Configuration Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=711a3ba7"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=aa914e54"></script>
+    <script src="_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>
