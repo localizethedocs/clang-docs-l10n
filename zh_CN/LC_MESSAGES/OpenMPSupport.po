@@ -1,0 +1,1799 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2025, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../OpenMPSupport.md:1
+msgid ""
+"<style type=\"text/css\">\n"
+"  .none { background-color: #FFCCCC }\n"
+"  .part { background-color: #FFFF99 }\n"
+"  .good { background-color: #CCFF99 }\n"
+"</style>"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:19
+msgid "OpenMP Support"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:21
+msgid ""
+"Clang fully supports OpenMP 4.5, almost all of 5.0 and most of 5.1/2. Clang "
+"supports offloading to X86_64, AArch64, PPC64[LE], NVIDIA GPUs (all models) "
+"and AMD GPUs (all models)."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:24
+msgid ""
+"In addition, the LLVM OpenMP runtime `libomp` supports the OpenMP Tools "
+"Interface (OMPT) on x86, x86_64, AArch64, and PPC64 on Linux, Windows, and "
+"macOS. OMPT is also supported for NVIDIA and AMD GPUs."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:28
+msgid ""
+"For the list of supported features from OpenMP 5.0 and 5.1 see {ref}`OpenMP "
+"implementation details <openmp-implementation-details>` and {ref}`OpenMP 51 "
+"implementation details <openmp-51-implementation-details>`."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:32
+msgid "General improvements"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:34
+msgid ""
+"New collapse clause scheme to avoid expensive remainder operations. Compute "
+"loop index variables after collapsing a loop nest via the collapse clause by "
+"replacing the expensive remainder operation with multiplications and "
+"additions."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:38
+msgid ""
+"When using the collapse clause on a loop nest the default behavior is to "
+"automatically extend the representation of the loop counter to 64 bits for "
+"the cases where the sizes of the collapsed loops are not known at compile "
+"time. To prevent this conservative choice and use at most 32 bits, compile "
+"your program with the `-fopenmp-optimistic-collapse`."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:45
+msgid "GPU devices support"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:47
+msgid "Data-sharing modes"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:49
+msgid ""
+"Clang supports two data-sharing models for Cuda devices: `Generic` and "
+"`Cuda` modes. The default mode is `Generic`. `Cuda` mode can give an "
+"additional performance and can be activated using the `-fopenmp-cuda-mode` "
+"flag. In `Generic` mode all local variables that can be shared in the "
+"parallel regions are stored in the global memory. In `Cuda` mode local "
+"variables are not shared between the threads and it is user responsibility "
+"to share the required data between the threads in the parallel regions. "
+"Often, the optimizer is able to reduce the cost of `Generic` mode to the "
+"level of `Cuda` mode, but the flag, as well as other assumption flags, can "
+"be used for tuning."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:59
+msgid "Features not supported or with limited support for Cuda devices"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:61
+msgid "Cancellation constructs are not supported."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:62
+msgid "Doacross loop nest is not supported."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:63
+msgid "User-defined reductions are supported only for trivial types."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:64
+msgid "Nested parallelism: inner parallel regions are executed sequentially."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:65
+msgid ""
+"Debug information for OpenMP target regions is supported, but sometimes it "
+"may be required to manually specify the address class of the inspected "
+"variables. In some cases the local variables are actually allocated in the "
+"global memory, but the debug info may be not aware of it."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:72
+msgid "OpenMP 5.0 Implementation Details"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:74
+msgid ""
+"The following table provides a quick overview over various OpenMP 5.0 "
+"features and their implementation status. Please post on the [Discourse "
+"forums (Runtimes - OpenMP category)] for more information or if you want to "
+"help with the implementation."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Category"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Feature"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Status"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Reviews"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "loop"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "support != in the canonical loop form"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{good}`done`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D54441][D54441]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "#pragma omp loop (directive)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{part}`partial`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D145823][D145823] (combined forms)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "#pragma omp loop bind"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{part}`worked on`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D144634][D144634] (needs review)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "collapse imperfectly nested loop"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "collapse non-rectangular nested loop"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "C++ range-base for loop"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "clause: if for SIMD directives"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "inclusive scan (matching C++17 PSTL)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "memory management"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "memory allocators"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "r341687,r357929"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "allocate directive and allocate clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "r355614,r335952"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPD"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPD interfaces"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D99914][D99914] (Supports only HOST(CPU) and Linux"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPT"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPT interfaces (callback support)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "thread affinity"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "task"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "taskloop reduction"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "task affinity"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{part}`not upstream`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "<https://github.com/jklinkenberg/openmp/tree/task-affinity>"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "clause: depend on the taskwait construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D113540][D113540] (regular codegen only)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "depend objects and detachable tasks"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "mutexinoutset dependence-type for tasks"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D53380][D53380],[D57576][D57576]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "combined taskloop constructs"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "master taskloop"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "parallel master taskloop"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "master taskloop simd"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "parallel master taskloop simd"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "SIMD"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "atomic and simd constructs inside SIMD code"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "SIMD nontemporal"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "device"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "infer target functions from initializers"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "infer target variables from initializers"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D146418][D146418]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMP_TARGET_OFFLOAD environment variable"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D50522][D50522]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "support full 'defaultmap' functionality"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D69204][D69204]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "device specific functions"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "clause: device_type"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "clause: extended device"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "clause: uses_allocators clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR157025][PR157025]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "clause: in_reduction"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "r308768"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "omp_get_device_num()"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D54342][D54342],[D128347][D128347]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "structure mapping of references"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{none}`unclaimed`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "nested target declare"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D51378][D51378]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "implicitly map 'this' (this[:1])"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D55982][D55982]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "allow access to the reference count (omp_target_is_present)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "requires directive"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "clause: unified_shared_memory"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D52625][D52625],[D52359][D52359]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "clause: unified_address"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "clause: reverse_offload"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D52780][D52780],[D155003][D155003]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "clause: atomic_default_mem_order"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D53513][D53513]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "clause: dynamic_allocators"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{part}`unclaimed parts`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D53079][D53079]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "user-defined mappers"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"[D56326][D56326],[D58638][D58638],[D58523][D58523],[D58074][D58074],[D60972]"
+"[D60972],[D59474][D59474]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "map array-section with implicit mapper"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR101101][PR101101]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "mapping lambda expression"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D51107][D51107]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "clause: use_device_addr for target data"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "support close modifier on map clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D55719][D55719],[D55892][D55892]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "teams construct on the host device"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "r371553"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "support non-contiguous array sections for target update"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR144635][PR144635]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "pointer attachment"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{part}`being repaired`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "@abhinavgaba ([PR153683][PR153683], [PR210213][PR210213])"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "atomic"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "hints for the atomic construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D51233][D51233]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "base language"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "C11 support"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "C++11/14/17 support"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "lambda support"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "misc"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "array shaping"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D74144][D74144]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "library shutdown (omp_pause_resource[\\_all])"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D55078][D55078]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "metadirectives"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{part}`mostly done`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D91944][D91944], [PR128640][PR128640]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "conditional modifier for lastprivate clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "iterator and multidependences"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "depobj directive and depobj dependency kind"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "user-defined function variants"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{good}`done`."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"[D67294][D67294], [D64095][D64095], [D71847][D71847], [D71830][D71830], "
+"[D109635][D109635]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "pointer/reference to pointer based array reductions"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "prevent new type definitions in clauses"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "memory model"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "memory model update (seq_cst, acq_rel, release, acquire,...)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:152
+msgid "OpenMP 5.1 Implementation Details"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:154
+msgid ""
+"The following table provides a quick overview over various OpenMP 5.1 "
+"features and their implementation status. Please post on the [Discourse "
+"forums (Runtimes - OpenMP category)] for more information or if you want to "
+"help with the implementation."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "'compare' clause on atomic construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"[D120290][D120290], [D120007][D120007], [D118632][D118632], [D120200]"
+"[D120200], [D116261][D116261], [D118547][D118547], [D116637][D116637]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "'fail' clause on atomic construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D123235][D123235] (in progress)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "C++ attribute specifier syntax"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D105648][D105648]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "'present' map type modifier"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D83061][D83061], [D83062][D83062], [D84422][D84422]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "'present' motion modifier"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D84711][D84711], [D84712][D84712]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "'present' in defaultmap clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D92427][D92427]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "map clause reordering based on 'present' modifier"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "device-specific environment variables"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "omp_target_is_accessible routine"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR138294][PR138294]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "omp_get_mapped_ptr routine"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D141545][D141545]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "new async target memory copy routines"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D136103][D136103]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "thread_limit clause on target construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D141540][D141540] (offload), [D152054][D152054] (host, in progress)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "has_device_addr clause on target construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "use_device_ptr/addr preserve host address when lookup fails"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR174659][PR174659]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "iterators in map clause or motion clauses"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR159112][PR159112]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "indirect clause on declare target directive"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{part}`In Progress`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "allow virtual functions calls for mapped object on device"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "interop construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "parsing/sema done: [D98558][D98558], [D98834][D98834], [D98815][D98815]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "assorted routines for querying interoperable properties"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D106674][D106674]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Loop tiling transformation"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"[D76342][D76342], canonicalisation of intra-tile loops: [PR191114][PR191114] "
+"(stacked tile not yet supported)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Loop unrolling transformation"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D99459][D99459]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "'reproducible'/'unconstrained' modifiers in 'order' clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D127855][D127855]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "alignment for allocate directive and clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D115683][D115683]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "'allocator' modifier for allocate clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR114883][PR114883]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "'align' modifier for allocate clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR121814][PR121814]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "new memory management routines"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "changes to omp_alloctrait_key enum"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "seq_cst clause on flush construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR114072][PR114072]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "'omp_all_memory' keyword and use in 'depend' clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D125828][D125828], [D126321][D126321]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "error directive"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D139166][D139166]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "scope construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D157933][D157933], [PR109197][PR109197]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "routines for controlling and querying team regions"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D95003][D95003] (libomp only)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "omp_display_env routine"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D74956][D74956]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "extended OMP_PLACES syntax"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMP_NUM_TEAMS and OMP_TEAMS_THREAD_LIMIT env vars"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D138769][D138769]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "'target_device' selector in context specifier"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "begin/end declare variant"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D71179][D71179]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "dispatch construct and function variant argument adjustment"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D99537][D99537], [D99679][D99679]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "assumes directives"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "assume directive"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "nothing directive"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D123286][D123286]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "masked construct and related combined constructs"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"[D99995][D99995], [D100514][D100514], [PR121741][PR121741] "
+"(parallel_masked_taskloop) [PR121746][PR121746] "
+"(parallel_masked_task_loop_simd), [PR121914][PR121914] (masked_taskloop) "
+"[PR121916][PR121916] (masked_taskloop_simd)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "default(firstprivate) & default(private)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D75591][D75591] (firstprivate), [D125912][D125912] (private)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "other"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "deprecating master construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "changes to ompt_scope_endpoint_t enum"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D90752][D90752]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "new barrier types added to ompt_sync_region_t enum"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "async data transfers added to ompt_target_data_op_t enum"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "new barrier state values added to ompt_state_t enum"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "new 'emi' callbacks for external monitoring interfaces"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "device tracing interface"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{part}`in progress`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "jplehr"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "'strict' modifier for taskloop construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "inoutset in depend clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D97085][D97085], [D118383][D118383]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "nowait clause on taskwait"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "parsing/sema done: [D131830][D131830], [D141531][D141531]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:219
+msgid "OpenMP 5.2 Implementation Details"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:221
+msgid ""
+"The following table provides a quick overview of various OpenMP 5.2 features "
+"and their implementation status. Please post on the [Discourse forums "
+"(Runtimes - OpenMP category)] for more information or if you want to help "
+"with the implementation."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "C/C++ Status"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Fortran Status"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "omp_in_explicit_task()"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "semantics of explicit_task_var and implicit_task_var"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "ompx sentinel for C/C++ directive extensions"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "ompx prefix for clause extensions"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "if clause on teams construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "step modifier added"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "declare mapper: Add iterator modifier on map clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "memspace and traits modifiers to uses allocator i"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Add otherwise clause to metadirectives"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "doacross clause with support for omp_cur_iteration"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "position of interop_type in init clause on iterop"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "implicit map type for target enter/exit data"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "work OMPT type for work-sharing loop constructs"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR189347][PR189347], [PR97429][PR97429]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "extend ompt_dispatch_t for new enum values"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D122107][D122107]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "allocate and firstprivate on scope directive"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Change loop consistency for order clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Add memspace and traits modifiers to uses_allocators"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Keep original base pointer on map w/o matched candidate"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Pure procedure support for certain directives"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{none}`N/A`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "ALLOCATE statement support for allocators"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "dispatch construct extension to support end directive"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:254
+msgid "OpenMP 5.2 Deprecations"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Linear clause syntax"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "The minus operator"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Map clause modifiers without commas"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "The use of allocate directives with ALLOCATE statement"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{good}`N/A`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "uses_allocators list syntax"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "The default clause on metadirectives"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "The delimited form of the declare target directive"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "The use of the to clause on the declare target directive"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "The syntax of the destroy clause on the depobj construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "keyword source and sink as task-dependence modifiers"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "interop types in any position on init clause of interop"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "ompd prefix usage for some ICVs"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:273
+msgid "OpenMP 6.0 Implementation Details"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:275
+msgid ""
+"The following table provides a quick overview of various OpenMP 6.0 features "
+"and their implementation status. Please post on the [Discourse forums "
+"(Runtimes - OpenMP category)] for more information or if you want to help "
+"with the implementation."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "free-agent threads"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "threadset clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Parse/Sema/Codegen: [PR13580][PR13580]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Recording of task graphs"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "clang: jtb20, flang: kparzysz"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Parallel inductions"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "init_complete for scan directive"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "loop interchange transformation"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"Clang (interchange): [PR93022][PR93022] Clang (permutation): [PR92030]"
+"[PR92030]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "loop reverse transformation"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR92916][PR92916]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "loop stripe transformation"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR119891][PR119891]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "loop fusion transformation"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR139293][PR139293] [PR161213][PR161213] [PR168898][PR168898]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "loop index set splitting transformation with count clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "@amitamd7"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "loop transformation apply clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "loop fuse transformation"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "workdistribute construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{none}`in progress`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "@skc7, @mjklemm"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "task_iteration"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "memscope clause for atomic and flush"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "transparent clause (hull tasks)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Clang parsing/sema [PR174646][PR174646]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "rule-based compound directives"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "kparzysz Testing for Fortran missing"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "C23, C++23"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Fortran 2023"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "decl attribute for declarative directives"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "C attribute syntax"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "pure directives in DO CONCURRENT"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Optional argument for all clauses"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Parse/Sema (nowait): [PR159628][PR159628]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Function references for locator list items"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "All clauses accept directive name modifier"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Extensions to depobj construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Extensions to atomic construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Private reductions"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{part}`mostly`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Parse/Sema: [PR129938][PR129938] Codegen: [PR134709][PR134709]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Self maps"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "parsing/sema done: [PR129888][PR129888]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Release map type for declare mapper"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Extensions to interop construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "no_openmp_constructs"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR125933][PR125933]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "safe_sync and progress with identifier and API"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OpenMP directives in concurrent loop regions"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR125621][PR125621]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "atomics constructs on concurrent loop regions"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Loop construct with DO CONCURRENT"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "device_type clause for target construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "nowait for ancestor target directives"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "New API for devices' num_teams/thread_limit"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Host and device environment variables"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "num_threads ICV and clause accepts list"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Numeric names for environment variables"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Increment between places for OMP_PLACES"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMP_AVAILABLE_DEVICES envirable"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "(should wait for \"Traits for default device envirable\" being done)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Traits for default device envirable"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "ro-i"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Optionally omit array length expression"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "(Parse) [PR148048][PR148048], (Sema) [PR152786][PR152786]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Canonical loop sequences"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Clang: [PR139293][PR139293]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Clarifications to Fortran map semantics"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "default clause at target construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR162910][PR162910]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "ref count update use_device_{ptr, addr}"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Clarifications to implicit reductions"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "ref modifier for map clauses"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "map-type modifiers in arbitrary position"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR90499][PR90499]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Lift nesting restriction on concurrent loop"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "priority clause for target constructs"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "changes to target_data construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Non-const do_not_sync for nowait/nogroup"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "need_device_addr modifier for adjust_args clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Parsing/Sema: [PR143442][PR143442] [PR149586][PR149586]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "need_device_ptr modifier for adjust_args clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Prescriptive num_threads"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"[PR160659][PR160659] [PR146403][PR146403] [PR146404][PR146404] [PR146405]"
+"[PR146405]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Message and severity clauses"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR146093][PR146093]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Local clause on declare target"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"clang Parse/Sema: [PR186281][PR186281] clang Codegen: [PR196431][PR196431]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "groupprivate directive"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"Flang: kparzysz, mjklemm Flang parser: [PR153807][PR153807] Flang sema: "
+"[PR154779][PR154779] Clang parse/sema: [PR158134][PR158134]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "variable-category on default clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Changes to omp_target_is_accessible"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "defaultmap implicit-behavior 'storage'"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR158336][PR158336]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "defaultmap implicit-behavior 'private'"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR158712][PR158712]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPT: ompt_get_buffer_limits entry point"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Definition: [PR195829][PR195829]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPT: ompt_any_record_ompt_t for device tracing"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR195829][PR195829]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPT: ompt_target_data_transfer_rect(_async) & subvolume"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Enum: [PR195829][PR195829]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPT: ompt_target_data_transfer(_async)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPT: ompt_target_data_memset(_async)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Enum: [PR195829][PR195829] Callbacks: [PR194168][PR194168]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPT: workdistribute work callback enum"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPT: transparent task flag enum (importing/exporting)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPT: dependence type {out, inout}_all_memory"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPT: removed master callback"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPT: removed sync_region_barrier(_implicit) enum value"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:363
+msgid "OpenMP 6.0 Deprecations"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPT: non-emi target callbacks"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "OMPT: transfer_to_device / transfer_from_device enums"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:372
+msgid "OpenMP 6.1 Implementation Details (Experimental)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:374
+msgid ""
+"The following table provides a quick overview over various OpenMP 6.1 "
+"features and their implementation status. Since OpenMP 6.1 has not yet been "
+"released, the following features are experimental and are subject to change "
+"at any time. Please post on the [Discourse forums (Runtimes - OpenMP "
+"category)] for more information or if you want to help with the "
+"implementation."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "dyn_groupprivate clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "C/C++: Host device support missing"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "loop flatten transformation"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "loop grid/tile modifiers for sizes clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "attach map-type modifier"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"C/C++: @abhinavgaba; RT: @abhinavgaba ([PR149036][PR149036], [PR158370]"
+"[PR158370], [PR210213][PR210213])"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "Clang Parsing/Sema: [PR168905][PR168905] [PR169558][PR169558]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "fallback modifier for use_device_ptr clause"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"Clang: @abhinavgaba ([PR170578][PR170578], [PR173931][PR173931]) RT: "
+"@abhinavgaba ([PR169603][PR169603])"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "dims modifier for num_teams, thread_limit, and num_threads clauses"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"C/C++: @kevinsala ([PR206412][PR208353]); Fortran: @skc7, @kparzysz, @mjklemm"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:391
+msgid "OpenMP Extensions"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:393
+msgid ""
+"The following table provides a quick overview over various OpenMP extensions "
+"and their implementation status. These extensions are not currently defined "
+"by any standard, so links to associated LLVM documentation are provided. As "
+"these extensions mature, they will be considered for standardization. Please "
+"post on the [Discourse forums (Runtimes - OpenMP category)] to provide "
+"feedback."
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "atomic extension"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"['atomic' strictly nested within 'teams'](https://openmp.llvm.org/docs/"
+"openacc/OpenMPExtensions.html#atomicWithinTeams)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "{part}`prototyped`"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D126323][D126323]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "device extension"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"['ompx_hold' map type modifier](https://openmp.llvm.org/docs/openacc/"
+"OpenMPExtensions.html#ompx-hold)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[D106509][D106509], [D106510][D106510]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"['ompx_bare' clause on 'target teams' construct](https://www.osti.gov/"
+"servlets/purl/2205717)"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR66844][PR66844], [PR70612][PR70612]"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid ""
+"Multi-dim 'num_teams' and 'thread_limit' clause on 'target teams ompx_bare' "
+"construct"
+msgstr ""
+
+#: ../../../OpenMPSupport.md:15
+msgid "[PR99732][PR99732], [PR101407][PR101407], [PR102715][PR102715]"
+msgstr ""
