@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"POT-Creation-Date: 2026-10-18 06:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -88,107 +88,133 @@ msgstr ""
 
 #: ../../../AllocToken.md:37
 msgid ""
+"`typefunchashpointersplit`: This mode assigns a token ID based on the hash "
+"of the allocated type's name and the hash of the name of the function "
+"containing the allocation. The upper half of the token ID bits is the type "
+"name hash, the lower half of the token ID bits is the function name hash, "
+"and the most significant bit is a flag indicating whether the type contains "
+"pointers."
+msgstr ""
+
+#: ../../../AllocToken.md:42
+msgid ""
+"`typefunchash`: Like `typefunchashpointersplit`, but without the pointer "
+"flag."
+msgstr ""
+
+#: ../../../AllocToken.md:43
+msgid ""
 "`random`: This mode assigns a statically-determined random token ID to each "
 "allocation site."
 msgstr ""
 
-#: ../../../AllocToken.md:39
+#: ../../../AllocToken.md:45
 msgid ""
 "`increment`: This mode assigns a simple, incrementally increasing token ID "
 "to each allocation site."
 msgstr ""
 
-#: ../../../AllocToken.md:42
+#: ../../../AllocToken.md:48
 msgid "The following command-line options affect generated token IDs:"
 msgstr ""
 
-#: ../../../AllocToken.md:44
+#: ../../../AllocToken.md:50
 msgid "`-falloc-token-max=<N>`"
 msgstr ""
 
-#: ../../../AllocToken.md:45
+#: ../../../AllocToken.md:51
 msgid ""
 "Configures the maximum number of token IDs. By default the number of tokens "
 "is bounded by `SIZE_MAX`."
 msgstr ""
 
-#: ../../../AllocToken.md:48
+#: ../../../AllocToken.md:54
+msgid ""
+"In the `typefunchashpointersplit` and `typefunchash` modes, the number of "
+"token IDs is `N` rounded down to a power of two. As an exception, if `N` is "
+"of the form `2^k-1` (e.g. the default `SIZE_MAX`), all `k` bits are used and "
+"token IDs are in `[0, N]`, i.e. a token ID may be equal to `N`."
+msgstr ""
+
+#: ../../../AllocToken.md:59
 msgid "Querying Token IDs with `__builtin_infer_alloc_token`"
 msgstr ""
 
-#: ../../../AllocToken.md:50
+#: ../../../AllocToken.md:61
 msgid ""
 "For use cases where the token ID must be known at compile time, Clang "
 "provides a builtin function:"
 msgstr ""
 
-#: ../../../AllocToken.md:57
+#: ../../../AllocToken.md:68
 msgid ""
 "This builtin returns the token ID inferred from its argument expressions, "
 "which mirror arguments normally passed to any allocation function. The "
 "argument expressions are **unevaluated**, so it can be used with expressions "
-"that would have side effects without any runtime impact."
+"that would have side effects without any runtime impact. In the "
+"`typefunchashpointersplit`, `typefunchash`, `random`, and `increment` modes, "
+"the builtin cannot be used in constant expressions."
 msgstr ""
 
-#: ../../../AllocToken.md:62
+#: ../../../AllocToken.md:75
 msgid "For example, it can be used as follows:"
 msgstr ""
 
-#: ../../../AllocToken.md:74
+#: ../../../AllocToken.md:87
 msgid "Allocation Token Instrumentation"
 msgstr ""
 
-#: ../../../AllocToken.md:76
+#: ../../../AllocToken.md:89
 msgid ""
 "To enable instrumentation of allocation functions, code can be compiled with "
 "the `-fsanitize=alloc-token` flag:"
 msgstr ""
 
-#: ../../../AllocToken.md:83
+#: ../../../AllocToken.md:96
 msgid ""
 "The instrumentation transforms allocation calls to include a token ID. For "
 "example:"
 msgstr ""
 
-#: ../../../AllocToken.md:94
+#: ../../../AllocToken.md:107
 msgid "Runtime Interface"
 msgstr ""
 
-#: ../../../AllocToken.md:96
+#: ../../../AllocToken.md:109
 msgid ""
 "A compatible runtime must be provided that implements the token-enabled "
 "allocation functions. The instrumentation generates calls to functions that "
 "take a final `size_t token_id` argument."
 msgstr ""
 
-#: ../../../AllocToken.md:115
+#: ../../../AllocToken.md:128
 msgid "Fast ABI"
 msgstr ""
 
-#: ../../../AllocToken.md:117
+#: ../../../AllocToken.md:130
 msgid ""
 "An alternative ABI can be enabled with `-fsanitize-alloc-token-fast-abi`, "
 "which encodes the token ID in the allocation function name."
 msgstr ""
 
-#: ../../../AllocToken.md:131
+#: ../../../AllocToken.md:144
 msgid ""
 "This ABI provides a more efficient alternative where `-falloc-token-max` is "
 "small."
 msgstr ""
 
-#: ../../../AllocToken.md:134
+#: ../../../AllocToken.md:147
 msgid "Instrumenting Non-Standard Allocation Functions"
 msgstr ""
 
-#: ../../../AllocToken.md:136
+#: ../../../AllocToken.md:149
 msgid ""
 "By default, AllocToken only instruments standard library allocation "
 "functions. This simplifies adoption, as a compatible allocator only needs to "
 "provide token-enabled variants for a well-defined set of standard functions."
 msgstr ""
 
-#: ../../../AllocToken.md:140
+#: ../../../AllocToken.md:153
 msgid ""
 "To extend instrumentation to custom allocation functions, enable broader "
 "coverage with `-fsanitize-alloc-token-extended`. Such functions require "
@@ -196,11 +222,11 @@ msgid ""
 "attribute] attributes (or a combination)."
 msgstr ""
 
-#: ../../../AllocToken.md:146
+#: ../../../AllocToken.md:159
 msgid "For example:"
 msgstr ""
 
-#: ../../../AllocToken.md:161
+#: ../../../AllocToken.md:174
 msgid ""
 "Note: Even in the default mode (without `-fsanitize-alloc-token-extended`), "
 "an *inline* allocation wrapper marked with the [malloc][malloc-attribute] or "
@@ -210,17 +236,17 @@ msgid ""
 "inlined still require `-fsanitize-alloc-token-extended`."
 msgstr ""
 
-#: ../../../AllocToken.md:172
+#: ../../../AllocToken.md:185
 msgid "Disabling Instrumentation"
 msgstr ""
 
-#: ../../../AllocToken.md:174
+#: ../../../AllocToken.md:187
 msgid ""
 "To exclude specific functions from instrumentation, you can use the "
 "`no_sanitize(\"alloc-token\")` attribute:"
 msgstr ""
 
-#: ../../../AllocToken.md:184
+#: ../../../AllocToken.md:197
 msgid ""
 "Note: Independent of any given allocator support, the instrumentation aims "
 "to remain performance neutral. As such, `no_sanitize(\"alloc-token\")` "
@@ -229,28 +255,28 @@ msgid ""
 "`noinline`."
 msgstr ""
 
-#: ../../../AllocToken.md:190
+#: ../../../AllocToken.md:203
 msgid ""
 "The `__attribute__((disable_sanitizer_instrumentation))` is also supported "
 "to disable this and other sanitizer instrumentations."
 msgstr ""
 
-#: ../../../AllocToken.md:193
+#: ../../../AllocToken.md:206
 msgid "Suppressions File (Ignorelist)"
 msgstr ""
 
-#: ../../../AllocToken.md:195
+#: ../../../AllocToken.md:208
 msgid ""
 "AllocToken respects the `src` and `fun` entity types in the {doc}"
 "`SanitizerSpecialCaseList`, which can be used to omit specified source files "
 "or functions from instrumentation."
 msgstr ""
 
-#: ../../../AllocToken.md:212
+#: ../../../AllocToken.md:225
 msgid "Conditional Compilation with `__SANITIZE_ALLOC_TOKEN__`"
 msgstr ""
 
-#: ../../../AllocToken.md:214
+#: ../../../AllocToken.md:227
 msgid ""
 "In some cases, one may need to execute different code depending on whether "
 "AllocToken instrumentation is enabled. The `__SANITIZE_ALLOC_TOKEN__` macro "

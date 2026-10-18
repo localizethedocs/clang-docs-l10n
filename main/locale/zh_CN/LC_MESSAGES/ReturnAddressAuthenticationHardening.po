@@ -1,0 +1,230 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2026, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-18 06:01+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ReturnAddressAuthenticationHardening.md:1
+msgid "Return Address Authentication Hardening"
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:3
+msgid "Introduction"
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:5
+msgid ""
+"Return Address Authentication Hardening is a mitigation against the PACMAN "
+"attack, which aims to bypass Pointer Authentication on AArch64 targets. The "
+"hardening mechanism described here is specific to pointer authentication of "
+"return addresses."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:10
+msgid ""
+"Return Address Signing (or Authentication), also known as pac-ret, is a "
+"feature devised to protect programs against Return Oriented Programming "
+"(ROP), in which attackers may hijack the return address of functions in "
+"order to direct execution to malicious code."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:15
+msgid "pac-ret can be enabled via different command-line options:"
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:17
+msgid ""
+"`-mbranch-protection=` with `pac-ret`, `pac-ret+leaf` or `standard` as value."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:19
+msgid "`-msign-return-address=` with `non-leaf` or `all` as value."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:20
+msgid "`-fptrauth-returns`."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:22
+msgid ""
+"More information can be found in [Pointer Authentication]"
+"(PointerAuthentication.md)."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:25
+msgid ""
+"Return Address Authentication Hardening is a mechanism to strengthen Return "
+"Address Signing against the PACMAN attack in AArch64 targets. It can be "
+"enabled with `-mharden-pac-ret=load-return-address`."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:29
+msgid "PACMAN attack"
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:31
+msgid ""
+"PACMAN is an attack that aims to extract valuable information about pointer "
+"authentication codes using side-channels in speculative execution."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:35
+msgid ""
+"It is performed with the use of gadgets to try and guess PAC codes. These "
+"guesses raise no faults because they are done in speculation. By observing "
+"the effects of the guessed PAC code on the processor's cache, it might be "
+"possible to determine the valid PAC code for the address to which the "
+"attacker wants the program to return."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:41
+msgid "A usual PACMAN gadget looks like this:"
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:52
+msgid "Such code would be compiled to:"
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:63
+msgid ""
+"This code fragment may be used as a gadget. A speculative execution of this "
+"fragment can happen as follows:"
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:66
+msgid ""
+"If the Link Register (LR) has the right PAC code, `autiasp` will succeed and "
+"strip the PAC code out of it. The processor's instruction fetcher will then "
+"bring the code after the return into the cache (that is, the instructions "
+"located at the address pointed by LR)."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:71
+msgid ""
+"If the LR has the wrong PAC code, `autiasp` will not succeed and hence will "
+"write a predefined error value to the LR's higher bits. Because of this, the "
+"instruction fetcher will not bring the code after the return into the cache."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:76
+msgid ""
+"This difference in behavior is what drives the PACMAN attack. An attacker "
+"can try to guess PAC codes and monitor cache behavior until the code after "
+"the return is observed to have been brought into the cache."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:80
+msgid "Details can be found at [pacmanattack.com](https://pacmanattack.com)."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:82
+msgid "Hardening"
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:84
+msgid ""
+"In order to mitigate the PACMAN attack, a hardening mechanism can be enabled "
+"with `-mharden-pac-ret=load-return-address`."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:99
+msgid ""
+"The idea is to always bring the code after the return into cache (the "
+"instructions located at the address pointed by LR), therefore minimizing the "
+"difference between a speculative execution with a correct PAC code and with "
+"an incorrect one."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:104
+msgid "`autiasp` performs the authentication step."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:105
+msgid ""
+"`mov x8, x30` copies the return address (LR and x30 are synonyms) to a "
+"temporary."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:107
+msgid "`xpaclri` strips the PAC code out of the return address in x30."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:108
+msgid "`ldr w30, [x30]` performs a load from the return address in x30."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:109
+msgid "`ret x8` returns to the authenticated return address."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:111
+msgid ""
+"The load operation brings the code into the cache even if the authentication "
+"step fails. As a consequence, in either case the code is loaded into the "
+"cache. Furthermore, the return operation uses the original return address "
+"before stripping, so the return address protection is still kept in place in "
+"a normal non-speculative execution."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:117
+msgid ""
+"If FEAT_PAuth is present, the code sequence can make use of instructions "
+"available with said feature with no change in semantics:"
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:128
+msgid "Command-line option"
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:130
+msgid ""
+"Return address authentication hardening can be enabled at translation unit "
+"level with `-mharden-pac-ret=load-return-address`. It requires pac-ret to be "
+"enabled at translation unit level as well."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:134
+msgid "Function attribute"
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:136
+msgid ""
+"In addition to the command-line option `-mharden-pac-ret=load-return-"
+"address`, the developer can enable the mitigation at function level with the "
+"use of the corresponding function attribute."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:149
+msgid "Caveats"
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:151
+msgid ""
+"The load from the return address brings the code into the shared instruction/"
+"data cache, therefore this cache level can't be used as an oracle to find "
+"out whether the authentication succeeded or not. However, in the case of "
+"authentication success, the code is also fetched into the instruction cache. "
+"An attacker who is able to measure this cache level specifically may still "
+"be able to carry out the exploit."
+msgstr ""
+
+#: ../../../ReturnAddressAuthenticationHardening.md:158
+msgid ""
+"Another caveat is if the code at the return address contains a load "
+"operation within the speculation window. If this is the case, this load will "
+"only execute speculatively if authentication succeeds, thus opening the "
+"program up for exploitation despite the mitigation."
+msgstr ""
