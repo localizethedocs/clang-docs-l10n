@@ -109,6 +109,12 @@ set(REMOTE_URL_OF_DOCS "https://github.com/llvm/llvm-project.git"
 set(BASEURL_HREF "file://${PROJECT_SOURCE_DIR}/out/$CACHE{SPHINX_BUILDER}"
     CACHE STRING "The base URL of the deployed documentation.")
 
+set(VERSION_OF_CMAKE "[default]"
+    CACHE STRING "The version of CMake to install.")
+
+set(VERSION_OF_GCC "[default]"
+    CACHE STRING "The version of GCC to install.")
+
 set(VERSION_OF_PYTHON "[default]"
     CACHE STRING "The version of Python to install.")
 
@@ -125,7 +131,8 @@ set(PROJ_CMAKE_TARGETS_DIR          "${PROJ_SOURCE_DIR}/cmake/targets")
 set(PROJ_CONDA_DIR                  "${PROJ_SOURCE_DIR}/.conda")
 set(PROJ_OUT_DIR                    "${PROJ_SOURCE_DIR}/out")
 set(PROJ_OUT_REPO_DIR               "${PROJ_OUT_DIR}/repo")
-set(PROJ_OUT_REPO_DOCS_DIR          "${PROJ_OUT_REPO_DIR}/clang/docs")
+set(PROJ_OUT_REPO_BUILD_DIR         "${PROJ_OUT_REPO_DIR}/build")
+set(PROJ_OUT_REPO_DOCS_DIR          "${PROJ_OUT_REPO_BUILD_DIR}/tools/clang/docs")
 set(PROJ_OUT_REPO_DOCS_CONFIG_DIR   "${PROJ_OUT_REPO_DOCS_DIR}")
 set(PROJ_OUT_REPO_DOCS_SOURCE_DIR   "${PROJ_OUT_REPO_DOCS_DIR}")
 set(PROJ_OUT_REPO_DOCS_LOCALE_DIR   "${PROJ_OUT_REPO_DOCS_DIR}/locale")
@@ -250,9 +257,17 @@ endif()
 #]============================================================]
 
 if     (VERSION MATCHES "^(main)$")
-    set(VERSION_OF_PYTHON     "3.12")
+    set(VERSION_OF_CMAKE    "")
+    set(VERSION_OF_GCC      "")
+    set(VERSION_OF_PYTHON   "3.14")
 else()
     message(FATAL_ERROR "Invalid VERSION value. (${VERSION})")
+endif()
+if (NOT "$CACHE{VERSION_OF_CMAKE}" STREQUAL "[default]")
+    set(VERSION_OF_CMAKE "$CACHE{VERSION_OF_CMAKE}")
+endif()
+if (NOT "$CACHE{VERSION_OF_GCC}" STREQUAL "[default]")
+    set(VERSION_OF_GCC "$CACHE{VERSION_OF_GCC}")
 endif()
 if (NOT "$CACHE{VERSION_OF_PYTHON}" STREQUAL "[default]")
     set(VERSION_OF_PYTHON "$CACHE{VERSION_OF_PYTHON}")
@@ -359,6 +374,8 @@ message(STATUS "BRANCH_OF_WORKTREE              = ${BRANCH_OF_WORKTREE}")
 message(STATUS "REMOTE_URL_OF_L10N              = ${REMOTE_URL_OF_L10N}")
 message(STATUS "REMOTE_URL_OF_DOCS              = ${REMOTE_URL_OF_DOCS}")
 message(STATUS "BASEURL_HREF                    = ${BASEURL_HREF}")
+message(STATUS "VERSION_OF_CMAKE                = ${VERSION_OF_CMAKE} (CACHE: $CACHE{VERSION_OF_CMAKE})")
+message(STATUS "VERSION_OF_GCC                  = ${VERSION_OF_GCC} (CACHE: $CACHE{VERSION_OF_GCC})")
 message(STATUS "VERSION_OF_PYTHON               = ${VERSION_OF_PYTHON} (CACHE: $CACHE{VERSION_OF_PYTHON})")
 message(STATUS "---------- Directory-Related Variables ----------")
 message(STATUS "PROJ_SOURCE_DIR                 = ${PROJ_SOURCE_DIR}")
@@ -370,6 +387,7 @@ message(STATUS "PROJ_CMAKE_TARGETS_DIR          = ${PROJ_CMAKE_TARGETS_DIR}")
 message(STATUS "PROJ_CONDA_DIR                  = ${PROJ_CONDA_DIR}")
 message(STATUS "PROJ_OUT_DIR                    = ${PROJ_OUT_DIR}")
 message(STATUS "PROJ_OUT_REPO_DIR               = ${PROJ_OUT_REPO_DIR}")
+message(STATUS "PROJ_OUT_REPO_BUILD_DIR         = ${PROJ_OUT_REPO_BUILD_DIR}")
 message(STATUS "PROJ_OUT_REPO_DOCS_DIR          = ${PROJ_OUT_REPO_DOCS_DIR}")
 message(STATUS "PROJ_OUT_REPO_DOCS_CONFIG_DIR   = ${PROJ_OUT_REPO_DOCS_CONFIG_DIR}")
 message(STATUS "PROJ_OUT_REPO_DOCS_SOURCE_DIR   = ${PROJ_OUT_REPO_DOCS_SOURCE_DIR}")
@@ -458,6 +476,8 @@ set(SCRIPT_MODE_CACHE
     -D REMOTE_URL_OF_L10N=${REMOTE_URL_OF_L10N}
     -D REMOTE_URL_OF_DOCS=${REMOTE_URL_OF_DOCS}
     -D BASEURL_HREF=${BASEURL_HREF}
+    -D VERSION_OF_CMAKE=${VERSION_OF_CMAKE}
+    -D VERSION_OF_GCC=${VERSION_OF_GCC}
     -D VERSION_OF_PYTHON=${VERSION_OF_PYTHON}
     # [Directory-Related Variables]
     -D PROJ_SOURCE_DIR=${PROJ_SOURCE_DIR}
@@ -469,6 +489,7 @@ set(SCRIPT_MODE_CACHE
     -D PROJ_CONDA_DIR=${PROJ_CONDA_DIR}
     -D PROJ_OUT_DIR=${PROJ_OUT_DIR}
     -D PROJ_OUT_REPO_DIR=${PROJ_OUT_REPO_DIR}
+    -D PROJ_OUT_REPO_BUILD_DIR=${PROJ_OUT_REPO_BUILD_DIR}
     -D PROJ_OUT_REPO_DOCS_DIR=${PROJ_OUT_REPO_DOCS_DIR}
     -D PROJ_OUT_REPO_DOCS_CONFIG_DIR=${PROJ_OUT_REPO_DOCS_CONFIG_DIR}
     -D PROJ_OUT_REPO_DOCS_SOURCE_DIR=${PROJ_OUT_REPO_DOCS_SOURCE_DIR}
