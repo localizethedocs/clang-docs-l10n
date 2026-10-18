@@ -172,11 +172,18 @@ message("")
 restore_cmake_message_indent()
 
 
-message(STATUS "Running 'conda install' command to install dependencies...")
+message(STATUS "Running 'conda install' command to install the requirements...")
 remove_cmake_message_indent()
 message("")
 execute_process(
     COMMAND ${Conda_EXECUTABLE} install
+            conda-forge::binutils
+            conda-forge::cmake=${VERSION_OF_CMAKE}
+            conda-forge::gcc=${VERSION_OF_GCC}
+            conda-forge::gxx=${VERSION_OF_GCC}
+            conda-forge::graphviz
+            conda-forge::ninja
+            conda-forge::pkg-config
             conda-forge::python=${VERSION_OF_PYTHON}
             --channel conda-forge
             --prefix ${PROJ_CONDA_DIR}
@@ -287,6 +294,104 @@ restore_cmake_message_indent()
 
 
 find_package(Sphinx     MODULE REQUIRED)
+
+
+message(STATUS "Removing directory '${PROJ_OUT_REPO_BUILD_DIR}/'...")
+if (EXISTS "${PROJ_OUT_REPO_BUILD_DIR}")
+    file(REMOVE_RECURSE "${PROJ_OUT_REPO_BUILD_DIR}")
+    remove_cmake_message_indent()
+    message("")
+    message("Directory '${PROJ_OUT_REPO_BUILD_DIR}/' exists.")
+    message("Removed '${PROJ_OUT_REPO_BUILD_DIR}/'.")
+    message("")
+    restore_cmake_message_indent()
+else()
+    remove_cmake_message_indent()
+    message("")
+    message("Directory '${PROJ_OUT_REPO_BUILD_DIR}/' does NOT exist.")
+    message("No need to remove '${PROJ_OUT_REPO_BUILD_DIR}/'.")
+    message("")
+    restore_cmake_message_indent()
+endif()
+
+
+find_package(CMake      MODULE REQUIRED)
+
+
+message(STATUS "Configuring the 'llvm-project' project for generating clang documentation...")
+if (CMAKE_HOST_LINUX)
+    set(ENV_PATH                "${PROJ_CONDA_DIR}/bin:$ENV{PATH}")
+    set(ENV_LD_LIBRARY_PATH     "${PROJ_CONDA_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
+    set(ENV_PYTHONPATH          "${PROJ_OUT_REPO_DOCS_EXTNS_DIR}")
+    set(ENV_VARS_OF_SYSTEM      PATH=${ENV_PATH}
+                                LD_LIBRARY_PATH=${ENV_LD_LIBRARY_PATH}
+                                PYTHONPATH=${ENV_PYTHONPATH})
+elseif (CMAKE_HOST_WIN32)
+    set(ENV_PATH                "${PROJ_CONDA_DIR}/bin"
+                                "${PROJ_CONDA_DIR}/Scripts"
+                                "${PROJ_CONDA_DIR}/Library/bin"
+                                "${PROJ_CONDA_DIR}"
+                                "$ENV{PATH}")
+    set(ENV_PYTHONPATH          "${PROJ_OUT_REPO_DOCS_EXTNS_DIR}")
+    string(REPLACE ";" "\\\\;" ENV_PATH "${ENV_PATH}")
+    string(REPLACE ";" "\\\\;" ENV_PYTHONPATH "${ENV_PYTHONPATH}")
+    set(ENV_VARS_OF_SYSTEM      PATH=${ENV_PATH}
+                                PYTHONPATH=${ENV_PYTHONPATH})
+else()
+    message(FATAL_ERROR "Invalid OS platform. (${CMAKE_HOST_SYSTEM_NAME})")
+endif()
+remove_cmake_message_indent()
+message("")
+execute_process(
+    COMMAND ${CMAKE_COMMAND} -E env
+            ${ENV_VARS_OF_SYSTEM}
+            ${CMake_EXECUTABLE}
+            -S ${PROJ_OUT_REPO_DIR}/llvm
+            -B ${PROJ_OUT_REPO_BUILD_DIR}
+            -G Ninja
+            -D CMAKE_BUILD_TYPE=Release
+            -D LLVM_ENABLE_PROJECTS=clang
+            -D LLVM_TARGETS_TO_BUILD=host
+            -D LLVM_INCLUDE_TESTS=OFF
+            -D LLVM_INCLUDE_BENCHMARKS=OFF
+            -D LLVM_INCLUDE_EXAMPLES=OFF
+            -D LLVM_BUILD_TOOLS=OFF
+            -D LLVM_BUILD_UTILS=OFF
+            -D CLANG_BUILD_TOOLS=OFF
+            -D LLVM_ENABLE_SPHINX=ON
+            -D SPHINX_OUTPUT_HTML=ON
+            -D SPHINX_OUTPUT_MAN=OFF
+    WORKING_DIRECTORY ${PROJ_OUT_REPO_DIR}
+    ECHO_OUTPUT_VARIABLE
+    ECHO_ERROR_VARIABLE
+    COMMAND_ERROR_IS_FATAL ANY)
+message("")
+restore_cmake_message_indent()
+
+
+message(STATUS "Building the targets that precede the 'docs-clang-html' target...")
+remove_cmake_message_indent()
+message("")
+execute_process(
+    COMMAND ${CMAKE_COMMAND} -E env
+            ${ENV_VARS_OF_SYSTEM}
+            ${CMake_EXECUTABLE}
+            --build ${PROJ_OUT_REPO_BUILD_DIR}
+            --config Release
+            --target
+                copy-clang-rst-docs
+                gen-AttributeReference.md
+                gen-DiagnosticsReference.md
+                gen-AMDGPUBuiltinReference.rst
+                gen-ClangCommandLineReference.md
+                generate-analyzer-options-rst
+            --parallel
+    WORKING_DIRECTORY ${PROJ_OUT_REPO_DIR}
+    ECHO_OUTPUT_VARIABLE
+    ECHO_ERROR_VARIABLE
+    COMMAND_ERROR_IS_FATAL ANY)
+message("")
+restore_cmake_message_indent()
 
 
 message(STATUS "The followings are the installed packages in the Conda environment...")
