@@ -64,12 +64,187 @@ message("")
 restore_cmake_message_indent()
 
 
+#[============================================================[
+# Functions used to prepare the documentation sources before running Sphinx.
+#]============================================================]
+
+function(run_prepare_command DESCRIPTION)
+    execute_process(
+        COMMAND ${ARGN}
+        WORKING_DIRECTORY "${PROJ_OUT_REPO_DOCS_DIR}"
+        ECHO_OUTPUT_VARIABLE
+        ECHO_ERROR_VARIABLE
+        RESULT_VARIABLE RES_VAR
+        OUTPUT_VARIABLE OUT_VAR OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_VARIABLE  ERR_VAR ERROR_STRIP_TRAILING_WHITESPACE)
+    if (RES_VAR EQUAL 0)
+        if (ERR_VAR)
+            string(CONCAT WARNING_REASON
+            "${DESCRIPTION} succeeded with warnings.\n\n"
+            "    result:\n\n${RES_VAR}\n\n"
+            "    stderr:\n\n${ERR_VAR}")
+            message("${WARNING_REASON}")
+        endif()
+    else()
+        string(CONCAT FAILURE_REASON
+        "${DESCRIPTION} failed with fatal errors.\n"
+        "    result:\n${RES_VAR}\n"
+        "    stdout:\n${OUT_VAR}\n"
+        "    stderr:\n${ERR_VAR}")
+        message(FATAL_ERROR "${FAILURE_REASON}")
+    endif()
+endfunction()
+
+
+function(gen_clang_doc_from_td OUTPUT_FILE TABLEGEN_OPTION SOURCE_FILE)
+    get_filename_component(TABLEGEN_INCLUDE_DIR "${SOURCE_FILE}" DIRECTORY)
+    message("clang-tblgen:")
+    message("  ${TABLEGEN_OPTION}")
+    message("  [source]      ${SOURCE_FILE}")
+    message("  [output]      ${OUTPUT_FILE}")
+    run_prepare_command("Generating '${OUTPUT_FILE}'"
+        "${CLANG_TABLEGEN_EXE}"
+        "${TABLEGEN_OPTION}"
+        "-I${TABLEGEN_INCLUDE_DIR}"
+        "-I${PROJ_OUT_REPO_DIR}/clang/include"
+        "-I${PROJ_OUT_REPO_DIR}/llvm/include"
+        "${SOURCE_FILE}"
+        --write-if-changed
+        -o "${OUTPUT_FILE}")
+endfunction()
+
+
 if (NOT UPDATE_POT_REQUIRED)
     message(STATUS "No need to update .pot files.")
     return()
 else()
     message(STATUS "Prepare to update .pot files.")
 endif()
+
+
+#[============================================================[
+# Prepare the documentation sources before running Sphinx.
+#
+# The upstream 'clang/docs/CMakeLists.txt' generates several documentation
+# files before invoking Sphinx. Since the source directory and the build
+# directory are the same directory in this project, generate them directly
+# in the source directory.
+#]============================================================]
+
+message(STATUS "Copying 'clang/Maintainers.md' to the clang docs directory...")
+set(MAINTAINERS_SRC_FILE "${PROJ_OUT_REPO_DIR}/clang/Maintainers.md")
+set(MAINTAINERS_DST_FILE "${PROJ_OUT_REPO_DOCS_DIR}/Maintainers.md")
+if (NOT EXISTS "${MAINTAINERS_DST_FILE}")
+    if (EXISTS "${MAINTAINERS_SRC_FILE}")
+        file(COPY_FILE "${MAINTAINERS_SRC_FILE}" "${MAINTAINERS_DST_FILE}")
+        remove_cmake_message_indent()
+        message("")
+        message("From: ${MAINTAINERS_SRC_FILE}")
+        message("To:   ${MAINTAINERS_DST_FILE}")
+        message("")
+        restore_cmake_message_indent()
+    else()
+        message(WARNING "File '${MAINTAINERS_SRC_FILE}' does NOT exist. Skipped.")
+    endif()
+else()
+    message("File '${MAINTAINERS_DST_FILE}' already exists. Skipped.")
+endif()
+
+
+message(STATUS "Post-processing the CIR documentation...")
+set(CIR_RAW_DIALECT_DOC "${PROJ_OUT_REPO_DOCS_DIR}/CIR/_raw/CIRDialect.md")
+if (EXISTS "${CIR_RAW_DIALECT_DOC}")
+    run_prepare_command("Post-processing the CIR documentation"
+        "${Python_EXECUTABLE}"
+        "${PROJ_OUT_REPO_DOCS_DIR}/CIR/_raw/PostProcessCIRDocs.py"
+        "${PROJ_OUT_REPO_DOCS_DIR}"
+        "${PROJ_OUT_REPO_DOCS_DIR}")
+else()
+    message("File '${CIR_RAW_DIALECT_DOC}' does NOT exist. Skipped.")
+endif()
+
+
+message(STATUS "Configuring and building 'clang-tblgen' used to generate documentation...")
+if (CMAKE_HOST_WIN32)
+    set(CLANG_TABLEGEN_EXE "${PROJ_BINARY_DIR}/clang-tblgen/bin/clang-tblgen.exe")
+else()
+    set(CLANG_TABLEGEN_EXE "${PROJ_BINARY_DIR}/clang-tblgen/bin/clang-tblgen")
+endif()
+find_program(NINJA_EXECUTABLE NAMES ninja ninja-build)
+if (NOT NINJA_EXECUTABLE)
+    message(FATAL_ERROR "Cannot find the 'ninja' build tool required to build 'clang-tblgen'.")
+endif()
+remove_cmake_message_indent()
+message("")
+set(ENV{CMAKE_SUPPRESS_DEVELOPER_WARNINGS} 1)
+run_prepare_command("Configuring the 'clang-tblgen' build"
+    "${CMAKE_COMMAND}"
+    -S "${PROJ_OUT_REPO_DIR}/llvm"
+    -B "${PROJ_BINARY_DIR}/clang-tblgen"
+    -G Ninja
+    -DCMAKE_BUILD_TYPE=Release
+    -DLLVM_ENABLE_PROJECTS=clang
+    -DLLVM_TARGETS_TO_BUILD=host
+    -DLLVM_INCLUDE_TESTS=OFF
+    -DLLVM_INCLUDE_DOCS=OFF
+    -DLLVM_INCLUDE_EXAMPLES=OFF
+    -DLLVM_INCLUDE_BENCHMARKS=OFF
+    -DLLVM_BUILD_TOOLS=OFF
+    -DLLVM_BUILD_UTILS=OFF
+    -DCLANG_BUILD_TOOLS=OFF
+    -DLLVM_ENABLE_ZLIB=OFF
+    -DLLVM_ENABLE_ZSTD=OFF
+    -DLLVM_ENABLE_LIBXML2=OFF
+    -DLLVM_ENABLE_LIBEDIT=OFF)
+run_prepare_command("Building 'clang-tblgen'"
+    "${CMAKE_COMMAND}" --build "${PROJ_BINARY_DIR}/clang-tblgen"
+    --target clang-tblgen --parallel)
+unset(ENV{CMAKE_SUPPRESS_DEVELOPER_WARNINGS})
+if (NOT EXISTS "${CLANG_TABLEGEN_EXE}")
+    message(FATAL_ERROR "Cannot find '${CLANG_TABLEGEN_EXE}' after building 'clang-tblgen'.")
+endif()
+message("")
+restore_cmake_message_indent()
+
+
+message(STATUS "Generating documentation files from TableGen sources...")
+remove_cmake_message_indent()
+message("")
+gen_clang_doc_from_td(
+    "${PROJ_OUT_REPO_DOCS_DIR}/AttributeReference.md"
+    -gen-attr-docs
+    "${PROJ_OUT_REPO_DIR}/clang/include/clang/Basic/Attr.td")
+gen_clang_doc_from_td(
+    "${PROJ_OUT_REPO_DOCS_DIR}/DiagnosticsReference.md"
+    -gen-diag-docs
+    "${PROJ_OUT_REPO_DIR}/clang/include/clang/Basic/Diagnostic.td")
+gen_clang_doc_from_td(
+    "${PROJ_OUT_REPO_DOCS_DIR}/AMDGPUBuiltinReference.rst"
+    -gen-builtin-docs
+    "${PROJ_OUT_REPO_DIR}/clang/include/clang/Basic/BuiltinsAMDGPU.td")
+gen_clang_doc_from_td(
+    "${PROJ_OUT_REPO_DOCS_DIR}/ClangCommandLineReference.md"
+    -gen-opt-docs
+    "${PROJ_OUT_REPO_DIR}/clang/include/clang/Options/ClangOptionDocs.td")
+message("")
+restore_cmake_message_indent()
+
+
+message(STATUS "Generating 'analyzer/user-docs/Options.rst'...")
+set(ANALYZER_OPTIONS_DOC "${PROJ_OUT_REPO_DOCS_DIR}/analyzer/user-docs/Options.rst")
+remove_cmake_message_indent()
+message("")
+message("From: ${PROJ_OUT_REPO_DOCS_DIR}/analyzer/user-docs/Options.rst.in")
+message("To:   ${ANALYZER_OPTIONS_DOC}")
+message("")
+run_prepare_command("Generating '${ANALYZER_OPTIONS_DOC}'"
+    "${Python_EXECUTABLE}"
+    "${PROJ_OUT_REPO_DOCS_DIR}/tools/generate_analyzer_options_docs.py"
+    --options-def "${PROJ_OUT_REPO_DIR}/clang/include/clang/StaticAnalyzer/Core/AnalyzerOptions.def"
+    --template "${PROJ_OUT_REPO_DOCS_DIR}/analyzer/user-docs/Options.rst.in"
+    --out "${ANALYZER_OPTIONS_DOC}")
+message("")
+restore_cmake_message_indent()
 
 
 message(STATUS "Removing directory '${PROJ_OUT_REPO_DOCS_LOCALE_DIR}/'...")
