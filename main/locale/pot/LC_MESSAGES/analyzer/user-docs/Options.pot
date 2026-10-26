@@ -1,0 +1,1123 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2026, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-26 14:46+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../analyzer/user-docs/Options.rst:3
+msgid "Configuring the Analyzer"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:5
+msgid "The clang static analyzer supports two kinds of options:"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:7
+msgid ""
+"Global **analyzer options** influence the behavior of the analyzer engine. "
+"They are documented on this page, in the section :ref:`List of analyzer "
+"options<list-of-analyzer-options>`."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:10
+msgid ""
+"The **checker options** belong to individual checkers (e.g. "
+"``core.BitwiseShift:Pedantic`` and ``unix.Stream:Pedantic`` are completely "
+"separate options) and customize the behavior of that particular checker. "
+"These are documented within the documentation of each individual checker "
+"at :doc:`../checkers`."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:17
+msgid "Assigning values to options"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:20
+msgid "With the compiler frontend"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:22
+msgid ""
+"All options can be configured by using the ``-analyzer-config`` flag of "
+"``clang -cc1`` (the so-called *compiler frontend* part of clang). The values "
+"of the options are specified with the syntax ``-analyzer-config "
+"OPT=VAL,OPT2=VAL2,...`` which supports specifying multiple options, but "
+"separate flags like ``-analyzer-config OPT=VAL -analyzer-config OPT2=VAL2`` "
+"are also accepted (with equivalent behavior). Analyzer options and checker "
+"options can be freely intermixed here because it's easy to recognize that "
+"checker option names are always prefixed with ``some.groups.NameOfChecker:``."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:32
+msgid ""
+"This is an internal interface, one should prefer `clang --analyze ...` for "
+"regular use. Clang does not intend to preserve backwards compatibility or "
+"announce breaking changes within the flags accepted by ``clang -cc1`` (but "
+"``-analyzer-config`` survived many years without major changes)."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:38
+msgid "With the clang driver"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:40
+msgid ""
+"In a conventional workflow ``clang -cc1`` (which is a low-level internal "
+"interface) is invoked indirectly by the clang *driver* (i.e. plain ``clang`` "
+"without the ``-cc1`` flag), which acts as an \"even more frontend\" wrapper "
+"layer around the ``clang -cc1`` *compiler frontend*. In this situation "
+"**each** command line argument intended for the *compiler frontend* must be "
+"prefixed with ``-Xclang``."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:47
+msgid ""
+"For example the following command analyzes ``foo.c`` in :ref:`shallow mode "
+"<analyzer-option-mode>` with :ref:`loop unrolling <analyzer-option-unroll-"
+"loops>`:"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:55
+msgid ""
+"When this is executed, the *driver* will compose and execute the following "
+"``clang -cc1`` command (which can be inspected by passing the ``-v`` flag to "
+"the *driver*):"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:63
+msgid ""
+"Here ``[...]`` stands for dozens of low-level flags which ensure that "
+"``clang -cc1`` does the right thing (e.g. ``-fcolor-diagnostics`` when it's "
+"suitable; ``-analyzer-checker`` flags to enable the default set of "
+"checkers). Also note the distinction that the ``clang`` *driver* requires "
+"``--analyze`` (double dashes) while the ``clang -cc1`` *compiler frontend* "
+"requires ``-analyze`` (single dash)."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:71
+msgid ""
+"The flag ``-Xanalyzer`` is equivalent to ``-Xclang`` in these situations "
+"(but doesn't forward other options of the clang frontend)."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:75
+msgid "With CodeChecker"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:77
+msgid ""
+"If the analysis is performed through :ref:`CodeChecker <command-line-usage-"
+"CodeChecker>` (which e.g. supports the analysis of a whole project instead "
+"of a single file) then it will act as another indirection layer. CodeChecker "
+"provides separate command-line flags called ``--analyzer-config`` (for "
+"analyzer options) and ``--checker-config`` (for checker options):"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:90
+msgid ""
+"These CodeChecker flags may be followed by multiple ``OPT=VAL`` pairs as "
+"separate arguments (and this is why the example needs to use ``--`` before "
+"``compile_commands.json``). The option names are all prefixed with "
+"``clangsa:`` to ensure that they are passed to the clang static analyzer "
+"(and not other analyzer tools that are also supported by CodeChecker)."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:99
+msgid "List of analyzer options"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:102
+msgid ""
+"These options are primarily intended for development purposes and non-"
+"default values are usually unsupported. Changing their values may "
+"drastically alter the behavior of the analyzer, and may even result in "
+"instabilities or crashes! Crash reports are welcome and depending on the "
+"severity they may be fixed."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:117
+msgid "mode"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:119
+msgid ""
+"(string) Controls the high-level analyzer mode, which influences the default "
+"settings for some of the lower-level config options (such as IPAMode)."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:122
+msgid "Accepted values: \"deep\", \"shallow\"."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:124
+msgid "Default value: \"deep\""
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:129
+msgid "cfg-implicit-dtors"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:131
+msgid ""
+"Whether or not implicit destructors for C++ objects should be included in "
+"the CFG."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:134
+#: ../../../analyzer/user-docs/Options.rst:144
+#: ../../../analyzer/user-docs/Options.rst:172
+#: ../../../analyzer/user-docs/Options.rst:200
+#: ../../../analyzer/user-docs/Options.rst:209
+#: ../../../analyzer/user-docs/Options.rst:218
+#: ../../../analyzer/user-docs/Options.rst:240
+#: ../../../analyzer/user-docs/Options.rst:251
+#: ../../../analyzer/user-docs/Options.rst:273
+#: ../../../analyzer/user-docs/Options.rst:292
+#: ../../../analyzer/user-docs/Options.rst:405
+#: ../../../analyzer/user-docs/Options.rst:415
+#: ../../../analyzer/user-docs/Options.rst:424
+#: ../../../analyzer/user-docs/Options.rst:433
+#: ../../../analyzer/user-docs/Options.rst:443
+#: ../../../analyzer/user-docs/Options.rst:455
+#: ../../../analyzer/user-docs/Options.rst:465
+#: ../../../analyzer/user-docs/Options.rst:539
+#: ../../../analyzer/user-docs/Options.rst:588
+#: ../../../analyzer/user-docs/Options.rst:615
+#: ../../../analyzer/user-docs/Options.rst:646
+#: ../../../analyzer/user-docs/Options.rst:656
+#: ../../../analyzer/user-docs/Options.rst:672
+msgid "Default value: true"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:139
+msgid "cfg-temporary-dtors"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:141
+msgid ""
+"Whether or not the destructors for C++ temporary objects should be included "
+"in the CFG."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:149
+msgid "cfg-lifetime"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:151
+msgid ""
+"Whether or not end-of-lifetime information should be included in the CFG."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:153
+#: ../../../analyzer/user-docs/Options.rst:162
+#: ../../../analyzer/user-docs/Options.rst:181
+#: ../../../analyzer/user-docs/Options.rst:191
+#: ../../../analyzer/user-docs/Options.rst:229
+#: ../../../analyzer/user-docs/Options.rst:263
+#: ../../../analyzer/user-docs/Options.rst:282
+#: ../../../analyzer/user-docs/Options.rst:302
+#: ../../../analyzer/user-docs/Options.rst:364
+#: ../../../analyzer/user-docs/Options.rst:374
+#: ../../../analyzer/user-docs/Options.rst:384
+#: ../../../analyzer/user-docs/Options.rst:396
+#: ../../../analyzer/user-docs/Options.rst:474
+#: ../../../analyzer/user-docs/Options.rst:483
+#: ../../../analyzer/user-docs/Options.rst:497
+#: ../../../analyzer/user-docs/Options.rst:508
+#: ../../../analyzer/user-docs/Options.rst:526
+#: ../../../analyzer/user-docs/Options.rst:549
+#: ../../../analyzer/user-docs/Options.rst:559
+#: ../../../analyzer/user-docs/Options.rst:568
+#: ../../../analyzer/user-docs/Options.rst:597
+#: ../../../analyzer/user-docs/Options.rst:606
+#: ../../../analyzer/user-docs/Options.rst:624
+#: ../../../analyzer/user-docs/Options.rst:636
+#: ../../../analyzer/user-docs/Options.rst:688
+msgid "Default value: false"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:158
+msgid "cfg-loopexit"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:160
+msgid ""
+"Whether or not the end of the loop information should be included in the CFG."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:167
+msgid "cfg-rich-constructors"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:169
+msgid ""
+"Whether or not construction site information should be included in the CFG C+"
+"+ constructor elements."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:177
+msgid "cfg-scopes"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:179
+msgid "Whether or not scope information should be included in the CFG."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:186
+msgid "cfg-expand-default-aggr-inits"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:188
+msgid ""
+"Whether or not inline CXXDefaultInitializers for aggregate initialization in "
+"the CFG."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:196
+msgid "c++-template-inlining"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:198
+msgid "Whether or not templated functions may be considered for inlining."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:205
+msgid "c++-stdlib-inlining"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:207
+msgid ""
+"Whether or not C++ standard library functions may be considered for inlining."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:214
+msgid "c++-allocator-inlining"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:216
+msgid ""
+"Whether or not allocator and deallocator calls may be considered for "
+"inlining."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:223
+msgid "c++-shared_ptr-inlining"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:225
+msgid ""
+"Whether or not the destructor of C++ 'shared\\_ptr' may be considered for "
+"inlining. This covers std::shared\\_ptr, std::tr1::shared\\_ptr, and "
+"boost::shared\\_ptr, and indeed any destructor named '~shared\\_ptr'."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:234
+msgid "c++-temp-dtor-inlining"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:236
+msgid ""
+"Whether C++ temporary destructors should be inlined during analysis. If "
+"temporary destructors are disabled in the CFG via the 'cfg-temporary-dtors' "
+"option, temporary destructors would not be inlined anyway."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:245
+msgid "suppress-null-return-paths"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:247
+msgid ""
+"Whether or not paths that go through null returns should be suppressed. This "
+"is a heuristic for avoiding bug reports with paths that go through inlined "
+"functions that are more defensive than their callers."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:256
+msgid "avoid-suppressing-null-argument-paths"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:258
+msgid ""
+"Whether a bug report should not be suppressed if its path includes a call "
+"with a null argument, even if that call has a null return. This option has "
+"no effect when ShouldSuppressNullReturnPaths is false. This is a counter-"
+"heuristic to avoid false negatives."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:268
+msgid "suppress-inlined-defensive-checks"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:270
+msgid ""
+"Whether or not diagnostics containing inlined defensive NULL checks should "
+"be suppressed."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:278
+msgid "c++-container-inlining"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:280
+msgid ""
+"Whether or not methods of C++ container objects may be considered for "
+"inlining."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:287
+msgid "suppress-c++-stdlib"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:289
+msgid ""
+"Whether or not diagnostics reported within the C++ standard library should "
+"be suppressed."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:297
+msgid "crosscheck-with-z3"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:299
+msgid ""
+"Whether bug reports should be crosschecked with the Z3 constraint manager "
+"backend."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:307
+msgid "crosscheck-with-z3-eqclass-timeout-threshold"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:309
+msgid ""
+"Set a timeout for bug report equivalence classes in milliseconds. If we "
+"exhaust this threshold, we will drop the bug report eqclass instead of doing "
+"more Z3 queries. Setting this to 700 ms in conjunction with \"crosscheck-"
+"with-z3-timeout- threshold\" of 300 ms, would nicely guarantee that no bug "
+"report equivalence class can take longer than 1 second, effectively "
+"mitigating Z3 hangs during refutation. If there were Z3 retries, only the "
+"minimum query time is considered when accumulating query times within a "
+"report equivalence class. Set 0 for no timeout."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:318
+#: ../../../analyzer/user-docs/Options.rst:342
+msgid "Default value: 0"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:323
+msgid "crosscheck-with-z3-timeout-threshold"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:325
+msgid ""
+"Set a timeout for individual Z3 queries in milliseconds. On fast machines, "
+"300 worked well in some cases. The lower it is, the higher the chances of "
+"having flaky issues. Having no timeout may hang the analyzer indefinitely. "
+"Set 0 for no timeout."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:330
+msgid "Default value: 15000"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:335
+msgid "crosscheck-with-z3-rlimit-threshold"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:337
+msgid ""
+"Set the Z3 resource limit threshold. This sets a supposedly deterministic "
+"cutoff point for Z3 queries, as longer queries usually consume more "
+"resources. 400'000 should on average make Z3 queries run for up to 100ms on "
+"modern hardware. Set 0 for unlimited."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:347
+msgid "crosscheck-with-z3-max-attempts-per-query"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:349
+msgid ""
+"Set how many times the oracle is allowed to run a Z3 query. This must be a "
+"positive value. Set 1 to not allow any retry attempts. Increasing the number "
+"of attempts is often more effective at reducing the number of "
+"nondeterministic diagnostics than \"crosscheck-with-z3-timeout-threshold\" "
+"in practice."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:354
+#: ../../../analyzer/user-docs/Options.rst:698
+msgid "Default value: 3"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:359
+msgid "report-in-main-source-file"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:361
+msgid ""
+"Whether or not the diagnostic report should be always reported in the main "
+"source file and not the headers."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:369
+msgid "stable-report-filename"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:371
+msgid ""
+"Deprecated: report filenames are now always stable. See also 'verbose-"
+"report- filename'."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:379
+msgid "verbose-report-filename"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:381
+msgid ""
+"Whether or not the report filename should contain extra information about "
+"the issue."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:389
+msgid "serialize-stats"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:391
+msgid ""
+"Whether the analyzer should serialize statistics to plist output. Statistics "
+"would be serialized in JSON format inside the main dictionary under the "
+"statistics key. Available only if compiled in assert mode or with LLVM "
+"statistics explicitly enabled."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:401
+msgid "objc-inlining"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:403
+msgid "Whether ObjectiveC inlining is enabled, false otherwise."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:410
+msgid "prune-paths"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:412
+msgid ""
+"Whether irrelevant parts of a bug report path should be pruned out of the "
+"final output."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:420
+msgid "add-pop-up-notes"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:422
+msgid "Whether pop-up notes should be added to the final output."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:429
+msgid "cfg-conditional-static-initializers"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:431
+msgid ""
+"Whether 'static' initializers should be in conditional logic in the CFG."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:438
+msgid "faux-bodies"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:440
+msgid ""
+"Whether the analyzer engine should synthesize fake bodies for well-known "
+"functions."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:448
+msgid "elide-constructors"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:450
+msgid ""
+"Whether elidable C++ copy-constructors and move-constructors should be "
+"actually elided during analysis. Both behaviors are allowed by the C++ "
+"standard, and the analyzer, like CodeGen, defaults to eliding. Starting with "
+"C++17 some elisions become mandatory, and in these cases the option will be "
+"ignored."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:460
+msgid "inline-lambdas"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:462
+msgid ""
+"Whether lambdas should be inlined. Otherwise a sink node will be generated "
+"each time a LambdaExpr is visited."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:470
+msgid "widen-loops"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:472
+msgid "Whether the analysis should try to widen loops."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:479
+msgid "unroll-loops"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:481
+msgid "Whether the analysis should try to unroll loops with known bounds."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:488
+msgid "assume-at-least-one-iteration"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:490
+msgid ""
+"Whether the analyzer should always assume at least one iteration in loops "
+"where the loop condition is opaque (i.e. the analyzer cannot determine if "
+"it's true or false). Setting this to true eliminates some false positives "
+"(where e.g. a structure is nonempty, but the analyzer does not notice this); "
+"but it also eliminates some true positives (e.g. cases where a structure can "
+"be empty and this causes buggy behavior)."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:502
+msgid "notes-as-events"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:504
+msgid ""
+"Whether the bug reporter should transparently treat extra note diagnostic "
+"pieces as event diagnostic pieces. Useful when the diagnostic consumer "
+"doesn't support the extra note pieces."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:513
+msgid "aggressive-binary-operation-simplification"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:515
+msgid ""
+"Whether SValBuilder should rearrange comparisons and additive operations of "
+"symbolic expressions which consist of a sum of a symbol and a concrete "
+"integer into the format where symbols are on the left-hand side and the "
+"integer is on the right. This is only done if both symbols and both concrete "
+"integers are signed, greater than or equal to the quarter of the minimum "
+"value of the type and less than or equal to the quarter of the maximum value "
+"of that type. A + n <OP> B + m becomes A - B <OP> m - n, where A and B "
+"symbolic, n and m are integers. <OP> is any of '==', '!=', '<', '<=', '>', "
+"'>=', '+' or '-'. The rearrangement also happens with '-' instead of '+' on "
+"either or both side and also if any or both integers are missing."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:531
+msgid "eagerly-assume"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:533
+msgid ""
+"If this is enabled (the default behavior), when the analyzer encounters a "
+"comparison operator or logical negation, it immediately splits the state to "
+"separate the case when the expression is true and the case when it's false. "
+"The upside is that this can increase analysis precision until we have a "
+"better way to lazily evaluate such logic; the downside is that it eagerly "
+"bifurcates paths."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:544
+msgid "experimental-enable-naive-ctu-analysis"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:546
+msgid ""
+"Whether naive cross translation unit analysis is enabled. This is an "
+"experimental feature to inline functions from other translation units."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:554
+msgid "expand-macros"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:556
+msgid ""
+"Whether macros related to the bugpath should be expanded and included in the "
+"plist output."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:564
+msgid "display-ctu-progress"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:566
+msgid ""
+"Whether to emit verbose output about the analyzer's progress related to ctu."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:573
+msgid "dump-entry-point-stats-to-csv"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:575
+msgid ""
+"If provided, the analyzer will dump statistics per entry point into the "
+"specified CSV file."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:578
+#: ../../../analyzer/user-docs/Options.rst:830
+#: ../../../analyzer/user-docs/Options.rst:869
+#: ../../../analyzer/user-docs/Options.rst:919
+msgid "Default value: (empty string)"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:583
+msgid "track-conditions"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:585
+msgid ""
+"Whether to track conditions that are a control dependency of an already "
+"tracked variable."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:593
+msgid "track-conditions-debug"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:595
+msgid "Whether to place an event at each tracked condition."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:602
+msgid "apply-fixits"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:604
+msgid "Apply the fix-it hints to the files"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:611
+msgid "display-checker-name"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:613
+msgid "Display the checker name for textual outputs"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:620
+msgid "support-symbolic-integer-casts"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:622
+msgid "Produce cast symbols for integral types."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:629
+msgid "assume-controlled-environment"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:631
+msgid ""
+"Whether the analyzed application runs in a controlled environment. We will "
+"assume that environment variables exist in queries and they hold no "
+"malicious data. For instance, if this option is enabled, 'getenv()' might be "
+"modeled by the analyzer to never return NULL."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:641
+msgid "ignore-bison-generated-files"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:643
+msgid ""
+"If enabled, any files containing the \"/\\* A Bison parser, made by\" won't "
+"be analyzed."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:651
+msgid "ignore-flex-generated-files"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:653
+msgid ""
+"If enabled, any files containing the \"/\\* A lexical scanner generated by "
+"flex\" won't be analyzed."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:661
+msgid "suppress-dereferences-from-any-address-space"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:663
+msgid ""
+"The analyzer does not report dereferences on memory that use address space "
+"#256, #257, and #258. Those address spaces are used when dereferencing "
+"address spaces relative to the GS, FS, and SS segments on x86/x86-64 "
+"targets. Dereferencing a null pointer in these address spaces is not defined "
+"as an error. All other null dereferences in other address spaces are defined "
+"as an error unless explicitly defined. When this option is turned on, the "
+"special behavior of address spaces #256, #257, #258 is extended to all "
+"pointers with address spaces and on any target."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:677
+msgid "inline-functions-with-ambiguous-loops"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:679
+msgid ""
+"If disabled (the default), the analyzer puts functions on a \"do not inline "
+"this\" list if it finds an execution path within that function that may "
+"potentially perform 'analyzer-max-loop' (= 4 by default) iterations in a "
+"loop. (Note that functions that \\_definitely\\_ reach the loop limit on "
+"some execution path are currently marked as \"do not inline\" even if this "
+"option is enabled.) Enabling this option eliminates this (somewhat "
+"arbitrary) restriction from the analysis scope, which increases the analysis "
+"runtime (on average by ~10%, but a few translation units may see much larger "
+"slowdowns)."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:693
+msgid "ipa-always-inline-size"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:695
+msgid ""
+"The size of the functions (in basic blocks), which should be considered to "
+"be small enough to always inline."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:703
+msgid "graph-trim-interval"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:705
+msgid ""
+"How often nodes in the ExplodedGraph should be recycled to save memory. To "
+"disable node reclamation, set the option to 0."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:708
+msgid "Default value: 1000"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:713
+msgid "min-cfg-size-treat-functions-as-large"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:715
+msgid ""
+"The number of basic blocks a function needs to have to be considered large "
+"for the 'max-times-inline-large' config option."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:718
+msgid "Default value: 14"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:723
+msgid "max-symbol-complexity"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:725
+msgid "The maximum complexity of symbolic constraint."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:727
+msgid "Default value: 35"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:732
+msgid "max-tainted-symbol-complexity"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:734
+msgid "[DEPRECATED] The maximum complexity of a symbol to carry taint"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:736
+msgid "Default value: 9"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:741
+msgid "max-times-inline-large"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:743
+msgid "The maximum times a large function could be inlined."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:745
+msgid "Default value: 32"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:750
+msgid "max-inlinable-size"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:752
+msgid "The bound on the number of basic blocks in an inlined function."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:754
+msgid "Default value: 4 (in shallow mode) / 100 (in deep mode)"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:759
+msgid "max-nodes"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:761
+msgid ""
+"The maximum number of nodes the analyzer can generate while exploring a top "
+"level function (for each exploded graph). 0 means no limit."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:764
+msgid "Default value: 75000 (in shallow mode) / 225000 (in deep mode)"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:769
+msgid "ctu-max-nodes-pct"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:771
+msgid ""
+"The percentage of single-TU analysed nodes that the CTU analysis is allowed "
+"to visit."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:774
+msgid "Default value: 50"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:779
+msgid "ctu-max-nodes-min"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:781
+msgid ""
+"The maximum number of nodes in CTU mode is determinded by 'ctu-max-nodes-"
+"pct'. However, if the number of nodes in single-TU analysis is too low, it "
+"is meaningful to provide a minimum value that serves as an upper bound "
+"instead."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:785
+msgid "Default value: 10000"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:790
+msgid "region-store-small-struct-limit"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:792
+msgid ""
+"The largest number of fields a struct can have and still be considered "
+"small. This is currently used to decide whether or not it is worth forcing a "
+"LazyCompoundVal on bind. To disable all small-struct-dependent behavior, set "
+"the option to 0."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:797
+msgid "Default value: 2"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:802
+msgid "region-store-small-array-limit"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:804
+msgid ""
+"The largest number of elements an array can have and still be considered "
+"small. This is currently used to decide whether or not it is worth forcing a "
+"LazyCompoundVal on bind. To disable all small-array-dependent behavior, set "
+"the option to 0."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:809
+msgid "Default value: 5"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:814
+msgid "region-store-max-binding-fanout"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:816
+msgid ""
+"This option limits how many sub-bindings a single binding operation can "
+"scatter into. For example, binding an array would scatter into binding each "
+"individual element. Setting this to zero means unlimited, but then modelling "
+"large array initializers may take proportional time to their size."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:821
+msgid "Default value: 128"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:826
+msgid "ctu-dir"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:828
+msgid "The directory containing the CTU related files."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:835
+msgid "ctu-index-name"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:837
+msgid ""
+"The name of the file containing the CTU index of definitions. The index file "
+"maps USR-names to identifiers. An identifier can end with an '.ast' suffix, "
+"indicating the indentifier is a path to a pch-dump. Otherwise the identifier "
+"is regarded as path to a source file which is parsed on-demand. Relative "
+"paths are prefixed with ctu-dir, absolute paths are used unmodified during "
+"lookup."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:843
+msgid "Default value: \"externalDefMap.txt\""
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:848
+msgid "ctu-invocation-list"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:850
+msgid ""
+"The path to the YAML format file containing a mapping from source file paths "
+"to command-line invocations represented as a list of arguments. This "
+"invocation is used produce the source-file's AST in case on-demand loading "
+"is performed."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:854
+msgid "Example file content::"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:858
+msgid "Default value: \"invocations.yaml\""
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:863
+msgid "model-path"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:865
+msgid ""
+"The analyzer can inline an alternative implementation written in C at the "
+"call site if the called function's body is not available. This is a path "
+"where to look for those alternative implementations (called models)."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:874
+msgid "ctu-phase1-inlining"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:876
+msgid ""
+"Controls which functions will be inlined during the first phase of the ctu "
+"analysis. If the value is set to 'all' then all foreign functions are "
+"inlinied immediately during the first phase, thus rendering the second phase "
+"a noop. The 'ctu-max-nodes-\\*' budge has no effect in this case. If the "
+"value is 'small' then only functions with a linear CFG and with a limited "
+"number of statements would be inlined during the first phase. The long and/"
+"or nontrivial functions are handled in the second phase and are controlled "
+"by the 'ctu-max-nodes-\\*' budge. The value 'none' means that all foreign "
+"functions are inlined only in the second phase, 'ctu-max-nodes-\\*' budge "
+"limits the second phase."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:886
+msgid "Accepted values: \"none\", \"small\", \"all\"."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:888
+msgid "Default value: \"small\""
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:893
+msgid "c++-inlining"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:895
+msgid "Controls which C++ member functions will be considered for inlining."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:897
+msgid "Accepted values: \"constructors\", \"destructors\", \"methods\"."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:899
+msgid "Default value: \"destructors\""
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:904
+msgid "exploration_strategy"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:906
+msgid ""
+"Accepted values: \"dfs\", \"bfs\", \"unexplored\\_first\", "
+"\"unexplored\\_first\\_queue\", \"unexplored\\_first\\_location\\_queue\", "
+"\"bfs\\_block\\_dfs\\_contents\"."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:909
+msgid "Default value: \"unexplored_first_queue\""
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:914
+msgid "silence-checkers"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:916
+msgid ""
+"A semicolon separated list of checker and package names to silence. Silenced "
+"checkers will not emit reports, but the modeling remain enabled."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:924
+msgid "ipa"
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:926
+msgid "Controls the mode of inter-procedural analysis."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:928
+msgid ""
+"Accepted values: \"none\", \"basic-inlining\", \"inlining\", \"dynamic\", "
+"\"dynamic- bifurcate\"."
+msgstr ""
+
+#: ../../../analyzer/user-docs/Options.rst:931
+msgid ""
+"Default value: \"inlining\" (in shallow mode) / \"dynamic-bifurcate\" (in "
+"deep mode)"
+msgstr ""
