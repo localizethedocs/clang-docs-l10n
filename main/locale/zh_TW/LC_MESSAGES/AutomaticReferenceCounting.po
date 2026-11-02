@@ -1048,10 +1048,10 @@ msgstr ""
 
 #: ../../../AutomaticReferenceCounting.md:675
 msgid ""
-"Except as described under the {ref}`inference rules <arc.ownership."
-"inference>`, a program is ill-formed if it attempts to form a pointer or "
-"reference type to a retainable object owner type which lacks an ownership "
-"qualifier."
+"Except as described under the {ref}`inference rules "
+"<arc.ownership.inference>`, a program is ill-formed if it attempts to form a "
+"pointer or reference type to a retainable object owner type which lacks an "
+"ownership qualifier."
 msgstr ""
 
 #: ../../../AutomaticReferenceCounting.md:680
@@ -1464,8 +1464,8 @@ msgstr ""
 
 #: ../../../AutomaticReferenceCounting.md:943
 msgid ""
-"the conversion is a well-formed {ref}`pass-by-writeback <arc.ownership."
-"restrictions.pass_by_writeback>`."
+"the conversion is a well-formed {ref}`pass-by-writeback "
+"<arc.ownership.restrictions.pass_by_writeback>`."
 msgstr ""
 
 #: ../../../AutomaticReferenceCounting.md:946
@@ -2398,10 +2398,10 @@ msgstr ""
 
 #: ../../../AutomaticReferenceCounting.md:1537
 msgid ""
-"Methods in the `init` family implicitly {ref}`consume <arc.objects.operands."
-"consumed>` their `self` parameter and {ref}`return a retained object <arc."
-"object.operands.retained-return-values>`. Neither of these properties can be "
-"altered through attributes."
+"Methods in the `init` family implicitly {ref}`consume "
+"<arc.objects.operands.consumed>` their `self` parameter and {ref}`return a "
+"retained object <arc.object.operands.retained-return-values>`. Neither of "
+"these properties can be altered through attributes."
 msgstr ""
 
 #: ../../../AutomaticReferenceCounting.md:1542
@@ -3023,8 +3023,8 @@ msgid ""
 "{ref}`externally-retained <arc.misc.externally_retained>` by the "
 "implementation. It is undefined behavior, or at least dangerous, to cause an "
 "object to be deallocated during a message send to that object. In an init "
-"method, `self` follows the {ref}`init family rules <arc.family.semantics."
-"init>`."
+"method, `self` follows the {ref}`init family rules "
+"<arc.family.semantics.init>`."
 msgstr ""
 
 #: ../../../AutomaticReferenceCounting.md:2015
@@ -3225,8 +3225,8 @@ msgstr ""
 #: ../../../AutomaticReferenceCounting.md:2153
 msgid ""
 "As an exception, no extension is required if the receiver is loaded directly "
-"from a `__strong` object with {ref}`precise lifetime semantics <arc."
-"optimization.precise>`."
+"from a `__strong` object with {ref}`precise lifetime semantics "
+"<arc.optimization.precise>`."
 msgstr ""
 
 #: ../../../AutomaticReferenceCounting.md:2158
@@ -3364,9 +3364,10 @@ msgstr ""
 msgid ""
 "The runtime tracks `__weak` objects which holds non-null values. It is "
 "undefined behavior to directly modify a `__weak` object which is being "
-"tracked by the runtime except through an {ref}`objc_storeWeak <arc.runtime."
-"objc_storeWeak>`, {ref}`objc_destroyWeak <arc.runtime.objc_destroyWeak>`, or "
-"{ref}`objc_moveWeak <arc.runtime.objc_moveWeak>` call."
+"tracked by the runtime except through an {ref}`objc_storeWeak "
+"<arc.runtime.objc_storeWeak>`, {ref}`objc_destroyWeak "
+"<arc.runtime.objc_destroyWeak>`, or {ref}`objc_moveWeak "
+"<arc.runtime.objc_moveWeak>` call."
 msgstr ""
 
 #: ../../../AutomaticReferenceCounting.md:2261
@@ -3480,12 +3481,12 @@ msgstr ""
 msgid ""
 "If `value` is null, this call has no effect. Otherwise, it makes a best "
 "effort to hand off ownership of a retain count on the object to a call to "
-"{ref}`objc_retainAutoreleasedReturnValue <arc.runtime."
-"objc_retainAutoreleasedReturnValue>` (or {ref}"
-"`objc_unsafeClaimAutoreleasedReturnValue <arc.runtime."
-"objc_unsafeClaimAutoreleasedReturnValue>`) for the same object in an "
-"enclosing call frame. If this is not possible, the object is autoreleased as "
-"above."
+"{ref}`objc_retainAutoreleasedReturnValue "
+"<arc.runtime.objc_retainAutoreleasedReturnValue>` (or {ref}"
+"`objc_unsafeClaimAutoreleasedReturnValue "
+"<arc.runtime.objc_unsafeClaimAutoreleasedReturnValue>`) for the same object "
+"in an enclosing call frame. If this is not possible, the object is "
+"autoreleased as above."
 msgstr ""
 
 #: ../../../AutomaticReferenceCounting.md:2336
@@ -3601,8 +3602,8 @@ msgstr ""
 msgid ""
 "`dest` is initialized to be equivalent to `src`, potentially registering it "
 "with the runtime. `src` may then be left in its original state, in which "
-"case this call is equivalent to {ref}`objc_copyWeak <arc.runtime."
-"objc_copyWeak>`, or it may be left as null."
+"case this call is equivalent to {ref}`objc_copyWeak "
+"<arc.runtime.objc_copyWeak>`, or it may be left as null."
 msgstr ""
 
 #: ../../../AutomaticReferenceCounting.md:2451
@@ -3659,8 +3660,8 @@ msgid ""
 "accept a hand off of a retain count from a call to {ref}"
 "`objc_autoreleaseReturnValue <arc.runtime.objc_autoreleaseReturnValue>` on "
 "`value` in a recently-called function or something it tail-calls. If that "
-"fails, it performs a retain operation exactly like {ref}`objc_retain <arc."
-"runtime.objc_retain>`."
+"fails, it performs a retain operation exactly like {ref}`objc_retain "
+"<arc.runtime.objc_retain>`."
 msgstr ""
 
 #: ../../../AutomaticReferenceCounting.md:2524
@@ -3725,10 +3726,10 @@ msgid ""
 "accept a hand off of a retain count from a call to {ref}"
 "`objc_autoreleaseReturnValue <arc.runtime.objc_autoreleaseReturnValue>` on "
 "`value` in a recently-called function or something it tail-calls (in a "
-"manner similar to {ref}`objc_retainAutoreleasedReturnValue <arc.runtime."
-"objc_retainAutoreleasedReturnValue>`). If that succeeds, it performs a "
-"release operation exactly like {ref}`objc_release <arc.runtime."
-"objc_release>`. If the handoff fails, this call has no effect."
+"manner similar to {ref}`objc_retainAutoreleasedReturnValue "
+"<arc.runtime.objc_retainAutoreleasedReturnValue>`). If that succeeds, it "
+"performs a release operation exactly like {ref}`objc_release "
+"<arc.runtime.objc_release>`. If the handoff fails, this call has no effect."
 msgstr ""
 
 #: ../../../AutomaticReferenceCounting.md:2553

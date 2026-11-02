@@ -148,9 +148,9 @@ msgstr ""
 
 #: ../../../ClangTransformerTutorial.md:80
 msgid ""
-"Note that the result of `makeRule` is a value of type `clang::transformer::"
-"RewriteRule`, but most users don't need to care about the details of this "
-"type."
+"Note that the result of `makeRule` is a value of type "
+"`clang::transformer::RewriteRule`, but most users don't need to care about "
+"the details of this type."
 msgstr ""
 
 #: ../../../ClangTransformerTutorial.md:84
@@ -253,11 +253,11 @@ msgstr ""
 
 #: ../../../ClangTransformerTutorial.md:167
 msgid ""
-"This rule isn't quite what we want: it will rewrite `my_object.child()."
-"foo()` to `my_object.foo()`, but it will also rewrite `my_ptr->child()."
-"foo()` to `my_ptr.foo()`, which is not what we intend. We could fix this by "
-"restricting the pattern with `not(isArrow())` in the definition of "
-"`child_call`. Yet, we *want* to rewrite calls through pointers."
+"This rule isn't quite what we want: it will rewrite "
+"`my_object.child().foo()` to `my_object.foo()`, but it will also rewrite "
+"`my_ptr->child().foo()` to `my_ptr.foo()`, which is not what we intend. We "
+"could fix this by restricting the pattern with `not(isArrow())` in the "
+"definition of `child_call`. Yet, we *want* to rewrite calls through pointers."
 msgstr ""
 
 #: ../../../ClangTransformerTutorial.md:173
@@ -504,10 +504,10 @@ msgstr ""
 #: ../../../ClangTransformerTutorial.md:340
 msgid ""
 "Transformer supports executing a rewrite rule as a [clang-tidy](https://"
-"clang.llvm.org/extra/clang-tidy/) check, with the class `clang::tidy::utils::"
-"TransformerClangTidyCheck`. It is designed to require minimal code in the "
-"definition. For example, given a rule `MyCheckAsRewriteRule`, one can define "
-"a tidy check as follows:"
+"clang.llvm.org/extra/clang-tidy/) check, with the class "
+"`clang::tidy::utils::TransformerClangTidyCheck`. It is designed to require "
+"minimal code in the definition. For example, given a rule "
+"`MyCheckAsRewriteRule`, one can define a tidy check as follows:"
 msgstr ""
 
 #: ../../../ClangTransformerTutorial.md:354

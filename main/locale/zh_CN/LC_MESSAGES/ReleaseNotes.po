@@ -42,12 +42,12 @@ msgstr ""
 #: ../../../ReleaseNotes.md:29
 msgid ""
 "This document contains the release notes for the Clang C/C++/Objective-C "
-"frontend, part of the LLVM Compiler Infrastructure, release {{env.config."
-"release}}. Here we describe the status of Clang in some detail, including "
-"major improvements from the previous release and new feature work. For the "
-"general LLVM release notes, see [the LLVM documentation](https://llvm.org/"
-"docs/ReleaseNotes.html). For the libc++ release notes, see [this page]"
-"(https://libcxx.llvm.org/ReleaseNotes.html). All LLVM releases may be "
+"frontend, part of the LLVM Compiler Infrastructure, release "
+"{{env.config.release}}. Here we describe the status of Clang in some detail, "
+"including major improvements from the previous release and new feature work. "
+"For the general LLVM release notes, see [the LLVM documentation](https://"
+"llvm.org/docs/ReleaseNotes.html). For the libc++ release notes, see [this "
+"page](https://libcxx.llvm.org/ReleaseNotes.html). All LLVM releases may be "
 "downloaded from the [LLVM releases web site](https://llvm.org/releases/)."
 msgstr ""
 
@@ -80,8 +80,8 @@ msgstr ""
 #: ../../../ReleaseNotes.md:53
 msgid ""
 "The `[[carries_dependency]]` attribute is no longer recognized, in any "
-"language mode, as it was removed from the standard by [P3475R2](https://wg21."
-"link/P3475R2)."
+"language mode, as it was removed from the standard by [P3475R2](https://"
+"wg21.link/P3475R2)."
 msgstr ""
 
 #: ../../../ReleaseNotes.md:58
@@ -393,8 +393,8 @@ msgstr ""
 #: ../../../ReleaseNotes.md:229
 msgid ""
 "Clang now supports C2y's new syntax for `if` and `switch` statements with "
-"initializer and condition variables, as specified in [N3356](https://www."
-"open-std.org/jtc1/sc22/wg14/www/docs/n3356.htm)_. For example:"
+"initializer and condition variables, as specified in [N3356](https://"
+"www.open-std.org/jtc1/sc22/wg14/www/docs/n3356.htm)_. For example:"
 msgstr ""
 
 #: ../../../ReleaseNotes.md:254
@@ -917,8 +917,8 @@ msgstr ""
 
 #: ../../../ReleaseNotes.md:589
 msgid ""
-"Clang now emits error when attribute is missing closing `]]` followed by `;;"
-"`. (#GH187223)"
+"Clang now emits error when attribute is missing closing `]]` followed by "
+"`;;`. (#GH187223)"
 msgstr ""
 
 #: ../../../ReleaseNotes.md:591
@@ -997,12 +997,13 @@ msgstr ""
 #: ../../../ReleaseNotes.md:631
 msgid ""
 "`-Wunsafe-buffer-usage-in-container` now warns on unsafe calls to two-"
-"parameter constructors and factory functions annotated with `[[clang::"
-"unsafe_buffer_usage_in_container]]` or `[[clang::"
-"unsafe_buffer_usage(\"container\")]]`. For these annotated functions, the "
-"safe `(.data(), .size())` and `(.begin(), .end())` argument checks use duck "
-"typing rather than a hardcoded type list, suppressing false positives when "
-"both methods are called on the same user-defined container object."
+"parameter constructors and factory functions annotated with "
+"`[[clang::unsafe_buffer_usage_in_container]]` or "
+"`[[clang::unsafe_buffer_usage(\"container\")]]`. For these annotated "
+"functions, the safe `(.data(), .size())` and `(.begin(), .end())` argument "
+"checks use duck typing rather than a hardcoded type list, suppressing false "
+"positives when both methods are called on the same user-defined container "
+"object."
 msgstr ""
 
 #: ../../../ReleaseNotes.md:639
@@ -1639,8 +1640,8 @@ msgstr ""
 #: ../../../ReleaseNotes.md:874
 msgid ""
 "Fixed a crash on invalid code where a ``decltype`` not followed by ``(`` was "
-"parsed where a nested-name-specifier could appear (e.g. ``int decltype = 0;"
-"``). Clang now diagnoses the error instead of asserting. (#GH211207)"
+"parsed where a nested-name-specifier could appear (e.g. ``int decltype = "
+"0;``). Clang now diagnoses the error instead of asserting. (#GH211207)"
 msgstr ""
 
 #: ../../../ReleaseNotes.md:878
@@ -1783,8 +1784,8 @@ msgstr ""
 msgid ""
 "Fixed an assertion when a redeclaration of a function template or an out-of-"
 "line definition of a member of a class template added a default argument to "
-"a parameter that follows a parameter pack (e.g. `template <typename... T> S::"
-"S(T..., int = 10) {}`).  (#GH216211)"
+"a parameter that follows a parameter pack (e.g. `template <typename... T> "
+"S::S(T..., int = 10) {}`).  (#GH216211)"
 msgstr ""
 
 #: ../../../ReleaseNotes.md:953
@@ -2434,8 +2435,8 @@ msgstr ""
 
 #: ../../../ReleaseNotes.md:1279
 msgid ""
-"The `alpha.cplusplus.UseAfterLifetimeEnd` checker was renamed to `alpha.core."
-"UseAfterLifetimeEnd`."
+"The `alpha.cplusplus.UseAfterLifetimeEnd` checker was renamed to "
+"`alpha.core.UseAfterLifetimeEnd`."
 msgstr ""
 
 #: ../../../ReleaseNotes.md:1281
@@ -2444,11 +2445,11 @@ msgstr ""
 
 #: ../../../ReleaseNotes.md:1283
 msgid ""
-"For self-assignments during initialization (`T v = v;`), `core.uninitialized."
-"Assign` will not report them as uninitialized accesses (except C++ reference "
-"types), and the checks will be delayed until the first accesses of these "
-"variables; `deadcode.DeadStores` will not report them as dead stores. "
-"(#GH187530)"
+"For self-assignments during initialization (`T v = v;`), "
+"`core.uninitialized.Assign` will not report them as uninitialized accesses "
+"(except C++ reference types), and the checks will be delayed until the first "
+"accesses of these variables; `deadcode.DeadStores` will not report them as "
+"dead stores. (#GH187530)"
 msgstr ""
 
 #: ../../../ReleaseNotes.md:1287
@@ -2469,17 +2470,17 @@ msgstr ""
 
 #: ../../../ReleaseNotes.md:1296
 msgid ""
-"Fixed a crash (`SIGFPE`) when traversing an AST via the visitor callbacks (e."
-"g. `Cursor.get_children`) on s390x. The callbacks now return a full register "
-"word so the return value is correctly extended, working around a `ctypes` "
-"bug (https://github.com/python/cpython/issues/156933) that left the high "
-"bytes of the return register uninitialized."
+"Fixed a crash (`SIGFPE`) when traversing an AST via the visitor callbacks "
+"(e.g. `Cursor.get_children`) on s390x. The callbacks now return a full "
+"register word so the return value is correctly extended, working around a "
+"`ctypes` bug (https://github.com/python/cpython/issues/156933) that left the "
+"high bytes of the return register uninitialized."
 msgstr ""
 
 #: ../../../ReleaseNotes.md:1301
 msgid ""
-"Add support for retrieving unary operator information through `Cursor."
-"unary_operator()`."
+"Add support for retrieving unary operator information through "
+"`Cursor.unary_operator()`."
 msgstr ""
 
 #: ../../../ReleaseNotes.md:1303
@@ -2538,9 +2539,9 @@ msgstr ""
 
 #: ../../../ReleaseNotes.md:1327
 msgid ""
-"Mapping of expressions with base-pointers through a user-defined mapper (e."
-"g. `map(s.p[0:n])`) now conforms to OpenMP's conditional pointer-attachment, "
-"matching the behavior of such maps outside a mapper."
+"Mapping of expressions with base-pointers through a user-defined mapper "
+"(e.g. `map(s.p[0:n])`) now conforms to OpenMP's conditional pointer-"
+"attachment, matching the behavior of such maps outside a mapper."
 msgstr ""
 
 #: ../../../ReleaseNotes.md:1330

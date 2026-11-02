@@ -311,9 +311,10 @@ msgstr ""
 
 #: ../../../LLVMExceptionHandlingCodeGen.md:164
 msgid ""
-"`CodeGenFunction::EmitDecl` routes the local variable to `CodeGenFunction::"
-"EmitVarDecl` and then `CodeGenFunction::EmitAutoVarDecl`, which in turn "
-"calls `EmitAutoVarAlloca`, `EmitAutoVarInit`, and `EmitAutoVarCleanups`."
+"`CodeGenFunction::EmitDecl` routes the local variable to "
+"`CodeGenFunction::EmitVarDecl` and then `CodeGenFunction::EmitAutoVarDecl`, "
+"which in turn calls `EmitAutoVarAlloca`, `EmitAutoVarInit`, and "
+"`EmitAutoVarCleanups`."
 msgstr ""
 
 #: ../../../LLVMExceptionHandlingCodeGen.md:168
@@ -330,8 +331,9 @@ msgstr ""
 #: ../../../LLVMExceptionHandlingCodeGen.md:175
 msgid ""
 "`CodeGenFunction::EmitAutoVarCleanups` calls `emitAutoVarTypeCleanup`, which "
-"ultimately registers a `DestroyObject` cleanup via `CodeGenFunction::"
-"pushDestroy` / `pushFullExprCleanup` for the full-array destructor path."
+"ultimately registers a `DestroyObject` cleanup via "
+"`CodeGenFunction::pushDestroy` / `pushFullExprCleanup` for the full-array "
+"destructor path."
 msgstr ""
 
 #: ../../../LLVMExceptionHandlingCodeGen.md:179
@@ -396,8 +398,9 @@ msgstr ""
 msgid ""
 "`CodeGenFunction::EmitMaterializeTemporaryExpr` creates storage for the "
 "temporary via `createReferenceTemporary` and initializes it. For record "
-"temporaries this flows through `EmitAnyExprToMem` and `CodeGenFunction::"
-"EmitCXXConstructExpr`, which calls `CodeGenFunction::EmitCXXConstructorCall`."
+"temporaries this flows through `EmitAnyExprToMem` and "
+"`CodeGenFunction::EmitCXXConstructExpr`, which calls "
+"`CodeGenFunction::EmitCXXConstructorCall`."
 msgstr ""
 
 #: ../../../LLVMExceptionHandlingCodeGen.md:225
@@ -409,6 +412,7 @@ msgstr ""
 
 #: ../../../LLVMExceptionHandlingCodeGen.md:228
 msgid ""
-"The cleanup ultimately uses `DestroyObject` and `CodeGenFunction::"
-"destroyCXXObject`, which emits `CodeGenFunction::EmitCXXDestructorCall`."
+"The cleanup ultimately uses `DestroyObject` and "
+"`CodeGenFunction::destroyCXXObject`, which emits "
+"`CodeGenFunction::EmitCXXDestructorCall`."
 msgstr ""

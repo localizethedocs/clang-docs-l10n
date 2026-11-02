@@ -52,9 +52,9 @@ msgstr ""
 #: ../../../DebuggingCoroutines.md:21
 msgid ""
 "This document focuses on clang and lldb. The screenshots show [lldb-dap]"
-"(https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions."
-"lldb-dap) in combination with VS Code. The same techniques can also be used "
-"in other IDEs."
+"(https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-"
+"extensions.lldb-dap) in combination with VS Code. The same techniques can "
+"also be used in other IDEs."
 msgstr ""
 
 #: ../../../DebuggingCoroutines.md:26
@@ -156,10 +156,11 @@ msgstr ""
 #: ../../../DebuggingCoroutines.md:153
 msgid ""
 "This is because lldb does not step into functions from the standard library "
-"by default. To make this work, you first need to run `settings set target."
-"process.thread.step-avoid-regexp \"\"`. You can do so from the \"Debug "
-"Console\" towards the bottom of the screen. With that setting change, you "
-"can step through `coroutine_handle::resume` and into your generator."
+"by default. To make this work, you first need to run `settings set "
+"target.process.thread.step-avoid-regexp \"\"`. You can do so from the "
+"\"Debug Console\" towards the bottom of the screen. With that setting "
+"change, you can step through `coroutine_handle::resume` and into your "
+"generator."
 msgstr ""
 
 #: ../../../DebuggingCoroutines.md:159
@@ -297,9 +298,9 @@ msgstr ""
 
 #: ../../../DebuggingCoroutines.md:344
 msgid ""
-"Note how the `task::promise_type` has a member variable `std::"
-"coroutine_handle<> continuation`. This is the handle of the coroutine that "
-"will be resumed when the current coroutine is finished executing (see "
+"Note how the `task::promise_type` has a member variable "
+"`std::coroutine_handle<> continuation`. This is the handle of the coroutine "
+"that will be resumed when the current coroutine is finished executing (see "
 "`final_suspend`). In a sense, this is the \"return address\" of the "
 "coroutine. It is set inside `operator co_await` when another coroutine calls "
 "our generator and awaits for the next value to be produced."
@@ -440,9 +441,9 @@ msgstr ""
 
 #: ../../../DebuggingCoroutines.md:484
 msgid ""
-"LLDB before 16.0 did not yet provide a pretty-printer for `std::"
-"coroutine_handle`. To inspect the coroutine handle, you had to manually use "
-"the approach described in the {ref}`devirtualization` section."
+"LLDB before 16.0 did not yet provide a pretty-printer for "
+"`std::coroutine_handle`. To inspect the coroutine handle, you had to "
+"manually use the approach described in the {ref}`devirtualization` section."
 msgstr ""
 
 #: ../../../DebuggingCoroutines.md:489
@@ -527,8 +528,8 @@ msgstr ""
 #: ../../../DebuggingCoroutines.md:529
 msgid ""
 "When trying to intercept all creations of new coroutines in the debugger, "
-"you hence might have to set breakpoints in the ramp function and its `."
-"noalloc` variant."
+"you hence might have to set breakpoints in the ramp function and its "
+"`.noalloc` variant."
 msgstr ""
 
 #: ../../../DebuggingCoroutines.md:533

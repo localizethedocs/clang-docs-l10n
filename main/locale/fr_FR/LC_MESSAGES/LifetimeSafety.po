@@ -56,11 +56,12 @@ msgid ""
 "not require lifetime annotations to get started, in their absence, the "
 "analysis treats function calls optimistically, assuming no lifetime effects, "
 "thereby potentially missing dangling pointer issues. As more functions are "
-"annotated with attributes like [clang::lifetimebound](AttributeReference."
-"md#lifetimebound), [gsl::Owner](AttributeReference.md#owner), and [gsl::"
-"Pointer](AttributeReference.md#pointer), the analysis can see through these "
-"lifetime contracts and enforce lifetime safety at call sites with higher "
-"accuracy. This approach supports gradual adoption in existing codebases."
+"annotated with attributes like [clang::lifetimebound]"
+"(AttributeReference.md#lifetimebound), [gsl::Owner]"
+"(AttributeReference.md#owner), and [gsl::Pointer]"
+"(AttributeReference.md#pointer), the analysis can see through these lifetime "
+"contracts and enforce lifetime safety at call sites with higher accuracy. "
+"This approach supports gradual adoption in existing codebases."
 msgstr ""
 
 #: ../../../LifetimeSafety.md:31
@@ -76,8 +77,8 @@ msgstr ""
 
 #: ../../../LifetimeSafety.md:52
 msgid ""
-"This example demonstrates a basic use-after-scope bug. The `std::"
-"string_view` object `v` holds a reference to `s`, a `std::string`. The "
+"This example demonstrates a basic use-after-scope bug. The "
+"`std::string_view` object `v` holds a reference to `s`, a `std::string`. The "
 "lifetime of `s` ends at the end of the inner block, causing `v` to become a "
 "dangling reference. The analysis flags the assignment `v = s` as defective "
 "because `s` is destroyed while `v` is still alive and points to `s`, and "
@@ -98,8 +99,8 @@ msgstr ""
 
 #: ../../../LifetimeSafety.md:80
 msgid ""
-"To run the analysis, compile with the `-Wlifetime-safety-permissive` flag, e."
-"g."
+"To run the analysis, compile with the `-Wlifetime-safety-permissive` flag, "
+"e.g."
 msgstr ""
 
 #: ../../../LifetimeSafety.md:86
@@ -142,8 +143,9 @@ msgstr ""
 
 #: ../../../LifetimeSafety.md:107
 msgid ""
-"`[[gsl::Pointer]]`: For non-owning types that borrow resources, like `std::"
-"string_view`, or raw pointers (which are implicitly treated as pointers)."
+"`[[gsl::Pointer]]`: For non-owning types that borrow resources, like "
+"`std::string_view`, or raw pointers (which are implicitly treated as "
+"pointers)."
 msgstr ""
 
 #: ../../../LifetimeSafety.md:111
@@ -157,9 +159,9 @@ msgstr ""
 msgid ""
 "Without these annotations, the analysis may not be able to determine whether "
 "a type is owning or borrowing, which can affect analysis precision. For more "
-"details on these attributes, see the Clang attribute reference for [gsl::"
-"Owner](AttributeReference.md#owner) and [gsl::Pointer](AttributeReference."
-"md#pointer)."
+"details on these attributes, see the Clang attribute reference for "
+"[gsl::Owner](AttributeReference.md#owner) and [gsl::Pointer]"
+"(AttributeReference.md#pointer)."
 msgstr ""
 
 #: ../../../LifetimeSafety.md:149
@@ -432,14 +434,14 @@ msgstr ""
 msgid ""
 "`-Wlifetime-safety-invalidation`: Warns when a pointer, reference, iterator "
 "or view is used after an operation that may invalidate it, such as container "
-"mutation or explicit destruction (e.g., `std::unique_ptr::reset`, `std::"
-"destroy_at`) (Experimental)."
+"mutation or explicit destruction (e.g., `std::unique_ptr::reset`, "
+"`std::destroy_at`) (Experimental)."
 msgstr ""
 
 #: ../../../LifetimeSafety.md:510
 msgid ""
-"`-Wlifetime-safety-suggestions`: Enables suggestions to add `[[clang::"
-"lifetimebound]]` to function parameters and `this` parameters."
+"`-Wlifetime-safety-suggestions`: Enables suggestions to add "
+"`[[clang::lifetimebound]]` to function parameters and `this` parameters."
 msgstr ""
 
 #: ../../../LifetimeSafety.md:512
@@ -474,8 +476,8 @@ msgstr ""
 
 #: ../../../LifetimeSafety.md:519
 msgid ""
-"`-Wlifetime-safety-noescape`: Warns when a parameter marked with `[[clang::"
-"noescape]]` escapes the function."
+"`-Wlifetime-safety-noescape`: Warns when a parameter marked with "
+"`[[clang::noescape]]` escapes the function."
 msgstr ""
 
 #: ../../../LifetimeSafety.md:520
@@ -533,8 +535,8 @@ msgstr ""
 
 #: ../../../LifetimeSafety.md:588
 msgid ""
-"The same principle applies when moving ownership using `std::unique_ptr::"
-"release()`:"
+"The same principle applies when moving ownership using "
+"`std::unique_ptr::release()`:"
 msgstr ""
 
 #: ../../../LifetimeSafety.md:611
@@ -543,13 +545,13 @@ msgstr ""
 
 #: ../../../LifetimeSafety.md:613
 msgid ""
-"The analysis assumes standard ownership semantics for owner types like `std::"
-"unique_ptr`: when a `unique_ptr` goes out of scope, it is assumed that the "
-"owned object is destroyed and its memory is deallocated. However, `std::"
-"unique_ptr` can be used with a custom deleter that modifies this behavior. "
-"For example, a custom deleter might keep the memory alive by transferring it "
-"to a memory pool, or simply do nothing, allowing another system to manage "
-"the lifetime."
+"The analysis assumes standard ownership semantics for owner types like "
+"`std::unique_ptr`: when a `unique_ptr` goes out of scope, it is assumed that "
+"the owned object is destroyed and its memory is deallocated. However, "
+"`std::unique_ptr` can be used with a custom deleter that modifies this "
+"behavior. For example, a custom deleter might keep the memory alive by "
+"transferring it to a memory pool, or simply do nothing, allowing another "
+"system to manage the lifetime."
 msgstr ""
 
 #: ../../../LifetimeSafety.md:621

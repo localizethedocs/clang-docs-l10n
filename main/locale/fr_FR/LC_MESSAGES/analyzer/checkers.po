@@ -83,13 +83,13 @@ msgstr ""
 
 #: ../../../analyzer/checkers.md:37
 msgid ""
-"Moreover, if the pedantic mode is activated by `-analyzer-config core."
-"BitwiseShift:Pedantic=true`, then this checker also reports situations where "
-"the *left* operand of a shift operator is negative or overflow occurs during "
-"the right shift of a signed value. (Most compilers handle these predictably, "
-"but the C standard and the C++ standards before C++20 say that they're "
-"undefined behavior. In the C++20 standard these constructs are well-defined, "
-"so activating pedantic mode in C++20 has no effect.)"
+"Moreover, if the pedantic mode is activated by `-analyzer-config "
+"core.BitwiseShift:Pedantic=true`, then this checker also reports situations "
+"where the *left* operand of a shift operator is negative or overflow occurs "
+"during the right shift of a signed value. (Most compilers handle these "
+"predictably, but the C standard and the C++ standards before C++20 say that "
+"they're undefined behavior. In the C++20 standard these constructs are well-"
+"defined, so activating pedantic mode in C++20 has no effect.)"
 msgstr ""
 
 #: ../../../analyzer/checkers.md:45
@@ -539,8 +539,8 @@ msgstr ""
 #: ../../../analyzer/checkers.md:605
 msgid ""
 "This checker is capable of checking the [SEI CERT C++ coding rule STR51-CPP. "
-"Do not attempt to create a std::string from a null pointer](https://wiki.sei."
-"cmu.edu/confluence/x/E3s-BQ)."
+"Do not attempt to create a std::string from a null pointer](https://"
+"wiki.sei.cmu.edu/confluence/x/E3s-BQ)."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:620
@@ -689,8 +689,8 @@ msgid ""
 "This checker does not accept the coding pattern where an enum type is used "
 "to store combinations of flag values. Such enums should be annotated with "
 "the `__attribute__((flag_enum))` or by the `[[clang::flag_enum]]` attribute "
-"to signal this intent. Refer to the [documentation](../AttributeReference."
-"md#flag-enum) of this Clang attribute."
+"to signal this intent. Refer to the [documentation](../"
+"AttributeReference.md#flag-enum) of this Clang attribute."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:831
@@ -759,8 +759,8 @@ msgstr ""
 
 #: ../../../analyzer/checkers.md:901
 msgid ""
-"This design rule is dictated by the SEI CERT rule [EXP47-C](https://wiki.sei."
-"cmu.edu/confluence/display/c/EXP47-C."
+"This design rule is dictated by the SEI CERT rule [EXP47-C](https://"
+"wiki.sei.cmu.edu/confluence/display/c/EXP47-C."
 "+Do+not+call+va_arg+with+an+argument+of+the+incorrect+type), which describes "
 "several issues related to the use of `va_arg()`. (The problem reported by "
 "this checker is shown in the second code example; the first, unrelated code "
@@ -929,8 +929,8 @@ msgstr ""
 
 #: ../../../analyzer/checkers.md:1217
 msgid ""
-"To override this threshold to e.g. 4 bytes, use the `-analyzer-config optin."
-"performance.Padding:AllowedPad=4` option."
+"To override this threshold to e.g. 4 bytes, use the `-analyzer-config "
+"optin.performance.Padding:AllowedPad=4` option."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:1222
@@ -1144,13 +1144,13 @@ msgstr ""
 #: ../../../analyzer/checkers.md:1433
 msgid ""
 "One can configure their own taint sources, sinks, and propagation rules by "
-"providing a configuration file via checker option `optin.taint."
-"TaintPropagation:Config`. The configuration file is in [YAML](http://llvm."
-"org/docs/YamlIO.html#introduction-to-yaml) format. The taint-related options "
-"defined in the config file extend but do not override the built-in sources, "
-"rules, sinks. The format of the external taint configuration file is not "
-"stable, and could change without any notice even in a non-backward "
-"compatible way."
+"providing a configuration file via checker option "
+"`optin.taint.TaintPropagation:Config`. The configuration file is in [YAML]"
+"(http://llvm.org/docs/YamlIO.html#introduction-to-yaml) format. The taint-"
+"related options defined in the config file extend but do not override the "
+"built-in sources, rules, sinks. The format of the external taint "
+"configuration file is not stable, and could change without any notice even "
+"in a non-backward compatible way."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:1442
@@ -1196,14 +1196,14 @@ msgstr ""
 
 #: ../../../analyzer/checkers.md:1463
 msgid ""
-"[CWE Data Neutralization Issues](https://cwe.mitre.org/data/definitions/137."
-"html)"
+"[CWE Data Neutralization Issues](https://cwe.mitre.org/data/definitions/"
+"137.html)"
 msgstr ""
 
 #: ../../../analyzer/checkers.md:1464
 msgid ""
-"[SEI Cert STR02-C. Sanitize data passed to complex subsystems](https://wiki."
-"sei.cmu.edu/confluence/display/c/STR02-C."
+"[SEI Cert STR02-C. Sanitize data passed to complex subsystems](https://"
+"wiki.sei.cmu.edu/confluence/display/c/STR02-C."
 "+Sanitize+data+passed+to+complex+subsystems)"
 msgstr ""
 
@@ -1316,9 +1316,9 @@ msgstr ""
 #: ../../../analyzer/checkers.md:1608
 msgid ""
 "This checker is an improved and renamed version of the checker that was "
-"previously known as `alpha.security.ArrayBoundV2`. The old checker `alpha."
-"security.ArrayBound` was removed when the (previously \"experimental\") V2 "
-"variant became stable enough for regular use."
+"previously known as `alpha.security.ArrayBoundV2`. The old checker "
+"`alpha.security.ArrayBound` was removed when the (previously "
+"\"experimental\") V2 variant became stable enough for regular use."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:1616
@@ -1362,8 +1362,8 @@ msgstr ""
 
 #: ../../../analyzer/checkers.md:1666
 msgid ""
-"To enable this option, use: `-analyzer-config security.cert.env.InvalidPtr:"
-"InvalidatingGetEnv=true`."
+"To enable this option, use: `-analyzer-config "
+"security.cert.env.InvalidPtr:InvalidatingGetEnv=true`."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:1669
@@ -1529,8 +1529,8 @@ msgstr ""
 
 #: ../../../analyzer/checkers.md:1866
 msgid ""
-"To set this option, use: `-analyzer-config security.insecureAPI."
-"DeprecatedOrUnsafeBufferHandling:ReportMode=all`"
+"To set this option, use: `-analyzer-config "
+"security.insecureAPI.DeprecatedOrUnsafeBufferHandling:ReportMode=all`"
 msgstr ""
 
 #: ../../../analyzer/checkers.md:1869
@@ -1688,9 +1688,9 @@ msgid ""
 "If set to `true`, the static analyzer assumes that all memory allocations "
 "and deallocations (like `malloc` or `free`) are marked with "
 "`ownership_holds`, `ownership_takes` and `ownership_returns` attributes. For "
-"more information see [Attributes in Clang](../AttributeReference."
-"md#ownership-holds-ownership-returns-ownership-takes-clang-static-analyzer). "
-"Default value is `false`."
+"more information see [Attributes in Clang](../"
+"AttributeReference.md#ownership-holds-ownership-returns-ownership-takes-"
+"clang-static-analyzer). Default value is `false`."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:2047
@@ -1761,9 +1761,9 @@ msgid ""
 "Check for improper use of `errno`. This checker implements partially CERT "
 "rule [ERR30-C. Set errno to zero before calling a library function known to "
 "set errno, and check errno only after the function returns a value "
-"indicating failure](https://wiki.sei.cmu.edu/confluence/pages/viewpage."
-"action?pageId=87152351). The checker can find the first read of `errno` "
-"after successful standard function calls."
+"indicating failure](https://wiki.sei.cmu.edu/confluence/pages/"
+"viewpage.action?pageId=87152351). The checker can find the first read of "
+"`errno` after successful standard function calls."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:2153
@@ -1774,8 +1774,8 @@ msgid ""
 "the call has failed. There are exceptions to this rule (for example "
 "`strtol`) but the affected functions are not yet supported by the checker. "
 "The return values for the failure cases are documented in the standard Linux "
-"man pages of the functions and in the [POSIX standard](https://pubs."
-"opengroup.org/onlinepubs/9699919799/)."
+"man pages of the functions and in the [POSIX standard](https://"
+"pubs.opengroup.org/onlinepubs/9699919799/)."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:2174
@@ -2598,9 +2598,9 @@ msgstr ""
 #: ../../../analyzer/checkers.md:3291
 msgid ""
 "Check that addresses to stack memory do not escape the function that "
-"involves dispatch_after or dispatch_async. This checker is a part of `core."
-"StackAddressEscape`, but is temporarily disabled until some false positives "
-"are fixed."
+"involves dispatch_after or dispatch_async. This checker is a part of "
+"`core.StackAddressEscape`, but is temporarily disabled until some false "
+"positives are fixed."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:3313
@@ -3083,8 +3083,8 @@ msgstr ""
 
 #: ../../../analyzer/checkers.md:3972
 msgid ""
-"Although we are enforcing member variables to be ref-counted by `webkit."
-"NoUncountedMemberChecker` any method of the same class still has "
+"Although we are enforcing member variables to be ref-counted by "
+"`webkit.NoUncountedMemberChecker` any method of the same class still has "
 "unrestricted access to these. Since from a caller's perspective we can't "
 "guarantee a particular member won't get modified by callee (directly or "
 "indirectly) we don't consider values obtained from members safe."
@@ -3300,10 +3300,10 @@ msgstr ""
 
 #: ../../../analyzer/checkers.md:4274
 msgid ""
-"A value counts as a loan when it reaches its origin through a `[[clang::"
-"lifetimebound]]` edge. That attribute does not distinguish a view into an "
-"object's interior from another name for the object itself. `foo6` shows why "
-"the checker resolves that ambiguity toward reporting."
+"A value counts as a loan when it reaches its origin through a "
+"`[[clang::lifetimebound]]` edge. That attribute does not distinguish a view "
+"into an object's interior from another name for the object itself. `foo6` "
+"shows why the checker resolves that ambiguity toward reporting."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:4276
