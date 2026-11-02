@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"POT-Creation-Date: 2026-11-02 17:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -210,29 +210,36 @@ msgid ""
 msgstr ""
 
 #: ../../../ThreadSafetyAnalysis.md:175
+msgid ""
+"A member of a nested struct or union, named or anonymous, may also name a "
+"member of the enclosing struct, which is resolved on the enclosing object "
+"through which the guarded member is reached."
+msgstr ""
+
+#: ../../../ThreadSafetyAnalysis.md:179
 msgid "When multiple capabilities are listed:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:177
+#: ../../../ThreadSafetyAnalysis.md:181
 msgid ""
 "**Write** access requires all listed capabilities to be held exclusively."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:178
+#: ../../../ThreadSafetyAnalysis.md:182
 msgid ""
 "**Read** access requires at least one of them to be held (shared or "
 "exclusive)."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:194
+#: ../../../ThreadSafetyAnalysis.md:198
 msgid "REQUIRES(...), REQUIRES_SHARED(...)"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:196
+#: ../../../ThreadSafetyAnalysis.md:200
 msgid "*Previously*: `EXCLUSIVE_LOCKS_REQUIRED`, `SHARED_LOCKS_REQUIRED`"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:198
+#: ../../../ThreadSafetyAnalysis.md:202
 msgid ""
 "`REQUIRES` is an attribute on functions, methods or function parameters of "
 "reference to {ref}`scoped_capability`-annotated type, which declares that "
@@ -243,23 +250,23 @@ msgid ""
 "capability manages the specified capabilities in the given order."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:206
+#: ../../../ThreadSafetyAnalysis.md:210
 msgid "`REQUIRES_SHARED` is similar, but requires only shared access."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:239
+#: ../../../ThreadSafetyAnalysis.md:243
 msgid ""
 "ACQUIRE(...), ACQUIRE_SHARED(...), RELEASE(...), RELEASE_SHARED(...), "
 "RELEASE_GENERIC(...)"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:241
+#: ../../../ThreadSafetyAnalysis.md:245
 msgid ""
 "*Previously*: `EXCLUSIVE_LOCK_FUNCTION`, `SHARED_LOCK_FUNCTION`, "
 "`UNLOCK_FUNCTION`"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:244
+#: ../../../ThreadSafetyAnalysis.md:248
 msgid ""
 "`ACQUIRE` and `ACQUIRE_SHARED` are attributes on functions, methods or "
 "function parameters of reference to {ref}`scoped_capability`-annotated type, "
@@ -270,7 +277,7 @@ msgid ""
 "capability manages the specified capabilities in the given order."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:252
+#: ../../../ThreadSafetyAnalysis.md:256
 msgid ""
 "`RELEASE`, `RELEASE_SHARED`, and `RELEASE_GENERIC` declare that the function "
 "releases the given capability. The capability must be held on entry "
@@ -278,7 +285,7 @@ msgid ""
 "shared for `RELEASE_GENERIC`), and will no longer be held on exit."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:286
+#: ../../../ThreadSafetyAnalysis.md:290
 msgid ""
 "If no argument is passed to `ACQUIRE` or `RELEASE`, then the argument is "
 "assumed to be `this`, and the analysis will not check the body of the "
@@ -286,15 +293,15 @@ msgid ""
 "details behind an abstract interface. For example:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:314
+#: ../../../ThreadSafetyAnalysis.md:318
 msgid "EXCLUDES(...)"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:316
+#: ../../../ThreadSafetyAnalysis.md:320
 msgid "*Previously*: `LOCKS_EXCLUDED`"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:318
+#: ../../../ThreadSafetyAnalysis.md:322
 msgid ""
 "`EXCLUDES` is an attribute on functions, methods or function parameters of "
 "reference to {ref}`scoped_capability`-annotated type, which declares that "
@@ -305,18 +312,18 @@ msgid ""
 "the scoped capability manages the specified capabilities in the given order."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:353
+#: ../../../ThreadSafetyAnalysis.md:357
 msgid ""
 "Unlike `REQUIRES`, `EXCLUDES` is optional. The analysis will not issue a "
 "warning if the attribute is missing, which can lead to false negatives in "
 "some cases. This issue is discussed further in {ref}`negative`."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:357
+#: ../../../ThreadSafetyAnalysis.md:361
 msgid "NO_THREAD_SAFETY_ANALYSIS"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:359
+#: ../../../ThreadSafetyAnalysis.md:363
 msgid ""
 "`NO_THREAD_SAFETY_ANALYSIS` is an attribute on functions or methods, which "
 "turns off thread safety checking for that method. It provides an escape "
@@ -325,7 +332,7 @@ msgid ""
 "for (2) will be described in the {ref}`limitations`, below."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:374
+#: ../../../ThreadSafetyAnalysis.md:378
 msgid ""
 "Unlike the other attributes, `NO_THREAD_SAFETY_ANALYSIS` is not part of the "
 "interface of a function, and should thus be placed on the function "
@@ -333,26 +340,26 @@ msgid ""
 "declaration (in the header)."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:379
+#: ../../../ThreadSafetyAnalysis.md:383
 msgid "RETURN_CAPABILITY(c)"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:381
+#: ../../../ThreadSafetyAnalysis.md:385
 msgid "*Previously*: `LOCK_RETURNED`"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:383
+#: ../../../ThreadSafetyAnalysis.md:387
 msgid ""
 "`RETURN_CAPABILITY` is an attribute on functions or methods, which declares "
 "that the function returns a reference to the given capability. It is used to "
 "annotate getter methods that return mutexes."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:401
+#: ../../../ThreadSafetyAnalysis.md:405
 msgid "ACQUIRED_BEFORE(...), ACQUIRED_AFTER(...)"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:403
+#: ../../../ThreadSafetyAnalysis.md:407
 msgid ""
 "`ACQUIRED_BEFORE` and `ACQUIRED_AFTER` are attributes on member "
 "declarations, specifically declarations of mutexes or other capabilities. "
@@ -360,15 +367,15 @@ msgid ""
 "acquired, in order to prevent deadlock."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:424
+#: ../../../ThreadSafetyAnalysis.md:428
 msgid "CAPABILITY(\\<string>)"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:426
+#: ../../../ThreadSafetyAnalysis.md:430
 msgid "*Previously*: `LOCKABLE`"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:428
+#: ../../../ThreadSafetyAnalysis.md:432
 msgid ""
 "`CAPABILITY` is an attribute on classes, which specifies that objects of the "
 "class can be used as a capability. The string argument specifies the kind of "
@@ -376,11 +383,11 @@ msgid ""
 "given above, or the `Mutex` class in {ref}`mutexheader`."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:433
+#: ../../../ThreadSafetyAnalysis.md:437
 msgid "REENTRANT_CAPABILITY"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:435
+#: ../../../ThreadSafetyAnalysis.md:439
 msgid ""
 "`REENTRANT_CAPABILITY` is an attribute on capability classes, denoting that "
 "they are reentrant. Marking a capability as reentrant means that acquiring "
@@ -389,7 +396,7 @@ msgid ""
 "considered reentrant by the analysis."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:441
+#: ../../../ThreadSafetyAnalysis.md:445
 msgid ""
 "Note: In many cases this attribute is only required where a capability is "
 "acquired reentrant within the same function, such as via macros or other "
@@ -398,15 +405,15 @@ msgid ""
 "produce warnings on double-acquisition attempts."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:449
+#: ../../../ThreadSafetyAnalysis.md:453
 msgid "SCOPED_CAPABILITY"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:451
+#: ../../../ThreadSafetyAnalysis.md:455
 msgid "*Previously*: `SCOPED_LOCKABLE`"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:453
+#: ../../../ThreadSafetyAnalysis.md:457
 msgid ""
 "`SCOPED_CAPABILITY` is an attribute on classes that implement RAII-style "
 "locking, in which a capability is acquired in the constructor, and released "
@@ -415,7 +422,7 @@ msgid ""
 "the `MutexLocker` class in {ref}`mutexheader`, below."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:459
+#: ../../../ThreadSafetyAnalysis.md:463
 msgid ""
 "Scoped capabilities are treated as capabilities that are implicitly acquired "
 "on construction and released on destruction. They are associated with the "
@@ -427,15 +434,15 @@ msgid ""
 "they're held."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:467
+#: ../../../ThreadSafetyAnalysis.md:471
 msgid "TRY_ACQUIRE(\\<bool>, ...), TRY_ACQUIRE_SHARED(\\<bool>, ...)"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:469
+#: ../../../ThreadSafetyAnalysis.md:473
 msgid "*Previously:* `EXCLUSIVE_TRYLOCK_FUNCTION`, `SHARED_TRYLOCK_FUNCTION`"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:471
+#: ../../../ThreadSafetyAnalysis.md:475
 msgid ""
 "These are attributes on a function or method that tries to acquire the given "
 "capability, and returns a boolean value indicating success or failure. The "
@@ -444,22 +451,22 @@ msgid ""
 "way as `ACQUIRE`. See {ref}`mutexheader`, below, for example uses."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:477
+#: ../../../ThreadSafetyAnalysis.md:481
 msgid ""
 "Because the analysis doesn't support conditional locking, a capability is "
 "treated as acquired after the first branch on the return value of a try-"
 "acquire function."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:497
+#: ../../../ThreadSafetyAnalysis.md:501
 msgid "ASSERT_CAPABILITY(...) and ASSERT_SHARED_CAPABILITY(...)"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:499
+#: ../../../ThreadSafetyAnalysis.md:503
 msgid "*Previously:* `ASSERT_EXCLUSIVE_LOCK`, `ASSERT_SHARED_LOCK`"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:501
+#: ../../../ThreadSafetyAnalysis.md:505
 msgid ""
 "These are attributes on a function or method which asserts the calling "
 "thread already holds the given capability, for example, by performing a run-"
@@ -468,19 +475,19 @@ msgid ""
 "to the annotated function. See {ref}`mutexheader`, below, for example uses."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:507
+#: ../../../ThreadSafetyAnalysis.md:511
 msgid "GUARDED_VAR and PT_GUARDED_VAR"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:509
+#: ../../../ThreadSafetyAnalysis.md:513
 msgid "Use of these attributes has been deprecated."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:511
+#: ../../../ThreadSafetyAnalysis.md:515
 msgid "Function Pointers"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:513
+#: ../../../ThreadSafetyAnalysis.md:517
 msgid ""
 "Thread safety attributes may also be applied to variables, fields, and "
 "parameters of function pointer (or, in C++, function reference) type. The "
@@ -488,7 +495,7 @@ msgid ""
 "and the analysis will check calls through the pointer accordingly."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:543
+#: ../../../ThreadSafetyAnalysis.md:547
 msgid ""
 "Note that the attributes are on the *variable* (or field, or parameter), not "
 "on the function pointer type. Assigning a function with different (or no) "
@@ -496,61 +503,61 @@ msgid ""
 "analysis trusts the annotations on the variable at the call site."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:548
+#: ../../../ThreadSafetyAnalysis.md:552
 msgid ""
 "This support is limited to plain function pointers and function references. "
-"Pointers-to-member functions, blocks, and wrapper types such as `std::"
-"function` are not supported yet."
-msgstr ""
-
-#: ../../../ThreadSafetyAnalysis.md:552
-msgid "Warning flags"
-msgstr ""
-
-#: ../../../ThreadSafetyAnalysis.md:554
-msgid "`-Wthread-safety`:  Umbrella flag which turns on the following:"
+"Pointers-to-member functions, blocks, and wrapper types such as "
+"`std::function` are not supported yet."
 msgstr ""
 
 #: ../../../ThreadSafetyAnalysis.md:556
+msgid "Warning flags"
+msgstr ""
+
+#: ../../../ThreadSafetyAnalysis.md:558
+msgid "`-Wthread-safety`:  Umbrella flag which turns on the following:"
+msgstr ""
+
+#: ../../../ThreadSafetyAnalysis.md:560
 msgid ""
 "`-Wthread-safety-attributes`: Semantic checks for thread safety attributes."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:557
+#: ../../../ThreadSafetyAnalysis.md:561
 msgid "`-Wthread-safety-analysis`: The core analysis."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:559
+#: ../../../ThreadSafetyAnalysis.md:563
 msgid ""
 "`-Wthread-safety-precise`: Requires that mutex expressions match precisely."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:560
+#: ../../../ThreadSafetyAnalysis.md:564
 msgid "This warning can be disabled for code which has a lot of aliases."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:562
+#: ../../../ThreadSafetyAnalysis.md:566
 msgid ""
 "`-Wthread-safety-reference`: Checks when guarded members are passed or "
 "returned by reference."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:565
+#: ../../../ThreadSafetyAnalysis.md:569
 msgid ""
 "`-Wthread-safety-pointer`: Checks when passing or returning pointers to "
 "guarded variables, or pointers to guarded data, as function argument or "
 "return value respectively."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:569
+#: ../../../ThreadSafetyAnalysis.md:573
 msgid "{ref}`negative` are an experimental feature, which are enabled with:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:571
+#: ../../../ThreadSafetyAnalysis.md:575
 msgid "`-Wthread-safety-negative`: Negative capabilities. Off by default."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:573
+#: ../../../ThreadSafetyAnalysis.md:577
 msgid ""
 "When new features and checks are added to the analysis, they can often "
 "introduce additional warnings. Those warnings are initially released as "
@@ -558,15 +565,15 @@ msgid ""
 "standard analysis."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:577
+#: ../../../ThreadSafetyAnalysis.md:581
 msgid "`-Wthread-safety-beta`: New features. Off by default."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:581
+#: ../../../ThreadSafetyAnalysis.md:585
 msgid "Negative Capabilities"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:583
+#: ../../../ThreadSafetyAnalysis.md:587
 msgid ""
 "Thread Safety Analysis is designed to prevent both race conditions and "
 "deadlock. The `GUARDED_BY` and `REQUIRES` attributes prevent race "
@@ -575,27 +582,27 @@ msgid ""
 "sure that a mutex is *not* held."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:589
+#: ../../../ThreadSafetyAnalysis.md:593
 msgid ""
 "However, `EXCLUDES` is an optional attribute, and does not provide the same "
 "safety guarantee as `REQUIRES`. In particular:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:592
+#: ../../../ThreadSafetyAnalysis.md:596
 msgid "A function which acquires a capability does not have to exclude it."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:593
+#: ../../../ThreadSafetyAnalysis.md:597
 msgid ""
 "A function which calls a function that excludes a capability does not have "
 "to transitively exclude that capability."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:596
+#: ../../../ThreadSafetyAnalysis.md:600
 msgid "As a result, `EXCLUDES` can easily produce false negatives:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:623
+#: ../../../ThreadSafetyAnalysis.md:627
 msgid ""
 "Negative requirements are an alternative to `EXCLUDES` that provide a "
 "stronger safety guarantee. A negative requirement uses the `REQUIRES` "
@@ -603,29 +610,29 @@ msgid ""
 "capability should *not* be held."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:628
+#: ../../../ThreadSafetyAnalysis.md:632
 msgid ""
 "For example, using `REQUIRES(!mu)` instead of `EXCLUDES(mu)` will produce "
 "the appropriate warnings:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:656
+#: ../../../ThreadSafetyAnalysis.md:660
 msgid ""
 "Negative requirements are an experimental feature which is off by default, "
 "because it will produce many warnings in existing code. It can be enabled by "
 "passing `-Wthread-safety-negative`."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:662
+#: ../../../ThreadSafetyAnalysis.md:666
 msgid "Frequently Asked Questions"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:664
+#: ../../../ThreadSafetyAnalysis.md:668
 msgid ""
 "(Q) Should I put attributes in the header file, or in the .cc/.cpp/.cxx file?"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:666
+#: ../../../ThreadSafetyAnalysis.md:670
 msgid ""
 "(A) Attributes are part of the formal interface of a function, and should "
 "always go in the header, where they are visible to anything that includes "
@@ -634,25 +641,25 @@ msgid ""
 "positives."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:671
+#: ../../../ThreadSafetyAnalysis.md:675
 msgid ""
 "(Q) \"*Mutex is not locked on every path through here?*\" What does that "
 "mean?"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:673
+#: ../../../ThreadSafetyAnalysis.md:677
 msgid "(A) See {ref}`conditional_locks`, below."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:677
+#: ../../../ThreadSafetyAnalysis.md:681
 msgid "Known Limitations"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:679
+#: ../../../ThreadSafetyAnalysis.md:683
 msgid "Lexical scope"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:681
+#: ../../../ThreadSafetyAnalysis.md:685
 msgid ""
 "Thread safety attributes contain ordinary C++ expressions, and thus follow "
 "ordinary C++ scoping rules. In particular, this means that mutexes and other "
@@ -663,11 +670,11 @@ msgid ""
 "allowed between classes, as illustrated below."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:701
+#: ../../../ThreadSafetyAnalysis.md:705
 msgid "Private Mutexes"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:703
+#: ../../../ThreadSafetyAnalysis.md:707
 msgid ""
 "Good software engineering practice dictates that mutexes should be private "
 "members because the locking mechanism used by a thread-safe class is part of "
@@ -677,14 +684,14 @@ msgid ""
 "an error to write `c.mu` in an attribute."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:711
+#: ../../../ThreadSafetyAnalysis.md:715
 msgid ""
 "One workaround is to (ab)use the `RETURN_CAPABILITY` attribute to provide a "
 "public *name* for a private mutex, without actually exposing the underlying "
 "mutex. For example:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:734
+#: ../../../ThreadSafetyAnalysis.md:738
 msgid ""
 "In the above example, `doSomethingTwice()` is an external routine that "
 "requires `c.mu` to be locked, which cannot be declared directly because `mu` "
@@ -694,22 +701,22 @@ msgid ""
 "method, which is provided only for the benefit of thread safety analysis."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:744
+#: ../../../ThreadSafetyAnalysis.md:748
 msgid "No conditionally held locks."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:746
+#: ../../../ThreadSafetyAnalysis.md:750
 msgid ""
 "The analysis must be able to determine whether a lock is held, or not held, "
 "at every program point. Thus, sections of code where a lock *might be held* "
 "will generate spurious warnings (false positives). For example:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:759
+#: ../../../ThreadSafetyAnalysis.md:763
 msgid "No checking inside constructors and destructors."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:761
+#: ../../../ThreadSafetyAnalysis.md:765
 msgid ""
 "The analysis currently does not do any checking inside constructors or "
 "destructors. In other words, every constructor and destructor is treated as "
@@ -720,7 +727,7 @@ msgid ""
 "of destructors."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:769
+#: ../../../ThreadSafetyAnalysis.md:773
 msgid ""
 "Ideally, the analysis would allow initialization of guarded members inside "
 "the object being initialized or destroyed, while still enforcing the usual "
@@ -729,11 +736,11 @@ msgid ""
 "hard to determine what data is owned by the enclosing object."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:775
+#: ../../../ThreadSafetyAnalysis.md:779
 msgid "No inlining."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:777
+#: ../../../ThreadSafetyAnalysis.md:781
 msgid ""
 "Thread safety analysis is strictly intra-procedural, just like ordinary type "
 "checking. It relies only on the declared attributes of a function, and will "
@@ -741,7 +748,7 @@ msgid ""
 "following will not work:"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:801
+#: ../../../ThreadSafetyAnalysis.md:805
 msgid ""
 "In this case, the destructor of `Autocleanup` calls `mu.Unlock()`, so the "
 "warning is bogus. However, thread safety analysis cannot see the unlock, "
@@ -750,17 +757,17 @@ msgid ""
 "that is not statically known. This pattern is simply not supported."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:808
+#: ../../../ThreadSafetyAnalysis.md:812
 msgid "No alias analysis."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:810
+#: ../../../ThreadSafetyAnalysis.md:814
 msgid ""
 "The analysis currently does not track pointer aliases. Thus, there can be "
 "false positives if two pointers both point to the same mutex."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:831
+#: ../../../ThreadSafetyAnalysis.md:835
 msgid ""
 "The MutexUnlocker class is intended to be the dual of the MutexLocker class, "
 "defined in {ref}`mutexheader`. However, it doesn't work because the analysis "
@@ -768,11 +775,11 @@ msgid ""
 "aliasing for MutexLocker, but does so only for that particular pattern."
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:838
+#: ../../../ThreadSafetyAnalysis.md:842
 msgid "mutex.h"
 msgstr ""
 
-#: ../../../ThreadSafetyAnalysis.md:840
+#: ../../../ThreadSafetyAnalysis.md:844
 msgid ""
 "Thread safety analysis can be used with any threading library, but it does "
 "require that the threading API be wrapped in classes and methods which have "
