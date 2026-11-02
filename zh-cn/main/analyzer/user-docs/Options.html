@@ -1,0 +1,1181 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="../../genindex.html"><link rel="search" title="搜索" href="../../search.html"><link rel="next" title="2.3. Running the analyzer within Xcode" href="UsingWithXCode.html"><link rel="prev" title="2.1. Command Line Usage: scan-build and CodeChecker" href="CommandLineUsage.html">
+        <link rel="canonical" href="https://projects.localizethedocs.org/clang-docs-l10n/analyzer/user-docs/Options.html">
+        <link rel="prefetch" href="../../_static/LLVMWyvernSmall.png" as="image">
+
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>2.2. Configuring the Analyzer - Clang</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=69ba022a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/llvm-sphinx/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6c7357ff" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style>
+<script type="text/javascript" src="../../ltd-provenance.js"></script>
+<script type="text/javascript" src="../../ltd-current.js"></script>
+<script type="text/javascript" src="../../../../ltd-config.js"></script>
+<script type="text/javascript" src="../../../../ltd-flyout.js"></script>
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Clang</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../../_static/LLVMWyvernSmall.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Clang</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ReleaseNotes.html">Clang Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../UsersManual.html">Clang Compiler User's Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Toolchain.html">Assembling a Complete Toolchain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../LanguageExtensions.html">Clang Language Extensions</a><input aria-label="Toggle navigation of Clang Language Extensions" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../ObjectiveCLiterals.html">Objective-C Literals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../BlockLanguageSpec.html">Language Specification for Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Block-ABI-Apple.html">Block Implementation Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../AutomaticReferenceCounting.html">Objective-C Automatic Reference Counting (ARC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../PointerAuthentication.html">Pointer Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../MatrixTypes.html">Matrix Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../CXXTypeAwareAllocators.html">C++ Type Aware Allocators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ClangCommandLineReference.html">Clang command line argument reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AttributeReference.html">Attributes in Clang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../DiagnosticsReference.html">Diagnostic flags in Clang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AMDGPUBuiltinReference.html">AMDGPU Builtins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../WarningSuppressionMappings.html">Warning suppression mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CrossCompilation.html">Cross-compilation using Clang</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../ClangStaticAnalyzer.html">Clang Static Analyzer</a><input aria-label="Toggle navigation of Clang Static Analyzer" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../checkers.html">1. Available Checkers</a></li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../user-docs.html">2. User Docs</a><input aria-label="Toggle navigation of 2. User Docs" checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="CommandLineUsage.html">2.1. Command Line Usage: scan-build and CodeChecker</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">2.2. Configuring the Analyzer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsingWithXCode.html">2.3. Running the analyzer within Xcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="FilingBugs.html">2.4. Filing Bugs and Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CrossTranslationUnit.html">2.5. Cross Translation Unit (CTU) Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TaintAnalysisConfiguration.html">2.6. Taint Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Annotations.html">2.7. Source Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="FAQ.html">2.8. FAQ and How to Deal with Common False Positives</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../developer-docs.html">3. Developer Docs</a><input aria-label="Toggle navigation of 3. Developer Docs" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../developer-docs/DebugChecks.html">3.1. Debug Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer-docs/IPA.html">3.2. Inlining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer-docs/InitializerLists.html">3.3. Initializer List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer-docs/nullability.html">3.4. Nullability Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer-docs/RegionStore.html">3.5. Region Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer-docs/PerformanceInvestigation.html">3.6. Performance Investigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer-docs/Statistics.html">3.7. Analysis Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ThreadSafetyAnalysis.html">Thread Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LifetimeSafety.html">Lifetime Safety Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SafeBuffers.html">C++ Safe Buffers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../ScalableStaticAnalysis/index.html">Scalable Static Analysis Framework</a><input aria-label="Toggle navigation of Scalable Static Analysis Framework" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../ScalableStaticAnalysis/user-docs/SourceEditGeneration.html">1. Source Edit Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ScalableStaticAnalysis/user-docs/SummaryExtraction.html">2. Summary Extraction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../ScalableStaticAnalysis/developer-docs/index.html">Developer Documentation</a><input aria-label="Toggle navigation of Developer Documentation" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../ScalableStaticAnalysis/developer-docs/ForceLinkerHeaders.html">1. Force-Linker Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ScalableStaticAnalysis/developer-docs/HowToExtend.html">2. How to Extend the Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ScalableStaticAnalysis/developer-docs/SummaryExtractionInternals.html">3. Summary Extraction Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../DataFlowAnalysisIntro.html">Data flow analysis: an informal introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FunctionEffectAnalysis.html">Function Effect Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AddressSanitizer.html">AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../HardwareAssistedAddressSanitizer.html">Hardware-assisted AddressSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ThreadSanitizer.html">ThreadSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../MemorySanitizer.html">MemorySanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../DataFlowSanitizer.html">DataFlowSanitizer</a><input aria-label="Toggle navigation of DataFlowSanitizer" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../DataFlowSanitizerDesign.html">DataFlowSanitizer Design Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../LeakSanitizer.html">LeakSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TypeSanitizer.html">TypeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RealtimeSanitizer.html">RealtimeSanitizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SanitizerCoverage.html">SanitizerCoverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SanitizerStats.html">SanitizerStats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SanitizerSpecialCaseList.html">Sanitizer special case list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AllocToken.html">Allocation Tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../OverflowBehaviorTypes.html">OverflowBehaviorTypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../BoundsSafety.html"><code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code>: Enforcing bounds safety for C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../BoundsSafetyAdoptionGuide.html">Adoption Guide for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../BoundsSafetyImplPlans.html">Implementation plans for <code class="docutils literal notranslate"><span class="pre">-fbounds-safety</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../ControlFlowIntegrity.html">Control Flow Integrity</a><input aria-label="Toggle navigation of Control Flow Integrity" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../ControlFlowIntegrityDesign.html">Control Flow Integrity Design Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../LTOVisibility.html">LTO Visibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ReturnAddressAuthenticationHardening.html">Return Address Authentication Hardening</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SafeStack.html">SafeStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ShadowCallStack.html">ShadowCallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../StructureProtection.html">Structure Protection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SourceBasedCodeCoverage.html">Source-based Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../StandardCPlusPlusModules.html">Standard C++ Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../MSVCCompatibility.html">MSVC compatibility</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../MisExpect.html">Misexpect</a><input aria-label="Toggle navigation of Misexpect" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../OpenCLSupport.html">OpenCL Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../OpenMPSupport.html">OpenMP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SYCLSupport.html">SYCL Compiler and Runtime architecture design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../HIPSupport.html">HIP Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../HLSL/HLSLDocs.html">Clang HLSL Documentation</a><input aria-label="Toggle navigation of Clang HLSL Documentation" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../HLSL/HLSLSupport.html">HLSL Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../HLSL/HLSLDocs.html#hlsl-design-and-implementation">HLSL Design and Implementation</a><input aria-label="Toggle navigation of HLSL Design and Implementation" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../HLSL/ExpectedDifferences.html">Expected Differences vs DXC and FXC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../HLSL/HLSLIRReference.html">HLSL IR Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../HLSL/ResourceTypes.html">HLSL Resource Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../HLSL/DynamicResources.html">HLSL Dynamic Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../HLSL/EntryFunctions.html">HLSL Entry Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../HLSL/FunctionCalls.html">HLSL Function Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../HLSL/AvailabilityDiagnostics.html">HLSL Availability Diagnostics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ThinLTO.html">ThinLTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../APINotes.html">API Notes: Annotations Without Modifying Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../DebuggingCoroutines.html">Debugging C++ Coroutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AMDGPUSupport.html">AMDGPU Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RISCVSupport.html">RISC-V Support</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../CIR/index.html">ClangIR</a><input aria-label="Toggle navigation of ClangIR" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../CIR/ABILowering.html">1. ClangIR ABI Lowering Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../CIR/CleanupAndEHDesign.html">2. ClangIR Cleanup and Exception Handling Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../CIR/CodeDuplication.html">3. ClangIR Code Duplication Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../CommandGuide/index.html">Clang "man" pages</a><input aria-label='Toggle navigation of Clang "man" pages' class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../CommandGuide/clang.html">clang - the Clang C, C++, and Objective-C compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../CommandGuide/diagtool.html">diagtool - clang diagnostics tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQ.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tooling.html">Choosing the Right Interface for Your Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ExternalClangExamples.html">External Clang Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../IntroductionToTheClangAST.html">Introduction to the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LibTooling.html">LibTooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LibClang.html">Libclang tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LibFormat.html">LibFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ClangPlugins.html">Clang Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RAVFrontendAction.html">How to write RecursiveASTVisitor based ASTFrontendActions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LibASTMatchersTutorial.html">Tutorial for building tools using LibTooling and LibASTMatchers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LibASTMatchers.html">Matching the Clang AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ClangTransformerTutorial.html">Clang Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LibASTImporter.html">ASTImporter: Merging Clang ASTs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../HowToSetupToolingForLLVM.html">How To Setup Clang Tooling For LLVM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../JSONCompilationDatabase.html">JSON Compilation Database Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RefactoringEngine.html">Clang's refactoring engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ClangTools.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ClangCheck.html">ClangCheck</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ClangFormat.html">ClangFormat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ClangFormatStyleOptions.html">Clang-Format Style Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ClangLinkerWrapper.html">Clang Linker Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ClangNVLinkWrapper.html">Clang nvlink Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ClangOffloadBundler.html">Clang Offload Bundler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ClangRepl.html">Clang-Repl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ClangSYCLLinker.html">Clang SYCL Linker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Maintainers.html">Clang Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Maintainers.html#active-maintainers">Active Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Maintainers.html#inactive-maintainers">Inactive Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../InternalsManual.html">"Clang" CFE Internals Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../DriverInternals.html">Driver Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Multilib.html">Multilib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../OffloadingDesign.html">Offloading Design &amp; Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PCHInternals.html">Precompiled Header and Modules Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ItaniumMangleAbiTags.html">ABI tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../HardwareAssistedAddressSanitizerDesign.html">Hardware-assisted AddressSanitizer Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ConstantInterpreter.html">Constant Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LLVMExceptionHandlingCodeGen.html">LLVM IR Generation for EH and Cleanups</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/blob/main/clang/docs/analyzer/user-docs/Options.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/llvm/llvm-project/edit/main/clang/docs/analyzer/user-docs/Options.rst" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="configuring-the-analyzer">
+<h1><span class="section-number">2.2. </span>Configuring the Analyzer<a class="headerlink" href="#configuring-the-analyzer" title="链接到此标题。">¶</a></h1>
+<p>The clang static analyzer supports two kinds of options:</p>
+<ol class="arabic simple">
+<li><p>Global <strong>analyzer options</strong> influence the behavior of the analyzer engine.
+They are documented on this page, in the section <a class="reference internal" href="#list-of-analyzer-options"><span class="std std-ref">List of analyzer
+options</span></a>.</p></li>
+<li><p>The <strong>checker options</strong> belong to individual checkers (e.g.
+<code class="docutils literal notranslate"><span class="pre">core.BitwiseShift:Pedantic</span></code> and <code class="docutils literal notranslate"><span class="pre">unix.Stream:Pedantic</span></code> are completely
+separate options) and customize the behavior of that particular checker.
+These are documented within the documentation of each individual checker at
+<a class="reference internal" href="../checkers.html"><span class="doc">Available Checkers</span></a>.</p></li>
+</ol>
+<section id="assigning-values-to-options">
+<h2><span class="section-number">2.2.1. </span>Assigning values to options<a class="headerlink" href="#assigning-values-to-options" title="链接到此标题。">¶</a></h2>
+<section id="with-the-compiler-frontend">
+<h3><span class="section-number">2.2.1.1. </span>With the compiler frontend<a class="headerlink" href="#with-the-compiler-frontend" title="链接到此标题。">¶</a></h3>
+<p>All options can be configured by using the <code class="docutils literal notranslate"><span class="pre">-analyzer-config</span></code> flag of <code class="docutils literal notranslate"><span class="pre">clang</span>
+<span class="pre">-cc1</span></code> (the so-called <em>compiler frontend</em> part of clang). The values of the
+options are specified with the syntax <code class="docutils literal notranslate"><span class="pre">-analyzer-config</span>
+<span class="pre">OPT=VAL,OPT2=VAL2,...</span></code> which supports specifying multiple options, but
+separate flags like <code class="docutils literal notranslate"><span class="pre">-analyzer-config</span> <span class="pre">OPT=VAL</span> <span class="pre">-analyzer-config</span> <span class="pre">OPT2=VAL2</span></code> are
+also accepted (with equivalent behavior). Analyzer options and checker options
+can be freely intermixed here because it's easy to recognize that checker
+option names are always prefixed with <code class="docutils literal notranslate"><span class="pre">some.groups.NameOfChecker:</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>This is an internal interface, one should prefer <cite>clang --analyze ...</cite> for
+regular use. Clang does not intend to preserve backwards compatibility or
+announce breaking changes within the flags accepted by <code class="docutils literal notranslate"><span class="pre">clang</span> <span class="pre">-cc1</span></code>
+(but <code class="docutils literal notranslate"><span class="pre">-analyzer-config</span></code> survived many years without major changes).</p>
+</div>
+</section>
+<section id="with-the-clang-driver">
+<h3><span class="section-number">2.2.1.2. </span>With the clang driver<a class="headerlink" href="#with-the-clang-driver" title="链接到此标题。">¶</a></h3>
+<p>In a conventional workflow <code class="docutils literal notranslate"><span class="pre">clang</span> <span class="pre">-cc1</span></code> (which is a low-level internal
+interface) is invoked indirectly by the clang <em>driver</em> (i.e. plain <code class="docutils literal notranslate"><span class="pre">clang</span></code>
+without the <code class="docutils literal notranslate"><span class="pre">-cc1</span></code> flag), which acts as an &quot;even more frontend&quot; wrapper layer
+around the <code class="docutils literal notranslate"><span class="pre">clang</span> <span class="pre">-cc1</span></code> <em>compiler frontend</em>. In this situation <strong>each</strong>
+command line argument intended for the <em>compiler frontend</em> must be prefixed
+with <code class="docutils literal notranslate"><span class="pre">-Xclang</span></code>.</p>
+<p>For example the following command analyzes <code class="docutils literal notranslate"><span class="pre">foo.c</span></code> in <a class="reference internal" href="#analyzer-option-mode"><span class="std std-ref">shallow mode</span></a> with <a class="reference internal" href="#analyzer-option-unroll-loops"><span class="std std-ref">loop unrolling</span></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clang</span> <span class="o">--</span><span class="n">analyze</span> <span class="o">-</span><span class="n">Xclang</span> <span class="o">-</span><span class="n">analyzer</span><span class="o">-</span><span class="n">config</span> <span class="o">-</span><span class="n">Xclang</span> <span class="n">mode</span><span class="o">=</span><span class="n">shallow</span><span class="p">,</span><span class="n">unroll</span><span class="o">-</span><span class="n">loops</span><span class="o">=</span><span class="n">true</span> <span class="n">foo</span><span class="o">.</span><span class="n">c</span>
+</pre></div>
+</div>
+<p>When this is executed, the <em>driver</em> will compose and execute the following
+<code class="docutils literal notranslate"><span class="pre">clang</span> <span class="pre">-cc1</span></code> command (which can be inspected by passing the <code class="docutils literal notranslate"><span class="pre">-v</span></code> flag to
+the <em>driver</em>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clang</span> <span class="o">-</span><span class="n">cc1</span> <span class="o">-</span><span class="n">analyze</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">-</span><span class="n">analyzer</span><span class="o">-</span><span class="n">config</span> <span class="n">mode</span><span class="o">=</span><span class="n">shallow</span><span class="p">,</span><span class="n">unroll</span><span class="o">-</span><span class="n">loops</span><span class="o">=</span><span class="n">true</span> <span class="n">foo</span><span class="o">.</span><span class="n">c</span>
+</pre></div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">[...]</span></code> stands for dozens of low-level flags which ensure that <code class="docutils literal notranslate"><span class="pre">clang</span>
+<span class="pre">-cc1</span></code> does the right thing (e.g. <code class="docutils literal notranslate"><span class="pre">-fcolor-diagnostics</span></code> when it's suitable;
+<code class="docutils literal notranslate"><span class="pre">-analyzer-checker</span></code> flags to enable the default set of checkers). Also
+note the distinction that the <code class="docutils literal notranslate"><span class="pre">clang</span></code> <em>driver</em> requires <code class="docutils literal notranslate"><span class="pre">--analyze</span></code> (double
+dashes) while the <code class="docutils literal notranslate"><span class="pre">clang</span> <span class="pre">-cc1</span></code> <em>compiler frontend</em> requires <code class="docutils literal notranslate"><span class="pre">-analyze</span></code>
+(single dash).</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>The flag <code class="docutils literal notranslate"><span class="pre">-Xanalyzer</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">-Xclang</span></code> in these situations
+(but doesn't forward other options of the clang frontend).</p>
+</div>
+</section>
+<section id="with-codechecker">
+<h3><span class="section-number">2.2.1.3. </span>With CodeChecker<a class="headerlink" href="#with-codechecker" title="链接到此标题。">¶</a></h3>
+<p>If the analysis is performed through <a class="reference internal" href="CommandLineUsage.html#command-line-usage-codechecker"><span class="std std-ref">CodeChecker</span></a> (which e.g. supports the analysis of a whole
+project instead of a single file) then it will act as another indirection
+layer. CodeChecker provides separate command-line flags called
+<code class="docutils literal notranslate"><span class="pre">--analyzer-config</span></code> (for analyzer options) and <code class="docutils literal notranslate"><span class="pre">--checker-config</span></code> (for
+checker options):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CodeChecker</span> <span class="n">analyze</span> <span class="o">-</span><span class="n">o</span> <span class="n">outdir</span> <span class="o">--</span><span class="n">checker</span><span class="o">-</span><span class="n">config</span> <span class="n">clangsa</span><span class="p">:</span><span class="n">unix</span><span class="o">.</span><span class="n">Stream</span><span class="p">:</span><span class="n">Pedantic</span><span class="o">=</span><span class="n">true</span>  \
+        <span class="o">--</span><span class="n">analyzer</span><span class="o">-</span><span class="n">config</span> <span class="n">clangsa</span><span class="p">:</span><span class="n">mode</span><span class="o">=</span><span class="n">shallow</span> <span class="n">clangsa</span><span class="p">:</span><span class="n">unroll</span><span class="o">-</span><span class="n">loops</span><span class="o">=</span><span class="n">true</span>          \
+        <span class="o">--</span> <span class="n">compile_commands</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>These CodeChecker flags may be followed by multiple <code class="docutils literal notranslate"><span class="pre">OPT=VAL</span></code> pairs as
+separate arguments (and this is why the example needs to use <code class="docutils literal notranslate"><span class="pre">--</span></code> before
+<code class="docutils literal notranslate"><span class="pre">compile_commands.json</span></code>). The option names are all prefixed with <code class="docutils literal notranslate"><span class="pre">clangsa:</span></code>
+to ensure that they are passed to the clang static analyzer (and not other
+analyzer tools that are also supported by CodeChecker).</p>
+</section>
+</section>
+<section id="list-of-analyzer-options">
+<span id="id1"></span><h2><span class="section-number">2.2.2. </span>List of analyzer options<a class="headerlink" href="#list-of-analyzer-options" title="链接到此标题。">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>These options are primarily intended for development purposes and
+non-default values are usually unsupported. Changing their values may
+drastically alter the behavior of the analyzer, and may even result in
+instabilities or crashes! Crash reports are welcome and depending on the
+severity they may be fixed.</p>
+</div>
+<section id="mode">
+<span id="analyzer-option-mode"></span><h3><span class="section-number">2.2.2.1. </span>mode<a class="headerlink" href="#mode" title="链接到此标题。">¶</a></h3>
+<p>(string) Controls the high-level analyzer mode, which influences the default
+settings for some of the lower-level config options (such as IPAMode).</p>
+<p>Accepted values: &quot;deep&quot;, &quot;shallow&quot;.</p>
+<p>Default value: &quot;deep&quot;</p>
+</section>
+<section id="cfg-implicit-dtors">
+<span id="analyzer-option-cfg-implicit-dtors"></span><h3><span class="section-number">2.2.2.2. </span>cfg-implicit-dtors<a class="headerlink" href="#cfg-implicit-dtors" title="链接到此标题。">¶</a></h3>
+<p>Whether or not implicit destructors for C++ objects should be included in the
+CFG.</p>
+<p>Default value: true</p>
+</section>
+<section id="cfg-temporary-dtors">
+<span id="analyzer-option-cfg-temporary-dtors"></span><h3><span class="section-number">2.2.2.3. </span>cfg-temporary-dtors<a class="headerlink" href="#cfg-temporary-dtors" title="链接到此标题。">¶</a></h3>
+<p>Whether or not the destructors for C++ temporary objects should be included in
+the CFG.</p>
+<p>Default value: true</p>
+</section>
+<section id="cfg-lifetime">
+<span id="analyzer-option-cfg-lifetime"></span><h3><span class="section-number">2.2.2.4. </span>cfg-lifetime<a class="headerlink" href="#cfg-lifetime" title="链接到此标题。">¶</a></h3>
+<p>Whether or not end-of-lifetime information should be included in the CFG.</p>
+<p>Default value: false</p>
+</section>
+<section id="cfg-loopexit">
+<span id="analyzer-option-cfg-loopexit"></span><h3><span class="section-number">2.2.2.5. </span>cfg-loopexit<a class="headerlink" href="#cfg-loopexit" title="链接到此标题。">¶</a></h3>
+<p>Whether or not the end of the loop information should be included in the CFG.</p>
+<p>Default value: false</p>
+</section>
+<section id="cfg-rich-constructors">
+<span id="analyzer-option-cfg-rich-constructors"></span><h3><span class="section-number">2.2.2.6. </span>cfg-rich-constructors<a class="headerlink" href="#cfg-rich-constructors" title="链接到此标题。">¶</a></h3>
+<p>Whether or not construction site information should be included in the CFG C++
+constructor elements.</p>
+<p>Default value: true</p>
+</section>
+<section id="cfg-scopes">
+<span id="analyzer-option-cfg-scopes"></span><h3><span class="section-number">2.2.2.7. </span>cfg-scopes<a class="headerlink" href="#cfg-scopes" title="链接到此标题。">¶</a></h3>
+<p>Whether or not scope information should be included in the CFG.</p>
+<p>Default value: false</p>
+</section>
+<section id="cfg-expand-default-aggr-inits">
+<span id="analyzer-option-cfg-expand-default-aggr-inits"></span><h3><span class="section-number">2.2.2.8. </span>cfg-expand-default-aggr-inits<a class="headerlink" href="#cfg-expand-default-aggr-inits" title="链接到此标题。">¶</a></h3>
+<p>Whether or not inline CXXDefaultInitializers for aggregate initialization in the
+CFG.</p>
+<p>Default value: false</p>
+</section>
+<section id="c-template-inlining">
+<span id="analyzer-option-c-template-inlining"></span><h3><span class="section-number">2.2.2.9. </span>c++-template-inlining<a class="headerlink" href="#c-template-inlining" title="链接到此标题。">¶</a></h3>
+<p>Whether or not templated functions may be considered for inlining.</p>
+<p>Default value: true</p>
+</section>
+<section id="c-stdlib-inlining">
+<span id="analyzer-option-c-stdlib-inlining"></span><h3><span class="section-number">2.2.2.10. </span>c++-stdlib-inlining<a class="headerlink" href="#c-stdlib-inlining" title="链接到此标题。">¶</a></h3>
+<p>Whether or not C++ standard library functions may be considered for inlining.</p>
+<p>Default value: true</p>
+</section>
+<section id="c-allocator-inlining">
+<span id="analyzer-option-c-allocator-inlining"></span><h3><span class="section-number">2.2.2.11. </span>c++-allocator-inlining<a class="headerlink" href="#c-allocator-inlining" title="链接到此标题。">¶</a></h3>
+<p>Whether or not allocator and deallocator calls may be considered for inlining.</p>
+<p>Default value: true</p>
+</section>
+<section id="c-shared-ptr-inlining">
+<span id="analyzer-option-c-shared-ptr-inlining"></span><h3><span class="section-number">2.2.2.12. </span>c++-shared_ptr-inlining<a class="headerlink" href="#c-shared-ptr-inlining" title="链接到此标题。">¶</a></h3>
+<p>Whether or not the destructor of C++ 'shared_ptr' may be considered for
+inlining. This covers std::shared_ptr, std::tr1::shared_ptr, and
+boost::shared_ptr, and indeed any destructor named '~shared_ptr'.</p>
+<p>Default value: false</p>
+</section>
+<section id="c-temp-dtor-inlining">
+<span id="analyzer-option-c-temp-dtor-inlining"></span><h3><span class="section-number">2.2.2.13. </span>c++-temp-dtor-inlining<a class="headerlink" href="#c-temp-dtor-inlining" title="链接到此标题。">¶</a></h3>
+<p>Whether C++ temporary destructors should be inlined during analysis. If
+temporary destructors are disabled in the CFG via the 'cfg-temporary-dtors'
+option, temporary destructors would not be inlined anyway.</p>
+<p>Default value: true</p>
+</section>
+<section id="suppress-null-return-paths">
+<span id="analyzer-option-suppress-null-return-paths"></span><h3><span class="section-number">2.2.2.14. </span>suppress-null-return-paths<a class="headerlink" href="#suppress-null-return-paths" title="链接到此标题。">¶</a></h3>
+<p>Whether or not paths that go through null returns should be suppressed. This is
+a heuristic for avoiding bug reports with paths that go through inlined
+functions that are more defensive than their callers.</p>
+<p>Default value: true</p>
+</section>
+<section id="avoid-suppressing-null-argument-paths">
+<span id="analyzer-option-avoid-suppressing-null-argument-paths"></span><h3><span class="section-number">2.2.2.15. </span>avoid-suppressing-null-argument-paths<a class="headerlink" href="#avoid-suppressing-null-argument-paths" title="链接到此标题。">¶</a></h3>
+<p>Whether a bug report should not be suppressed if its path includes a call with a
+null argument, even if that call has a null return. This option has no effect
+when ShouldSuppressNullReturnPaths is false. This is a counter-heuristic to
+avoid false negatives.</p>
+<p>Default value: false</p>
+</section>
+<section id="suppress-inlined-defensive-checks">
+<span id="analyzer-option-suppress-inlined-defensive-checks"></span><h3><span class="section-number">2.2.2.16. </span>suppress-inlined-defensive-checks<a class="headerlink" href="#suppress-inlined-defensive-checks" title="链接到此标题。">¶</a></h3>
+<p>Whether or not diagnostics containing inlined defensive NULL checks should be
+suppressed.</p>
+<p>Default value: true</p>
+</section>
+<section id="c-container-inlining">
+<span id="analyzer-option-c-container-inlining"></span><h3><span class="section-number">2.2.2.17. </span>c++-container-inlining<a class="headerlink" href="#c-container-inlining" title="链接到此标题。">¶</a></h3>
+<p>Whether or not methods of C++ container objects may be considered for inlining.</p>
+<p>Default value: false</p>
+</section>
+<section id="suppress-c-stdlib">
+<span id="analyzer-option-suppress-c-stdlib"></span><h3><span class="section-number">2.2.2.18. </span>suppress-c++-stdlib<a class="headerlink" href="#suppress-c-stdlib" title="链接到此标题。">¶</a></h3>
+<p>Whether or not diagnostics reported within the C++ standard library should be
+suppressed.</p>
+<p>Default value: true</p>
+</section>
+<section id="crosscheck-with-z3">
+<span id="analyzer-option-crosscheck-with-z3"></span><h3><span class="section-number">2.2.2.19. </span>crosscheck-with-z3<a class="headerlink" href="#crosscheck-with-z3" title="链接到此标题。">¶</a></h3>
+<p>Whether bug reports should be crosschecked with the Z3 constraint manager
+backend.</p>
+<p>Default value: false</p>
+</section>
+<section id="crosscheck-with-z3-eqclass-timeout-threshold">
+<span id="analyzer-option-crosscheck-with-z3-eqclass-timeout-threshold"></span><h3><span class="section-number">2.2.2.20. </span>crosscheck-with-z3-eqclass-timeout-threshold<a class="headerlink" href="#crosscheck-with-z3-eqclass-timeout-threshold" title="链接到此标题。">¶</a></h3>
+<p>Set a timeout for bug report equivalence classes in milliseconds. If we exhaust
+this threshold, we will drop the bug report eqclass instead of doing more Z3
+queries. Setting this to 700 ms in conjunction with &quot;crosscheck-with-z3-timeout-
+threshold&quot; of 300 ms, would nicely guarantee that no bug report equivalence
+class can take longer than 1 second, effectively mitigating Z3 hangs during
+refutation. If there were Z3 retries, only the minimum query time is considered
+when accumulating query times within a report equivalence class. Set 0 for no
+timeout.</p>
+<p>Default value: 0</p>
+</section>
+<section id="crosscheck-with-z3-timeout-threshold">
+<span id="analyzer-option-crosscheck-with-z3-timeout-threshold"></span><h3><span class="section-number">2.2.2.21. </span>crosscheck-with-z3-timeout-threshold<a class="headerlink" href="#crosscheck-with-z3-timeout-threshold" title="链接到此标题。">¶</a></h3>
+<p>Set a timeout for individual Z3 queries in milliseconds. On fast machines, 300
+worked well in some cases. The lower it is, the higher the chances of having
+flaky issues. Having no timeout may hang the analyzer indefinitely. Set 0 for no
+timeout.</p>
+<p>Default value: 15000</p>
+</section>
+<section id="crosscheck-with-z3-rlimit-threshold">
+<span id="analyzer-option-crosscheck-with-z3-rlimit-threshold"></span><h3><span class="section-number">2.2.2.22. </span>crosscheck-with-z3-rlimit-threshold<a class="headerlink" href="#crosscheck-with-z3-rlimit-threshold" title="链接到此标题。">¶</a></h3>
+<p>Set the Z3 resource limit threshold. This sets a supposedly deterministic cutoff
+point for Z3 queries, as longer queries usually consume more resources. 400'000
+should on average make Z3 queries run for up to 100ms on modern hardware. Set 0
+for unlimited.</p>
+<p>Default value: 0</p>
+</section>
+<section id="crosscheck-with-z3-max-attempts-per-query">
+<span id="analyzer-option-crosscheck-with-z3-max-attempts-per-query"></span><h3><span class="section-number">2.2.2.23. </span>crosscheck-with-z3-max-attempts-per-query<a class="headerlink" href="#crosscheck-with-z3-max-attempts-per-query" title="链接到此标题。">¶</a></h3>
+<p>Set how many times the oracle is allowed to run a Z3 query. This must be a
+positive value. Set 1 to not allow any retry attempts. Increasing the number of
+attempts is often more effective at reducing the number of nondeterministic
+diagnostics than &quot;crosscheck-with-z3-timeout-threshold&quot; in practice.</p>
+<p>Default value: 3</p>
+</section>
+<section id="report-in-main-source-file">
+<span id="analyzer-option-report-in-main-source-file"></span><h3><span class="section-number">2.2.2.24. </span>report-in-main-source-file<a class="headerlink" href="#report-in-main-source-file" title="链接到此标题。">¶</a></h3>
+<p>Whether or not the diagnostic report should be always reported in the main
+source file and not the headers.</p>
+<p>Default value: false</p>
+</section>
+<section id="stable-report-filename">
+<span id="analyzer-option-stable-report-filename"></span><h3><span class="section-number">2.2.2.25. </span>stable-report-filename<a class="headerlink" href="#stable-report-filename" title="链接到此标题。">¶</a></h3>
+<p>Deprecated: report filenames are now always stable. See also 'verbose-report-
+filename'.</p>
+<p>Default value: false</p>
+</section>
+<section id="verbose-report-filename">
+<span id="analyzer-option-verbose-report-filename"></span><h3><span class="section-number">2.2.2.26. </span>verbose-report-filename<a class="headerlink" href="#verbose-report-filename" title="链接到此标题。">¶</a></h3>
+<p>Whether or not the report filename should contain extra information about the
+issue.</p>
+<p>Default value: false</p>
+</section>
+<section id="serialize-stats">
+<span id="analyzer-option-serialize-stats"></span><h3><span class="section-number">2.2.2.27. </span>serialize-stats<a class="headerlink" href="#serialize-stats" title="链接到此标题。">¶</a></h3>
+<p>Whether the analyzer should serialize statistics to plist output. Statistics
+would be serialized in JSON format inside the main dictionary under the
+statistics key. Available only if compiled in assert mode or with LLVM
+statistics explicitly enabled.</p>
+<p>Default value: false</p>
+</section>
+<section id="objc-inlining">
+<span id="analyzer-option-objc-inlining"></span><h3><span class="section-number">2.2.2.28. </span>objc-inlining<a class="headerlink" href="#objc-inlining" title="链接到此标题。">¶</a></h3>
+<p>Whether ObjectiveC inlining is enabled, false otherwise.</p>
+<p>Default value: true</p>
+</section>
+<section id="prune-paths">
+<span id="analyzer-option-prune-paths"></span><h3><span class="section-number">2.2.2.29. </span>prune-paths<a class="headerlink" href="#prune-paths" title="链接到此标题。">¶</a></h3>
+<p>Whether irrelevant parts of a bug report path should be pruned out of the final
+output.</p>
+<p>Default value: true</p>
+</section>
+<section id="add-pop-up-notes">
+<span id="analyzer-option-add-pop-up-notes"></span><h3><span class="section-number">2.2.2.30. </span>add-pop-up-notes<a class="headerlink" href="#add-pop-up-notes" title="链接到此标题。">¶</a></h3>
+<p>Whether pop-up notes should be added to the final output.</p>
+<p>Default value: true</p>
+</section>
+<section id="cfg-conditional-static-initializers">
+<span id="analyzer-option-cfg-conditional-static-initializers"></span><h3><span class="section-number">2.2.2.31. </span>cfg-conditional-static-initializers<a class="headerlink" href="#cfg-conditional-static-initializers" title="链接到此标题。">¶</a></h3>
+<p>Whether 'static' initializers should be in conditional logic in the CFG.</p>
+<p>Default value: true</p>
+</section>
+<section id="faux-bodies">
+<span id="analyzer-option-faux-bodies"></span><h3><span class="section-number">2.2.2.32. </span>faux-bodies<a class="headerlink" href="#faux-bodies" title="链接到此标题。">¶</a></h3>
+<p>Whether the analyzer engine should synthesize fake bodies for well-known
+functions.</p>
+<p>Default value: true</p>
+</section>
+<section id="elide-constructors">
+<span id="analyzer-option-elide-constructors"></span><h3><span class="section-number">2.2.2.33. </span>elide-constructors<a class="headerlink" href="#elide-constructors" title="链接到此标题。">¶</a></h3>
+<p>Whether elidable C++ copy-constructors and move-constructors should be actually
+elided during analysis. Both behaviors are allowed by the C++ standard, and the
+analyzer, like CodeGen, defaults to eliding. Starting with C++17 some elisions
+become mandatory, and in these cases the option will be ignored.</p>
+<p>Default value: true</p>
+</section>
+<section id="inline-lambdas">
+<span id="analyzer-option-inline-lambdas"></span><h3><span class="section-number">2.2.2.34. </span>inline-lambdas<a class="headerlink" href="#inline-lambdas" title="链接到此标题。">¶</a></h3>
+<p>Whether lambdas should be inlined. Otherwise a sink node will be generated each
+time a LambdaExpr is visited.</p>
+<p>Default value: true</p>
+</section>
+<section id="widen-loops">
+<span id="analyzer-option-widen-loops"></span><h3><span class="section-number">2.2.2.35. </span>widen-loops<a class="headerlink" href="#widen-loops" title="链接到此标题。">¶</a></h3>
+<p>Whether the analysis should try to widen loops.</p>
+<p>Default value: false</p>
+</section>
+<section id="unroll-loops">
+<span id="analyzer-option-unroll-loops"></span><h3><span class="section-number">2.2.2.36. </span>unroll-loops<a class="headerlink" href="#unroll-loops" title="链接到此标题。">¶</a></h3>
+<p>Whether the analysis should try to unroll loops with known bounds.</p>
+<p>Default value: false</p>
+</section>
+<section id="assume-at-least-one-iteration">
+<span id="analyzer-option-assume-at-least-one-iteration"></span><h3><span class="section-number">2.2.2.37. </span>assume-at-least-one-iteration<a class="headerlink" href="#assume-at-least-one-iteration" title="链接到此标题。">¶</a></h3>
+<p>Whether the analyzer should always assume at least one iteration in loops where
+the loop condition is opaque (i.e. the analyzer cannot determine if it's true or
+false). Setting this to true eliminates some false positives (where e.g. a
+structure is nonempty, but the analyzer does not notice this); but it also
+eliminates some true positives (e.g. cases where a structure can be empty and
+this causes buggy behavior).</p>
+<p>Default value: false</p>
+</section>
+<section id="notes-as-events">
+<span id="analyzer-option-notes-as-events"></span><h3><span class="section-number">2.2.2.38. </span>notes-as-events<a class="headerlink" href="#notes-as-events" title="链接到此标题。">¶</a></h3>
+<p>Whether the bug reporter should transparently treat extra note diagnostic pieces
+as event diagnostic pieces. Useful when the diagnostic consumer doesn't support
+the extra note pieces.</p>
+<p>Default value: false</p>
+</section>
+<section id="aggressive-binary-operation-simplification">
+<span id="analyzer-option-aggressive-binary-operation-simplification"></span><h3><span class="section-number">2.2.2.39. </span>aggressive-binary-operation-simplification<a class="headerlink" href="#aggressive-binary-operation-simplification" title="链接到此标题。">¶</a></h3>
+<p>Whether SValBuilder should rearrange comparisons and additive operations of
+symbolic expressions which consist of a sum of a symbol and a concrete integer
+into the format where symbols are on the left-hand side and the integer is on
+the right. This is only done if both symbols and both concrete integers are
+signed, greater than or equal to the quarter of the minimum value of the type
+and less than or equal to the quarter of the maximum value of that type. A + n
+&lt;OP&gt; B + m becomes A - B &lt;OP&gt; m - n, where A and B symbolic, n and m are
+integers. &lt;OP&gt; is any of '==', '!=', '&lt;', '&lt;=', '&gt;', '&gt;=', '+' or '-'. The
+rearrangement also happens with '-' instead of '+' on either or both side and
+also if any or both integers are missing.</p>
+<p>Default value: false</p>
+</section>
+<section id="eagerly-assume">
+<span id="analyzer-option-eagerly-assume"></span><h3><span class="section-number">2.2.2.40. </span>eagerly-assume<a class="headerlink" href="#eagerly-assume" title="链接到此标题。">¶</a></h3>
+<p>If this is enabled (the default behavior), when the analyzer encounters a
+comparison operator or logical negation, it immediately splits the state to
+separate the case when the expression is true and the case when it's false. The
+upside is that this can increase analysis precision until we have a better way
+to lazily evaluate such logic; the downside is that it eagerly bifurcates paths.</p>
+<p>Default value: true</p>
+</section>
+<section id="experimental-enable-naive-ctu-analysis">
+<span id="analyzer-option-experimental-enable-naive-ctu-analysis"></span><h3><span class="section-number">2.2.2.41. </span>experimental-enable-naive-ctu-analysis<a class="headerlink" href="#experimental-enable-naive-ctu-analysis" title="链接到此标题。">¶</a></h3>
+<p>Whether naive cross translation unit analysis is enabled. This is an
+experimental feature to inline functions from other translation units.</p>
+<p>Default value: false</p>
+</section>
+<section id="expand-macros">
+<span id="analyzer-option-expand-macros"></span><h3><span class="section-number">2.2.2.42. </span>expand-macros<a class="headerlink" href="#expand-macros" title="链接到此标题。">¶</a></h3>
+<p>Whether macros related to the bugpath should be expanded and included in the
+plist output.</p>
+<p>Default value: false</p>
+</section>
+<section id="display-ctu-progress">
+<span id="analyzer-option-display-ctu-progress"></span><h3><span class="section-number">2.2.2.43. </span>display-ctu-progress<a class="headerlink" href="#display-ctu-progress" title="链接到此标题。">¶</a></h3>
+<p>Whether to emit verbose output about the analyzer's progress related to ctu.</p>
+<p>Default value: false</p>
+</section>
+<section id="dump-entry-point-stats-to-csv">
+<span id="analyzer-option-dump-entry-point-stats-to-csv"></span><h3><span class="section-number">2.2.2.44. </span>dump-entry-point-stats-to-csv<a class="headerlink" href="#dump-entry-point-stats-to-csv" title="链接到此标题。">¶</a></h3>
+<p>If provided, the analyzer will dump statistics per entry point into the
+specified CSV file.</p>
+<p>Default value: (empty string)</p>
+</section>
+<section id="track-conditions">
+<span id="analyzer-option-track-conditions"></span><h3><span class="section-number">2.2.2.45. </span>track-conditions<a class="headerlink" href="#track-conditions" title="链接到此标题。">¶</a></h3>
+<p>Whether to track conditions that are a control dependency of an already tracked
+variable.</p>
+<p>Default value: true</p>
+</section>
+<section id="track-conditions-debug">
+<span id="analyzer-option-track-conditions-debug"></span><h3><span class="section-number">2.2.2.46. </span>track-conditions-debug<a class="headerlink" href="#track-conditions-debug" title="链接到此标题。">¶</a></h3>
+<p>Whether to place an event at each tracked condition.</p>
+<p>Default value: false</p>
+</section>
+<section id="apply-fixits">
+<span id="analyzer-option-apply-fixits"></span><h3><span class="section-number">2.2.2.47. </span>apply-fixits<a class="headerlink" href="#apply-fixits" title="链接到此标题。">¶</a></h3>
+<p>Apply the fix-it hints to the files</p>
+<p>Default value: false</p>
+</section>
+<section id="display-checker-name">
+<span id="analyzer-option-display-checker-name"></span><h3><span class="section-number">2.2.2.48. </span>display-checker-name<a class="headerlink" href="#display-checker-name" title="链接到此标题。">¶</a></h3>
+<p>Display the checker name for textual outputs</p>
+<p>Default value: true</p>
+</section>
+<section id="support-symbolic-integer-casts">
+<span id="analyzer-option-support-symbolic-integer-casts"></span><h3><span class="section-number">2.2.2.49. </span>support-symbolic-integer-casts<a class="headerlink" href="#support-symbolic-integer-casts" title="链接到此标题。">¶</a></h3>
+<p>Produce cast symbols for integral types.</p>
+<p>Default value: false</p>
+</section>
+<section id="assume-controlled-environment">
+<span id="analyzer-option-assume-controlled-environment"></span><h3><span class="section-number">2.2.2.50. </span>assume-controlled-environment<a class="headerlink" href="#assume-controlled-environment" title="链接到此标题。">¶</a></h3>
+<p>Whether the analyzed application runs in a controlled environment. We will
+assume that environment variables exist in queries and they hold no malicious
+data. For instance, if this option is enabled, 'getenv()' might be modeled by
+the analyzer to never return NULL.</p>
+<p>Default value: false</p>
+</section>
+<section id="ignore-bison-generated-files">
+<span id="analyzer-option-ignore-bison-generated-files"></span><h3><span class="section-number">2.2.2.51. </span>ignore-bison-generated-files<a class="headerlink" href="#ignore-bison-generated-files" title="链接到此标题。">¶</a></h3>
+<p>If enabled, any files containing the &quot;/* A Bison parser, made by&quot; won't be
+analyzed.</p>
+<p>Default value: true</p>
+</section>
+<section id="ignore-flex-generated-files">
+<span id="analyzer-option-ignore-flex-generated-files"></span><h3><span class="section-number">2.2.2.52. </span>ignore-flex-generated-files<a class="headerlink" href="#ignore-flex-generated-files" title="链接到此标题。">¶</a></h3>
+<p>If enabled, any files containing the &quot;/* A lexical scanner generated by flex&quot;
+won't be analyzed.</p>
+<p>Default value: true</p>
+</section>
+<section id="suppress-dereferences-from-any-address-space">
+<span id="analyzer-option-suppress-dereferences-from-any-address-space"></span><h3><span class="section-number">2.2.2.53. </span>suppress-dereferences-from-any-address-space<a class="headerlink" href="#suppress-dereferences-from-any-address-space" title="链接到此标题。">¶</a></h3>
+<p>The analyzer does not report dereferences on memory that use address space #256,
+#257, and #258. Those address spaces are used when dereferencing address spaces
+relative to the GS, FS, and SS segments on x86/x86-64 targets. Dereferencing a
+null pointer in these address spaces is not defined as an error. All other null
+dereferences in other address spaces are defined as an error unless explicitly
+defined. When this option is turned on, the special behavior of address spaces
+#256, #257, #258 is extended to all pointers with address spaces and on any
+target.</p>
+<p>Default value: true</p>
+</section>
+<section id="inline-functions-with-ambiguous-loops">
+<span id="analyzer-option-inline-functions-with-ambiguous-loops"></span><h3><span class="section-number">2.2.2.54. </span>inline-functions-with-ambiguous-loops<a class="headerlink" href="#inline-functions-with-ambiguous-loops" title="链接到此标题。">¶</a></h3>
+<p>If disabled (the default), the analyzer puts functions on a &quot;do not inline this&quot;
+list if it finds an execution path within that function that may potentially
+perform 'analyzer-max-loop' (= 4 by default) iterations in a loop. (Note that
+functions that _definitely_ reach the loop limit on some execution path are
+currently marked as &quot;do not inline&quot; even if this option is enabled.) Enabling
+this option eliminates this (somewhat arbitrary) restriction from the analysis
+scope, which increases the analysis runtime (on average by ~10%, but a few
+translation units may see much larger slowdowns).</p>
+<p>Default value: false</p>
+</section>
+<section id="ipa-always-inline-size">
+<span id="analyzer-option-ipa-always-inline-size"></span><h3><span class="section-number">2.2.2.55. </span>ipa-always-inline-size<a class="headerlink" href="#ipa-always-inline-size" title="链接到此标题。">¶</a></h3>
+<p>The size of the functions (in basic blocks), which should be considered to be
+small enough to always inline.</p>
+<p>Default value: 3</p>
+</section>
+<section id="graph-trim-interval">
+<span id="analyzer-option-graph-trim-interval"></span><h3><span class="section-number">2.2.2.56. </span>graph-trim-interval<a class="headerlink" href="#graph-trim-interval" title="链接到此标题。">¶</a></h3>
+<p>How often nodes in the ExplodedGraph should be recycled to save memory. To
+disable node reclamation, set the option to 0.</p>
+<p>Default value: 1000</p>
+</section>
+<section id="min-cfg-size-treat-functions-as-large">
+<span id="analyzer-option-min-cfg-size-treat-functions-as-large"></span><h3><span class="section-number">2.2.2.57. </span>min-cfg-size-treat-functions-as-large<a class="headerlink" href="#min-cfg-size-treat-functions-as-large" title="链接到此标题。">¶</a></h3>
+<p>The number of basic blocks a function needs to have to be considered large for
+the 'max-times-inline-large' config option.</p>
+<p>Default value: 14</p>
+</section>
+<section id="max-symbol-complexity">
+<span id="analyzer-option-max-symbol-complexity"></span><h3><span class="section-number">2.2.2.58. </span>max-symbol-complexity<a class="headerlink" href="#max-symbol-complexity" title="链接到此标题。">¶</a></h3>
+<p>The maximum complexity of symbolic constraint.</p>
+<p>Default value: 35</p>
+</section>
+<section id="max-tainted-symbol-complexity">
+<span id="analyzer-option-max-tainted-symbol-complexity"></span><h3><span class="section-number">2.2.2.59. </span>max-tainted-symbol-complexity<a class="headerlink" href="#max-tainted-symbol-complexity" title="链接到此标题。">¶</a></h3>
+<p>[DEPRECATED] The maximum complexity of a symbol to carry taint</p>
+<p>Default value: 9</p>
+</section>
+<section id="max-times-inline-large">
+<span id="analyzer-option-max-times-inline-large"></span><h3><span class="section-number">2.2.2.60. </span>max-times-inline-large<a class="headerlink" href="#max-times-inline-large" title="链接到此标题。">¶</a></h3>
+<p>The maximum times a large function could be inlined.</p>
+<p>Default value: 32</p>
+</section>
+<section id="max-inlinable-size">
+<span id="analyzer-option-max-inlinable-size"></span><h3><span class="section-number">2.2.2.61. </span>max-inlinable-size<a class="headerlink" href="#max-inlinable-size" title="链接到此标题。">¶</a></h3>
+<p>The bound on the number of basic blocks in an inlined function.</p>
+<p>Default value: 4 (in shallow mode) / 100 (in deep mode)</p>
+</section>
+<section id="max-nodes">
+<span id="analyzer-option-max-nodes"></span><h3><span class="section-number">2.2.2.62. </span>max-nodes<a class="headerlink" href="#max-nodes" title="链接到此标题。">¶</a></h3>
+<p>The maximum number of nodes the analyzer can generate while exploring a top
+level function (for each exploded graph). 0 means no limit.</p>
+<p>Default value: 75000 (in shallow mode) / 225000 (in deep mode)</p>
+</section>
+<section id="ctu-max-nodes-pct">
+<span id="analyzer-option-ctu-max-nodes-pct"></span><h3><span class="section-number">2.2.2.63. </span>ctu-max-nodes-pct<a class="headerlink" href="#ctu-max-nodes-pct" title="链接到此标题。">¶</a></h3>
+<p>The percentage of single-TU analysed nodes that the CTU analysis is allowed to
+visit.</p>
+<p>Default value: 50</p>
+</section>
+<section id="ctu-max-nodes-min">
+<span id="analyzer-option-ctu-max-nodes-min"></span><h3><span class="section-number">2.2.2.64. </span>ctu-max-nodes-min<a class="headerlink" href="#ctu-max-nodes-min" title="链接到此标题。">¶</a></h3>
+<p>The maximum number of nodes in CTU mode is determinded by 'ctu-max-nodes-pct'.
+However, if the number of nodes in single-TU analysis is too low, it is
+meaningful to provide a minimum value that serves as an upper bound instead.</p>
+<p>Default value: 10000</p>
+</section>
+<section id="region-store-small-struct-limit">
+<span id="analyzer-option-region-store-small-struct-limit"></span><h3><span class="section-number">2.2.2.65. </span>region-store-small-struct-limit<a class="headerlink" href="#region-store-small-struct-limit" title="链接到此标题。">¶</a></h3>
+<p>The largest number of fields a struct can have and still be considered small.
+This is currently used to decide whether or not it is worth forcing a
+LazyCompoundVal on bind. To disable all small-struct-dependent behavior, set the
+option to 0.</p>
+<p>Default value: 2</p>
+</section>
+<section id="region-store-small-array-limit">
+<span id="analyzer-option-region-store-small-array-limit"></span><h3><span class="section-number">2.2.2.66. </span>region-store-small-array-limit<a class="headerlink" href="#region-store-small-array-limit" title="链接到此标题。">¶</a></h3>
+<p>The largest number of elements an array can have and still be considered small.
+This is currently used to decide whether or not it is worth forcing a
+LazyCompoundVal on bind. To disable all small-array-dependent behavior, set the
+option to 0.</p>
+<p>Default value: 5</p>
+</section>
+<section id="region-store-max-binding-fanout">
+<span id="analyzer-option-region-store-max-binding-fanout"></span><h3><span class="section-number">2.2.2.67. </span>region-store-max-binding-fanout<a class="headerlink" href="#region-store-max-binding-fanout" title="链接到此标题。">¶</a></h3>
+<p>This option limits how many sub-bindings a single binding operation can scatter
+into. For example, binding an array would scatter into binding each individual
+element. Setting this to zero means unlimited, but then modelling large array
+initializers may take proportional time to their size.</p>
+<p>Default value: 128</p>
+</section>
+<section id="ctu-dir">
+<span id="analyzer-option-ctu-dir"></span><h3><span class="section-number">2.2.2.68. </span>ctu-dir<a class="headerlink" href="#ctu-dir" title="链接到此标题。">¶</a></h3>
+<p>The directory containing the CTU related files.</p>
+<p>Default value: (empty string)</p>
+</section>
+<section id="ctu-index-name">
+<span id="analyzer-option-ctu-index-name"></span><h3><span class="section-number">2.2.2.69. </span>ctu-index-name<a class="headerlink" href="#ctu-index-name" title="链接到此标题。">¶</a></h3>
+<p>The name of the file containing the CTU index of definitions. The index file
+maps USR-names to identifiers. An identifier can end with an '.ast' suffix,
+indicating the indentifier is a path to a pch-dump. Otherwise the identifier is
+regarded as path to a source file which is parsed on-demand. Relative paths are
+prefixed with ctu-dir, absolute paths are used unmodified during lookup.</p>
+<p>Default value: &quot;externalDefMap.txt&quot;</p>
+</section>
+<section id="ctu-invocation-list">
+<span id="analyzer-option-ctu-invocation-list"></span><h3><span class="section-number">2.2.2.70. </span>ctu-invocation-list<a class="headerlink" href="#ctu-invocation-list" title="链接到此标题。">¶</a></h3>
+<p>The path to the YAML format file containing a mapping from source file paths to
+command-line invocations represented as a list of arguments. This invocation is
+used produce the source-file's AST in case on-demand loading is performed.</p>
+<p>Example file content:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">cpp</span><span class="p">:</span> <span class="p">[</span><span class="n">clang</span><span class="o">++</span><span class="p">,</span> <span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">cpp</span><span class="p">],</span> <span class="n">other</span><span class="o">.</span><span class="n">cpp</span><span class="p">:</span> <span class="p">[</span><span class="n">clang</span><span class="o">++</span><span class="p">,</span> <span class="o">/</span><span class="n">other</span><span class="o">.</span><span class="n">cpp</span><span class="p">]}</span>
+</pre></div>
+</div>
+<p>Default value: &quot;invocations.yaml&quot;</p>
+</section>
+<section id="model-path">
+<span id="analyzer-option-model-path"></span><h3><span class="section-number">2.2.2.71. </span>model-path<a class="headerlink" href="#model-path" title="链接到此标题。">¶</a></h3>
+<p>The analyzer can inline an alternative implementation written in C at the call
+site if the called function's body is not available. This is a path where to
+look for those alternative implementations (called models).</p>
+<p>Default value: (empty string)</p>
+</section>
+<section id="ctu-phase1-inlining">
+<span id="analyzer-option-ctu-phase1-inlining"></span><h3><span class="section-number">2.2.2.72. </span>ctu-phase1-inlining<a class="headerlink" href="#ctu-phase1-inlining" title="链接到此标题。">¶</a></h3>
+<p>Controls which functions will be inlined during the first phase of the ctu
+analysis. If the value is set to 'all' then all foreign functions are inlinied
+immediately during the first phase, thus rendering the second phase a noop. The
+'ctu-max-nodes-*' budge has no effect in this case. If the value is 'small'
+then only functions with a linear CFG and with a limited number of statements
+would be inlined during the first phase. The long and/or nontrivial functions
+are handled in the second phase and are controlled by the 'ctu-max-nodes-*'
+budge. The value 'none' means that all foreign functions are inlined only in the
+second phase, 'ctu-max-nodes-*' budge limits the second phase.</p>
+<p>Accepted values: &quot;none&quot;, &quot;small&quot;, &quot;all&quot;.</p>
+<p>Default value: &quot;small&quot;</p>
+</section>
+<section id="c-inlining">
+<span id="analyzer-option-c-inlining"></span><h3><span class="section-number">2.2.2.73. </span>c++-inlining<a class="headerlink" href="#c-inlining" title="链接到此标题。">¶</a></h3>
+<p>Controls which C++ member functions will be considered for inlining.</p>
+<p>Accepted values: &quot;constructors&quot;, &quot;destructors&quot;, &quot;methods&quot;.</p>
+<p>Default value: &quot;destructors&quot;</p>
+</section>
+<section id="exploration-strategy">
+<span id="analyzer-option-exploration-strategy"></span><h3><span class="section-number">2.2.2.74. </span>exploration_strategy<a class="headerlink" href="#exploration-strategy" title="链接到此标题。">¶</a></h3>
+<p>Accepted values: &quot;dfs&quot;, &quot;bfs&quot;, &quot;unexplored_first&quot;, &quot;unexplored_first_queue&quot;,
+&quot;unexplored_first_location_queue&quot;, &quot;bfs_block_dfs_contents&quot;.</p>
+<p>Default value: &quot;unexplored_first_queue&quot;</p>
+</section>
+<section id="silence-checkers">
+<span id="analyzer-option-silence-checkers"></span><h3><span class="section-number">2.2.2.75. </span>silence-checkers<a class="headerlink" href="#silence-checkers" title="链接到此标题。">¶</a></h3>
+<p>A semicolon separated list of checker and package names to silence. Silenced
+checkers will not emit reports, but the modeling remain enabled.</p>
+<p>Default value: (empty string)</p>
+</section>
+<section id="ipa">
+<span id="analyzer-option-ipa"></span><h3><span class="section-number">2.2.2.76. </span>ipa<a class="headerlink" href="#ipa" title="链接到此标题。">¶</a></h3>
+<p>Controls the mode of inter-procedural analysis.</p>
+<p>Accepted values: &quot;none&quot;, &quot;basic-inlining&quot;, &quot;inlining&quot;, &quot;dynamic&quot;, &quot;dynamic-
+bifurcate&quot;.</p>
+<p>Default value: &quot;inlining&quot; (in shallow mode) / &quot;dynamic-bifurcate&quot; (in deep mode)</p>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="UsingWithXCode.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title"><span class="section-number">2.3. </span>Running the analyzer within Xcode</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="CommandLineUsage.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title"><span class="section-number">2.1. </span>Command Line Usage: scan-build and CodeChecker</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2007-2026, The Clang Team
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">2.2. Configuring the Analyzer</a><ul>
+<li><a class="reference internal" href="#assigning-values-to-options">2.2.1. Assigning values to options</a><ul>
+<li><a class="reference internal" href="#with-the-compiler-frontend">2.2.1.1. With the compiler frontend</a></li>
+<li><a class="reference internal" href="#with-the-clang-driver">2.2.1.2. With the clang driver</a></li>
+<li><a class="reference internal" href="#with-codechecker">2.2.1.3. With CodeChecker</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#list-of-analyzer-options">2.2.2. List of analyzer options</a><ul>
+<li><a class="reference internal" href="#mode">2.2.2.1. mode</a></li>
+<li><a class="reference internal" href="#cfg-implicit-dtors">2.2.2.2. cfg-implicit-dtors</a></li>
+<li><a class="reference internal" href="#cfg-temporary-dtors">2.2.2.3. cfg-temporary-dtors</a></li>
+<li><a class="reference internal" href="#cfg-lifetime">2.2.2.4. cfg-lifetime</a></li>
+<li><a class="reference internal" href="#cfg-loopexit">2.2.2.5. cfg-loopexit</a></li>
+<li><a class="reference internal" href="#cfg-rich-constructors">2.2.2.6. cfg-rich-constructors</a></li>
+<li><a class="reference internal" href="#cfg-scopes">2.2.2.7. cfg-scopes</a></li>
+<li><a class="reference internal" href="#cfg-expand-default-aggr-inits">2.2.2.8. cfg-expand-default-aggr-inits</a></li>
+<li><a class="reference internal" href="#c-template-inlining">2.2.2.9. c++-template-inlining</a></li>
+<li><a class="reference internal" href="#c-stdlib-inlining">2.2.2.10. c++-stdlib-inlining</a></li>
+<li><a class="reference internal" href="#c-allocator-inlining">2.2.2.11. c++-allocator-inlining</a></li>
+<li><a class="reference internal" href="#c-shared-ptr-inlining">2.2.2.12. c++-shared_ptr-inlining</a></li>
+<li><a class="reference internal" href="#c-temp-dtor-inlining">2.2.2.13. c++-temp-dtor-inlining</a></li>
+<li><a class="reference internal" href="#suppress-null-return-paths">2.2.2.14. suppress-null-return-paths</a></li>
+<li><a class="reference internal" href="#avoid-suppressing-null-argument-paths">2.2.2.15. avoid-suppressing-null-argument-paths</a></li>
+<li><a class="reference internal" href="#suppress-inlined-defensive-checks">2.2.2.16. suppress-inlined-defensive-checks</a></li>
+<li><a class="reference internal" href="#c-container-inlining">2.2.2.17. c++-container-inlining</a></li>
+<li><a class="reference internal" href="#suppress-c-stdlib">2.2.2.18. suppress-c++-stdlib</a></li>
+<li><a class="reference internal" href="#crosscheck-with-z3">2.2.2.19. crosscheck-with-z3</a></li>
+<li><a class="reference internal" href="#crosscheck-with-z3-eqclass-timeout-threshold">2.2.2.20. crosscheck-with-z3-eqclass-timeout-threshold</a></li>
+<li><a class="reference internal" href="#crosscheck-with-z3-timeout-threshold">2.2.2.21. crosscheck-with-z3-timeout-threshold</a></li>
+<li><a class="reference internal" href="#crosscheck-with-z3-rlimit-threshold">2.2.2.22. crosscheck-with-z3-rlimit-threshold</a></li>
+<li><a class="reference internal" href="#crosscheck-with-z3-max-attempts-per-query">2.2.2.23. crosscheck-with-z3-max-attempts-per-query</a></li>
+<li><a class="reference internal" href="#report-in-main-source-file">2.2.2.24. report-in-main-source-file</a></li>
+<li><a class="reference internal" href="#stable-report-filename">2.2.2.25. stable-report-filename</a></li>
+<li><a class="reference internal" href="#verbose-report-filename">2.2.2.26. verbose-report-filename</a></li>
+<li><a class="reference internal" href="#serialize-stats">2.2.2.27. serialize-stats</a></li>
+<li><a class="reference internal" href="#objc-inlining">2.2.2.28. objc-inlining</a></li>
+<li><a class="reference internal" href="#prune-paths">2.2.2.29. prune-paths</a></li>
+<li><a class="reference internal" href="#add-pop-up-notes">2.2.2.30. add-pop-up-notes</a></li>
+<li><a class="reference internal" href="#cfg-conditional-static-initializers">2.2.2.31. cfg-conditional-static-initializers</a></li>
+<li><a class="reference internal" href="#faux-bodies">2.2.2.32. faux-bodies</a></li>
+<li><a class="reference internal" href="#elide-constructors">2.2.2.33. elide-constructors</a></li>
+<li><a class="reference internal" href="#inline-lambdas">2.2.2.34. inline-lambdas</a></li>
+<li><a class="reference internal" href="#widen-loops">2.2.2.35. widen-loops</a></li>
+<li><a class="reference internal" href="#unroll-loops">2.2.2.36. unroll-loops</a></li>
+<li><a class="reference internal" href="#assume-at-least-one-iteration">2.2.2.37. assume-at-least-one-iteration</a></li>
+<li><a class="reference internal" href="#notes-as-events">2.2.2.38. notes-as-events</a></li>
+<li><a class="reference internal" href="#aggressive-binary-operation-simplification">2.2.2.39. aggressive-binary-operation-simplification</a></li>
+<li><a class="reference internal" href="#eagerly-assume">2.2.2.40. eagerly-assume</a></li>
+<li><a class="reference internal" href="#experimental-enable-naive-ctu-analysis">2.2.2.41. experimental-enable-naive-ctu-analysis</a></li>
+<li><a class="reference internal" href="#expand-macros">2.2.2.42. expand-macros</a></li>
+<li><a class="reference internal" href="#display-ctu-progress">2.2.2.43. display-ctu-progress</a></li>
+<li><a class="reference internal" href="#dump-entry-point-stats-to-csv">2.2.2.44. dump-entry-point-stats-to-csv</a></li>
+<li><a class="reference internal" href="#track-conditions">2.2.2.45. track-conditions</a></li>
+<li><a class="reference internal" href="#track-conditions-debug">2.2.2.46. track-conditions-debug</a></li>
+<li><a class="reference internal" href="#apply-fixits">2.2.2.47. apply-fixits</a></li>
+<li><a class="reference internal" href="#display-checker-name">2.2.2.48. display-checker-name</a></li>
+<li><a class="reference internal" href="#support-symbolic-integer-casts">2.2.2.49. support-symbolic-integer-casts</a></li>
+<li><a class="reference internal" href="#assume-controlled-environment">2.2.2.50. assume-controlled-environment</a></li>
+<li><a class="reference internal" href="#ignore-bison-generated-files">2.2.2.51. ignore-bison-generated-files</a></li>
+<li><a class="reference internal" href="#ignore-flex-generated-files">2.2.2.52. ignore-flex-generated-files</a></li>
+<li><a class="reference internal" href="#suppress-dereferences-from-any-address-space">2.2.2.53. suppress-dereferences-from-any-address-space</a></li>
+<li><a class="reference internal" href="#inline-functions-with-ambiguous-loops">2.2.2.54. inline-functions-with-ambiguous-loops</a></li>
+<li><a class="reference internal" href="#ipa-always-inline-size">2.2.2.55. ipa-always-inline-size</a></li>
+<li><a class="reference internal" href="#graph-trim-interval">2.2.2.56. graph-trim-interval</a></li>
+<li><a class="reference internal" href="#min-cfg-size-treat-functions-as-large">2.2.2.57. min-cfg-size-treat-functions-as-large</a></li>
+<li><a class="reference internal" href="#max-symbol-complexity">2.2.2.58. max-symbol-complexity</a></li>
+<li><a class="reference internal" href="#max-tainted-symbol-complexity">2.2.2.59. max-tainted-symbol-complexity</a></li>
+<li><a class="reference internal" href="#max-times-inline-large">2.2.2.60. max-times-inline-large</a></li>
+<li><a class="reference internal" href="#max-inlinable-size">2.2.2.61. max-inlinable-size</a></li>
+<li><a class="reference internal" href="#max-nodes">2.2.2.62. max-nodes</a></li>
+<li><a class="reference internal" href="#ctu-max-nodes-pct">2.2.2.63. ctu-max-nodes-pct</a></li>
+<li><a class="reference internal" href="#ctu-max-nodes-min">2.2.2.64. ctu-max-nodes-min</a></li>
+<li><a class="reference internal" href="#region-store-small-struct-limit">2.2.2.65. region-store-small-struct-limit</a></li>
+<li><a class="reference internal" href="#region-store-small-array-limit">2.2.2.66. region-store-small-array-limit</a></li>
+<li><a class="reference internal" href="#region-store-max-binding-fanout">2.2.2.67. region-store-max-binding-fanout</a></li>
+<li><a class="reference internal" href="#ctu-dir">2.2.2.68. ctu-dir</a></li>
+<li><a class="reference internal" href="#ctu-index-name">2.2.2.69. ctu-index-name</a></li>
+<li><a class="reference internal" href="#ctu-invocation-list">2.2.2.70. ctu-invocation-list</a></li>
+<li><a class="reference internal" href="#model-path">2.2.2.71. model-path</a></li>
+<li><a class="reference internal" href="#ctu-phase1-inlining">2.2.2.72. ctu-phase1-inlining</a></li>
+<li><a class="reference internal" href="#c-inlining">2.2.2.73. c++-inlining</a></li>
+<li><a class="reference internal" href="#exploration-strategy">2.2.2.74. exploration_strategy</a></li>
+<li><a class="reference internal" href="#silence-checkers">2.2.2.75. silence-checkers</a></li>
+<li><a class="reference internal" href="#ipa">2.2.2.76. ipa</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=7d86a446"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/translations.js?v=540d3cec"></script>
+    <script src="../../_static/llvm-sphinx/copybutton.js"></script>
+    </body>
+</html>
