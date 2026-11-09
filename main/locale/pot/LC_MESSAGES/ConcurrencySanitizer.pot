@@ -1,0 +1,255 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2007-2026, The Clang Team
+# This file is distributed under the same license as the Clang package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Clang main\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-09 18:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../ConcurrencySanitizer.md:1
+msgid "ConcurrencySanitizer"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:3
+msgid "Introduction"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:5
+msgid ""
+"ConcurrencySanitizer (CSan) is a data race detector for CPU and GPU "
+"programs. It consists of an LLVM instrumentation pass and run-time libraries "
+"in compiler-rt."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:9
+msgid ""
+"Unlike ThreadSanitizer, CSan does not maintain a happens-before model or "
+"shadow state for every memory location. Memory accesses are sampled at "
+"random and stalled to detect unordered accesses. Importantly, this method "
+"has **no false positives** and **fixed memory overhead.** However, the "
+"probabilistic nature means that many runs are required to state confidently "
+"that the application is not racy."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:16
+msgid "How to build"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:18
+msgid ""
+"Build LLVM/Clang with [CMake](https://llvm.org/docs/CMake.html). To enable "
+"offloading support, the easiest configuration is provided in a CMake cache "
+"file."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:28
+msgid "Supported platforms"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:30
+msgid "CSan currently supports:"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:32
+msgid "Linux on x86-64."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:33
+msgid "AMDGPU devices on Linux through the HSA runtime."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:35
+msgid "Support for other hosts and GPU targets is not currently implemented."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:37
+msgid "Usage"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:39
+msgid ""
+"Compile and link the complete program with `-fsanitize=concurrency`. Use `-"
+"g` to include source locations in reports and `-O1` or higher for "
+"representative optimized code."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:43
+msgid "For a CPU program:"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:50
+msgid "For a HIP program:"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:58
+msgid "For an OpenMP offload program:"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:66
+msgid ""
+"When CSan detects a race, it writes a report to standard error. A watchpoint "
+"report normally identifies both conflicting accesses:"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:77
+msgid ""
+"A value change without a matching instrumented access is reported as a `data "
+"race of unknown origin` and contains only the sampled access. GPU reports "
+"also identify the block, thread, and lane and may name the global variable "
+"containing the raced address."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:82
+msgid "How it works"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:84
+msgid ""
+"The instrumentation marks memory accesses with a runtime function. The "
+"runtime then samples these accesses. Sampling is fundamentally stalling a "
+"given value while checking if any other threads have touched it during that "
+"window. This is done using a **watchpoint** table and by **value "
+"comparison**. Each probed access sets up a tripwire and checks later if "
+"another thread triggered it like in the following pseudocode:"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:119
+msgid ""
+"The probability of detecting a race and the overhead of the sanitizer is "
+"directly related to the probability of sampling and the length of the delay. "
+"The watchpoint table can be omitted to make a minimal detector with less "
+"coverage."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:123
+msgid "`__SANITIZE_CONCURRENCY__`"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:125
+msgid "Code can test whether CSan instrumentation is enabled:"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:133
+msgid "Disabling instrumentation"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:135
+msgid ""
+"Use `no_sanitize(\"concurrency\")` to disable CSan memory-access "
+"instrumentation for a function:"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:145
+msgid ""
+"The `disable_sanitizer_instrumentation` attribute disables all sanitizer "
+"instrumentation and takes precedence over `no_sanitize` attributes. Use "
+"either form carefully: uninstrumented accesses cannot consume watchpoints "
+"and may reduce detection or produce reports of unknown origin."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:150
+msgid "Run-time flags"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:152
+msgid "CSan reads options from the `CSAN_OPTIONS` environment variable:"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:158
+msgid "The CSan-specific host options are:"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:160
+msgid ""
+"`skip_watch` (default: `4000`): Approximate number of accesses skipped by a "
+"thread before arming another watchpoint."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:162
+msgid ""
+"`udelay` (default: `80`): Microseconds to delay after arming a watchpoint."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:163
+msgid ""
+"`halt_on_error` (default: `false`): Terminate after the first host report."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:165
+msgid ""
+"These options currently control the host detector. The AMDGPU sampling rate "
+"and delay interval are fixed. Common sanitizer options still control "
+"facilities such as symbolization and report formatting on the host side of "
+"GPU reporting."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:169
+msgid ""
+"Use `CSAN_OPTIONS=help=1` to print all CSan and sanitizer-common options. "
+"Programs may provide host defaults by defining:"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:178
+msgid "Environment options take precedence over `__csan_default_options`."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:180
+msgid "Limitations"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:182
+msgid ""
+"CSan is probabilistic. It detects races that overlap a sampled observation "
+"window rather than proving that a program is race-free."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:184
+msgid ""
+"CSan does not implement ThreadSanitizer's happens-before model, lock-order "
+"analysis, thread history, or synchronization diagnostics."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:186
+msgid ""
+"CSan cannot be combined with several other full sanitizers, including "
+"ThreadSanitizer and AddressSanitizer."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:189
+msgid "Security considerations"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:191
+msgid ""
+"ConcurrencySanitizer is a testing tool. Its runtime is not intended for "
+"production executables and was not developed under security-sensitive "
+"runtime constraints. Instrumented programs deliberately change scheduling "
+"and reserve additional memory."
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:196
+msgid "Current status"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:198
+msgid ""
+"ConcurrencySanitizer is experimental. Its interface, reports, supported "
+"targets, sampling policy, and run-time options may change. The compiler-rt "
+"test suite can be run with:"
+msgstr ""
+
+#: ../../../ConcurrencySanitizer.md:206
+msgid ""
+"Minimized test cases and reports from real CPU and GPU applications are "
+"welcome."
+msgstr ""
