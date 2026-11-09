@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"POT-Creation-Date: 2026-11-09 18:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -119,7 +119,7 @@ msgid ""
 msgstr ""
 
 #: ../../../JSONCompilationDatabase.md:58
-#: ../../../JSONCompilationDatabase.md:116
+#: ../../../JSONCompilationDatabase.md:118
 msgid "Example:"
 msgstr ""
 
@@ -131,10 +131,12 @@ msgstr ""
 msgid ""
 "**directory:** The working directory of the compilation. All paths specified "
 "in the **command** or **file** fields must be either absolute or relative to "
-"this directory."
+"this directory. A relative **directory** is relative to the directory "
+"containing the compilation database file. Symlinks are not resolved: a "
+"symlink to the file is relative to the symlink's directory."
 msgstr ""
 
-#: ../../../JSONCompilationDatabase.md:80
+#: ../../../JSONCompilationDatabase.md:82
 msgid ""
 "**file:** The main translation unit source processed by this compilation "
 "step. This is used by tools as the key into the compilation database. There "
@@ -142,7 +144,7 @@ msgid ""
 "source file is compiled with different configurations."
 msgstr ""
 
-#: ../../../JSONCompilationDatabase.md:86
+#: ../../../JSONCompilationDatabase.md:88
 msgid ""
 "**arguments:** The compile command argv as list of strings. This should run "
 "the compilation step for the translation unit `file`. `arguments[0]` should "
@@ -150,7 +152,7 @@ msgid ""
 "but ready to pass to `execvp()`."
 msgstr ""
 
-#: ../../../JSONCompilationDatabase.md:91
+#: ../../../JSONCompilationDatabase.md:93
 msgid ""
 "**command:** The compile command as a single shell-escaped string. Arguments "
 "may be shell quoted and escaped following platform conventions, with '`\"`' "
@@ -158,24 +160,24 @@ msgid ""
 "supported."
 msgstr ""
 
-#: ../../../JSONCompilationDatabase.md:96
+#: ../../../JSONCompilationDatabase.md:98
 msgid ""
 "Either **arguments** or **command** is required. **arguments** is preferred, "
 "as shell (un)escaping is a possible source of errors."
 msgstr ""
 
-#: ../../../JSONCompilationDatabase.md:99
+#: ../../../JSONCompilationDatabase.md:101
 msgid ""
 "**output:** The name of the output created by this compilation step. This "
 "field is optional. It can be used to distinguish different processing modes "
 "of the same input file."
 msgstr ""
 
-#: ../../../JSONCompilationDatabase.md:103
+#: ../../../JSONCompilationDatabase.md:105
 msgid "Build System Integration"
 msgstr ""
 
-#: ../../../JSONCompilationDatabase.md:105
+#: ../../../JSONCompilationDatabase.md:107
 msgid ""
 "The convention is to name the file compile_commands.json and put it at the "
 "top of the build directory. Clang tools are pointed to the top of the build "
@@ -183,18 +185,18 @@ msgid ""
 "code in the source tree."
 msgstr ""
 
-#: ../../../JSONCompilationDatabase.md:110
+#: ../../../JSONCompilationDatabase.md:112
 msgid "Alternatives"
 msgstr ""
 
-#: ../../../JSONCompilationDatabase.md:112
+#: ../../../JSONCompilationDatabase.md:114
 msgid ""
 "For simple projects, Clang tools also recognize a `compile_flags.txt` file. "
 "This should contain one argument per line. The same flags will be used to "
 "compile any file."
 msgstr ""
 
-#: ../../../JSONCompilationDatabase.md:124
+#: ../../../JSONCompilationDatabase.md:126
 msgid ""
 "Here `-I libwidget/include` is two arguments, and so becomes two lines. "
 "Paths are relative to the directory containing `compile_flags.txt`."

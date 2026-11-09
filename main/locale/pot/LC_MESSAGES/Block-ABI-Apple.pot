@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 13:03+0000\n"
+"POT-Creation-Date: 2026-11-09 18:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -244,8 +244,8 @@ msgstr ""
 msgid "which would be compiled to:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:228 ../../../Block-ABI-Apple.md:452
-#: ../../../Block-ABI-Apple.md:522 ../../../Block-ABI-Apple.md:599
+#: ../../../Block-ABI-Apple.md:228 ../../../Block-ABI-Apple.md:453
+#: ../../../Block-ABI-Apple.md:521 ../../../Block-ABI-Apple.md:598
 msgid "and:"
 msgstr ""
 
@@ -381,11 +381,11 @@ msgstr ""
 msgid "would translate into:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:462
+#: ../../../Block-ABI-Apple.md:463
 msgid "Importing `__block` variables into `Blocks`"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:464
+#: ../../../Block-ABI-Apple.md:465
 msgid ""
 "A `Block` that uses a `__block` variable in its compound statement body must "
 "import the variable and emit `copy_helper` and `dispose_helper` helper "
@@ -394,30 +394,30 @@ msgid ""
 "and `_Block_object_dispose`."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:470
+#: ../../../Block-ABI-Apple.md:471
 msgid "For example:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:477 ../../../Block-ABI-Apple.md:627
+#: ../../../Block-ABI-Apple.md:478 ../../../Block-ABI-Apple.md:626
 msgid "would translate to:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:535
+#: ../../../Block-ABI-Apple.md:534
 msgid "Importing `__attribute__((NSObject))` `__block` variables"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:537
+#: ../../../Block-ABI-Apple.md:536
 msgid ""
 "A `__block` variable that is also marked `__attribute__((NSObject))` should "
 "have `byref_keep` and `byref_dispose` helper functions that use "
 "`_Block_object_assign` and `_Block_object_dispose`."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:541
+#: ../../../Block-ABI-Apple.md:540
 msgid "`__block` escapes"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:543
+#: ../../../Block-ABI-Apple.md:542
 msgid ""
 "Because `Blocks` referencing `__block` variables may have `Block_copy()` "
 "performed upon them the underlying storage for the variables may move to the "
@@ -428,11 +428,11 @@ msgid ""
 "scope. The call should be:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:555
+#: ../../../Block-ABI-Apple.md:554
 msgid "Nesting"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:557
+#: ../../../Block-ABI-Apple.md:556
 msgid ""
 "`Blocks` may contain `Block` literal expressions. Any variables used within "
 "inner blocks are imported into all enclosing `Block` scopes even if the "
@@ -440,15 +440,15 @@ msgid ""
 "variables."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:562
+#: ../../../Block-ABI-Apple.md:561
 msgid "Objective C Extensions to `Blocks`"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:564
+#: ../../../Block-ABI-Apple.md:563
 msgid "Importing Objects"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:566
+#: ../../../Block-ABI-Apple.md:565
 msgid ""
 "Objects should be treated as `__attribute__((NSObject))` variables; all "
 "`copy_helper`, `dispose_helper`, `byref_keep`, and `byref_dispose` helper "
@@ -457,11 +457,11 @@ msgid ""
 "methods."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:572
+#: ../../../Block-ABI-Apple.md:571
 msgid "`Blocks` as Objects"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:574
+#: ../../../Block-ABI-Apple.md:573
 msgid ""
 "The compiler will treat `Blocks` as objects when synthesizing property "
 "setters and getters, will characterize them as objects when generating "
@@ -470,11 +470,11 @@ msgid ""
 "same manner as objects."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:580
+#: ../../../Block-ABI-Apple.md:579
 msgid "`__weak __block` Support"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:582
+#: ../../../Block-ABI-Apple.md:581
 msgid ""
 "Objective-C (and Objective-C++) support the `__weak` attribute on `__block` "
 "variables. Under normal circumstances the compiler uses the Objective-C "
@@ -483,43 +483,43 @@ msgid ""
 "variables:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:592
+#: ../../../Block-ABI-Apple.md:591
 msgid ""
 "The `__weak` variable is stored in a `_block_byref_foo` structure and the "
 "`Block` has copy and dispose helpers for this structure that call:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:605
+#: ../../../Block-ABI-Apple.md:604
 msgid ""
 "In turn, the `block_byref` copy support helpers distinguish between whether "
 "the `__block` variable is a `Block` or not and should either call:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:612
+#: ../../../Block-ABI-Apple.md:611
 msgid "for something declared as an object or:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:618
+#: ../../../Block-ABI-Apple.md:617
 msgid "for something declared as a `Block`."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:620
+#: ../../../Block-ABI-Apple.md:619
 msgid "A full example follows:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:651
+#: ../../../Block-ABI-Apple.md:650
 msgid "for the block `byref` part and:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:685
+#: ../../../Block-ABI-Apple.md:684
 msgid "and within the compound statement:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:704
+#: ../../../Block-ABI-Apple.md:703
 msgid "C++ Support"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:706
+#: ../../../Block-ABI-Apple.md:705
 msgid ""
 "Within a block stack based C++ objects are copied into `const` copies using "
 "the copy constructor. It is an error if a stack based C++ object is used "
@@ -533,22 +533,22 @@ msgid ""
 "routine."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:716
+#: ../../../Block-ABI-Apple.md:715
 msgid ""
 "As an example, suppose a C++ class `FOO` existed with a copy constructor. "
 "Within a code block a stack version of a `FOO` object is declared and used "
 "within a `Block` literal expression:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:727
+#: ../../../Block-ABI-Apple.md:726
 msgid "The compiler would synthesize:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:759
+#: ../../../Block-ABI-Apple.md:758
 msgid "and the code would be:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:779
+#: ../../../Block-ABI-Apple.md:778
 msgid ""
 "C++ objects stored in `__block` storage start out on the stack in a "
 "`block_byref` data structure as do other variables. Such objects (if not "
@@ -561,42 +561,42 @@ msgid ""
 "within the supplied `block_byref` heap data structure. For example,"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:793
+#: ../../../Block-ABI-Apple.md:792
 msgid ""
 "requires the normal constructor for the embedded `blockStorageFoo` object:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:799
+#: ../../../Block-ABI-Apple.md:798
 msgid "and at scope termination the destructor:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:805
+#: ../../../Block-ABI-Apple.md:804
 msgid "Note that the forwarding indirection is *NOT* used."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:807
+#: ../../../Block-ABI-Apple.md:806
 msgid ""
 "The compiler would need to generate (if used from a block literal) the "
 "following copy/dispose helpers:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:820
+#: ../../../Block-ABI-Apple.md:819
 msgid ""
 "for the appropriately named constructor and destructor for the class/struct "
 "`FOO`."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:823
+#: ../../../Block-ABI-Apple.md:822
 msgid ""
 "To support member variable and function access the compiler will synthesize "
 "a `const` pointer to a block version of the `this` pointer."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:828
+#: ../../../Block-ABI-Apple.md:827
 msgid "Runtime Helper Functions"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:830
+#: ../../../Block-ABI-Apple.md:829
 msgid ""
 "The runtime helper functions are described in `/usr/local/include/"
 "Block_private.h`. To summarize their use, a `Block` requires copy/dispose "
@@ -606,26 +606,26 @@ msgid ""
 "generated."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:837
+#: ../../../Block-ABI-Apple.md:836
 msgid ""
 "The block copy helper function should, for each of the variables of the type "
 "mentioned above, call:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:844
+#: ../../../Block-ABI-Apple.md:843
 msgid "in the copy helper and:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:850
+#: ../../../Block-ABI-Apple.md:849
 msgid "in the dispose helper where `<apropos>` is:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:864
+#: ../../../Block-ABI-Apple.md:863
 msgid ""
 "and of course the constructors/destructors for `const` copied C++ objects."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:866
+#: ../../../Block-ABI-Apple.md:865
 msgid ""
 "The `block_byref` data structure similarly requires copy/dispose helpers for "
 "block variables, `__attribute__((NSObject))` variables, or C++ `const` "
@@ -633,7 +633,7 @@ msgid ""
 "set and functions are generated in the same manner."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:871
+#: ../../../Block-ABI-Apple.md:870
 msgid ""
 "Under ObjC we allow `__weak` as an attribute on `__block` variables, and "
 "this causes the addition of `BLOCK_FIELD_IS_WEAK` orred onto the "
@@ -642,15 +642,15 @@ msgid ""
 "`block_byref` copy/dispose helper calls."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:877
+#: ../../../Block-ABI-Apple.md:876
 msgid "The prototypes, and summary, of the helper functions are:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:898
+#: ../../../Block-ABI-Apple.md:897
 msgid "Copyright"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:900
+#: ../../../Block-ABI-Apple.md:899
 msgid ""
 "Copyright 2008-2010 Apple, Inc. Permission is hereby granted, free of "
 "charge, to any person obtaining a copy of this software and associated "
@@ -661,13 +661,13 @@ msgid ""
 "the following conditions:"
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:908
+#: ../../../Block-ABI-Apple.md:907
 msgid ""
 "The above copyright notice and this permission notice shall be included in "
 "all copies or substantial portions of the Software."
 msgstr ""
 
-#: ../../../Block-ABI-Apple.md:911
+#: ../../../Block-ABI-Apple.md:910
 msgid ""
 "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR "
 "IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, "

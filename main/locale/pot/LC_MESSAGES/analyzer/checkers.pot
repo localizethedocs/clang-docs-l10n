@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Clang main\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 06:01+0000\n"
+"POT-Creation-Date: 2026-11-09 18:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,13 +83,13 @@ msgstr ""
 
 #: ../../../analyzer/checkers.md:37
 msgid ""
-"Moreover, if the pedantic mode is activated by `-analyzer-config core."
-"BitwiseShift:Pedantic=true`, then this checker also reports situations where "
-"the *left* operand of a shift operator is negative or overflow occurs during "
-"the right shift of a signed value. (Most compilers handle these predictably, "
-"but the C standard and the C++ standards before C++20 say that they're "
-"undefined behavior. In the C++20 standard these constructs are well-defined, "
-"so activating pedantic mode in C++20 has no effect.)"
+"Moreover, if the pedantic mode is activated by `-analyzer-config "
+"core.BitwiseShift:Pedantic=true`, then this checker also reports situations "
+"where the *left* operand of a shift operator is negative or overflow occurs "
+"during the right shift of a signed value. (Most compilers handle these "
+"predictably, but the C standard and the C++ standards before C++20 say that "
+"they're undefined behavior. In the C++20 standard these constructs are well-"
+"defined, so activating pedantic mode in C++20 has no effect.)"
 msgstr ""
 
 #: ../../../analyzer/checkers.md:45
@@ -539,8 +539,8 @@ msgstr ""
 #: ../../../analyzer/checkers.md:605
 msgid ""
 "This checker is capable of checking the [SEI CERT C++ coding rule STR51-CPP. "
-"Do not attempt to create a std::string from a null pointer](https://wiki.sei."
-"cmu.edu/confluence/x/E3s-BQ)."
+"Do not attempt to create a std::string from a null pointer](https://"
+"wiki.sei.cmu.edu/confluence/x/E3s-BQ)."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:620
@@ -689,8 +689,8 @@ msgid ""
 "This checker does not accept the coding pattern where an enum type is used "
 "to store combinations of flag values. Such enums should be annotated with "
 "the `__attribute__((flag_enum))` or by the `[[clang::flag_enum]]` attribute "
-"to signal this intent. Refer to the [documentation](../AttributeReference."
-"md#flag-enum) of this Clang attribute."
+"to signal this intent. Refer to the [documentation](../"
+"AttributeReference.md#flag-enum) of this Clang attribute."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:831
@@ -759,8 +759,8 @@ msgstr ""
 
 #: ../../../analyzer/checkers.md:901
 msgid ""
-"This design rule is dictated by the SEI CERT rule [EXP47-C](https://wiki.sei."
-"cmu.edu/confluence/display/c/EXP47-C."
+"This design rule is dictated by the SEI CERT rule [EXP47-C](https://"
+"wiki.sei.cmu.edu/confluence/display/c/EXP47-C."
 "+Do+not+call+va_arg+with+an+argument+of+the+incorrect+type), which describes "
 "several issues related to the use of `va_arg()`. (The problem reported by "
 "this checker is shown in the second code example; the first, unrelated code "
@@ -929,8 +929,8 @@ msgstr ""
 
 #: ../../../analyzer/checkers.md:1217
 msgid ""
-"To override this threshold to e.g. 4 bytes, use the `-analyzer-config optin."
-"performance.Padding:AllowedPad=4` option."
+"To override this threshold to e.g. 4 bytes, use the `-analyzer-config "
+"optin.performance.Padding:AllowedPad=4` option."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:1222
@@ -1144,13 +1144,13 @@ msgstr ""
 #: ../../../analyzer/checkers.md:1433
 msgid ""
 "One can configure their own taint sources, sinks, and propagation rules by "
-"providing a configuration file via checker option `optin.taint."
-"TaintPropagation:Config`. The configuration file is in [YAML](http://llvm."
-"org/docs/YamlIO.html#introduction-to-yaml) format. The taint-related options "
-"defined in the config file extend but do not override the built-in sources, "
-"rules, sinks. The format of the external taint configuration file is not "
-"stable, and could change without any notice even in a non-backward "
-"compatible way."
+"providing a configuration file via checker option "
+"`optin.taint.TaintPropagation:Config`. The configuration file is in [YAML]"
+"(http://llvm.org/docs/YamlIO.html#introduction-to-yaml) format. The taint-"
+"related options defined in the config file extend but do not override the "
+"built-in sources, rules, sinks. The format of the external taint "
+"configuration file is not stable, and could change without any notice even "
+"in a non-backward compatible way."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:1442
@@ -1196,14 +1196,14 @@ msgstr ""
 
 #: ../../../analyzer/checkers.md:1463
 msgid ""
-"[CWE Data Neutralization Issues](https://cwe.mitre.org/data/definitions/137."
-"html)"
+"[CWE Data Neutralization Issues](https://cwe.mitre.org/data/definitions/"
+"137.html)"
 msgstr ""
 
 #: ../../../analyzer/checkers.md:1464
 msgid ""
-"[SEI Cert STR02-C. Sanitize data passed to complex subsystems](https://wiki."
-"sei.cmu.edu/confluence/display/c/STR02-C."
+"[SEI Cert STR02-C. Sanitize data passed to complex subsystems](https://"
+"wiki.sei.cmu.edu/confluence/display/c/STR02-C."
 "+Sanitize+data+passed+to+complex+subsystems)"
 msgstr ""
 
@@ -1316,9 +1316,9 @@ msgstr ""
 #: ../../../analyzer/checkers.md:1608
 msgid ""
 "This checker is an improved and renamed version of the checker that was "
-"previously known as `alpha.security.ArrayBoundV2`. The old checker `alpha."
-"security.ArrayBound` was removed when the (previously \"experimental\") V2 "
-"variant became stable enough for regular use."
+"previously known as `alpha.security.ArrayBoundV2`. The old checker "
+"`alpha.security.ArrayBound` was removed when the (previously "
+"\"experimental\") V2 variant became stable enough for regular use."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:1616
@@ -1362,8 +1362,8 @@ msgstr ""
 
 #: ../../../analyzer/checkers.md:1666
 msgid ""
-"To enable this option, use: `-analyzer-config security.cert.env.InvalidPtr:"
-"InvalidatingGetEnv=true`."
+"To enable this option, use: `-analyzer-config "
+"security.cert.env.InvalidPtr:InvalidatingGetEnv=true`."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:1669
@@ -1529,8 +1529,8 @@ msgstr ""
 
 #: ../../../analyzer/checkers.md:1866
 msgid ""
-"To set this option, use: `-analyzer-config security.insecureAPI."
-"DeprecatedOrUnsafeBufferHandling:ReportMode=all`"
+"To set this option, use: `-analyzer-config "
+"security.insecureAPI.DeprecatedOrUnsafeBufferHandling:ReportMode=all`"
 msgstr ""
 
 #: ../../../analyzer/checkers.md:1869
@@ -1688,9 +1688,9 @@ msgid ""
 "If set to `true`, the static analyzer assumes that all memory allocations "
 "and deallocations (like `malloc` or `free`) are marked with "
 "`ownership_holds`, `ownership_takes` and `ownership_returns` attributes. For "
-"more information see [Attributes in Clang](../AttributeReference."
-"md#ownership-holds-ownership-returns-ownership-takes-clang-static-analyzer). "
-"Default value is `false`."
+"more information see [Attributes in Clang](../"
+"AttributeReference.md#ownership-holds-ownership-returns-ownership-takes-"
+"clang-static-analyzer). Default value is `false`."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:2047
@@ -1761,9 +1761,9 @@ msgid ""
 "Check for improper use of `errno`. This checker implements partially CERT "
 "rule [ERR30-C. Set errno to zero before calling a library function known to "
 "set errno, and check errno only after the function returns a value "
-"indicating failure](https://wiki.sei.cmu.edu/confluence/pages/viewpage."
-"action?pageId=87152351). The checker can find the first read of `errno` "
-"after successful standard function calls."
+"indicating failure](https://wiki.sei.cmu.edu/confluence/pages/"
+"viewpage.action?pageId=87152351). The checker can find the first read of "
+"`errno` after successful standard function calls."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:2153
@@ -1774,8 +1774,8 @@ msgid ""
 "the call has failed. There are exceptions to this rule (for example "
 "`strtol`) but the affected functions are not yet supported by the checker. "
 "The return values for the failure cases are documented in the standard Linux "
-"man pages of the functions and in the [POSIX standard](https://pubs."
-"opengroup.org/onlinepubs/9699919799/)."
+"man pages of the functions and in the [POSIX standard](https://"
+"pubs.opengroup.org/onlinepubs/9699919799/)."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:2174
@@ -2598,9 +2598,9 @@ msgstr ""
 #: ../../../analyzer/checkers.md:3291
 msgid ""
 "Check that addresses to stack memory do not escape the function that "
-"involves dispatch_after or dispatch_async. This checker is a part of `core."
-"StackAddressEscape`, but is temporarily disabled until some false positives "
-"are fixed."
+"involves dispatch_after or dispatch_async. This checker is a part of "
+"`core.StackAddressEscape`, but is temporarily disabled until some false "
+"positives are fixed."
 msgstr ""
 
 #: ../../../analyzer/checkers.md:3313
@@ -2900,74 +2900,61 @@ msgid ""
 msgstr ""
 
 #: ../../../analyzer/checkers.md:3779
-msgid "alpha.unix.SimpleStream (C)"
-msgstr ""
-
-#: ../../../analyzer/checkers.md:3781
-msgid ""
-"Check for misuses of stream APIs. Check for misuses of stream APIs: `fopen, "
-"fclose` (demo checker, the subject of the demo ([Slides](https://llvm.org/"
-"devmtg/2012-11/Zaks-Rose-Checker24Hours.pdf) , [Video](https://youtu.be/"
-"kdxlsP5QVPw)) by Anna Zaks and Jordan Rose presented at the [2012 LLVM "
-"Developers' Meeting](https://llvm.org/devmtg/2012-11/))."
-msgstr ""
-
-#: ../../../analyzer/checkers.md:3803
 msgid "alpha.unix.cstring.BufferOverlap (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3805
+#: ../../../analyzer/checkers.md:3781
 msgid ""
 "Checks for overlap in two buffer arguments. Applies to: `memcpy, mempcpy, "
 "wmemcpy, wmempcpy`."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3816
+#: ../../../analyzer/checkers.md:3792
 msgid "alpha.unix.cstring.OutOfBounds (C)"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3818
+#: ../../../analyzer/checkers.md:3794
 msgid ""
 "Check for out-of-bounds access in string functions, such as: `memcpy, bcopy, "
 "strcpy, strncpy, strcat, strncat, memmove, memcmp, memset` and more."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3821
+#: ../../../analyzer/checkers.md:3797
 msgid ""
 "This check also works with string literals, except there is a known bug in "
 "that the analyzer cannot detect embedded NULL characters when determining "
 "the string length."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3838
+#: ../../../analyzer/checkers.md:3814
 msgid "alpha.WebKit"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3840
+#: ../../../analyzer/checkers.md:3816
 msgid "alpha.webkit.ForwardDeclChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3842
+#: ../../../analyzer/checkers.md:3818
 msgid ""
 "Check for local variables, member variables, and function arguments that are "
 "forward declared."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3860
+#: ../../../analyzer/checkers.md:3836
 msgid "alpha.webkit.MemoryUnsafeCastChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3862
+#: ../../../analyzer/checkers.md:3838
 msgid ""
 "Check for all casts from a base type to its derived type as these might be "
 "memory-unsafe."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3864
+#: ../../../analyzer/checkers.md:3840
 msgid "Example:"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3875
+#: ../../../analyzer/checkers.md:3851
 msgid ""
 "For all cast operations (C-style casts, static_cast, reinterpret_cast, "
 "dynamic_cast), if the source type a `Base*` and the destination type is "
@@ -2975,43 +2962,43 @@ msgid ""
 "signal an error."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3877
+#: ../../../analyzer/checkers.md:3853
 msgid "This applies to:"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3879
+#: ../../../analyzer/checkers.md:3855
 msgid ""
 "C structs, C++ structs and classes, and Objective-C classes and protocols."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3880
+#: ../../../analyzer/checkers.md:3856
 msgid "Pointers and references."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3881
+#: ../../../analyzer/checkers.md:3857
 msgid ""
 "Inside template instantiations and macro expansions that are visible to the "
 "compiler."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3883
+#: ../../../analyzer/checkers.md:3859
 msgid ""
 "For types like this, instead of using built in casts, the programmer will "
 "use helper functions that internally perform the appropriate type check and "
 "disable static analysis."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3885
+#: ../../../analyzer/checkers.md:3861
 msgid "alpha.webkit.NoDeleteChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3887
+#: ../../../analyzer/checkers.md:3863
 msgid ""
 "Check that `[[clang::annotate_type(\"webkit.nodelete\")]]` annotation does "
 "not appear on a function which could delete an object."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3899
+#: ../../../analyzer/checkers.md:3875
 msgid ""
 "`[[clang::annotate_type(\"webkit.nodelete\")]]` annotation makes the "
 "function ignored for the purpose of other WebKit smart pointer checkers. For "
@@ -3019,28 +3006,28 @@ msgid ""
 "with this annotation."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3902
+#: ../../../analyzer/checkers.md:3878
 msgid "alpha.webkit.NoUncheckedPtrMemberChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3904
+#: ../../../analyzer/checkers.md:3880
 msgid ""
 "Raw pointers and references to an object which supports CheckedPtr or "
 "CheckedRef can't be used as class members. Only CheckedPtr, CheckedRef, "
 "RefPtr, or Ref are allowed."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3919 ../../../analyzer/checkers.md:3933
+#: ../../../analyzer/checkers.md:3895 ../../../analyzer/checkers.md:3909
 msgid ""
 "See [WebKit Guidelines for Safer C++ Programming](https://github.com/WebKit/"
 "WebKit/wiki/Safer-CPP-Guidelines) for details."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3921
+#: ../../../analyzer/checkers.md:3897
 msgid "alpha.webkit.NoUnretainedMemberChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3923
+#: ../../../analyzer/checkers.md:3899
 msgid ""
 "Raw pointers and references to a NS or CF object can't be used as class "
 "members or ivars. Only RetainPtr is allowed for CF types regardless of "
@@ -3048,11 +3035,11 @@ msgid ""
 "for NS types when ARC is disabled."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3935
+#: ../../../analyzer/checkers.md:3911
 msgid "alpha.webkit.UnretainedLambdaCapturesChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3937
+#: ../../../analyzer/checkers.md:3913
 msgid ""
 "Raw pointers and references to NS or CF types can't be captured in lambdas. "
 "Only RetainPtr is allowed for CF types regardless of whether ARC is enabled "
@@ -3060,11 +3047,11 @@ msgid ""
 "ARC is disabled."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3950
+#: ../../../analyzer/checkers.md:3926
 msgid "alpha.webkit.UncountedCallArgsChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3952
+#: ../../../analyzer/checkers.md:3928
 msgid ""
 "The goal of this rule is to make sure that lifetime of any dynamically "
 "allocated ref-countable object passed as a call argument spans past the end "
@@ -3074,23 +3061,23 @@ msgid ""
 "uncounted types."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3954
+#: ../../../analyzer/checkers.md:3930
 msgid ""
 "Here are some examples of situations that we warn about as they *might* be "
 "potentially unsafe. The logic is that either we're able to guarantee that an "
 "argument is safe or it's considered if not a bug then bug-prone."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3972
+#: ../../../analyzer/checkers.md:3948
 msgid ""
-"Although we are enforcing member variables to be ref-counted by `webkit."
-"NoUncountedMemberChecker` any method of the same class still has "
+"Although we are enforcing member variables to be ref-counted by "
+"`webkit.NoUncountedMemberChecker` any method of the same class still has "
 "unrestricted access to these. Since from a caller's perspective we can't "
 "guarantee a particular member won't get modified by callee (directly or "
 "indirectly) we don't consider values obtained from members safe."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3974
+#: ../../../analyzer/checkers.md:3950
 msgid ""
 "Note: It's likely this heuristic could be made more precise with fewer false "
 "positives - for example calls to free functions that don't have any "
@@ -3098,77 +3085,77 @@ msgid ""
 "to tamper with the member unless it's a global variable."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3986
+#: ../../../analyzer/checkers.md:3962
 msgid ""
 "The implementation of this rule is a heuristic - we define a whitelist of "
 "kinds of values that are considered safe to be passed as arguments. If we "
 "can't prove an argument is safe it's considered an error."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3988
+#: ../../../analyzer/checkers.md:3964
 msgid "Allowed kinds of arguments:"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:3990
+#: ../../../analyzer/checkers.md:3966
 msgid ""
 "values obtained from ref-counted objects (including temporaries as those "
 "survive the call too)"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4003
+#: ../../../analyzer/checkers.md:3979
 msgid "forwarding uncounted arguments from caller to callee"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4011
+#: ../../../analyzer/checkers.md:3987
 msgid "Caller of `foo()` is responsible for `a`'s lifetime."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4013
+#: ../../../analyzer/checkers.md:3989
 msgid "`this` pointer"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4021
+#: ../../../analyzer/checkers.md:3997
 msgid ""
 "Caller of `foo()` is responsible for keeping the memory pointed to by `this` "
 "pointer safe."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4023
+#: ../../../analyzer/checkers.md:3999
 msgid "constants"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4029
+#: ../../../analyzer/checkers.md:4005
 msgid ""
 "We also define a set of safe transformations which if passed a safe value as "
 "an input provide (usually it's the return value) a safe value (or an object "
 "that provides safe values). This is also a heuristic."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4031
+#: ../../../analyzer/checkers.md:4007
 msgid "constructors of ref-counted types (including factory methods)"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4032
+#: ../../../analyzer/checkers.md:4008
 msgid "getters of ref-counted types"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4033
+#: ../../../analyzer/checkers.md:4009
 msgid "member overloaded operators"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4034
+#: ../../../analyzer/checkers.md:4010
 msgid "casts"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4035
+#: ../../../analyzer/checkers.md:4011
 msgid "unary operators like `&` or `*`"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4037
+#: ../../../analyzer/checkers.md:4013
 msgid "alpha.webkit.UncheckedCallArgsChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4039
+#: ../../../analyzer/checkers.md:4015
 msgid ""
 "The goal of this rule is to make sure that lifetime of any dynamically "
 "allocated CheckedPtr capable object passed as a call argument keeps its "
@@ -3178,27 +3165,27 @@ msgid ""
 "parameters of raw pointers and references to unchecked types."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4041
+#: ../../../analyzer/checkers.md:4017
 msgid ""
 "The rules of when to use and not to use CheckedPtr / CheckedRef are same as "
 "alpha.webkit.UncountedCallArgsChecker for ref-counted objects."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4043
+#: ../../../analyzer/checkers.md:4019
 msgid "alpha.webkit.UncheckedLambdaCapturesChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4045
+#: ../../../analyzer/checkers.md:4021
 msgid ""
 "Raw pointers and references to unchecked types can't be captured in lambdas. "
 "Only CheckedPtr or CheckedRef is allowed."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4060
+#: ../../../analyzer/checkers.md:4036
 msgid "alpha.webkit.UnretainedCallArgsChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4062
+#: ../../../analyzer/checkers.md:4038
 msgid ""
 "The goal of this rule is to make sure that lifetime of any dynamically "
 "allocated NS or CF objects passed as a call argument keeps its memory region "
@@ -3208,17 +3195,17 @@ msgid ""
 "references to unretained types."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4064 ../../../analyzer/checkers.md:4156
+#: ../../../analyzer/checkers.md:4040 ../../../analyzer/checkers.md:4132
 msgid ""
 "The rules of when to use and not to use RetainPtr or OSObjectPtr are same as "
 "alpha.webkit.UncountedCallArgsChecker for ref-counted objects."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4066
+#: ../../../analyzer/checkers.md:4042
 msgid "alpha.webkit.UncountedLocalVarsChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4068
+#: ../../../analyzer/checkers.md:4044
 msgid ""
 "The goal of this rule is to make sure that any uncounted local variable is "
 "backed by a ref-counted object with lifetime that is strictly larger than "
@@ -3227,24 +3214,24 @@ msgid ""
 "counted object that backs it."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4070 ../../../analyzer/checkers.md:4113
-#: ../../../analyzer/checkers.md:4158
+#: ../../../analyzer/checkers.md:4046 ../../../analyzer/checkers.md:4089
+#: ../../../analyzer/checkers.md:4134
 msgid "These are examples of cases that we consider safe:"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4090 ../../../analyzer/checkers.md:4133
-#: ../../../analyzer/checkers.md:4178
+#: ../../../analyzer/checkers.md:4066 ../../../analyzer/checkers.md:4109
+#: ../../../analyzer/checkers.md:4154
 msgid ""
 "Here are some examples of situations that we warn about as they *might* be "
 "potentially unsafe. The logic is that either we're able to guarantee that a "
 "local variable is safe or it's considered unsafe."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4109
+#: ../../../analyzer/checkers.md:4085
 msgid "alpha.webkit.UncheckedLocalVarsChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4111
+#: ../../../analyzer/checkers.md:4087
 msgid ""
 "The goal of this rule is to make sure that any unchecked local variable is "
 "backed by a CheckedPtr or CheckedRef with lifetime that is strictly larger "
@@ -3253,11 +3240,11 @@ msgid ""
 "CheckedPtr/CheckRef object that backs it."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4152
+#: ../../../analyzer/checkers.md:4128
 msgid "alpha.webkit.UnretainedLocalVarsChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4154
+#: ../../../analyzer/checkers.md:4130
 msgid ""
 "The goal of this rule is to make sure that any NS or CF local variable is "
 "backed by a RetainPtr or OSObjectPtr with lifetime that is strictly larger "
@@ -3266,101 +3253,101 @@ msgid ""
 "RetainPtr or OSObjectPtr object that backs it."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4197
+#: ../../../analyzer/checkers.md:4173
 msgid "alpha.webkit.UnborrowedLocalVarsChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4199
+#: ../../../analyzer/checkers.md:4175
 msgid ""
 "A *CanBorrow* type tracks views into its interior at runtime. It calls "
 "`crashIfBorrowed()` in methods that destroy its interior. `WTF::Vector` is a "
 "motivating example: `append()` calls `crashIfBorrowed()`."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4201
+#: ../../../analyzer/checkers.md:4177
 msgid ""
 "`Borrow<T>` is an RAII object that tracks a view into a `CanBorrow` type: "
 "while a `Borrow<T>` on a `CanBorrow` object is in scope, views into the "
 "object remain valid (otherwise the program crashes)."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4203
+#: ../../../analyzer/checkers.md:4179
 msgid ""
 "The goal of this rule is to require a pointer/reference/view into a "
 "`CanBorrow` type to be guarded by an overlooking `Borrow<T>`."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4205
+#: ../../../analyzer/checkers.md:4181
 msgid "These are examples do not warn:"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4229
+#: ../../../analyzer/checkers.md:4205
 msgid "These are examples warn:"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4274
+#: ../../../analyzer/checkers.md:4250
 msgid ""
-"A value counts as a loan when it reaches its origin through a `[[clang::"
-"lifetimebound]]` edge. That attribute does not distinguish a view into an "
-"object's interior from another name for the object itself. `foo6` shows why "
-"the checker resolves that ambiguity toward reporting."
+"A value counts as a loan when it reaches its origin through a "
+"`[[clang::lifetimebound]]` edge. That attribute does not distinguish a view "
+"into an object's interior from another name for the object itself. `foo6` "
+"shows why the checker resolves that ambiguity toward reporting."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4276
+#: ../../../analyzer/checkers.md:4252
 msgid ""
 "The cost is that an identity function is reported even though its result "
 "really is an alias:"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4287
+#: ../../../analyzer/checkers.md:4263
 msgid "Includes built-in recognition for std view types. For example:"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4307
+#: ../../../analyzer/checkers.md:4283
 msgid "alpha.webkit.UnborrowedCallArgsChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4309
+#: ../../../analyzer/checkers.md:4285
 msgid ""
 "The same rule as alpha.webkit.UnborrowedLocalVarsChecker, applied to "
 "function arguments."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4330
+#: ../../../analyzer/checkers.md:4306
 msgid "The implicit object argument counts as an argument:"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4343
+#: ../../../analyzer/checkers.md:4319
 msgid "These examples do not warn:"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4353
+#: ../../../analyzer/checkers.md:4329
 msgid "alpha.webkit.UnborrowedLambdaCapturesChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4355
+#: ../../../analyzer/checkers.md:4331
 msgid ""
 "The same rule as alpha.webkit.UnborrowedLocalVarsChecker, applied to lambda "
 "captures."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4357
+#: ../../../analyzer/checkers.md:4333
 msgid ""
 "Note: It is impossible for an escaping closure to capture a Borrow since "
 "Borrow is stack-only."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4372
+#: ../../../analyzer/checkers.md:4348
 msgid ""
 "A NOESCAPE callee runs the lambda before returning, so a `Borrow` in the "
 "enclosing scope protects the capture:"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4387
+#: ../../../analyzer/checkers.md:4363
 msgid "webkit.RetainPtrCtorAdoptChecker"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4389
+#: ../../../analyzer/checkers.md:4365
 msgid ""
 "The goal of this rule is to make sure the constructors of RetainPtr and "
 "OSObjectPtr as well as adoptNS, adoptCF, and adoptOSObject are used "
@@ -3369,138 +3356,138 @@ msgid ""
 "RetainPtr or OSObjectPtr constructor should be used. Warn otherwise."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4393
+#: ../../../analyzer/checkers.md:4369
 msgid "These are examples of cases that we consider correct:"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4401
+#: ../../../analyzer/checkers.md:4377
 msgid ""
 "Here are some examples of cases that we consider incorrect use of RetainPtr "
 "constructor and adoptCF"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4409
+#: ../../../analyzer/checkers.md:4385
 msgid "Debug Checkers"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4413
+#: ../../../analyzer/checkers.md:4389
 msgid "debug"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4415
+#: ../../../analyzer/checkers.md:4391
 msgid ""
 "Checkers used for debugging the analyzer. {doc}`developer-docs/DebugChecks` "
 "page contains a detailed description."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4420
+#: ../../../analyzer/checkers.md:4396
 msgid "debug.AnalysisOrder"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4422
+#: ../../../analyzer/checkers.md:4398
 msgid "Print callbacks that are called during analysis in order."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4426
+#: ../../../analyzer/checkers.md:4402
 msgid "debug.ConfigDumper"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4428
+#: ../../../analyzer/checkers.md:4404
 msgid "Dump config table."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4432
+#: ../../../analyzer/checkers.md:4408
 msgid "debug.DumpCFG Display"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4434
+#: ../../../analyzer/checkers.md:4410
 msgid "Control-Flow Graphs."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4438
+#: ../../../analyzer/checkers.md:4414
 msgid "debug.DumpCallGraph"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4440
+#: ../../../analyzer/checkers.md:4416
 msgid "Display Call Graph."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4444
+#: ../../../analyzer/checkers.md:4420
 msgid "debug.DumpCalls"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4446
+#: ../../../analyzer/checkers.md:4422
 msgid "Print calls as they are traversed by the engine."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4450
+#: ../../../analyzer/checkers.md:4426
 msgid "debug.DumpDominators"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4452
+#: ../../../analyzer/checkers.md:4428
 msgid "Print the dominance tree for a given CFG."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4456
+#: ../../../analyzer/checkers.md:4432
 msgid "debug.DumpLiveVars"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4458
+#: ../../../analyzer/checkers.md:4434
 msgid "Print results of live variable analysis."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4462
+#: ../../../analyzer/checkers.md:4438
 msgid "debug.DumpTraversal"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4464
+#: ../../../analyzer/checkers.md:4440
 msgid "Print branch conditions as they are traversed by the engine."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4468
+#: ../../../analyzer/checkers.md:4444
 msgid "debug.ExprInspection"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4470
+#: ../../../analyzer/checkers.md:4446
 msgid "Check the analyzer's understanding of expressions."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4474
+#: ../../../analyzer/checkers.md:4450
 msgid "debug.Stats"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4476
+#: ../../../analyzer/checkers.md:4452
 msgid "Emit warnings with analyzer statistics."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4480
+#: ../../../analyzer/checkers.md:4456
 msgid "debug.TaintTest"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4482
+#: ../../../analyzer/checkers.md:4458
 msgid "Mark tainted symbols as such."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4486
+#: ../../../analyzer/checkers.md:4462
 msgid "debug.ViewCFG"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4488
+#: ../../../analyzer/checkers.md:4464
 msgid "View Control-Flow Graphs using GraphViz."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4492
+#: ../../../analyzer/checkers.md:4468
 msgid "debug.ViewCallGraph"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4494
+#: ../../../analyzer/checkers.md:4470
 msgid "View Call Graph using GraphViz."
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4498
+#: ../../../analyzer/checkers.md:4474
 msgid "debug.ViewExplodedGraph"
 msgstr ""
 
-#: ../../../analyzer/checkers.md:4500
+#: ../../../analyzer/checkers.md:4476
 msgid "View Exploded Graphs using GraphViz."
 msgstr ""
